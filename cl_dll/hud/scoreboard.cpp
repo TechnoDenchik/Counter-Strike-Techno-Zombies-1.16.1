@@ -199,7 +199,7 @@
 		case MOD_DM: return "DeathMatch";
 		case MOD_TDM: return "Team DeathMatch";
 		case MOD_ZB1: return "Zombie Classic";
-		case MOD_ZB2: return "Zombie Mod 2";
+		case MOD_ZB2: return "Zombie Mutation";
 		case MOD_ZBU: return "Zombie United";
 		case MOD_ZB3: return "Zombie Hero";
 		case MOD_ZBS: return "Scenario Zombie";
@@ -303,6 +303,7 @@
 				else if (g_PlayerExtraInfo[id].teamnumber == TEAM_TERRORIST)
 				{
 					std::tie(r, g, b, a) = std::make_tuple(216, 81, 80, 255);
+
 				}
 				else
 				{
@@ -323,10 +324,9 @@
 
 				if(gHUD.m_iModRunning == MOD_ZB1 || gHUD.m_iModRunning == MOD_ZB3)
 				{
-				
 					if (g_PlayerExtraInfo[id].dead)
 					{
-						sprintf(szBuf, "Мертв");
+						sprintf(szBuf, "Мёртв");
 						DrawUtils::DrawHudStringReverse(x + (iStartW / 2) - 5 - 220, y + offsetY, 0, szBuf, r, g, b, flScale);
 					}
 					else if(g_PlayerExtraInfo[id].zombie)
@@ -350,7 +350,7 @@
 				{ 
 					if (g_PlayerExtraInfo[id].dead)
 					{
-						sprintf(szBuf, "Мертв");
+						sprintf(szBuf, "Мёртв");
 						DrawUtils::DrawHudStringReverse(x + (iStartW / 2) - 5 - 220, y + offsetY, 0, szBuf, r, g, b, flScale);
 					}
 				}
@@ -362,7 +362,7 @@
 				else if (g_PlayerExtraInfo[id].vip)
 				{
 					if (gHUD.m_iModRunning == MOD_ZB3)
-						sprintf(szBuf, "ВИП");
+						sprintf(szBuf, "Герой");
 					else
 						sprintf(szBuf, "VIP");
 					DrawUtils::DrawHudStringReverse(x + (iStartW / 2) - 5 - 220, y + offsetY, 0, szBuf, r, g, b, flScale);
@@ -392,7 +392,7 @@
 
 			std::tie(r, g, b, a) = std::make_tuple(255, 188, 0, 255);
 			
-			if (gHUD.m_iModRunning == MOD_ZSH)
+			if (gHUD.m_iModRunning == MOD_ZSH || gHUD.m_iModRunning == MOD_ZB3)
 			{
 				sprintf(szBuf, "Счёт");
 				DrawUtils::DrawHudStringReverse(x + (iStartW / 2) - 5 - 145, y + 110 + iCharHeightOffset, 0, szBuf, r, g, b, flScale);
@@ -421,8 +421,6 @@
 				DrawUtils::DrawHudString(x + 105, y + 110 + iCharHeightOffset, 1000, szBuf, r, g, b, flScale);
 
 				gEngfuncs.pfnFillRGBA(x + 10, y + 125, (iStartW / 2) - 16, 1, 188, 112, 0, 255);
-
-				
 
 			}
 
@@ -458,9 +456,9 @@
 
 				gEngfuncs.pfnFillRGBA(x + 19, y + iStartH - 212, (iStartW / 2) - 49, 1, 188, 112, 0, 255);
 				std::tie(r, g, b, a) = std::make_tuple(188, 112, 0, 255);
-				for (int i = 0; i < 4; i++)
+				for (int i = 0; i < 5; i++)
 				{
-					static constexpr const char* szLeaderNames[] = { "TechnoSoftware", "Nexon", "FWGS Team", "Valve"};
+					static constexpr const char* szLeaderNames[] = { "TechnoSoftware", "Nexon", "FWGS Team", "Valve", "Hymei" };
 					sprintf(szBuf, "%d. %s", i + 1, szLeaderNames[i]);
 					DrawUtils::DrawHudString(x + 34, y + iStartH - 194 + 25 * i, 1000, szBuf, r, g, b, flScale);
 				}
