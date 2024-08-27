@@ -35,7 +35,7 @@
 * [x] *Mode* : Zombie Hero - Requires improvement
 * [x] *Mode* : Zombie Scenario - Needs improvement
 * [x] *Mode* : Fight to the death "Weapon"
-* [x] *Mode* : Zombie Hideout - under development
+* [x] *Mode* : Zombie Shelter - under development
       
 ## Assembling
 
