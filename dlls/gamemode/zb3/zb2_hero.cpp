@@ -1,5 +1,5 @@
 /*
-zb2_zclass_tank.h - CSMoE Gameplay server : Zombie Mod 2
+zb2_zclass.cpp - CSMoE Gameplay server : Zombie Mod 2
 Copyright (C) 2019 Moemod Yanase
 
 This program is free software: you can redistribute it and/or modify
@@ -13,13 +13,14 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "player.h"
 
-#ifndef PROJECT_ZB2_ZCLASS_TANK_H
-#define PROJECT_ZB2_ZCLASS_TANK_H
-
+#include "gamemode/zb2/zb2_const.h"
+#include "gamemode/zb3/zb3_human.h"
+#include "gamemode/zb3/zb2_hero.h"
 #include "zb2_hero.h"
-#include "gamemode/mod_zb1.h"
-
-
-
-#endif //PROJECT_ZB2_ZCLASS_TANK_H
+#include "zb3_class_hero.h"
+#include <random>

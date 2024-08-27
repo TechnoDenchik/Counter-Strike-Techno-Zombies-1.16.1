@@ -111,12 +111,12 @@ extern int gmsgGDMsg;
 extern int gmsgBTEWeapon;
 extern int gmsgZB2Msg;
 extern int gmsgZB3Msg;
+extern int gmsgZB3RenMsg;
 extern int gmsgZSHMsg;
 extern int gmsgZSHMsgText;
 extern int gmsgGunDeath;
 extern int gmsgHitMsg;
 extern int gmsgResetRound;
-extern int gmsgSupplyText;
 
 void LinkUserMessages();
 void WriteSigonMessages();

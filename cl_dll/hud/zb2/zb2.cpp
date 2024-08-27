@@ -23,7 +23,7 @@ GNU General Public License for more details.
 
 #include "zb2.h"
 #include "Winhud.h"
-#include "Textstring.h"
+#include "Textset2.h"
 #include "zb3/TextSet.h"
 #include "zb2_skill.h"
 #include "hud_sub_impl.h"
@@ -44,10 +44,8 @@ public:
 };
 
 DECLARE_MESSAGE(m_ZB2, ZB2Msg)
-DECLARE_MESSAGE(m_ZB2, SupplyText)
-//DECLARE_MESSAGE(m_ZB2, ZB2Win)
-
-
+//DECLARE_MESSAGE(m_ZB2, SupplyText)
+DECLARE_MESSAGE(m_ZB2, ZB3RenMsg)
 
 int CHudZB2::MsgFunc_ZB2Msg(const char *pszName, int iSize, void *pbuf)
 {
@@ -57,75 +55,72 @@ int CHudZB2::MsgFunc_ZB2Msg(const char *pszName, int iSize, void *pbuf)
 	auto type = static_cast<ZB2MessageType>(buf.ReadByte());
 	switch (type)
 	{
-	case ZB2_MESSAGE_HEALTH_RECOVERY:
-	{
-		pimpl->get<CHudZB2_Skill>().OnHealthRecovery();
-		break;
-	}
-	case ZB2_MESSAGE_SKILL_INIT:
-	{
-		ZombieClassType zclass = ZOMBIE_CLASS_HUMAN;
-		if(!buf.Eof())
-			zclass = static_cast<ZombieClassType>(buf.ReadByte());
-		ZombieSkillType skills[4]{};
-		for (int i = 0; i < 4 && !buf.Eof(); ++i)
-			skills[i] = static_cast<ZombieSkillType>(buf.ReadByte());
-		pimpl->get<CHudZB2_Skill>().OnSkillInit(zclass, skills[0], skills[1], skills[2], skills[3]);
 
-		// remove retinas...
-		for (auto x : pimpl->m_RetinaIndexes)
+		case ZB2_MESSAGE_HEALTH_RECOVERY:
 		{
-			gHUD.m_Retina.RemoveItem(x);
+			pimpl->get<CHudZB2_Skill>().OnHealthRecovery();
+			break;
 		}
-		pimpl->m_RetinaIndexes.clear();
-		break;
-	}
-	case ZB2_MESSAGE_SKILL_ACTIVATE:
-	{
-		auto skilltype = static_cast<ZombieSkillType>(buf.ReadByte());
-		float flHoldTime = buf.ReadShort();
-		float flFreezeTime = buf.ReadShort();
-		pimpl->get<CHudZB2_Skill>().OnSkillActivate(skilltype, flHoldTime, flFreezeTime);
-		if (skilltype == ZOMBIE_SKILL_CRAZY || skilltype == ZOMBIE_SKILL_CRAZY2)
-			pimpl->m_RetinaIndexes.push_back(gHUD.m_Retina.AddItem(pimpl->m_pTexture_RageRetina, CHudRetina::RETINA_DRAW_TYPE_BLINK, flHoldTime));
-		else if (skilltype == ZOMBIE_SKILL_SPRINT)
-			pimpl->m_RetinaIndexes.push_back(gHUD.m_Retina.AddItem(pimpl->m_pTexture_SprintRetina, CHudRetina::RETINA_DRAW_TYPE_BLINK | CHudRetina::RETINA_DRAW_TYPE_QUARTER, flHoldTime));
-		else if (skilltype == ZOMBIE_SKILL_HEADSHOT || skilltype == ZOMBIE_SKILL_KNIFE2X)
-			pimpl->m_RetinaIndexes.push_back(gHUD.m_Retina.AddItem(pimpl->m_pTexture_DamageDoubleRetina, CHudRetina::RETINA_DRAW_TYPE_BLINK | CHudRetina::RETINA_DRAW_TYPE_QUARTER, flHoldTime));
+
+		case ZB2_MESSAGE_SKILL_INIT:
+		{
+			ZombieClassType zclass = ZOMBIE_CLASS_HUMAN;
+			if(!buf.Eof())
+				zclass = static_cast<ZombieClassType>(buf.ReadByte());
+			ZombieSkillType skills[4]{};
+			for (int i = 0; i < 4 && !buf.Eof(); ++i)
+				skills[i] = static_cast<ZombieSkillType>(buf.ReadByte());
+			pimpl->get<CHudZB2_Skill>().OnSkillInit(zclass, skills[0], skills[1], skills[2], skills[3]);
+
+			for (auto x : pimpl->m_RetinaIndexes)
+			{
+				gHUD.m_Retina.RemoveItem(x);
+			}
+			pimpl->m_RetinaIndexes.clear();
+			break;
+		}
+
+		case ZB2_MESSAGE_SKILL_ACTIVATE:
+		{
+			auto skilltype = static_cast<ZombieSkillType>(buf.ReadByte());
+			float flHoldTime = buf.ReadShort();
+			float flFreezeTime = buf.ReadShort();
+			pimpl->get<CHudZB2_Skill>().OnSkillActivate(skilltype, flHoldTime, flFreezeTime);
+			if (skilltype == ZOMBIE_SKILL_CRAZY || skilltype == ZOMBIE_SKILL_CRAZY2)
+				pimpl->m_RetinaIndexes.push_back(gHUD.m_Retina.AddItem(pimpl->m_pTexture_RageRetina, CHudRetina::RETINA_DRAW_TYPE_BLINK, flHoldTime));
+			else if (skilltype == ZOMBIE_SKILL_SPRINT)
+				pimpl->m_RetinaIndexes.push_back(gHUD.m_Retina.AddItem(pimpl->m_pTexture_SprintRetina, CHudRetina::RETINA_DRAW_TYPE_BLINK | CHudRetina::RETINA_DRAW_TYPE_QUARTER, flHoldTime));
+			else if (skilltype == ZOMBIE_SKILL_HEADSHOT || skilltype == ZOMBIE_SKILL_KNIFE2X)
+				pimpl->m_RetinaIndexes.push_back(gHUD.m_Retina.AddItem(pimpl->m_pTexture_DamageDoubleRetina, CHudRetina::RETINA_DRAW_TYPE_BLINK | CHudRetina::RETINA_DRAW_TYPE_QUARTER, flHoldTime));
 		
-		break;
-	}
+			break;
+		}
 	
-	case ZB2_MESSAGE_WINHUDHM:
-	{
-		pimpl->get<CHudWinhudZB1>().WinHuman();
-		break;
-	}
-	case ZB2_MESSAGE_WINHUDZB:
-	{
-		pimpl->get<CHudWinhudZB1>().WinZombie();
-		break;
-	}
-	case ZB2_TEXT_STRING:
-	{
-		pimpl->get<CHudTextZB1>().Settext();
-		break;
-	}
-	case ZB3_MESSAGE_USED_STATUS:
-	{
-		pimpl->get<CHudTextZB3>().Settext();
-		break;
-	}
-	case ZOMBIE_INFECTION:
-	{
-		pimpl->get<CHudInfection>().infected();
-		break;
-	}
-	case MAKE_ZOMBIES:
-	{
-		pimpl->get<CHudMakeZombies>().Make();
-		break;
-	}
+		case ZB2_MESSAGE_WINHUDHM:
+		{
+			pimpl->get<CHudWinhudZB1>().WinHuman();
+			break;
+		}
+		case ZB2_MESSAGE_WINHUDZB:
+		{
+			pimpl->get<CHudWinhudZB1>().WinZombie();
+			break;
+		}
+		case ZB3_MESSAGE_USED_STATUS:
+		{
+			pimpl->get<CHudTextZB3>().Settext();
+			break;
+		}
+		case ZOMBIE_INFECTION:
+		{
+			pimpl->get<CHudInfection>().infected();
+			break;
+		}
+		case MAKE_ZOMBIES:
+		{
+			pimpl->get<CHudMakeZombies>().Make();
+			break;
+		}
 	}
 	return 1;
 }
@@ -137,8 +132,8 @@ int CHudZB2::Init()
 	gHUD.AddHudElem(this);
 
 	HOOK_MESSAGE(ZB2Msg);
-	HOOK_MESSAGE(SupplyText);
-	//HOOK_MESSAGE(ZB2Win);
+//	HOOK_MESSAGE(SupplyText);
+	HOOK_MESSAGE(ZB3RenMsg);
 
 	return 1;
 }
@@ -153,7 +148,7 @@ int CHudZB2::VidInit()
 	return 1;
 }
 
-int CHudZB2::MsgFunc_SupplyText(const char* pszName, int iSize, void* pbuf)
+int CHudZB2::MsgFunc_ZB3RenMsg(const char* pszName, int iSize, void* pbuf)
 {
 	BufferReader buf(pszName, pbuf, iSize);
 	int type = buf.ReadByte();
@@ -161,14 +156,13 @@ int CHudZB2::MsgFunc_SupplyText(const char* pszName, int iSize, void* pbuf)
 
 	pimpl->get<CHudTextZB1>().renaining(time);
 
-	auto type2 = static_cast<ZB2MessageType>(buf.ReadByte());
-	switch (type2)
+	switch (type)
 	{
-	case ZB2_SUPPLY_GET:
-	{
-		pimpl->get<CHudTextZB1>().Settext();
-		break;
-	}
+		case ZB3_REN_MSG:
+		{
+			pimpl->get<CHudTextZB1>().Settext();
+			break;
+		}
 	}
 
 	return 1;

@@ -11,9 +11,9 @@ public:
 
 	void Settext();
 
-	void renaining(int time)
+	void renaining(int iCountDown)
 	{
-		times = time;
+		times = iCountDown;
 	}
 protected:
 	int times;

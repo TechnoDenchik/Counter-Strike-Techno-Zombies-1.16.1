@@ -93,6 +93,13 @@ void CMod_Zombi::Think()
 {
 	//IBaseMod::Think();
 
+	int NumDeadCT, NumDeadTerrorist, NumAliveTerrorist, NumAliveCT;
+	InitializePlayerCounts(NumAliveTerrorist, NumAliveCT, NumDeadTerrorist, NumDeadCT);
+
+	//if (~NumAliveCT < 1 && ~NumAliveTerrorist < 1)
+	//{
+
+	
 	static int iLastCountDown = -1;
 	int iCountDown = static_cast<int>(gpGlobals->time - m_fRoundCount);
 
@@ -101,12 +108,18 @@ void CMod_Zombi::Think()
 		iLastCountDown = iCountDown;
 		if (iCountDown > 0 && iCountDown < 20 && !m_bFreezePeriod)
 		{
-
+			
 			//UTIL_ClientPrintAll(HUD_PRINTCENTER, "Time Remaining for Zombie Selection: %s1 Sec", UTIL_dtos1(20 - iCountDown)); // #CSO_ZombiSelectCount
 
-			MESSAGE_BEGIN(MSG_ALL, gmsgSupplyText, NULL);
-			WRITE_BYTE(iCountDown);
-			WRITE_BYTE(ZB2_SUPPLY_GET);
+			//MESSAGE_BEGIN(MSG_ALL, gmsgSupplyText, NULL);
+			//WRITE_BYTE(iCountDown);
+			//WRITE_BYTE(ZB2_SUPPLY_GET);
+			//MESSAGE_END();
+		
+			MESSAGE_BEGIN(MSG_ONE, gmsgZB3RenMsg);
+			WRITE_BYTE(0);
+			WRITE_BYTE(20 - iCountDown);
+			WRITE_BYTE(ZB3_REN_MSG);
 			MESSAGE_END();
 
 			static const char *szCountDownSound[11] = {
@@ -135,6 +148,12 @@ void CMod_Zombi::Think()
 		TeamCheck();
 	}
 
+	//}
+	//else if(NumAliveCT < 2 && NumAliveTerrorist < 2)
+	//{
+	//	UTIL_ClientPrintAll(HUD_PRINTCENTER, "Waiting for the players...");
+	//}
+
 	if (CheckGameOver())   // someone else quit the game already
 		return;
 
@@ -151,8 +170,8 @@ void CMod_Zombi::Think()
 		RestartRound();
 	}
 
-	CheckLevelInitialized();
-
+		CheckLevelInitialized();
+	
 	if (gpGlobals->time > m_tmNextPeriodicThink)
 	{
 		CheckRestartRound();
@@ -493,11 +512,15 @@ void CMod_Zombi::PlayerSpawn(CBasePlayer *pPlayer)
 	
 	pPlayer->m_bNotKilled = false;
 	IBaseMod::PlayerSpawn(pPlayer);
-	pPlayer->AddAccount(16000);
+	pPlayer->AddAccount(32000);
 
 	// Open buy menu on spawn
-	ShowVGUIMenu(pPlayer, VGUI_Menu_Buy, (MENU_KEY_1 | MENU_KEY_2 | MENU_KEY_3 | MENU_KEY_4 | MENU_KEY_5 | MENU_KEY_6 | MENU_KEY_7 | MENU_KEY_8 | MENU_KEY_0), "#Buy");
-	pPlayer->m_iMenu = Menu_Buy;
+	if (pPlayer->m_bIsZombie == false)
+	{
+		ShowVGUIMenu(pPlayer, VGUI_Menu_Buy, (MENU_KEY_1 | MENU_KEY_2 | MENU_KEY_3 | MENU_KEY_4 | MENU_KEY_5 | MENU_KEY_6 | MENU_KEY_7 | MENU_KEY_8 | MENU_KEY_0), "#Buy");
+		pPlayer->m_iMenu = Menu_Buy;
+	}
+	else { 0; }
 }
 
 BOOL CMod_Zombi::FPlayerCanTakeDamage(CBasePlayer *pPlayer, CBaseEntity *pAttacker)

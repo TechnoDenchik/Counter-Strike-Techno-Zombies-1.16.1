@@ -191,26 +191,24 @@ int CHudZSHScoreboard::Draw(float time)
 	double x5 = ScreenWidth / 2.3;
 	double x6 = ScreenWidth / 2.6;
 
-	int x7 = ScreenWidth / 1.905; // Движение по вертикали
-	int y4 = ScreenHeight / 88; // Движение по горизонтали
+	int x7 = ScreenWidth / 1.905; 
+	int x8 = ScreenWidth / 1.970; 
+	int x9 = ScreenWidth / 1.980; 
+	int x10 = ScreenWidth / 2.0; 
+	int x11 = ScreenWidth / 2; 
+	int x12 = ScreenWidth / 2;
+	int x13 = ScreenWidth / 1.980; 
+	int x14 = ScreenWidth / 1.980; 
+	int x15 = ScreenWidth / 1.980; 
+	int x16 = ScreenWidth / 1.980;
+	int x17 = ScreenWidth / 1.980; 
 
-	int x8 = ScreenWidth / 1.970; // Движение по вертикали
-	int x9 = ScreenWidth / 1.980; // Движение по вертикали
-	int y8 = ScreenHeight / 30; // Движение по горизонтали
-	
-	int x10 = ScreenWidth / 2.0; // Движение по вертикали
-	int x11 = ScreenWidth / 2; // Движение по вертикали
-	int x12 = ScreenWidth / 2; // Движение по вертикали
-	int x13 = ScreenWidth / 1.980; // Движение по вертикали
-	int x14 = ScreenWidth / 1.980; // Движение по вертикали
-	int x15 = ScreenWidth / 1.980; // Движение по вертикали
-	int x16 = ScreenWidth / 1.980; // Движение по вертикали
-	int x17 = ScreenWidth / 1.980; // Движение по вертикали
-
-	int y9 = ScreenHeight / 55; // Движение по горизонтали
-	int y10 = ScreenHeight / 1.027; // Движение по горизонтали
-	int y11 = ScreenHeight / 30; // Движение по горизонтали
-	int y12 = ScreenHeight / 30; // Движение по горизонтали
+	int y4 = ScreenHeight / 88; 
+	int y8 = ScreenHeight / 30; 
+	int y9 = ScreenHeight / 55; 
+	int y10 = ScreenHeight / 1.027; 
+	int y11 = ScreenHeight / 30; 
+	int y12 = ScreenHeight / 30; 
 	
 	int best_player = gHUD.m_Scoreboard.FindBestPlayer();
 

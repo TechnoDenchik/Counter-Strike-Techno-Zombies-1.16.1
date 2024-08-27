@@ -116,7 +116,6 @@ public:
 	void GiveWeaponsToPlayer() const
 	{
 		m_pPlayer->RemoveAllItems(false);
-		m_pPlayer->m_bHasPrimary = true;
 		m_pPlayer->GiveNamedItem("weapon_shelteraxe");
 		//m_pPlayer->GiveNamedItem("weapon_c4shelter");
 	}
@@ -242,31 +241,25 @@ float CMod_ZombieShelter_coop::GetAdjustedEntityDamage2(CBaseEntity* victim, ent
 void CMod_ZombieShelter_coop::PlayerSpawn(CBasePlayer* pPlayer)
 {
 	IBaseMod::PlayerSpawn(pPlayer);
-	pPlayer->AddAccount(16000);
+	pPlayer->AddAccount(800);
 
 	// Give Armor
 	pPlayer->m_iKevlar = ARMOR_TYPE_HELMET;
+	pPlayer->pev->health = 100;
 	pPlayer->pev->armorvalue = 100;
 	pPlayer->SpawnProtection_Start(3.0f);
 }
 
 CMod_ZombieShelter_coop::CMod_ZombieShelter_coop()
 {
+	m_iRoundTimeSecs = m_iIntroRoundTime = 20 + 2;
 	PRECACHE_SOUND("zsh/BGM_start.wav");
 	PRECACHE_GENERIC("sound/zsh/BGM_zombie_attack.mp3");
 	UTIL_PrecacheOther("resources");
 	UTIL_PrecacheOther("monster_sentry2");
 
 	CVAR_SET_FLOAT("sv_maxspeed", 990 );
-	CVAR_SET_FLOAT("mp_freezetime", 25);
-	for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
-	{
-		CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
-		if (!entity)
-			continue;
-		CLIENT_COMMAND(entity->edict(), "mp_freezetime 25");
-
-	}
+	//CVAR_SET_FLOAT("mp_freezetime", 25);
 	
 	
 }

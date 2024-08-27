@@ -151,7 +151,7 @@
     <ClCompile Include="..\cl_dll\hud\vgui2menu\Buymenu.cpp" />
     <ClCompile Include="..\cl_dll\hud\vgui2menu\Classmenu.cpp" />
     <ClCompile Include="..\cl_dll\hud\vgui2menu\Tabmenu.cpp" />
-    <ClCompile Include="..\cl_dll\hud\zb2\Textstring.cpp" />
+    <ClCompile Include="..\cl_dll\hud\zb2\Textset2.cpp" />
     <ClCompile Include="..\cl_dll\hud\zb2\Winhud.cpp" />
     <ClCompile Include="..\cl_dll\hud\zb2\zb2.cpp" />
     <ClCompile Include="..\cl_dll\hud\zb2\zb2_skill.cpp" />
@@ -369,7 +369,7 @@
     <ClInclude Include="..\cl_dll\hud\vgui2menu\Buymenu.h" />
     <ClInclude Include="..\cl_dll\hud\vgui2menu\Classmenu.h" />
     <ClInclude Include="..\cl_dll\hud\vgui2menu\Tabmenu.h" />
-    <ClInclude Include="..\cl_dll\hud\zb2\Textstring.h" />
+    <ClInclude Include="..\cl_dll\hud\zb2\Textset2.h" />
     <ClInclude Include="..\cl_dll\hud\zb2\Winhud.h" />
     <ClInclude Include="..\cl_dll\hud\zb2\zb2.h" />
     <ClInclude Include="..\cl_dll\hud\zb2\zb2_skill.h" />

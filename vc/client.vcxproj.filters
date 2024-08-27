@@ -927,7 +927,7 @@
     <ClCompile Include="..\cl_dll\hud\zb3\TextSet.cpp">
       <Filter>cl_dll\hud\zb3</Filter>
     </ClCompile>
-    <ClCompile Include="..\cl_dll\hud\zb2\Textstring.cpp">
+    <ClCompile Include="..\cl_dll\hud\zb2\Textset2.cpp">
       <Filter>cl_dll\hud\zb2</Filter>
     </ClCompile>
     <ClCompile Include="..\cl_dll\hud\zb2\Winhud.cpp">
@@ -1493,7 +1493,7 @@
     <ClInclude Include="..\cl_dll\hud\zb3\TextSet.h">
       <Filter>cl_dll\hud\zb3</Filter>
     </ClInclude>
-    <ClInclude Include="..\cl_dll\hud\zb2\Textstring.h">
+    <ClInclude Include="..\cl_dll\hud\zb2\Textset2.h">
       <Filter>cl_dll\hud\zb2</Filter>
     </ClInclude>
     <ClInclude Include="..\cl_dll\hud\zb2\Winhud.h">

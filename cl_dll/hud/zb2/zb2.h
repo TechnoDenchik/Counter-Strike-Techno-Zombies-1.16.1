@@ -36,7 +36,8 @@ public:
 	bool ActivateSkill(int iSlot);
 	bool m_bCanDraw;
 	CHudMsgFunc(ZB2Msg);
-	CHudMsgFunc(SupplyText);
+	//CHudMsgFunc(SupplyText);
+	CHudMsgFunc(ZB3RenMsg);
     //CHudMsgFunc(ZB2Win);
 
 public:

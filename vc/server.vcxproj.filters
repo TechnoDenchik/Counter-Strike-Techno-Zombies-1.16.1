@@ -787,15 +787,6 @@
     <ClCompile Include="..\dlls\player\player_hero.cpp">
       <Filter>dlls\player</Filter>
     </ClCompile>
-    <ClCompile Include="..\dlls\gamemode\zb3\zb3_hero.cpp">
-      <Filter>dlls\gamemode\zb3</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\gamemode\zb3\zb3_class_hero.cpp">
-      <Filter>dlls\gamemode\zb3</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\gamemode\zb2\zb2_skill_hero.cpp">
-      <Filter>dlls\gamemode\zb2</Filter>
-    </ClCompile>
     <ClCompile Include="..\dlls\func_shelter.cpp">
       <Filter>dlls</Filter>
     </ClCompile>
@@ -963,6 +954,18 @@
     </ClCompile>
     <ClCompile Include="..\dlls\gamemode\zsh\skill\Enginner\moving turrets.cpp">
       <Filter>dlls\gamemode\zsh\Skills\Engineer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb3\zb2_hero.cpp">
+      <Filter>dlls\gamemode\zb2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb3\zb2_class_hero.cpp">
+      <Filter>dlls\gamemode\zb2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zbs\monster_entity_boss.cpp">
+      <Filter>dlls\gamemode\zbs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zbs\boss_manager.cpp">
+      <Filter>dlls\gamemode\zbs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1600,12 +1603,6 @@
     <ClInclude Include="..\dlls\gamemode\zb3\zb3_human.h">
       <Filter>dlls\gamemode\zb3</Filter>
     </ClInclude>
-    <ClInclude Include="..\dlls\gamemode\zb3\zb3_hero.h">
-      <Filter>dlls\gamemode\zb3</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\gamemode\zb3\zb3_class_hero.h">
-      <Filter>dlls\gamemode\zb3</Filter>
-    </ClInclude>
     <ClInclude Include="..\dlls\func_shelter.h">
       <Filter>dlls</Filter>
     </ClInclude>
@@ -1848,6 +1845,15 @@
     </ClInclude>
     <ClInclude Include="..\engine2\customentity.h">
       <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb3\zb2_hero.h">
+      <Filter>dlls\gamemode\zb2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zbs\monster_entity_boss.h">
+      <Filter>dlls\gamemode\zbs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zbs\boss_manager.h">
+      <Filter>dlls\gamemode\zbs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

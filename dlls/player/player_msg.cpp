@@ -115,11 +115,11 @@ int gmsgGDMsg = 0;
 int gmsgBTEWeapon = 0;
 int gmsgZB2Msg = 0;
 int gmsgZB3Msg = 0;
+int gmsgZB3RenMsg = 0;
 int gmsgZSHMsg = 0;
 int gmsgZSHMsgText = 0;
 int gmsgResetRound = 0;
 int gmsgGunDeath = 0;
-int gmsgSupplyText = 0;
 
 // utils
 inline int FNullEnt(CBaseEntity *ent) { return (!ent) || FNullEnt(ent->edict()); }
@@ -225,9 +225,9 @@ void LinkUserMessages()
 	gmsgZSHMsg = REG_USER_MSG("ZSHMsg", -1);
 	gmsgZSHMsgText = REG_USER_MSG("ZSHMsgText", -1);
 	gmsgZB3Msg = REG_USER_MSG("ZB3Msg", -1);
+	gmsgZB3RenMsg = REG_USER_MSG("ZB3RenMsg", -1);
 	gmsgResetRound = REG_USER_MSG("ResetRound", -1);
 	gmsgGunDeath = REG_USER_MSG("GunDeath", -1);
-	gmsgSupplyText = REG_USER_MSG("SupplyText", -1);
 }
 
 void WriteWeaponInfo2(CBasePlayer* pPlayer, const ItemInfo& II)

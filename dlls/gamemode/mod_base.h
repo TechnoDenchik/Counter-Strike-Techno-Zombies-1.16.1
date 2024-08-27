@@ -36,7 +36,7 @@ public:
 	virtual void InstallPlayerModStrategy(CBasePlayer *player);
 	virtual float GetAdjustedEntityDamage(CBaseEntity *victim, entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) { return flDamage; }
 	virtual float GetAdjustedEntityDamage2(CBaseEntity* victim, entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage2, int bitsDamageType2) { return flDamage2; }
-	virtual int MaxMoney() { return 16000; }
+	virtual int MaxMoney() { return 32000; }
 	virtual HitBoxGroup GetAdjustedTraceAttackHitgroup(CBaseEntity *victim, entvars_t * pevAttacker, float flDamage, const Vector & vecDir, TraceResult * ptr, int bitsDamageType) { return static_cast<HitBoxGroup>(ptr->iHitgroup); }
 	virtual HitBoxGroup GetAdjustedTraceAttackHitgroup2(CBaseEntity* victim, entvars_t* pevAttacker, float flDamage2, const Vector& vecDir, TraceResult* ptr, int bitsDamageType2) { return static_cast<HitBoxGroup>(ptr->iHitgroup2); }
 };
