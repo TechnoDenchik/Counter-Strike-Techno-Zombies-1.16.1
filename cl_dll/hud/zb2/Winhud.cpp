@@ -9,8 +9,6 @@
 #include <numeric>
 #include <tuple>
 
-CHudWinhudZB1 m_hudzb1;
-
 int CHudWinhudZB1::VidInit(void)
 {
 	if (!iconwinhm)
