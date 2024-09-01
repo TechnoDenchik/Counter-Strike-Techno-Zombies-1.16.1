@@ -27,6 +27,7 @@ GNU General Public License for more details.
 #include <vector>
 #include <random>
 #include "gamemode/zb2/zb2_const.h"
+#include "gamemode/interface/interface_const.h"
 #include "bot_include.h"
 
 #include "util/u_range.hpp"
@@ -108,15 +109,8 @@ void CMod_Zombi::Think()
 		iLastCountDown = iCountDown;
 		if (iCountDown > 0 && iCountDown < 20 && !m_bFreezePeriod)
 		{
-			
-			//UTIL_ClientPrintAll(HUD_PRINTCENTER, "Time Remaining for Zombie Selection: %s1 Sec", UTIL_dtos1(20 - iCountDown)); // #CSO_ZombiSelectCount
-
-			//MESSAGE_BEGIN(MSG_ALL, gmsgSupplyText, NULL);
-			//WRITE_BYTE(iCountDown);
-			//WRITE_BYTE(ZB2_SUPPLY_GET);
-			//MESSAGE_END();
 		
-			MESSAGE_BEGIN(MSG_ONE, gmsgZB3RenMsg);
+			MESSAGE_BEGIN(MSG_ALL, gmsgZB3RenMsg);
 			WRITE_BYTE(0);
 			WRITE_BYTE(20 - iCountDown);
 			WRITE_BYTE(ZB3_REN_MSG);

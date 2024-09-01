@@ -14,18 +14,21 @@
 #include "hud/legacy/hud_scoreboard_legacy.h"
 #include "zb3_rage.h"
 #include "player/player_const.h"
-
+#include "zb3/TextSet.h"
 #include "gamemode/zb3/zb3_const.h"
+#include "gamemode/interface/interface_const.h"
 
 #include <vector>
 
 class CHudZB3::impl_t
-	: public THudSubDispatcher<CHudZB3Morale, CHudZB3Rage>
+	: public THudSubDispatcher<CHudZB3Morale, CHudZB3Rage, CHudTextZB3>
 {
 public:
 };
 
 DECLARE_MESSAGE(m_ZB3, ZB3Msg)
+DECLARE_MESSAGE(m_ZB3, ZB3SkillUsed)
+
 int CHudZB3::MsgFunc_ZB3Msg(const char *pszName, int iSize, void *pbuf)
 {
 	BufferReader buf(pszName, pbuf, iSize);
@@ -52,6 +55,27 @@ int CHudZB3::MsgFunc_ZB3Msg(const char *pszName, int iSize, void *pbuf)
 	return 1;
 }
 
+int CHudZB3::MsgFunc_ZB3SkillUsed(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);	
+	auto type = static_cast<INTMessage>(buf.ReadByte());
+	int time = buf.ReadByte();
+
+
+	pimpl->get<CHudTextZB3>().renaining(time);
+
+	switch (type)
+	{
+		case ZB3_USED_MSG:
+		{
+			pimpl->get<CHudTextZB3>().Settext();
+			break;
+		}
+	}
+
+	return 1;
+}
+
 int CHudZB3::Init(void)
 {
 	pimpl = new CHudZB3::impl_t;
@@ -59,6 +83,7 @@ int CHudZB3::Init(void)
 	gHUD.AddHudElem(this);
 
 	HOOK_MESSAGE(ZB3Msg);
+	HOOK_MESSAGE(ZB3SkillUsed);
 
 	return 1;
 }

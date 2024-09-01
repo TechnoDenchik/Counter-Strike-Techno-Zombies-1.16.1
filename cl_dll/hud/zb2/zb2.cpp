@@ -30,7 +30,7 @@ GNU General Public License for more details.
 #include "player/player_const.h"
 
 #include "gamemode/zb2/zb2_const.h"
-
+#include "gamemode/interface/interface_const.h"
 #include <vector>
 
 class CHudZB2_impl_t : public THudSubDispatcher<CHudZB2_Skill, CHudWinhudZB1, CHudTextZB1, CHudTextZB3, CHudInfection, CHudMakeZombies>

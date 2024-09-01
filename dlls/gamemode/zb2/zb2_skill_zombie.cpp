@@ -19,6 +19,7 @@ GNU General Public License for more details.
 #include "player.h"
 
 #include "gamemode/zb2/zb2_const.h"
+#include "gamemode/interface/interface_const.h"
 #include "gamemode/zb2/zb2_zclass.h"
 #include "gamemode/zb2/zb2_skill.h"
 #include "zb2_zclass.h"
@@ -74,12 +75,18 @@ void CZombieSkill_ZombieCrazy::Activate()
 		{
 		case SKILL_STATUS_USING:
 		case SKILL_STATUS_FREEZING:
-			char buf[16];
+			/*char buf[16];
 			sprintf(buf, "%d", static_cast<int>(m_flTimeZombieSkillNext - gpGlobals->time));
 			ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER,
 				"The 'Berserk' skill can't be used because the skill is in cooldown. [Remaining Cooldown Time: %s1 sec.]",
 				buf
-			); // #CSO_WaitCoolTimeNormal
+			); */
+
+			MESSAGE_BEGIN(MSG_ALL, gmsgZB3UsedMsg, NULL, m_pPlayer->pev);
+			WRITE_BYTE(ZB3_USED_MSG);
+			WRITE_BYTE(m_flTimeZombieSkillNext - gpGlobals->time);
+			WRITE_BYTE(0);
+			MESSAGE_END();
 
 			break;
 		case SKILL_STATUS_USED:

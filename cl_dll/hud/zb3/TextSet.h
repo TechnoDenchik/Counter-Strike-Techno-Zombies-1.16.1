@@ -11,7 +11,14 @@ public:
 
 	void Settext();
 
+	void renaining(int iCountDown)
+	{
+		times = iCountDown;
+	}
+
 protected:
+	int times;
+	int names;
 	SharedTexture m_pCurTexture;
 	SharedTexture stringtext;
 	float m_flDisplayTime;

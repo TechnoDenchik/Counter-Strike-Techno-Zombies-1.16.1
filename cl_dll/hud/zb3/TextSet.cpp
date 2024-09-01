@@ -15,7 +15,31 @@
 #include <numeric>
 #include <tuple>
 
-CHudTextZB3 m_hudzb1;
+inline void DrawTexturePart(const CTextureRef& tex, const wrect_t& rect, int x1, int y1, float scale = 1.0f)
+{
+	tex.Bind();
+
+	float w = tex.w();
+	float h = tex.h();
+
+	x1 *= gHUD.m_flScale;
+	y1 *= gHUD.m_flScale;
+	scale *= gHUD.m_flScale;
+
+	int x2 = x1 + (rect.right - rect.left) * scale;
+	int y2 = y1 + (rect.bottom - rect.top) * scale;
+
+	gEngfuncs.pTriAPI->Begin(TRI_QUADS);
+	gEngfuncs.pTriAPI->TexCoord2f(rect.left / w, rect.top / h);
+	gEngfuncs.pTriAPI->Vertex3f(x1, y1, 0);
+	gEngfuncs.pTriAPI->TexCoord2f(rect.left / w, rect.bottom / h);
+	gEngfuncs.pTriAPI->Vertex3f(x1, y2, 0);
+	gEngfuncs.pTriAPI->TexCoord2f(rect.right / w, rect.bottom / h);
+	gEngfuncs.pTriAPI->Vertex3f(x2, y2, 0);
+	gEngfuncs.pTriAPI->TexCoord2f(rect.right / w, rect.top / h);
+	gEngfuncs.pTriAPI->Vertex3f(x2, y1, 0);
+	gEngfuncs.pTriAPI->End();
+}
 
 int CHudTextZB3::VidInit(void)
 {
@@ -35,19 +59,47 @@ int CHudTextZB3::Draw(float time)
 		return 1;
 	}
 
-	int x = ScreenWidth / 2;
-	int y = ScreenHeight / 1.5;
+	int x = ScreenWidth / 1.995;
+	int y = ScreenHeight / 1.4;
+	int y2 = ScreenHeight / 1.4;
 
-	int x2 = ScreenWidth / 2;
-	int y2 = ScreenHeight / 1.5;
 	const float flScale = 0.0f;
-	const int r = 255, g = 255, b = 0;
+	const int r = 153, g = 97, b = 7;
 
 	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
 	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255 - std::min(5.0f - (time - m_flDisplayTime), 1.0f));
+
 	m_pCurTexture->Bind();
-	DrawUtils::Draw2DQuadScaled(x - 500 / 2, y, x + 500 / 2, y + 23);
-	DrawUtils::DrawHudString(x2 - 170, y2 + 3, ScreenWidth, "Навык можно использовать только один раз за раунд", r, g, b, 0.0f);
+	DrawUtils::Draw2DQuadScaled(x - 600 / 2, y - 38, x + 600 / 2, y - 8);
+
+	char szbuffer[64];
+
+	if (times >= 5)
+	{
+		sprintf(szbuffer, "Навык снова можно будет использовать через: %d секунд", times);
+	}
+	else if (times == 4)
+	{
+		sprintf(szbuffer, "Навык снова можно будет использовать через: %d секунды", times);
+	}
+	else if (times == 3)
+	{
+		sprintf(szbuffer, "Навык снова можно будет использовать через: %d секунды", times);
+	}
+	else if (times == 2)
+	{
+		sprintf(szbuffer, "Навык снова можно будет использовать через: %d секунды", times);
+	}
+	else if (times == 1)
+	{
+		sprintf(szbuffer, "Навык снова можно будет использовать через: %d секунда", times);
+	}
+	else
+	{
+		sprintf(szbuffer, "Навык снова можно будет использовать через: %d секунд", times);
+	}
+
+	DrawUtils::DrawHudString(x - 190, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
 	
 	return 1;
 }
