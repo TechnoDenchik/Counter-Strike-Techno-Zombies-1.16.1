@@ -114,6 +114,7 @@ int CHud :: MsgFunc_GameMode(const char *pszName, int iSize, void *pbuf )
 	reader.ReadByte();
 
 	// reset mod-specific settings
+	gHUD.m_CLS.m_iFlags &= ~HUD_ACTIVE;
 	gHUD.m_gd.m_iFlags &= ~HUD_ACTIVE;
 	gHUD.m_ZB2.m_iFlags &= ~HUD_ACTIVE;
 	gHUD.m_ZB3.m_iFlags &= ~HUD_ACTIVE;
@@ -124,6 +125,7 @@ int CHud :: MsgFunc_GameMode(const char *pszName, int iSize, void *pbuf )
 	{
 	case MOD_NONE:
 	{
+		gHUD.m_CLS.m_iFlags |= HUD_ACTIVE;
 		int iBombTargetsNum = reader.ReadByte();
 		iBombTargetsNum = min(iBombTargetsNum, 2);
 

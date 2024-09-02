@@ -82,7 +82,7 @@ void CZombieSkill_ZombieCrazy::Activate()
 				buf
 			); */
 
-			MESSAGE_BEGIN(MSG_ALL, gmsgZB3UsedMsg, NULL, m_pPlayer->pev);
+			MESSAGE_BEGIN(MSG_ONE, gmsgZB3UsedMsg, NULL, m_pPlayer->pev);
 			WRITE_BYTE(ZB3_USED_MSG);
 			WRITE_BYTE(m_flTimeZombieSkillNext - gpGlobals->time);
 			WRITE_BYTE(0);

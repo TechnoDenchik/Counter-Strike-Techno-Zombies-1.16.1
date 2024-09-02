@@ -118,6 +118,12 @@ extern int gmsgZSHMsgText;
 extern int gmsgGunDeath;
 extern int gmsgHitMsg;
 extern int gmsgResetRound;
+extern int gmsgOriginalMsg;
+extern int gmsgOriginalMsg2;
+extern int gmsgOriginalMsg3;
+extern int gmsgOriginalMsg4;
+extern int gmsgOriginalMsg5;
+extern int gmsgOriginalMsg6;
 
 void LinkUserMessages();
 void WriteSigonMessages();

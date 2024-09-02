@@ -116,6 +116,12 @@ int gmsgBTEWeapon = 0;
 int gmsgZB2Msg = 0;
 int gmsgZB3Msg = 0;
 int gmsgZB3RenMsg = 0;
+int gmsgOriginalMsg = 0;
+int gmsgOriginalMsg2 = 0;
+int gmsgOriginalMsg3 = 0;
+int gmsgOriginalMsg4 = 0;
+int gmsgOriginalMsg5 = 0;
+int gmsgOriginalMsg6 = 0;
 int gmsgZB3UsedMsg = 0;
 int gmsgZSHMsg = 0;
 int gmsgZSHMsgText = 0;
@@ -227,6 +233,14 @@ void LinkUserMessages()
 	gmsgZSHMsgText = REG_USER_MSG("ZSHMsgText", -1);
 	gmsgZB3Msg = REG_USER_MSG("ZB3Msg", -1);
 	gmsgZB3RenMsg = REG_USER_MSG("ZB3RenMsg", -1);
+
+	gmsgOriginalMsg = REG_USER_MSG("StartGame", -1);
+	gmsgOriginalMsg2 = REG_USER_MSG("BombPlant", -1);
+	gmsgOriginalMsg3 = REG_USER_MSG("BombDefuse", -1);
+	gmsgOriginalMsg4 = REG_USER_MSG("CTWIN", -1);
+	gmsgOriginalMsg5 = REG_USER_MSG("TRWIN", -1);
+	gmsgOriginalMsg6 = REG_USER_MSG("RoundDraw", -1);
+
 	gmsgZB3UsedMsg = REG_USER_MSG("ZB3SkillUsed", -1);
 	gmsgResetRound = REG_USER_MSG("ResetRound", -1);
 	gmsgGunDeath = REG_USER_MSG("GunDeath", -1);

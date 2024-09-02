@@ -21,6 +21,7 @@
 #include "hltv.h"
 #include "gamerules.h"
 #include "wpn_c4.h"
+#include "gamemode/interface/interface_const.h"
 
 //#define C4MADNESS
 #ifdef CLIENT_DLL
@@ -217,7 +218,10 @@ void CC4::PrimaryAttack(void)
 				WRITE_COORD(pGrenade->pev->origin.z);
 				WRITE_BYTE(1);
 				MESSAGE_END();
-				UTIL_ClientPrintAll(HUD_PRINTCENTER, "#Bomb_Planted");
+				
+				MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg2);
+				WRITE_BYTE(ORIG_BOMB_MSG);
+				MESSAGE_END();
 
 				UTIL_LogPrintf("\"%s<%i><%s><TERRORIST>\" triggered \"Planted_The_Bomb\"\n", STRING(m_pPlayer->pev->netname), GETPLAYERUSERID(m_pPlayer->edict()), GETPLAYERAUTHID(m_pPlayer->edict()));
 				g_pGameRules->m_bBombDropped = false;

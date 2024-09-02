@@ -82,7 +82,7 @@ void CHalfLifeRules::PlayerSpawn(CBasePlayer *pPlayer)
 {
 	pPlayer->pev->weapons |= (1 << WEAPON_SUIT);
 
-	pPlayer->GiveNamedItem("weapon_shelteraxe");
+	pPlayer->GiveNamedItem("weapon_knife");
 	pPlayer->GiveNamedItem("weapon_usp");
 	pPlayer->GiveNamedItem("weapon_mp5navy");
 	pPlayer->GiveNamedItem("weapon_hegrenade");

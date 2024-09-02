@@ -19,6 +19,7 @@
 
 #include "pm_shared.h"
 #include "utllinkedlist.h"
+#include "gamemode/interface/interface_const.h"
 
 // CSBOT and Nav
 #include "game_shared2/GameEvent.h"		// Game event enum used by career mode, tutor system, and bots
@@ -1156,7 +1157,10 @@ bool CHalfLifeMultiplay::NeededPlayersCheck(bool &bNeededPlayers)
 		m_bFreezePeriod = FALSE;
 		m_bCompleteReset = true;
 
-		EndRoundMessage("#Game_Commencing", ROUND_END_DRAW);
+		MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg);
+		WRITE_BYTE(ORIG_START_MSG);
+		MESSAGE_END();
+
 		TerminateRound(IsCareer() ? 0 : 3, WINSTATUS_DRAW);
 
 		m_bFirstConnected = true;
@@ -1343,9 +1347,10 @@ bool CHalfLifeMultiplay::BombRoundEndCheck(bool bNeededPlayers)
 			UpdateTeamScores();
 		}
 
-		EndRoundMessage("#Target_Bombed", ROUND_TARGET_BOMB);
 		TerminateRound(5, WINSTATUS_TERRORISTS);
-
+		MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg5);
+		WRITE_BYTE(ORIG_TRWIN_MSG);
+		MESSAGE_END();
 		if (IsCareer())
 		{
 			QueueCareerRoundEndMenu(5, WINSTATUS_TERRORISTS);
@@ -1366,9 +1371,14 @@ bool CHalfLifeMultiplay::BombRoundEndCheck(bool bNeededPlayers)
 			UpdateTeamScores();
 		}
 
-		EndRoundMessage("#Bomb_Defused", ROUND_BOMB_DEFUSED);
-		TerminateRound(5, WINSTATUS_CTS);
+		MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg3);
+		WRITE_BYTE(ORIG_BOMB2_MSG);
+		MESSAGE_END();
 
+		TerminateRound(5, WINSTATUS_CTS);
+		MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg5);
+		WRITE_BYTE(ORIG_CTWIN_MSG);
+		MESSAGE_END();
 		if (IsCareer())
 		{
 			QueueCareerRoundEndMenu(5, WINSTATUS_CTS);
@@ -1412,7 +1422,10 @@ bool CHalfLifeMultiplay::TeamExterminationCheck(int NumAliveTerrorist, int NumAl
 					UpdateTeamScores();
 				}
 
-				EndRoundMessage("#CTs_Win", ROUND_CTS_WIN);
+				MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg4);
+				WRITE_BYTE(ORIG_CTWIN_MSG);
+				MESSAGE_END();
+
 				TerminateRound(5, WINSTATUS_CTS);
 
 				if (IsCareer())
@@ -1437,7 +1450,10 @@ bool CHalfLifeMultiplay::TeamExterminationCheck(int NumAliveTerrorist, int NumAl
 				UpdateTeamScores();
 			}
 
-			EndRoundMessage("#Terrorists_Win", ROUND_TERRORISTS_WIN);
+			MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg5);
+			WRITE_BYTE(ORIG_TRWIN_MSG);
+			MESSAGE_END();
+
 			TerminateRound(5, WINSTATUS_TERRORISTS);
 
 			if (IsCareer())
@@ -1450,7 +1466,11 @@ bool CHalfLifeMultiplay::TeamExterminationCheck(int NumAliveTerrorist, int NumAl
 	}
 	else if (NumAliveCT == 0 && NumAliveTerrorist == 0)
 	{
-		EndRoundMessage("#Round_Draw", ROUND_END_DRAW);
+
+		MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg6);
+		WRITE_BYTE(ORIG_RDRAW_MSG);
+		MESSAGE_END();
+
 		Broadcast("rounddraw");
 		TerminateRound(5, WINSTATUS_DRAW);
 
@@ -2085,7 +2105,7 @@ BOOL CHalfLifeMultiplay::IsThereABomber()
 	// Didn't find a bomber.
 	return FALSE;
 }
-
+//Cstrike_TitlesTXT_Bomb_Planted
 BOOL CHalfLifeMultiplay::IsThereABomb()
 {
 	CGrenade *pC4 = NULL;

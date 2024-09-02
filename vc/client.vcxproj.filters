@@ -942,10 +942,10 @@
     <ClCompile Include="..\cl_dll\hud\original\Classic.cpp">
       <Filter>cl_dll\hud\none</Filter>
     </ClCompile>
-    <ClCompile Include="..\cl_dll\hud\original\Winhud2.cpp">
+    <ClCompile Include="..\cl_dll\hud\original\OrigWinhud.cpp">
       <Filter>cl_dll\hud\none</Filter>
     </ClCompile>
-    <ClCompile Include="..\cl_dll\hud\original\Wins.cpp">
+    <ClCompile Include="..\cl_dll\hud\original\TextOrig.cpp">
       <Filter>cl_dll\hud\none</Filter>
     </ClCompile>
     <ClCompile Include="..\cl_dll\hud\classes\Militia.cpp">
@@ -1502,10 +1502,10 @@
     <ClInclude Include="..\cl_dll\hud\original\Classic.h">
       <Filter>cl_dll\hud\none</Filter>
     </ClInclude>
-    <ClInclude Include="..\cl_dll\hud\original\Winhud2.h">
+    <ClInclude Include="..\cl_dll\hud\original\OrigWinhud.h">
       <Filter>cl_dll\hud\none</Filter>
     </ClInclude>
-    <ClInclude Include="..\cl_dll\hud\original\Wins.h">
+    <ClInclude Include="..\cl_dll\hud\original\TextOrig.h">
       <Filter>cl_dll\hud\none</Filter>
     </ClInclude>
     <ClInclude Include="..\cl_dll\hud\classes\Militia.h">
