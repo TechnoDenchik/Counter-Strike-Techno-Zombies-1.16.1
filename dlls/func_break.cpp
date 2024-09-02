@@ -677,11 +677,6 @@ int CBreakable::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, floa
 	if (bitsDamageType & DMG_POISON)
 	{
 		flDamage *= 0.1f;
-		MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, pevAttacker);
-		WRITE_LONG(flDamage);
-		WRITE_SHORT(ENTINDEX(edict()));
-		WRITE_BYTE(0);
-		MESSAGE_END();
 	}
 
 	// this global is still used for glass and other non-monster killables, along with decals.
@@ -690,7 +685,18 @@ int CBreakable::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, floa
 	// do the damage
 	pev->health -= flDamage;
 
-	
+#ifdef XASH_DEDICATED
+	//gr
+	//ClientPrint(pevAttacker, HUD_PRINTTALK, "Hit Breakable Msg Sending \n");
+	if (CBaseEntity::Instance(pevAttacker)->IsPlayer() && flDamage > 0.0f) {
+		MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, pevAttacker);
+		WRITE_LONG((long)flDamage);
+		WRITE_SHORT(ENTINDEX(edict()));
+		WRITE_BYTE(0);
+		MESSAGE_END();
+		//ClientPrint(pevAttacker, HUD_PRINTTALK, "Hit Breakable Msg Sent \n");
+	}
+#endif
 	
 	
 	if (pev->health <= 0)

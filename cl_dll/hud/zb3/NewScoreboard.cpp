@@ -201,14 +201,14 @@ int CHudZB3ScoreBoard::Draw(float time)
 	int roundNumber2 = gHUD.m_Scoreboard.m_iTeamScore_T + gHUD.m_Scoreboard.m_iTeamScore_CT;
 	int roundmax = gHUD.m_Scoreboard.m_iTeamScore_Max;
 
+	int iMinutes = max(0, (int)(gHUD.m_Timer.m_iTime + gHUD.m_Timer.m_fStartTime - gHUD.m_flTime) / 60);
+	int iSeconds = max(0, (int)(gHUD.m_Timer.m_iTime + gHUD.m_Timer.m_fStartTime - gHUD.m_flTime) - (iMinutes * 60));
+
 	int iX = 0;
 	int iY = ScreenHeight - 5;
 
 	int iW = m_iCharacterBG_New_Bottom->w();
 	int iH = m_iCharacterBG_New_Bottom->h();
-
-	int iMinutes = max(0, (int)(gHUD.m_Timer.m_iTime + gHUD.m_Timer.m_fStartTime - gHUD.m_flTime) / 60);
-	int iSeconds = max(0, (int)(gHUD.m_Timer.m_iTime + gHUD.m_Timer.m_fStartTime - gHUD.m_flTime) - (iMinutes * 60));
 
 	m_iCharacterBG_New_Bottom->Draw2DQuadScaled(iX, iY - iH, iX + iW, iY - iH + iH);
 
@@ -218,14 +218,14 @@ int CHudZB3ScoreBoard::Draw(float time)
 	iX = ScreenWidth;
 	iY = ScreenHeight - 5;
 
-	if (!g_PlayerInfoList[idx].model) 
-	{
+	int idx2 = gEngfuncs.GetLocalPlayer()->index;
+	if (!g_PlayerInfoList[idx2].model) {
 		return 1;
 	}
 
-	if (m_szLastModel != g_PlayerInfoList[idx].model)
+	if (m_szLastModel != g_PlayerInfoList[idx2].model)
 	{
-		m_szLastModel = g_PlayerInfoList[idx].model;
+		m_szLastModel = g_PlayerInfoList[idx2].model;
 		if (m_iCharacter)
 			m_iCharacter = nullptr;
 

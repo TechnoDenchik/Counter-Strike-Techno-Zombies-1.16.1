@@ -744,12 +744,6 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 	int hitBits = 0;
 	if (m_LastHitGroup == HITGROUP_SHIELD) hitBits |= (1 << 0);
 	if (bitsDamageType & DMG_BURN) hitBits |= (1 << 3);
-	MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, pevAttacker);
-	WRITE_LONG((long)flDamage);
-	WRITE_SHORT(ENTINDEX(edict()));
-	WRITE_BYTE(hitBits);
-	WRITE_BYTE(0);
-	MESSAGE_END();
 
 	if (bitsDamageType & (DMG_EXPLOSION | DMG_BLAST))
 	{
@@ -825,11 +819,30 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 		}
 		else
 		{
+
+			if (CBaseEntity::Instance(this->pev)->IsPlayer()) {
+				MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, this->pev);
+				WRITE_LONG(-1);
+				WRITE_SHORT(ENTINDEX(edict()));
+				WRITE_BYTE(0);
+				WRITE_BYTE(1);
+				MESSAGE_END();
+			}
+
 			if (bitsDamageType & DMG_BLAST)
 				m_bKilledByBomb = true;
 
 			else if (bitsDamageType & DMG_EXPLOSION)
 				m_bKilledByGrenade = true;
+		}
+
+		if (CBaseEntity::Instance(pevAttacker)->IsPlayer() && (int)flDamage > 0) {
+			MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, pevAttacker);
+			WRITE_LONG((long)flDamage);
+			WRITE_SHORT(ENTINDEX(edict()));
+			WRITE_BYTE(0);
+			WRITE_BYTE(0);
+			MESSAGE_END();
 		}
 
 		// notify gamerules
@@ -913,12 +926,6 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 
 	if (!g_pGameRules->FPlayerCanTakeDamage(this, pAttacker) && Q_strcmp("grenade", STRING(pevInflictor->classname)))
 	{
-
-		MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, pevAttacker);
-		WRITE_LONG((long)flDamage);
-		WRITE_SHORT(ENTINDEX(edict()));
-		WRITE_BYTE(0);
-		MESSAGE_END();
 		// Refuse the damage
 		return 0;
 	}
@@ -939,15 +946,6 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 	{
 		pAttack = GetClassPtr<CBasePlayer>(pevAttacker);
 
-		if (CBaseEntity::Instance(pevAttacker)->IsPlayer() && flDamage > 0.0f) 
-		{
-				MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, pevAttacker);
-				WRITE_LONG((long)flDamage);
-				WRITE_SHORT(ENTINDEX(edict()));
-				WRITE_BYTE(0);
-				MESSAGE_END();
-				
-		}
 		bool bAttackFFA = !g_pGameRules->IsTeamplay();
 
 		// warn about team attacks
@@ -984,11 +982,6 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 
 		if (g_pGameRules->IsTeamplay() && pAttack->m_iTeam == m_iTeam && !bAttackFFA)
 		{
-			MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, pevAttacker);
-			WRITE_LONG((long)flDamage);
-			WRITE_SHORT(ENTINDEX(edict()));
-			WRITE_BYTE(0);
-			MESSAGE_END();
 			// bullets hurt teammates less
 			flDamage *= 0.35;
 		}
@@ -1065,16 +1058,24 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 		int hitBits = 0;
 		if (m_LastHitGroup == HITGROUP_HEAD) hitBits |= (1 << 0);
 		if (bitsDamageType & DMG_BURN) hitBits |= (1 << 3);
+		Pain(m_LastHitGroup, true);
+	}
+	else
+		Pain(m_LastHitGroup, false);
+
+	if (CBaseEntity::Instance(pevAttacker)->IsPlayer()) {
+		int hitBits = 0;
+		if (m_LastHitGroup == HITGROUP_HEAD) hitBits |= (1 << 0);
+		if (bitsDamageType & DMG_CRITICAL) hitBits |= (1 << 1);
+		if (bitsDamageType & DMG_BACKATK) hitBits |= (1 << 2);
+		if (bitsDamageType & DMG_BURN) hitBits |= (1 << 3);
 		MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, pevAttacker);
 		WRITE_LONG((long)flDamage);
 		WRITE_SHORT(ENTINDEX(edict()));
 		WRITE_BYTE(hitBits);
 		WRITE_BYTE(0);
 		MESSAGE_END();
-		Pain(m_LastHitGroup, true);
 	}
-	else
-		Pain(m_LastHitGroup, false);
 
 	LogAttack(pAttack, this, teamAttack, flDamage, armorHit, pev->health - flDamage, pev->armorvalue, GetWeaponName(pevInflictor, pevAttacker));
 
