@@ -122,6 +122,13 @@ int gmsgOriginalMsg3 = 0;
 int gmsgOriginalMsg4 = 0;
 int gmsgOriginalMsg5 = 0;
 int gmsgOriginalMsg6 = 0;
+int gmsgOriginalMsg7 = 0;
+int gmsgOriginalMsg8 = 0;
+int gmsgOriginalMsg9 = 0;
+int gmsgOriginalMsg10 = 0;
+int gmsgOriginalMsg11 = 0;
+int gmsgOriginalMsg12 = 0;
+
 int gmsgZB3UsedMsg = 0;
 int gmsgZSHMsg = 0;
 int gmsgZSHMsgText = 0;
@@ -240,6 +247,12 @@ void LinkUserMessages()
 	gmsgOriginalMsg4 = REG_USER_MSG("CTWIN", -1);
 	gmsgOriginalMsg5 = REG_USER_MSG("TRWIN", -1);
 	gmsgOriginalMsg6 = REG_USER_MSG("RoundDraw", -1);
+	gmsgOriginalMsg7 = REG_USER_MSG("Bombnozone", -1);
+	gmsgOriginalMsg8 = REG_USER_MSG("Bombnoground", -1);
+	gmsgOriginalMsg9 = REG_USER_MSG("Bombgive", -1);
+	gmsgOriginalMsg10 = REG_USER_MSG("Bombdrop", -1);
+	gmsgOriginalMsg11 = REG_USER_MSG("WPNDrop", -1);
+	gmsgOriginalMsg12 = REG_USER_MSG("", -1);
 
 	gmsgZB3UsedMsg = REG_USER_MSG("ZB3SkillUsed", -1);
 	gmsgResetRound = REG_USER_MSG("ResetRound", -1);

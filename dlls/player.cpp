@@ -41,6 +41,7 @@
 // addons
 #include "player/player_spawnpoint.h"
 #include "player/player_knockback.h"
+#include "gamemode/interface/interface_const.h"
 
 /*
 * Globals initialization
@@ -6769,7 +6770,9 @@ void CBasePlayer::DropPlayerItem(const char *pszItemName)
 
 	if (m_bIsVIP || !m_pModStrategy->CanDropWeapon(pszItemName))
 	{
-		ClientPrint(pev, HUD_PRINTCENTER, "#Weapon_Cannot_Be_Dropped");
+		MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg11);
+		WRITE_BYTE(ORIG_WDROP_MSG);
+		MESSAGE_END();
 		return;
 	}
 	else if (!pszItemName && HasShield())
@@ -6802,7 +6805,10 @@ void CBasePlayer::DropPlayerItem(const char *pszItemName)
 		{
 			if (!pWeapon->CanDrop())
 			{
-				ClientPrint(pev, HUD_PRINTCENTER, "#Weapon_Cannot_Be_Dropped");
+				MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg11);
+				WRITE_BYTE(ORIG_WDROP_MSG);
+				MESSAGE_END();
+			//	ClientPrint(pev, HUD_PRINTCENTER, "#Weapon_Cannot_Be_Dropped");
 				continue;
 			}
 
@@ -6846,7 +6852,12 @@ void CBasePlayer::DropPlayerItem(const char *pszItemName)
 
 							if (pOther->pev->deadflag == DEAD_NO && pOther->m_iTeam == TERRORIST)
 							{
-								ClientPrint(pOther->pev, HUD_PRINTCENTER, "#Game_bomb_drop", STRING(pev->netname));
+
+								MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg10);
+								WRITE_BYTE(ORIG_BOMB6_MSG);
+								MESSAGE_END();
+
+								//ClientPrint(pOther->pev, HUD_PRINTCENTER, "#Game_bomb_drop", STRING(pev->netname));
 
 								MESSAGE_BEGIN(MSG_ONE, gmsgBombDrop, NULL, pOther->pev);
 									WRITE_COORD(pev->origin.x);

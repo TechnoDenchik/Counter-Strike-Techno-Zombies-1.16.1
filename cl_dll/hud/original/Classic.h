@@ -18,6 +18,11 @@ public:
 	CHudMsgFunc(CTWIN);
 	CHudMsgFunc(TRWIN);
 	CHudMsgFunc(RoundDraw);
+	CHudMsgFunc(Bombnozone);
+	CHudMsgFunc(Bombnoground);
+	CHudMsgFunc(Bombdrop);
+	CHudMsgFunc(Bombgive);
+	CHudMsgFunc(WPNDrop);
 
 public:
 	class CHudClassic_impl_t* pimpl = nullptr;

@@ -14,7 +14,7 @@
 #include "OrigWinhud.h"
 #include <vector>
 
-class CHudClassic_impl_t : public THudSubDispatcher<CHudGameStart, CHudBombPlant, CHudBombDefuse, CHudOrigWins, CHudRoundDraw>
+class CHudClassic_impl_t : public THudSubDispatcher<CHudGameStart, CHudBombPlant, CHudBombDefuse, CHudOrigWins, CHudRoundDraw, CHudBombnozone, CHudBombnoground, CHudBombgive, CHudBombdrop, CHudWPNDrop>
 {
 public:
 };
@@ -25,6 +25,11 @@ DECLARE_MESSAGE(m_CLS, BombDefuse)
 DECLARE_MESSAGE(m_CLS, CTWIN)
 DECLARE_MESSAGE(m_CLS, TRWIN)
 DECLARE_MESSAGE(m_CLS, RoundDraw)
+DECLARE_MESSAGE(m_CLS, Bombnozone)
+DECLARE_MESSAGE(m_CLS, Bombnoground)
+DECLARE_MESSAGE(m_CLS, Bombgive)
+DECLARE_MESSAGE(m_CLS, Bombdrop)
+DECLARE_MESSAGE(m_CLS, WPNDrop)
 
 int CHudClassic::MsgFunc_StartGame(const char* pszName, int iSize, void* pbuf)
 {
@@ -113,11 +118,91 @@ int CHudClassic::MsgFunc_RoundDraw(const char* pszName, int iSize, void* pbuf)
 	auto type = static_cast<INTMessage>(buf.ReadByte());
 	switch (type)
 	{
-	case ORIG_RDRAW_MSG:
-	{
-		pimpl->get<CHudRoundDraw>().Settext();
-		break;
+		case ORIG_RDRAW_MSG:
+		{
+			pimpl->get<CHudRoundDraw>().Settext();
+			break;
+		}
 	}
+	return 1;
+}
+
+int CHudClassic::MsgFunc_Bombnozone(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+
+	auto type = static_cast<INTMessage>(buf.ReadByte());
+	switch (type)
+	{
+		case ORIG_BOMB3_MSG:
+		{
+			pimpl->get<CHudBombnozone>().Settext();
+			break;
+		}
+	}
+	return 1;
+}
+
+int CHudClassic::MsgFunc_Bombnoground(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+
+	auto type = static_cast<INTMessage>(buf.ReadByte());
+	switch (type)
+	{
+		case ORIG_BOMB4_MSG:
+		{
+			pimpl->get<CHudBombnoground>().Settext();
+			break;
+		}
+	}
+	return 1;
+}
+
+int CHudClassic::MsgFunc_Bombgive(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+
+	auto type = static_cast<INTMessage>(buf.ReadByte());
+	switch (type)
+	{
+		case ORIG_BOMB5_MSG:
+		{
+			pimpl->get<CHudBombgive>().Settext();
+			break;
+		}
+	}
+	return 1;
+}
+
+int CHudClassic::MsgFunc_Bombdrop(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+
+	auto type = static_cast<INTMessage>(buf.ReadByte());
+	switch (type)
+	{
+		case ORIG_BOMB6_MSG:
+		{
+			pimpl->get<CHudBombdrop>().Settext();
+			break;
+		}
+	}
+	return 1;
+}
+
+int CHudClassic::MsgFunc_WPNDrop(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+
+	auto type = static_cast<INTMessage>(buf.ReadByte());
+	switch (type)
+	{
+		case ORIG_WDROP_MSG:
+		{
+			pimpl->get<CHudWPNDrop>().Settext();
+			break;
+		}
 	}
 	return 1;
 }
@@ -134,6 +219,11 @@ int CHudClassic::Init()
 	HOOK_MESSAGE(CTWIN);
 	HOOK_MESSAGE(TRWIN);
 	HOOK_MESSAGE(RoundDraw);
+	HOOK_MESSAGE(Bombnozone);
+	HOOK_MESSAGE(Bombnoground);
+	HOOK_MESSAGE(Bombgive);
+	HOOK_MESSAGE(Bombdrop);
+	HOOK_MESSAGE(WPNDrop);
 
 	return 1;
 }

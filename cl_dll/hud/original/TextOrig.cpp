@@ -215,3 +215,228 @@ void CHudRoundDraw::Settext()
 	m_pCurTexture = stringtext;
 	m_flDisplayTime = gHUD.m_flTime;
 }
+
+int CHudBombnozone::VidInit(void)
+{
+	if (!stringtext)
+		stringtext = R_LoadTextureShared("resource/hud/zb3/hud_string_bg", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
+	return 1;
+}
+
+int CHudBombnozone::Draw(float time)
+{
+	if (!m_pCurTexture)
+		return 1;
+
+	if (time > m_flDisplayTime + 2.0f)
+	{
+		m_pCurTexture = nullptr;
+		return 1;
+	}
+
+	int x = ScreenWidth / 1.995;
+	int y = ScreenHeight / 1.4;
+	int y2 = ScreenHeight / 1.4;
+
+	const float flScale = 0.0f;
+	const int r = 153, g = 97, b = 7;
+
+	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
+	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255 * std::min(5.0f - (time - m_flDisplayTime), 1.0f));
+
+	stringtext->Bind();
+	DrawUtils::Draw2DQuadScaled(x - 500 / 2, y - 38, x + 500 / 2, y - 8);
+
+	char szbuffer[64];
+	sprintf(szbuffer, "Бомба должна находится в зоне закладки");
+
+	DrawUtils::DrawHudString(x - 140, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+
+	return 1;
+}
+
+void CHudBombnozone::Settext()
+{
+	m_pCurTexture = stringtext;
+	m_flDisplayTime = gHUD.m_flTime;
+}
+
+int CHudBombnoground::VidInit(void)
+{
+	if (!stringtext)
+		stringtext = R_LoadTextureShared("resource/hud/zb3/hud_string_bg", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
+	return 1;
+}
+
+int CHudBombnoground::Draw(float time)
+{
+	if (!m_pCurTexture)
+		return 1;
+
+	if (time > m_flDisplayTime + 2.0f)
+	{
+		m_pCurTexture = nullptr;
+		return 1;
+	}
+
+	int x = ScreenWidth / 1.995;
+	int y = ScreenHeight / 1.4;
+	int y2 = ScreenHeight / 1.4;
+
+	const float flScale = 0.0f;
+	const int r = 153, g = 97, b = 7;
+
+	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
+	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255 * std::min(5.0f - (time - m_flDisplayTime), 1.0f));
+
+	stringtext->Bind();
+	DrawUtils::Draw2DQuadScaled(x - 500 / 2, y - 38, x + 500 / 2, y - 8);
+
+	char szbuffer[64];
+	sprintf(szbuffer, "Бомба должна находится на земле");
+
+	DrawUtils::DrawHudString(x - 130, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+
+	return 1;
+}
+
+void CHudBombnoground::Settext()
+{
+	m_pCurTexture = stringtext;
+	m_flDisplayTime = gHUD.m_flTime;
+}
+
+int CHudBombgive::VidInit(void)
+{
+	if (!stringtext)
+		stringtext = R_LoadTextureShared("resource/hud/zb3/hud_string_bg", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
+	return 1;
+}
+
+int CHudBombgive::Draw(float time)
+{
+	if (!m_pCurTexture)
+		return 1;
+
+	if (time > m_flDisplayTime + 2.0f)
+	{
+		m_pCurTexture = nullptr;
+		return 1;
+	}
+
+	int x = ScreenWidth / 1.995;
+	int y = ScreenHeight / 1.4;
+	int y2 = ScreenHeight / 1.4;
+
+	const float flScale = 0.0f;
+	const int r = 153, g = 97, b = 7;
+
+	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
+	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255 * std::min(5.0f - (time - m_flDisplayTime), 1.0f));
+
+	stringtext->Bind();
+	DrawUtils::Draw2DQuadScaled(x - 500 / 2, y - 38, x + 500 / 2, y - 8);
+
+	char szbuffer[64];
+	sprintf(szbuffer, "Вы подобрали бомбу");
+
+	DrawUtils::DrawHudString(x - 65, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+
+	return 1;
+}
+
+void CHudBombgive::Settext()
+{
+	m_pCurTexture = stringtext;
+	m_flDisplayTime = gHUD.m_flTime;
+}
+
+int CHudBombdrop::VidInit(void)
+{
+	if (!stringtext)
+		stringtext = R_LoadTextureShared("resource/hud/zb3/hud_string_bg", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
+	return 1;
+}
+
+int CHudBombdrop::Draw(float time)
+{
+	if (!m_pCurTexture)
+		return 1;
+
+	if (time > m_flDisplayTime + 2.0f)
+	{
+		m_pCurTexture = nullptr;
+		return 1;
+	}
+
+	int x = ScreenWidth / 1.995;
+	int y = ScreenHeight / 1.4;
+	int y2 = ScreenHeight / 1.4;
+
+	const float flScale = 0.0f;
+	const int r = 153, g = 97, b = 7;
+
+	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
+	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255 * std::min(5.0f - (time - m_flDisplayTime), 1.0f));
+
+	stringtext->Bind();
+	DrawUtils::Draw2DQuadScaled(x - 500 / 2, y - 38, x + 500 / 2, y - 8);
+
+	char szbuffer[64];
+	sprintf(szbuffer, "Вы выбросили бомбу");
+
+	DrawUtils::DrawHudString(x - 65, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+
+	return 1;
+}
+
+void CHudBombdrop::Settext()
+{
+	m_pCurTexture = stringtext;
+	m_flDisplayTime = gHUD.m_flTime;
+}
+
+int CHudWPNDrop::VidInit(void)
+{
+	if (!stringtext)
+		stringtext = R_LoadTextureShared("resource/hud/zb3/hud_string_bg", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
+	return 1;
+}
+
+int CHudWPNDrop::Draw(float time)
+{
+	if (!m_pCurTexture)
+		return 1;
+
+	if (time > m_flDisplayTime + 2.0f)
+	{
+		m_pCurTexture = nullptr;
+		return 1;
+	}
+
+	int x = ScreenWidth / 1.995;
+	int y = ScreenHeight / 1.4;
+	int y2 = ScreenHeight / 1.4;
+
+	const float flScale = 0.0f;
+	const int r = 153, g = 97, b = 7;
+
+	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
+	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255 * std::min(5.0f - (time - m_flDisplayTime), 1.0f));
+
+	stringtext->Bind();
+	DrawUtils::Draw2DQuadScaled(x - 500 / 2, y - 38, x + 500 / 2, y - 8);
+
+	char szbuffer[64];
+	sprintf(szbuffer, "Это оружие нельзя выбрсить");
+
+	DrawUtils::DrawHudString(x - 100, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+
+	return 1;
+}
+
+void CHudWPNDrop::Settext()
+{
+	m_pCurTexture = stringtext;
+	m_flDisplayTime = gHUD.m_flTime;
+}

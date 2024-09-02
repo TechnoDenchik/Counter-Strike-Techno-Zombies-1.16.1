@@ -124,6 +124,12 @@ extern int gmsgOriginalMsg3;
 extern int gmsgOriginalMsg4;
 extern int gmsgOriginalMsg5;
 extern int gmsgOriginalMsg6;
+extern int gmsgOriginalMsg7;
+extern int gmsgOriginalMsg8;
+extern int gmsgOriginalMsg9;
+extern int gmsgOriginalMsg10;
+extern int gmsgOriginalMsg11;
+extern int gmsgOriginalMsg12;
 
 void LinkUserMessages();
 void WriteSigonMessages();

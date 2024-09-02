@@ -73,6 +73,7 @@
 
 /*
 * Globals initialization
+bomb
 */
 float g_flTimeLimit = 0;
 float g_flResetTime = 0;
