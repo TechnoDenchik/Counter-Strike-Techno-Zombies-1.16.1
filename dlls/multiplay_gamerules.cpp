@@ -449,6 +449,8 @@ void ReadMultiplayCvars(CHalfLifeMultiplay *mp)
 
 CHalfLifeMultiplay::CHalfLifeMultiplay()
 {
+	PRECACHE_GENERIC("sound/Music/ct/musicforfb_1.mp3");
+	PRECACHE_GENERIC("sound/Music/t/musicforfb_2.mp3");
 	m_VoiceGameMgr.Init(&g_GameMgrHelper, gpGlobals->maxClients);
 	RefreshSkillData();
 
@@ -1391,6 +1393,10 @@ bool CHalfLifeMultiplay::BombRoundEndCheck(bool bNeededPlayers)
 	return false;
 }
 
+#include "util\u_ebobase.hpp"
+#include "util\u_range.hpp"
+using namespace moe;
+
 bool CHalfLifeMultiplay::TeamExterminationCheck(int NumAliveTerrorist, int NumAliveCT, int NumDeadTerrorist, int NumDeadCT, bool bNeededPlayers)
 {
 	if ((m_iNumCT > 0 && m_iNumSpawnableCT > 0) && (m_iNumTerrorist > 0 && m_iNumSpawnableTerrorist > 0))
@@ -1423,15 +1429,20 @@ bool CHalfLifeMultiplay::TeamExterminationCheck(int NumAliveTerrorist, int NumAl
 					UpdateTeamScores();
 				}
 
+				//edict_t* pEntity();
+				for (CBasePlayer* player : moe::range::PlayersList())
+					CLIENT_COMMAND(player->edict(), "mp3 loop sound/Music/ct/musicforfb_1\n");
+				//CLIENT_COMMAND(pEntity(), "mp3 loop sound/Music/ct/musicforfb_11.mp3\n");
+
 				MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg4);
 				WRITE_BYTE(ORIG_CTWIN_MSG);
 				MESSAGE_END();
 
-				TerminateRound(5, WINSTATUS_CTS);
+				TerminateRound(10, WINSTATUS_CTS);
 
 				if (IsCareer())
 				{
-					QueueCareerRoundEndMenu(5, WINSTATUS_CTS);
+					QueueCareerRoundEndMenu(10, WINSTATUS_CTS);
 				}
 
 				return true;
@@ -1451,15 +1462,18 @@ bool CHalfLifeMultiplay::TeamExterminationCheck(int NumAliveTerrorist, int NumAl
 				UpdateTeamScores();
 			}
 
+			for (CBasePlayer* player : moe::range::PlayersList())
+				CLIENT_COMMAND(player->edict(), "mp3 loop sound/Music/t/musicforfb_2\n");
+
 			MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg5);
 			WRITE_BYTE(ORIG_TRWIN_MSG);
 			MESSAGE_END();
 
-			TerminateRound(5, WINSTATUS_TERRORISTS);
+			TerminateRound(10, WINSTATUS_TERRORISTS);
 
 			if (IsCareer())
 			{
-				QueueCareerRoundEndMenu(5, WINSTATUS_TERRORISTS);
+				QueueCareerRoundEndMenu(10, WINSTATUS_TERRORISTS);
 			}
 
 			return true;
@@ -1473,7 +1487,7 @@ bool CHalfLifeMultiplay::TeamExterminationCheck(int NumAliveTerrorist, int NumAl
 		MESSAGE_END();
 
 		Broadcast("rounddraw");
-		TerminateRound(5, WINSTATUS_DRAW);
+		TerminateRound(7, WINSTATUS_DRAW);
 
 		return true;
 	}
@@ -1505,7 +1519,7 @@ bool CHalfLifeMultiplay::HostageRescueRoundEndCheck(bool bNeededPlayers)
 	if (!bHostageAlive && iHostages > 0)
 	{
 		if (m_iHostagesRescued >= (iHostages * 0.5))
-		{
+		{ 
 			Broadcast("ctwin");
 			m_iAccountCT += REWARD_ALL_HOSTAGES_RESCUED;
 
@@ -1532,10 +1546,10 @@ bool CHalfLifeMultiplay::HostageRescueRoundEndCheck(bool bNeededPlayers)
 				}
 			}
 
-			TerminateRound(5, WINSTATUS_CTS);
+			TerminateRound(10, WINSTATUS_CTS);
 			if (IsCareer())
 			{
-				QueueCareerRoundEndMenu(5, WINSTATUS_CTS);
+				QueueCareerRoundEndMenu(10, WINSTATUS_CTS);
 			}
 
 			return true;
@@ -1711,13 +1725,18 @@ void CHalfLifeMultiplay::RestartRound()
 		g_pHostages->RestartRound();
 	}
 
+
+
 	++m_iTotalRoundsPlayed;
 	ClearBodyQue();
+
+	for (CBasePlayer* player : moe::range::PlayersList())
+		CLIENT_COMMAND(player->edict(), "mp3 stop\n");
 
 	// Hardlock the player accelaration to 5.0
 	CVAR_SET_FLOAT("sv_accelerate", 5.0);
 	CVAR_SET_FLOAT("sv_friction", 4.0);
-	CVAR_SET_FLOAT("sv_stopspeed", 75);
+	CVAR_SET_FLOAT("sv_stopspeed", 85);
 
 	// Tabulate the number of players on each team.
 	m_iNumCT = CountTeamPlayers(CT);
@@ -3825,7 +3844,7 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer *pVictim, entvars_t *pKiller, e
 			KillerTeam, STRING(pVictim->pev->netname), GETPLAYERUSERID(pVictim->edict()), GETPLAYERAUTHID(pVictim->edict()), VictimTeam, killer_weapon_name);
 	}
 	else
-	{
+	{ 
 		// killed by the world
 		const char *team = GetTeam(pVictim->m_iTeam);
 		UTIL_LogPrintf("\"%s<%i><%s><%s>\" committed suicide with \"%s\" (world)\n", STRING(pVictim->pev->netname), GETPLAYERUSERID(pVictim->edict()),
