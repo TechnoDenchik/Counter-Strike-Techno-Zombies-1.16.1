@@ -75,22 +75,18 @@ void CZombieSkill_ZombieCrazy::Activate()
 		{
 		case SKILL_STATUS_USING:
 		case SKILL_STATUS_FREEZING:
-			/*char buf[16];
-			sprintf(buf, "%d", static_cast<int>(m_flTimeZombieSkillNext - gpGlobals->time));
-			ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER,
-				"The 'Berserk' skill can't be used because the skill is in cooldown. [Remaining Cooldown Time: %s1 sec.]",
-				buf
-			); */
 
 			MESSAGE_BEGIN(MSG_ONE, gmsgZB3UsedMsg, NULL, m_pPlayer->pev);
 			WRITE_BYTE(ZB3_USED_MSG);
 			WRITE_BYTE(m_flTimeZombieSkillNext - gpGlobals->time);
 			WRITE_BYTE(0);
 			MESSAGE_END();
-
 			break;
 		case SKILL_STATUS_USED:
-			ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER, "The 'Sprint' skill can only be used once per round."); // #CSO_CantSprintUsed
+	
+			MESSAGE_BEGIN(MSG_ONE, gmsgZB3UsedMsg2, NULL, m_pPlayer->pev);
+			WRITE_BYTE(ZB3_USED_MSG2);
+			MESSAGE_END();
 			break;
 		default:
 			break;

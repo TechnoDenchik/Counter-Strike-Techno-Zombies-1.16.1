@@ -18,6 +18,7 @@ GNU General Public License for more details.
 #include "cbase.h"
 #include "player.h"
 
+#include "gamemode/interface/interface_const.h"
 #include "gamemode/zb2/zb2_const.h"
 #include "gamemode/zb2/zb2_zclass.h"
 #include "gamemode/zb2/zb2_skill.h"
@@ -54,7 +55,9 @@ public:
 	{
 		if (m_iZombieSkillStatus != SKILL_STATUS_READY)
 		{
-			ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER, "The 'Sprint' skill can only be used once per round."); // #CSO_CantSprintUsed
+			MESSAGE_BEGIN(MSG_ONE, gmsgZB3UsedMsg2, NULL, m_pPlayer->pev);
+			WRITE_BYTE(ZB3_USED_MSG2);
+			MESSAGE_END();
 			return;
 		}
 
@@ -134,7 +137,9 @@ public:
 	{
 		if (m_iZombieSkillStatus != SKILL_STATUS_READY)
 		{
-			ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER, "The 'HeadShot' skill can only be used once per round."); // #CSO_CantSprintUsed
+			MESSAGE_BEGIN(MSG_ONE, gmsgZB3UsedMsg2, NULL, m_pPlayer->pev);
+			WRITE_BYTE(ZB3_USED_MSG2);
+			MESSAGE_END();
 			return;
 		}
 		m_iZombieSkillStatus = SKILL_STATUS_USING;
@@ -169,7 +174,9 @@ public:
 	{
 		if (m_iZombieSkillStatus != SKILL_STATUS_READY)
 		{
-			ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER, "The 'Knife2x' skill can only be used once per round."); // #CSO_CantSprintUsed
+			MESSAGE_BEGIN(MSG_ONE, gmsgZB3UsedMsg2, NULL, m_pPlayer->pev);
+			WRITE_BYTE(ZB3_USED_MSG2);
+			MESSAGE_END();
 			return;
 		}
 		m_iZombieSkillStatus = SKILL_STATUS_USING;

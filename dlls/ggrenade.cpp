@@ -1479,7 +1479,7 @@ void CGrenade::C4Think()
 			{
 				if (!iOnGround)
 				{
-					MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg8);
+					MESSAGE_BEGIN(MSG_ONE, gmsgOriginalMsg8, NULL, pPlayer->pev);
 					WRITE_BYTE(ORIG_BOMB4_MSG);
 					MESSAGE_END();
 				}

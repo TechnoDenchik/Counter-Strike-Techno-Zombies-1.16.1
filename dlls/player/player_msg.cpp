@@ -130,6 +130,7 @@ int gmsgOriginalMsg11 = 0;
 int gmsgOriginalMsg12 = 0;
 
 int gmsgZB3UsedMsg = 0;
+int gmsgZB3UsedMsg2 = 0;
 int gmsgZSHMsg = 0;
 int gmsgZSHMsgText = 0;
 int gmsgResetRound = 0;
@@ -255,6 +256,7 @@ void LinkUserMessages()
 	gmsgOriginalMsg12 = REG_USER_MSG("", -1);
 
 	gmsgZB3UsedMsg = REG_USER_MSG("ZB3SkillUsed", -1);
+	gmsgZB3UsedMsg2 = REG_USER_MSG("ZB3SkillUsed2", -1);
 	gmsgResetRound = REG_USER_MSG("ResetRound", -1);
 	gmsgGunDeath = REG_USER_MSG("GunDeath", -1);
 }

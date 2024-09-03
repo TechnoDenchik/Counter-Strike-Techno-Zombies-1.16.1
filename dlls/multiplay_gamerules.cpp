@@ -20,6 +20,7 @@
 #include "pm_shared.h"
 #include "utllinkedlist.h"
 #include "gamemode/interface/interface_const.h"
+#include "gamemode/zb2/zb2_const.h"
 
 // CSBOT and Nav
 #include "game_shared2/GameEvent.h"		// Game event enum used by career mode, tutor system, and bots
@@ -2084,6 +2085,11 @@ void CHalfLifeMultiplay::RestartRound()
 	m_bTargetBombed = m_bBombDefused = false;
 	m_bLevelInitialized = false;
 	m_bCompleteReset = false;
+
+	MESSAGE_BEGIN(MSG_ALL, gmsgResetRound, nullptr);
+	WRITE_BYTE(m_iTotalRoundsPlayed);
+	MESSAGE_END();
+
 }
 
 BOOL CHalfLifeMultiplay::IsThereABomber()

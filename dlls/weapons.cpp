@@ -1658,7 +1658,8 @@ void CWeaponBox::Touch(CBaseEntity *pOther)
 					pPlayer->HintMessage("#Hint_you_have_the_bomb");
 				}
 				else
-					MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg9);
+					
+					MESSAGE_BEGIN(MSG_ONE, gmsgOriginalMsg9, NULL, pPlayer->pev);
 					WRITE_BYTE(ORIG_BOMB5_MSG);
 					MESSAGE_END();
 

@@ -109,3 +109,48 @@ void CHudTextZB3::Settext()
 	m_pCurTexture = stringtext;
 	m_flDisplayTime = gHUD.m_flTime;
 }
+
+int CHudText2ZB3::VidInit(void)
+{
+	if (!stringtext)
+		stringtext = R_LoadTextureShared("resource/hud/zb3/hud_string_bg", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
+	return 1;
+}
+
+int CHudText2ZB3::Draw(float time)
+{
+	if (!m_pCurTexture)
+		return 1;
+
+	if (time > m_flDisplayTime + 3.00f)
+	{
+		m_pCurTexture = nullptr;
+		return 1;
+	}
+
+	int x = ScreenWidth / 1.995;
+	int y = ScreenHeight / 1.4;
+	int y2 = ScreenHeight / 1.4;
+
+	const float flScale = 0.0f;
+	const int r = 153, g = 97, b = 7;
+
+	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
+	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255 * std::min(5.0f - (time - m_flDisplayTime), 1.0f));
+
+	stringtext->Bind();
+	DrawUtils::Draw2DQuadScaled(x - 600 / 2, y - 38, x + 600 / 2, y - 8);
+
+	char szbuffer[64];
+	sprintf(szbuffer, "Навык снова можно будет использовать в следующем раунде");
+
+	DrawUtils::DrawHudString(x - 210, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+
+	return 1;
+}
+
+void CHudText2ZB3::Settext()
+{
+	m_pCurTexture = stringtext;
+	m_flDisplayTime = gHUD.m_flTime;
+}

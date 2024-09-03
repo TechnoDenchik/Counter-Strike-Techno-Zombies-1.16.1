@@ -141,7 +141,7 @@ void CC4::PrimaryAttack(void)
 		{
 		#ifndef CLIENT_DLL
 			//ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER, "#C4_Plant_At_Bomb_Spot");
-			MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg7);
+			MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg7, NULL, m_pPlayer->pev);
 			WRITE_BYTE(ORIG_BOMB3_MSG);
 			MESSAGE_END();
 		#endif
@@ -153,7 +153,7 @@ void CC4::PrimaryAttack(void)
 		{
 		#ifndef CLIENT_DLL
 			//ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER, "#C4_Plant_Must_Be_On_Ground");
-			MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg8);
+			MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg8, NULL, m_pPlayer->pev);
 			WRITE_BYTE(ORIG_BOMB4_MSG);
 			MESSAGE_END();
 		#endif
@@ -182,7 +182,7 @@ void CC4::PrimaryAttack(void)
 			if (onBombZone)
 			{ 
 			#ifndef CLIENT_DLL
-				MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg8);
+				MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg8, NULL, m_pPlayer->pev);
 				WRITE_BYTE(ORIG_BOMB4_MSG);
 				MESSAGE_END();
 			#endif

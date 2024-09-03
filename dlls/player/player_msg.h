@@ -113,6 +113,7 @@ extern int gmsgZB2Msg;
 extern int gmsgZB3Msg;
 extern int gmsgZB3RenMsg;
 extern int gmsgZB3UsedMsg;
+extern int gmsgZB3UsedMsg2;
 extern int gmsgZSHMsg;
 extern int gmsgZSHMsgText;
 extern int gmsgGunDeath;

@@ -27,6 +27,7 @@ public:
 	void Shutdown(void) override;
 	CHudMsgFunc(ZB3Msg);
 	CHudMsgFunc(ZB3SkillUsed);
+	CHudMsgFunc(ZB3SkillUsed2);
 protected:
 	class impl_t;
 	impl_t *pimpl;

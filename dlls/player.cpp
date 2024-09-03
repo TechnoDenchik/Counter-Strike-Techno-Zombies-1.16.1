@@ -6770,7 +6770,7 @@ void CBasePlayer::DropPlayerItem(const char *pszItemName)
 
 	if (m_bIsVIP || !m_pModStrategy->CanDropWeapon(pszItemName))
 	{
-		MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg11);
+		MESSAGE_BEGIN(MSG_ONE, gmsgOriginalMsg11, NULL, pev);
 		WRITE_BYTE(ORIG_WDROP_MSG);
 		MESSAGE_END();
 		return;
@@ -6805,10 +6805,9 @@ void CBasePlayer::DropPlayerItem(const char *pszItemName)
 		{
 			if (!pWeapon->CanDrop())
 			{
-				MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg11);
+				MESSAGE_BEGIN(MSG_ONE, gmsgOriginalMsg11,NULL, pev);
 				WRITE_BYTE(ORIG_WDROP_MSG);
 				MESSAGE_END();
-			//	ClientPrint(pev, HUD_PRINTCENTER, "#Weapon_Cannot_Be_Dropped");
 				continue;
 			}
 
@@ -6850,10 +6849,11 @@ void CBasePlayer::DropPlayerItem(const char *pszItemName)
 						{
 							CBasePlayer *pOther = GetClassPtr<CBasePlayer>(pEntity->pev);
 
+							CBasePlayer* pPlayer = static_cast<CBasePlayer*>(pOther);
 							if (pOther->pev->deadflag == DEAD_NO && pOther->m_iTeam == TERRORIST)
 							{
 
-								MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg10);
+								MESSAGE_BEGIN(MSG_ONE, gmsgOriginalMsg10, NULL, pPlayer->pev);
 								WRITE_BYTE(ORIG_BOMB6_MSG);
 								MESSAGE_END();
 
