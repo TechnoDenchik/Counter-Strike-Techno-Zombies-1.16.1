@@ -13,8 +13,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-#ifndef PLAYER_ZOMBIE_H
-#define PLAYER_ZOMBIE_H
+#ifndef PLAYER_HERO_H
+#define PLAYER_HERO_H
 #ifdef _WIN32
 #pragma once
 #endif

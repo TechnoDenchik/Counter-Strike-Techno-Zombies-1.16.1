@@ -90,7 +90,7 @@ void CSDM_LoadSpawnPoints()
 	g_vecSpawnCSDM.clear();
 	// Check for CSDM spawns of the current map
 	char filename[256];
-	Q_sprintf(filename, "addons/amxmodx/configs/csdm/%s.spawns.cfg", STRING(gpGlobals->mapname));
+	Q_sprintf(filename, "cfg/maps/%s.spawns.cfg", STRING(gpGlobals->mapname));
 
 	SteamFile csdmFile(filename);
 

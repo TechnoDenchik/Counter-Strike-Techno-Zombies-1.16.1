@@ -45,7 +45,7 @@ public: // CHalfLifeMultiplay
 	void CheckWinConditions() override;
 	int IPointsForKill(CBasePlayer *pAttacker, CBasePlayer *pKilled) override;
 	void PlayerKilled(CBasePlayer *pVictim, entvars_t *pKiller, entvars_t *pInflictor) override;
-
+	
 public: // IBaseMod
 	DamageTrack_e DamageTrack() override { return DT_ZB; }
 	void InstallPlayerModStrategy(CBasePlayer *player) override;

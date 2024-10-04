@@ -36,10 +36,10 @@ CZombieClass_Speed::CZombieClass_Speed(CBasePlayer *player, ZombieLevel iEvoluti
 	m_pPlayer->SetNewPlayerModel(szModelPath);
 
 	// set default property
-	m_pPlayer->pev->health = m_pPlayer->pev->max_health = 8000;
+	m_pPlayer->pev->health = m_pPlayer->pev->max_health = 10000;
 	m_pPlayer->pev->armortype = ARMOR_TYPE_HELMET;
-	m_pPlayer->pev->armorvalue = 2000;
-	m_pPlayer->pev->gravity = 0.84f;
+	m_pPlayer->pev->armorvalue = 2500;
+	m_pPlayer->pev->gravity = 0.94f;
 	m_pPlayer->ResetMaxSpeed();
 	m_pPlayer->GiveNamedItem("Knife_Zombi_female");
 	m_pPlayer->m_bIsZombieFemale = true;

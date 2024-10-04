@@ -25,18 +25,19 @@ TYPEDESCRIPTION CWallHealth::m_SaveData[] =
 
 LINK_ENTITY_TO_CLASS(item_healthkit, CHealthKit);
 
-void CHealthKit::Spawn()
-{
-	Precache();
-	SET_MODEL(ENT(pev), "models/w_medkit.mdl");
-
-	CItem::Spawn();
-}
-
 void CHealthKit::Precache()
 {
 	PRECACHE_MODEL("models/w_medkit.mdl");
 	PRECACHE_SOUND("items/smallmedkit1.wav");
+	PRECACHE_SOUND("items/suitchargeok1.wav");
+}
+
+void CHealthKit::Spawn()
+{
+	Precache();
+	SET_MODEL(ENT(pev), "models/w_medkit.mdl");
+	EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/smallmedkit1.wav", VOL_NORM, ATTN_NORM);
+	CItem::Spawn();
 }
 
 BOOL CHealthKit::MyTouch(CBasePlayer *pPlayer)

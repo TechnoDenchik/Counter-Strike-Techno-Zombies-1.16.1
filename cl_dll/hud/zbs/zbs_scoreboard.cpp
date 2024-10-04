@@ -152,16 +152,18 @@ int CHudZBSScoreBoard::Draw(float time)
 
 	int x9 = ScreenWidth / 2;
 	int y9 = 18;
-	
+
 	int x10 = ScreenWidth / 2;
 	int y10 = 5;
 
 	int x11 = ScreenWidth / 2;
 	int y11 = 7;
+
 	const float flScale = 0.0f;
 
 	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
 	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
+
 	m_pBackground->Bind();
 	DrawUtils::Draw2DQuadScaled(x - 170, y - 4.5 , x + 170, y + 77);
 

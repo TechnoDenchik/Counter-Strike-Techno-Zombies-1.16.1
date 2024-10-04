@@ -253,13 +253,16 @@ public:
 	virtual BOOL IsFreezePeriod() { return m_bFreezePeriod; }
 	virtual void ServerDeactivate() {};
 	virtual void CheckMapConditions() {};
-   
+	virtual BOOL IsNightRound() { return nights2; };
+	virtual BOOL IsDayRound() { return dayses2; };
 public:
 	virtual ~CGameRules() {} // Added.
 
 public:
 	BOOL m_bFreezePeriod;
 	BOOL m_bBombDropped;
+	BOOL dayses2;
+	BOOL nights2;
 };
 
 class CHalfLifeRules: public CGameRules
@@ -425,8 +428,8 @@ public:
 	void MarkSpawnSkipped() { m_bSkipSpawn = false; }
 	//NOXREF void PlayerJoinedTeam(CBasePlayer *pPlayer) { }
 	float TimeRemaining() { return m_iRoundTimeSecs - gpGlobals->time + m_fRoundCount; }
-	float TimeRemaining2() { return m_iRoundTimeSecs - gpGlobals->time + DayTime; }
-	float TimeRemaining3() { return m_iRoundTimeSecs - gpGlobals->time + NightTime; }
+	float TimeRemaining2() { return m_iDayTimeSecs - gpGlobals->time + DayTime; }
+	float TimeRemaining3() { return m_iNightTimeSecs - gpGlobals->time + NightTime; }
 	BOOL TeamFull(int team_id);
 	BOOL TeamStacked(int newTeam_id, int curTeam_id);
 	bool IsVIPQueueEmpty();
@@ -462,9 +465,11 @@ public:
 	float m_flCheckWinConditions;
 	float m_fRoundCount;
 	int m_iRoundTime;// (From mp_roundtime) - How many seconds long this round is.
-	int NightTime = 120;
-	int DayTime = 240;
+	float NightTime;
+	float DayTime;
 	int m_iRoundTimeSecs;
+	int m_iDayTimeSecs;
+	int m_iNightTimeSecs;
 	int m_iIntroRoundTime;				// (From mp_freezetime) - How many seconds long the intro round (when players are frozen) is.
 	float m_fIntroRoundCount;			// The global time when the intro round ends and the real one starts
 							// wrote the original "m_flRoundTime" comment for this variable).
@@ -524,6 +529,9 @@ public:
 	int m_iMaxRounds;
 	int m_iTotalRoundsPlayed;
 	int m_iMaxRoundsWon;
+	int m_iMaxDayTime;
+	int m_iMaxNightTime;
+
 	int m_iStoredSpectValue;
 	float m_flForceCameraValue;
 	float m_flForceChaseCamValue;

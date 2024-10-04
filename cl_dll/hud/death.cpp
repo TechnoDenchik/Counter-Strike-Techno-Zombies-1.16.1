@@ -25,6 +25,32 @@
 
 #include "triangleapi.h"
 
+inline void DrawTexturePart(const CTextureRef& tex, const wrect_t& rect, int x1, int y1, float scale = 1.0f)
+{
+	tex.Bind();
+
+	float w = tex.w();
+	float h = tex.h();
+
+	x1 *= gHUD.m_flScale;
+	y1 *= gHUD.m_flScale;
+	scale *= gHUD.m_flScale;
+
+	int x2 = x1 + (rect.right - rect.left) * scale;
+	int y2 = y1 + (rect.bottom - rect.top) * scale;
+
+	gEngfuncs.pTriAPI->Begin(TRI_QUADS);
+	gEngfuncs.pTriAPI->TexCoord2f(rect.left / w, rect.top / h);
+	gEngfuncs.pTriAPI->Vertex3f(x1, y1, 0);
+	gEngfuncs.pTriAPI->TexCoord2f(rect.left / w, rect.bottom / h);
+	gEngfuncs.pTriAPI->Vertex3f(x1, y2, 0);
+	gEngfuncs.pTriAPI->TexCoord2f(rect.right / w, rect.bottom / h);
+	gEngfuncs.pTriAPI->Vertex3f(x2, y2, 0);
+	gEngfuncs.pTriAPI->TexCoord2f(rect.right / w, rect.top / h);
+	gEngfuncs.pTriAPI->Vertex3f(x2, y1, 0);
+	gEngfuncs.pTriAPI->End();
+}
+
 float color[3];
 
 DECLARE_MESSAGE( m_DeathNotice, DeathMsg )
@@ -135,6 +161,7 @@ void CHudDeathNotice::Shutdown(void)
 
 int CHudDeathNotice :: Draw( float time)
 {
+	DrawNewAlarm(time);
 	int x, y, r, g, b, i;
 
 	for( i = 0; i < MAX_DEATHNOTICES; i++ )
@@ -265,19 +292,22 @@ int CHudDeathNotice :: Draw( float time)
 				{
 				case 1:
 				{
-					numIndex = m_KM_Number0;
+					cantbelieve();
+					//numIndex = m_KM_Number0;
 					break;
 				}
 
 				case 2:
 				{
-					numIndex = m_KM_Number1;
+					incredible();
+					//numIndex = m_KM_Number1;
 					break;
 				}
 
 				case 3:
 				{
-					numIndex = m_KM_Number2;
+					crazy();
+					//numIndex = m_KM_Number2;
 					break;
 				}
 
@@ -332,22 +362,25 @@ int CHudDeathNotice :: Draw( float time)
 							{
 							case 1:
 							{
-								SPR_Set(gHUD.GetSprite(m_KM_Icon_Head), r, g, b);
-								SPR_DrawAdditive(0, x, y, &gHUD.GetSpriteRect(m_KM_Icon_Head));
+								//SPR_Set(gHUD.GetSprite(m_KM_Icon_Head), r, g, b);
+								//SPR_DrawAdditive(0, x, y, &gHUD.GetSpriteRect(m_KM_Icon_Head));
+								headshots();
 								break;
 							}
 
 							case 2:
 							{
-								SPR_Set(gHUD.GetSprite(m_KM_Icon_Knife), r, g, b);
-								SPR_DrawAdditive(0, x, y, &gHUD.GetSpriteRect(m_KM_Icon_Knife));
+								//SPR_Set(gHUD.GetSprite(m_KM_Icon_Knife), r, g, b);
+								//SPR_DrawAdditive(0, x, y, &gHUD.GetSpriteRect(m_KM_Icon_Knife));
+								knife();
 								break;
 							}
 
 							case 3:
 							{
-								SPR_Set(gHUD.GetSprite(m_KM_Icon_Frag), r, g, b);
-								SPR_DrawAdditive(0, x, y, &gHUD.GetSpriteRect(m_KM_Icon_Frag));
+								//SPR_Set(gHUD.GetSprite(m_KM_Icon_Frag), r, g, b);
+								//SPR_DrawAdditive(0, x, y, &gHUD.GetSpriteRect(m_KM_Icon_Frag));
+								excellent();
 								break;
 							}
 							}
@@ -366,6 +399,12 @@ int CHudDeathNotice :: Draw( float time)
 	if( i == 0 )
 		m_iFlags &= ~HUD_DRAW; // disable hud item
 
+	
+	return 1;
+}
+
+int CHudDeathNotice::DrawNewAlarm(float time)
+{
 	if (!m_pCurTexture)
 		return 1;
 
@@ -382,7 +421,6 @@ int CHudDeathNotice :: Draw( float time)
 	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255 - std::min(5.0f - (time - m_flDisplayTime), 1.0f));
 	m_pCurTexture->Bind();
 	DrawUtils::Draw2DQuadScaled(x2 - 500 / 2, y2, x2 + 500 / 2, y2 + 23);
-	return 1;
 }
 
 // This message handler may be better off elsewhere

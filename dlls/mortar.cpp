@@ -72,7 +72,7 @@ void CFuncMortarField::Spawn()
 
 void CFuncMortarField::Precache()
 {
-	PRECACHE_SOUND("weapons/mortar.wav");
+	PRECACHE_SOUND("zsh/turret/at4-1.wav");
 	PRECACHE_SOUND("weapons/mortarhit.wav");
 	PRECACHE_MODEL("sprites/lgtning.spr");
 }

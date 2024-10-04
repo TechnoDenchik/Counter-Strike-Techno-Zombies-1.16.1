@@ -28,7 +28,7 @@ GNU General Public License for more details.
 #include <algorithm>
 #include <vector>
 #include <dlls/gamemode/zb2/zb2_zclass.h>
-#include <dlls/gamemode/zb3/zb3_hero.h>
+#include <dlls/gamemode/zb3/zb2_hero.h>
 #include <dlls/gamemode/zb3/zb3_class_hero.h>
 #include <dlls/util/u_range.hpp>
 
@@ -151,9 +151,7 @@ void CMod_ZombieMod2::MakeSupplyboxThink()
 		if (player->m_bIsZombie)
 			continue;
 
-		MESSAGE_BEGIN(MSG_ONE, gmsgSupplyText, NULL, player->pev);
-		WRITE_BYTE(ZB2_SUPPLY_GET);
-		MESSAGE_END();
+		
 	}
 
 	for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
@@ -319,19 +317,13 @@ void CPlayerModStrategy_ZB2::Zombie_HealthRecoveryThink()
 
 void CPlayerModStrategy_ZB2::BecomeZombie(ZombieLevel iEvolutionLevel)
 {
-
-	auto sp2 = HeroClassFactory(m_pPlayer, iEvolutionLevel, "random");
 	auto sp = ZombieClassFactory(m_pPlayer, iEvolutionLevel, "random");
 	
-	m_pCharacter_ZB3 = sp2;
-	
-
 	m_pCharacter_ZB2 = sp;
 	m_pCharacter = sp;
 
 	sp->InitHUD();
 	sp->ResetMaxSpeed();
-	sp2->ResetMaxSpeed();
 
 	m_iZombieInfections = 0;
 	UpdatePlayerEvolutionHUD();

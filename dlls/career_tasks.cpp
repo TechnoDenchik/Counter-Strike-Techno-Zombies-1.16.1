@@ -402,6 +402,8 @@ void CCareerTask::OnEvent(GameEventType event, CBasePlayer *pVictim, CBasePlayer
 		{
 			TheCareerTasks->SetFinishedTaskTime((int)TheCareerTasks->GetRoundElapsedTime());
 			UTIL_GetLocalPlayer()->SyncRoundTimer();
+			UTIL_GetLocalPlayer()->SyncRoundTimer2();
+			UTIL_GetLocalPlayer()->SyncRoundTimer3();
 		}
 	}
 	else if (event >= EVENT_ROUND_DRAW)
@@ -434,6 +436,8 @@ void CCareerTask::OnEvent(GameEventType event, CBasePlayer *pVictim, CBasePlayer
 				{
 					TheCareerTasks->SetFinishedTaskTime((int)TheCareerTasks->GetRoundElapsedTime());
 					UTIL_GetLocalPlayer()->SyncRoundTimer();
+					UTIL_GetLocalPlayer()->SyncRoundTimer2();
+					UTIL_GetLocalPlayer()->SyncRoundTimer3();
 				}
 
 				if (TheTutor != NULL)

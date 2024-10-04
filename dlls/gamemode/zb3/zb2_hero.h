@@ -1,6 +1,6 @@
 /*
-zb2_zclass_tank.h - CSMoE Gameplay server : Zombie Mod 2
-Copyright (C) 2019 Moemod Yanase
+zclass.h - CSMoE Gameplay server : zombie class for zb2
+Copyright (C) 2018 Moemod Hyakuya
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -12,14 +12,3 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
-
-
-#ifndef PROJECT_ZB2_ZCLASS_TANK_H
-#define PROJECT_ZB2_ZCLASS_TANK_H
-
-#include "zb2_hero.h"
-#include "gamemode/mod_zb1.h"
-
-
-
-#endif //PROJECT_ZB2_ZCLASS_TANK_H

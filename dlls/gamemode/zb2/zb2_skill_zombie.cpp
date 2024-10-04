@@ -19,6 +19,7 @@ GNU General Public License for more details.
 #include "player.h"
 
 #include "gamemode/zb2/zb2_const.h"
+#include "gamemode/interface/interface_const.h"
 #include "gamemode/zb2/zb2_zclass.h"
 #include "gamemode/zb2/zb2_skill.h"
 #include "zb2_zclass.h"
@@ -74,16 +75,18 @@ void CZombieSkill_ZombieCrazy::Activate()
 		{
 		case SKILL_STATUS_USING:
 		case SKILL_STATUS_FREEZING:
-			char buf[16];
-			sprintf(buf, "%d", static_cast<int>(m_flTimeZombieSkillNext - gpGlobals->time));
-			ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER,
-				"The 'Berserk' skill can't be used because the skill is in cooldown. [Remaining Cooldown Time: %s1 sec.]",
-				buf
-			); // #CSO_WaitCoolTimeNormal
 
+			MESSAGE_BEGIN(MSG_ONE, gmsgZB3UsedMsg, NULL, m_pPlayer->pev);
+			WRITE_BYTE(ZB3_USED_MSG);
+			WRITE_BYTE(m_flTimeZombieSkillNext - gpGlobals->time);
+			WRITE_BYTE(0);
+			MESSAGE_END();
 			break;
 		case SKILL_STATUS_USED:
-			ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER, "The 'Sprint' skill can only be used once per round."); // #CSO_CantSprintUsed
+	
+			MESSAGE_BEGIN(MSG_ONE, gmsgZB3UsedMsg2, NULL, m_pPlayer->pev);
+			WRITE_BYTE(ZB3_USED_MSG2);
+			MESSAGE_END();
 			break;
 		default:
 			break;
@@ -104,7 +107,7 @@ void CZombieSkill_ZombieCrazy::Activate()
 	m_pPlayer->pev->rendercolor = { 255,0,0 };
 	m_pPlayer->pev->renderamt = 1;
 	m_pPlayer->pev->fov = m_pPlayer->m_iFOV = 105;
-	m_pPlayer->pev->speed = 800;
+	m_pPlayer->pev->speed = 1800;
 
 	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_pressure.wav", VOL_NORM, ATTN_NORM);
 

@@ -41,6 +41,7 @@
 // addons
 #include "player/player_spawnpoint.h"
 #include "player/player_knockback.h"
+#include "gamemode/interface/interface_const.h"
 
 /*
 * Globals initialization
@@ -741,6 +742,10 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 
 	flDamage = m_pModStrategy->AdjustDamageTaken(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 
+	int hitBits = 0;
+	if (m_LastHitGroup == HITGROUP_SHIELD) hitBits |= (1 << 0);
+	if (bitsDamageType & DMG_BURN) hitBits |= (1 << 3);
+
 	if (bitsDamageType & (DMG_EXPLOSION | DMG_BLAST))
 	{
 		if (!IsAlive())
@@ -815,11 +820,30 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 		}
 		else
 		{
+
+			if (CBaseEntity::Instance(this->pev)->IsPlayer()) {
+				MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, this->pev);
+				WRITE_LONG(-1);
+				WRITE_SHORT(ENTINDEX(edict()));
+				WRITE_BYTE(0);
+				WRITE_BYTE(1);
+				MESSAGE_END();
+			}
+
 			if (bitsDamageType & DMG_BLAST)
 				m_bKilledByBomb = true;
 
 			else if (bitsDamageType & DMG_EXPLOSION)
 				m_bKilledByGrenade = true;
+		}
+
+		if (CBaseEntity::Instance(pevAttacker)->IsPlayer() && (int)flDamage > 0) {
+			MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, pevAttacker);
+			WRITE_LONG((long)flDamage);
+			WRITE_SHORT(ENTINDEX(edict()));
+			WRITE_BYTE(0);
+			WRITE_BYTE(0);
+			MESSAGE_END();
 		}
 
 		// notify gamerules
@@ -903,12 +927,6 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 
 	if (!g_pGameRules->FPlayerCanTakeDamage(this, pAttacker) && Q_strcmp("grenade", STRING(pevInflictor->classname)))
 	{
-
-		MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, pevAttacker);
-		WRITE_LONG((long)flDamage);
-		WRITE_SHORT(ENTINDEX(edict()));
-		WRITE_BYTE(0);
-		MESSAGE_END();
 		// Refuse the damage
 		return 0;
 	}
@@ -929,15 +947,6 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 	{
 		pAttack = GetClassPtr<CBasePlayer>(pevAttacker);
 
-		if (CBaseEntity::Instance(pevAttacker)->IsPlayer() && flDamage > 0.0f) 
-		{
-				MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, pevAttacker);
-				WRITE_LONG((long)flDamage);
-				WRITE_SHORT(ENTINDEX(edict()));
-				WRITE_BYTE(0);
-				MESSAGE_END();
-				
-		}
 		bool bAttackFFA = !g_pGameRules->IsTeamplay();
 
 		// warn about team attacks
@@ -974,11 +983,6 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 
 		if (g_pGameRules->IsTeamplay() && pAttack->m_iTeam == m_iTeam && !bAttackFFA)
 		{
-			MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, pevAttacker);
-			WRITE_LONG((long)flDamage);
-			WRITE_SHORT(ENTINDEX(edict()));
-			WRITE_BYTE(0);
-			MESSAGE_END();
 			// bullets hurt teammates less
 			flDamage *= 0.35;
 		}
@@ -1055,16 +1059,24 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 		int hitBits = 0;
 		if (m_LastHitGroup == HITGROUP_HEAD) hitBits |= (1 << 0);
 		if (bitsDamageType & DMG_BURN) hitBits |= (1 << 3);
+		Pain(m_LastHitGroup, true);
+	}
+	else
+		Pain(m_LastHitGroup, false);
+
+	if (CBaseEntity::Instance(pevAttacker)->IsPlayer()) {
+		int hitBits = 0;
+		if (m_LastHitGroup == HITGROUP_HEAD) hitBits |= (1 << 0);
+		if (bitsDamageType & DMG_CRITICAL) hitBits |= (1 << 1);
+		if (bitsDamageType & DMG_BACKATK) hitBits |= (1 << 2);
+		if (bitsDamageType & DMG_BURN) hitBits |= (1 << 3);
 		MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, pevAttacker);
 		WRITE_LONG((long)flDamage);
 		WRITE_SHORT(ENTINDEX(edict()));
 		WRITE_BYTE(hitBits);
 		WRITE_BYTE(0);
 		MESSAGE_END();
-		Pain(m_LastHitGroup, true);
 	}
-	else
-		Pain(m_LastHitGroup, false);
 
 	LogAttack(pAttack, this, teamAttack, flDamage, armorHit, pev->health - flDamage, pev->armorvalue, GetWeaponName(pevInflictor, pevAttacker));
 
@@ -2890,6 +2902,146 @@ void CBasePlayer::SyncRoundTimer()
 				WRITE_SHORT(remaining);		// remaining of time, -1 the timer is disappears
 				WRITE_BYTE(shouldCountDown);	// timer counts down
 				WRITE_BYTE(fadeOutDelay); // fade in time, hide HUD timer after the expiration time
+			MESSAGE_END();
+		}
+	}
+}
+
+void CBasePlayer::SyncRoundTimer2()
+{
+	float tmRemaining;
+	CHalfLifeMultiplay* mp = g_pGameRules;
+
+	if (mp->IsMultiplayer())
+		tmRemaining = mp->TimeRemaining2();
+	else
+		tmRemaining = 0;
+
+	if (tmRemaining < 0)
+		tmRemaining = 0;
+
+	MESSAGE_BEGIN(MSG_ONE, gmsgRoundTime, NULL, pev);
+	WRITE_SHORT((int)tmRemaining);
+	MESSAGE_END();
+
+	if (!mp->IsMultiplayer())
+		return;
+
+	if (mp->IsFreezePeriod() && TheTutor != NULL && !IsObserver())
+	{
+		MESSAGE_BEGIN(MSG_ONE, gmsgBlinkAcct, NULL, pev);
+		WRITE_BYTE(MONEY_BLINK_AMOUNT);
+		MESSAGE_END();
+	}
+
+	if (TheCareerTasks != NULL && mp->IsCareer())
+	{
+		int remaining = 0;
+		bool shouldCountDown = false;
+		int fadeOutDelay = 0;
+
+		if (tmRemaining != 0.0f)
+		{
+			remaining = TheCareerTasks->GetTaskTime() - (gpGlobals->time - mp->m_fRoundCount);
+		}
+
+		if (remaining < 0)
+			remaining = 0;
+
+		if (mp->IsFreezePeriod())
+			remaining = -1;
+
+		if (TheCareerTasks->GetFinishedTaskTime())
+			remaining = -TheCareerTasks->GetFinishedTaskTime();
+
+		if (!mp->IsFreezePeriod() && !TheCareerTasks->GetFinishedTaskTime())
+		{
+			shouldCountDown = true;
+		}
+		if (!mp->IsFreezePeriod())
+		{
+			if (TheCareerTasks->GetFinishedTaskTime() || (TheCareerTasks->GetTaskTime() <= TheCareerTasks->GetRoundElapsedTime()))
+			{
+				fadeOutDelay = 3;
+			}
+		}
+
+		if (!TheCareerTasks->GetFinishedTaskTime() || TheCareerTasks->GetFinishedTaskRound() == mp->m_iTotalRoundsPlayed)
+		{
+			MESSAGE_BEGIN(MSG_ONE, gmsgTaskTime, NULL, pev);
+			WRITE_SHORT(remaining);		// remaining of time, -1 the timer is disappears
+			WRITE_BYTE(shouldCountDown);	// timer counts down
+			WRITE_BYTE(fadeOutDelay); // fade in time, hide HUD timer after the expiration time
+			MESSAGE_END();
+		}
+	}
+}
+
+void CBasePlayer::SyncRoundTimer3()
+{
+	float tmRemaining;
+	CHalfLifeMultiplay* mp = g_pGameRules;
+
+	if (mp->IsMultiplayer())
+		tmRemaining = mp->TimeRemaining3();
+	else
+		tmRemaining = 0;
+
+	if (tmRemaining < 0)
+		tmRemaining = 0;
+
+	MESSAGE_BEGIN(MSG_ONE, gmsgRoundTime, NULL, pev);
+	WRITE_SHORT((int)tmRemaining);
+	MESSAGE_END();
+
+	if (!mp->IsMultiplayer())
+		return;
+
+	if (mp->IsFreezePeriod() && TheTutor != NULL && !IsObserver())
+	{
+		MESSAGE_BEGIN(MSG_ONE, gmsgBlinkAcct, NULL, pev);
+		WRITE_BYTE(MONEY_BLINK_AMOUNT);
+		MESSAGE_END();
+	}
+
+	if (TheCareerTasks != NULL && mp->IsCareer())
+	{
+		int remaining = 0;
+		bool shouldCountDown = false;
+		int fadeOutDelay = 0;
+
+		if (tmRemaining != 0.0f)
+		{
+			remaining = TheCareerTasks->GetTaskTime() - (gpGlobals->time - mp->m_fRoundCount);
+		}
+
+		if (remaining < 0)
+			remaining = 0;
+
+		if (mp->IsFreezePeriod())
+			remaining = -1;
+
+		if (TheCareerTasks->GetFinishedTaskTime())
+			remaining = -TheCareerTasks->GetFinishedTaskTime();
+
+		if (!mp->IsFreezePeriod() && !TheCareerTasks->GetFinishedTaskTime())
+		{
+			shouldCountDown = true;
+		}
+		if (!mp->IsFreezePeriod())
+		{
+			if (TheCareerTasks->GetFinishedTaskTime() || (TheCareerTasks->GetTaskTime() <= TheCareerTasks->GetRoundElapsedTime()))
+			{
+				fadeOutDelay = 3;
+			}
+		}
+
+		if (!TheCareerTasks->GetFinishedTaskTime() || TheCareerTasks->GetFinishedTaskRound() == mp->m_iTotalRoundsPlayed)
+		{
+			MESSAGE_BEGIN(MSG_ONE, gmsgTaskTime, NULL, pev);
+			WRITE_SHORT(remaining);		// remaining of time, -1 the timer is disappears
+			WRITE_BYTE(shouldCountDown);	// timer counts down
+			WRITE_BYTE(fadeOutDelay); // fade in time, hide HUD timer after the expiration time
 			MESSAGE_END();
 		}
 	}
@@ -6758,7 +6910,9 @@ void CBasePlayer::DropPlayerItem(const char *pszItemName)
 
 	if (m_bIsVIP || !m_pModStrategy->CanDropWeapon(pszItemName))
 	{
-		ClientPrint(pev, HUD_PRINTCENTER, "#Weapon_Cannot_Be_Dropped");
+		MESSAGE_BEGIN(MSG_ONE, gmsgOriginalMsg11, NULL, pev);
+		WRITE_BYTE(ORIG_WDROP_MSG);
+		MESSAGE_END();
 		return;
 	}
 	else if (!pszItemName && HasShield())
@@ -6791,7 +6945,9 @@ void CBasePlayer::DropPlayerItem(const char *pszItemName)
 		{
 			if (!pWeapon->CanDrop())
 			{
-				ClientPrint(pev, HUD_PRINTCENTER, "#Weapon_Cannot_Be_Dropped");
+				MESSAGE_BEGIN(MSG_ONE, gmsgOriginalMsg11,NULL, pev);
+				WRITE_BYTE(ORIG_WDROP_MSG);
+				MESSAGE_END();
 				continue;
 			}
 
@@ -6833,9 +6989,15 @@ void CBasePlayer::DropPlayerItem(const char *pszItemName)
 						{
 							CBasePlayer *pOther = GetClassPtr<CBasePlayer>(pEntity->pev);
 
+							CBasePlayer* pPlayer = static_cast<CBasePlayer*>(pOther);
 							if (pOther->pev->deadflag == DEAD_NO && pOther->m_iTeam == TERRORIST)
 							{
-								ClientPrint(pOther->pev, HUD_PRINTCENTER, "#Game_bomb_drop", STRING(pev->netname));
+
+								MESSAGE_BEGIN(MSG_ONE, gmsgOriginalMsg10, NULL, pPlayer->pev);
+								WRITE_BYTE(ORIG_BOMB6_MSG);
+								MESSAGE_END();
+
+								//ClientPrint(pOther->pev, HUD_PRINTCENTER, "#Game_bomb_drop", STRING(pev->netname));
 
 								MESSAGE_BEGIN(MSG_ONE, gmsgBombDrop, NULL, pOther->pev);
 									WRITE_COORD(pev->origin.x);

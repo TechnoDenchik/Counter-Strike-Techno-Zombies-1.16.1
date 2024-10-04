@@ -14,6 +14,7 @@
 
 #include "pm_shared.h"
 #include "utllinkedlist.h"
+#include "gamemode/interface/interface_const.h"
 
 // CSBOT and Nav
 #include "game_shared2/GameEvent.h"		// Game event enum used by career mode, tutor system, and bots
@@ -60,6 +61,7 @@
 
 /*
 * Globals initialization
+* got_bomb
 */
 ItemInfo CBasePlayerItem::ItemInfoArray[MAX_WEAPONS];
 AmmoInfo CBasePlayerItem::AmmoInfoArray[MAX_AMMO_SLOTS];
@@ -1656,7 +1658,10 @@ void CWeaponBox::Touch(CBaseEntity *pOther)
 					pPlayer->HintMessage("#Hint_you_have_the_bomb");
 				}
 				else
-					ClientPrint(pPlayer->pev, HUD_PRINTCENTER, "#Got_bomb");
+					
+					MESSAGE_BEGIN(MSG_ONE, gmsgOriginalMsg9, NULL, pPlayer->pev);
+					WRITE_BYTE(ORIG_BOMB5_MSG);
+					MESSAGE_END();
 
 				UTIL_LogPrintf("\"%s<%i><%s><TERRORIST>\" triggered \"Got_The_Bomb\"\n",
 					STRING(pPlayer->pev->netname),

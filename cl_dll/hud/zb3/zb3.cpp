@@ -14,41 +14,83 @@
 #include "hud/legacy/hud_scoreboard_legacy.h"
 #include "zb3_rage.h"
 #include "player/player_const.h"
-
+#include "zb3/TextSet.h"
 #include "gamemode/zb3/zb3_const.h"
+#include "gamemode/interface/interface_const.h"
 
 #include <vector>
 
 class CHudZB3::impl_t
-	: public THudSubDispatcher<CHudZB3Morale, CHudZB3Rage>
+	: public THudSubDispatcher<CHudZB3Morale, CHudZB3Rage, CHudTextZB3, CHudText2ZB3>
 {
 public:
 };
 
 DECLARE_MESSAGE(m_ZB3, ZB3Msg)
+DECLARE_MESSAGE(m_ZB3, ZB3SkillUsed)
+DECLARE_MESSAGE(m_ZB3, ZB3SkillUsed2)
+
 int CHudZB3::MsgFunc_ZB3Msg(const char *pszName, int iSize, void *pbuf)
 {
 	BufferReader buf(pszName, pbuf, iSize);
 	auto type = static_cast<ZB3MessageType>(buf.ReadByte());
+
 	switch (type)
 	{
-	case ZB3_MESSAGE_MORALE:
-	{
-		auto morale_type = static_cast<ZB3HumanMoraleType_e>(buf.ReadByte());
-		int morale_level = buf.ReadByte();
-		pimpl->get<CHudZB3Morale>().UpdateLevel(morale_type, morale_level);
-		break;
-	}
-	case ZB3_MESSAGE_RAGE:
-	{
-		auto zombie_level = static_cast<ZombieLevel>(buf.ReadByte());
-		int percent = buf.ReadByte();
-		pimpl->get<CHudZB3Rage>().SetZombieLevel(zombie_level);
-		pimpl->get<CHudZB3Rage>().SetPercent(percent);
-		break;
-	}
+		case ZB3_MESSAGE_MORALE:
+		{
+			auto morale_type = static_cast<ZB3HumanMoraleType_e>(buf.ReadByte());
+			int morale_level = buf.ReadByte();
+			pimpl->get<CHudZB3Morale>().UpdateLevel(morale_type, morale_level);
+			break;
+		}
+		case ZB3_MESSAGE_RAGE:
+		{
+			auto zombie_level = static_cast<ZombieLevel>(buf.ReadByte());
+			int percent = buf.ReadByte();
+			pimpl->get<CHudZB3Rage>().SetZombieLevel(zombie_level);
+			pimpl->get<CHudZB3Rage>().SetPercent(percent);
+			break;
+		}
 	}
 	
+	return 1;
+}
+
+int CHudZB3::MsgFunc_ZB3SkillUsed(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);	
+	auto type = static_cast<INTMessage>(buf.ReadByte());
+	int time = buf.ReadByte();
+
+	pimpl->get<CHudTextZB3>().renaining(time);
+
+	switch (type)
+	{
+		case ZB3_USED_MSG:
+		{
+			pimpl->get<CHudTextZB3>().Settext();
+			break;
+		}
+	}
+
+	return 1;
+}
+
+int CHudZB3::MsgFunc_ZB3SkillUsed2(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+	auto type = static_cast<INTMessage>(buf.ReadByte());
+
+	switch (type)
+	{
+		case ZB3_USED_MSG2:
+		{
+			pimpl->get<CHudText2ZB3>().Settext();
+			break;
+		}
+	}
+
 	return 1;
 }
 
@@ -59,6 +101,8 @@ int CHudZB3::Init(void)
 	gHUD.AddHudElem(this);
 
 	HOOK_MESSAGE(ZB3Msg);
+	HOOK_MESSAGE(ZB3SkillUsed);
+	HOOK_MESSAGE(ZB3SkillUsed2);
 
 	return 1;
 }
@@ -66,7 +110,6 @@ int CHudZB3::Init(void)
 int CHudZB3::VidInit(void)
 {
 	pimpl->for_each(&IBaseHudSub::VidInit);
-
 	return 1;
 }
 

@@ -24,7 +24,7 @@ GNU General Public License for more details.
 #include "EventDispatcher.h"
 
 #include "zb2/zb2_zclass.h"
-#include "zb3/zb3_hero.h"
+#include "zb3/zb2_hero.h"
 #include "zb2/zb2_skill.h"
 
 class CSupplyBox;
@@ -98,7 +98,6 @@ private:
 
 	//std::unique_ptr<IZombieSkill> m_pZombieSkill;
 	std::shared_ptr<IZombieModeCharacter_ZB2_Extra> m_pCharacter_ZB2;
-	std::shared_ptr<IHeroCharacter_ZB2_Extra> m_pCharacter_ZB3;
 	float m_flTimeNextZombieHealthRecovery;
 	int m_iZombieInfections;
 };
