@@ -2907,6 +2907,146 @@ void CBasePlayer::SyncRoundTimer()
 	}
 }
 
+void CBasePlayer::SyncRoundTimer2()
+{
+	float tmRemaining;
+	CHalfLifeMultiplay* mp = g_pGameRules;
+
+	if (mp->IsMultiplayer())
+		tmRemaining = mp->TimeRemaining2();
+	else
+		tmRemaining = 0;
+
+	if (tmRemaining < 0)
+		tmRemaining = 0;
+
+	MESSAGE_BEGIN(MSG_ONE, gmsgRoundTime, NULL, pev);
+	WRITE_SHORT((int)tmRemaining);
+	MESSAGE_END();
+
+	if (!mp->IsMultiplayer())
+		return;
+
+	if (mp->IsFreezePeriod() && TheTutor != NULL && !IsObserver())
+	{
+		MESSAGE_BEGIN(MSG_ONE, gmsgBlinkAcct, NULL, pev);
+		WRITE_BYTE(MONEY_BLINK_AMOUNT);
+		MESSAGE_END();
+	}
+
+	if (TheCareerTasks != NULL && mp->IsCareer())
+	{
+		int remaining = 0;
+		bool shouldCountDown = false;
+		int fadeOutDelay = 0;
+
+		if (tmRemaining != 0.0f)
+		{
+			remaining = TheCareerTasks->GetTaskTime() - (gpGlobals->time - mp->m_fRoundCount);
+		}
+
+		if (remaining < 0)
+			remaining = 0;
+
+		if (mp->IsFreezePeriod())
+			remaining = -1;
+
+		if (TheCareerTasks->GetFinishedTaskTime())
+			remaining = -TheCareerTasks->GetFinishedTaskTime();
+
+		if (!mp->IsFreezePeriod() && !TheCareerTasks->GetFinishedTaskTime())
+		{
+			shouldCountDown = true;
+		}
+		if (!mp->IsFreezePeriod())
+		{
+			if (TheCareerTasks->GetFinishedTaskTime() || (TheCareerTasks->GetTaskTime() <= TheCareerTasks->GetRoundElapsedTime()))
+			{
+				fadeOutDelay = 3;
+			}
+		}
+
+		if (!TheCareerTasks->GetFinishedTaskTime() || TheCareerTasks->GetFinishedTaskRound() == mp->m_iTotalRoundsPlayed)
+		{
+			MESSAGE_BEGIN(MSG_ONE, gmsgTaskTime, NULL, pev);
+			WRITE_SHORT(remaining);		// remaining of time, -1 the timer is disappears
+			WRITE_BYTE(shouldCountDown);	// timer counts down
+			WRITE_BYTE(fadeOutDelay); // fade in time, hide HUD timer after the expiration time
+			MESSAGE_END();
+		}
+	}
+}
+
+void CBasePlayer::SyncRoundTimer3()
+{
+	float tmRemaining;
+	CHalfLifeMultiplay* mp = g_pGameRules;
+
+	if (mp->IsMultiplayer())
+		tmRemaining = mp->TimeRemaining3();
+	else
+		tmRemaining = 0;
+
+	if (tmRemaining < 0)
+		tmRemaining = 0;
+
+	MESSAGE_BEGIN(MSG_ONE, gmsgRoundTime, NULL, pev);
+	WRITE_SHORT((int)tmRemaining);
+	MESSAGE_END();
+
+	if (!mp->IsMultiplayer())
+		return;
+
+	if (mp->IsFreezePeriod() && TheTutor != NULL && !IsObserver())
+	{
+		MESSAGE_BEGIN(MSG_ONE, gmsgBlinkAcct, NULL, pev);
+		WRITE_BYTE(MONEY_BLINK_AMOUNT);
+		MESSAGE_END();
+	}
+
+	if (TheCareerTasks != NULL && mp->IsCareer())
+	{
+		int remaining = 0;
+		bool shouldCountDown = false;
+		int fadeOutDelay = 0;
+
+		if (tmRemaining != 0.0f)
+		{
+			remaining = TheCareerTasks->GetTaskTime() - (gpGlobals->time - mp->m_fRoundCount);
+		}
+
+		if (remaining < 0)
+			remaining = 0;
+
+		if (mp->IsFreezePeriod())
+			remaining = -1;
+
+		if (TheCareerTasks->GetFinishedTaskTime())
+			remaining = -TheCareerTasks->GetFinishedTaskTime();
+
+		if (!mp->IsFreezePeriod() && !TheCareerTasks->GetFinishedTaskTime())
+		{
+			shouldCountDown = true;
+		}
+		if (!mp->IsFreezePeriod())
+		{
+			if (TheCareerTasks->GetFinishedTaskTime() || (TheCareerTasks->GetTaskTime() <= TheCareerTasks->GetRoundElapsedTime()))
+			{
+				fadeOutDelay = 3;
+			}
+		}
+
+		if (!TheCareerTasks->GetFinishedTaskTime() || TheCareerTasks->GetFinishedTaskRound() == mp->m_iTotalRoundsPlayed)
+		{
+			MESSAGE_BEGIN(MSG_ONE, gmsgTaskTime, NULL, pev);
+			WRITE_SHORT(remaining);		// remaining of time, -1 the timer is disappears
+			WRITE_BYTE(shouldCountDown);	// timer counts down
+			WRITE_BYTE(fadeOutDelay); // fade in time, hide HUD timer after the expiration time
+			MESSAGE_END();
+		}
+	}
+}
+
 void CBasePlayer::RemoveLevelText()
 {
 	ResetMenu();

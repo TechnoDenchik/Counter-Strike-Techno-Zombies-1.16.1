@@ -1429,11 +1429,9 @@ bool CHalfLifeMultiplay::TeamExterminationCheck(int NumAliveTerrorist, int NumAl
 					UpdateTeamScores();
 				}
 
-				//edict_t* pEntity();
 				for (CBasePlayer* player : moe::range::PlayersList())
 					CLIENT_COMMAND(player->edict(), "mp3 loop sound/Music/ct/musicforfb_1\n");
-				//CLIENT_COMMAND(pEntity(), "mp3 loop sound/Music/ct/musicforfb_11.mp3\n");
-
+			
 				MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg4);
 				WRITE_BYTE(ORIG_CTWIN_MSG);
 				MESSAGE_END();
@@ -2036,6 +2034,8 @@ void CHalfLifeMultiplay::RestartRound()
 		if (!player->IsPlayer())
 		{
 			player->SyncRoundTimer();
+			player->SyncRoundTimer2();
+			player->SyncRoundTimer3();
 		}
 
 		if (player->m_iTeam == CT)
@@ -2818,6 +2818,7 @@ void CHalfLifeMultiplay::CheckFreezePeriodExpired()
 		}
 
 		plr->SyncRoundTimer();
+
 	}
 
 	if (TheBots != NULL)

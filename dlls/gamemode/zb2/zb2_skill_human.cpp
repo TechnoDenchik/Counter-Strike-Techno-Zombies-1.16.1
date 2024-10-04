@@ -66,7 +66,7 @@ public:
 		m_flTimeZombieSkillNext = -1;
 		m_flTimeZombieSkillEffect = gpGlobals->time + 1.0f;
 		m_bDebuffStatus = false;
-
+		m_pPlayer->SpawnProtection_Start(4.0f);
 		m_pPlayer->ResetMaxSpeed();
 
 		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/speedup.wav", VOL_NORM, ATTN_NORM);

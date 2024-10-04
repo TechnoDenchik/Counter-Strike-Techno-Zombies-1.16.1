@@ -88,13 +88,17 @@ public:
 					MESSAGE_END();
 					CMod_ZombieScenario Win;
 					Win.HumanWin();
+					Win.TerminateRound(5, WINSTATUS_CTS);
+					Win.ClearZombieNPC();
+					CLIENT_COMMAND(0, "mp3 stop\n");
+					Win.CheckRestartRound();
 				}
 			}
 
 		);
 		
 	}
-	int  ComputeMaxAmmo( const char *szAmmoClassName, int iOriginalMax) override { return 1600; }
+	int  ComputeMaxAmmo( const char *szAmmoClassName, int iOriginalMax) override { return 3600; }
 	bool CanPlayerBuy(bool display) override
 	{
 		// is the player alive?
@@ -341,7 +345,7 @@ void CMod_ZombieScenario::UpdateGameMode(CBasePlayer *pPlayer)
 	MESSAGE_BEGIN(MSG_ONE, gmsgGameMode, NULL, pPlayer->edict());
 	WRITE_BYTE(MOD_ZBS);
 	WRITE_BYTE(0); // Reserved. (weapon restriction? )
-	WRITE_BYTE(maxrounds.value); // MaxRound (mp_roundlimit)
+	WRITE_BYTE(6); // MaxRound (mp_roundlimit)
 	WRITE_BYTE(0); // Reserved. (MaxTime?)
 	MESSAGE_END();
 }
@@ -454,12 +458,12 @@ void CMod_ZombieScenario::Think()
 			CVAR_SET_FLOAT("sv_stopspeed", 75.0);
 		}
 
-		m_iMaxRounds = (int)maxrounds.value;
+		m_iMaxRounds = 6;
 
 		if (m_iMaxRounds < 0)
 		{
-			m_iMaxRounds = 0;
-			CVAR_SET_FLOAT("mp_maxrounds", 6);
+			m_iMaxRounds = 6;
+			//CVAR_SET_FLOAT("mp_maxrounds", 6);
 		}
 
 		m_iMaxRoundsWon = (int)winlimit.value;
@@ -525,10 +529,6 @@ void CMod_ZombieScenario::HumanWin()
 	UpdateTeamScores();
 	ClearZombieNPC();
     CLIENT_COMMAND(0, "mp3 stop\n");
-	if (m_iMaxRoundsWon && m_iNumCTWins >= m_iMaxRoundsWon)
-	{
-		UTIL_ClientPrintAll(HUD_PRINTCENTER, "Congratulations! You've cleared all the Rounds."); // #CSO_CongAllRoundClear
-	}
 }
 
 void CMod_ZombieScenario::ZombieWin()

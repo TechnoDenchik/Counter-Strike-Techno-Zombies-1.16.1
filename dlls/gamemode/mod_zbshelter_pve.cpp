@@ -20,6 +20,7 @@
 #include "zsh/resources/zsh_subs.h"
 #include "zsh/resources/resrandomspawn.h"
 
+#include "game_shared2/GameEvent.h"	
 #include <vector>
 #include <random>
 #include <algorithm>
@@ -248,11 +249,14 @@ void CMod_ZombieShelter_coop::PlayerSpawn(CBasePlayer* pPlayer)
 	pPlayer->pev->health = 100;
 	pPlayer->pev->armorvalue = 100;
 	pPlayer->SpawnProtection_Start(3.0f);
+
 }
 
 CMod_ZombieShelter_coop::CMod_ZombieShelter_coop()
 {
 	m_iRoundTimeSecs = m_iIntroRoundTime = 20 + 2;
+	DayTime = 0;
+	NightTime = 0;
 	PRECACHE_SOUND("zsh/BGM_start.wav");
 	PRECACHE_GENERIC("sound/zsh/BGM_zombie_attack.mp3");
 	UTIL_PrecacheOther("resources");
@@ -266,7 +270,6 @@ CMod_ZombieShelter_coop::CMod_ZombieShelter_coop()
 
 void CMod_ZombieShelter_coop::CheckMapConditions()
 {
-	CVAR_SET_STRING("sv_skyname", "hk");
 
 	CBaseEntity* fog = nullptr;
 	while ((fog = UTIL_FindEntityByClassname(fog, "env_fog")) != nullptr)
@@ -276,16 +279,15 @@ void CMod_ZombieShelter_coop::CheckMapConditions()
 
 	m_vecZombieSpawns.clear();
 	CBaseEntity* sp = nullptr;
-	CBaseEntity* ent = NULL;
 	while ((sp = UTIL_FindEntityByClassname(sp, "zombiespawn")) != nullptr)
 	{
 		m_vecZombieSpawns.push_back(static_cast<CResSpawn*>(sp));
 	}
 
-	while ((ent = UTIL_FindEntityByClassname(ent, "playerspawn")) != NULL)
+	while ((sp = UTIL_FindEntityByClassname(sp, "playerspawn")) != NULL)
 		++m_iSpawnPointCount_Terrorist;
 
-	while ((ent = UTIL_FindEntityByClassname(ent, "playerspawn")) != NULL)
+	while ((sp = UTIL_FindEntityByClassname(sp, "playerspawn")) != NULL)
 		++m_iSpawnPointCount_CT;
 
 	UTIL_FindEntityByClassname(sp, "shelter_team_barricade2");
@@ -333,29 +335,79 @@ void CMod_ZombieShelter_coop::WaitingSound()
 	}
 }
 
-void CMod_ZombieShelter_coop::day()
+void CMod_ZombieShelter_coop::DaySound()
 {
-	
+	for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
+	{
+		CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
+		if (!entity)
+			continue;
+		CLIENT_COMMAND(entity->edict(), "spk zsh/skill_bonus.wav\n");
+
+	}
 }
 
+void CMod_ZombieShelter_coop::NightSound()
+{
+	for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
+	{
+		CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
+		if (!entity)
+			continue;
+		CLIENT_COMMAND(entity->edict(), "mp3 loop sound/zsh/BGM_zombie_attack.mp3\n");
+
+	}
+}
+
+void CMod_ZombieShelter_coop::Thinks()
+{
+	dayses2 = TRUE;
+	nights2 = FALSE;
+}
+
+void CMod_ZombieShelter_coop::Thinks2()
+{
+	nights2 = TRUE;
+	dayses2 = FALSE;
+}
 
 void CMod_ZombieShelter_coop::Think()
 {
+
 	if (CheckGameOver())
 		return;
-
+	
+	if (CheckTimeLimit())
+			return;
+	day();
+	night();
 	TeamCheck();
 	CheckLevelInitialized();
+	CheckRoundTimeExpired();
 
-		if (CheckGameOver())
-			return;
+	if (!DayTime)
+	{
+		// intialize the timer time stamps, this happens once only
+		m_fIntroRoundCount = DayTime = gpGlobals->time;
+	}
+	if (!NightTime)
+	{
+		// intialize the timer time stamps, this happens once only
+		m_fIntroRoundCount = NightTime = gpGlobals->time;
+	}
 
-		if (CheckTimeLimit())
-			return;
-		
+	if (m_fTeamCount != 0.0f && m_fTeamCount <= gpGlobals->time)
+	{
+		RestartRound();
+	}
 
 		if (IsFreezePeriod())
 		{
+
+			
+			
+				CheckRoundTimeExpired();
+			
 
 			static int iLastCountDown = -1;
 			int iCountDown = TimeRemaining();
@@ -372,49 +424,29 @@ void CMod_ZombieShelter_coop::Think()
 
 					if (iCountDown == 18)
 					{
-
 						WaitingSound();
-						
 					}
-					if (iCountDown == 15)
+					if (iCountDown == 2 )
 					{
-						day();
+						//Thinks();
 					}
 				}
 			}
-
 
 			CheckFreezePeriodExpired();
 
 		}
 		if (FRoundStarted() && !m_bRoundTerminating)
 		{
-
 			if (gpGlobals->time > m_flNextSpawnNPC)
 			{
+				
 				MakeResources();
 				MakeResources2();
 				m_flNextSpawnNPC = gpGlobals->time + 18.0f;
 			}
 		}
-		if (FRoundStarted() && !m_bRoundTerminating)
-		{
-
-			if (gpGlobals->time > m_flNextDay)
-			{
-				m_flNextDay = gpGlobals->time + 18.0f;
-
-				
-				
-			}
-		}
 		
-	//if (m_fTeamCount != 0.0f && m_fTeamCount <= gpGlobals->time)
-	//{
-	//	RestartRound();
-	//}
-
-	CheckLevelInitialized();
 
 	if (gpGlobals->time > m_tmNextPeriodicThink)
 	{
@@ -450,6 +482,22 @@ void CMod_ZombieShelter_coop::Think()
 			m_iMaxRoundsWon = 0;
 			CVAR_SET_FLOAT("mp_winlimit", 1);
 		}
+
+		m_iMaxDayTime = (int)daytimelimit.value;
+
+		if (m_iMaxDayTime < 0)
+		{
+			m_iMaxDayTime = 240;
+			CVAR_SET_FLOAT("mp_daytimelimit", 240);
+		}
+
+		m_iMaxNightTime = (int)nighttimelimit.value;
+
+		if (m_iMaxNightTime < 0)
+		{
+			m_iMaxNightTime = 120;
+			CVAR_SET_FLOAT("mp_nighttimelimit", 120);
+		}
 	}
 
 	for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
@@ -472,6 +520,174 @@ void CMod_ZombieShelter_coop::Think()
 
 		player->RoundRespawn();
 	}
+	
+	
+	
+}
+
+
+void CMod_ZombieShelter_coop::RestartRound()
+{
+
+	if (daytimelimit.value < 0)
+	{
+		CVAR_SET_FLOAT("mp_daytimelimit", 0);
+	}
+
+	if (nighttimelimit.value < 0)
+	{
+		CVAR_SET_FLOAT("mp_nighttimelimit", 0);
+	}
+
+	g_flResetTime = gpGlobals->time;
+	if (timelimit.value < 0)
+	{
+		CVAR_SET_FLOAT("mp_timelimit", 0);
+	}
+
+	// Reset timelimit
+	if (timelimit.value)
+		g_flTimeLimit = gpGlobals->time + (timelimit.value * 60);
+
+	
+	g_flResetTime = gpGlobals->time;
+
+	if (daytimelimit.value)
+		g_flTimeLimit = gpGlobals->time + (daytimelimit.value * 60);
+
+	if (nighttimelimit.value)
+		g_flTimeLimit = gpGlobals->time + (nighttimelimit.value * 60);
+}
+
+void CMod_ZombieShelter_coop::CheckFreezePeriodExpired()
+{
+	if (TimeRemaining() > 0)
+		return;
+
+	// Log this information
+	UTIL_LogPrintf("World triggered \"Round_Start\"\n");
+
+	// Freeze period expired: kill the flag
+	m_bFreezePeriod = FALSE;
+
+	char CT_sentence[40];
+	char T_sentence[40];
+
+	switch (RANDOM_LONG(0, 3))
+	{
+	case 0:
+		Q_strncpy(CT_sentence, "%!MRAD_MOVEOUT", sizeof(CT_sentence));
+		Q_strncpy(T_sentence, "%!MRAD_MOVEOUT", sizeof(T_sentence));
+		break;
+	case 1:
+		Q_strncpy(CT_sentence, "%!MRAD_LETSGO", sizeof(CT_sentence));
+		Q_strncpy(T_sentence, "%!MRAD_LETSGO", sizeof(T_sentence));
+		break;
+	case 2:
+		Q_strncpy(CT_sentence, "%!MRAD_LOCKNLOAD", sizeof(CT_sentence));
+		Q_strncpy(T_sentence, "%!MRAD_LOCKNLOAD", sizeof(T_sentence));
+		break;
+	default:
+		Q_strncpy(CT_sentence, "%!MRAD_GO", sizeof(CT_sentence));
+		Q_strncpy(T_sentence, "%!MRAD_GO", sizeof(T_sentence));
+		break;
+	}
+
+	// More specific radio commands for the new scenarios : Prison & Assasination
+	if (m_bMapHasEscapeZone)
+	{
+		Q_strncpy(CT_sentence, "%!MRAD_ELIM", sizeof(CT_sentence));
+		Q_strncpy(T_sentence, "%!MRAD_GETOUT", sizeof(T_sentence));
+	}
+	else if (m_iMapHasVIPSafetyZone == MAP_HAVE_VIP_SAFETYZONE_YES)
+	{
+		Q_strncpy(CT_sentence, "%!MRAD_VIP", sizeof(CT_sentence));
+		Q_strncpy(T_sentence, "%!MRAD_LOCKNLOAD", sizeof(T_sentence));
+	}
+
+	// Reset the round time
+	DayTime = gpGlobals->time;
+	NightTime = gpGlobals->time;
+	// in seconds
+	m_iDayTimeSecs = m_iRoundTime;
+	m_iNightTimeSecs = m_iRoundTime;
+
+	bool bCTPlayed = false;
+	bool bTPlayed = false;
+
+	for (int i = 1; i <= gpGlobals->maxClients; ++i)
+	{
+		CBasePlayer* plr = static_cast<CBasePlayer*>(UTIL_PlayerByIndex(i));
+
+		if (!plr || plr->pev->flags == FL_DORMANT)
+		{
+			continue;
+		}
+
+		if (plr->m_iJoiningState == JOINED)
+		{
+			if (plr->m_iTeam == CT && !bCTPlayed)
+			{
+				plr->Radio(CT_sentence);
+				bCTPlayed = true;
+			}
+			else if (plr->m_iTeam == TERRORIST && !bTPlayed)
+			{
+				plr->Radio(T_sentence);
+				bTPlayed = true;
+			}
+
+			if (plr->m_iTeam != SPECTATOR)
+			{
+				plr->ResetMaxSpeed();
+				plr->m_bCanShoot = true;
+			}
+		}
+
+		plr->SyncRoundTimer2();
+		plr->SyncRoundTimer3();
+	}
+}
+
+void CMod_ZombieShelter_coop::CheckRoundTimeExpired()
+{
+	if (!HasRoundTimeExpired())
+		return;
+
+	// This is done so that the portion of code has enough time to do it's thing.
+	DayTime = gpGlobals->time + 50.0f;
+	NightTime = gpGlobals->time + 120.0f;
+
+	if (DayTime <= 0)
+	{
+		Thinks2();
+	}
+
+	if (NightTime > 2)
+	{
+		Thinks();
+		NightSound();
+		RestartRound();
+	}
+}
+
+bool CMod_ZombieShelter_coop::HasRoundTimeExpired()
+{
+	// We haven't completed other objectives, so go for this!.
+	if (TimeRemaining2())
+	{
+		return false;
+	}
+
+	if (TimeRemaining3())
+	{
+		return false;
+	}
+
+	// If the bomb is planted, don't let the round timer end the round.
+	// keep going until the bomb explodes or is defused
+
+	return false;
 }
 
 BOOL CMod_ZombieShelter_coop::FInfectionStarted()
@@ -480,79 +696,84 @@ BOOL CMod_ZombieShelter_coop::FInfectionStarted()
 	return iCountDown > 20;
 }
 
-/*
-void CMod_ZombieShelter_coop::MakeSpawnresThink()
-{
-	if (!FInfectionStarted())
-		return;
-	if (gpGlobals->time < m_flTimeNextMakeSupplybox)
-		return;
-	m_flTimeNextMakeSupplybox = gpGlobals->time + RANDOM_FLOAT(20.0f, 30.0f);
-
-	RemoveAllSupplybox();
-
-	int iSupplyboxCount = SpawnresCount();
-	for (int i = 0; i < iSupplyboxCount; ++i)
-	{
-		CSpawnres* sb = CreateSpawnres();
-		if (!sb)
-			continue;
-		sb->m_iSupplyboxIndex = i + 1;
-
-		for (CBasePlayer* player : moe::range::PlayersList())
-		{
-			if (player->m_bIsZombie)
-				continue;
-
-			MESSAGE_BEGIN(MSG_ALL, gmsgHostagePos, nullptr, player->pev);
-			WRITE_BYTE(1);
-			WRITE_BYTE(sb->m_iSupplyboxIndex);
-			WRITE_COORD(sb->pev->origin.x);
-			WRITE_COORD(sb->pev->origin.y);
-			WRITE_COORD(sb->pev->origin.z);
-			MESSAGE_END();
-		}
-	}
-
-}
-
-int CMod_ZombieShelter_coop::SpawnresCount()
-{
-	int NumDeadCT, NumDeadTerrorist, NumAliveTerrorist, NumAliveCT;
-	InitializePlayerCounts(NumAliveTerrorist, NumAliveCT, NumDeadTerrorist, NumDeadCT);
-	int iSupplyboxCount = (NumAliveTerrorist + NumAliveCT + NumDeadTerrorist) / 10 + 1;
-	return iSupplyboxCount;
-}
-
-void CMod_ZombieShelter_coop::RemoveAllSupplybox()
-{
-	CBaseEntity* ent = nullptr;
-	while ((ent = UTIL_FindEntityByClassname(ent, "resoures")) != nullptr)
-	{
-		CSpawnres* sb = dynamic_ent_cast<CSpawnres*>(ent);
-		sb->pev->effects |= EF_NODRAW;
-		sb->pev->flags |= FL_KILLME;
-		sb->SendPositionMsg();
-		sb->SetThink(&CBaseEntity::SUB_Remove);
-	}
-}
-
-CSpawnres* CMod_ZombieShelter_coop::CreateSpawnres()
-{
-	auto supplybox = CreateClassPtr<CSpawnres>();
-
-	Vector backup_v_angle = supplybox->pev->v_angle;
-	CSDM_DoRandomSpawn(supplybox);
-
-	supplybox->pev->spawnflags |= SF_NORESPAWN;
-
-	DispatchSpawn(supplybox->edict());
-	return supplybox;
-}*/
-
 BOOL CMod_ZombieShelter_coop::FRoundStarted()
 {
 	return !IsFreezePeriod();
+}
+
+void CMod_ZombieShelter_coop::day()
+{
+	if (DayRound())
+	{
+
+			static int sun = 60.0f;
+			static int iLastCountDown = -1.0f;
+			int iCountDown = static_cast<int>(gpGlobals->time - sun);
+
+			if (iCountDown > 0.0f)
+			{
+				if (iCountDown != iLastCountDown)
+				{
+					if (iCountDown > 0 && iCountDown < 60)
+					{
+						UTIL_ClientPrintAll(HUD_PRINTCENTER, "Start: %s1 sec(s)", UTIL_dtos1(iCountDown)); // #CSO_ZBS_StartCount
+					}
+					iLastCountDown = iCountDown;
+					for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
+					{
+						CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
+						if (!entity)
+							continue;
+						CLIENT_COMMAND(entity->edict(), "mp3 stop\n");
+
+					}
+					if (iCountDown == 2.0f)
+					{
+						Thinks2();
+						night();
+					}
+				}
+			}
+
+	}
+}
+
+void CMod_ZombieShelter_coop::night()
+{
+	if (NightRound() && FRoundStarted())
+	{
+		Thinks2();
+		NightSound();
+		int sun3 = 60.0f;
+		static int iLastCountDown = -1.0f;
+		int iCountDown3 = static_cast<int>(gpGlobals->time - sun3);
+
+		if (iCountDown3 > 0.0f)
+		{
+			if (iCountDown3 != iLastCountDown)
+			{
+				iLastCountDown = iCountDown3;
+
+				if (iCountDown3 <= 2.0f)
+				{
+					DaySound();
+					day();
+					Thinks();
+				}
+			}
+		}
+	}
+	
+}
+
+BOOL CMod_ZombieShelter_coop::DayRound()
+{
+	return IsDayRound();
+}
+
+BOOL CMod_ZombieShelter_coop::NightRound()
+{
+	return IsNightRound();
 }
 
 void CMod_ZombieShelter_coop::TeamCheck()
