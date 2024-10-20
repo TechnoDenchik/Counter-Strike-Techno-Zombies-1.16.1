@@ -140,6 +140,9 @@
     <Filter Include="dlls\gamemode\interface">
       <UniqueIdentifier>{a5222e6f-a420-4950-9e09-581673aebf43}</UniqueIdentifier>
     </Filter>
+    <Filter Include="dlls\physic">
+      <UniqueIdentifier>{34761316-1bc0-4d36-846e-2ae658c998b7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\dlls\h_export.cpp">
