@@ -370,3 +370,24 @@ BOOL CGungnirAmmo::AddAmmo(CBaseEntity *pOther)
 }
 
 LINK_ENTITY_TO_CLASS(ammo_gungnir, CGungnirAmmo);
+
+void CTwinAxesAmmo::Spawn()
+{
+	Precache();
+	SET_MODEL(ENT(pev), "models/w_9mmclip.mdl");
+	CBasePlayerAmmo::Spawn();
+}
+
+void CTwinAxesAmmo::Precache(){}
+
+BOOL CTwinAxesAmmo::AddAmmo(CBaseEntity* pOther)
+{
+	if (pOther->GiveAmmo(50, "TwinAmmo", 100) == -1)
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+LINK_ENTITY_TO_CLASS(twin_ammo, CTwinAxesAmmo);

@@ -88,6 +88,16 @@ float  v_cameraFocusAngle	= 35.0f;
 int	   v_cameraMode = CAM_MODE_FOCUS;
 bool   v_resetCamera = 1;
 
+cvar_t* cl_rollspeed;
+cvar_t* cl_rollangle;
+
+//magic nipples - weapon lag
+cvar_t* cl_weaponlag_amount;
+cvar_t* cl_weaponlag_speed;
+
+cvar_t* g_cvShadows; // Buz
+
+
 cvar_t	*scr_ofsx;
 cvar_t	*scr_ofsy;
 cvar_t	*scr_ofsz;
@@ -178,8 +188,10 @@ void V_InterpolateAngles( float *start, float *end, float *output, float frac )
 	V_NormalizeAngles( output );
 } */
 
+
+
 // Quakeworld bob code, this fixes jitters in the mutliplayer since the clock (pparams->time) isn't quite linear
-float V_CalcBob ( struct ref_params_s *pparams )
+float V_CalcBob(struct ref_params_s* pparams)
 {
 	static	double	bobtime;
 	static float	bob;
@@ -188,8 +200,8 @@ float V_CalcBob ( struct ref_params_s *pparams )
 	vec3_t	vel;
 
 
-	if ( pparams->onground == -1 ||
-		 pparams->time == lasttime )
+	if (pparams->onground == -1 ||
+		pparams->time == lasttime)
 	{
 		// just use old value
 		return bob;
@@ -198,49 +210,48 @@ float V_CalcBob ( struct ref_params_s *pparams )
 	lasttime = pparams->time;
 
 	bobtime += pparams->frametime;
-	cycle = bobtime - (int)( bobtime / cl_bobcycle->value ) * cl_bobcycle->value;
+	cycle = bobtime - (int)(bobtime / cl_bobcycle->value) * cl_bobcycle->value;
 	cycle /= cl_bobcycle->value;
 
-	if ( cycle < cl_bobup->value )
+	if (cycle < cl_bobup->value)
 	{
 		cycle = M_PI * cycle / cl_bobup->value;
 	}
 	else
 	{
-		cycle = M_PI + M_PI * ( cycle - cl_bobup->value )/( 1.0 - cl_bobup->value );
+		cycle = M_PI + M_PI * (cycle - cl_bobup->value) / (1.0 - cl_bobup->value);
 	}
 
 	// bob is proportional to simulated velocity in the xy plane
 	// (don't count Z, or jumping messes it up)
-	VectorCopy( pparams->simvel, vel );
+	VectorCopy(pparams->simvel, vel);
 	vel[2] = 0;
 
-	bob = sqrt( vel[0] * vel[0] + vel[1] * vel[1] ) * cl_bob->value;
+	bob = sqrt(vel[0] * vel[0] + vel[1] * vel[1]) * cl_bob->value;
 	bob = bob * 0.3 + bob * 0.7 * sin(cycle);
-	bob = min( bob, 4.0f );
-	bob = max( bob, -7.0f );
+	bob = min(bob, 4);
+	bob = max(bob, -7);
 	return bob;
 
 }
-
 /*
 ===============
 V_CalcRoll
 Used by view and sv_user
 ===============
 */
-float V_CalcRoll (vec3_t angles, vec3_t velocity, float rollangle, float rollspeed )
+float V_CalcRoll(vec3_t angles, vec3_t velocity, float rollangle, float rollspeed)
 {
 	float   sign;
 	float   side;
 	float   value;
 	vec3_t  forward, right, up;
 
-	AngleVectors ( angles, forward, right, up );
+	AngleVectors(angles, forward, right, up);
 
-	side = DotProduct (velocity, right);
+	side = DotProduct(velocity, right);
 	sign = side < 0 ? -1 : 1;
-	side = fabs( side );
+	side = fabs(side);
 
 	value = rollangle;
 	if (side < rollspeed)
@@ -253,7 +264,7 @@ float V_CalcRoll (vec3_t angles, vec3_t velocity, float rollangle, float rollspe
 	}
 	return side * sign;
 }
-#if 0
+
 typedef struct pitchdrift_s
 {
 	float		pitchvel;
@@ -352,7 +363,6 @@ void V_DriftPitch ( struct ref_params_s *pparams )
 		pparams->cl_viewangles[PITCH] -= move;
 	}
 }
-#endif
 /*
 ==============================================================================
 						VIEW RENDERING
@@ -381,24 +391,65 @@ void V_DropPunchAngle ( float frametime, float *ev_punchangle )
 V_CalcGunAngle
 ==================
 */
-void V_CalcGunAngle ( struct ref_params_s *pparams )
+void V_CalcGunAngle(struct ref_params_s* pparams)
 {
-	cl_entity_t *viewent;
+	cl_entity_t* viewent;
 
 	viewent = gEngfuncs.GetViewModel();
-	if ( !viewent )
+	if (!viewent)
 		return;
 
-	viewent->angles[YAW]   =  pparams->viewangles[YAW]   + pparams->crosshairangle[YAW];
+	viewent->angles[YAW] = pparams->viewangles[YAW] + pparams->crosshairangle[YAW];
 	viewent->angles[PITCH] = -pparams->viewangles[PITCH] + pparams->crosshairangle[PITCH] * 0.25;
-	viewent->angles[ROLL]  -= v_idlescale * sin(pparams->time*v_iroll_cycle.value) * v_iroll_level.value;
+	viewent->angles[ROLL] -= v_idlescale * sin(pparams->time * v_iroll_cycle.value) * v_iroll_level.value;
 
 	// don't apply all of the v_ipitch to prevent normally unseen parts of viewmodel from coming into view.
-	viewent->angles[PITCH] -= v_idlescale * sin(pparams->time*v_ipitch_cycle.value) * (v_ipitch_level.value * 0.5);
-	viewent->angles[YAW]   -= v_idlescale * sin(pparams->time*v_iyaw_cycle.value) * v_iyaw_level.value;
+	viewent->angles[PITCH] -= v_idlescale * sin(pparams->time * v_ipitch_cycle.value) * (v_ipitch_level.value * 0.5);
+	viewent->angles[YAW] -= v_idlescale * sin(pparams->time * v_iyaw_cycle.value) * v_iyaw_level.value;
 
-	VectorCopy( viewent->angles, viewent->curstate.angles );
-	VectorCopy( viewent->angles, viewent->latched.prevangles );
+	VectorCopy(viewent->angles, viewent->curstate.angles);
+	VectorCopy(viewent->angles, viewent->latched.prevangles);
+}
+
+void V_CalcViewModelLag(ref_params_t* pparams, vec3_t& origin, vec3_t& angles, vec3_t original_angles)
+{
+	static vec3_t m_vecLastFacing;
+	vec3_t vOriginalOrigin = origin;
+	vec3_t vOriginalAngles = angles;
+
+	if (CVAR_GET_FLOAT("cl_weaponlag_amount") <= 0)
+		return;
+
+	// Calculate our drift
+	vec3_t    forward, right, up;
+	AngleVectors(angles, forward, right, up);
+
+	//if ( pparams->frametime != 0.0f )// not in paused
+	Vector vDifference;
+
+	vDifference = forward - m_vecLastFacing;
+
+	float flSpeed = CVAR_GET_FLOAT("cl_weaponlag_speed");
+
+	// If we start to lag too far behind, we'll increase the "catch up" speed.
+	// Solves the problem with fast cl_yawspeed, m_yaw or joysticks rotating quickly.
+	// The old code would slam lastfacing with origin causing the viewmodel to pop to a new position
+	float flDiff = vDifference.Length();
+	if ((flDiff > CVAR_GET_FLOAT("cl_weaponlag_amount")) && (CVAR_GET_FLOAT("cl_weaponlag_amount") > 0.0f))
+	{
+		float flScale = flDiff / CVAR_GET_FLOAT("cl_weaponlag_amount");
+		flSpeed *= flScale;
+	}
+
+	// FIXME:  Needs to be predictable?
+	m_vecLastFacing = m_vecLastFacing + vDifference * (flSpeed * pparams->frametime);
+	// Make sure it doesn't grow out of control!!!
+	m_vecLastFacing = m_vecLastFacing.Normalize();
+
+	//origin = origin + (vDifference * -1.0f) * 5.0f;
+	origin.x = origin.x + (vDifference.x * -1.0f) * 5.0f;
+	origin.y = origin.y + (vDifference.y * -1.0f) * 5.0f;
+	origin.z = origin.z + (vDifference.z * 1.0f) * 5.0f;
 }
 
 /*
@@ -415,6 +466,25 @@ void V_AddIdle ( struct ref_params_s *pparams )
 	pparams->viewangles[YAW]   += v_idlescale * sin(pparams->time * v_iyaw_cycle.value) * v_iyaw_level.value;
 }
 
+void V_CalcViewRoll(struct ref_params_s* pparams)
+{
+	cl_entity_t* viewentity;
+
+	viewentity = gEngfuncs.GetEntityByIndex(pparams->viewentity);
+	if (!viewentity)
+		return;
+
+	pparams->viewangles[ROLL] = V_CalcRoll(pparams->viewangles, pparams->simvel, cl_rollangle->value, cl_rollspeed->value) * 4; // magic nipples - view roll
+
+	if (pparams->health <= 0 && (pparams->viewheight[2] != 0))
+	{
+		// only roll the view if the player is dead and the viewheight[2] is nonzero 
+		// this is so deadcam in multiplayer will work.
+		pparams->viewangles[ROLL] = 80;	// dead view angle
+		return;
+	}
+}
+
 
 /*
 ==============
@@ -423,28 +493,6 @@ V_CalcViewRoll
 Roll is induced by movement and damage
 ==============
 */
-void V_CalcViewRoll ( struct ref_params_s *pparams )
-{
-	float		side;
-	cl_entity_t *viewentity;
-
-	viewentity = gEngfuncs.GetEntityByIndex( pparams->viewentity );
-	if ( !viewentity )
-		return;
-
-	side = V_CalcRoll ( viewentity->angles, pparams->simvel, pparams->movevars->rollangle, pparams->movevars->rollspeed );
-
-	pparams->viewangles[ROLL] += side;
-
-	if ( pparams->health <= 0 && ( pparams->viewheight[2] != 0 ) )
-	{
-		// only roll the view if the player is dead and the viewheight[2] is nonzero
-		// this is so deadcam in multiplayer will work.
-		pparams->viewangles[ROLL] = 80;	// dead view angle
-		return;
-	}
-}
-
 
 /*
 ==================
@@ -519,7 +567,7 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 
 	vec3_t camAngles, camForward, camRight, camUp;
 	cl_entity_t *pwater;
-
+	
 	//V_DriftPitch ( pparams );
 
 	if ( gEngfuncs.IsSpectateOnly() )
@@ -543,6 +591,7 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 	VectorCopy ( pparams->simorg, pparams->vieworg );
 	pparams->vieworg[2] += ( bob );
 	VectorAdd( pparams->vieworg, pparams->viewheight, pparams->vieworg );
+	Vector lastAngles = view->angles; //Magic Nipples - weapon lag
 
 	if( pparams->health <= 0 )
 	{
@@ -625,8 +674,8 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 
 	pparams->vieworg[2] += waterOffset;
 
-	V_CalcViewRoll ( pparams );
-
+	V_CalcViewRoll(pparams);
+	
 	V_AddIdle ( pparams );
 
 	// offsets
@@ -706,6 +755,8 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 	// gun a very nice 'shifting' effect when the player looks up/down. If there is a problem
 	// with view model distortion, this may be a cause. (SJB).
 	view->origin[2] -= 1;
+
+	V_CalcViewModelLag(pparams, view->origin, view->angles, lastAngles);
 
 	// fudge position around to keep amount of weapon visible
 	// roughly equal with different FOV
@@ -833,6 +884,8 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 	// Store off v_angles before munging for third person
 	v_angles = pparams->viewangles;
 	v_lastAngles = pparams->viewangles;
+
+	
 	//	v_cl_angles = pparams->cl_viewangles;	// keep old user mouse angles !
 	if ( CL_IsThirdPerson() )
 	{
@@ -1725,7 +1778,7 @@ V_Init
 */
 void V_Init (void)
 {
-	//gEngfuncs.pfnAddCommand ("centerview", V_StartPitchDrift );
+	gEngfuncs.pfnAddCommand ("centerview", V_StartPitchDrift );
 
 	scr_ofsx			= gEngfuncs.pfnRegisterVariable( "scr_ofsx","0", 0 );
 	scr_ofsy			= gEngfuncs.pfnRegisterVariable( "scr_ofsy","0", 0 );
@@ -1739,4 +1792,93 @@ void V_Init (void)
 	cl_bobup			= gEngfuncs.pfnRegisterVariable( "cl_bobup","0.5", 0 );
 	cl_waterdist		= gEngfuncs.pfnRegisterVariable( "cl_waterdist","4", 0 );
 	cl_chasedist		= gEngfuncs.pfnRegisterVariable( "cl_chasedist","112", 0 );
+
+	cl_rollspeed = gEngfuncs.pfnRegisterVariable("cl_rollspeed", "325", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);
+	cl_rollangle = gEngfuncs.pfnRegisterVariable("cl_rollangle", "0.6", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);
+
+	cl_weaponlag_amount = gEngfuncs.pfnRegisterVariable("cl_weaponlag_amount", "0.8", FCVAR_CLIENTDLL | FCVAR_ARCHIVE); //Magic Nipples - weapon lag
+	cl_weaponlag_speed = gEngfuncs.pfnRegisterVariable("cl_weaponlag_speed", "6", FCVAR_CLIENTDLL | FCVAR_ARCHIVE); //Magic Nipples - weapon lag
+
+	g_cvShadows = gEngfuncs.pfnRegisterVariable("gl_shadows", "0", FCVAR_ARCHIVE); // Buz
+
 }
+#if defined( TRACE_TEST )
+
+extern float in_fov;
+/*
+====================
+CalcFov
+====================
+*/
+float CalcFov(float fov_x, float width, float height)
+{
+	float	a;
+	float	x;
+
+	if (fov_x < 1 || fov_x > 179)
+		fov_x = 90;	// error, set to 90
+
+	x = width / tan(fov_x / 360 * M_PI);
+
+	a = atan(height / x);
+
+	a = a * 360 / M_PI;
+
+	return a;
+}
+
+int hitent = -1;
+
+void V_Move(int mx, int my)
+{
+	float fov;
+	float fx, fy;
+	float dx, dy;
+	float c_x, c_y;
+	float dX, dY;
+	vec3_t forward, up, right;
+	vec3_t newangles;
+
+	vec3_t farpoint;
+	pmtrace_t tr;
+
+	fov = CalcFov(in_fov, (float)ScreenWidth, (float)ScreenHeight);
+
+	c_x = (float)ScreenWidth / 2.0;
+	c_y = (float)ScreenHeight / 2.0;
+
+	dx = (float)mx - c_x;
+	dy = (float)my - c_y;
+
+	// Proportion we moved in each direction
+	fx = dx / c_x;
+	fy = dy / c_y;
+
+	dX = fx * in_fov / 2.0;
+	dY = fy * fov / 2.0;
+
+	newangles = v_angles;
+
+	newangles[YAW] -= dX;
+	newangles[PITCH] += dY;
+
+	// Now rotate v_forward around that point
+	AngleVectors(newangles, forward, right, up);
+
+	farpoint = v_origin + 8192 * forward;
+
+	// Trace
+	tr = *(gEngfuncs.PM_TraceLine((float*)&v_origin, (float*)&farpoint, PM_TRACELINE_PHYSENTSONLY, 2 /*point sized hull*/, -1));
+
+	if (tr.fraction != 1.0 && tr.ent != 0)
+	{
+		hitent = PM_GetPhysEntInfo(tr.ent);
+		PM_ParticleLine((float*)&v_origin, (float*)&tr.endpos, 5, 1.0, 0.0);
+	}
+	else
+	{
+		hitent = -1;
+	}
+}
+
+#endif

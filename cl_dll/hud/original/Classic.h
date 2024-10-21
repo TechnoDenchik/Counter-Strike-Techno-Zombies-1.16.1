@@ -12,7 +12,18 @@ public:
 	void Shutdown() override;
 public:
 	bool m_bCanDraw;
-	CHudMsgFunc(CLSMsg);
+	CHudMsgFunc(StartGame);
+	CHudMsgFunc(BombPlant);
+	CHudMsgFunc(BombDefuse);
+	CHudMsgFunc(CTWIN);
+	CHudMsgFunc(TRWIN);
+	CHudMsgFunc(RoundDraw);
+	CHudMsgFunc(Bombnozone);
+	CHudMsgFunc(Bombnoground);
+	CHudMsgFunc(Bombdrop);
+	CHudMsgFunc(Bombgive);
+	CHudMsgFunc(WPNDrop);
+	CHudMsgFunc(AK47);
 
 public:
 	class CHudClassic_impl_t* pimpl = nullptr;

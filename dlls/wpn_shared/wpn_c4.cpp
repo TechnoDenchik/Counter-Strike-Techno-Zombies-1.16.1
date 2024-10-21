@@ -21,6 +21,7 @@
 #include "hltv.h"
 #include "gamerules.h"
 #include "wpn_c4.h"
+#include "gamemode/interface/interface_const.h"
 
 //#define C4MADNESS
 #ifdef CLIENT_DLL
@@ -138,17 +139,28 @@ void CC4::PrimaryAttack(void)
 #ifndef C4MADNESS
 		if (!onBombZone)
 		{
-			ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER, "#C4_Plant_At_Bomb_Spot");
+		#ifndef CLIENT_DLL
+			//ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER, "#C4_Plant_At_Bomb_Spot");
+			MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg7, NULL, m_pPlayer->pev);
+			WRITE_BYTE(ORIG_BOMB3_MSG);
+			MESSAGE_END();
+		#endif
 			m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 1;
 			return;
 		}
 
 		if (!onGround)
 		{
-			ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER, "#C4_Plant_Must_Be_On_Ground");
+		#ifndef CLIENT_DLL
+			//ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER, "#C4_Plant_Must_Be_On_Ground");
+			MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg8, NULL, m_pPlayer->pev);
+			WRITE_BYTE(ORIG_BOMB4_MSG);
+			MESSAGE_END();
+		#endif
 			m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 1;
 			return;
 		}
+	
 #endif
 		m_bStartedArming = true;
 		m_bBombPlacedAnimation = false;
@@ -168,9 +180,18 @@ void CC4::PrimaryAttack(void)
 		if (!onGround || !onBombZone)
 		{
 			if (onBombZone)
-				ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER, "#C4_Plant_Must_Be_On_Ground");
+			{ 
+			#ifndef CLIENT_DLL
+				MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg8, NULL, m_pPlayer->pev);
+				WRITE_BYTE(ORIG_BOMB4_MSG);
+				MESSAGE_END();
+			#endif
+			}
 			else
+			{
 				ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER, "#C4_Arming_Cancelled");
+			}
+				
 
 			m_bStartedArming = false;
 			m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 1.5;
@@ -217,7 +238,10 @@ void CC4::PrimaryAttack(void)
 				WRITE_COORD(pGrenade->pev->origin.z);
 				WRITE_BYTE(1);
 				MESSAGE_END();
-				UTIL_ClientPrintAll(HUD_PRINTCENTER, "#Bomb_Planted");
+				
+				MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg2);
+				WRITE_BYTE(ORIG_BOMB_MSG);
+				MESSAGE_END();
 
 				UTIL_LogPrintf("\"%s<%i><%s><TERRORIST>\" triggered \"Planted_The_Bomb\"\n", STRING(m_pPlayer->pev->netname), GETPLAYERUSERID(m_pPlayer->edict()), GETPLAYERAUTHID(m_pPlayer->edict()));
 				g_pGameRules->m_bBombDropped = false;

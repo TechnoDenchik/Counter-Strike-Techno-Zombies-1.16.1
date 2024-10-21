@@ -39,7 +39,7 @@
 #include "camera.h"
 
 #include "cs_wpn/bte_weapons.h"
-
+#include "gamemode/mods_const.h"
 
 
 extern client_sprite_t *GetSpriteList(client_sprite_t *pList, const char *psz, int iRes, int iCount);
@@ -654,5 +654,11 @@ void CHud::AddHudElem(CHudBase *phudelem)
 	// find last
 	for( ptemp = m_pHudList; ptemp->pNext; ptemp = ptemp->pNext );
 
+	
 	ptemp->pNext = pdl;
+}
+
+bool CHud::IsZombieMod() const
+{
+	return m_iModRunning == MOD_ZB1 || m_iModRunning == MOD_ZB2 || m_iModRunning == MOD_ZB3;
 }

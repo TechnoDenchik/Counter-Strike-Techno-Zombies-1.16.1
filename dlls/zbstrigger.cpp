@@ -558,7 +558,7 @@ void CTriggerMonsterJump2::Touch(CBaseEntity *pOther)
 
 	if (!(pevOther->flags & FL_MONSTER))
 	{
-		// touched by a non-monster.
+		touchmonster == true;
 		return;
 	}
 
@@ -821,13 +821,13 @@ void ZBSTrigger::HurtTouch(CBaseEntity *pOther)
 	if ((pev->spawnflags & SF_TRIGGER_HURT_CLIENTONLYTOUCH) && !pOther->IsPlayer())
 	{
 		// this trigger is only allowed to touch clients, and this ain't a client.
-		m_pPlayer->zbstriggeruse = true;
+		//m_pPlayer->zbstriggeruse == true;
 		return;
 	}
 
 	if ((pev->spawnflags & SF_TRIGGER_HURT_NO_CLIENTS) && pOther->IsPlayer())
 	{
-		m_pPlayer->zbstriggeruse = true;
+		//m_pPlayer->zbstriggeruse == true;
 		return;
 	}
 
@@ -843,6 +843,7 @@ void ZBSTrigger::HurtTouch(CBaseEntity *pOther)
 				// too early to hurt again, and not same frame with a different entity
 				if (!pOther->IsPlayer())
 				{
+					m_pPlayer->zbstriggeruse == true;
 					return;
 				}
 

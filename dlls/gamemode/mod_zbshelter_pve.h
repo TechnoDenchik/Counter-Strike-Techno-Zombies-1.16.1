@@ -26,7 +26,8 @@ public:
 	 CMod_ZombieShelter_coop();
 public:
 	friend class CShelter;
-	
+	friend class ZSHUpdateDay;
+
 	void TeamCheck();
 	BOOL IsTeamplay(void) override { return TRUE; }
 	void CheckMapConditions() override;
@@ -36,7 +37,19 @@ public:
 	void night();
 	void PlayerSpawn(CBasePlayer* pPlayer) override;
 	void Think() override;
+	void RestartRound() override;
+	void CheckRoundTimeExpired();
+	void CheckFreezePeriodExpired();
+	void ReadMultiplayCvars(CHalfLifeMultiplay* mp);
 	BOOL FRoundStarted();
+	BOOL NightRound();
+	BOOL DayRound();
+	void DaySound();
+	void NightSound();
+	void Thinks();
+	void Thinks2();
+	
+	bool HasRoundTimeExpired();
 	void InstallPlayerModStrategy(CBasePlayer* player) override;
 	BOOL ClientConnected(edict_t* pEntity, const char* pszName, const char* pszAddress, char* szRejectReason) override;
 	void ClientDisconnected(edict_t* pClient) override;
@@ -57,8 +70,13 @@ public:
 	BOOL FInfectionStarted();
 public:
 
+
+
 	float m_flNextSpawnNPC;
 	float m_flNextDay;
+	float m_flNextDay2;
+	float m_flNextDay3;
+	float m_flNextDay4;
 	std::vector<CResSpawn*> m_vecZombieSpawns;
 	
 	EventDispatcher<void(CBasePlayer* attacker, float&)> m_eventAdjustDamage;

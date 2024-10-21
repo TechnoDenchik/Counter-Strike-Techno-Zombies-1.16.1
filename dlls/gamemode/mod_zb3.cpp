@@ -20,7 +20,7 @@ GNU General Public License for more details.
 #include "game.h"
 
 #include "mod_zb3.h"
-
+#include "zb3/zb2_hero.h"
 #include "util/u_range.hpp"
 
 #include <vector>
@@ -87,6 +87,7 @@ void CPlayerModStrategy_ZB3::BecomeZombie(ZombieLevel iEvolutionLevel)
 	
 	return CPlayerModStrategy_ZB2::BecomeZombie(iEvolutionLevel);
 }
+
 
 void CPlayerModStrategy_ZB3::Event_OnInfection(CBasePlayer * victim, CBasePlayer * attacker)
 {
@@ -209,8 +210,10 @@ void CMod_ZombieHero::PickZombieOrigin()
 {
 	CMod_Zombi::PickZombieOrigin();
 	// TODO : pick hero
-	// PickHero();
+	 PickHero();
 }
+
+
 
 void CMod_ZombieHero::UpdateGameMode(CBasePlayer * pPlayer)
 {

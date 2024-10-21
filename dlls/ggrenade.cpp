@@ -15,6 +15,7 @@
 
 #include "pm_shared.h"
 #include "utllinkedlist.h"
+#include "gamemode/interface/interface_const.h"
 
 // CSBOT and Nav
 #include "game_shared2/GameEvent.h"		// Game event enum used by career mode, tutor system, and bots
@@ -1478,7 +1479,9 @@ void CGrenade::C4Think()
 			{
 				if (!iOnGround)
 				{
-					ClientPrint(m_pBombDefuser->pev, HUD_PRINTCENTER, "#C4_Defuse_Must_Be_On_Ground");
+					MESSAGE_BEGIN(MSG_ONE, gmsgOriginalMsg8, NULL, pPlayer->pev);
+					WRITE_BYTE(ORIG_BOMB4_MSG);
+					MESSAGE_END();
 				}
 
 				// release the player from being frozen

@@ -110,6 +110,7 @@ void W_Precache()
 	UTIL_PrecacheOther("ammo_gungnir");
 	UTIL_PrecacheOtherWeapon("knife_skullaxe");
 	UTIL_PrecacheOtherWeapon("weapon_shelteraxe");
+	UTIL_PrecacheOtherWeapon("weapon_twinaxes");
 	UTIL_PrecacheOtherWeapon("weapon_infinityss");
 	UTIL_PrecacheOtherWeapon("weapon_infinitysb");
 	UTIL_PrecacheOtherWeapon("weapon_zombibomb");

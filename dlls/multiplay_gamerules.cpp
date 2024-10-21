@@ -19,6 +19,8 @@
 
 #include "pm_shared.h"
 #include "utllinkedlist.h"
+#include "gamemode/interface/interface_const.h"
+#include "gamemode/zb2/zb2_const.h"
 
 // CSBOT and Nav
 #include "game_shared2/GameEvent.h"		// Game event enum used by career mode, tutor system, and bots
@@ -447,6 +449,8 @@ void ReadMultiplayCvars(CHalfLifeMultiplay *mp)
 
 CHalfLifeMultiplay::CHalfLifeMultiplay()
 {
+	PRECACHE_GENERIC("sound/Music/ct/musicforfb_1.mp3");
+	PRECACHE_GENERIC("sound/Music/t/musicforfb_2.mp3");
 	m_VoiceGameMgr.Init(&g_GameMgrHelper, gpGlobals->maxClients);
 	RefreshSkillData();
 
@@ -1156,7 +1160,10 @@ bool CHalfLifeMultiplay::NeededPlayersCheck(bool &bNeededPlayers)
 		m_bFreezePeriod = FALSE;
 		m_bCompleteReset = true;
 
-		EndRoundMessage("#Game_Commencing", ROUND_END_DRAW);
+		MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg);
+		WRITE_BYTE(ORIG_START_MSG);
+		MESSAGE_END();
+
 		TerminateRound(IsCareer() ? 0 : 3, WINSTATUS_DRAW);
 
 		m_bFirstConnected = true;
@@ -1343,9 +1350,10 @@ bool CHalfLifeMultiplay::BombRoundEndCheck(bool bNeededPlayers)
 			UpdateTeamScores();
 		}
 
-		EndRoundMessage("#Target_Bombed", ROUND_TARGET_BOMB);
 		TerminateRound(5, WINSTATUS_TERRORISTS);
-
+		MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg5);
+		WRITE_BYTE(ORIG_TRWIN_MSG);
+		MESSAGE_END();
 		if (IsCareer())
 		{
 			QueueCareerRoundEndMenu(5, WINSTATUS_TERRORISTS);
@@ -1366,9 +1374,14 @@ bool CHalfLifeMultiplay::BombRoundEndCheck(bool bNeededPlayers)
 			UpdateTeamScores();
 		}
 
-		EndRoundMessage("#Bomb_Defused", ROUND_BOMB_DEFUSED);
-		TerminateRound(5, WINSTATUS_CTS);
+		MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg3);
+		WRITE_BYTE(ORIG_BOMB2_MSG);
+		MESSAGE_END();
 
+		TerminateRound(5, WINSTATUS_CTS);
+		MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg5);
+		WRITE_BYTE(ORIG_CTWIN_MSG);
+		MESSAGE_END();
 		if (IsCareer())
 		{
 			QueueCareerRoundEndMenu(5, WINSTATUS_CTS);
@@ -1379,6 +1392,10 @@ bool CHalfLifeMultiplay::BombRoundEndCheck(bool bNeededPlayers)
 
 	return false;
 }
+
+#include "util\u_ebobase.hpp"
+#include "util\u_range.hpp"
+using namespace moe;
 
 bool CHalfLifeMultiplay::TeamExterminationCheck(int NumAliveTerrorist, int NumAliveCT, int NumDeadTerrorist, int NumDeadCT, bool bNeededPlayers)
 {
@@ -1412,12 +1429,18 @@ bool CHalfLifeMultiplay::TeamExterminationCheck(int NumAliveTerrorist, int NumAl
 					UpdateTeamScores();
 				}
 
-				EndRoundMessage("#CTs_Win", ROUND_CTS_WIN);
-				TerminateRound(5, WINSTATUS_CTS);
+				for (CBasePlayer* player : moe::range::PlayersList())
+					CLIENT_COMMAND(player->edict(), "mp3 loop sound/Music/ct/musicforfb_1\n");
+			
+				MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg4);
+				WRITE_BYTE(ORIG_CTWIN_MSG);
+				MESSAGE_END();
+
+				TerminateRound(10, WINSTATUS_CTS);
 
 				if (IsCareer())
 				{
-					QueueCareerRoundEndMenu(5, WINSTATUS_CTS);
+					QueueCareerRoundEndMenu(10, WINSTATUS_CTS);
 				}
 
 				return true;
@@ -1437,12 +1460,18 @@ bool CHalfLifeMultiplay::TeamExterminationCheck(int NumAliveTerrorist, int NumAl
 				UpdateTeamScores();
 			}
 
-			EndRoundMessage("#Terrorists_Win", ROUND_TERRORISTS_WIN);
-			TerminateRound(5, WINSTATUS_TERRORISTS);
+			for (CBasePlayer* player : moe::range::PlayersList())
+				CLIENT_COMMAND(player->edict(), "mp3 loop sound/Music/t/musicforfb_2\n");
+
+			MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg5);
+			WRITE_BYTE(ORIG_TRWIN_MSG);
+			MESSAGE_END();
+
+			TerminateRound(10, WINSTATUS_TERRORISTS);
 
 			if (IsCareer())
 			{
-				QueueCareerRoundEndMenu(5, WINSTATUS_TERRORISTS);
+				QueueCareerRoundEndMenu(10, WINSTATUS_TERRORISTS);
 			}
 
 			return true;
@@ -1450,9 +1479,13 @@ bool CHalfLifeMultiplay::TeamExterminationCheck(int NumAliveTerrorist, int NumAl
 	}
 	else if (NumAliveCT == 0 && NumAliveTerrorist == 0)
 	{
-		EndRoundMessage("#Round_Draw", ROUND_END_DRAW);
+
+		MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg6);
+		WRITE_BYTE(ORIG_RDRAW_MSG);
+		MESSAGE_END();
+
 		Broadcast("rounddraw");
-		TerminateRound(5, WINSTATUS_DRAW);
+		TerminateRound(7, WINSTATUS_DRAW);
 
 		return true;
 	}
@@ -1484,7 +1517,7 @@ bool CHalfLifeMultiplay::HostageRescueRoundEndCheck(bool bNeededPlayers)
 	if (!bHostageAlive && iHostages > 0)
 	{
 		if (m_iHostagesRescued >= (iHostages * 0.5))
-		{
+		{ 
 			Broadcast("ctwin");
 			m_iAccountCT += REWARD_ALL_HOSTAGES_RESCUED;
 
@@ -1511,10 +1544,10 @@ bool CHalfLifeMultiplay::HostageRescueRoundEndCheck(bool bNeededPlayers)
 				}
 			}
 
-			TerminateRound(5, WINSTATUS_CTS);
+			TerminateRound(10, WINSTATUS_CTS);
 			if (IsCareer())
 			{
-				QueueCareerRoundEndMenu(5, WINSTATUS_CTS);
+				QueueCareerRoundEndMenu(10, WINSTATUS_CTS);
 			}
 
 			return true;
@@ -1690,13 +1723,18 @@ void CHalfLifeMultiplay::RestartRound()
 		g_pHostages->RestartRound();
 	}
 
+
+
 	++m_iTotalRoundsPlayed;
 	ClearBodyQue();
+
+	for (CBasePlayer* player : moe::range::PlayersList())
+		CLIENT_COMMAND(player->edict(), "mp3 stop\n");
 
 	// Hardlock the player accelaration to 5.0
 	CVAR_SET_FLOAT("sv_accelerate", 5.0);
 	CVAR_SET_FLOAT("sv_friction", 4.0);
-	CVAR_SET_FLOAT("sv_stopspeed", 75);
+	CVAR_SET_FLOAT("sv_stopspeed", 85);
 
 	// Tabulate the number of players on each team.
 	m_iNumCT = CountTeamPlayers(CT);
@@ -1996,6 +2034,8 @@ void CHalfLifeMultiplay::RestartRound()
 		if (!player->IsPlayer())
 		{
 			player->SyncRoundTimer();
+			player->SyncRoundTimer2();
+			player->SyncRoundTimer3();
 		}
 
 		if (player->m_iTeam == CT)
@@ -2064,6 +2104,11 @@ void CHalfLifeMultiplay::RestartRound()
 	m_bTargetBombed = m_bBombDefused = false;
 	m_bLevelInitialized = false;
 	m_bCompleteReset = false;
+
+	MESSAGE_BEGIN(MSG_ALL, gmsgResetRound, nullptr);
+	WRITE_BYTE(m_iTotalRoundsPlayed);
+	MESSAGE_END();
+
 }
 
 BOOL CHalfLifeMultiplay::IsThereABomber()
@@ -2085,7 +2130,7 @@ BOOL CHalfLifeMultiplay::IsThereABomber()
 	// Didn't find a bomber.
 	return FALSE;
 }
-
+//Cstrike_TitlesTXT_Bomb_Planted
 BOOL CHalfLifeMultiplay::IsThereABomb()
 {
 	CGrenade *pC4 = NULL;
@@ -2773,6 +2818,7 @@ void CHalfLifeMultiplay::CheckFreezePeriodExpired()
 		}
 
 		plr->SyncRoundTimer();
+
 	}
 
 	if (TheBots != NULL)
@@ -3799,7 +3845,7 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer *pVictim, entvars_t *pKiller, e
 			KillerTeam, STRING(pVictim->pev->netname), GETPLAYERUSERID(pVictim->edict()), GETPLAYERAUTHID(pVictim->edict()), VictimTeam, killer_weapon_name);
 	}
 	else
-	{
+	{ 
 		// killed by the world
 		const char *team = GetTeam(pVictim->m_iTeam);
 		UTIL_LogPrintf("\"%s<%i><%s><%s>\" committed suicide with \"%s\" (world)\n", STRING(pVictim->pev->netname), GETPLAYERUSERID(pVictim->edict()),

@@ -393,6 +393,16 @@ public:
 	float m_flStartThrow;
 	float m_flReleaseThrow;
 	int m_iSwing;
+	int m_iSwing2;
+	int m_iSwing3;
+	int m_iSwing4;
+	int m_iSwing5;
+	int m_iSwing6;
+	int m_iSwing7;
+	int m_iSwing8;
+	int m_iSwing9;
+	int m_iSwing10;
+	int m_iSwing11;
 	bool has_disconnected;
 	bool zbstriggeruse;
 };
@@ -599,6 +609,10 @@ public:
 #define bits_CAP_FLY (1<<15)
 #define bits_CAP_DOORS_GROUP (bits_CAP_USE | bits_CAP_AUTO_DOORS | bits_CAP_OPEN_DOORS)
 
+#define DMG_EXPLOSION (1 << 24)
+#define DMG_BACKATK (1 << 25)			// Knife back atk
+#define DMG_CRITICAL (1 << 26)
+
 #define DMG_GENERIC 0
 #define DMG_CRUSH (1<<0)
 #define DMG_BULLET (1<<1)
@@ -627,7 +641,7 @@ public:
 #define DMG_MORTAR (1<<23)
 #define DMG_EXPLOSION (1<<24)
 #define DMG_GIB_CORPSE (DMG_CRUSH | DMG_FALL | DMG_BLAST | DMG_SONIC | DMG_CLUB)
-#define DMG_SHOWNHUD (DMG_POISON | DMG_ACID | DMG_FREEZE | DMG_SLOWFREEZE | DMG_DROWN | DMG_BURN | DMG_SLOWBURN | DMG_NERVEGAS | DMG_RADIATION | DMG_SHOCK)
+#define DMG_SHOWNHUD (DMG_POISON | DMG_ACID | DMG_FREEZE | DMG_SLOWFREEZE | DMG_DROWN | DMG_BURN | DMG_SLOWBURN | DMG_BACKATK | DMG_CRITICAL | DMG_NERVEGAS | DMG_RADIATION | DMG_SHOCK)
 
 #define PARALYZE_DURATION 2
 #define PARALYZE_DAMAGE 1.0

@@ -400,6 +400,8 @@ public:
 	void MenuPrint(const char *msg);
 	void ResetMenu();
 	void SyncRoundTimer();
+	void SyncRoundTimer2();
+	void SyncRoundTimer3();
 	void CheckSuitUpdate();
 	void SetSuitUpdate(const char *name = nullptr, int fgroup = 0, int iNoRepeatTime = 0);
 	void UpdateGeigerCounter();
@@ -714,6 +716,7 @@ public:
 public:
 	std::unique_ptr<IBasePlayerModStrategy> m_pModStrategy;
 	std::unique_ptr<IBasePlayerModStrategy> m_pModStrategy2;
+	std::unique_ptr<IBasePlayerModStrategy> m_pModStrategy3;
 };
 
 extern int gEvilImpulse101;

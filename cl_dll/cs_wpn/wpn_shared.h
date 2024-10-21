@@ -29,3 +29,5 @@
 #include "wpn_shared/wpn_sg550.h"
 #include "wpn_shared/wpn_galil.h"
 #include "wpn_shared/wpn_famas.h"
+#include "wpn_shared/knife_shelter_axe.h"
+#include "wpn_shared/knife_twin_axes.h"

@@ -32,11 +32,17 @@ public:
 	void SetSelectorIconLevel(int slot, int level);
 	bool Selector(int i);
 	bool SelectorCanDraw();
+	void SendAlarmState(int iType, float flValue, int iValue2);
 public:
 	bool ActivateSkill(int iSlot);
+	float m_flAliveTime;
+	float m_flPlayerMoveDis = 0.0;
+	float m_flRecoveryAmount = 0.0;
+
 	bool m_bCanDraw;
 	CHudMsgFunc(ZB2Msg);
-	CHudMsgFunc(SupplyText);
+	//CHudMsgFunc(SupplyText);
+	CHudMsgFunc(ZB3RenMsg);
     //CHudMsgFunc(ZB2Win);
 
 public:

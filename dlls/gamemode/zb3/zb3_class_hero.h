@@ -17,22 +17,9 @@ GNU General Public License for more details.
 #ifndef PROJECT_ZB2_ZCLASS_TANK_H
 #define PROJECT_ZB2_ZCLASS_TANK_H
 
-#include "zb3_hero.h"
+#include "zb2_hero.h"
 #include "gamemode/mod_zb1.h"
 
-class CHeroClass_Default : public CBaseHeroClass_ZB3
-{
-public:
-	explicit CHeroClass_Default(CBasePlayer *player, ZombieLevel lv);
-	void ResetMaxSpeed() const override;
-	float AdjustDamageTaken(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) const override;
-	bool ApplyKnockback(CBasePlayer *attacker, const KnockbackData & kbd) override;
-	void Pain_Hero(int m_LastHitGroup, bool HasArmour) override;
-	void DeathSound_Hero() override;
 
-	float m_flTimeNextZombieHealthRecovery;
-protected:
-	std::unique_ptr<IZombieSkill> m_pZombieSkill;
-};
 
 #endif //PROJECT_ZB2_ZCLASS_TANK_H

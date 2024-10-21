@@ -103,6 +103,8 @@ static CTMP g_TMP;
 static CUMP45 g_UMP45;
 static CUSP g_USP;
 static CXM1014 g_XM1014;
+static CSTwinShadowAxes twinaxes;
+static CShelter_axe shelteraxe;
 
 int    g_iWeaponFlags;
 bool   g_bInBombZone;
@@ -877,6 +879,8 @@ void HUD_InitClientWeapons( void )
 	HUD_PrepEntity( &g_AK47, &player);
 	HUD_PrepEntity( &g_Knife, &player);
 	HUD_PrepEntity( &g_P90, &player );
+	HUD_PrepEntity(& twinaxes, &player);
+	HUD_PrepEntity(& shelteraxe, &player);
 
 	BTEClientWeapons().PrepEntity(&player);
 }
@@ -1104,6 +1108,14 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 
 		case WEAPON_P90:
 			pWeapon = &g_P90;
+			break;
+
+		case WEAPON_SHELTERAXE:
+			pWeapon = &shelteraxe;
+			break;
+
+		case WEAPON_TWINAXES:
+			pWeapon = &twinaxes;
 			break;
 
 		/*case WEAPON_NONE:

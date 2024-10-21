@@ -11,6 +11,7 @@
 class CZombieSpawn;
 class CMonster;
 class CMonster2;
+class CMonsterBoss;
 
 class CMod_ZombieScenario : public TBaseMod_RemoveObjects<>
 {
@@ -24,7 +25,7 @@ public:
 	void Think() override;
 	void CheckWinConditions() override;
 	void CheckMapConditions() override;
-	
+	bool boss_clear;
 public:
 	DamageTrack_e DamageTrack() override { return DT_ZBS; }
 	void InstallPlayerModStrategy(CBasePlayer *player) override;
@@ -51,6 +52,7 @@ public:
 	CBaseEntity* MakeZombieNPC9();
 	CBaseEntity* MakeZombieNPC10();
 	CBaseEntity* MakeZombieNPC11();
+	CBaseEntity* MakeZombieBoss();
 	void ClearZombieNPC();
 
 public:
@@ -61,6 +63,7 @@ public:
 	EventDispatcher<void(CBasePlayer *attacker, float &)> m_eventAdjustDamage2;
 	EventDispatcher<void(CMonster *victim, CBaseEntity *attacker)> m_eventMonsterKilled;
 	EventDispatcher<void(CMonster2* victim, CBaseEntity* attacker)> m_eventMonsterKilled2;
+	EventDispatcher<void(CMonsterBoss* victim, CBaseEntity* attacker)> m_eventMonsterKilled3;
 };
 
 #endif

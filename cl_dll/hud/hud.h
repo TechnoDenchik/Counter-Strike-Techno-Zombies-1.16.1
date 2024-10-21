@@ -65,7 +65,10 @@ enum
 
 extern const char *sPlayerModelFiles[];
 extern wrect_t nullrc;
-
+extern bool g_bFirstBlood;
+extern float g_fLastAssist[MAX_CLIENTS + 1][MAX_CLIENTS + 1];
+extern int g_iDefuser, g_iPlanter, g_CWcount[MAX_CLIENTS + 1][3];
+extern int g_lastsoldier[2];
 
 class CClientSprite;
 
@@ -594,6 +597,7 @@ public:
 	void Shutdown(void);
 	int Draw( float time );
 
+	int DrawNewAlarm(float time);
 	void headshots();
 	void crazy();
 	void excellent();
@@ -1328,7 +1332,7 @@ public:
 		return m_bIsCZero;
 	}
 
-
+	bool IsZombieMod() const;
 	float   m_flTime;      // the current client time
 	float   m_fOldTime;    // the time at which the HUD was last redrawn
 	double  m_flTimeDelta; // the difference between flTime and fOldTime
@@ -1447,6 +1451,8 @@ public:
 	int m_iWeaponGet;
 	int m_NEWHUD_hPlus;
 
+	int m_iZlevel;
+	float m_flZombieSelectTime;
 	// sprite indexes
 	int m_HUD_number_0;
 

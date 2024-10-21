@@ -19,8 +19,7 @@ enum ZB2MessageType : byte
 	ZOMBIE_INFECTION,
 	MAKE_ZOMBIES,
 	ZB3_MESSAGE_USED_STATUS,
-	ZB2_SUPPLY_GET,
-
+	ZB2_MESSAGE_ALARM
 };
 
 enum ZombieSkillSlot : byte

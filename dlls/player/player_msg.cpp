@@ -115,11 +115,27 @@ int gmsgGDMsg = 0;
 int gmsgBTEWeapon = 0;
 int gmsgZB2Msg = 0;
 int gmsgZB3Msg = 0;
+int gmsgZB3RenMsg = 0;
+int gmsgOriginalMsg = 0;
+int gmsgOriginalMsg2 = 0;
+int gmsgOriginalMsg3 = 0;
+int gmsgOriginalMsg4 = 0;
+int gmsgOriginalMsg5 = 0;
+int gmsgOriginalMsg6 = 0;
+int gmsgOriginalMsg7 = 0;
+int gmsgOriginalMsg8 = 0;
+int gmsgOriginalMsg9 = 0;
+int gmsgOriginalMsg10 = 0;
+int gmsgOriginalMsg11 = 0;
+int gmsgOriginalMsg12 = 0;
+int gmsgOriginalMsg13 = 0;
+
+int gmsgZB3UsedMsg = 0;
+int gmsgZB3UsedMsg2 = 0;
 int gmsgZSHMsg = 0;
 int gmsgZSHMsgText = 0;
 int gmsgResetRound = 0;
 int gmsgGunDeath = 0;
-int gmsgSupplyText = 0;
 
 // utils
 inline int FNullEnt(CBaseEntity *ent) { return (!ent) || FNullEnt(ent->edict()); }
@@ -225,9 +241,26 @@ void LinkUserMessages()
 	gmsgZSHMsg = REG_USER_MSG("ZSHMsg", -1);
 	gmsgZSHMsgText = REG_USER_MSG("ZSHMsgText", -1);
 	gmsgZB3Msg = REG_USER_MSG("ZB3Msg", -1);
+	gmsgZB3RenMsg = REG_USER_MSG("ZB3RenMsg", -1);
+
+	gmsgOriginalMsg = REG_USER_MSG("StartGame", -1);
+	gmsgOriginalMsg2 = REG_USER_MSG("BombPlant", -1);
+	gmsgOriginalMsg3 = REG_USER_MSG("BombDefuse", -1);
+	gmsgOriginalMsg4 = REG_USER_MSG("CTWIN", -1);
+	gmsgOriginalMsg5 = REG_USER_MSG("TRWIN", -1);
+	gmsgOriginalMsg6 = REG_USER_MSG("RoundDraw", -1);
+	gmsgOriginalMsg7 = REG_USER_MSG("Bombnozone", -1);
+	gmsgOriginalMsg8 = REG_USER_MSG("Bombnoground", -1);
+	gmsgOriginalMsg9 = REG_USER_MSG("Bombgive", -1);
+	gmsgOriginalMsg10 = REG_USER_MSG("Bombdrop", -1);
+	gmsgOriginalMsg11 = REG_USER_MSG("WPNDrop", -1);
+	gmsgOriginalMsg12 = REG_USER_MSG("", -1);
+	gmsgOriginalMsg13 = REG_USER_MSG("AK47", -1);
+
+	gmsgZB3UsedMsg = REG_USER_MSG("ZB3SkillUsed", -1);
+	gmsgZB3UsedMsg2 = REG_USER_MSG("ZB3SkillUsed2", -1);
 	gmsgResetRound = REG_USER_MSG("ResetRound", -1);
 	gmsgGunDeath = REG_USER_MSG("GunDeath", -1);
-	gmsgSupplyText = REG_USER_MSG("SupplyText", -1);
 }
 
 void WriteWeaponInfo2(CBasePlayer* pPlayer, const ItemInfo& II)
