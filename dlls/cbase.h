@@ -393,6 +393,16 @@ public:
 	float m_flStartThrow;
 	float m_flReleaseThrow;
 	int m_iSwing;
+	int m_iSwing2;
+	int m_iSwing3;
+	int m_iSwing4;
+	int m_iSwing5;
+	int m_iSwing6;
+	int m_iSwing7;
+	int m_iSwing8;
+	int m_iSwing9;
+	int m_iSwing10;
+	int m_iSwing11;
 	bool has_disconnected;
 	bool zbstriggeruse;
 };

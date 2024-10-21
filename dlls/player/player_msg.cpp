@@ -128,6 +128,7 @@ int gmsgOriginalMsg9 = 0;
 int gmsgOriginalMsg10 = 0;
 int gmsgOriginalMsg11 = 0;
 int gmsgOriginalMsg12 = 0;
+int gmsgOriginalMsg13 = 0;
 
 int gmsgZB3UsedMsg = 0;
 int gmsgZB3UsedMsg2 = 0;
@@ -254,6 +255,7 @@ void LinkUserMessages()
 	gmsgOriginalMsg10 = REG_USER_MSG("Bombdrop", -1);
 	gmsgOriginalMsg11 = REG_USER_MSG("WPNDrop", -1);
 	gmsgOriginalMsg12 = REG_USER_MSG("", -1);
+	gmsgOriginalMsg13 = REG_USER_MSG("AK47", -1);
 
 	gmsgZB3UsedMsg = REG_USER_MSG("ZB3SkillUsed", -1);
 	gmsgZB3UsedMsg2 = REG_USER_MSG("ZB3SkillUsed2", -1);

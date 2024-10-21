@@ -137,3 +137,18 @@ protected:
 	SharedTexture stringtext;
 	float m_flDisplayTime;
 };
+
+class CHudAK47 : public IBaseHudSub
+{
+public:
+	int VidInit(void) override;
+	int Draw(float time) override;
+
+	void Settext();
+
+protected:
+	int names;
+	SharedTexture m_pCurTexture;
+	SharedTexture stringtext;
+	float m_flDisplayTime;
+};

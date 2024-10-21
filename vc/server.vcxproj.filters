@@ -967,6 +967,9 @@
     <ClCompile Include="..\dlls\gamemode\zbs\boss_manager.cpp">
       <Filter>dlls\gamemode\zbs</Filter>
     </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_twin_axes.cpp">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\dlls\activity.h">
@@ -1854,6 +1857,9 @@
     </ClInclude>
     <ClInclude Include="..\dlls\gamemode\zbs\boss_manager.h">
       <Filter>dlls\gamemode\zbs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\knife_twin_axes.h">
+      <Filter>dlls\wpn_shared</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

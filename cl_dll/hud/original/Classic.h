@@ -23,6 +23,7 @@ public:
 	CHudMsgFunc(Bombdrop);
 	CHudMsgFunc(Bombgive);
 	CHudMsgFunc(WPNDrop);
+	CHudMsgFunc(AK47);
 
 public:
 	class CHudClassic_impl_t* pimpl = nullptr;

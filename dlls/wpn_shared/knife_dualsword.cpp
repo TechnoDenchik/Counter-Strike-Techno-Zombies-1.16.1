@@ -160,6 +160,8 @@ public:
 #endif
 	void DelayPrimaryAttack();
 
+
+
 	float GetPrimaryAttackDamage(int iType) const
 	{
 		float flDamage = iType ? 50 : 770;

@@ -19,6 +19,7 @@
 #include "player.h"
 #include "weapons.h"
 #include "wpn_ak47.h"
+#include "gamemode/interface/interface_const.h"
 
 enum ak47_e
 {
@@ -84,8 +85,13 @@ BOOL CAK47::Deploy(void)
 	m_flAccuracy = 0.2;
 	m_iShotsFired = 0;
 	iShellOn = 1;
-
 	return DefaultDeploy("models/v_ak47.mdl", "models/p_ak47.mdl", AK47_DRAW, "ak47", UseDecrement() != FALSE);
+
+#ifndef CLIENT_DLL
+	MESSAGE_BEGIN(MSG_ONE, gmsgOriginalMsg13, NULL, m_pPlayer->pev);
+	WRITE_BYTE(WEAPONAK47);
+	MESSAGE_END();
+#endif
 }
 
 void CAK47::PrimaryAttack(void)
@@ -96,6 +102,11 @@ void CAK47::PrimaryAttack(void)
 		AK47Fire(0.04 + (0.07) * m_flAccuracy, 0.0955, FALSE);
 	else
 		AK47Fire((0.0275), 0.0955, FALSE);
+#ifndef CLIENT_DLL
+	MESSAGE_BEGIN(MSG_ONE, gmsgOriginalMsg13, NULL, m_pPlayer->pev);
+	WRITE_BYTE(WEAPONAK47);
+	MESSAGE_END();
+#endif
 }
 
 void CAK47::AK47Fire(float flSpread, float flCycleTime, BOOL fUseAutoAim)
@@ -106,6 +117,12 @@ void CAK47::AK47Fire(float flSpread, float flCycleTime, BOOL fUseAutoAim)
 
 	if (m_flAccuracy > 1.25)
 		m_flAccuracy = 1.25;
+
+#ifndef CLIENT_DLL
+	MESSAGE_BEGIN(MSG_ONE, gmsgOriginalMsg13, NULL, m_pPlayer->pev);
+	WRITE_BYTE(WEAPONAK47);
+	MESSAGE_END();
+#endif
 
 	if (m_iClip <= 0)
 	{
@@ -165,6 +182,9 @@ void CAK47::Reload(void)
 	{
 #ifndef CLIENT_DLL
 		m_pPlayer->SetAnimation(PLAYER_RELOAD);
+		MESSAGE_BEGIN(MSG_ONE, gmsgOriginalMsg13, NULL, m_pPlayer->pev);
+		WRITE_BYTE(WEAPONAK47);
+		MESSAGE_END();
 #endif
 		m_flAccuracy = 0.2;
 		m_iShotsFired = 0;
@@ -174,6 +194,12 @@ void CAK47::Reload(void)
 
 void CAK47::WeaponIdle(void)
 {
+#ifndef CLIENT_DLL
+	MESSAGE_BEGIN(MSG_ONE, gmsgOriginalMsg13, NULL, m_pPlayer->pev);
+	WRITE_BYTE(WEAPONAK47);
+	MESSAGE_END();
+#endif
+
 	ResetEmptySound();
 	m_pPlayer->GetAutoaimVector(AUTOAIM_10DEGREES);
 

@@ -84,6 +84,7 @@
     <ClCompile Include="..\cl_dll\events\event_tar21.cpp" />
     <ClCompile Include="..\cl_dll\events\event_thompson.cpp" />
     <ClCompile Include="..\cl_dll\events\event_tmp.cpp" />
+    <ClCompile Include="..\cl_dll\events\event_twinaxes.cpp" />
     <ClCompile Include="..\cl_dll\events\event_ump45.cpp" />
     <ClCompile Include="..\cl_dll\events\event_usp.cpp" />
     <ClCompile Include="..\cl_dll\events\event_vehicle.cpp" />
@@ -200,6 +201,7 @@
     <ClCompile Include="..\dlls\wpn_shared\knife_katana.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_shelter_axe.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_skullaxe.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_twin_axes.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_female.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_ak47.cpp" />
@@ -420,6 +422,7 @@
     <ClInclude Include="..\dlls\gamemode\zb2\zb2_const.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\zsh_const.h" />
     <ClInclude Include="..\dlls\wpn_shared\knife_shelter_axe.h" />
+    <ClInclude Include="..\dlls\wpn_shared\knife_twin_axes.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_ak47.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_ak47l.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_as50.h" />

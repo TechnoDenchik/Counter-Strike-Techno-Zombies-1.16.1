@@ -25,49 +25,39 @@
 *    version.
 *
 */
-#pragma once
-#ifndef EVENTS_H
-#define EVENTS_H
+#include "events.h"
 
-#include "hud.h"
-#include "cl_util.h"
-#include "const.h"
-#include "entity_state.h"
-#include "cl_entity.h"
+enum knife_e
+{
+	ANIM_IDLE,
+	ANIM_IDLE2,
 
-#include "r_efx.h"
+	ANIM_DRAW,
 
-#include "eventscripts.h"
-#include "event_api.h"
-#include "pm_defs.h"
-#include "ev_hldm.h"
-#include "com_weapons.h"
+	ANIM_SLASH1,
+	ANIM_SLASH2,
+	ANIM_SLASH3,
+	ANIM_SLASH4,
 
-#ifndef PITCH
-// MOVEMENT INFO
-// up / down
-#define	PITCH	0
-// left / right
-#define	YAW		1
-// fall over
-#define	ROLL	2
-#endif
+	ANIM_DUAL_SLASH1,
+	ANIM_DUAL_SLASH2,
 
-#define DECLARE_EVENT( x ) void EV_##x( struct event_args_s *args )
-#define HOOK_EVENT( x, y ) gEngfuncs.pfnHookEvent( "events/" #x ".sc", EV_##y )
+	ANIM_COMBO,
 
-#define PLAY_EVENT_SOUND( x ) gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, (x), VOL_NORM, ATTN_NORM, 0, PITCH_NORM )
+	ANIM_SKILL1,
+	ANIM_SKILL2,
+};
 
+static const char *SOUNDS_NAME = "weapons/dgaxe_slash1.wav";
 
-// enable it until fix isn't applied in Xash3D
-//#define _CS16CLIENT_FIX_EVENT_ORIGIN
+void EV_weapon_twinaxes( struct event_args_s *args )
+{
+	int    idx = args->entindex;
+	Vector origin( args->origin );
 
-extern int g_iPShell;
-extern int g_iRShell;
-extern int g_iShotgunShell;
-extern int g_iBlackSmoke;
+	if( EV_IsLocal( idx ))
+		gEngfuncs.pEventAPI->EV_WeaponAnimation( args->iparam1, 2 );
 
-
-void Game_HookEvents( void );
-
-#endif
+	//Play Swing sound
+	PLAY_EVENT_SOUND( SOUNDS_NAME );
+}

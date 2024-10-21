@@ -23,8 +23,7 @@ static std::pair<const char *, void(*)(CBasePlayer *p)> g_SupplyboxItems[]=
 			int iAmount2 = p->m_pModStrategy->ComputeMaxAmmo("50ae", MAX_AMMO_50AE);
 			p->GiveAmmo(iAmount2, "762Nato", iAmount2);
 
-			p->GiveNamedItem("knife_dualsword");
-			p->GiveNamedItem("weapon_zombibomb");
+			p->GiveNamedItem("weapon_twinaxes");
 		}
 	}
 };

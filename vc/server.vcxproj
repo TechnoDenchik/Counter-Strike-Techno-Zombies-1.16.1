@@ -420,6 +420,7 @@
     <ClCompile Include="..\dlls\wpn_shared\knife_katana.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_shelter_axe.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_skullaxe.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_twin_axes.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_female.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_ak47.cpp">
@@ -870,6 +871,7 @@
     <ClInclude Include="..\dlls\weapons_precache.h" />
     <ClInclude Include="..\dlls\world.h" />
     <ClInclude Include="..\dlls\wpn_shared\knife_shelter_axe.h" />
+    <ClInclude Include="..\dlls\wpn_shared\knife_twin_axes.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_ak47.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_as50.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_aug.h" />

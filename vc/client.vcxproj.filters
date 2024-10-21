@@ -1089,6 +1089,12 @@
     <ClCompile Include="..\public2\unicode_strtools.cpp">
       <Filter>public</Filter>
     </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_twinaxes.cpp">
+      <Filter>cl_dll\events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_twin_axes.cpp">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\dlls\wpn_shared\wpn_m249.h">
@@ -1657,6 +1663,9 @@
     </ClInclude>
     <ClInclude Include="..\public2\unicode_strtools.h">
       <Filter>public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\knife_twin_axes.h">
+      <Filter>dlls\wpn_shared</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
