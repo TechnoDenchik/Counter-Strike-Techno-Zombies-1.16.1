@@ -24,4 +24,10 @@ enum INTMessage : byte
 	ORIG_WDROP_MSG,
 	WEAPONAK47
 };
+
+enum INTWeaponMsg : byte
+{
+	QUANTUMMSG,
+	TWINAXESMSG,
+};
 #endif

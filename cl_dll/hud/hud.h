@@ -149,6 +149,7 @@ struct HUDLIST {
 #include "hud2/NewFontManager.h"
 #include "Original/Classic.h"
 #include "interface/interface.h"
+#include "weapons/weapon_int.h"
 
 
 //
@@ -1418,6 +1419,7 @@ public:
 	CHudZBS	m_ZBS;
 	CHudZB2 m_ZB2;
 	CHudClassic m_CLS;
+	CWeaponInt m_WPI;
 	CHudGunDeath m_gd;
 	CHudZB3 m_ZB3;
 	CHudZSH m_ZSH;

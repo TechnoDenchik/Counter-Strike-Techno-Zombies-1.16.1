@@ -152,4 +152,12 @@ public:
 	virtual BOOL AddAmmo(CBaseEntity* pOther);
 };
 
+class CQuantAmmo : public CBasePlayerAmmo
+{
+public:
+	virtual void Spawn();
+	virtual void Precache();
+	virtual BOOL AddAmmo(CBaseEntity* pOther);
+};
+
 #endif // AMMO_H

@@ -380,6 +380,13 @@ public:
 	int ammo_556natobox;
 	int maxammo_762nato;
 	int ammo_762nato;
+
+	int maxammo_QuantAmmo;
+	int ammo_QuantAmmo;
+
+	int maxammo_TwinAmmo;
+	int ammo_TwinAmmo;
+
 	int maxammo_45acp;
 	int ammo_45acp;
 	int maxammo_50ae;
@@ -403,6 +410,7 @@ public:
 	int m_iSwing9;
 	int m_iSwing10;
 	int m_iSwing11;
+	int m_iSwing12;
 	bool has_disconnected;
 	bool zbstriggeruse;
 };

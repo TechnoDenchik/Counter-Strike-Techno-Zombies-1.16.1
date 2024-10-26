@@ -923,7 +923,8 @@ void UTIL_TraceModel(const Vector &vecStart, const Vector &vecEnd, int hullNumbe
 	TRACE_MODEL(vecStart, vecEnd, hullNumber, pentModel, ptr);
 }
 
-NOXREF TraceResult UTIL_GetGlobalTrace()
+TraceResult UTIL_GetGlobalTrace()
+//NOXREF TraceResult UTIL_GetGlobalTrace()
 {
 	TraceResult tr;
 
@@ -940,6 +941,7 @@ NOXREF TraceResult UTIL_GetGlobalTrace()
 
 	return tr;
 }
+
 
 void UTIL_SetSize(entvars_t *pev, const Vector &vecMin, const Vector &vecMax)
 {
@@ -2345,6 +2347,62 @@ bool UTIL_IsGame(const char *gameName)
 #endif // CSTRIKE
 
 	return false;
+}
+
+float UTIL_CalculateDamageRate(Vector vecSrc, CBaseEntity* pOther)
+{
+	TraceResult tr;
+	float rate = 0.0;
+
+	if (!pOther->IsPlayer())
+	{
+		UTIL_TraceLine(vecSrc, pOther->pev->origin, ignore_monsters, NULL, &tr);
+
+		return tr.flFraction < 1.0 ? 0.0 : 1.0;
+	}
+
+	UTIL_TraceLine(vecSrc, pOther->pev->origin, ignore_monsters, NULL, &tr);
+
+	if (tr.flFraction == 1.0)
+		rate = 0.4;
+
+	UTIL_TraceLine(vecSrc, pOther->pev->origin + Vector(0, 0, 25), ignore_monsters, NULL, &tr);
+
+	if (tr.flFraction == 1.0)
+		rate += 0.2;
+
+	UTIL_TraceLine(vecSrc, pOther->pev->origin + Vector(0, 0, FBitSet(pOther->pev->flags, FL_DUCKING) ? -14 : -34), ignore_monsters, NULL, &tr);
+
+	if (tr.flFraction == 1.0)
+		rate += 0.2;
+
+	Vector2D vecDir = pOther->pev->origin.Make2D() - vecSrc.Make2D();
+	float dis2D = vecDir.LengthSquared();
+
+	if (!dis2D)
+	{
+		vecDir.x = 0.0;
+		vecDir.y = 1.0;
+
+		UTIL_TraceLine(vecSrc, pOther->pev->origin + Vector(0, 13, 0), ignore_monsters, NULL, &tr);
+	}
+	else
+	{
+		vecDir.x /= dis2D;
+		vecDir.y /= dis2D;
+
+		UTIL_TraceLine(vecSrc, pOther->pev->origin + Vector(-vecDir.y, vecDir.x, 0.0) * 13, ignore_monsters, NULL, &tr);
+	}
+
+	if (tr.flFraction == 1.0)
+		rate += 0.1;
+
+	UTIL_TraceLine(vecSrc, pOther->pev->origin - Vector(-vecDir.y, vecDir.x, 0.0) * 13, ignore_monsters, NULL, &tr);
+
+	if (tr.flFraction == 1.0)
+		rate += 0.1;
+
+	return rate;
 }
 
 float UTIL_GetPlayerGaitYaw(int playerIndex)

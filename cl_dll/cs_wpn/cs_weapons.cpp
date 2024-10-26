@@ -103,8 +103,9 @@ static CTMP g_TMP;
 static CUMP45 g_UMP45;
 static CUSP g_USP;
 static CXM1014 g_XM1014;
-static CSTwinShadowAxes twinaxes;
-static CShelter_axe shelteraxe;
+static CSTwinShadowAxes g_twinaxes;
+static CShelter_axe g_shelteraxe;
+static CQuantum g_QUANT;
 
 int    g_iWeaponFlags;
 bool   g_bInBombZone;
@@ -631,6 +632,7 @@ void CBasePlayerWeapon::ItemPostFrame( void )
 		}
 
 		WeaponIdle();
+		AmmoGetAuto();
 		return;
 	}
 }
@@ -879,8 +881,8 @@ void HUD_InitClientWeapons( void )
 	HUD_PrepEntity( &g_AK47, &player);
 	HUD_PrepEntity( &g_Knife, &player);
 	HUD_PrepEntity( &g_P90, &player );
-	HUD_PrepEntity(& twinaxes, &player);
-	HUD_PrepEntity(& shelteraxe, &player);
+	HUD_PrepEntity( &g_twinaxes, &player);
+	HUD_PrepEntity( &g_shelteraxe, &player);
 
 	BTEClientWeapons().PrepEntity(&player);
 }
@@ -1102,6 +1104,10 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 			pWeapon = &g_AK47;
 			break;
 
+		case WEAPON_QUANTUM:
+			pWeapon = &g_QUANT;
+			break;
+
 		case WEAPON_KNIFE:
 			pWeapon = &g_Knife;
 			break;
@@ -1111,11 +1117,11 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 			break;
 
 		case WEAPON_SHELTERAXE:
-			pWeapon = &shelteraxe;
+			pWeapon = &g_shelteraxe;
 			break;
 
 		case WEAPON_TWINAXES:
-			pWeapon = &twinaxes;
+			pWeapon = &g_twinaxes;
 			break;
 
 		/*case WEAPON_NONE:
@@ -1225,6 +1231,8 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 	player.ammo_buckshot	= from->client.ammo_shells;
 	player.ammo_556natobox	= from->client.ammo_rockets;
 	player.ammo_762nato		= (int)from->client.vuser2.x;
+	player.ammo_QuantAmmo = (int)from->client.vuser2.x;
+	player.ammo_TwinAmmo = (int)from->client.vuser2.x;
 	player.ammo_45acp		= (int)from->client.vuser2.y;
 	player.ammo_50ae		= (int)from->client.vuser2.z;
 	player.ammo_338mag		= (int)from->client.vuser3.x;
@@ -1241,6 +1249,8 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 
 	flags = from->client.iuser3;
 	g_bHoldingKnife		= pWeapon->m_iId == WEAPON_KNIFE;
+	g_bHoldingKnife = pWeapon->m_iId == WEAPON_TWINAXES;
+	
 	player.m_bCanShoot	= (flags & PLAYER_CAN_SHOOT) != 0;
 	g_iFreezeTimeOver	= !(flags & PLAYER_FREEZE_TIME_OVER);
 	g_bInBombZone		= (flags & PLAYER_IN_BOMB_ZONE) != 0;
@@ -1309,6 +1319,10 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 	to->client.ammo_shells = player.ammo_buckshot;
 	to->client.ammo_rockets = player.ammo_556natobox;
 	to->client.vuser2.x = player.ammo_762nato;
+
+	to->client.vuser2.x = player.ammo_QuantAmmo;
+	to->client.vuser2.x = player.ammo_TwinAmmo;
+
 	to->client.vuser2.y = player.ammo_45acp;
 	to->client.vuser2.z = player.ammo_50ae;
 	to->client.vuser3.x = player.ammo_338mag;

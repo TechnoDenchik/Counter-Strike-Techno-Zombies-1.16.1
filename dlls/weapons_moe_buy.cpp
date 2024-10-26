@@ -62,6 +62,8 @@ static MoEWeaponBuyInfo_s g_MoEWeaponBuyInfo[] = {
 	
 	{ "weapon_cannon", "Blackdragon Cannon", 3800, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_gungnir", "Gungnir", 6000, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_quant", "QuantumHorizon", 6000, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_twinaxes", "Twin Shadow Axes", 0, KNIFE_SLOT, UNASSIGNED },
 	
 	{ "weapon_knife", "Seal Knife", 0, KNIFE_SLOT, UNASSIGNED },
 	{ "knife_skullaxe", "Skull-9", 0, KNIFE_SLOT, UNASSIGNED },

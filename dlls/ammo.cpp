@@ -374,7 +374,6 @@ LINK_ENTITY_TO_CLASS(ammo_gungnir, CGungnirAmmo);
 void CTwinAxesAmmo::Spawn()
 {
 	Precache();
-	SET_MODEL(ENT(pev), "models/w_9mmclip.mdl");
 	CBasePlayerAmmo::Spawn();
 }
 
@@ -390,4 +389,30 @@ BOOL CTwinAxesAmmo::AddAmmo(CBaseEntity* pOther)
 	return TRUE;
 }
 
-LINK_ENTITY_TO_CLASS(twin_ammo, CTwinAxesAmmo);
+LINK_ENTITY_TO_CLASS(ammo_TwinAmmo, CTwinAxesAmmo);
+
+void CQuantAmmo::Spawn()
+{
+	Precache();
+	SET_MODEL(ENT(pev), "models/w_9mmclip.mdl");
+	CBasePlayerAmmo::Spawn();
+}
+
+void CQuantAmmo::Precache()
+{
+	PRECACHE_MODEL("models/w_9mmclip.mdl");
+	PRECACHE_SOUND("items/9mmclip1.wav");
+}
+
+BOOL CQuantAmmo::AddAmmo(CBaseEntity* pOther)
+{
+	if (pOther->GiveAmmo(35, "QuantAmmo", 100) == -1)
+	{
+		return FALSE;
+	}
+
+	EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", VOL_NORM, ATTN_NORM);
+	return TRUE;
+}
+
+LINK_ENTITY_TO_CLASS(ammo_QuantAmmo, CQuantAmmo);

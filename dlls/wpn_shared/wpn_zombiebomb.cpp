@@ -20,11 +20,11 @@
 #include "weapons.h"
 #include "wpn_zombiebomb.h"
 
-LINK_ENTITY_TO_CLASS(weapon_zombibomb, CZombieBomb)
+LINK_ENTITY_TO_CLASS(weapon_zombibombz, CZombieBomb)
 
 void CZombieBomb::Spawn(void)
 {
-	pev->classname = MAKE_STRING("weapon_zombibomb");
+	pev->classname = MAKE_STRING("weapon_zombibombz");
 	Precache();
 	m_iId = WEAPON_HEGRENADE;
 

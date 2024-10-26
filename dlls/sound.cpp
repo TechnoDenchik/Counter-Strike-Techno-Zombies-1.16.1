@@ -247,6 +247,7 @@ void CAmbientGeneric::Precache()
 		UTIL_EmitAmbientSound(ENT(pev), pev->origin, szSoundFile, (m_dpv.vol * 0.01), m_flAttenuation, SND_SPAWNING, m_dpv.pitch);
 		pev->nextthink = gpGlobals->time + 0.1f;
 	}
+	
 }
 
 // RampThink - Think at 5hz if we are dynamically modifying

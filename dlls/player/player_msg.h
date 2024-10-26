@@ -132,7 +132,8 @@ extern int gmsgOriginalMsg10;
 extern int gmsgOriginalMsg11;
 extern int gmsgOriginalMsg12;
 extern int gmsgOriginalMsg13;
-
+extern int gmsgTwinAxesMsg;
+extern int gmsgQuantumMsg;
 void LinkUserMessages();
 void WriteSigonMessages();
 void SendItemStatus(CBasePlayer *pPlayer);

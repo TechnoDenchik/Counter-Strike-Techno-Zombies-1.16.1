@@ -970,6 +970,12 @@
     <ClCompile Include="..\dlls\wpn_shared\knife_twin_axes.cpp">
       <Filter>dlls\wpn_shared</Filter>
     </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_twinsummon.cpp">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_quant.cpp">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\dlls\activity.h">
@@ -1860,6 +1866,12 @@
     </ClInclude>
     <ClInclude Include="..\dlls\wpn_shared\knife_twin_axes.h">
       <Filter>dlls\wpn_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_quant.h">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\features.h">
+      <Filter>dlls\common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

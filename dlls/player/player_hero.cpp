@@ -29,7 +29,7 @@ CHero_ZB1::CHero_ZB1(CBasePlayer *player, ZombieLevel iEvolutionLevel) : BasePla
 	m_pPlayer->m_bNotKilled = false;
 
 	m_pPlayer->pev->body = 0;
-	m_pPlayer->m_iModelName = MODEL_HUMAN_HERO;
+	m_pPlayer->m_iModelName = MODEL_VIP;
 
 	const char *szModel = "hero";
 	SET_CLIENT_KEY_VALUE(m_pPlayer->entindex(), GET_INFO_BUFFER(m_pPlayer->edict()), "model", const_cast<char *>(szModel));

@@ -24,6 +24,14 @@ GNU General Public License for more details.
 
 #include "zb2_zclass_speed.h"
 
+void CZombieClass_Speed::Precache()
+{
+	PRECACHE_SOUND("sound/zb3/zombi_hurt_female_1.wav");
+	PRECACHE_SOUND("sound/zb3/zombi_hurt_female_2.wav");
+	PRECACHE_SOUND("sound/zb3/zombi_death_female_1.wav");
+	PRECACHE_SOUND("sound/zb3/zombi_death_female_2.wav");
+}
+
 CZombieClass_Speed::CZombieClass_Speed(CBasePlayer *player, ZombieLevel iEvolutionLevel) : CBaseZombieClass_ZB2(player, iEvolutionLevel)
 {
 	m_pZombieSkill.reset(new CZombieSkill_female(m_pPlayer));
@@ -96,8 +104,8 @@ void CZombieClass_Speed::Pain_Zombie(int m_LastHitGroup, bool HasArmour)
 {
 	switch (RANDOM_LONG(0, 1))
 	{
-		case 0: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_hurt_female_1.wav", VOL_NORM, ATTN_NORM); break;
-		case 1: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_hurt_female_2.wav", VOL_NORM, ATTN_NORM); break;
+		case 0: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_AUTO, "zb3/zombi_hurt_female_1.wav", VOL_NORM, ATTN_NORM); break;
+		case 1: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_AUTO, "zb3/zombi_hurt_female_2.wav", VOL_NORM, ATTN_NORM); break;
 		default:break;
 	}
 }
@@ -106,8 +114,8 @@ void CZombieClass_Speed::DeathSound_Zombie()
 {
 	switch (RANDOM_LONG(1, 2))
 	{
-		case 1: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_death_female_1.wav", VOL_NORM, ATTN_NORM); break;
-		case 2: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_death_female_2.wav", VOL_NORM, ATTN_NORM); break;
+		case 1: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_AUTO, "zb3/zombi_death_female_1.wav", VOL_NORM, ATTN_NORM); break;
+		case 2: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_AUTO, "zb3/zombi_death_female_2.wav", VOL_NORM, ATTN_NORM); break;
 		default:break;
 	}
 }

@@ -60,6 +60,7 @@ void CL_KillAttachedTents( int client );
 void CL_RicochetSprite( const vec3_t pos, model_t *pmodel, float duration, float scale );
 void CL_RocketFlare( const vec3_t pos );
 void CL_MuzzleFlash( const vec3_t pos, int type );
+void CL_MuzzleFlash2(const vec3_t pos, int type);
 void CL_BloodSprite( const vec3_t org, int colorIndex, int modelIndex, int modelIndex2, float size );
 void CL_BreakModel( const vec3_t pos, const vec3_t size, const vec3_t dir, float random, float life, int count, int modelIndex, char flags );
 struct tempent_s *CL_TempModel( const vec3_t pos, const vec3_t dir, const vec3_t angles, float life, int modelIndex, int soundtype );

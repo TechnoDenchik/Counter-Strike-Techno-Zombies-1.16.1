@@ -62,15 +62,18 @@ enum AmmoCostType
 	AMMO_556MM_PRICE	= 60,
 	AMMO_57MM_PRICE		= 50,
 	AMMO_762MM_PRICE	= 80,
+	AMMO_QUANT_PRICE = 80,
 	AMMO_9MM_PRICE		= 20,
 	AMMO_BUCKSHOT_PRICE	= 65,
 	AMMO_46MM_PRICE		= 20,
 	AMMO_50BMG_PRICE = 100,
+	AMMO_TWINAXES_PRICE = 100,
 };
 
 enum WeaponCostType
 {
 	AK47_PRICE	= 2500,
+	QUANT_PRICE = 2500,
 	AWP_PRICE	= 4750,
 	DEAGLE_PRICE	= 650,
 	G3SG1_PRICE	= 5000,
@@ -121,6 +124,7 @@ enum AmmoBuyAmount
 	AMMO_556NATOBOX_BUY	= 30,
 	AMMO_57MM_BUY		= 50,
 	AMMO_762NATO_BUY	= 30,
+	AMMO_QUANT_BUY = 35,
 	AMMO_9MM_BUY		= 30,
 	AMMO_BUCKSHOT_BUY	= 8,
 	AMMO_46MM_BUY = 30,
@@ -183,7 +187,7 @@ struct WeaponBuyAmmoConfig
 	int cost;
 };
 
-extern AutoBuyInfoStruct g_autoBuyInfo[35];
+extern AutoBuyInfoStruct g_autoBuyInfo[36];
 
 // WeaponType
 WeaponIdType AliasToWeaponID(const char *alias);

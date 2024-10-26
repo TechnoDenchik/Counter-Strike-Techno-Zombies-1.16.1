@@ -23,6 +23,13 @@ GNU General Public License for more details.
 #include "gamemode/zb2/zb2_skill.h"
 
 #include "zb2_zclass_tank.h"
+void CZombieClass_Default::Precache()
+{
+	PRECACHE_SOUND("sound/zb3/zombi_hurt_01.wav");
+	PRECACHE_SOUND("sound/zb3/zombi_hurt_02.wav");
+	PRECACHE_SOUND("sound/zb3/zombi_death_1.wav");
+	PRECACHE_SOUND("sound/zb3/zombi_death_2.wav");
+}
 
 CZombieClass_Default::CZombieClass_Default(CBasePlayer *player, ZombieLevel iEvolutionLevel) : CBaseZombieClass_ZB2(player, iEvolutionLevel)
 {
@@ -87,8 +94,8 @@ void CZombieClass_Default::Pain_Zombie(int m_LastHitGroup, bool HasArmour)
 {
 	switch (RANDOM_LONG(0, 1))
 	{
-		case 0: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_hurt_01.wav", VOL_NORM, ATTN_NORM); break;
-		case 1: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_hurt_02.wav", VOL_NORM, ATTN_NORM); break;
+		case 0: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_AUTO, "zb3/zombi_hurt_01.wav", VOL_NORM, ATTN_NORM); break;
+		case 1: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_AUTO, "zb3/zombi_hurt_02.wav", VOL_NORM, ATTN_NORM); break;
 		default:break;
 	}
 }
@@ -97,8 +104,8 @@ void CZombieClass_Default::DeathSound_Zombie()
 {
 	switch (RANDOM_LONG(1, 2))
 	{
-		case 1: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_death_1.wav", VOL_NORM, ATTN_NORM); break;
-		case 2: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_death_2.wav", VOL_NORM, ATTN_NORM); break;
+		case 1: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_AUTO, "zb3/zombi_death_1.wav", VOL_NORM, ATTN_NORM); break;
+		case 2: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_AUTO, "zb3/zombi_death_2.wav", VOL_NORM, ATTN_NORM); break;
 		default:break;
 	}
 }

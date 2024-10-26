@@ -252,6 +252,7 @@ void CHud :: Init( void )
 	m_ZB3.Init();
 	m_ZSH.Init();
 	m_CLS.Init();
+	m_WPI.Init();
 	m_gd.Init();
 	//m_GDScoreboard.Init();
 	m_MoeTouch.Init();

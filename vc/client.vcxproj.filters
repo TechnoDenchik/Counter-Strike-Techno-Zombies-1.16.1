@@ -133,6 +133,15 @@
     <Filter Include="Header">
       <UniqueIdentifier>{cbc7b252-2a4c-42b6-bd31-99e2f62f2fb4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="cl_dll\hud\weapons">
+      <UniqueIdentifier>{cd1daf4c-71d6-4407-891c-39c6af2a5780}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cl_dll\hud\weapons\epic">
+      <UniqueIdentifier>{662e8627-1707-4b4c-9a78-ae250d1e3026}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cl_dll\hud\weapons\overcoming">
+      <UniqueIdentifier>{02ecc6cc-39f2-4803-993a-ff84a96781e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\cl_dll\events\ev_cs16.cpp">
@@ -1095,6 +1104,27 @@
     <ClCompile Include="..\dlls\wpn_shared\knife_twin_axes.cpp">
       <Filter>dlls\wpn_shared</Filter>
     </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_quantumhorizon.cpp">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_quant.cpp">
+      <Filter>cl_dll\events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_twinsummon.cpp">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_quant.cpp">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\weapons\weapon_int.cpp">
+      <Filter>cl_dll\hud\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\weapons\epic\TwinShadowAxes.cpp">
+      <Filter>cl_dll\hud\weapons\epic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\weapons\epic\QuantumHorizon.cpp">
+      <Filter>cl_dll\hud\weapons\epic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\dlls\wpn_shared\wpn_m249.h">
@@ -1666,6 +1696,21 @@
     </ClInclude>
     <ClInclude Include="..\dlls\wpn_shared\knife_twin_axes.h">
       <Filter>dlls\wpn_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_quantumhorizon.h">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_quant.h">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\weapons\weapon_int.h">
+      <Filter>cl_dll\hud\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\weapons\epic\TwinShadowAxes.h">
+      <Filter>cl_dll\hud\weapons\epic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\weapons\epic\QuantumHorizon.h">
+      <Filter>cl_dll\hud\weapons\epic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

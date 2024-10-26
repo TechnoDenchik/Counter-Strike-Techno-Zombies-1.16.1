@@ -30,7 +30,7 @@ CHuman_ZB1::CHuman_ZB1(CBasePlayer *player) : BasePlayerExtra(player)
 	m_pPlayer->pev->health = m_pPlayer->pev->max_health= 1000;
 	//pPlayer->pev->gravity = 0.86f;
 	m_pPlayer->m_iKevlar = ARMOR_TYPE_HELMET;
-	m_pPlayer->pev->armorvalue = 100;
+	m_pPlayer->pev->armorvalue = 500;
 }
 
 //void CBasePlayer::MakeZombie(ZombieLevel iEvolutionLevel)
@@ -60,7 +60,7 @@ CZombie_ZB1::CZombie_ZB1(CBasePlayer *player, ZombieLevel iEvolutionLevel) : Bas
 	// set default property
 	m_pPlayer->pev->health = m_pPlayer->pev->max_health = 2000;
 	m_pPlayer->pev->armortype = ARMOR_TYPE_HELMET;
-	m_pPlayer->pev->armorvalue = 200;
+	m_pPlayer->pev->armorvalue = 800;
 	m_pPlayer->pev->gravity = 0.83f;
 	m_pPlayer->ResetMaxSpeed();
 

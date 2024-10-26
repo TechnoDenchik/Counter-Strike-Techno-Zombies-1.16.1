@@ -598,6 +598,22 @@ qboolean CL_AddVisibleEntity( cl_entity_t *ent, int entityType )
 		dl->radius = 100;
 	}
 
+	if (ent->curstate.effects & EF_MUZZLEFLASHQUANT)
+	{
+		dlight_t* dl;
+
+		if (ent == &clgame.viewent)
+			ent->curstate.effects &= ~EF_MUZZLEFLASHQUANT;
+
+		dl = CL_AllocElight(0);
+
+		VectorCopy(ent->attachment[0], dl->origin);
+		dl->die = cl.time + 0.05f;
+		dl->color.r = 255;
+		dl->color.g = 180;
+		dl->color.b = 64;
+		dl->radius = 100;
+	}
 	// add light effect
 	if( ent->curstate.effects & EF_LIGHT )
 	{

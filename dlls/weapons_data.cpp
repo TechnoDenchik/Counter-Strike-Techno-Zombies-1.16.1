@@ -41,9 +41,11 @@ const char *GetCSModelName(WeaponIdType item_id)
 	case WEAPON_DEAGLE:		modelName = "models/w_deagle.mdl"; break;
 	case WEAPON_SG552:		modelName = "models/w_sg552.mdl"; break;
 	case WEAPON_AK47:		modelName = "models/w_ak47.mdl"; break;
+	case WEAPON_QUANTUM:		modelName = "models/w_revivegun.mdl"; break;
 	case WEAPON_KNIFE:		modelName = "models/w_knife.mdl"; break;
 	case WEAPON_P90:		modelName = "models/w_p90.mdl"; break;
 	case WEAPON_SHIELDGUN:		modelName = "models/w_shield.mdl"; break;
+//	case WEAPON_TWINAXES:		modelName = "models/w_knife.mdl"; break;
 	default:
 		ALERT(at_console, "CBasePlayer::PackDeadPlayerItems(): Unhandled item- not creating weaponbox\n");
 	}
@@ -72,10 +74,12 @@ float GetArmorRatioModifier(WeaponIdType iGunType)
 	case WEAPON_P228:	flRatio *= 1.25; break;
 	case WEAPON_SCOUT:
 	case WEAPON_KNIFE:	flRatio *= 1.7; break;
+	case WEAPON_TWINAXES:	flRatio *= 1.7; break;
 	case WEAPON_FAMAS:
 	case WEAPON_SG552:	flRatio *= 1.4; break;
 	case WEAPON_GALIL:
 	case WEAPON_AK47:	flRatio *= 1.55; break;
+	case WEAPON_QUANTUM:	flRatio *= 1.55; break;
 	default:            break;
 	}
 	return flRatio;
@@ -91,6 +95,13 @@ WeaponBuyAmmoConfig GetBuyAmmoConfig(WeaponIdType id)
 	case WEAPON_AWP:
 		cost = AMMO_338MAG_PRICE;
 		classname = "ammo_338magnum";
+		break;
+	case WEAPON_QUANTUM:
+		cost = AMMO_QUANT_PRICE;
+		classname = "ammo_QuantAmmo";
+		break;
+	case WEAPON_TWINAXES:
+		classname = "ammo_TwinAmmo";
 		break;
 	case WEAPON_SCOUT:
 	case WEAPON_G3SG1:

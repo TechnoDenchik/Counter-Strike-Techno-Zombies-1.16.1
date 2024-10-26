@@ -31,6 +31,7 @@ public:
 	void Pain_Zombie(int m_LastHitGroup, bool HasArmour) override;
 	void DeathSound_Zombie() override;
 	virtual void Zombie_HealthRecoveryThink();
+	virtual void Precache();
 	void OnThink() override;
 	std::shared_ptr<IZombieModeCharacter_ZB2_Extra> m_pCharacter_ZB2;
 	float m_flTimeNextZombieHealthRecovery;

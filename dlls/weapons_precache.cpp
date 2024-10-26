@@ -35,6 +35,8 @@ void W_Precache()
 	UTIL_PrecacheOtherWeapon("weapon_ak47");
 	UTIL_PrecacheOtherWeapon("weapon_scout");
 	UTIL_PrecacheOther("ammo_762nato");
+	UTIL_PrecacheOther("ammo_QuantAmmo");
+	UTIL_PrecacheOther("ammo_TwinAmmo");
 
 	// m249
 	UTIL_PrecacheOtherWeapon("weapon_m249");
@@ -131,7 +133,8 @@ void W_Precache()
 	UTIL_PrecacheOtherWeapon("weapon_bow");
 	UTIL_PrecacheOtherWeapon("weapon_voidpistol");
 	UTIL_PrecacheOtherWeapon("weapon_starchaserar");
-
+	UTIL_PrecacheOtherWeapon("weapon_quant");
+	UTIL_PrecacheOtherWeapon("weapon_quantum");
 
 	if (g_pGameRules->IsDeathmatch())
 	{

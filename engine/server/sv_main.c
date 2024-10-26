@@ -569,6 +569,7 @@ void SV_PrepWorldFrame( void )
 		if( ent->free ) continue;
 
 		ent->v.effects &= ~(EF_MUZZLEFLASH|EF_NOINTERP);
+		ent->v.effects &= ~(EF_MUZZLEFLASHQUANT | EF_NOINTERP);
 	}
 }
 

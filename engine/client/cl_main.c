@@ -1541,6 +1541,7 @@ void CL_PrepVideo( void )
 
 	// update right muzzleflash indexes
 	CL_RegisterMuzzleFlashes ();
+	CL_RegisterMuzzleFlashes2 ();
 
 	// invalidate all decal indexes
 	Q_memset( cl.decal_index, 0, sizeof( cl.decal_index ));

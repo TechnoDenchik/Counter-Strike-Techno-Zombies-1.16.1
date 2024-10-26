@@ -4236,6 +4236,8 @@ void ClientPrecache()
 	PRECACHE_MODEL("models/p_usp.mdl");
 	PRECACHE_MODEL("models/p_fiveseven.mdl");
 	PRECACHE_MODEL("models/p_knife.mdl");
+	PRECACHE_MODEL("models/p_revivegun.mdl");
+	PRECACHE_MODEL("models/p_dgaxe_a.mdl");
 	PRECACHE_MODEL("models/w_flashbang.mdl");
 	PRECACHE_MODEL("models/w_hegrenade.mdl");
 	PRECACHE_MODEL("models/p_sg550.mdl");
@@ -5160,6 +5162,10 @@ void EXT_FUNC UpdateClientData(const struct edict_s *ent, int sendweapons, struc
 		cd->ammo_cells = pl->ammo_556nato;
 		cd->ammo_rockets = pl->ammo_556natobox;
 		cd->vuser2.x = pl->ammo_762nato;
+
+		cd->vuser2.x = pl->ammo_QuantAmmo;
+		cd->vuser2.x = pl->ammo_TwinAmmo;
+
 		cd->vuser2.y = pl->ammo_45acp;
 		cd->vuser2.z = pl->ammo_50ae;
 		cd->vuser3.x = pl->ammo_338mag;

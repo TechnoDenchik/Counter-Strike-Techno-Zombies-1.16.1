@@ -843,6 +843,7 @@ void CL_AddCustomBeam( cl_entity_t *pEnvBeam );
 void CL_KillDeadBeams( cl_entity_t *pDeadEntity );
 void CL_ParseViewBeam( sizebuf_t *msg, int beamType );
 void CL_RegisterMuzzleFlashes( void );
+void CL_RegisterMuzzleFlashes2(void);
 void CL_ReadPointFile_f( void );
 void CL_ReadLineFile_f( void );
 

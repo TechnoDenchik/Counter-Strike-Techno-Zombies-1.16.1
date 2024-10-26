@@ -12,6 +12,7 @@ AutoBuyInfoStruct g_autoBuyInfo[] =
 {
 	{ AUTOBUYCLASS_PRIMARY|AUTOBUYCLASS_RIFLE,		"galil",	"weapon_galil" },
 	{ AUTOBUYCLASS_PRIMARY|AUTOBUYCLASS_RIFLE,		"ak47",		"weapon_ak47" },
+	{ AUTOBUYCLASS_PRIMARY | AUTOBUYCLASS_RIFLE,		"quantum",		"weapon_quantum" },
 	{ AUTOBUYCLASS_PRIMARY|AUTOBUYCLASS_SNIPERRIFLE,	"scout",	"weapon_scout" },
 	{ AUTOBUYCLASS_PRIMARY|AUTOBUYCLASS_RIFLE,		"sg552",	"weapon_sg552" },
 	{ AUTOBUYCLASS_PRIMARY|AUTOBUYCLASS_SNIPERRIFLE,	"awp",		"weapon_awp" },
@@ -77,7 +78,9 @@ WeaponAliasInfo weaponAliasInfo[] =
 	{ "deagle",	WEAPON_DEAGLE },
 	{ "sg552",	WEAPON_SG552 },
 	{ "ak47",	WEAPON_AK47 },
+	{ "quantum",	WEAPON_QUANTUM },
 	{ "knife",	WEAPON_KNIFE },
+	{ "twinaxes",	WEAPON_TWINAXES },
 	{ "p90",	WEAPON_P90 },
 	{ "shield",	WEAPON_SHIELDGUN },
 	{ "none",	WEAPON_NONE },
@@ -95,6 +98,7 @@ WeaponBuyAliasInfo weaponBuyAliasInfo[] =
 	{ "galil",		WEAPON_GALIL,		"#Galil" },
 	{ "defender",		WEAPON_GALIL,		"#Galil" },
 	{ "ak47",		WEAPON_AK47,		"#AK47" },
+	{ "quantum",		WEAPON_QUANTUM,		"#QUANT" },
 	{ "cv47",		WEAPON_AK47,		"#AK47" },
 	{ "scout",		WEAPON_SCOUT,		NULL },
 	{ "sg552",		WEAPON_SG552,		"#SG552" },
@@ -167,7 +171,9 @@ WeaponClassAliasInfo weaponClassAliasInfo[] =
 	{ "deagle",	WEAPONCLASS_PISTOL },
 	{ "sg552",	WEAPONCLASS_RIFLE },
 	{ "ak47",	WEAPONCLASS_RIFLE },
+	{ "quantum",	WEAPONCLASS_RIFLE },
 	{ "knife",	WEAPONCLASS_KNIFE },
+	{ "twinaxes",	WEAPONCLASS_KNIFE },
 	{ "p90",	WEAPONCLASS_SUBMACHINEGUN },
 	{ "shield",	WEAPONCLASS_PISTOL },
 	{ "grenade",	WEAPONCLASS_GRENADE },
@@ -213,6 +219,7 @@ WeaponInfoStruct weaponInfo[] =
 	{ WEAPON_DEAGLE,	DEAGLE_PRICE,		AMMO_50AE_PRICE,	AMMO_50AE_BUY,		DEAGLE_MAX_CLIP,	MAX_AMMO_50AE,		AMMO_50AE,		"weapon_deagle" },
 	{ WEAPON_SG552,		SG552_PRICE,		AMMO_556MM_PRICE,	AMMO_556NATO_BUY,	SG552_MAX_CLIP,		MAX_AMMO_556NATO,	AMMO_556NATO,		"weapon_sg552" },
 	{ WEAPON_AK47,		AK47_PRICE,		AMMO_762MM_PRICE,	AMMO_762NATO_BUY,	AK47_MAX_CLIP,		MAX_AMMO_762NATO,	AMMO_762NATO,		"weapon_ak47" },
+	{ WEAPON_QUANTUM,		QUANT_PRICE,		AMMO_QUANT_PRICE,	AMMO_QUANT_BUY,	QUANT_MAX_CLIP,		MAX_AMMO_QUANT,	AMMO_QUANTAMMO,		"weapon_quantum" },
 	{ WEAPON_P90,		P90_PRICE,		AMMO_57MM_PRICE,	AMMO_57MM_BUY,		P90_MAX_CLIP,		MAX_AMMO_57MM,		AMMO_57MM,		"weapon_p90" },
 	{ WEAPON_SHIELDGUN,	SHIELDGUN_PRICE,	0,			0,			0,			0,			-1,			NULL },
 	{ 0,			0,			0,			0,			0,			0,			-1,			NULL }
@@ -306,6 +313,7 @@ bool IsPrimaryWeapon(int id)
 	case WEAPON_G3SG1:
 	case WEAPON_SG552:
 	case WEAPON_AK47:
+	case WEAPON_QUANTUM:
 	case WEAPON_P90:
 	case WEAPON_SHIELDGUN:
 		return true;
@@ -372,6 +380,7 @@ bool CanBuyWeaponByMaptype(int playerTeam, WeaponIdType weaponID, bool useAssasi
 			case WEAPON_DEAGLE:
 			case WEAPON_P90:
 			case WEAPON_SHIELDGUN:
+			case WEAPON_QUANTUM:
 				return true;
 			default:
 				return false;
@@ -391,6 +400,7 @@ bool CanBuyWeaponByMaptype(int playerTeam, WeaponIdType weaponID, bool useAssasi
 			case WEAPON_AWP:
 			case WEAPON_DEAGLE:
 			case WEAPON_AK47:
+			case WEAPON_QUANTUM:
 				return true;
 			default:
 				return false;
@@ -422,6 +432,7 @@ bool CanBuyWeaponByMaptype(int playerTeam, WeaponIdType weaponID, bool useAssasi
 		case WEAPON_DEAGLE:
 		case WEAPON_P90:
 		case WEAPON_SHIELDGUN:
+		case WEAPON_QUANTUM:
 			return true;
 		default:
 			return false;
@@ -448,6 +459,7 @@ bool CanBuyWeaponByMaptype(int playerTeam, WeaponIdType weaponID, bool useAssasi
 		case WEAPON_DEAGLE:
 		case WEAPON_SG552:
 		case WEAPON_AK47:
+		case WEAPON_QUANTUM:
 		case WEAPON_P90:
 			return true;
 		default:

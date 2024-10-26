@@ -104,6 +104,7 @@
 // entity effects
 #define EF_BRIGHTFIELD		1	// swirling cloud of particles
 #define EF_MUZZLEFLASH		2	// single frame ELIGHT on entity attachment 0
+#define EF_MUZZLEFLASHQUANT		1	// single frame ELIGHT on entity attachment 0
 #define EF_BRIGHTLIGHT		4	// DLIGHT centered at entity origin
 #define EF_DIMLIGHT			8	// player flashlight
 #define EF_INVLIGHT			16	// get lighting from ceiling

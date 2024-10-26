@@ -11,10 +11,7 @@
 #include "gamemode/zb3/zb3_const.h"
 
 
-CHudZB3Morale::CHudZB3Morale(void)
-{
-	
-}
+CHudZB3Morale::CHudZB3Morale(void){}
 
 int CHudZB3Morale::VidInit(void)
 {

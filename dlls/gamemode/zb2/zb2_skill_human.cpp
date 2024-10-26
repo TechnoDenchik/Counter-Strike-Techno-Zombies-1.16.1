@@ -69,7 +69,7 @@ public:
 		m_pPlayer->SpawnProtection_Start(4.0f);
 		m_pPlayer->ResetMaxSpeed();
 
-		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/speedup.wav", VOL_NORM, ATTN_NORM);
+		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_BODY, "zb3/speedup.wav", VOL_NORM, ATTN_NORM);
 
 		MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
 		WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);
@@ -146,7 +146,7 @@ public:
 		m_flTimeZombieSkillEnd = gpGlobals->time + 4.5f;
 		m_flTimeZombieSkillNext = -1;
 
-		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/speedup.wav", VOL_NORM, ATTN_NORM);
+		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_BODY, "zb3/speedup.wav", VOL_NORM, ATTN_NORM);
 
 		MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
 		WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);
@@ -183,7 +183,7 @@ public:
 		m_flTimeZombieSkillEnd = gpGlobals->time + 10.f;
 		m_flTimeZombieSkillNext = -1;
 
-		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/speedup.wav", VOL_NORM, ATTN_NORM);
+		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_BODY, "zb3/speedup.wav", VOL_NORM, ATTN_NORM);
 
 		MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
 		WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);

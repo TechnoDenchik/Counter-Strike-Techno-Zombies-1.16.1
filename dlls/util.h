@@ -481,6 +481,7 @@ float UTIL_WaterLevel(const Vector &position, float minz, float maxz);
 void UTIL_Bubbles(Vector mins, Vector maxs, int count);
 void UTIL_BubbleTrail(Vector from, Vector to, int count);
 void UTIL_Remove(CBaseEntity *pEntity);
+
 //NOXREF BOOL UTIL_IsValidEntity(edict_t *pent);
 void UTIL_PrecacheOther(const char *szClassname);
 void UTIL_LogPrintf(const char *fmt, ...);
@@ -492,7 +493,8 @@ char UTIL_TextureHit(TraceResult *ptr, Vector vecSrc, Vector vecEnd);
 bool UTIL_IsGame(const char *gameName);
 float UTIL_GetPlayerGaitYaw(int playerIndex);
 int UTIL_ReadFlags(const char *c);
-
+float UTIL_CalculateDamageRate(Vector vecSrc, CBaseEntity* pOther);
+TraceResult UTIL_GetGlobalTrace();
 extern int g_groupmask;
 extern int g_groupop;
 

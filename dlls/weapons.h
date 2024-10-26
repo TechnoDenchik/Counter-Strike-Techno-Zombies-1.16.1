@@ -83,6 +83,7 @@ enum ArmouryItemPack
 	ARMOURY_P90,
 	ARMOURY_MAC10,
 	ARMOURY_AK47,
+	ARMOURY_QUANT,
 	ARMOURY_SG552,
 	ARMOURY_M4A1,
 	ARMOURY_AUG,
@@ -97,6 +98,7 @@ enum ArmouryItemPack
 	ARMOURY_KEVLAR,
 	ARMOURY_ASSAULT,
 	ARMOURY_SMOKEGRENADE,
+	ARMOURY_TWINAXES,
 };
 
 struct ItemInfo
@@ -403,6 +405,7 @@ public:
 	virtual void SecondaryAttack() {};
 	virtual void Reload() {};
 	virtual void WeaponIdle() {};
+	virtual void AmmoGetAuto() {};
 	virtual void RetireWeapon();
 	virtual BOOL ShouldWeaponIdle() { return FALSE; }
 	virtual BOOL UseDecrement() { return FALSE; }

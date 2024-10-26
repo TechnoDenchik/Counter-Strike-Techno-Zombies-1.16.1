@@ -125,6 +125,9 @@ WeaponStruct g_weaponStruct[ MAX_WEAPONS ] =
 	{ WEAPON_DEAGLE,	DEAGLE_PRICE,		TERRORIST|CT,		AUTOBUYCLASS_SECONDARY,	AMMO_50AE_PRICE },
 	{ WEAPON_SG552,		SG552_PRICE,		CT,			AUTOBUYCLASS_PRIMARY,	AMMO_556MM_PRICE },
 	{ WEAPON_AK47,		AK47_PRICE,		CT,			AUTOBUYCLASS_PRIMARY,	AMMO_762MM_PRICE },
+	{ WEAPON_TWINAXES,		AK47_PRICE,		TERRORIST | CT,			AUTOBUYCLASS_NONE,	AMMO_TWINAXES_PRICE },
+	{ WEAPON_SHELTERAXE,		AK47_PRICE,		TERRORIST | CT,			AUTOBUYCLASS_NONE,	AMMO_762MM_PRICE },
+	{ WEAPON_QUANTUM,		QUANT_PRICE,		TERRORIST | CT,			AUTOBUYCLASS_PRIMARY,	AMMO_QUANT_PRICE },
 	{ WEAPON_P90,		P90_PRICE,		TERRORIST|CT,		AUTOBUYCLASS_PRIMARY,	AMMO_57MM_PRICE },
 	{ WEAPON_FAMAS,		FAMAS_PRICE,		TERRORIST,		AUTOBUYCLASS_PRIMARY,	AMMO_556MM_PRICE },
 	{ WEAPON_GALIL,		GALIL_PRICE,		CT,			AUTOBUYCLASS_PRIMARY,	AMMO_556MM_PRICE },
@@ -153,7 +156,7 @@ int gEvilImpulse101;
 char g_szMapBriefingText[512];
 
 entvars_t *g_pevLastInflictor;
-
+//ak47
 LINK_ENTITY_TO_CLASS(player, CBasePlayer);
 
 CBasePlayer::CBasePlayer() : m_rebuyString(nullptr) 
@@ -7371,6 +7374,10 @@ void CBasePlayer::TabulateAmmo()
 	ammo_556nato = AmmoInventory(GetAmmoIndex("556Nato"));
 	ammo_556natobox = AmmoInventory(GetAmmoIndex("556NatoBox"));
 	ammo_762nato = AmmoInventory(GetAmmoIndex("762Nato"));
+
+	ammo_QuantAmmo = AmmoInventory(GetAmmoIndex("QuantAmmo"));
+	ammo_TwinAmmo = AmmoInventory(GetAmmoIndex("TwinAmmo"));
+
 	ammo_45acp = AmmoInventory(GetAmmoIndex("45acp"));
 	ammo_50ae = AmmoInventory(GetAmmoIndex("50AE"));
 	ammo_338mag = AmmoInventory(GetAmmoIndex("338Magnum"));
@@ -7848,6 +7855,7 @@ BOOL CBasePlayer::ShouldDoLargeFlinch(int nHitGroup, int nGunType)
 		case WEAPON_DEAGLE:
 		case WEAPON_SG552:
 		case WEAPON_AK47:
+		case WEAPON_QUANTUM:
 			return TRUE;
 		}
 	}
@@ -8060,7 +8068,7 @@ const char *GetBuyStringForWeaponClass(int weaponClass)
 	case WEAPONCLASS_MACHINEGUN:
 		return "m249";
 	case WEAPONCLASS_RIFLE:
-		return "sg552 aug ak47 m4a1 galil famas";
+		return "sg552 aug ak47 m4a1 galil famas quantum";
 	}
 
 	return NULL;
