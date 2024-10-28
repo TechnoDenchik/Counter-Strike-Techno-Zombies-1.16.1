@@ -47,12 +47,12 @@ public:
 		return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | flags;
 	}
 
-	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	void Animate(float frames);
 	void Expand(float scaleSpeed, float fadeSpeed);
-	void SpriteInit(const char *pSpriteName, const Vector &origin);
+	void SpriteInit(const char* pSpriteName, const Vector& origin);
 
-	inline void SetAttachment(edict_t *pEntity, int attachment)
+	inline void SetAttachment(edict_t* pEntity, int attachment)
 	{
 		if (pEntity)
 		{
@@ -95,10 +95,10 @@ public:
 	void EXPORT ExpandThink(void);
 	void EXPORT AnimateUntilDead(void);
 
-	virtual int Save(CSave &save);
-	virtual int Restore(CRestore &restore);
+	virtual int Save(CSave& save);
+	virtual int Restore(CRestore& restore);
 	static TYPEDESCRIPTION m_SaveData[];
-	static CSprite *SpriteCreate(const char *pSpriteName, const Vector &origin, BOOL animate);
+	static CSprite* SpriteCreate(const char* pSpriteName, const Vector& origin, BOOL animate);
 
 private:
 	float m_lastTime;
@@ -124,8 +124,8 @@ public:
 public:
 	inline void SetType(int type) { pev->rendermode = (pev->rendermode & 0xF0) | (type & 0x0F); }
 	inline void SetFlags(int flags) { pev->rendermode = (pev->rendermode & 0x0F) | (flags & 0xF0); }
-	inline void SetStartPos(const Vector &pos) { pev->origin = pos; }
-	inline void SetEndPos(const Vector &pos) { pev->angles = pos; }
+	inline void SetStartPos(const Vector& pos) { pev->origin = pos; }
+	inline void SetEndPos(const Vector& pos) { pev->angles = pos; }
 
 	void SetStartEntity(int entityIndex);
 	void SetEndEntity(int entityIndex);
@@ -145,8 +145,8 @@ public:
 	inline int GetFlags(void) { return pev->rendermode & 0xF0; }
 	inline int GetStartEntity(void) { return pev->sequence & 0xFFF; }
 	inline int GetEndEntity(void) { return pev->skin & 0xFFF; }
-	const Vector &GetStartPos(void);
-	const Vector &GetEndPos(void);
+	const Vector& GetStartPos(void);
+	const Vector& GetEndPos(void);
 
 public:
 	Vector Center(void) { return (GetStartPos() + GetEndPos()) * 0.5; }
@@ -160,24 +160,24 @@ public:
 	inline int GetScrollRate(void) { return (int)(pev->animtime); }
 
 public:
-	void EXPORT TriggerTouch(CBaseEntity *pOther);
+	void EXPORT TriggerTouch(CBaseEntity* pOther);
 	void RelinkBeam(void);
-	void DoSparks(const Vector &start, const Vector &end);
-	CBaseEntity *RandomTargetname(const char *szName);
-	void BeamDamage(TraceResult *ptr);
-	void BeamInit(const char *pSpriteName, int width);
-	void PointsInit(const Vector &start, const Vector &end);
-	void PointEntInit(const Vector &start, int endIndex);
+	void DoSparks(const Vector& start, const Vector& end);
+	CBaseEntity* RandomTargetname(const char* szName);
+	void BeamDamage(TraceResult* ptr);
+	void BeamInit(const char* pSpriteName, int width);
+	void PointsInit(const Vector& start, const Vector& end);
+	void PointEntInit(const Vector& start, int endIndex);
 	void EntsInit(int startIndex, int endIndex);
-	void HoseInit(const Vector &start, const Vector &direction);
+	void HoseInit(const Vector& start, const Vector& direction);
 
 public:
-	static CBeam *BeamCreate(const char *pSpriteName, int width);
+	static CBeam* BeamCreate(const char* pSpriteName, int width);
 
 public:
 	inline void LiveForTime(float time) { SetThink(&CBaseEntity::SUB_Remove); pev->nextthink = gpGlobals->time + time; }
 
-	inline void BeamDamageInstant(TraceResult *ptr, float damage)
+	inline void BeamDamageInstant(TraceResult* ptr, float damage)
 	{
 		pev->dmg = damage;
 		pev->dmgtime = gpGlobals->time - 1;
@@ -193,10 +193,10 @@ class CLaser : public CBeam
 public:
 	void Spawn(void);
 	void Precache(void);
-	void KeyValue(KeyValueData *pkvd);
-	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	int Save(CSave &save);
-	int Restore(CRestore &restore);
+	void KeyValue(KeyValueData* pkvd);
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	int Save(CSave& save);
+	int Restore(CRestore& restore);
 
 public:
 	void TurnOn(void);
@@ -204,14 +204,14 @@ public:
 	int IsOn(void);
 
 public:
-	void FireAtPoint(TraceResult &point);
+	void FireAtPoint(TraceResult& point);
 	void EXPORT StrikeThink(void);
 
 public:
 	static TYPEDESCRIPTION m_SaveData[];
 
 public:
-	CSprite * m_pSprite;
+	CSprite* m_pSprite;
 	int m_iszSpriteName;
 	Vector m_firePosition;
 };

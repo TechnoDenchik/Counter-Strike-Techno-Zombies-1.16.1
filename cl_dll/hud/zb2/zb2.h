@@ -41,9 +41,8 @@ public:
 
 	bool m_bCanDraw;
 	CHudMsgFunc(ZB2Msg);
-	//CHudMsgFunc(SupplyText);
 	CHudMsgFunc(ZB3RenMsg);
-    //CHudMsgFunc(ZB2Win);
+	CHudMsgFunc(ZB3RespMsg);
 
 public:
 	class CHudZB2_impl_t *pimpl = nullptr;

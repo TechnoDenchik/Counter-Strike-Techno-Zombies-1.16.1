@@ -15,13 +15,13 @@
 #ifdef __APPLE__
 	#include <dlfcn.h>
 	#include <errno.h>
-	#define XASHLIB    "technoengine2.dylib"
+	#define TECHNOENGINELIB    "technoengine2.dylib"
 	#define dlmount(x) dlopen(x, RTLD_NOW)
 	#define HINSTANCE  void*
 #elif __unix__
 	#include <dlfcn.h>
 	#include <errno.h>
-	#define XASHLIB    "technoengine2.so"
+	#define TECHNOENGINELIB    "technoengine2.so"
 	#define dlmount(x) dlopen(x, RTLD_NOW)
 	#define HINSTANCE  void*
 #elif _WIN32
@@ -33,42 +33,40 @@
 		#define USE_WINMAIN
 	#endif
 	#ifndef XASH_DEDICATED
-		#define XASHLIB "technoengine2.dll"
+		#define TECHNOENGINELIB "technoengine2.dll"
 	#else
-		#define XASHLIB "technoengine2.dll"
+		#define TECHNOENGINELIB "technoengine2.dll"
 	#endif
 	#include "windows.h"
 #endif
 
-#ifndef USE_WINMAIN // use for MSVC check here
+#ifndef USE_WINMAIN
 #define _inline static inline
 #endif
 
 #ifdef WIN32
-// Enable NVIDIA High Performance Graphics while using Integrated Graphics.
 __declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
-
-// Enable AMD High Performance Graphics while using Integrated Graphics.
 __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 #endif
 
-#define GAME_PATH	"cstz"	// default dir to start from
+#define GAME_PATH	"cstz"	
 
 typedef void (*pfnChangeGame)( const char *progname );
 typedef int  (*pfnInit)( int argc, char **argv, const char *progname, int bChangeGame, pfnChangeGame func );
 typedef void (*pfnShutdown)( void );
 typedef enum { false, true } qboolean;
 
-static pfnInit     Xash_Main;
-static pfnShutdown Xash_Shutdown = NULL;
-static char        szGameDir[128]; // safe place to keep gamedir
+static pfnInit     TechnoEngine_Main;
+static pfnShutdown TechnoEngine_Shutdown = NULL;
+static char        szGameDir[128];
 static int         szArgc;
 static char        **szArgv;
 static HINSTANCE	hEngine;
+BOOL gamegir;
 
-static void Xash_Error( const char *szFmt, ... )
+static void TechnoEngine_Error( const char *szFmt, ... )
 {
-	static char	buffer[16384];	// must support > 1k messages
+	static char	buffer[16384];
 	va_list		args;
 
 	va_start( args, szFmt );
@@ -76,13 +74,53 @@ static void Xash_Error( const char *szFmt, ... )
 	va_end( args );
 
 #ifdef XASH_SDL
-	SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "Engine Error", buffer, NULL );
+	SDL_ShowSimpleMessageBox( SDL_MESSAGEBOX_ERROR, "TechnoEngine Error", buffer, NULL );
 #elif defined( _WIN32 )
-	MessageBoxA( NULL, buffer, "Engine Error", MB_OK );
+	MessageBoxA( NULL, buffer, "TechnoEngine Error", MB_ICONERROR);
 #else
-	fprintf( stderr, "Engine Error: %s\n", buffer );
+	fprintf( stderr, "TechnoEngine Error: %s\n", buffer );
 #endif
 	exit( 1 );
+	_exit(1);
+}
+
+static void TechnoEngine_Warning(const char* szFmt, ...)
+{
+	static char	buffer[16384];
+	va_list		args;
+
+	va_start(args, szFmt);
+	vsnprintf(buffer, sizeof(buffer), szFmt, args);
+	va_end(args);
+
+#ifdef XASH_SDL
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "TechnoEngine Message", buffer, NULL);
+#elif defined( _WIN32 )
+	MessageBoxA(NULL, buffer, "TechnoEngine Message", MB_ICONINFORMATION);
+#else
+	fprintf(stderr, "TechnoEngine Message: %s\n", buffer);
+#endif
+	exit(1);
+	_exit(1);
+}
+
+static void TechnoEngine_Warning2(const char* szFmt, ...)
+{
+	static char	buffer[16384];
+	va_list		args;
+
+	va_start(args, szFmt);
+	vsnprintf(buffer, sizeof(buffer), szFmt, args);
+	va_end(args);
+
+#ifdef XASH_SDL
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "TechnoEngine Message", buffer, NULL);
+#elif defined( _WIN32 )
+	MessageBoxA(NULL, buffer, "TechnoEngine Message", MB_ICONWARNING);
+#else
+	fprintf(stderr, "TechnoEngine Message: %s\n", buffer);
+#endif
+	exit(1);
 	_exit(1);
 }
 
@@ -98,46 +136,107 @@ static const char *GetStringLastError()
 	return buf;
 }
 #endif
+HANDLE CheckInstance(const char* Name)
+{
+	HANDLE Mutex = CreateMutex(NULL, true, Name);
+	int er = GetLastError();
+	if (er) return 0;
+	return Mutex;
+}
+
+BOOL DirIsExist(const TCHAR* dir) 
+{
+	DWORD flag = GetFileAttributes(dir);
+	if (flag == 0xFFFFFFFFUL) {
+		if (GetLastError() == ERROR_FILE_NOT_FOUND)
+			return false;
+	}
+	if (!(flag & FILE_ATTRIBUTE_DIRECTORY))
+		return false;
+	return true;
+}
 
 static void Sys_LoadEngine( void )
 {
-	if(( hEngine = dlmount( XASHLIB )) == NULL )
-	{
-		Xash_Error("Запуск не возможен, отсутствует "XASHLIB": %s", dlerror() );
-	}
+	const char* NamedMutex = "Launcher CST:Z";
 
-	if(( Xash_Main = (pfnInit)dlsym( hEngine, "Host_Main" )) == NULL )
+	if (DirIsExist("cstz"))
 	{
-		Xash_Error("Не удалось найти точку входа в: "XASHLIB":  %s", dlerror() );
-	}
+		if (DirIsExist("cstz/cl_dlls"))
+		{
+			if (DirIsExist("cstz/dlls"))
+			{
+				if (DirIsExist("cstz/media"))
+				{
+					HANDLE Mutex = CheckInstance(NamedMutex);
 
-	// this is non-fatal for us but change game will not working
-	Xash_Shutdown = (pfnShutdown)dlsym( hEngine, "Host_Shutdown" );
+					if (!Mutex)
+					{
+						ReleaseMutex(Mutex);
+						TechnoEngine_Warning("Игра запущена!");
+						HWND hWnd = FindWindow(0, "Launcher CST:Z");
+						SetForegroundWindow(hWnd);
+						return 1;
+					}
+					else
+					{
+						if ((hEngine = dlmount(TECHNOENGINELIB)) == NULL)
+						{
+							TechnoEngine_Error("Системе не удалось обнаружить модуль "TECHNOENGINELIB" в директории игры. Error:0x000027t", dlerror());
+						}
+
+						if ((TechnoEngine_Main = (pfnInit)dlsym(hEngine, "Host_Main")) == NULL)
+						{
+							TechnoEngine_Error("Точка входа в функции $@Sys_start(void),$@Sys_unloadEndine(void) не выполнена. Error:0x000127t"TECHNOENGINELIB"", dlerror());
+						}
+
+						TechnoEngine_Shutdown = (pfnShutdown)dlsym(hEngine, "Host_Shutdown");
+					}
+				}
+				else
+				{
+					TechnoEngine_Warning2("Папка медиаплеера cstz/media не обнаружена Error:0x000427g", dlerror());
+				}
+			}
+			else
+			{
+				TechnoEngine_Warning2("Папка сервера cstz/dlls не найдена Error:0x000327g", dlerror());
+			}
+		}
+		else
+		{
+			TechnoEngine_Warning2("Папка клиента cstz/cl_dlls не найдена Error:0x000127g", dlerror());
+		}
+	}
+	else
+	{
+		TechnoEngine_Warning2("Папка с ресурсами игры не была обнаружена Error:0x000027g", dlerror());
+	}
 }
 
 static void Sys_UnloadEngine( void )
 {
-	if( Xash_Shutdown ) Xash_Shutdown( );
+	if(TechnoEngine_Shutdown ) TechnoEngine_Shutdown( );
 	if( hEngine ) dlclose( hEngine );
 
-	Xash_Main = NULL;
-	Xash_Shutdown = NULL;
+	TechnoEngine_Main = NULL;
+	TechnoEngine_Shutdown = NULL;
 }
 
 static void Sys_ChangeGame( const char *progname )
 {
 	if( !progname || !progname[0] )
-		Xash_Error( "Папка с ресурсами игры не была обнаружена" );
+		TechnoEngine_Error( "Папка с ресурсами игры не была обнаружена" );
 
-	if( Xash_Shutdown == NULL )
-		Xash_Error( "Точка входа в 'Host_Shutdown' client.dll не найдена" );
+	if(TechnoEngine_Shutdown == NULL )
+		TechnoEngine_Error( "Точка входа в 'Host_Shutdown' client.dll не найдена" );
 
 	strncpy( szGameDir, progname, sizeof( szGameDir ) - 1 );
 
 	Sys_UnloadEngine ();
 	Sys_LoadEngine ();
 
-	Xash_Main( szArgc, szArgv, szGameDir, true, Sys_ChangeGame );
+	TechnoEngine_Main( szArgc, szArgv, szGameDir, true, Sys_ChangeGame );
 }
 
 _inline int Sys_Start( void )
@@ -145,7 +244,7 @@ _inline int Sys_Start( void )
 	int ret;
 
 	Sys_LoadEngine();
-	ret = Xash_Main( szArgc, szArgv, GAME_PATH, false, Xash_Shutdown ? Sys_ChangeGame : NULL );
+	ret = TechnoEngine_Main( szArgc, szArgv, GAME_PATH, false, TechnoEngine_Shutdown ? Sys_ChangeGame : NULL );
 	Sys_UnloadEngine();
 
 	return ret;

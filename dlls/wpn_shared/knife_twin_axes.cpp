@@ -318,23 +318,18 @@ void CSTwinShadowAxes::WeaponIdle(void)
 	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase())
 		return;
 	
-	if (m_pPlayer->m_bShieldDrawn != true)
+	switch ((m_iSwing10++) % 2)
 	{
-		#ifndef CLIENT_DLL
-			MESSAGE_BEGIN(MSG_ONE, gmsgTwinAxesMsg, nullptr, m_pPlayer->edict());
-			WRITE_BYTE(TWINAXESMSG);
-			MESSAGE_END();
-		#endif 
-
-		switch ((m_iSwing10++) % 2)
-		{
-			case 0:	SendWeaponAnim(ANIM_IDLE, UseDecrement() != FALSE); break;
-			case 1:	SendWeaponAnim(ANIM_IDLE2, UseDecrement() != FALSE); break;	
-		}
-			
-
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 15;
+		case 0:	SendWeaponAnim(ANIM_IDLE, UseDecrement() != FALSE); break;
+		case 1:	SendWeaponAnim(ANIM_IDLE2, UseDecrement() != FALSE); break;	
 	}
+	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 15;
+	#ifndef CLIENT_DLL
+		MESSAGE_BEGIN(MSG_ALL, gmsgTwinAxesMsg, NULL, m_pPlayer->pev);
+		WRITE_BYTE(TWINAXESMSG);
+		MESSAGE_END();
+	#endif // !CLIENT_DLL
+	
 }
 
 void CSTwinShadowAxes::Reload(void)
@@ -589,7 +584,7 @@ int CSTwinShadowAxes::Stab(int fFirst)
 			
 
 			m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.7;
-			m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.1745;
+			m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.1645;
 
 			switch ((m_iSwing3++) % 4)
 			{
@@ -620,7 +615,7 @@ int CSTwinShadowAxes::Stab(int fFirst)
 		}
 #endif
 		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.7;
-		m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.1745;
+		m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.1645;
 
 		CBaseEntity* pEntity = CBaseEntity::Instance(tr.pHit);
 

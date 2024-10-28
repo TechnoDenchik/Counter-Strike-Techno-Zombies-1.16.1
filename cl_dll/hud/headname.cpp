@@ -10,6 +10,15 @@
 #include "com_model.h"
 #include "calcscreen.h"
 
+#include <assert.h>
+#include <string.h>
+
+#include "wrect.h"
+#include "cl_dll.h"
+#include "ammo.h"
+#include "csprite.h"
+#include "cvardef.h" 
+
 int CHudHeadName::Init(void)
 {
 	gHUD.AddHudElem(this);

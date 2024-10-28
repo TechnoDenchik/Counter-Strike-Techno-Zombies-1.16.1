@@ -1125,6 +1125,9 @@
     <ClCompile Include="..\cl_dll\hud\weapons\epic\QuantumHorizon.cpp">
       <Filter>cl_dll\hud\weapons\epic</Filter>
     </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_sbmine.cpp">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\dlls\wpn_shared\wpn_m249.h">
@@ -1711,6 +1714,9 @@
     </ClInclude>
     <ClInclude Include="..\cl_dll\hud\weapons\epic\QuantumHorizon.h">
       <Filter>cl_dll\hud\weapons\epic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_sbmine.h">
+      <Filter>dlls\wpn_shared</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

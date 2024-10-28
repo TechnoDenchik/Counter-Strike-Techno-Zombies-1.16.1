@@ -961,6 +961,40 @@ CGrenade *CGrenade::ShootTimed2(entvars_t *pevOwner, Vector vecStart, Vector vec
 	return pGrenade;
 }
 
+CGrenade* CGrenade::ShootTimedSbmine(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity, float time, int iTeam, unsigned short usEvent)
+{
+	CGrenade* pGrenade = CreateClassPtr<CGrenade>();
+	pGrenade->Spawn();
+
+	UTIL_SetOrigin(pGrenade->pev, vecStart);
+	pGrenade->pev->velocity = vecVelocity;
+	pGrenade->pev->angles = pevOwner->angles;
+	pGrenade->pev->owner = ENT(pevOwner);
+
+	pGrenade->m_usEvent = usEvent;
+
+	pGrenade->SetTouch(&CGrenade::BounceTouch);
+
+	pGrenade->pev->dmgtime = gpGlobals->time + time;
+	pGrenade->SetThink(&CGrenade::TumbleThink);
+	pGrenade->pev->nextthink = gpGlobals->time + 0.1f;
+
+	pGrenade->pev->sequence = RANDOM_LONG(3, 6);
+	pGrenade->pev->framerate = 1.0f;
+
+	pGrenade->m_bJustBlew = true;
+
+	pGrenade->pev->gravity = 0.55f;
+	pGrenade->pev->friction = 0.7f;
+
+	pGrenade->m_iTeam = iTeam;
+
+	SET_MODEL(ENT(pGrenade->pev), "models/w_sbmine.mdl");
+	pGrenade->pev->dmg = 100.0f;
+
+	return pGrenade;
+}
+
 CGrenade *CGrenade::ShootTimed(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity, float time)
 {
 	CGrenade *pGrenade = CreateClassPtr<CGrenade>();

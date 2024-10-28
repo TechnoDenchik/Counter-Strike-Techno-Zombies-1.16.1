@@ -976,6 +976,9 @@
     <ClCompile Include="..\dlls\wpn_shared\wpn_quant.cpp">
       <Filter>dlls\wpn_shared</Filter>
     </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_sbmine.cpp">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\dlls\activity.h">
@@ -1872,6 +1875,9 @@
     </ClInclude>
     <ClInclude Include="..\common\features.h">
       <Filter>dlls\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_sbmine.h">
+      <Filter>dlls\wpn_shared</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

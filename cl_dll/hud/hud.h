@@ -1234,6 +1234,18 @@ private:
 	SharedTexture ourforces;
 };
 
+class CHudTwinAxes : public CHudBase
+{
+public:
+	int Init();
+	int VidInit();
+	int Draw(float fltime);
+	bool CheckForPlayer(cl_entity_s* pEnt);
+
+protected:
+	SharedTexture m_pCurTexture;
+};
+
 //
 //-----------------------------------------------------
 //
@@ -1414,6 +1426,7 @@ public:
 	CHudScenarioStatus m_scenarioStatus;
 	CHudSiFiammo m_HudSiFiammo;
 	CHudHeadName	m_HeadName;
+	CHudTwinAxes	m_TwinAxes;
 	CHudRetina		m_Retina;
 	CHudScoreBoardLegacy m_legacy_score;
 	CHudZBS	m_ZBS;

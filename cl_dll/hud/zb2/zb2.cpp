@@ -44,8 +44,23 @@ public:
 };
 
 DECLARE_MESSAGE(m_ZB2, ZB2Msg)
-//DECLARE_MESSAGE(m_ZB2, SupplyText)
 DECLARE_MESSAGE(m_ZB2, ZB3RenMsg)
+DECLARE_MESSAGE(m_ZB2, ZB3RespMsg)
+
+int CHudZB2::MsgFunc_ZB3RespMsg(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+	auto type = static_cast<ZB2MessageType>(buf.ReadByte());
+	switch (type)
+	{
+		case ZB2_RESPZOZOMBIE:
+		{
+			pimpl->get<CHudWinhudZB1>().WinHuman();
+			break;
+		}
+	}
+	return 1;
+}
 
 int CHudZB2::MsgFunc_ZB2Msg(const char *pszName, int iSize, void *pbuf)
 {

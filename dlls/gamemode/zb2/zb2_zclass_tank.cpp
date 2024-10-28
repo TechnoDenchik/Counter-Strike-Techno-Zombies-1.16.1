@@ -29,6 +29,7 @@ void CZombieClass_Default::Precache()
 	PRECACHE_SOUND("sound/zb3/zombi_hurt_02.wav");
 	PRECACHE_SOUND("sound/zb3/zombi_death_1.wav");
 	PRECACHE_SOUND("sound/zb3/zombi_death_2.wav");
+	PRECACHE_MODEL("sprites/deathres_zombie.spr");
 }
 
 CZombieClass_Default::CZombieClass_Default(CBasePlayer *player, ZombieLevel iEvolutionLevel) : CBaseZombieClass_ZB2(player, iEvolutionLevel)
@@ -108,6 +109,16 @@ void CZombieClass_Default::DeathSound_Zombie()
 		case 2: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_AUTO, "zb3/zombi_death_2.wav", VOL_NORM, ATTN_NORM); break;
 		default:break;
 	}
+	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
+	WRITE_BYTE(TE_EXPLOSION);
+	WRITE_COORD(0);
+	WRITE_COORD(0);
+	WRITE_COORD(0);
+	WRITE_SHORT(MODEL_INDEX("sprites/deathres_zombie.spr"));
+	WRITE_BYTE(8);
+	WRITE_BYTE(40);
+	WRITE_BYTE(TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOSOUND);
+	MESSAGE_END();
 }
 
 void CZombieClass_Default::OnThink()

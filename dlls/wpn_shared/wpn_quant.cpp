@@ -127,10 +127,19 @@ BOOL CQuantum::Deploy(void)
 
 void CQuantum::SecondaryAttack(void)
 {
-	m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME; // 600
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.9f;
-	Getsprite();
-	RadiusDamage2();
+	if (m_iClip > 0)
+	{
+		m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME; // 600
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.9f;
+		Getsprite();
+		RadiusDamage2();
+	}
+	else
+	{
+		for (CBasePlayer* player : moe::range::PlayersList())
+			CLIENT_COMMAND(player->edict(), "spk weapons/revivegun_clipoutB_1\n");
+		m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.5;
+	}
 }
 
 bool CQuantum::PrimaryAttack_CheckTargetAvailable(CBaseEntity* a2, Vector vecAngleDirection)
@@ -161,15 +170,25 @@ bool CQuantum::PrimaryAttack_CheckTargetAvailable(CBaseEntity* a2, Vector vecAng
 
 void CQuantum::PrimaryAttack(void)
 {
-	m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME; // 600
-	if (!FBitSet(m_pPlayer->pev->flags, FL_ONGROUND))
-		QuantFire(0.035 + (0.4) * m_flAccuracy, 0.2f, FALSE);
-	else if (m_pPlayer->pev->velocity.Length2D() > 140)
-		QuantFire(0.035 + (0.07) * m_flAccuracy, 0.2f, FALSE);
-	else if (m_pPlayer->pev->fov == 90)
-		QuantFire((0.02) * m_flAccuracy, 0.2f, FALSE);
+	if (m_iClip > 0)
+	{
+		m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME; // 600
+		if (!FBitSet(m_pPlayer->pev->flags, FL_ONGROUND))
+			QuantFire(0.035 + (0.4) * m_flAccuracy, 0.2f, FALSE);
+		else if (m_pPlayer->pev->velocity.Length2D() > 140)
+			QuantFire(0.035 + (0.07) * m_flAccuracy, 0.2f, FALSE);
+		else if (m_pPlayer->pev->fov == 90)
+			QuantFire((0.02) * m_flAccuracy, 0.2f, FALSE);
+		else
+			QuantFire((0.02) * m_flAccuracy, 0.2f, FALSE);
+	}
 	else
-		QuantFire((0.02) * m_flAccuracy, 0.2f, FALSE);
+	{
+
+		for (CBasePlayer* player : moe::range::PlayersList())
+			CLIENT_COMMAND(player->edict(), "spk weapons/revivegun_clipoutB_1\n");
+		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.5;
+	}
 }
 
 #ifndef CLIENT_DLL
@@ -268,6 +287,102 @@ void CQuantum::RadiusDamage(Vector vecAiming, float flDamage)
 }
 #endif	
 
+#ifndef CLIENT_DLL
+void CQuantum::RadiusDamage3(Vector vecAiming, float flDamage)
+{
+	float flRadius = 85.0f;
+
+	if (g_pModRunning->DamageTrack() == DT_ZBS)
+		flRadius = 140.0f;
+	if (g_pModRunning->DamageTrack() == DT_ZB)
+		flRadius = 125.0f;
+
+	const Vector vecSrc = vecAiming;
+	entvars_t* const pevAttacker = VARS(pev->owner);
+	entvars_t* const pevInflictor = this->pev;
+	int bitsDamageType = DMG_BULLET;
+
+	TraceResult tr;
+	//const float falloff = flRadius ? flDamage / flRadius : 1;
+	const int bInWater = (UTIL_PointContents(vecSrc) == CONTENTS_WATER);
+
+	CBaseEntity* pEntity = NULL;
+	while ((pEntity = UTIL_FindEntityInSphere(pEntity, vecSrc, flRadius)) != NULL)
+	{
+		if (pEntity->pev->takedamage != DAMAGE_NO)
+		{
+			if (bInWater && !pEntity->pev->waterlevel)
+				continue;
+
+			if (!bInWater && pEntity->pev->waterlevel == 3)
+				continue;
+
+			if (pEntity->IsBSPModel())
+				continue;
+
+			if (pEntity->pev == pevAttacker)
+				continue;
+
+			Vector vecSpot = pEntity->BodyTarget(vecSrc);
+			UTIL_TraceLine(vecSrc, vecSpot, missile, ENT(pevInflictor), &tr);
+
+			if (tr.flFraction == 1.0f || tr.pHit == pEntity->edict())
+			{
+				if (tr.fStartSolid)
+				{
+					tr.vecEndPos = vecSrc;
+					tr.flFraction = 0;
+				}
+				/*float flAdjustedDamage = flDamage - (vecSrc - pEntity->pev->origin).Length() * falloff;
+				flAdjustedDamage = Q_max(0, flAdjustedDamage);*/
+
+				if (tr.flFraction == 1.0f)
+				{
+					pEntity->TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+				}
+				else
+				{
+					tr.iHitgroup = HITGROUP_CHEST;
+					ClearMultiDamage();
+					pEntity->TraceAttack(pevInflictor, flDamage, (tr.vecEndPos - vecSrc).Normalize(), &tr, bitsDamageType);
+					ApplyMultiDamage(pevInflictor, pevAttacker);
+				}
+
+				/*CBasePlayer *pVictim = dynamic_cast<CBasePlayer *>(pEntity);
+				if (pVictim->m_bIsZombie) // Zombie Knockback...
+				{
+				ApplyKnockbackData(pVictim, vecSpot - vecSrc, GetKnockBackData());
+				}*/
+			}
+		}
+	}
+
+	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
+	WRITE_BYTE(TE_EXPLOSION);
+	WRITE_COORD(vecAiming[0]);
+	WRITE_COORD(vecAiming[1]);
+	WRITE_COORD(vecAiming[2]);
+	WRITE_SHORT(MODEL_INDEX("sprites/ef_revivegun_expB.spr"));
+	WRITE_BYTE(8);
+	WRITE_BYTE(40);
+	WRITE_BYTE(TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOSOUND);
+	MESSAGE_END();
+
+	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
+	WRITE_BYTE(TE_EXPLOSION);
+	WRITE_COORD(vecAiming[0]);
+	WRITE_COORD(vecAiming[1]);
+	WRITE_COORD(vecAiming[2]);
+	WRITE_SHORT(MODEL_INDEX("sprites/ef_revivegun_expB.spr"));
+	WRITE_BYTE(8);
+	WRITE_BYTE(40);
+	WRITE_BYTE(TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOSOUND);
+	MESSAGE_END();
+
+
+}
+#endif	
+
 void CQuantum::RadiusDamage2()
 {
 	BOOL fDidHit = FALSE;
@@ -288,7 +403,7 @@ void CQuantum::RadiusDamage2()
 	size_t v8 = 0;
 	for (CBaseEntity* pEntity : phs9_10_11)
 	{
-		if (v8 >= 5)
+		if (v8 >= 6)
 			break;
 		if (!pEntity)
 			continue;
@@ -302,7 +417,7 @@ void CQuantum::RadiusDamage2()
 		ApplyMultiDamage(m_pPlayer->pev, m_pPlayer->pev);
 
 
-		if (v8 < 3)
+		if (v8 < 6)
 		{
 #ifndef CLIENT_DLL
 			CBeam* pBeam = phs5_6_7[v8];

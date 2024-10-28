@@ -15,7 +15,7 @@
 #include "epic/TwinShadowAxes.h"
 #include "epic/QuantumHorizon.h"
 
-class CWeaponInt_impl_t : public THudSubDispatcher<CHudTwinAxes, CHudQuantum>
+class CWeaponInt_impl_t : public THudSubDispatcher< CHudQuantum>
 {
 public:
 };
@@ -32,7 +32,7 @@ int CWeaponInt::MsgFunc_HudTwinAxesMsg(const char* pszName, int iSize, void* pbu
 	{
 		case TWINAXESMSG:
 		{
-			pimpl->get<CHudTwinAxes>().Setint();
+			//pimpl->get<CHudTwinAxes>().Draw(1);
 			break;
 		}
 	}

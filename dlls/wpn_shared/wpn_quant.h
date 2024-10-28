@@ -51,6 +51,7 @@ public:
 	void QuantFire(float flSpread, duration_t flCycleTime, BOOL fUseAutoAim);
 	void QuantFire2(float flSpread, duration_t flCycleTime, BOOL fUseAutoAim);
 	void RadiusDamage(Vector vecAiming, float flDamage);
+	void RadiusDamage3(Vector vecAiming, float flDamage);
 	void RadiusDamage2();
 	const char *GetCSModelName() override { return "models/w_revivegun.mdl"; }
 	Vector Get_ShootPosition(CBaseEntity *pevAttacker, Vector vecSrc);

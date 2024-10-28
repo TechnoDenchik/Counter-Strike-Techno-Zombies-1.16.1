@@ -37,7 +37,7 @@ public:
 	void Skin();
 	void Holster(int skiplocal) override;
 	float GetMaxSpeed() override { return m_fMaxSpeed; }
-	int iItemSlot() override { return KNIFE_SLOT; }
+	virtual int iItemSlot() { return KNIFE_SLOT; }
 	void Reload() override;
 	void FlyingThink();
 	void GiveSummon();

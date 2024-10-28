@@ -35,6 +35,7 @@ public:
 	void OnThink() override;
 	std::shared_ptr<IZombieModeCharacter_ZB2_Extra> m_pCharacter_ZB2;
 	float m_flTimeNextZombieHealthRecovery;
+	entvars_t* pev;
 };
 
 #endif //PROJECT_ZB2_ZCLASS_TANK_H

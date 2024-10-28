@@ -272,6 +272,7 @@ void CHud :: Init( void )
 	m_scenarioStatus.Init();
 	m_DrawFontText.VidInit();
 	m_HeadName.Init();
+	m_TwinAxes.Init();
 	
 
 	// all things that have own background and must be drawn last

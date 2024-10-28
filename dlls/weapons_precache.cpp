@@ -81,6 +81,7 @@ void W_Precache()
 
 	UTIL_PrecacheOtherWeapon("weapon_flashbang");
 	UTIL_PrecacheOtherWeapon("weapon_hegrenade");
+	UTIL_PrecacheOtherWeapon("weapon_sbmine");
 	UTIL_PrecacheOtherWeapon("weapon_smokegrenade");
 	UTIL_PrecacheOtherWeapon("weapon_c4");
 	UTIL_PrecacheOtherWeapon("weapon_c4shelter");

@@ -174,8 +174,10 @@ void CPlayerModStrategy_Default::GiveDefaultItems()
 	switch (m_pPlayer->m_iTeam)
 	{
 	case CT:
+		m_pPlayer->GiveNamedItem("weapon_sbmine");
 		m_pPlayer->GiveNamedItem("weapon_twinaxes");
 		m_pPlayer->GiveNamedItem("weapon_quantum");
+		
 		m_pPlayer->GiveAmmo(m_pPlayer->m_bIsVIP ? 12 : 24, "45acp", MAX_AMMO_45ACP);
 
 		break;

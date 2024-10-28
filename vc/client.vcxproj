@@ -252,6 +252,7 @@
     <ClCompile Include="..\dlls\wpn_shared\wpn_p90.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_quant.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_quantumhorizon.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_sbmine.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_scarh.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_scarl.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_scout.cpp" />
@@ -472,6 +473,7 @@
     <ClInclude Include="..\dlls\wpn_shared\wpn_p90.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_quant.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_quantumhorizon.h" />
+    <ClInclude Include="..\dlls\wpn_shared\wpn_sbmine.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_scarh.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_scarl.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_scout.h" />
