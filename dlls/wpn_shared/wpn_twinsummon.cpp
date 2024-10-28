@@ -26,7 +26,6 @@ public:
 		Precache();
 
 		m_fSequenceLoops = 0;
-		//ph26 = 0;
 		SetThink(&CGungnirProjectile2::OnThink);
 		SetTouch(&CGungnirProjectile2::OnTouch);
 		SET_MODEL(this->edict(), "sprites/ef_gungnir_missile.spr");

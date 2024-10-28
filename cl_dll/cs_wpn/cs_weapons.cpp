@@ -103,9 +103,6 @@ static CTMP g_TMP;
 static CUMP45 g_UMP45;
 static CUSP g_USP;
 static CXM1014 g_XM1014;
-static CSTwinShadowAxes g_twinaxes;
-static CShelter_axe g_shelteraxe;
-static CQuantum g_QUANT;
 
 int    g_iWeaponFlags;
 bool   g_bInBombZone;
@@ -881,8 +878,8 @@ void HUD_InitClientWeapons( void )
 	HUD_PrepEntity( &g_AK47, &player);
 	HUD_PrepEntity( &g_Knife, &player);
 	HUD_PrepEntity( &g_P90, &player );
-	HUD_PrepEntity( &g_twinaxes, &player);
-	HUD_PrepEntity( &g_shelteraxe, &player);
+
+//	HUD_PrepEntity( &g_shelteraxe, &player);
 
 	BTEClientWeapons().PrepEntity(&player);
 }
@@ -1104,10 +1101,6 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 			pWeapon = &g_AK47;
 			break;
 
-		case WEAPON_QUANTUM:
-			pWeapon = &g_QUANT;
-			break;
-
 		case WEAPON_KNIFE:
 			pWeapon = &g_Knife;
 			break;
@@ -1116,21 +1109,13 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 			pWeapon = &g_P90;
 			break;
 
-		case WEAPON_SHELTERAXE:
-			pWeapon = &g_shelteraxe;
-			break;
-
-		case WEAPON_TWINAXES:
-			pWeapon = &g_twinaxes;
-			break;
-
-		/*case WEAPON_NONE:
+		case WEAPON_NONE:
 			break;
 
 		case WEAPON_GLOCK:
 		default:
 			gEngfuncs.Con_Printf("VALVEWHY: Unknown Weapon %i is active.\n", from->client.m_iId );
-			break;*/
+			break;
 	}
 
 	// if we have BTE weapon entity, use it.
@@ -1249,7 +1234,6 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 
 	flags = from->client.iuser3;
 	g_bHoldingKnife		= pWeapon->m_iId == WEAPON_KNIFE;
-	g_bHoldingKnife = pWeapon->m_iId == WEAPON_TWINAXES;
 	
 	player.m_bCanShoot	= (flags & PLAYER_CAN_SHOOT) != 0;
 	g_iFreezeTimeOver	= !(flags & PLAYER_FREEZE_TIME_OVER);

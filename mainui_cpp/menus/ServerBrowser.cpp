@@ -25,10 +25,28 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "Switch.h"
 #include "Field.h"
 #include "utlvector.h"
+#include "EventSystem.h"
+#include "PicButton.h"
+#include "CheckBox.h"
+#include "Slider.h"
+#include "SpinControl.h"
+#include "PlayerModelView.h"
+#include "StringArrayModel.h"
 
 #define ART_BANNER_INET		"gfx/shell/head_inetgames"
 #define ART_BANNER_LAN		"gfx/shell/head_lan"
 #define ART_BANNER_LOCK		"gfx/shell/lock"
+#define MAX_PLAYERMODELS	100
+
+static byte g_iCrosshairAvailColors[6][3] =
+{
+	{ 0,   0,   0   },
+	{ 50,  250, 50  },
+	{ 250, 50,  50  },
+	{ 50,  50,  250 },
+	{ 250, 250, 50  },
+	{ 50,  250, 250 },
+};
 
 struct server_t
 {
@@ -155,9 +173,13 @@ class CMenuServerBrowser: public CMenuFramework
 {
 public:
 	CMenuServerBrowser() : CMenuFramework( "CMenuServerBrowser" ) { }
+
 	void Draw() override;
 	void Show() override;
+	void SetConfig();
+	void WriteNewLogo();
 
+	CMenuField	name;
 	void SetLANOnly( bool lanOnly )
 	{
 		m_bLanOnly = lanOnly;
@@ -175,6 +197,14 @@ public:
 
 	static void Connect( server_t &server );
 
+	/*class CMenuLogoPreview : public CMenuBaseItem
+	{
+	public:
+		virtual void Draw();
+		int r, g, b;
+		HIMAGE hImage;
+	} logoImage;*/
+
 	CMenuPicButton *joinGame;
 	CMenuPicButton *createGame;
 	CMenuPicButton *refresh;
@@ -187,6 +217,14 @@ public:
 	CMenuYesNoMessageBox askPassword;
 	CMenuField password;
 
+/*	CMenuSpinControl	logo;
+	CMenuSpinControl		logoColor;
+	CMenuSpinControl	crosshairSize;
+	CMenuSpinControl	crosshairColor;
+	CMenuSpinControl	crosshairType;*/
+	CMenuCheckBox	crosshairTranslucent;
+	CMenuCheckBox	extendedMenus;
+
 	int	  refreshTime;
 	int   refreshTime2;
 
@@ -194,12 +232,35 @@ public:
 private:
 	void _Init() override;
 	void _VidInit() override;
-};
+} uiPlayerSetup;
 
 static server_t staticServerSelect;
 static bool staticWaitingPassword = false;
 
 static CMenuServerBrowser	uiServerBrowser;
+
+/*void CMenuServerBrowser::CMenuLogoPreview::Draw()
+{
+	if (!hImage)
+	{
+		// draw the background
+		UI_FillRect(m_scPos, m_scSize, uiPromptBgColor);
+
+		UI_DrawString(font, m_scPos, m_scSize, "No logo", colorBase, m_scChSize, QM_CENTER, ETF_SHADOW);
+	}
+	else
+	{
+		EngFuncs::PIC_Set(hImage, r, g, b, 255);
+		EngFuncs::PIC_Draw(m_scPos, m_scSize);
+	}
+
+	// draw the rectangle
+	if (eFocusAnimation == QM_HIGHLIGHTIFFOCUS && IsCurrentSelected())
+		UI_DrawRectangle(m_scPos, m_scSize, uiInputTextColor);
+	else
+		UI_DrawRectangle(m_scPos, m_scSize, uiInputFgColor);
+
+}*/
 
 bool CMenuGameListModel::Sort(int column, bool ascend)
 {
@@ -270,6 +331,46 @@ void CMenuGameListModel::Update( void )
 			Sort( m_iSortingColumn, m_bAscend );
 	}
 }
+
+/*void CMenuServerBrowser::SetConfig(void)
+{
+	name.WriteCvar();
+	char curColor[CS_SIZE];
+	int i = uiPlayerSetup.crosshairColor.GetCurrentValue() + 1;
+	snprintf(curColor, CS_SIZE, "%i %i %i",
+		g_iCrosshairAvailColors[i][0],
+		g_iCrosshairAvailColors[i][1],
+		g_iCrosshairAvailColors[i][2]);
+	EngFuncs::CvarSetString("cl_crosshair_color", curColor);
+	crosshairSize.WriteCvar();
+	crosshairType.WriteCvar();
+	crosshairTranslucent.WriteCvar();
+	extendedMenus.WriteCvar();
+	WriteNewLogo();
+}
+
+void CMenuServerBrowser::WriteNewLogo(void)
+{
+
+	char filename[1024];
+	CBMP* bmpFile;
+
+	snprintf(filename, sizeof(filename), "logos/%s.bmp", logo.GetCurrentString());
+	bmpFile = CBMP::LoadFile(filename);
+
+	// not valid logo BMP file
+	if (!bmpFile)
+		return;
+
+	// remap logo if needed
+	bmpFile->RemapLogo(logoImage.r, logoImage.g, logoImage.b);
+
+	EngFuncs::DeleteFile("custom.hpk");
+	EngFuncs::DeleteFile("logos/remapped.bmp");
+	EngFuncs::COM_SaveFile("logos/remapped.bmp", bmpFile->GetBitmap(), bmpFile->GetBitmapHdr()->fileSize);
+
+	delete bmpFile;
+}*/
 
 void CMenuGameListModel::OnActivateEntry( int line )
 {
@@ -364,20 +465,14 @@ void CMenuServerBrowser::RefreshList()
 {
 	ClearList();
 
-	if( m_bLanOnly )
+	if( uiStatic.realTime > refreshTime2 )
 	{
 		EngFuncs::ClientCmd( FALSE, "localservers\n" );
-	}
-	else
-	{
-		if( uiStatic.realTime > refreshTime2 )
-		{
-			EngFuncs::ClientCmd( FALSE, "internetservers\n" );
-			refreshTime2 = uiStatic.realTime + (EngFuncs::GetCvarFloat("cl_nat") ? 4000:1000);
-			refresh->SetGrayed( true );
-			if( uiStatic.realTime + 20000 < refreshTime )
-				refreshTime = uiStatic.realTime + 20000;
-		}
+		EngFuncs::ClientCmd( FALSE, "internetservers\n" );
+		refreshTime2 = uiStatic.realTime + (EngFuncs::GetCvarFloat("cl_nat") ? 4000:1000);
+		refresh->SetGrayed( true );
+		if( uiStatic.realTime + 20000 < refreshTime )
+			refreshTime = uiStatic.realTime + 20000;
 	}
 }
 
@@ -425,13 +520,25 @@ void CMenuServerBrowser::_Init( void )
 
 		UI_CreateGame_Menu();
 	});
-
+	AddButton("Game Options", "", PC_GAME_OPTIONS, UI_GameOptions_Menu , QMF_NOTIFY);
+	AddButton("Adv options", "", PC_ADV_OPT, UI_AdvUserOptions_Menu, QMF_NOTIFY);
 	// TODO: implement!
 	AddButton( "View game info", "Get detail game info", PC_VIEW_GAME_INFO, CEventCallback::NoopCb, QMF_GRAYED );
 
 	refresh = AddButton( "Refresh", "Refresh servers list", PC_REFRESH, VoidCb( &CMenuServerBrowser::RefreshList ) );
 
 	AddButton( "Done", "Return to main menu", PC_DONE, VoidCb( &CMenuServerBrowser::Hide ) );
+	
+	
+	
+	/*SET_EVENT_MULTI(gameOpt->onActivated,
+		{
+			((CMenuServerBrowser*)pSelf->Parent())->SetConfig();
+			UI_AdvUserOptions_Menu();
+		});
+	CMenuPicButton* gameOpt = AddButton("Game options", "Configure handness, fov and other advanced options", PC_GAME_OPTIONS);
+	AddButton("Adv options", "", PC_ADV_OPT, UI_GameOptions_Menu);
+	gameOpt->SetGrayed(!UI_AdvUserOptions_IsAvailable());*/
 
 	msgBox.SetMessage( "Join a network game will exit any current game, OK to exit?" );
 	msgBox.SetPositiveButton( "Ok", PC_OK );
@@ -452,7 +559,7 @@ void CMenuServerBrowser::_Init( void )
 	natOrDirect.AddSwitch( "Direct" );
 	natOrDirect.AddSwitch( "NAT" );
 	natOrDirect.eTextAlignment = QM_CENTER;
-	natOrDirect.bMouseToggle = false;
+	natOrDirect.bMouseToggle = true;
 	natOrDirect.LinkCvar( "cl_nat" );
 	natOrDirect.iSelectColor = uiInputFgColor;
 	// bit darker
@@ -512,18 +619,11 @@ CMenuServerBrowser::VidInit
 */
 void CMenuServerBrowser::_VidInit()
 {
-	if( m_bLanOnly )
-	{
-		banner.SetPicture( ART_BANNER_LAN );
-		createGame->szStatusText = ( "Create new LAN game" );
-		natOrDirect.Hide();
-	}
-	else
-	{
-		banner.SetPicture( ART_BANNER_INET );
-		createGame->szStatusText = ( "Create new Internet game" );
-		natOrDirect.Show();
-	}
+	
+	banner.SetPicture( ART_BANNER_INET );
+	createGame->szStatusText = ( "Create new Internet game" );
+	natOrDirect.Show();
+	natOrDirect.Hide();
 
 	gameList.SetRect( 360, 230, -20, 465 );
 	natOrDirect.SetCoord( -20 - natOrDirect.size.w, gameList.pos.y - UI_OUTLINE_WIDTH - natOrDirect.size.h );
@@ -536,7 +636,6 @@ void CMenuServerBrowser::Show()
 {
 	CMenuFramework::Show();
 
-	// clear out server table
 	staticWaitingPassword = false;
 	gameListModel.Flush();
 	gameList.DisableSorting();
@@ -587,7 +686,7 @@ void UI_ServerBrowser_Menu( void )
 
 void UI_InternetGames_Menu( void )
 {
-	uiServerBrowser.SetLANOnly( false );
+	uiServerBrowser.SetLANOnly( true );
 
 	UI_ServerBrowser_Menu();
 }
@@ -598,8 +697,8 @@ void UI_LanGame_Menu( void )
 
 	UI_ServerBrowser_Menu();
 }
-ADD_MENU( menu_langame, NULL, UI_LanGame_Menu );
-ADD_MENU( menu_internetgames, UI_ServerBrowser_Precache, UI_InternetGames_Menu );
+ADD_MENU( menu_langame, UI_ServerBrowser_Precache, UI_InternetGames_Menu, UI_LanGame_Menu);
+ADD_MENU( menu_internetgames, UI_ServerBrowser_Precache, UI_InternetGames_Menu, UI_LanGame_Menu);
 
 /*
 =================

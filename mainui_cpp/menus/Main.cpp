@@ -112,7 +112,7 @@ void CMenuMain::QuitDialog(void *pExtra)
 void CMenuMain::DisconnectDialogCb()
 {
 	dialog.onPositive.SetCommand( FALSE, "cmd disconnect;endgame disconnect;wait;wait;wait;menu_options;menu_main\n" );
-	dialog.SetMessage( "Really disconnect?" );
+	dialog.SetMessage(L("Really disconnect?"));
 	dialog.Show();
 }
 
@@ -203,7 +203,7 @@ void CMenuMain::_Init( void )
 	bCustomGame = false;
 
 	// console
-	console.SetNameAndStatus( "Console", "Show console" );
+	console.SetNameAndStatus(L("GameUI_Console"), "Show console" );
 	console.iFlags |= QMF_NOTIFY;
 	console.SetPicture( PC_CONSOLE );
 	SET_EVENT_MULTI( console.onActivated,
@@ -212,12 +212,12 @@ void CMenuMain::_Init( void )
 		EngFuncs::KEY_SetDest( KEY_CONSOLE );
 	});
 
-	resumeGame.SetNameAndStatus( "Resume Game", 0);
+	resumeGame.SetNameAndStatus(L("GameUI_GameMenu_ResumeGame"), 0);
 	resumeGame.SetPicture( PC_RESUME_GAME );
 	resumeGame.iFlags |= QMF_NOTIFY;
 	resumeGame.onActivated = UI_CloseMenu;
 
-	disconnect.SetNameAndStatus( "Disconnect", "Disconnect from server" );
+	disconnect.SetNameAndStatus(L("GameUI_GameMenu_Disconnect"), "Disconnect from server" );
 	disconnect.SetPicture( PC_DISCONNECT );
 	disconnect.iFlags |= QMF_NOTIFY;
 	disconnect.onActivated = VoidCb( &CMenuMain::DisconnectDialogCb );
@@ -232,22 +232,22 @@ void CMenuMain::_Init( void )
 	createGame.iFlags |= QMF_NOTIFY;
 	createGame.onActivated = UI_CreateGame_Menu;
 
-	multiPlayer.SetNameAndStatus( "Multiplayer", 0);
+	multiPlayer.SetNameAndStatus(L("GameUI_Multiplayer"), 0);
 	multiPlayer.SetPicture( PC_MULTIPLAYER );
 	multiPlayer.iFlags |= QMF_NOTIFY;
-	multiPlayer.onActivated = UI_MultiPlayer_Menu;
+	multiPlayer.onActivated = UI_InternetGames_Menu;
 
-	configuration.SetNameAndStatus( "Configuration", 0);
+	configuration.SetNameAndStatus(L("GameUI_Options"), 0);
 	configuration.SetPicture( PC_CONFIG );
 	configuration.iFlags |= QMF_NOTIFY;
 	configuration.onActivated = UI_Options_Menu;
 
-	previews.SetNameAndStatus( "Previews", 0);
+	previews.SetNameAndStatus(L("Previews"), 0);
 	previews.SetPicture( PC_PREVIEWS );
 	previews.iFlags |= QMF_NOTIFY;
 	SET_EVENT( previews.onActivated, EngFuncs::ShellExecute( MenuStrings[IDS_MEDIA_PREVIEWURL], NULL, false ) );
 
-	quit.SetNameAndStatus( "Quit", 0);
+	quit.SetNameAndStatus(L("GameUI_GameMenu_Quit"), 0);
 	quit.SetPicture( PC_QUIT );
 	quit.iFlags |= QMF_NOTIFY;
 	quit.onActivated = MenuCb( &CMenuMain::QuitDialog );

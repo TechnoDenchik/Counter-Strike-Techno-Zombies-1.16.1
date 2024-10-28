@@ -145,31 +145,31 @@ void CAdvancedControls::_Init( void )
 {
 	banner.SetPicture( ART_BANNER );
 
-	done.SetNameAndStatus( "Done", "save changed and go back to the Customize Menu" );
+	done.SetNameAndStatus(L("Done"), "save changed and go back to the Customize Menu" );
 	done.SetPicture( PC_DONE );
 	done.onActivated = VoidCb( &CAdvancedControls::SaveAndPopMenu );
 	done.SetCoord( 72, 680 );
 
-	crosshair.SetNameAndStatus( "Crosshair", "Enable the weapon aiming crosshair" );
+	crosshair.SetNameAndStatus(L("Crosshair"), "Enable the weapon aiming crosshair" );
 	crosshair.iFlags |= QMF_NOTIFY;
 	crosshair.SetCoord( 72, 280 );
 
-	invertMouse.SetNameAndStatus( "Invert mouse", "Reverse mouse up/down axis" );
+	invertMouse.SetNameAndStatus(L("GameUI_MouseLook"), "Reverse mouse up/down axis" );
 	invertMouse.iFlags |= QMF_NOTIFY;
 	invertMouse.onChanged = VoidCb( &CAdvancedControls::PitchInvert );
 	invertMouse.SetCoord( 72, 330 );
 
-	mouseLook.SetNameAndStatus( "Mouse look", "Use the mouse to look around instead of using the mouse to move" );
+	mouseLook.SetNameAndStatus(L("Look spring"), "Use the mouse to look around instead of using the mouse to move" );
 	mouseLook.iFlags |= QMF_NOTIFY;
 	SET_EVENT( mouseLook.onChanged,
 		((CAdvancedControls*)pSelf->Parent())->ToggleLookCheckboxes( true ) );
 	mouseLook.SetCoord( 72, 380 );
 
-	lookSpring.SetNameAndStatus("Look spring", "Causes the screen to 'spring' back to looking straight ahead when you move forward" );
+	lookSpring.SetNameAndStatus(L( "Look spring" ), "Causes the screen to 'spring' back to looking straight ahead when you move forward" );
 	lookSpring.iFlags |= QMF_NOTIFY;
 	lookSpring.SetCoord( 72, 430 );
 
-	lookStrafe.SetNameAndStatus( "Look strafe", "In combination with your mouse look modifier, causes left-right movements to strafe instead of turn");
+	lookStrafe.SetNameAndStatus(L("Look strafe"), "In combination with your mouse look modifier, causes left-right movements to strafe instead of turn");
 	lookStrafe.iFlags |= QMF_NOTIFY;
 	lookStrafe.SetCoord( 72, 480 );
 

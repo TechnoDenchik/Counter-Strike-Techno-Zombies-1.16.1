@@ -424,7 +424,7 @@ void CMenuPlayerSetup::ApplyColorToLogoPreview()
 
 void CMenuPlayerSetup::WriteNewLogo( void )
 {
-#ifdef NEW_ENGINE_INTERFACE
+
 	char filename[1024];
 	CBMP *bmpFile;
 
@@ -443,7 +443,6 @@ void CMenuPlayerSetup::WriteNewLogo( void )
 	EngFuncs::COM_SaveFile( "logos/remapped.bmp", bmpFile->GetBitmap(), bmpFile->GetBitmapHdr()->fileSize );
 
 	delete bmpFile;
-#endif
 }
 
 /*
@@ -471,7 +470,7 @@ void CMenuPlayerSetup::_Init( void )
 
 	banner.SetPicture(ART_BANNER);
 
-	name.SetNameAndStatus( "Name","Enter your multiplayer display name" );
+	name.SetNameAndStatus( "NickName","Enter your multiplayer display name" );
 	name.iMaxLength = 32;
 	name.LinkCvar( "name" );
 	name.SetRect( 320, 260, 256, 36 );
@@ -510,17 +509,7 @@ void CMenuPlayerSetup::_Init( void )
 
 	AddItem( background );
 	AddItem( banner );
-
-	AddButton( "Done", "Go back to the Multiplayer Menu", PC_DONE, VoidCb( &CMenuPlayerSetup::SaveAndPopMenu ) );
-	CMenuPicButton *gameOpt = AddButton( "Game options", "Configure handness, fov and other advanced options", PC_GAME_OPTIONS );
-	SET_EVENT_MULTI( gameOpt->onActivated,
-	{
-		((CMenuPlayerSetup*)pSelf->Parent())->SetConfig();
-		UI_AdvUserOptions_Menu();
-	});
-
-	AddButton( "Adv options", "", PC_ADV_OPT, UI_GameOptions_Menu );
-	gameOpt->SetGrayed( !UI_AdvUserOptions_IsAvailable() );
+	AddButton("Done", "Go back to the Main menu", PC_DONE, VoidCb(&CMenuPlayerSetup::Hide), QMF_NOTIFY);
 
 
 	if( !hideLogos )

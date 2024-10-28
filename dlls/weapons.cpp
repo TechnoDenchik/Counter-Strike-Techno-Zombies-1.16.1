@@ -540,8 +540,7 @@ void CBasePlayerItem::DefaultTouch(CBaseEntity *pOther)
 		&& m_iId != WEAPON_GLOCK18
 		&& m_iId != WEAPON_P228
 		&& m_iId != WEAPON_DEAGLE
-		&& m_iId != WEAPON_KNIFE
-		&& m_iId != WEAPON_TWINAXES)
+		&& m_iId != WEAPON_KNIFE)
 	{
 		return;
 	}
@@ -782,7 +781,6 @@ bool CBasePlayerWeapon::HasSecondaryAttack()
 	{
 	case WEAPON_AK47:
 	case WEAPON_XM1014:
-	case WEAPON_QUANTUM:
 	case WEAPON_MAC10:
 	case WEAPON_ELITE:
 	case WEAPON_FIVESEVEN:
@@ -2159,14 +2157,6 @@ void CArmoury::ArmouryTouch(CBaseEntity *pOther)
 		case ARMOURY_AK47:
 			p->GiveNamedItem("weapon_ak47");
 			p->GiveAmmo(60, "762Nato", MAX_AMMO_762NATO);
-			break;
-		case ARMOURY_QUANT:
-			p->GiveNamedItem("weapon_quantum");
-			p->GiveAmmo(60, "QuantAmmo", MAX_AMMO_QUANT);
-			break;
-		case ARMOURY_TWINAXES:
-			p->GiveNamedItem("weapon_twinaxes");
-			p->GiveAmmo(60, "ammo_TwinAmmo", MAX_TWINAXES);
 			break;
 		case ARMOURY_SG552:
 			p->GiveNamedItem("weapon_sg552");

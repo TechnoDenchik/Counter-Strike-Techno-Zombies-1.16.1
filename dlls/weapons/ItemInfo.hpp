@@ -45,20 +45,6 @@ struct StaticItemInfo<WEAPON_AK47> : StaticItemInfo<>
 	static constexpr WeaponIdType iId = WEAPON_AK47;
 	static constexpr int iWeight = AK47_WEIGHT;
 };
-
-template<>
-struct StaticItemInfo<WEAPON_QUANTUM> : StaticItemInfo<>
-{
-	static constexpr const char* szName = "weapon_quantum";
-	static constexpr const char* szAmmo1 = "ammo_QuantAmmo";
-	static constexpr int iMaxAmmo1 = MAX_AMMO_QUANT;
-	static constexpr int iMaxClip = QUANT_MAX_CLIP;
-	static constexpr int iSlot = 0;
-	static constexpr int iPosition = 1;
-	static constexpr WeaponIdType iId = WEAPON_QUANTUM;
-	static constexpr int iWeight = QUANT_WEIGHT;
-};
-
 template<>
 struct StaticItemInfo<WEAPON_AUG> : StaticItemInfo<>
 {
@@ -217,26 +203,6 @@ struct StaticItemInfo<WEAPON_KNIFE> : StaticItemInfo<>
 };
 
 template<>
-struct StaticItemInfo<WEAPON_TWINAXES> : StaticItemInfo<>
-{
-	static constexpr const char* szName = "weapon_twinaxes";
-	static constexpr int iSlot = 2;
-	static constexpr int iPosition = 1;
-	static constexpr WeaponIdType iId = WEAPON_TWINAXES;
-	static constexpr int iWeight = TWINAXES_WEIGHT;
-};
-
-template<>
-struct StaticItemInfo<WEAPON_SHELTERAXE> : StaticItemInfo<>
-{
-	static constexpr const char* szName = "weapon_shelteraxe";
-	static constexpr int iSlot = 2;
-	static constexpr int iPosition = 1;
-	static constexpr WeaponIdType iId = WEAPON_SHELTERAXE;
-	static constexpr int iWeight = KNIFE_WEIGHT;
-};
-
-template<>
 struct StaticItemInfo<WEAPON_M3> : StaticItemInfo<>
 {
 	static constexpr const char *szName = "weapon_m3";
@@ -259,18 +225,6 @@ struct StaticItemInfo<WEAPON_M4A1> : StaticItemInfo<>
 	static constexpr int iPosition = 6;
 	static constexpr WeaponIdType iId = WEAPON_M4A1;
 	static constexpr int iWeight = M4A1_WEIGHT;
-};
-template<>
-struct StaticItemInfo<WEAPON_M249> : StaticItemInfo<>
-{
-	static constexpr const char *szName = "weapon_m249";
-	static constexpr const char *szAmmo1 = "556NatoBox";
-	static constexpr int iMaxAmmo1 = MAX_AMMO_556NATOBOX;
-	static constexpr int iMaxClip = M249_MAX_CLIP;
-	static constexpr int iSlot = 0;
-	static constexpr int iPosition = 4;
-	static constexpr WeaponIdType iId = WEAPON_M249;
-	static constexpr int iWeight = M249_WEIGHT;
 };
 template<>
 struct StaticItemInfo<WEAPON_MAC10> : StaticItemInfo<>

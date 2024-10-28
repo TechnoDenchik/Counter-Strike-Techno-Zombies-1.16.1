@@ -14,7 +14,7 @@ static std::pair<const char *, void(*)(CBasePlayer *p)> g_SupplyboxItems[]=
 {
 	{ "Dual MP7A1", [](CBasePlayer *p) {
 			DropPrimary(p);
-			p->GiveNamedItem("weapon_gungnir");
+			p->GiveNamedItem("weapon_quantum");
 			int iAmount = p->m_pModStrategy->ComputeMaxAmmo("46mm", MAX_AMMO_46MM);
 			p->GiveAmmo(iAmount, "46mm", iAmount);
 			

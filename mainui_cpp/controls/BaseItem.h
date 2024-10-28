@@ -127,6 +127,7 @@ public:
 	CEventCallback onActivated;
 	CEventCallback onChanged;
 	CEventCallback onPressed;
+	CEventCallback onReleased;
 
 	// called when CL_IsActive returns true, otherwise onActivate
 	CEventCallback onActivatedClActive;

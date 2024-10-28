@@ -48,6 +48,7 @@ private:
 	CMenuCheckBox	cl_predict;
 	CMenuCheckBox	cl_lw;
 
+	CMenuPicButton	allowConsole;
 	CMenuSpinControl	maxpacket, maxpayload, cmdrate, updaterate, rate;
 	CMenuAction networkMode;
 	CMenuCheckBox normal, dsl, slowest;
@@ -130,17 +131,21 @@ UI_GameOptions_Init
 void CMenuGameOptions::_Init( void )
 {
 	banner.SetPicture( ART_BANNER );
-	maxFPS.szName = "Limit game FPS";
+	maxFPS.szName = L("FPS limit");
 	maxFPS.szStatusText = "Cap your game frame rate";
 	maxFPS.Setup( 20, 500, 20 );
 	maxFPS.LinkCvar( "fps_max", CMenuEditable::CVAR_VALUE );
 	maxFPS.SetRect( 240, 270, 220, 32 );
 
+	allowConsole.SetNameAndStatus(L("Enable developer console"), L("Turns on console when engine was run without -console or -dev parameter"));
+	allowConsole.SetCoord(360, 365);
+	allowConsole.onReleased.SetCommand(FALSE, "ui_allowconsole\n");
+
 	//hand.SetNameAndStatus( "Use left hand", "Draw gun at left side" );
 	//hand.LinkCvar( "cl_righthand" );
 	// hand.SetCoord( 240, 330 );
 
-	allowDownload.SetNameAndStatus( "Allow download", "Allow download of files from servers" );
+	allowDownload.SetNameAndStatus(L("Allow download"), "Allow download of files from servers" );
 	allowDownload.LinkCvar( "sv_allow_download" );
 	allowDownload.SetCoord( 240, 315 );
 

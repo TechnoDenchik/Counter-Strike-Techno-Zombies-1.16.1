@@ -48,8 +48,8 @@ void CQuantum::Spawn(void)
 	pev->classname = MAKE_STRING("weapon_quantum");
 
 	Precache();
-	m_iId = WEAPON_QUANTUM;
-	SET_MODEL(ENT(pev), "models/p_revivegun.mdl");
+	m_iId = WEAPON_AK47;
+	SET_MODEL(ENT(pev), "models/w_revivegun.mdl");
 
 	m_iDefaultAmmo = QUANT_DEFAULT_GIVE;
 	m_flAccuracy = 0.2;
@@ -102,14 +102,14 @@ void CQuantum::Precache(void)
 int CQuantum::GetItemInfo(ItemInfo *p)
 {
 	p->pszName = STRING(pev->classname);
-	p->pszAmmo1 = "QuantAmmo";
+	p->pszAmmo1 = "762Nato";
 	p->iMaxAmmo1 = MAX_AMMO_762NATO;
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
 	p->iMaxClip = QUANT_MAX_CLIP;
 	p->iSlot = 0;
 	p->iPosition = 14;
-	p->iId = m_iId = WEAPON_QUANTUM;
+	p->iId = m_iId = WEAPON_AK47;
 	p->iFlags = 0;
 	p->iWeight = QUANT_WEIGHT;
 
@@ -122,7 +122,7 @@ BOOL CQuantum::Deploy(void)
 	m_iShotsFired = 0;
 	iShellOn = 1;
 
-	return DefaultDeploy("models/v_revivegun_a_fix.mdl", "models/w_revivegun.mdl", QUANT_DRAW, "draw", UseDecrement() != FALSE);
+	return DefaultDeploy("models/v_revivegun_a_fix.mdl", "models/p_revivegun.mdl", QUANT_DRAW, "ak47", UseDecrement() != FALSE);
 }
 
 void CQuantum::SecondaryAttack(void)
@@ -749,7 +749,7 @@ void CQuantum::QuantFire2(float flSpread, duration_t flCycleTime, BOOL fUseAutoA
 
 void CQuantum::Reload(void)
 {
-	if (m_pPlayer->ammo_QuantAmmo <= 0)
+	if (m_pPlayer->ammo_762nato <= 0)
 		return;
 
 	if (DefaultReload(QUANT_MAX_CLIP, QUANT_RELOAD, 2.3f))

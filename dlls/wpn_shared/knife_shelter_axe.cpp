@@ -41,7 +41,7 @@ void CShelter_axe::Spawn(void)
 	
 	Precache();
 	
-	m_iId = WEAPON_SHELTERAXE;
+	m_iId = WEAPON_KNIFE;
 	SET_MODEL(ENT(pev), "models/p_shelteraxe.mdl");
 
 	m_iClip = WEAPON_NOCLIP;
@@ -77,7 +77,7 @@ int CShelter_axe::GetItemInfo(ItemInfo* p)
 	p->iMaxClip = WEAPON_NOCLIP;
 	p->iSlot = 2;
 	p->iPosition = 1;
-	p->iId = WEAPON_SHELTERAXE;
+	p->iId = WEAPON_KNIFE;
 	//p->iFlags = 0;
 	p->iWeight = KNIFE_WEIGHT;
 	p->iFlags = ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;

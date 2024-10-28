@@ -129,33 +129,33 @@ void CMenuAudio::_Init( void )
 
 	banner.SetPicture(ART_BANNER);
 
-	soundVolume.SetNameAndStatus( "Game sound volume", "Set master volume level" );
+	soundVolume.SetNameAndStatus(L("GameUI_SoundEffectVolume"), "Set master volume level" );
 	soundVolume.Setup( 0.0, 1.0, 0.05f );
 	soundVolume.onChanged = CMenuEditable::WriteCvarCb;
 	soundVolume.SetCoord( 320, 280 );
 
-	musicVolume.SetNameAndStatus( "Game music volume", "Set background music volume level" );
+	musicVolume.SetNameAndStatus(L("GameUI_MP3Volume"), "Set background music volume level" );
 	musicVolume.Setup( 0.0, 1.0, 0.05f );
 	musicVolume.onChanged = CMenuEditable::WriteCvarCb;
 	musicVolume.SetCoord( 320, 340 );
 
-	suitVolume.SetNameAndStatus( "Suit volume", "Set suit volume level" );
+	suitVolume.SetNameAndStatus(L("GameUI_HEVSuitVolume"), "Set suit volume level" );
 	suitVolume.Setup( 0.0, 1.0, 0.05f );
 	suitVolume.onChanged = CMenuEditable::WriteCvarCb;
 	suitVolume.SetCoord( 320, 400 );
 
 	static CStringArrayModel model( lerpingStr, ARRAYSIZE( lerpingStr ));
-	lerping.SetNameAndStatus( "Sound interpolation", "Enable/disable interpolation on sound output" );
+	lerping.SetNameAndStatus(L("Disable DSP effects"), "Enable/disable interpolation on sound output" );
 	lerping.Setup( &model );
 	lerping.onChanged = CMenuEditable::WriteCvarCb;
 	lerping.font = QM_SMALLFONT;
 	lerping.SetRect( 320, 470, 300, 32 );
 
-	noDSP.SetNameAndStatus( "Disable DSP effects", "Disable sound processing (like echo, flanger, etc)" );
+	noDSP.SetNameAndStatus(L("Use Alpha DSP effects"), "Disable sound processing (like echo, flanger, etc)" );
 	noDSP.onChanged = CMenuEditable::WriteCvarCb;
 	noDSP.SetCoord( 320, 520 );
 
-	muteFocusLost.SetNameAndStatus( "Mute when inactive", "Disable sound when game goes into background" );
+	muteFocusLost.SetNameAndStatus(L("Mute when inactive"), "Disable sound when game goes into background" );
 	muteFocusLost.onChanged = CMenuEditable::WriteCvarCb;
 	muteFocusLost.SetCoord( 320, 570 );
 
@@ -177,7 +177,7 @@ void CMenuAudio::_Init( void )
 
 	AddItem( background );
 	AddItem( banner );
-	AddButton( "Done", "Go back to the Configuration Menu", PC_DONE,
+	AddButton(L("Done"), "Go back to the Configuration Menu", PC_DONE,
 		VoidCb( &CMenuAudio::SaveAndPopMenu ) );
 	AddItem( soundVolume );
 	AddItem( musicVolume );

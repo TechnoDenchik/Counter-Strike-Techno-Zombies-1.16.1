@@ -203,7 +203,7 @@ void CMenuMapListModel::Update( void )
 	char token[1024];
 	int numMaps = 1;
 
-	strcpy( mapName[0], "<Random Map>" );
+	strcpy( mapName[0], L("GameUI_RandomMap"));
 	mapsDescription[0][0] = 0;
 	
 	while(( pfile = EngFuncs::COM_ParseFile( pfile, token )) != NULL )
@@ -247,24 +247,24 @@ void CMenuCreateGame::_Init( void )
 	// add them here, so "done" button can be used by mapsListModel::Update
 	AddItem( background );
 	AddItem( banner );
-	CMenuPicButton *advOpt = AddButton( "Adv. Options", "Open the game advanced options menu", PC_ADV_OPT, UI_AdvServerOptions_Menu );
+	CMenuPicButton *advOpt = AddButton(L("Adv. Options"), "Open the game advanced options menu", PC_ADV_OPT, UI_AdvServerOptions_Menu );
 	advOpt->SetGrayed( !UI_AdvServerOptions_IsAvailable() );
 
-	done = AddButton( "Ok", "Start the multiplayer game", PC_DONE, Begin );
+	done = AddButton(L("GameUI_OK"), "Start the multiplayer game", PC_DONE, Begin );
 	done->onActivatedClActive = msgBox.MakeOpenEvent();
 
 	mapsList.SetCharSize( QM_SMALLFONT );
-	mapsList.SetupColumn( 0, "", 0.5f ); // Map
-	mapsList.SetupColumn( 1, "", 0.5f ); // Title
+	mapsList.SetupColumn( 0, L("GameUI_Map"), 0.5f ); // Map
+	mapsList.SetupColumn( 1, L("Title"), 0.5f ); // Title
 	mapsList.SetModel( &mapsListModel );
 
-	hostName.szName = "Server Name:";
+	hostName.szName = L("GameUI_ServerName");
 	hostName.iMaxLength = 28;
 	hostName.LinkCvar( "hostname" );
 
 	maxClients.iMaxLength = 3;
 	maxClients.bNumbersOnly = true;
-	maxClients.szName = "Max Players:";
+	maxClients.szName = L("GameUI_MaxPlayers");
 	maxClients.LinkCvar("maxplayers");
 	maxClients.UpdateCvar();
 	SET_EVENT_MULTI( maxClients.onChanged,
@@ -279,7 +279,7 @@ void CMenuCreateGame::_Init( void )
 	});
 	maxClients.onCvarGet = maxClients.onChanged;
 
-	password.szName = "Password:";
+	password.szName = L("GameUI_Password");
 	password.iMaxLength = 16;
 	password.eTextAlignment = QM_CENTER;
 	password.bHideInput = true;
@@ -304,7 +304,7 @@ void CMenuCreateGame::_Init( void )
 	botNum.onCvarGet = botNum.onChanged;
 
 	msgBox.onPositive = Begin;
-	msgBox.SetMessage( "Starting a new game will exit any current game, OK to exit?" );
+	msgBox.SetMessage(L("Starting a new game will exit any current game, OK to exit?") );
 	msgBox.Link( this );
 
 	static CStringArrayModel modelGameModes(g_szGameModeNames, ARRAYSIZE(g_szGameModeNames));
@@ -319,7 +319,7 @@ void CMenuCreateGame::_Init( void )
 		break;
 	}
 
-	AddButton( "Cancel", "Return to the previous menu", PC_CANCEL, VoidCb( &CMenuCreateGame::Hide ) );
+	AddButton(L("GameUI_Cancel"), "Return to the previous menu", PC_CANCEL, VoidCb( &CMenuCreateGame::Hide ) );
 	AddItem( maxClients );
 	AddItem( hostName );
 	AddItem( password );

@@ -54,7 +54,7 @@ void CSTwinShadowAxes::Spawn(void)
 	
 	Precache();
 	
-	m_iId = WEAPON_TWINAXES;
+	m_iId = WEAPON_KNIFE;
 	SET_MODEL(ENT(pev), "models/p_dgaxe_a.mdl");
 
 	m_iWeaponState &= ~WPNSTATE_SHIELD_DRAWN;
@@ -109,7 +109,7 @@ int CSTwinShadowAxes::GetItemInfo(ItemInfo* p)
 	p->iMaxClip = TWINSHADOWAXES;
 	p->iSlot = 2;
 	p->iPosition = 2;
-	p->iId = WEAPON_TWINAXES;
+	p->iId = WEAPON_KNIFE;
 	p->iFlags = 0;
 	p->iWeight = TWINAXES_WEIGHT;
 	//p->iFlags = ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;
@@ -136,9 +136,9 @@ BOOL CSTwinShadowAxes::Deploy(void)
 	m_iWeaponState &= ~WPNSTATE_SHIELD_DRAWN;
 	m_pPlayer->m_bShieldDrawn = false;
 	if(setskin == true)
-		return DefaultDeploy("models/v_dgaxe_2.mdl", "models/p_dgaxe_a.mdl", ANIM_DRAW, "draw", UseDecrement() != FALSE);
+		return DefaultDeploy("models/v_dgaxe_2.mdl", "models/p_dgaxe_a.mdl", ANIM_DRAW, "knife", UseDecrement() != FALSE);
 	else
-		return DefaultDeploy("models/v_dgaxe.mdl", "models/p_dgaxe_a.mdl", ANIM_DRAW, "draw", UseDecrement() != FALSE);
+		return DefaultDeploy("models/v_dgaxe.mdl", "models/p_dgaxe_a.mdl", ANIM_DRAW, "knife", UseDecrement() != FALSE);
 	
 }
 
