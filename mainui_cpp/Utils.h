@@ -148,6 +148,7 @@ extern void UI_EnableTextInput( bool enable );
 
 void UI_LoadCustomStrings( void );
 const char *L( const char *szStr ); // L means Localize!
+const char* LL(const char* szStr); // L means Localize!
 void UI_FreeCustomStrings( void );
 
 #ifdef __APPLE__

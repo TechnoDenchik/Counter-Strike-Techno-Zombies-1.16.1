@@ -23,6 +23,7 @@
     <ProjectGuid>{7E719095-7557-4336-99FC-44803D2A5AE0}</ProjectGuid>
     <RootNamespace>vgui2support</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>VGUI2</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

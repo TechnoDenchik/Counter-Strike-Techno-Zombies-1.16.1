@@ -35,7 +35,6 @@ TEMPENTS MANAGEMENT
 ==============================================================
 */
 #define MAX_MUZZLEFLASH		4
-#define MAX_MUZZLEFLASHQUANT		4
 #define SHARD_VOLUME		12.0f	// on shard ever n^3 units
 #define SF_FUNNEL_REVERSE		1
 
@@ -43,7 +42,6 @@ TEMPENTITY	*cl_active_tents;
 TEMPENTITY	*cl_free_tents;
 TEMPENTITY	*cl_tempents = NULL;		// entities pool
 int		cl_muzzleflash[MAX_MUZZLEFLASH];	// muzzle flashes
-int		cl_muzzleflashQuant[MAX_MUZZLEFLASHQUANT];	// muzzle flashes
 
 /*
 ================
@@ -73,11 +71,6 @@ void CL_RegisterMuzzleFlashes( void )
 
 	// update registration for shellchrome
 	cls.hChromeSprite = pfnSPR_Load( "sprites/shellchrome.spr" );
-}
-
-void CL_RegisterMuzzleFlashes2(void)
-{
-	cl_muzzleflashQuant[0] = CL_FindModelIndex("sprites/muzzleflash224.spr");
 }
 
 /*
@@ -807,52 +800,6 @@ void GAME_EXPORT CL_MuzzleFlash( const vec3_t pos, int type )
 		pTemp->entity.curstate.effects |= EF_REFLECTONLY;
 
 	CL_TEntAddEntity( &pTemp->entity );
-}
-
-void GAME_EXPORT CL_MuzzleFlash2(const vec3_t pos, int type)
-{
-	TEMPENTITY* pTemp;
-	int		index, modelIndex, frameCount;
-	float		scale;
-
-	index = bound(0, type % 5, MAX_MUZZLEFLASH - 1);
-	scale = (type / 10) * 0.1f;
-	if (scale == 0.0f) scale = 0.5f;
-
-	modelIndex = cl_muzzleflashQuant[index];
-	if (!modelIndex) return;
-
-	Mod_GetFrames(modelIndex, &frameCount);
-
-	// must set position for right culling on render
-	pTemp = CL_TempEntAllocHigh(pos, Mod_Handle(modelIndex));
-	if (!pTemp) return;
-	pTemp->entity.curstate.rendermode = kRenderTransAdd;
-	pTemp->entity.curstate.renderamt = 255;
-	pTemp->entity.curstate.framerate = 10;
-	pTemp->entity.curstate.renderfx = 0;
-	pTemp->die = cl.time + 0.01; // die at next frame
-	pTemp->entity.curstate.frame = Com_RandomLong(0, frameCount - 1);
-	pTemp->flags |= FTENT_SPRANIMATE | FTENT_SPRANIMATELOOP;
-	pTemp->frameMax = frameCount - 1;
-
-	if (index == 0)
-	{
-		// Rifle flash
-		pTemp->entity.curstate.scale = scale * Com_RandomFloat(0.5f, 0.6f);
-		pTemp->entity.angles[2] = 90 * Com_RandomLong(0, 3);
-	}
-	else
-	{
-		pTemp->entity.curstate.scale = scale;
-		pTemp->entity.angles[2] = Com_RandomLong(0, 359);
-	}
-
-	// play playermodel muzzleflashes only for mirror pass
-	if (RP_LOCALCLIENT(RI.currententity) && !RI.thirdPerson && (RI.params & RP_MIRRORVIEW))
-		pTemp->entity.curstate.effects |= EF_REFLECTONLY;
-
-	CL_TEntAddEntity(&pTemp->entity);
 }
 
 /*

@@ -103,10 +103,10 @@ GNU General Public License for more details.
 #define MAX_MODEL_BITS		13
 #define MAX_MODELS			(1<<MAX_MODEL_BITS)	// 11 bits == 2048 models
 
-#define MAX_SOUND_BITS		20
+#define MAX_SOUND_BITS		13
 #define MAX_SOUNDS			(1<<MAX_SOUND_BITS)	// 11 bits == 2048 sounds
 
-#define MAX_ENTITY_BITS		30
+#define MAX_ENTITY_BITS		12
 #define MAX_EDICTS			(1<<MAX_ENTITY_BITS)// 12 bits = 4096 edicts
 
 #define MAX_CUSTOM			1024	// max custom resources per level

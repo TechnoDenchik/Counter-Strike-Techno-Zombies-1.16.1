@@ -126,8 +126,6 @@ public:
 	CMenuSpinControl	crosshairColor;
 	CMenuSpinControl	crosshairType;
 	CMenuCheckBox	crosshairTranslucent;
-	CMenuCheckBox	extendedMenus;
-
 
 	CMenuYesNoMessageBox msgBox;
 
@@ -369,8 +367,7 @@ void CMenuPlayerSetup::SetConfig( void )
 	crosshairSize.WriteCvar();
 	crosshairType.WriteCvar();
 	crosshairTranslucent.WriteCvar();
-	extendedMenus.WriteCvar();
-	WriteNewLogo();
+	//WriteNewLogo();
 }
 
 void CMenuPlayerSetup::SaveAndPopMenu()
@@ -470,46 +467,42 @@ void CMenuPlayerSetup::_Init( void )
 
 	banner.SetPicture(ART_BANNER);
 
-	name.SetNameAndStatus( "NickName","Enter your multiplayer display name" );
+	name.SetNameAndStatus(L("CstzUI_NickName"), L("CstzUI_NickName"));
 	name.iMaxLength = 32;
 	name.LinkCvar( "name" );
 	name.SetRect( 320, 260, 256, 36 );
 
 	crosshairView.SetRect( 320, 370, 96, 96 );
-	crosshairView.SetNameAndStatus( "Crosshair preview", "Choose dynamic crosshair" );
+	crosshairView.SetNameAndStatus(L("CstzUI_Crosshair_preview"), L("CstzUI_Crosshair_preview"));
 	crosshairView.hWhite = EngFuncs::PIC_Load("*white");
 
 	static CStringArrayModel modelSizes( g_szCrosshairAvailSizes, ARRAYSIZE( g_szCrosshairAvailSizes ));
 	crosshairSize.SetRect( 480, 345, 256, 26 );
-	crosshairSize.SetNameAndStatus( "Crosshair size", "Set crosshair size" );
+	crosshairSize.SetNameAndStatus(L("CstzUI_Crosshair_size"), L("CstzUI_Crosshair_size"));
 	crosshairSize.Setup(&modelSizes);
 	crosshairSize.LinkCvar("cl_crosshair_size", CMenuEditable::CVAR_STRING);
 
 	static CStringArrayModel modelColors( g_szCrosshairAvailColors, ARRAYSIZE( g_szCrosshairAvailColors ));
 	crosshairColor.SetRect( 480, 415, 256, 26 );
-	crosshairColor.SetNameAndStatus( "Crosshair color", "Set crosshair color" );
+	crosshairColor.SetNameAndStatus(L("CstzUI_Crosshair_color"), L("CstzUI_Crosshair_color"));
 	crosshairColor.Setup(&modelColors);
 
 	static CStringArrayModel modelTypes(g_szCrosshairTypes, ARRAYSIZE(g_szCrosshairTypes));
 	crosshairType.SetRect(480, 485, 256, 26);
-	crosshairType.SetNameAndStatus("Crosshair type", "Set crosshair type");
+	crosshairType.SetNameAndStatus(L("CstzUI_Crosshair_type"), L("CstzUI_Crosshair_type"));
 	crosshairType.Setup(&modelTypes);
 	crosshairType.LinkCvar("cl_crosshair_type", CMenuEditable::CVAR_VALUE);
 
 	crosshairTranslucent.SetCoord( 320, 540 );
-	crosshairTranslucent.SetNameAndStatus( "Translucent crosshair", "Set additive render crosshair" );
+	crosshairTranslucent.SetNameAndStatus(L("CstzUI_Translucent"), L("CstzUI_Translucent"));
 	crosshairTranslucent.LinkCvar( "cl_crosshair_translucent" );
 
-	extendedMenus.SetCoord( 320, 590 );
-	extendedMenus.SetNameAndStatus( "Extended touch menu", "Force touch menus for radio" );
-	extendedMenus.LinkCvar( "_extended_menus" );
-
-	msgBox.SetMessage( "Please, choose another player name" );
+	msgBox.SetMessage(L("CstzUI_SetMessage"));
 	msgBox.Link( this );
 
 	AddItem( background );
 	AddItem( banner );
-	AddButton("Done", "Go back to the Main menu", PC_DONE, VoidCb(&CMenuPlayerSetup::Hide), QMF_NOTIFY);
+	AddButton("Done", 0, PC_DONE, VoidCb(&CMenuPlayerSetup::SaveAndPopMenu), QMF_NOTIFY);
 
 
 	if( !hideLogos )
@@ -546,7 +539,6 @@ void CMenuPlayerSetup::_Init( void )
 	AddItem( crosshairColor );
 	AddItem( crosshairType );
 	AddItem( crosshairTranslucent );
-	AddItem( extendedMenus );
 	AddItem( crosshairView );
 
 

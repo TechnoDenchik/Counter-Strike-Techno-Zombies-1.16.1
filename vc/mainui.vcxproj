@@ -123,7 +123,6 @@
     <ClCompile Include="..\mainui_cpp\menus\InputDevices.cpp" />
     <ClCompile Include="..\mainui_cpp\menus\LoadGame.cpp" />
     <ClCompile Include="..\mainui_cpp\menus\Main.cpp" />
-    <ClCompile Include="..\mainui_cpp\menus\Multiplayer.cpp" />
     <ClCompile Include="..\mainui_cpp\menus\NewGame.cpp" />
     <ClCompile Include="..\mainui_cpp\menus\PlayerIntroduceDialog.cpp" />
     <ClCompile Include="..\mainui_cpp\menus\PlayerSetup.cpp" />
@@ -147,6 +146,7 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>mainui</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Interface</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -194,7 +194,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <TargetName>interface</TargetName>
-    <OutDir>..\Debug</OutDir>
+    <OutDir>F:\Release 2</OutDir>
     <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

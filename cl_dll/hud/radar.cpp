@@ -98,12 +98,6 @@ int CHudRadar::VidInit(void)
 
 int CHudRadar::Draw(float time)
 {
-	if (gHUD.m_iModRunning == MOD_ZBS)
-	{
-		0;
-	}
-	else
-	{ 
 		//pimpl->for_each(&IBaseHudSub::Draw, time);
 		auto& modern = pimpl->get<CHudRadarModern>();
 		auto& legacy = pimpl->get<CHudRadarLegacy>();
@@ -119,7 +113,6 @@ int CHudRadar::Draw(float time)
 			gHUD.m_bMordenRadar = FALSE;
 		}
 		return 1;
-	}
 	
 }
 

@@ -48,6 +48,7 @@ static CMenuEntry	*s_pEntries = NULL;
 
 
 const char* uiSoundIn = "media/launch_upmenu1.wav";
+const char* uiStartGame = "media/mm_success_lets_roll.wav";
 const char* uiSoundOut = "media/launch_dnmenu1.wav";
 const char* uiSoundLaunch = "media/launch_select2.wav";
 const char* uiSoundGlow = "media/launch_glow1.wav";
@@ -1274,17 +1275,17 @@ void UI_OpenUpdatePage( bool engine, bool preferstore )
 	{
 #ifndef XASH_DISABLE_FWGS_EXTENSIONS
 		if( preferstore )
-			updateUrl = "https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.0/releases";
+			updateUrl = "https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.1/releases/tag/cstz1.16.1(beta)";
 		else
-			updateUrl = "https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.0/releases";
+			updateUrl = "https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.1/releases/tag/cstz1.16.1(beta)";
 #else
 		// TODO: Replace by macro for mainui_cpp modders?
-		updateUrl = "https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.0/releases";
+		updateUrl = "https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.1/releases/tag/cstz1.16.1(beta)";
 #endif 
 	}
 	else
 	{
-		updateUrl = "https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.0/releases";
+		updateUrl = "https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.1/releases/tag/cstz1.16.1(beta)";
 	}
 
 	EngFuncs::ShellExecute( updateUrl, NULL, TRUE );
@@ -1330,10 +1331,9 @@ void UI_Init( void )
 	ui_showmodels = EngFuncs::CvarRegister( "ui_showmodels", "0", FCVAR_ARCHIVE );
 	ui_show_window_stack = EngFuncs::CvarRegister( "ui_show_window_stack", "0", FCVAR_ARCHIVE );
 	ui_borderclip = EngFuncs::CvarRegister( "ui_borderclip", "0", FCVAR_ARCHIVE );
-#ifdef CS16CLIENT
-	// autofill ammo after bought weapon
+
 	EngFuncs::CvarRegister( "ui_cs_autofill", "0", FCVAR_ARCHIVE );
-#endif // CS16CLIENT
+
 
 	// show cl_predict dialog
 	EngFuncs::CvarRegister( "menu_mp_firsttime", "1", FCVAR_ARCHIVE );

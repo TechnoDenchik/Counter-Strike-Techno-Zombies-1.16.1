@@ -135,7 +135,7 @@ static inline dictionary_t *Dictionary_GetBucket( const char *name )
 
 static void UI_InitAliasStrings( void )
 {
-	char token[1024];
+	char token[4024];
 
 	/*// some strings needs to be initialized here
 	sprintf( token, "Quit %s without\nsaving current game?", gMenu.m_gameinfo.title );
@@ -162,7 +162,7 @@ static void UI_InitAliasStrings( void )
 
 static void Localize_AddToDictionary( const char *name, const char *lang )
 {
-	char filename[64];
+	char filename[256];
 	snprintf( filename, sizeof( filename ), "resource/%s_%s.txt", name, lang );
 
 	int unicodeLength;
@@ -174,6 +174,7 @@ static void Localize_AddToDictionary( const char *name, const char *lang )
 		char *afile = new char[ansiLength]; // save original pointer, so we can free it later
 		char *pfile = afile;
 		char token[4096];
+		char token2[4096];
 		int i = 0;
 
 		Q_UTF16ToUTF8( unicodeBuf + 1, afile, ansiLength, STRINGCONVERT_ASSERT_REPLACE );
@@ -255,9 +256,11 @@ error:
 
 static void Localize_Init( void )
 {
-	char gamedir[256];
+	char gamedir[2024];
+	char gamedir2[256];
 
 	EngFuncs::GetGameDir( gamedir );
+	EngFuncs::GetGameDir(gamedir2);
 
 	memset( hashed_cmds, 0, sizeof( hashed_cmds ) );
 
@@ -265,10 +268,19 @@ static void Localize_Init( void )
 	if( strcmp( gamedir, "gameui" )) // just for case
 		Localize_AddToDictionary( "gameui", "russian" );
 
-	Localize_AddToDictionary( "cstz",  "russian" );
+	if (strcmp(gamedir, "cstzui")) // just for case
+		Localize_AddToDictionary("cstzui", "russian");
+
 
 	if( strcmp( gamedir, "cstz" ))
-		Localize_AddToDictionary( gamedir,  "russian" );
+		Localize_AddToDictionary("cstz",  "russian" );
+
+
+	if (strcmp(gamedir2, "cstzmodui"))
+		Localize_AddToDictionary("cstzmodui", "russian");
+	
+	Localize_AddToDictionary(gamedir, "russian");
+	Localize_AddToDictionary(gamedir2,  "russian" );
 }
 
 static void Localize_Free( void )
@@ -295,7 +307,7 @@ void UI_LoadCustomStrings( void )
 {
 	char *afile = (char *)EngFuncs::COM_LoadFile( "gfx/shell/strings.lst", NULL );
 	char *pfile = afile;
-	char token[1024];
+	char token[4096];
 	int string_num;
 
 	UI_InitAliasStrings ();
@@ -336,6 +348,23 @@ const char *L( const char *szStr ) // L means Localize!
 		dictionary_t *found = Dictionary_FindInBucket( base, szStr );
 
 		if( found )
+			return found->value;
+	}
+
+	return szStr;
+}
+
+const char* LL(const char* szStr) // L means Localize!
+{
+	if (szStr)
+	{
+		if (*szStr == '#')
+			szStr++;
+
+		dictionary_t* base = Dictionary_GetBucket(szStr);
+		dictionary_t* found = Dictionary_FindInBucket(base, szStr);
+
+		if (found)
 			return found->value;
 	}
 

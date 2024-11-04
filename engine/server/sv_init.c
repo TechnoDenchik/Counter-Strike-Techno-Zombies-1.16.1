@@ -293,9 +293,6 @@ void SV_ActivateServer( void )
 	pfnPrecacheModel( "sprites/muzzleflash2.spr" );
 	pfnPrecacheModel( "sprites/muzzleflash3.spr" );
 
-	pfnPrecacheModel("sprites/muzzleflash224.spr");
-
-
 	// rocket flare
 	pfnPrecacheModel( "sprites/animglow01.spr" );
 

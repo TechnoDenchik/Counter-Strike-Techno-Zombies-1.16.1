@@ -96,7 +96,7 @@ void CQuantum::Precache(void)
 	PRECACHE_MODEL("sprites/muzzleflash226.spr");
 
 	m_iShell = PRECACHE_MODEL("models/rshell.mdl");
-	m_usFireQuant = PRECACHE_EVENT(1, "events/quant.sc");
+	m_usFire = PRECACHE_EVENT(1, "events/quant.sc");
 }
 
 int CQuantum::GetItemInfo(ItemInfo *p)
@@ -420,20 +420,6 @@ void CQuantum::RadiusDamage2()
 		if (v8 < 6)
 		{
 #ifndef CLIENT_DLL
-			CBeam* pBeam = phs5_6_7[v8];
-			if (pBeam)
-			{
-				pBeam->EntsInit(ENTINDEX(m_pPlayer->edict()), ENTINDEX(pEntity->edict()));
-				pBeam->SetType(BEAM_ENTS);
-				pBeam->SetStartEntity(ENTINDEX(m_pPlayer->edict()));
-				pBeam->SetEndEntity(ENTINDEX(pEntity->edict()));
-				pBeam->SetStartAttachment(1);
-				pBeam->SetEndAttachment(0);
-				pBeam->RelinkBeam();
-				pBeam->SetBrightness(230);
-				pBeam->pev->effects &= ~EF_NODRAW;
-
-			}
 
 			MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pEntity->pev->origin);
 			WRITE_BYTE(TE_EXPLOSION);
@@ -648,7 +634,7 @@ void CQuantum::QuantFire(float flSpread, duration_t flCycleTime, BOOL fUseAutoAi
 	flags = 0;
 #endif
 
-	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usFireQuant, 0, (float *)&g_vecZero, (float *)&g_vecZero, vecDir.x, vecDir.y, (int)(m_pPlayer->pev->punchangle.x * 100), (int)(m_pPlayer->pev->punchangle.y * 100), FALSE, FALSE);
+	
 	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + flCycleTime;
 
 #ifndef CLIENT_DLL
@@ -728,7 +714,7 @@ void CQuantum::QuantFire2(float flSpread, duration_t flCycleTime, BOOL fUseAutoA
 	flags = 0;
 #endif
 
-	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usFireQuant, 0, (float*)&g_vecZero, (float*)&g_vecZero, vecDir.x, vecDir.y, (int)(m_pPlayer->pev->punchangle.x * 100), (int)(m_pPlayer->pev->punchangle.y * 100), FALSE, FALSE);
+
 	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + flCycleTime;
 
 #ifndef CLIENT_DLL

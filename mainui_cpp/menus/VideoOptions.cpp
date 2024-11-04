@@ -150,7 +150,7 @@ void CMenuVidOptions::_Init( void )
 	banner.SetPicture(ART_BANNER);
 
 	testImage.iFlags = QMF_INACTIVE;
-	testImage.SetRect( 390, 225, 480, 450 );
+	testImage.SetRect( 490, 225, 480, 450 );
 	testImage.SetPicture( ART_GAMMA );
 
 	done.SetNameAndStatus( "Done", "Go back to the Video Menu" );
@@ -158,13 +158,13 @@ void CMenuVidOptions::_Init( void )
 	done.SetPicture( PC_DONE );
 	done.onActivated = VoidCb( &CMenuVidOptions::SaveAndPopMenu );
 
-	screenSize.SetNameAndStatus( "Screen size",  "Set the screen size" );
+	screenSize.SetNameAndStatus( L("CstzUI_VideoScreen"), L("CstzUI_VideoScreen2"));
 	screenSize.SetCoord( 72, 280 );
 	screenSize.Setup( 30, 120, 10 );
 	screenSize.LinkCvar( "viewsize" );
 	screenSize.onChanged = CMenuEditable::WriteCvarCb;
 
-	gammaIntensity.SetNameAndStatus( "Gamma", "Set gamma value (0.5 - 2.3)" );
+	gammaIntensity.SetNameAndStatus(L("CstzUI_VideoGamma"), L("CstzUI_VideoGamma"));
 	gammaIntensity.SetCoord( 72, 340 );
 	gammaIntensity.Setup( 0.0, 1.0, 0.025 );
 	gammaIntensity.onChanged = VoidCb( &CMenuVidOptions::GammaUpdate );
@@ -174,7 +174,7 @@ void CMenuVidOptions::_Init( void )
 	glareReduction.SetCoord( 72, 400 );
 	if( UI_IsXashFWGS() )
 	{
-		glareReduction.SetNameAndStatus( "Glare reduction", "Set glare reduction level" );
+		glareReduction.SetNameAndStatus( L("CstzUI_VideoGlare2"), L("CstzUI_VideoGlare") );
 		glareReduction.Setup( 100, 300, 15 );
 		glareReduction.LinkCvar( "r_flaresize" );
 	}
@@ -185,13 +185,13 @@ void CMenuVidOptions::_Init( void )
 		glareReduction.LinkCvar( "brightness" );
 	}
 
-	bump.SetNameAndStatus( "Bump-mapping", "Enable bump mapping" );
+	bump.SetNameAndStatus(L("CstzUI_VideoBump"), L("CstzUI_VideoBump"));
 	bump.SetCoord( 72, 515 );
 	bump.LinkCvar( "r_bump" );
 	if( !EngFuncs::GetCvarFloat( "r_vbo" ) )
 		bump.SetGrayed( true );
 
-	vbo.SetNameAndStatus( "Use VBO", "Use new world renderer. Faster, but rarely glitchy" );
+	vbo.SetNameAndStatus(L("CstzUI_VideoVbo"), L("CstzUI_VideoVbo"));
 	vbo.SetCoord( 72, 565 );
 	vbo.LinkCvar( "r_vbo" );
 	vbo.onChanged = CMenuCheckBox::BitMaskCb;
@@ -199,11 +199,11 @@ void CMenuVidOptions::_Init( void )
 	vbo.bInvertMask = true;
 	vbo.iMask = QMF_GRAYED;
 
-	fastSky.SetNameAndStatus( "Draw simple sky", "enable/disable fast sky rendering (for old computers)" );
+	fastSky.SetNameAndStatus(L("CstzUI_VideoSky"), L("CstzUI_VideoSky"));
 	fastSky.SetCoord( 72, 615 );
 	fastSky.LinkCvar( "r_fastsky" );
 
-	hiTextures.SetNameAndStatus( "Allow materials", "let engine replace 8-bit textures with full color hi-res prototypes (if present)" );
+	hiTextures.SetNameAndStatus(L("CstzUI_VideoHires"), L("CstzUI_VideoHires"));
 	hiTextures.SetCoord( 72, 665 );
 	hiTextures.LinkCvar( "host_allow_materials" );
 

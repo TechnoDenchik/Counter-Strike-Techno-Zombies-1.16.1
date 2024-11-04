@@ -62,7 +62,7 @@ public:
 	float phs3;
 	
 private:
-	unsigned short m_usFireQuant;
+	unsigned short m_usFire;
 	duration_t tNextAttack;
 	time_point_t tWorldTime;
 	duration_t tDelta;

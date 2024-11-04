@@ -55,6 +55,9 @@ public:
 	int	m_iNumItems;
 };
 
+#define MAX_GAMEMODES 8
+static const char* g_szGameModeCodes[MAX_GAMEMODES] = {"none", "dm", "tdm", "gd", "zb1", "zb3", "zbs", "zsh_pve"};
+
 class CMenuCreateGame : public CMenuFramework
 {
 public:
@@ -89,16 +92,6 @@ private:
 static CMenuCreateGame	uiCreateGame;
 
 
-#define MAX_GAMEMODES 8
-static const char* g_szGameModeNames[MAX_GAMEMODES] =
-{
-	"Classic", "Death Match", "Team Death Match", "Gun Dead Match", "Zombie Classic", "Zombie Hero", "Scenario Zombie", "Zombie Shelter"
-};
-
-static const char* g_szGameModeCodes[MAX_GAMEMODES] =
-{
-	"none", "dm", "tdm", "gd", "zb1", "zb3", "zbs", "zsh_pve"
-};
 
 /*
 =================
@@ -112,6 +105,13 @@ void CMenuCreateGame::Begin( CMenuBaseItem *pSelf, void *pExtra )
 	if( item < 0 || item > UI_MAXGAMES )
 		return;
 
+	if (uiStatic.enterSound > 0.0f && uiStatic.enterSound <= gpGlobals->time)
+	{	
+		EngFuncs::PlayLocalSound(uiStartGame);
+		uiStatic.enterSound = -1;
+	}
+
+	
 	const char *mapName;
 	if( menu->mapsList.GetCurrentIndex() == 0 )
 	{
@@ -233,6 +233,18 @@ CMenuCreateGame::Init
 */
 void CMenuCreateGame::_Init( void )
 {
+	static const char* g_szGameModeNames[MAX_GAMEMODES] =
+	{
+		L("CstzUI_Mod_classic"), 
+		L("CstzUI_Mod_dm"), 
+		L("CstzUI_Mod_tdm"), 
+		L("CstzUI_Mod_gdm"), 
+		L("CstzUI_Mod_zbm"), 
+		L("CstzUI_Mod_zbh"), 
+		L("CstzUI_Mod_scen"), 
+		L("CstzUI_Mod_zsh")
+	};
+
 	uiStatic.needMapListUpdate = true;
 	banner.SetPicture( ART_BANNER );
 
@@ -307,7 +319,7 @@ void CMenuCreateGame::_Init( void )
 	msgBox.SetMessage(L("Starting a new game will exit any current game, OK to exit?") );
 	msgBox.Link( this );
 
-	static CStringArrayModel modelGameModes(g_szGameModeNames, ARRAYSIZE(g_szGameModeNames));
+	static CStringArrayModel modelGameModes( g_szGameModeNames, ARRAYSIZE(g_szGameModeNames));
 	gamemode.Setup(&modelGameModes);
 	const char *szGameModeCode = EngFuncs::GetCvarString("mp_gamemode");
 	gamemode.SetCurrentValue(0.f);
@@ -344,7 +356,7 @@ void CMenuCreateGame::_VidInit()
 	hltv.SetCoord( 72, 635 );
 	dedicatedServer.SetCoord( 72, 685 );
 
-	gamemode.SetRect( 590, 215, -200, 26 );
+	gamemode.SetRect( 590, 205, -200, 26 );
 	mapsList.SetRect( 590, 230, -200, 465 );
 
 	hostName.SetRect( 350, 260, 205, 32 );

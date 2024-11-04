@@ -57,7 +57,7 @@ public:
 	void HandleDisconnect( void );
 	void HandlePrecache( void )
 	{
-		SetCommonText( "Precaching resources" );
+		SetCommonText( L("CstzUI_MainPrecache") );
 		commonProgress.LinkCvar( "scr_loading", 0, 100 );
 		m_iState = STATE_CONNECTING;
 	}
@@ -85,11 +85,17 @@ public:
 	{
 		if( m_iSource == SOURCE_CREATEGAME )
 		{
-			strcpy( sTitleString, "Starting game..." );
+			//EngFuncs::PlayLocalSound(uiStartGame);
+			if (uiStatic.enterSound > 0.0f && uiStatic.enterSound <= gpGlobals->time)
+			{
+	
+				uiStatic.enterSound = -1;
+			}
+			strcpy( sTitleString, L("CstzUI_MainStart"));
 		}
 		else
 		{
-			snprintf( sTitleString, sizeof( sTitleString ) - 1, "Connecting to %s...", pszName );
+			snprintf( sTitleString, sizeof( sTitleString ) - 1, L("CstzUI_MainCon %s..."), pszName );
 		}
 
 		commonProgress.SetValue( 0 );
@@ -175,7 +181,7 @@ void CMenuConnectionProgress::HandleDisconnect( void )
 		}
 	}
 	
-	SetCommonText( "Disconnected." );
+	SetCommonText( L("CstzUI_MainDiscon2") );
 
 	m_iState = STATE_NONE;
 	VidInit();
@@ -218,7 +224,7 @@ void CMenuConnectionProgress::_Init( void )
 	disconnectButton.onActivated = VoidCb( &CMenuConnectionProgress::Disconnect );
 	disconnectButton.bEnableTransitions = false;
 
-	dialog.SetMessage( "Really disconnect?" );
+	dialog.SetMessage( L("CstzUI_MainDiscon") );
 	dialog.Link( this );
 	dialog.onPositive = VoidCb( &CMenuConnectionProgress::Disconnect );
 
@@ -367,7 +373,7 @@ void UI_ConnectionProgress_f( void )
 		uiConnectionProgress.m_iState = STATE_MENU;
 		uiConnectionProgress.m_iSource = SOURCE_CREATEGAME;
 		uiConnectionProgress.SetServer( "" );
-		uiConnectionProgress.SetCommonText( "Starting local server...");
+		uiConnectionProgress.SetCommonText( L("CstzUI_MainStart"));
 		uiConnectionProgress.Show();
 	}
 

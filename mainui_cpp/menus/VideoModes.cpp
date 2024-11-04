@@ -196,7 +196,7 @@ void CMenuVidModes::_Init( void )
 	vidList.SetupColumn( 0, 0, 1.0f );
 	vidList.SetModel( &vidListModel );
 
-	windowed.SetNameAndStatus( "Run in a window", "Run game in window mode" );
+	windowed.SetNameAndStatus(L("CstzUI_VideoWind"), L("CstzUI_VideoWind") );
 	windowed.SetCoord( 360, 620 );
 	SET_EVENT_MULTI( windowed.onChanged,
 	{
@@ -210,7 +210,7 @@ void CMenuVidModes::_Init( void )
 			uiVidModes.vidList.SetCurrentIndex( VID_AUTOMODE_POS );
 	});
 
-	vsync.SetNameAndStatus( "Vertical sync", "Enable vertical synchronization" );
+	vsync.SetNameAndStatus(L("CstzUI_VideoSync"), L("CstzUI_VideoSync") );
 	vsync.SetCoord( 360, 670 );
 	vsync.LinkCvar( "gl_swapInterval" );
 

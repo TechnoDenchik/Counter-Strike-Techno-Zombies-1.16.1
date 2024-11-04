@@ -392,9 +392,9 @@ void CMenuControls::_Init( void )
 
 	AddItem( background );
 	AddItem( banner );
-	AddButton(L("GameUI_UseDefaults"), "Reset all buttons binding to their default values", PC_USE_DEFAULTS, msgBox2.MakeOpenEvent() );
+	AddButton("Default", L("GameUI_UseDefaults"), PC_USE_DEFAULTS, msgBox2.MakeOpenEvent() );
 	AddButton(L("Adv. Controls"), "Change mouse sensitivity, enable autoaim, mouselook and crosshair", PC_ADV_CONTROLS, UI_AdvControls_Menu );
-	AddButton(L("GameUI_OK"), "Save changed and return to configuration menu", PC_DONE,
+	AddButton(L("GameUI_OK"), L("CstzUI_done"), PC_DONE,
 		VoidCb( &CMenuControls::SaveAndPopMenu ) );
 	AddButton(L("GameUI_Cancel"), "Discard changes and return to configuration menu", PC_CANCEL,
 		VoidCb( &CMenuControls::Cancel ) );

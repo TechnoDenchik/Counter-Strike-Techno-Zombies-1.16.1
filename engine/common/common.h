@@ -195,11 +195,11 @@ typedef enum
 // config strings are a general means of communication from
 // the server to all connected clients.
 // each config string can be at most CS_SIZE characters.
-#define CS_SIZE		128	// size of one config string
+#define CS_SIZE		64	// size of one config string
 #define CS_TIME		16	// size of time string
 
-#define MAX_DECALS		2048	// touching TE_DECAL messages, etc
-#define MAX_STATIC_ENTITIES	4096	// static entities that moved on the client when level is spawn
+#define MAX_DECALS		1024	// touching TE_DECAL messages, etc
+#define MAX_STATIC_ENTITIES	2048	// static entities that moved on the client when level is spawn
 
 #define GI              SI.GameInfo
 #define FS_Gamedir()	SI.GameInfo->gamefolder

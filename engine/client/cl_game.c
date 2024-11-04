@@ -3710,7 +3710,6 @@ static efx_api_t gEfxApi =
 	(void*)CL_LavaSplash,
 	(void*)CL_MultiGunshot,
 	(void*)CL_MuzzleFlash,
-	(void*)CL_MuzzleFlash2,
 	(void*)CL_ParticleBox,
 	(void*)CL_ParticleBurst,
 	(void*)CL_ParticleExplosion,

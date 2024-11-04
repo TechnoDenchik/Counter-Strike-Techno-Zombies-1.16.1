@@ -159,6 +159,7 @@ extern uiStatic_t		uiStatic;
 #define DLG_X ((uiStatic.width - 640) / 2 - 192) // Dialogs are 640px in width
 
 extern const char		*uiSoundIn;
+extern const char*	 uiStartGame;
 extern const char		*uiSoundRollOver;
 extern const char		*uiSoundOut;
 extern const char		*uiSoundKey;

@@ -26,10 +26,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define ART_BANNER			"gfx/shell/head_multi"
 
-class CMenuMultiplayer : public CMenuFramework
+class CMenuMultiplayer2 : public CMenuFramework
 {
 public:
-	CMenuMultiplayer() : CMenuFramework( "CMenuMultiplayer" ) { }
+	CMenuMultiplayer2() : CMenuFramework( "CMenuMultiplayer" ) { }
 
 	void AskPredictEnable() { msgBox.Show(); }
 
@@ -40,7 +40,7 @@ private:
 	CMenuYesNoMessageBox msgBox;
 };
 
-static CMenuMultiplayer	uiMultiPlayer;
+static CMenuMultiplayer2	uiMultiPlayer;
 
 
 /*
@@ -48,7 +48,7 @@ static CMenuMultiplayer	uiMultiPlayer;
 CMenuMultiplayer::Init
 =================
 */
-void CMenuMultiplayer::_Init( void )
+void CMenuMultiplayer2::_Init( void )
 {
 
 	AddItem( background );
@@ -61,25 +61,12 @@ void CMenuMultiplayer::_Init( void )
 	AddButton( "LAN game", "Set up the game on the local area network", PC_LAN_GAME, UI_LanGame_Menu, QMF_NOTIFY );
 //	AddButton( "Customize", "Choose your player name, and select visual options for your character", PC_CUSTOMIZE, UI_PlayerSetup_Menu, QMF_NOTIFY );
 	AddButton( "Controls", "Change keyboard and mouse settings", PC_CONTROLS, UI_Controls_Menu, QMF_NOTIFY );
-	AddButton( "Done", "Go back to the Main menu", PC_DONE, VoidCb( &CMenuMultiplayer::Hide ), QMF_NOTIFY );
+	AddButton( "Done", "Go back to the Main menu", PC_DONE, VoidCb( &CMenuMultiplayer2::Hide ), QMF_NOTIFY );
 
 	msgBox.SetMessage( "It is recomended to enable client movement prediction.\nPress OK to enable it now or enable it later in ^5(Multiplayer/Customize)");
 	msgBox.SetPositiveButton( "Ok", PC_OK );
 	msgBox.SetNegativeButton( "Cancel", PC_CANCEL );
 	msgBox.HighlightChoice( CMenuYesNoMessageBox::HIGHLIGHT_YES );
-	SET_EVENT_MULTI( msgBox.onPositive,
-	{
-		EngFuncs::CvarSetValue( "cl_predict", 1.0f );
-		EngFuncs::CvarSetValue( "menu_mp_firsttime", 0.0f );
-
-		UI_PlayerIntroduceDialog_Show( &uiMultiPlayer );
-	});
-	SET_EVENT_MULTI( msgBox.onNegative,
-	{
-		EngFuncs::CvarSetValue( "menu_mp_firsttime", 0.0f );
-
-		UI_PlayerIntroduceDialog_Show( &uiMultiPlayer );
-	});
 	msgBox.Link( this );
 
 }
@@ -101,18 +88,8 @@ UI_MultiPlayer_Menu
 */
 void UI_MultiPlayer_Menu2( void )
 {
-	if ( gMenu.m_gameinfo.gamemode == GAME_SINGLEPLAYER_ONLY )
-		return;
 
 	uiMultiPlayer.Show();
 
-	if( EngFuncs::GetCvarFloat( "menu_mp_firsttime" ) && !EngFuncs::GetCvarFloat( "cl_predict" ) )
-	{
-		uiMultiPlayer.AskPredictEnable();
-	}
-	else if( !UI::Names::CheckIsNameValid( EngFuncs::GetCvarString( "name" ) ) )
-	{
-		UI_PlayerIntroduceDialog_Show( &uiMultiPlayer );
-	}
 }
 ADD_MENU( menu_multiplayer, UI_MultiPlayer_Precache, UI_MultiPlayer_Menu2 );

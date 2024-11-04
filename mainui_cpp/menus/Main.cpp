@@ -112,7 +112,7 @@ void CMenuMain::QuitDialog(void *pExtra)
 void CMenuMain::DisconnectDialogCb()
 {
 	dialog.onPositive.SetCommand( FALSE, "cmd disconnect;endgame disconnect;wait;wait;wait;menu_options;menu_main\n" );
-	dialog.SetMessage(L("Really disconnect?"));
+	dialog.SetMessage(L("CstzUI_MainDiscon"));
 	dialog.Show();
 }
 
@@ -217,7 +217,7 @@ void CMenuMain::_Init( void )
 	resumeGame.iFlags |= QMF_NOTIFY;
 	resumeGame.onActivated = UI_CloseMenu;
 
-	disconnect.SetNameAndStatus(L("GameUI_GameMenu_Disconnect"), "Disconnect from server" );
+	disconnect.SetNameAndStatus(L("GameUI_GameMenu_Disconnect"), 0);
 	disconnect.SetPicture( PC_DISCONNECT );
 	disconnect.iFlags |= QMF_NOTIFY;
 	disconnect.onActivated = VoidCb( &CMenuMain::DisconnectDialogCb );

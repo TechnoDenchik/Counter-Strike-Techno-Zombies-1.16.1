@@ -89,7 +89,7 @@ void SCR_CreateStartupVids( void )
 	if( !f ) return;
 
 	// make standard video playlist: sierra, valve
-	FS_Print( f, "media/technocorp.mp4\n" );
+	FS_Print( f, "media/technocorp.avi\n" );
 	FS_Close( f );
 }
 

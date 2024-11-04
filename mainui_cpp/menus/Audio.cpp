@@ -39,22 +39,17 @@ private:
 	void _Init() override;
 	void _VidInit() override;
 	void GetConfig();
-	//void VibrateChanged();
 	void SaveAndPopMenu() override;
-
 	void LerpingCvarWrite();
 
 	CMenuSlider	soundVolume;
 	CMenuSlider	musicVolume;
-	CMenuSlider	suitVolume;
-	//CMenuSlider	vibration;
 	CMenuSpinControl lerping;
 	CMenuCheckBox noDSP;
 	CMenuCheckBox muteFocusLost;
-	//CMenuCheckBox vibrationEnable;
 	CMenuCheckBox reverseChannels;
 
-	//float oldVibrate;
+
 };
 
 static CMenuAudio		uiAudio;
@@ -68,32 +63,12 @@ void CMenuAudio::GetConfig( void )
 {
 	soundVolume.LinkCvar( "volume" );
 	musicVolume.LinkCvar( "MP3Volume" );
-	suitVolume.LinkCvar( "suitvolume" );
-	//vibration.LinkCvar( "vibration_length" );
 
 	lerping.LinkCvar( "s_lerping", CMenuEditable::CVAR_VALUE );
 	noDSP.LinkCvar( "dsp_off" );
 	muteFocusLost.LinkCvar( "snd_mute_losefocus" );
-	//vibrationEnable.LinkCvar( "vibration_enable" );
 	reverseChannels.LinkCvar( "s_reverse_channels" );
-
-	//if( !vibrationEnable.bChecked )
-		//vibration.SetGrayed( true );
-	//oldVibrate = vibration.GetCurrentValue();
 }
-
-//void CMenuAudio::VibrateChanged()
-//{
-	//float newVibrate = vibration.GetCurrentValue();
-	//if( oldVibrate != newVibrate )
-	//{
-	//	char cmd[64];
-	///	snprintf( cmd, 64, "vibrate %f", newVibrate );
-	//	EngFuncs::ClientCmd( FALSE, cmd );
-		//vibration.WriteCvar();
-		//oldVibrate = newVibrate;
-	//}
-//}
 
 /*
 =================
@@ -104,12 +79,9 @@ void CMenuAudio::SaveAndPopMenu()
 {
 	soundVolume.WriteCvar();
 	musicVolume.WriteCvar();
-	suitVolume.WriteCvar();
-//	vibration.WriteCvar();
 	lerping.WriteCvar();
 	noDSP.WriteCvar();
 	muteFocusLost.WriteCvar();
-	//vibrationEnable.WriteCvar();
 	reverseChannels.WriteCvar();
 
 	CMenuFramework::SaveAndPopMenu();
@@ -139,11 +111,6 @@ void CMenuAudio::_Init( void )
 	musicVolume.onChanged = CMenuEditable::WriteCvarCb;
 	musicVolume.SetCoord( 320, 340 );
 
-	suitVolume.SetNameAndStatus(L("GameUI_HEVSuitVolume"), "Set suit volume level" );
-	suitVolume.Setup( 0.0, 1.0, 0.05f );
-	suitVolume.onChanged = CMenuEditable::WriteCvarCb;
-	suitVolume.SetCoord( 320, 400 );
-
 	static CStringArrayModel model( lerpingStr, ARRAYSIZE( lerpingStr ));
 	lerping.SetNameAndStatus(L("Disable DSP effects"), "Enable/disable interpolation on sound output" );
 	lerping.Setup( &model );
@@ -159,18 +126,6 @@ void CMenuAudio::_Init( void )
 	muteFocusLost.onChanged = CMenuEditable::WriteCvarCb;
 	muteFocusLost.SetCoord( 320, 570 );
 
-	//vibrationEnable.SetNameAndStatus( "Enable vibration", "In-game vibration(when player injured, etc)");
-	//vibrationEnable.iMask = (QMF_GRAYED|QMF_INACTIVE);
-	//vibrationEnable.bInvertMask = true;
-	//vibrationEnable.onChanged = CMenuCheckBox::BitMaskCb;
-	//vibrationEnable.onChanged.pExtra = &vibration.iFlags;
-	//vibrationEnable.SetCoord( 700, 470 );
-
-	//vibration.SetNameAndStatus( "Vibration", "Default vibration length" );
-	//vibration.Setup( 0.0f, 5.0f, 0.05f );
-	//vibration.onChanged = VoidCb( &CMenuAudio::VibrateChanged );
-	//vibration.SetCoord( 700, 570 );
-
 	reverseChannels.SetNameAndStatus( "Reverse audio channels", "Use it when you can't swap your headphones' speakers" );
 	reverseChannels.onChanged = CMenuEditable::WriteCvarCb;
 	reverseChannels.SetCoord( 320, 620 );
@@ -181,13 +136,9 @@ void CMenuAudio::_Init( void )
 		VoidCb( &CMenuAudio::SaveAndPopMenu ) );
 	AddItem( soundVolume );
 	AddItem( musicVolume );
-	AddItem( suitVolume );
 	AddItem( lerping );
 	AddItem( noDSP );
 	AddItem( muteFocusLost );
-	AddItem( reverseChannels );
-	//AddItem( vibrationEnable );
-	//AddItem( vibration );
 }
 
 void CMenuAudio::_VidInit( )
