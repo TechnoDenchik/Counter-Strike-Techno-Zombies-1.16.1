@@ -203,7 +203,7 @@ void CMenuMapListModel::Update( void )
 	char token[1024];
 	int numMaps = 1;
 
-	strcpy( mapName[0], L("GameUI_RandomMap"));
+	strcpy( mapName[0], L("CstzUI_GameRandom"));
 	mapsDescription[0][0] = 0;
 	
 	while(( pfile = EngFuncs::COM_ParseFile( pfile, token )) != NULL )

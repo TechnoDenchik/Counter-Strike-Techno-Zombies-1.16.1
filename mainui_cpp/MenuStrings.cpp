@@ -42,7 +42,7 @@ EMPTY_STRINGS_100, // 0..9
 EMPTY_STRINGS_20, // 100..119
 EMPTY_STRINGS_10, // 120..129
 EMPTY_STRINGS_2, // 130..131
-"Display mode", // 132
+L("CstzUI_Display"), // 132
 EMPTY_STRINGS_5, // 133..137
 EMPTY_STRINGS_2, // 138..139
 EMPTY_STRINGS_20, // 140..159
@@ -59,15 +59,15 @@ EMPTY_STRINGS_2, // 186..187
 EMPTY_STRINGS_1,	// 190
 "Load a previously saved game.", // 191
 "Load a saved game, save the current game.", // 192
-"Change game settings, configure controls", // 193
+L("CstzUI_Change"), // 193
 EMPTY_STRINGS_20, // 194..213
 EMPTY_STRINGS_20, // 214..233
 "Starting a Hazard Course will exit\nany current game, OK to exit?", // 234
 EMPTY_STRINGS_1, // 235
-"Are you sure you want to quit?", // 236
+
 EMPTY_STRINGS_2, // 237..238
 EMPTY_STRINGS_1, // 239
-"Starting a new game will exit\nany current game, OK to exit?",	// 240
+L("CstzUI_Startnewgame"),	// 240
 EMPTY_STRINGS_5, // 241..245
 EMPTY_STRINGS_2, // 246..247
 EMPTY_STRINGS_2, // 248..249
@@ -80,7 +80,7 @@ EMPTY_STRINGS_5, // 403..407
 EMPTY_STRINGS_2, // 408..409
 EMPTY_STRINGS_100, // 410..509
 EMPTY_STRINGS_20, // 510..529
-"Select a custom game",	// 530
+"https://discord.gg/U9sdYbZrRU",	// 530
 EMPTY_STRINGS_5, // 531..535
 EMPTY_STRINGS_2, // 536..537
 EMPTY_STRINGS_2, // 538..539

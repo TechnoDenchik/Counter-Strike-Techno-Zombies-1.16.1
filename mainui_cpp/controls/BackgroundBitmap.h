@@ -45,6 +45,7 @@ private:
 	// void DrawSplash( Point p, float xScale, float yScale );
 	void DrawColor();
 	void DrawInGameBackground();
+	void DrawGameBackground();
 
 	static bool LoadBackgroundImage( const bool gamedirOnly ); // Steam background loader
 	static bool CheckBackgroundSplash( const bool gamedirOnly ); // WON background loader

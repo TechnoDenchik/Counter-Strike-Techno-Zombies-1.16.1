@@ -38,7 +38,6 @@ public:
 	void SaveAndPopMenu() override;
 	void GammaUpdate();
 	void GammaGet();
-
 	int		outlineWidth;
 
 	class CMenuVidPreview : public CMenuBitmap
@@ -51,6 +50,8 @@ public:
 	CMenuSlider	screenSize;
 	CMenuSlider	gammaIntensity;
 	CMenuSlider	glareReduction;
+	CMenuSlider	anisatropic;
+	CMenuSlider	qualitygraphics;
 	CMenuCheckBox	fastSky;
 	CMenuCheckBox	hiTextures;
 	CMenuCheckBox   vbo;
@@ -90,6 +91,8 @@ void CMenuVidOptions::SaveAndPopMenu( void )
 	hiTextures.WriteCvar();
 	vbo.WriteCvar();
 	bump.WriteCvar();
+	anisatropic.WriteCvar();
+	qualitygraphics.WriteCvar();
 	// gamma is already written
 
 	CMenuFramework::SaveAndPopMenu();
@@ -150,7 +153,7 @@ void CMenuVidOptions::_Init( void )
 	banner.SetPicture(ART_BANNER);
 
 	testImage.iFlags = QMF_INACTIVE;
-	testImage.SetRect( 490, 225, 480, 450 );
+	testImage.SetRect( 590, 225, 480, 450 );
 	testImage.SetPicture( ART_GAMMA );
 
 	done.SetNameAndStatus( "Done", "Go back to the Video Menu" );
@@ -207,6 +210,18 @@ void CMenuVidOptions::_Init( void )
 	hiTextures.SetCoord( 72, 665 );
 	hiTextures.LinkCvar( "host_allow_materials" );
 
+	anisatropic.SetNameAndStatus(L("CstzUI_GLAnys"), L("CstzUI_GLAnys2"));
+	anisatropic.Setup(1.0, 16.0, 2.0);
+	anisatropic.onChanged = CMenuEditable::WriteCvarCb;
+	anisatropic.SetCoord(320, 280);
+	anisatropic.LinkCvar("gl_anisotropy");
+
+	qualitygraphics.SetNameAndStatus(L("CstzUI_GLGraph"), L("CstzUI_GLGraph2"));
+	qualitygraphics.Setup(0.1, 2.5, 0.1);
+	qualitygraphics.onChanged = CMenuEditable::WriteCvarCb;
+	qualitygraphics.SetCoord(320, 340);
+	qualitygraphics.LinkCvar("gl_texture_lodbias");
+
 	AddItem( background );
 	AddItem( banner );
 	AddItem( done );
@@ -218,6 +233,8 @@ void CMenuVidOptions::_Init( void )
 	AddItem( fastSky );
 	AddItem( hiTextures );
 	AddItem( testImage );
+	AddItem( anisatropic );
+	AddItem( qualitygraphics );
 }
 
 void CMenuVidOptions::_VidInit()

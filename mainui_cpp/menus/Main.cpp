@@ -34,6 +34,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define ART_CLOSEBTN_N	"gfx/shell/cls_n"
 #define ART_CLOSEBTN_F	"gfx/shell/cls_f"
 #define ART_CLOSEBTN_D	"gfx/shell/cls_d"
+#define ART_DISCORD		"gfx/shell/discord"
 
 class CMenuMain: public CMenuFramework
 {
@@ -59,6 +60,11 @@ private:
 		virtual void Draw();
 	} banner;
 
+	class CMenuVidPreview : public CMenuBitmap
+	{
+		void Draw() override;
+	} testImage;
+
 	CMenuPicButton	resumeGame;
 	CMenuPicButton	disconnect;
 	CMenuPicButton	credits;
@@ -66,15 +72,52 @@ private:
 	CMenuPicButton	configuration;
 	CMenuPicButton	multiPlayer;
 	CMenuPicButton	previews;
+	CMenuPicButton	discord;
+	CMenuPicButton	github;
 	CMenuPicButton	quit;
 
 	CMenuYesNoMessageBox dialog;
 
+	int		outlineWidth;
 	bool bTrainMap;
 	bool bCustomGame;
 };
 
 static CMenuMain uiMain;
+
+void CMenuMain::CMenuVidPreview::Draw()
+{
+	int		color = 0xFFFF0000; // 255, 0, 0, 255
+	int		viewport[4];
+	int		viewsize, size, sb_lines;
+
+	viewsize = EngFuncs::GetCvarFloat("viewsize");
+
+	if (viewsize >= 120)
+		sb_lines = 0;	// no status bar at all
+	else if (viewsize >= 110)
+		sb_lines = 24;	// no inventory
+	else sb_lines = 48;
+
+	size = Q_min(viewsize, 100);
+
+	viewport[2] = m_scSize.w * size / 100;
+	viewport[3] = m_scSize.h * size / 100;
+
+	if (viewport[3] > m_scSize.h - sb_lines)
+		viewport[3] = m_scSize.h - sb_lines;
+	if (viewport[3] > m_scSize.h)
+		viewport[3] = m_scSize.h;
+
+	viewport[2] &= ~7;
+	viewport[3] &= ~1;
+
+	viewport[0] = (m_scSize.w - viewport[2]) / 2;
+	viewport[1] = (m_scSize.h - sb_lines - viewport[3]) / 2;
+
+	UI_DrawPic(m_scPos.x + viewport[0], m_scPos.y + viewport[1], viewport[2], viewport[3], uiColorWhite, szPic);
+	UI_DrawRectangleExt(m_scPos, m_scSize, color, ((CMenuMain*)Parent())->outlineWidth);
+}
 
 void CMenuMain::CMenuMainBanner::Draw()
 {
@@ -103,7 +146,7 @@ void CMenuMain::QuitDialog(void *pExtra)
 	if( CL_IsActive() && EngFuncs::GetCvarFloat( "host_serverstate" ) && EngFuncs::GetCvarFloat( "maxplayers" ) == 1.0f )
 		dialog.SetMessage( MenuStrings[IDS_MAIN_QUITPROMPTINGAME] );
 	else
-		dialog.SetMessage( MenuStrings[IDS_MAIN_QUITPROMPT] );
+		dialog.SetMessage(L("CstzUI_Exit"));
 
 	dialog.onPositive.SetCommand( FALSE, "quit\n" );
 	dialog.Show();
@@ -119,7 +162,7 @@ void CMenuMain::DisconnectDialogCb()
 void CMenuMain::HazardCourseDialogCb()
 {
 	dialog.onPositive = VoidCb( &CMenuMain::HazardCourseCb );;
-	dialog.SetMessage( MenuStrings[IDS_TRAINING_EXITCURRENT] );
+	dialog.SetMessage( L("CstzUI_Hazard") );
 	dialog.Show();
 }
 
@@ -212,6 +255,10 @@ void CMenuMain::_Init( void )
 		EngFuncs::KEY_SetDest( KEY_CONSOLE );
 	});
 
+	testImage.iFlags = QMF_INACTIVE;
+	testImage.SetRect(490, 225, 480, 450);
+	testImage.SetPicture(ART_DISCORD);
+
 	resumeGame.SetNameAndStatus(L("GameUI_GameMenu_ResumeGame"), 0);
 	resumeGame.SetPicture( PC_RESUME_GAME );
 	resumeGame.iFlags |= QMF_NOTIFY;
@@ -247,6 +294,13 @@ void CMenuMain::_Init( void )
 	previews.iFlags |= QMF_NOTIFY;
 	SET_EVENT( previews.onActivated, EngFuncs::ShellExecute( MenuStrings[IDS_MEDIA_PREVIEWURL], NULL, false ) );
 
+
+	discord.SetNameAndStatus(0, L("CstzUI_Discord"));
+	discord.SetPicture(ART_DISCORD);
+	discord.iFlags |= QMF_MOUSEONLY;
+	discord.eFocusAnimation = QM_HIGHLIGHTIFFOCUS;
+	SET_EVENT(discord.onActivated, EngFuncs::ShellExecute("https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.1", NULL, false));
+
 	quit.SetNameAndStatus(L("GameUI_GameMenu_Quit"), 0);
 	quit.SetPicture( PC_QUIT );
 	quit.iFlags |= QMF_NOTIFY;
@@ -274,6 +328,7 @@ void CMenuMain::_Init( void )
 		AddItem( console );
 
 	AddItem( disconnect );
+	AddItem( discord );
 	AddItem( resumeGame );
 	//AddItem( credits );
 
@@ -306,12 +361,19 @@ void CMenuMain::_VidInit( void )
 	multiPlayer.SetCoord( 32, 600 );
 
 	previews.SetCoord( 32,  640);
+	discord.SetRect(uiStatic.width - 102, 220, 32, 32);
 
 	// too short execute string - not a real command
-	if( strlen( MenuStrings[IDS_MEDIA_PREVIEWURL] ) <= 3 )
+	if( strlen("https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.0") <= 3 )
 		previews.SetGrayed( true );
 
+	if (strlen("https://discord.gg/U9sdYbZrRU") <= 3)
+		discord.SetGrayed(true);
+
 	quit.SetCoord( 32, 680 );
+
+	outlineWidth = 2;
+	UI_ScaleCoords(NULL, NULL, &outlineWidth, NULL);
 
 	//minimizeBtn.SetRect( uiStatic.width - 72, 13, 32, 32 );
 
@@ -331,7 +393,7 @@ void UI_Main_Precache( void )
 	EngFuncs::PIC_Load( ART_CLOSEBTN_N );
 	EngFuncs::PIC_Load( ART_CLOSEBTN_F );
 	EngFuncs::PIC_Load( ART_CLOSEBTN_D );
-
+	EngFuncs::PIC_Load(ART_DISCORD);
 	// precache .avi file and get logo width and height
 	EngFuncs::PrecacheLogo( "technocorp.avi" );
 }

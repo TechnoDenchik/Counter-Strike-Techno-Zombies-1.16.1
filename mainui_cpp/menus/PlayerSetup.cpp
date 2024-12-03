@@ -125,7 +125,9 @@ public:
 	CMenuSpinControl	crosshairSize;
 	CMenuSpinControl	crosshairColor;
 	CMenuSpinControl	crosshairType;
+	CMenuSpinControl	playerinfo;
 	CMenuCheckBox	crosshairTranslucent;
+	CMenuCheckBox	uirenderworld;
 
 	CMenuYesNoMessageBox msgBox;
 
@@ -239,6 +241,7 @@ void CMenuPlayerSetup::CMenuCrosshairPreview::Draw()
 		b = g_iCrosshairAvailColors[(int)uiPlayerSetup.crosshairColor.GetCurrentValue()+1][2];
 
 	bool additive = uiPlayerSetup.crosshairTranslucent.bChecked;
+	bool additive2 = uiPlayerSetup.uirenderworld.bChecked;
 
 	if (bDrawCircle)
 	{
@@ -246,6 +249,18 @@ void CMenuPlayerSetup::CMenuCrosshairPreview::Draw()
 		int count = radius * 6;
 
 		if (additive)
+		{
+			EngFuncs::PIC_Set(hWhite, r, g, b, a);
+			for (int i = 0; i < count; i++)
+				EngFuncs::PIC_DrawTrans(x + w / 2 + radius * cos(2 * M_PI / count * i), y + h / 2 + radius * sin(2 * M_PI / count * i), 1, 1);
+		}
+		else
+		{
+			EngFuncs::PIC_Set(hWhite, r, g, b, a);
+			for (int i = 0; i < count; i++)
+				EngFuncs::PIC_DrawAdditive(x + w / 2 + radius * cos(2 * M_PI / count * i), y + h / 2 + radius * sin(2 * M_PI / count * i), 1, 1);
+		}
+		if (additive2)
 		{
 			EngFuncs::PIC_Set(hWhite, r, g, b, a);
 			for (int i = 0; i < count; i++)
@@ -271,11 +286,53 @@ void CMenuPlayerSetup::CMenuCrosshairPreview::Draw()
 			EngFuncs::PIC_Set(hWhite, r, g, b, a);
 			EngFuncs::PIC_DrawAdditive(x + w / 2 - 1, y + h / 2 - 1, 3, 3);
 		}
+		if (additive2)
+		{
+			EngFuncs::PIC_Set(hWhite, r, g, b, a);
+			EngFuncs::PIC_DrawTrans(x + w / 2 - 1, y + h / 2 - 1, 3, 3);
+		}
+		else
+		{
+			EngFuncs::PIC_Set(hWhite, r, g, b, a);
+			EngFuncs::PIC_DrawAdditive(x + w / 2 - 1, y + h / 2 - 1, 3, 3);
+		}
 	}
 
 	if (bDrawCross)
 	{
 		if (additive)
+		{
+			// verical
+			EngFuncs::PIC_Set(hWhite, r, g, b, a);
+			EngFuncs::PIC_DrawTrans(x + w / 2, y + d, 1, l);
+
+			EngFuncs::PIC_Set(hWhite, r, g, b, a);
+			EngFuncs::PIC_DrawTrans(x + w / 2, y + h / 2 + d, 1, l);
+
+			// horizontal
+			EngFuncs::PIC_Set(hWhite, r, g, b, a);
+			EngFuncs::PIC_DrawTrans(x + d, y + h / 2, l, 1);
+
+			EngFuncs::PIC_Set(hWhite, r, g, b, a);
+			EngFuncs::PIC_DrawTrans(x + w / 2 + d, y + h / 2, l, 1);
+		}
+		else
+		{
+			// verical
+			EngFuncs::PIC_Set(hWhite, r, g, b, a);
+			EngFuncs::PIC_DrawAdditive(x + w / 2, y + d, 1, l);
+
+			EngFuncs::PIC_Set(hWhite, r, g, b, a);
+			EngFuncs::PIC_DrawAdditive(x + w / 2, y + h / 2 + d, 1, l);
+
+			// horizontal
+			EngFuncs::PIC_Set(hWhite, r, g, b, a);
+			EngFuncs::PIC_DrawAdditive(x + d, y + h / 2, l, 1);
+
+			EngFuncs::PIC_Set(hWhite, r, g, b, a);
+			EngFuncs::PIC_DrawAdditive(x + w / 2 + d, y + h / 2, l, 1);
+		}
+		if (additive2)
 		{
 			// verical
 			EngFuncs::PIC_Set(hWhite, r, g, b, a);
@@ -367,6 +424,9 @@ void CMenuPlayerSetup::SetConfig( void )
 	crosshairSize.WriteCvar();
 	crosshairType.WriteCvar();
 	crosshairTranslucent.WriteCvar();
+	uirenderworld.WriteCvar();
+	playerinfo.WriteCvar();
+
 	//WriteNewLogo();
 }
 
@@ -453,6 +513,11 @@ void CMenuPlayerSetup::_Init( void )
 	bool hideLogos = false;
 	int addFlags = 0;
 
+	static const char* playerinfor[] =
+	{
+		L("CstzUI_PlayerInfOff"), L("CstzUI_PlayerInfText"), L("CstzUI_PlayerInfTga")
+	};
+
 	// disable playermodel preview for HLRally to prevent crash
 	if( !stricmp( gMenu.m_gameinfo.gamefolder, "hlrally" ))
 		hideModels = true;
@@ -497,8 +562,20 @@ void CMenuPlayerSetup::_Init( void )
 	crosshairTranslucent.SetNameAndStatus(L("CstzUI_Translucent"), L("CstzUI_Translucent"));
 	crosshairTranslucent.LinkCvar( "cl_crosshair_translucent" );
 
+	uirenderworld.SetCoord(320, 580);
+	uirenderworld.SetNameAndStatus(L("CstzUI_uirender"), L("CstzUI_uirender2"));
+	uirenderworld.LinkCvar("ui_renderworld");
+
 	msgBox.SetMessage(L("CstzUI_SetMessage"));
 	msgBox.Link( this );
+
+	static CStringArrayModel model(playerinfor, ARRAYSIZE(playerinfor));
+	playerinfo.SetNameAndStatus(L("CstzUI_PlayerInfo"), L("CstzUI_PlayerInfo2"));
+	playerinfo.Setup(&model);
+	playerinfo.onChanged = CMenuEditable::WriteCvarCb;
+	playerinfo.font = QM_SMALLFONT;
+	playerinfo.LinkCvar("cl_headname", CMenuEditable::CVAR_VALUE);
+	playerinfo.SetRect(780, 345, 256, 26);
 
 	AddItem( background );
 	AddItem( banner );
@@ -540,7 +617,8 @@ void CMenuPlayerSetup::_Init( void )
 	AddItem( crosshairType );
 	AddItem( crosshairTranslucent );
 	AddItem( crosshairView );
-
+	AddItem( uirenderworld );
+	AddItem( playerinfo );
 
 	if( !hideLogos )
 	{

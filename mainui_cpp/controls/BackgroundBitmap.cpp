@@ -57,6 +57,12 @@ void CMenuBackgroundBitmap::VidInit()
 void CMenuBackgroundBitmap::DrawInGameBackground()
 {
 	UI_FillRect( m_scPos, m_scSize, uiColorBlack );
+	EngFuncs::ClientCmd(1, "thirdperson");
+}
+
+void CMenuBackgroundBitmap::DrawGameBackground()
+{
+	EngFuncs::ClientCmd(1, "firstperson");
 }
 
 void CMenuBackgroundBitmap::DrawColor()
@@ -142,19 +148,20 @@ void CMenuBackgroundBitmap::Draw()
 		return;
 	}
 
-	if( EngFuncs::ClientInGame() )
+	if (EngFuncs::ClientInGame())
 	{
-		if( EngFuncs::GetCvarFloat( "cl_background" ) )
+		if (EngFuncs::GetCvarFloat("cl_background"))
 		{
 			return;
 		}
 
-		if( EngFuncs::GetCvarFloat( "ui_renderworld" ) )
+		if (EngFuncs::GetCvarFloat("ui_renderworld"))
 		{
 			DrawInGameBackground();
 			return;
 		}
 	}
+	
 
 	if( s_iBackgroundCount == 0 )
 	{
@@ -297,7 +304,7 @@ bool CMenuBackgroundBitmap::CheckBackgroundSplash( bool gamedirOnly )
 		if( gamedirOnly )
 		{
 			// if we doesn't have logo.avi in gamedir we don't want to draw it
-			s_bEnableLogoMovie = EngFuncs::FileExists( "media/logo.avi", TRUE );
+			s_bEnableLogoMovie = EngFuncs::FileExists( "media/valve.avi", TRUE );
 		}
 
 		return true;

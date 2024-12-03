@@ -544,7 +544,7 @@ GNU General Public License for more details.
 #define IDS_MOD_REMOTEOPENFAIL          527
 #define IDS_MOD_LOCALOPENFAIL           528
 #define IDS_BTN_CUSTOMGAME              529
-#define IDS_MAIN_CUSTOMHELP             530
+#define IDS_MAIN_DISCORD				530
 #define IDS_BTN_ACTIVATE                531
 #define IDS_BTN_INSTALL                 532
 #define IDS_BTN_DETAILS                 533

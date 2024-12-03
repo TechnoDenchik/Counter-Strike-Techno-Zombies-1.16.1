@@ -607,7 +607,11 @@ void UI_CloseMenu( void )
 {
 	uiStatic.menu.Close();
 	CMenuPicButton::ClearButtonStack();
-
+	if(EngFuncs::GetCvarFloat("ui_renderworld"))
+	{
+		EngFuncs::ClientCmd(1, "firstperson");
+	}
+	
 //	EngFuncs::KEY_ClearStates ();
 	if( !uiStatic.client.IsActive() )
 		EngFuncs::KEY_SetDest( KEY_GAME );
