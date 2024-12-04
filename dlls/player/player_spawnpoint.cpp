@@ -52,6 +52,7 @@ edict_t *EntSelectSpawnPoint(CBaseEntity *pPlayer)
 
 		if (!FNullEnt(pSpot))
 			goto ReturnSpot;
+
 	}
 	// VIP spawn point
 	else if (g_pGameRules->IsDeathmatch() && ((CBasePlayer *)pPlayer)->m_bIsVIP)
