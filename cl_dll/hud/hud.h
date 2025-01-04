@@ -206,7 +206,13 @@ public:
 
 	bool FHasSecondaryAmmo() { return m_pWeapon && m_pWeapon->iAmmo2Type > 0; }
 
+	void renaining(int iCountDown)
+	{
+		m_iClip_c = iCountDown;
+	}
+
 public:
+	int m_iClip_c;
 
 	SharedTexture ammoclips;
 	SharedTexture ammofloat;

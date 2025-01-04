@@ -176,7 +176,9 @@ void CPlayerModStrategy_Default::GiveDefaultItems()
 	case CT:
 
 		m_pPlayer->GiveNamedItem("weapon_twinaxes");
-		m_pPlayer->GiveNamedItem("weapon_gungnir");
+		m_pPlayer->GiveNamedItem("weapon_arbalest");
+		//m_pPlayer->GiveNamedItem("weapon_quantum");
+		//m_pPlayer->GiveNamedItem("weapon_ak47");
 		
 		//	m_pPlayer->GiveAmmo(m_pPlayer->m_bIsVIP ? 12 : 24, "45acp", MAX_AMMO_45ACP);
 

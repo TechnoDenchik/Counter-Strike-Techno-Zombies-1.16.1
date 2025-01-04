@@ -14,6 +14,7 @@ public:
 public:
 	CHudMsgFunc(HudTwinAxesMsg);
 	CHudMsgFunc(HudQuantumMsg);
+	CHudMsgFunc(ArbalestMsg);
 
 public:
 	class CWeaponInt_impl_t *pimpl = nullptr;

@@ -1,15 +1,20 @@
-/* =================================================================================== *
-	  * =================== TechnoSoftware & Valve Developing =================== *
- * =================================================================================== */
-
-
 #include "hud.h"
 #include "followicon.h"
 #include "cl_util.h"
 #include "draw_util.h"
 #include "triangleapi.h"
-#include "TextSet.h"
+#include "Arbalest.h"
 
+#include "parsemsg.h"
+#include "r_efx.h"
+#include "event_api.h"
+#include "com_model.h"
+#include "calcscreen.h"
+#include "util_vector.h"
+
+#include "cl_entity.h"
+
+#include <string.h>
 #include "string.h"
 #include "assert.h"
 #include <numeric>
@@ -92,115 +97,58 @@ inline int DrawTexturedNumbersTopCenterAligned(const CTextureRef& tex, const wre
 	return DrawTexturedNumbersTopRightAligned(tex, rect, iNumber, x, y, scale);
 }
 
-int CHudTextZB3::VidInit(void)
+int CHudArbalest::VidInit(void)
 {
-	if (!stringtext)
-		stringtext = R_LoadTextureShared("resource/hud/zb3/hud_string_bg", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
+	R_InitTexture(stringtext, "resource/hud/zb3/hud_sb_num_big_white");
+	BuildNumberRC(m_rcAmmoclip, 18, 22);
 	return 1;
 }
 
-int CHudTextZB3::Draw(float time)
+int CHudArbalest::Draw(float time)
 {
 	if (!m_pCurTexture)
 		return 1;
 
-	if (time > m_flDisplayTime + 2.0f)
-	{
-		m_pCurTexture = nullptr;
+	if ((gHUD.m_iHideHUDDisplay & HIDEHUD_HEALTH))
 		return 1;
-	}
+
+	if (!(gHUD.m_iWeaponBits & (1 << (WEAPON_SUIT))))
+		return 1;
+
+	if ((gHUD.m_iHideHUDDisplay & (HIDEHUD_WEAPONS | HIDEHUD_ALL)))
+		return 1;
 
 	int x = ScreenWidth / 1.995;
 	int y = ScreenHeight / 1.4;
 	int y2 = ScreenHeight / 1.4;
 
+	int x3 = ScreenWidth / 1.1;
+	int y3 = ScreenHeight / 1.0820;
+
+	int ammos = gHUD.m_Ammo.m_pWeapon->iClip;
+
 	const float flScale = 0.0f;
-	const int r = 153, g = 97, b = 7;
+	//120, 219, 226
+	const int r = 120, g = 219, b = 226;
 
 	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
-	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255 - std::min(5.0f - (time - m_flDisplayTime), 1.0f));
-
+	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
+	gEngfuncs.pTriAPI->Color4ub(r, g, b, 255);
 	m_pCurTexture->Bind();
-	DrawUtils::Draw2DQuadScaled(x - 600 / 2, y - 38, x + 600 / 2, y - 8);
+
 
 	char szbuffer[64];
-
-	if (times >= 5)
-	{
-		sprintf(szbuffer, "Навык снова можно будет использовать через: %d секунд", times);
+	sprintf(szbuffer, "%d", times);
+	if(times > 0)
+	{ 
+		DrawTexturedNumbersTopRightAligned(*stringtext, m_rcAmmoclip, times, x3 - 75, y3 + 45, 1.0f);
 	}
-	else if (times == 4)
-	{
-		sprintf(szbuffer, "Навык снова можно будет использовать через: %d секунды", times);
-	}
-	else if (times == 3)
-	{
-		sprintf(szbuffer, "Навык снова можно будет использовать через: %d секунды", times);
-	}
-	else if (times == 2)
-	{
-		sprintf(szbuffer, "Навык снова можно будет использовать через: %d секунды", times);
-	}
-	else if (times == 1)
-	{
-		sprintf(szbuffer, "Навык снова можно будет использовать через: %d секунда", times);
-	}
-	else
-	{
-		sprintf(szbuffer, "Навык снова можно будет использовать через: %d секунд", times);
-	}
-
-	DrawUtils::DrawHudString(x - 190, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
-	
-	return 1;
-}
-
-void CHudTextZB3::Settext()
-{
-	m_pCurTexture = stringtext;
-	m_flDisplayTime = gHUD.m_flTime;
-}
-
-int CHudText2ZB3::VidInit(void)
-{
-	if (!stringtext)
-		stringtext = R_LoadTextureShared("resource/hud/zb3/hud_string_bg", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	return 1;
-}
-
-int CHudText2ZB3::Draw(float time)
-{
-	if (!m_pCurTexture)
-		return 1;
-
-	if (time > m_flDisplayTime + 3.00f)
-	{
-		m_pCurTexture = nullptr;
-		return 1;
-	}
-
-	int x = ScreenWidth / 1.995;
-	int y = ScreenHeight / 1.4;
-	int y2 = ScreenHeight / 1.4;
-
-	const float flScale = 0.0f;
-	const int r = 153, g = 97, b = 7;
-
-	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
-	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255 * std::min(5.0f - (time - m_flDisplayTime), 1.0f));
-
-	stringtext->Bind();
-	DrawUtils::Draw2DQuadScaled(x - 600 / 2, y - 38, x + 600 / 2, y - 8);
-
-	char szbuffer[64];
-	sprintf(szbuffer, "Навык снова можно будет использовать в следующем раунде");
-
-	DrawUtils::DrawHudString(x - 210, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+	//	DrawUtils::DrawHudString(x - 190, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
 
 	return 1;
 }
 
-void CHudText2ZB3::Settext()
+void CHudArbalest::Settext()
 {
 	m_pCurTexture = stringtext;
 	m_flDisplayTime = gHUD.m_flTime;

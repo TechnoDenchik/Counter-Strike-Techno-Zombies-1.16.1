@@ -55,8 +55,9 @@
 // Hostage
 #include "hostage/hostage.h"
 #include "hostage/hostage_localnav.h"
-
+#include "gamemode/interface/interface_const.h"
 #include "bot/cs_bot.h"
+#include "wpn_shared/wpn_arbalest.h"
 
 // Tutor
 #include "tutor.h"
@@ -3683,6 +3684,20 @@ void EXT_FUNC ClientCommand(edict_t *pEntity)
 				{
 					// ...
 				}
+
+				if (player->m_pActiveItem != NULL && player->m_pActiveItem->m_iId == WEAPON_AUG)
+				{
+					player->DropPlayerItem("weapon_arbalest");
+
+					
+				#ifndef CLIENT_DLL
+					MESSAGE_BEGIN(MSG_ONE, gmsgArbalestMsg, NULL, player->pev);
+					WRITE_BYTE(WPN_ARBALEST);
+					WRITE_BYTE(0); 
+					MESSAGE_END();
+				#endif
+				}
+
 #ifdef ENABLE_SHIELD
 				else if (player->HasShield())
 				{

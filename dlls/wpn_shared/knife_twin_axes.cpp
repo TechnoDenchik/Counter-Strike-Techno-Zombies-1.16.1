@@ -105,15 +105,15 @@ int CSTwinShadowAxes::GetItemInfo(ItemInfo* p)
 	p->pszAmmo1 = "TwinAmmo";
 	p->iMaxAmmo1 = MAX_TWINAXES;
 	p->pszAmmo2 = NULL;
-	p->iMaxAmmo2 = NULL;
+	p->iMaxAmmo2 = -1;
 	p->iMaxClip = TWINSHADOWAXES;
-	p->iSlot = 2;
-	p->iPosition = 2;
+	p->iSlot = 3;
+	p->iPosition = 1;
 	p->iId = WEAPON_KNIFE;
 	p->iFlags = 0;
 	p->iWeight = TWINAXES_WEIGHT;
-	//p->iFlags = ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;
-	
+	p->iFlags = ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;
+
 	return 1;
 }
 
@@ -139,7 +139,12 @@ BOOL CSTwinShadowAxes::Deploy(void)
 		return DefaultDeploy("models/v_dgaxe_2.mdl", "models/p_dgaxe_a.mdl", ANIM_DRAW, "knife", UseDecrement() != FALSE);
 	else
 		return DefaultDeploy("models/v_dgaxe.mdl", "models/p_dgaxe_a.mdl", ANIM_DRAW, "knife", UseDecrement() != FALSE);
-	
+#ifndef CLIENT_DLL
+	MESSAGE_BEGIN(MSG_ONE, gmsgArbalestMsg, NULL);
+	WRITE_BYTE(WPN_ARBALEST);
+	WRITE_BYTE(0);
+	MESSAGE_END();
+#endif
 }
 
 void CSTwinShadowAxes::Holster(int skiplocal)
@@ -543,6 +548,27 @@ void CSTwinShadowAxes::GetSummon()
 void CSTwinShadowAxes::FlyingTouch(CBaseEntity* pOther)
 {
 	
+}
+
+void CSTwinShadowAxes::ItemPostFrame()
+{
+	if (gpGlobals->time - tWorldTime2 < 99.0f)
+	{
+		tDelta2 += gpGlobals->time - tWorldTime2;
+	}
+	if (tNextAttack2 > 0.3f || (gpGlobals->time - tWorldTime2 > 0.3f) || tDelta2 > 0.3f)	//可以多射一次
+	{
+		tNextAttack2 = 0.0f;
+		tDelta2 = 0.0f;
+		m_pPlayer->GiveAmmo(1, "TwinAmmo", ARBALEST_MAX_CLIP);
+		if (m_iClip < 100)
+		{
+			m_iClip = std::max(m_iClip + 1, 0);
+		}
+		
+	}
+	tWorldTime2 = gpGlobals->time;
+	return CBasePlayerWeapon::ItemPostFrame();
 }
 
 int CSTwinShadowAxes::Stab(int fFirst)

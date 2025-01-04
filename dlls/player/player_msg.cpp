@@ -131,7 +131,7 @@ int gmsgOriginalMsg12 = 0;
 int gmsgOriginalMsg13 = 0;
 int gmsgTwinAxesMsg = 0;
 int gmsgQuantumMsg = 0;
-
+int gmsgArbalestMsg = 0;
 int gmsgZB3UsedMsg = 0;
 int gmsgZB3UsedMsg2 = 0;
 int gmsgZSHMsg = 0;
@@ -260,6 +260,7 @@ void LinkUserMessages()
 	gmsgOriginalMsg13 = REG_USER_MSG("AK47", -1);
 	gmsgTwinAxesMsg = REG_USER_MSG("HudTwinAxesMsg", -1);
 	gmsgQuantumMsg = REG_USER_MSG("HudQuantumMsg", -1);
+	gmsgArbalestMsg = REG_USER_MSG("ArbalestMsg", -1);
 
 	gmsgZB3UsedMsg = REG_USER_MSG("ZB3SkillUsed", -1);
 	gmsgZB3UsedMsg2 = REG_USER_MSG("ZB3SkillUsed2", -1);

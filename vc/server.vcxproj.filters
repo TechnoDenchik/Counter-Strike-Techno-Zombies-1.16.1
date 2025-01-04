@@ -143,6 +143,9 @@
     <Filter Include="dlls\physic">
       <UniqueIdentifier>{34761316-1bc0-4d36-846e-2ae658c998b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="dlls\player\weapons_const">
+      <UniqueIdentifier>{3ccd81f9-51b5-4e8a-a780-1f96bd78c759}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\dlls\h_export.cpp">
@@ -978,6 +981,12 @@
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_sbmine.cpp">
       <Filter>dlls\wpn_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_arbalest.cpp">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\player\weapons_const\arbalest_const.cpp">
+      <Filter>dlls\player\weapons_const</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1878,6 +1887,12 @@
     </ClInclude>
     <ClInclude Include="..\dlls\wpn_shared\wpn_sbmine.h">
       <Filter>dlls\wpn_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_arbalest.h">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\player\weapons_const\arbalest_const.h">
+      <Filter>dlls\player\weapons_const</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

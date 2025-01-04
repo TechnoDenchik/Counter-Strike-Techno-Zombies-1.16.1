@@ -37,6 +37,7 @@ public:
 	void night();
 	void PlayerSpawn(CBasePlayer* pPlayer) override;
 	void Think() override;
+	void ResetTime();
 	void RestartRound() override;
 	void CheckRoundTimeExpired();
 	void CheckFreezePeriodExpired();
@@ -45,10 +46,11 @@ public:
 	BOOL NightRound();
 	BOOL DayRound();
 	void DaySound();
+
 	void NightSound();
 	void Thinks();
 	void Thinks2();
-	
+	virtual void RoundEndScore(int iWinStatus);
 	bool HasRoundTimeExpired();
 	void InstallPlayerModStrategy(CBasePlayer* player) override;
 	BOOL ClientConnected(edict_t* pEntity, const char* pszName, const char* pszAddress, char* szRejectReason) override;
@@ -70,15 +72,21 @@ public:
 	BOOL FInfectionStarted();
 public:
 
-
-
+	int daytimes;
+	int nighttimes;
+	bool daytimer;
+	bool nighttimer;
 	float m_flNextSpawnNPC;
 	float m_flNextDay;
 	float m_flNextDay2;
 	float m_flNextDay3;
 	float m_flNextDay4;
 	std::vector<CResSpawn*> m_vecZombieSpawns;
-	
+
+	duration_t tNextAttack5;
+	time_point_t tWorldTime5;
+	duration_t tDelta5;
+
 	EventDispatcher<void(CBasePlayer* attacker, float&)> m_eventAdjustDamage;
 	EventDispatcher<void(CBasePlayer* attacker2, float&)> m_eventAdjustDamage2;
 	EventDispatcher<void(CWood* victim, CBaseEntity* attacker)> m_eventWoodKilled;

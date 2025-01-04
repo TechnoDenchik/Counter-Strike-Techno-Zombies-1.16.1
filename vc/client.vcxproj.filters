@@ -1128,6 +1128,15 @@
     <ClCompile Include="..\dlls\wpn_shared\wpn_sbmine.cpp">
       <Filter>dlls\wpn_shared</Filter>
     </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_arbalest.cpp">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_arbalest.cpp">
+      <Filter>cl_dll\events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\weapons\epic\Arbalest.cpp">
+      <Filter>cl_dll\hud\weapons\epic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\dlls\wpn_shared\wpn_m249.h">
@@ -1717,6 +1726,12 @@
     </ClInclude>
     <ClInclude Include="..\dlls\wpn_shared\wpn_sbmine.h">
       <Filter>dlls\wpn_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_arbalest.h">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\weapons\epic\Arbalest.h">
+      <Filter>cl_dll\hud\weapons\epic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -313,6 +313,12 @@ void CMod_ZombieShelter_coop::UpdateGameMode(CBasePlayer* pPlayer)
 	MESSAGE_END();
 }
 
+void CMod_ZombieShelter_coop::ResetTime()
+{
+	daytimes = 20;
+	nighttimes = 120;
+}
+
 BOOL CMod_ZombieShelter_coop::ClientConnected(edict_t* pEntity, const char* pszName, const char* pszAddress, char* szRejectReason)
 {
 	return 1;
@@ -331,7 +337,8 @@ void CMod_ZombieShelter_coop::WaitingSound()
 		if (!entity)
 			continue;
 		CLIENT_COMMAND(entity->edict(), "spk sound/zsh/BGM_start.wav\n");
-
+		ResetTime();
+		daytimer = true;
 	}
 }
 
@@ -342,8 +349,7 @@ void CMod_ZombieShelter_coop::DaySound()
 		CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
 		if (!entity)
 			continue;
-		CLIENT_COMMAND(entity->edict(), "spk zsh/skill_bonus.wav\n");
-
+		CLIENT_COMMAND(entity->edict(), "spk zsh/skill_bonus.wav\n");	
 	}
 }
 
@@ -361,14 +367,14 @@ void CMod_ZombieShelter_coop::NightSound()
 
 void CMod_ZombieShelter_coop::Thinks()
 {
-	dayses2 = TRUE;
-	nights2 = FALSE;
+	//dayses2 = TRUE;
+	//nights2 = FALSE;
 }
 
 void CMod_ZombieShelter_coop::Thinks2()
 {
-	nights2 = TRUE;
-	dayses2 = FALSE;
+	//nights2 = TRUE;
+	//dayses2 = FALSE;
 }
 
 void CMod_ZombieShelter_coop::Think()
@@ -379,11 +385,98 @@ void CMod_ZombieShelter_coop::Think()
 	
 	if (CheckTimeLimit())
 			return;
-	day();
-	night();
 	TeamCheck();
 	CheckLevelInitialized();
 	CheckRoundTimeExpired();
+
+
+	if (gpGlobals->time - tWorldTime5 < 99.0f)
+	{
+		tDelta5 += gpGlobals->time - tWorldTime5;
+	}
+	if (tNextAttack5 > 1.0f || (gpGlobals->time - tWorldTime5 > 1.0f) || tDelta5 > 1.0f)	//可以多射一次
+	{
+		tNextAttack5 = 0.0f;
+		tDelta5 = 0.0f;
+		
+
+		if (daytimes > 2)
+		{
+			nighttimer = false;
+			daytimer = true;
+		}
+		else
+		{
+			daytimer = false;
+			nighttimer = true;
+		}
+
+		if (daytimer == true)
+		{
+			daytimes--;
+			if (daytimes > 19)
+			{
+				DaySound();
+			}
+			if (daytimes > 3)
+			{
+				#ifndef CLIENT_DLL
+				MESSAGE_BEGIN(MSG_ALL, gmsgZSHUpdateDay, NULL );
+				WRITE_BYTE(0);
+				WRITE_BYTE(daytimes);
+				MESSAGE_END();
+				#endif
+				//nighttimer = false;
+			}
+
+		
+			
+			if (daytimes < 2)
+			{
+				//nighttimer = true;
+				//daytimer = false;
+			}
+		}
+		if (nighttimer == true)
+		{
+			nighttimes--;
+			if (daytimer == false)
+			{
+				if (nighttimes > 118)
+				{
+					NightSound();
+				}
+				if (nighttimes < 57)
+				{
+					for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
+					{
+						CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
+						if (!entity)
+							continue;
+						CLIENT_COMMAND(entity->edict(), "mp3 stop\n");
+
+					}
+				}
+		#ifndef CLIENT_DLL
+				MESSAGE_BEGIN(MSG_ALL, gmsgZSHUpdateDay, NULL);
+				WRITE_BYTE(0);
+				WRITE_BYTE(nighttimes);
+				MESSAGE_END();
+		#endif
+				if (nighttimes == 1)
+				{
+					ResetTime();
+					daytimer = true;
+					nighttimer = false;
+
+				}
+
+			}
+		}
+
+	}
+	tWorldTime5 = gpGlobals->time;
+
 
 	if (!DayTime)
 	{
@@ -520,7 +613,8 @@ void CMod_ZombieShelter_coop::Think()
 
 		player->RoundRespawn();
 	}
-	
+	if (TimeRemaining() <= 0 && !m_bRoundTerminating)
+		NightRound();
 	
 	
 }
@@ -740,8 +834,6 @@ void CMod_ZombieShelter_coop::day()
 
 void CMod_ZombieShelter_coop::night()
 {
-	if (NightRound() && FRoundStarted())
-	{
 		Thinks2();
 		NightSound();
 		int sun3 = 60.0f;
@@ -762,7 +854,11 @@ void CMod_ZombieShelter_coop::night()
 				}
 			}
 		}
-	}
+		TerminateRound(5, WINSTATUS_CTS);
+		RoundEndScore(WINSTATUS_CTS);
+
+		++m_iNumCTWins;
+		UpdateTeamScores();
 	
 }
 
@@ -774,6 +870,46 @@ BOOL CMod_ZombieShelter_coop::DayRound()
 BOOL CMod_ZombieShelter_coop::NightRound()
 {
 	return IsNightRound();
+}
+
+void CMod_ZombieShelter_coop::RoundEndScore(int iWinStatus)
+{
+	for (CBasePlayer* player : moe::range::PlayersList())
+	{
+		if (player->m_iTeam == TEAM_UNASSIGNED || player->m_iTeam == TEAM_SPECTATOR)
+			continue;
+
+		if (iWinStatus == WINSTATUS_CTS)
+		{
+			if (player->IsAlive() && !player->m_bIsZombie)
+			{
+				player->pev->frags += 3;
+
+				MESSAGE_BEGIN(MSG_BROADCAST, gmsgScoreInfo);
+				WRITE_BYTE(ENTINDEX(player->edict()));
+				WRITE_SHORT((int)player->pev->frags);
+				WRITE_SHORT(player->m_iDeaths);
+				WRITE_SHORT(0);
+				WRITE_SHORT(player->m_iTeam);
+				MESSAGE_END();
+			}
+		}
+		else if (iWinStatus == WINSTATUS_TERRORISTS)
+		{
+			if (player->m_bIsZombie)
+			{
+				player->pev->frags += 1;
+
+				MESSAGE_BEGIN(MSG_BROADCAST, gmsgScoreInfo);
+				WRITE_BYTE(ENTINDEX(player->edict()));
+				WRITE_SHORT((int)player->pev->frags);
+				WRITE_SHORT(player->m_iDeaths);
+				WRITE_SHORT(0);
+				WRITE_SHORT(player->m_iTeam);
+				MESSAGE_END();
+			}
+		}
+	}
 }
 
 void CMod_ZombieShelter_coop::TeamCheck()

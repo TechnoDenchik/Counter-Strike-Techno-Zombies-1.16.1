@@ -763,6 +763,13 @@ void CHalfLifeMultiplay::CleanUpMap()
 		torestart = UTIL_FindEntityByClassname(torestart, "env_sprite");
 	}
 
+	torestart = UTIL_FindEntityByClassname(NULL, "env_sky");
+	while (torestart != NULL)
+	{
+		torestart->Restart();
+		torestart = UTIL_FindEntityByClassname(torestart, "env_sky");
+	}
+
 	// Remove grenades and C4
 	int icount = 0;
 	toremove = UTIL_FindEntityByClassname(NULL, "grenade");

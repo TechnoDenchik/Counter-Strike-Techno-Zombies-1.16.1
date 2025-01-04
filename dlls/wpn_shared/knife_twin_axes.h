@@ -41,6 +41,7 @@ public:
 	void Reload() override;
 	void FlyingThink();
 	void GiveSummon();
+	void ItemPostFrame() override;
 	void RadiusDamage();
 	void GetSummon();
 	void CSTwinShadowAxes::FlyingTouch(CBaseEntity* pOther);
@@ -175,9 +176,9 @@ private:
 	std::array<CBeam*, 3> phs5_6_7; // EHANDLE ?
 	// unsigned short phs8; // m_usFireGungnir
 	std::vector<EHANDLE> phs9_10_11;
-	duration_t tNextAttack;
-	time_point_t tWorldTime;
-	duration_t tDelta;
+	duration_t tNextAttack2;
+	time_point_t tWorldTime2;
+	duration_t tDelta2;
 	float phs12;
 	unsigned short m_usFire;
 };

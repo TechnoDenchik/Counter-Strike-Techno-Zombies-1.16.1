@@ -14,14 +14,16 @@
 
 #include "epic/TwinShadowAxes.h"
 #include "epic/QuantumHorizon.h"
+#include "epic/Arbalest.h"
 
-class CWeaponInt_impl_t : public THudSubDispatcher< CHudQuantum>
+class CWeaponInt_impl_t : public THudSubDispatcher< CHudQuantum, CHudArbalest>
 {
 public:
 };
 
 DECLARE_MESSAGE(m_WPI, HudTwinAxesMsg)
 DECLARE_MESSAGE(m_WPI, HudQuantumMsg)
+DECLARE_MESSAGE(m_WPI, ArbalestMsg)
 
 int CWeaponInt::MsgFunc_HudTwinAxesMsg(const char* pszName, int iSize, void* pbuf)
 {
@@ -55,6 +57,26 @@ int CWeaponInt::MsgFunc_HudQuantumMsg(const char* pszName, int iSize, void* pbuf
 	return 1;
 }
 
+int CWeaponInt::MsgFunc_ArbalestMsg(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+	auto type = static_cast<INTWeaponMsg>(buf.ReadByte());
+	int time = buf.ReadByte();
+
+	pimpl->get<CHudArbalest>().renaining(time);
+
+	switch (type)
+	{
+		case WPN_ARBALEST:
+		{
+			pimpl->get<CHudArbalest>().Settext();
+			break;
+		}
+	}
+
+	return 1;
+}
+
 int CWeaponInt::Init()
 {
 	pimpl = new CWeaponInt_impl_t;
@@ -63,6 +85,7 @@ int CWeaponInt::Init()
 
 	HOOK_MESSAGE(HudTwinAxesMsg);
 	HOOK_MESSAGE(HudQuantumMsg);
+	HOOK_MESSAGE(ArbalestMsg);
 
 	return 1;
 }

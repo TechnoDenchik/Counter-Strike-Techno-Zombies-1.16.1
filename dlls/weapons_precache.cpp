@@ -134,6 +134,7 @@ void W_Precache()
 	UTIL_PrecacheOtherWeapon("weapon_voidpistol");
 	UTIL_PrecacheOtherWeapon("weapon_starchaserar");
 	UTIL_PrecacheOtherWeapon("weapon_quantum");
+	UTIL_PrecacheOtherWeapon("weapon_arbalest");
 
 	if (g_pGameRules->IsDeathmatch())
 	{

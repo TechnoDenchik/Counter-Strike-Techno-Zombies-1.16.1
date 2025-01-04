@@ -32,6 +32,9 @@ public:
 	void PrimaryAttack() override;
 	bool PrimaryAttack_CheckTargetAvailable(CBaseEntity* a2, Vector vecDirection);
 	void SecondaryAttack() override;
+	void DestroyEffect();
+	void Holster(int skiplocal) override;
+	void PrimaryAttack_FindTargets();
 	//void ItemPostFrame() override;
 	void Reload() override;
 	void WeaponIdle() override;

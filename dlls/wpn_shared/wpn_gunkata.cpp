@@ -267,7 +267,7 @@ public:
 	{
 		//v1 = this;
 		PRECACHE_MODEL("models/p_gunkata2.mdl");
-		/*
+		
         PRECACHE_MODEL("models/ef_gunkata.mdl");
         PRECACHE_MODEL("models/ef_gunkata_man.mdl");
         PRECACHE_MODEL("models/ef_gunkata_woman.mdl");
@@ -280,7 +280,7 @@ public:
         PRECACHE_SOUND("weapons/gunkata_skill_04.wav");
         PRECACHE_SOUND("weapons/gunkata_skill_05.wav");
         PRECACHE_SOUND("weapons/gunkata_skill_last_exp.wav");
-        */
+        
 		//m_iShell = PRECACHE_MODEL("models/pshell.mdl");
 		//*((_WORD *)v1 + 142) = precache_event(1, "events/gunkata.sc");
 		//result = PRECACHE_EVENT(1, "events/gunkata_effect.sc");

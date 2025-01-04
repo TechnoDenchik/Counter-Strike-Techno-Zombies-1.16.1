@@ -32,6 +32,7 @@
     <ClCompile Include="..\cl_dll\events.cpp" />
     <ClCompile Include="..\cl_dll\events\event_ak47.cpp" />
     <ClCompile Include="..\cl_dll\events\event_ak47l.cpp" />
+    <ClCompile Include="..\cl_dll\events\event_arbalest.cpp" />
     <ClCompile Include="..\cl_dll\events\event_as50.cpp" />
     <ClCompile Include="..\cl_dll\events\event_aug.cpp" />
     <ClCompile Include="..\cl_dll\events\event_awp.cpp" />
@@ -153,6 +154,7 @@
     <ClCompile Include="..\cl_dll\hud\vgui2menu\Buymenu.cpp" />
     <ClCompile Include="..\cl_dll\hud\vgui2menu\Classmenu.cpp" />
     <ClCompile Include="..\cl_dll\hud\vgui2menu\Tabmenu.cpp" />
+    <ClCompile Include="..\cl_dll\hud\weapons\epic\Arbalest.cpp" />
     <ClCompile Include="..\cl_dll\hud\weapons\epic\QuantumHorizon.cpp" />
     <ClCompile Include="..\cl_dll\hud\weapons\epic\TwinShadowAxes.cpp" />
     <ClCompile Include="..\cl_dll\hud\weapons\weapon_int.cpp" />
@@ -210,6 +212,7 @@
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_female.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_ak47.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_ak47l.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_arbalest.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_as50.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_aug.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_awp.cpp" />
@@ -379,6 +382,7 @@
     <ClInclude Include="..\cl_dll\hud\vgui2menu\Buymenu.h" />
     <ClInclude Include="..\cl_dll\hud\vgui2menu\Classmenu.h" />
     <ClInclude Include="..\cl_dll\hud\vgui2menu\Tabmenu.h" />
+    <ClInclude Include="..\cl_dll\hud\weapons\epic\Arbalest.h" />
     <ClInclude Include="..\cl_dll\hud\weapons\epic\QuantumHorizon.h" />
     <ClInclude Include="..\cl_dll\hud\weapons\epic\TwinShadowAxes.h" />
     <ClInclude Include="..\cl_dll\hud\weapons\weapon_int.h" />
@@ -436,6 +440,7 @@
     <ClInclude Include="..\dlls\wpn_shared\knife_twin_axes.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_ak47.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_ak47l.h" />
+    <ClInclude Include="..\dlls\wpn_shared\wpn_arbalest.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_as50.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_aug.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_awp.h" />
@@ -661,6 +666,7 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

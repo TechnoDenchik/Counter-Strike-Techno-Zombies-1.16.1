@@ -21,6 +21,7 @@ enum ZB2MessageType : byte
 	ZB3_MESSAGE_USED_STATUS,
 	ZB2_MESSAGE_ALARM,
 	ZB2_RESPZOZOMBIE,
+	WPN_ARBALEST2,
 };
 
 enum ZombieSkillSlot : byte

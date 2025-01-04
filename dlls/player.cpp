@@ -158,6 +158,7 @@ CBasePlayer::CBasePlayer() : m_rebuyString(nullptr)
 {
 	g_pModRunning->InstallPlayerModStrategy(this);
 }
+
 CBasePlayer::~CBasePlayer()
 {
 	delete[] m_rebuyString;

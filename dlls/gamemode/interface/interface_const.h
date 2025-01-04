@@ -5,7 +5,6 @@
 #pragma once
 #endif
 
-
 enum INTMessage : byte
 {
 	ZB3_REN_MSG,
@@ -29,5 +28,7 @@ enum INTWeaponMsg : byte
 {
 	QUANTUMMSG,
 	TWINAXESMSG,
+	WPN_ARBALEST,
 };
+
 #endif

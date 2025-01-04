@@ -37,6 +37,7 @@
 #include "com_weapons.h"
 #include "draw_util.h"
 #include "ammo.h"
+#include "gamemode/interface/interface_const.h"
 
 enum WeaponIdType
 {

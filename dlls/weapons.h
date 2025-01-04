@@ -266,6 +266,7 @@ public:
 	virtual BOOL CanDeploy() { return TRUE; }
 	virtual BOOL CanDrop() { return TRUE; }
 	virtual BOOL Deploy() { return TRUE; }
+	bool DeployArb;
 	virtual BOOL IsWeapon() { return FALSE; }
 	virtual BOOL CanHolster() { return TRUE; }
 #ifdef CLIENT_DLL
@@ -442,6 +443,7 @@ public:
 	int m_iPrimaryAmmoType;
 	int m_iSecondaryAmmoType;
 	int m_iClip;
+	int m_iClip2;
 	int m_iClientClip;
 	int m_iClientWeaponState;
 	int m_fInReload;
