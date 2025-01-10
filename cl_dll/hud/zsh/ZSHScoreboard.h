@@ -24,9 +24,24 @@ public:
 		meat = metal;
 	}
 
+	void UpdateTime(int daytimes, int nighttimes, bool daytimer, int dayseconds, int nightseconds)
+	{
+		timeday = daytimes;
+		timenight = nighttimes;
+		timerday = daytimer;
+		secondsday = dayseconds;
+		secondsnight = nightseconds;
+	}
+
 protected:
 
 	int days;
+
+	int timeday;
+	int timenight;
+	int secondsday;
+	int secondsnight;
+	bool timerday;
 
 	int wood;
 	int meat;

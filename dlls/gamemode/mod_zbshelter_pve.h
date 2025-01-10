@@ -38,6 +38,7 @@ public:
 	void PlayerSpawn(CBasePlayer* pPlayer) override;
 	void Think() override;
 	void ResetTime();
+	void ResetTime2();
 	void RestartRound() override;
 	void CheckRoundTimeExpired();
 	void CheckFreezePeriodExpired();
@@ -47,9 +48,12 @@ public:
 	BOOL DayRound();
 	void DaySound();
 
+	void UpdateDay();
+	void spawn();
+	void Reset();
+	void UpdateHUD();
+
 	void NightSound();
-	void Thinks();
-	void Thinks2();
 	virtual void RoundEndScore(int iWinStatus);
 	bool HasRoundTimeExpired();
 	void InstallPlayerModStrategy(CBasePlayer* player) override;
@@ -59,23 +63,28 @@ public:
 	float GetAdjustedEntityDamage2(CBaseEntity* victim, entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage2, int bitsDamageType2) override;
 public:
 	float m_flTimeNextMakeSupplybox;
-//	void MakeSpawnresThink();
-	//void RemoveAllSupplybox();
-	//CSpawnres* CreateSpawnres();
-	//int SpawnresCount();
+	int dayses;
 
 	CResSpawn* SelectZombieSpawnPoint();
 	CBaseEntity* MakeResources();
 	CBaseEntity* MakeResources2();
 	CBaseEntity* MakeResources3();
-	
+	bool start;
 	BOOL FInfectionStarted();
 public:
 
 	int daytimes;
 	int nighttimes;
+
+	int dayseconds;
+	int nightseconds;
+
+	int dayminutes;
+	int nightminutes;
+
 	bool daytimer;
 	bool nighttimer;
+
 	float m_flNextSpawnNPC;
 	float m_flNextDay;
 	float m_flNextDay2;
@@ -87,12 +96,15 @@ public:
 	time_point_t tWorldTime5;
 	duration_t tDelta5;
 
+	duration_t tNextAttack6;
+	time_point_t tWorldTime6;
+	duration_t tDelta6;
+
 	EventDispatcher<void(CBasePlayer* attacker, float&)> m_eventAdjustDamage;
 	EventDispatcher<void(CBasePlayer* attacker2, float&)> m_eventAdjustDamage2;
 	EventDispatcher<void(CWood* victim, CBaseEntity* attacker)> m_eventWoodKilled;
 	EventDispatcher<void(CMeat* victim, CBaseEntity* attacker)> m_eventMeatKilled;
 
-	
 };
 
 #endif

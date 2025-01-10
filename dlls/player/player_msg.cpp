@@ -110,6 +110,7 @@ int gmsgZBSTip = 0;
 int gmsgZBSLevel = 0;
 int gmsgZSHUpdateDay = 0;
 int gmsgZSHUpdateRes = 0;
+int gmsgZSHUpdateTime = 0;
 int gmsgGDUpdateLV = 0;
 int gmsgGDMsg = 0;
 int gmsgBTEWeapon = 0;
@@ -242,6 +243,7 @@ void LinkUserMessages()
 	gmsgZB2Msg = REG_USER_MSG("ZB2Msg", -1);
 	gmsgZSHMsg = REG_USER_MSG("ZSHMsg", -1);
 	gmsgZSHMsgText = REG_USER_MSG("ZSHMsgText", -1);
+	gmsgZSHUpdateTime = REG_USER_MSG("ZSHUpdateTime", -1);
 	gmsgZB3Msg = REG_USER_MSG("ZB3Msg", -1);
 	gmsgZB3RenMsg = REG_USER_MSG("ZB3RenMsg", -1);
 

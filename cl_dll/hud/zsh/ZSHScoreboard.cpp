@@ -234,15 +234,45 @@ int CHudZSHScoreboard::Draw(float time)
 	zsht_gungergauge_bg->Bind();
 	DrawUtils::Draw2DQuadScaled(x2 - 420 / 3.0, y2 - 3.5, x2 + 420 / 3.0, y2 + 45);
 
-	zsht_sun_icon->Bind();
-	DrawUtils::Draw2DQuadScaled(x7 - 34, y4 - 3.5, x7 + 34, y4 + 23);
+	if (timerday == true)
+	{
+		zsht_sun_icon->Bind();
+		DrawUtils::Draw2DQuadScaled(x7 - 34, y4 - 3.5, x7 + 34, y4 + 23);
 
-	//zsht_moon_icon->Bind();
-	//DrawUtils::Draw2DQuadScaled(x7 - 34, y4 - 3.5, x7 + 34, y4 + 23);
+		char minutesday[240];
 
+		sprintf(minutesday, "%d :", timeday);
+		DrawUtils::DrawHudString2(x9 - 15, y8 + 29, ScreenWidth, minutesday, r, g, b, flScale);
+
+		char secondday[240];
+
+		sprintf(secondday, "%d", secondsday);
+		DrawUtils::DrawHudString2(x9 + 5, y8 + 29, ScreenWidth, secondday, r, g, b, flScale);
+		
+	}
+	else
+	{
+		zsht_moon_icon->Bind();
+		DrawUtils::Draw2DQuadScaled(x7 - 34, y4 - 3.5, x7 + 34, y4 + 23);
+
+		char minutesnight[120];
+
+		sprintf(minutesnight, "%d :", timenight);
+		DrawUtils::DrawHudString2(x9 - 15, y8 + 29, ScreenWidth, minutesnight, r, g, b, flScale);
+		
+		char secondnight[120];
+
+		sprintf(secondnight, "%d", secondsnight);
+		DrawUtils::DrawHudString2(x9 + 5, y8 + 29, ScreenWidth, secondnight, r, g, b, flScale);
+	}
+	
 	char szBuffer[64];
 	
 	sprintf(szBuffer, "Day %d", days);
+	DrawUtils::DrawHudString2(x9 + 20, y8 + 5, ScreenWidth, szBuffer, r, g, b, flScale);
+
+
+	DrawUtils::DrawHudString2(x9 + 20, y8 + 5, ScreenWidth, szBuffer, r, g, b, flScale);
 	DrawUtils::DrawHudString2(x9 + 20, y8 + 5, ScreenWidth, szBuffer, r, g, b, flScale);
 
 	DrawTexturedNumbersTopRightAligned(*count, m_rcSelfnumber, 0, x3 + 80, y3, 0.70f);

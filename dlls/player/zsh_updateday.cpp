@@ -1,6 +1,6 @@
 /* =================================================================================== *
 			 * =================== TechnoSoftware =================== *
- * =================================================================================== */
+ * =================================================================================== 
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -36,7 +36,7 @@ ZSHUpdateDay::ZSHUpdateDay(CBasePlayer *player) : BasePlayerExtra(player)
 		return;
 
 	m_pPlayer->pev->health += 20.0f;
-}*/
+}
 
 void ZSHUpdateDay::UpdateDay()
 {
@@ -60,4 +60,4 @@ void ZSHUpdateDay::UpdateHUD() const
 	WRITE_BYTE(0);
 	WRITE_BYTE(dayses);
 	MESSAGE_END();
-}
+}*/

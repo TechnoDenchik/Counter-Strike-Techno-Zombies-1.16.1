@@ -28,6 +28,7 @@ class CHudZSH::impl_t
 DECLARE_MESSAGE(m_ZSH, ZSHMsg)
 DECLARE_MESSAGE(m_ZSH, ZSHUpdateDay)
 DECLARE_MESSAGE(m_ZSH, ZSHUpdateRes)
+DECLARE_MESSAGE(m_ZSH, ZSHUpdateTime)
 
 int CHudZSH::MsgFunc_ZSHMsg(const char* pszName, int iSize, void* pbuf)
 {
@@ -224,6 +225,21 @@ int CHudZSH::MsgFunc_ZSHUpdateRes(const char* pszName, int iSize, void* pbuf)
 	return 1;
 }
 
+int CHudZSH::MsgFunc_ZSHUpdateTime(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+	int type = buf.ReadByte();
+	int daytimes = buf.ReadByte();
+	int nighttimes = buf.ReadByte();
+	bool daytimer = buf.ReadByte();
+	int dayseconds = buf.ReadByte();
+	int nightsecond = buf.ReadByte();
+
+	pimpl->get<CHudZSHScoreboard>().UpdateTime(daytimes, nighttimes, daytimer, dayseconds, nightsecond);
+
+	return 1;
+}
+
 int CHudZSH::Init(void)
 {
 	pimpl = new CHudZSH::impl_t;
@@ -233,6 +249,7 @@ int CHudZSH::Init(void)
 	HOOK_MESSAGE(ZSHMsg);
 	HOOK_MESSAGE(ZSHUpdateDay);
 	HOOK_MESSAGE(ZSHUpdateRes);
+	HOOK_MESSAGE(ZSHUpdateTime);
 
 	return 1;
 }

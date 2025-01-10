@@ -135,6 +135,8 @@ extern int gmsgOriginalMsg13;
 extern int gmsgTwinAxesMsg;
 extern int gmsgQuantumMsg;
 extern int gmsgArbalestMsg;
+extern int gmsgZSHUpdateTime;
+
 void LinkUserMessages();
 void WriteSigonMessages();
 void SendItemStatus(CBasePlayer *pPlayer);
