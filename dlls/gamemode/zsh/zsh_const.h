@@ -8,8 +8,8 @@ enum ZSHMessageTypes : byte
 {
 	ZSHScoreboard,
 	ZSHWeaponboard,
-	ZSHMessagebox
-
+	ZSHMessagebox,
+	ZSHMessageTime
 };
 
 enum ZSHMessageBuild : byte
@@ -40,7 +40,14 @@ enum ZSHMessageSkills : byte
 enum ZSHMessageUi : byte
 {
 	ZSHBuildbord,
-	ZSHSkillsboard
+	ZSHSkillsboard,
+	ZSHSurvivallose,
+	ZSHSurvivalwin,
+};
+
+enum ZSHTipKill : byte
+{
+	ZSHKill
 };
 
 #endif

@@ -64,6 +64,7 @@ int gmsgArmorType = 0;
 int gmsgStatusValue = 0;
 int gmsgStatusText = 0;
 int gmsgStatusIcon = 0;
+int gmsgShelterIcon = 0;
 int gmsgWeaponList2 = 0;
 
 int gmsgBarTime = 0;
@@ -110,6 +111,7 @@ int gmsgZBSTip = 0;
 int gmsgZBSLevel = 0;
 int gmsgZSHUpdateDay = 0;
 int gmsgZSHUpdateRes = 0;
+int gmsgZSHUpdateResHome = 0;
 int gmsgZSHUpdateTime = 0;
 int gmsgGDUpdateLV = 0;
 int gmsgGDMsg = 0;
@@ -137,7 +139,18 @@ int gmsgZB3UsedMsg = 0;
 int gmsgZB3UsedMsg2 = 0;
 int gmsgZSHMsg = 0;
 int gmsgZSHMsgText = 0;
+int gmsgZSHMsgTextNextDay = 0;
+int gmsgZSHMsgRound = 0;
 int gmsgResetRound = 0;
+int gmsgZSHMsgShelterPos = 0;
+int gmsgZSHMsgResPos = 0;
+int gmsgZSHMsgRes2Pos = 0;
+int gmsgZSHMsgZmPos = 0;
+int gmsgZSHMsgShelterPosK = 0;
+int gmsgZSHMsgResPosK = 0;
+int gmsgZSHMsgRes2PosK = 0;
+int gmsgZSHMsgZmPosK = 0;
+int gmsgZSHMsgMentality = 0;
 int gmsgGunDeath = 0;
 
 // utils
@@ -193,6 +206,7 @@ void LinkUserMessages()
 	gmsgStatusText = REG_USER_MSG("StatusText", -1);
 	gmsgWeaponList2 = REG_USER_MSG("WeaponList2", -1);
 	gmsgStatusIcon = REG_USER_MSG("StatusIcon", -1);
+	gmsgShelterIcon = REG_USER_MSG("ShelterIcon", -1);
 	gmsgBarTime = REG_USER_MSG("BarTime", 2);
 	gmsgReloadSound = REG_USER_MSG("ReloadSound", 2);
 	gmsgCrosshair = REG_USER_MSG("Crosshair", 1);
@@ -237,12 +251,24 @@ void LinkUserMessages()
 	gmsgZBSLevel = REG_USER_MSG("ZBSLevel", -1);
 	gmsgZSHUpdateDay = REG_USER_MSG("ZSHUpdateDay", -1);
 	gmsgZSHUpdateRes = REG_USER_MSG("ZSHUpdateRes", -1);
+	gmsgZSHUpdateResHome = REG_USER_MSG("ZSHUpdateResHome", -1);
 	gmsgGDUpdateLV = REG_USER_MSG("GDMsgLV", -1);
 	gmsgGDMsg = REG_USER_MSG("GDMsg", -1);
 	gmsgBTEWeapon = REG_USER_MSG("BTEWeapon", -1);
 	gmsgZB2Msg = REG_USER_MSG("ZB2Msg", -1);
 	gmsgZSHMsg = REG_USER_MSG("ZSHMsg", -1);
 	gmsgZSHMsgText = REG_USER_MSG("ZSHMsgText", -1);
+	gmsgZSHMsgTextNextDay = REG_USER_MSG("ZSHMsgTextNextDay", -1);
+	gmsgZSHMsgRound = REG_USER_MSG("ZSHMsgRound", -1);
+	gmsgZSHMsgShelterPos = REG_USER_MSG("ShelterPos", -1);
+	gmsgZSHMsgShelterPosK = REG_USER_MSG("ShelterK", -1);
+	gmsgZSHMsgMentality = REG_USER_MSG("ZSHMentalityHealth", -1);
+	gmsgZSHMsgResPos = REG_USER_MSG("WoodPos", -1);
+	gmsgZSHMsgRes2Pos = REG_USER_MSG("MetalPos", -1);
+	gmsgZSHMsgZmPos = REG_USER_MSG("ZombiePos", -1);
+	gmsgZSHMsgResPosK = REG_USER_MSG("WoodK", -1);
+	gmsgZSHMsgRes2PosK = REG_USER_MSG("MetalK", -1);
+	gmsgZSHMsgZmPosK = REG_USER_MSG("ZombieK", -1);
 	gmsgZSHUpdateTime = REG_USER_MSG("ZSHUpdateTime", -1);
 	gmsgZB3Msg = REG_USER_MSG("ZB3Msg", -1);
 	gmsgZB3RenMsg = REG_USER_MSG("ZB3RenMsg", -1);
@@ -317,15 +343,15 @@ void WriteSigonMessages()
 	// No need for this
 	// WeaponList will be sent when player pick up weapon.
 
-	/*for (int i = 0; i < MAX_WEAPONS; ++i)
+	for (int i = 0; i < MAX_WEAPONS; ++i)
 	{
 		ItemInfo &II = CBasePlayerItem::ItemInfoArray[i];
-
+		
 		if (!II.iId)
 			continue;
-
-		WriteWeaponInfo(II);
-	}*/
+		CBasePlayer* m_pPlayer = nullptr;
+		WriteWeaponInfo(m_pPlayer, II);
+	}
 }
 
 void SendItemStatus(CBasePlayer *pPlayer)

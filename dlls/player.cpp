@@ -301,6 +301,112 @@ CBasePlayer *CBasePlayer::GetNextRadioRecipient(CBasePlayer *pStartPlayer)
 	return NULL;
 }
 
+void CBasePlayer::Skill(const char* msg_id, const char* msg_verbose, short pitch, bool showIcon)
+{
+	// Spectators don't say radio messages.
+	if (!IsPlayer())
+		return;
+
+	// Neither do dead guys.
+	if (pev->deadflag != DEAD_NO && !IsBot())
+		return;
+
+	CBaseEntity* pEntity = NULL;
+	while ((pEntity = UTIL_FindEntityByClassname(pEntity, "player")) != NULL)
+	{
+		if (FNullEnt(pEntity->edict()))
+			break;
+
+		BOOL bSend = FALSE;
+		CBasePlayer* pPlayer = GetClassPtr<CBasePlayer>(pEntity->pev);
+
+		if (pPlayer == NULL)
+			continue;
+
+		// are we a regular player? (not spectator)
+		if (pPlayer->IsPlayer())
+		{
+			if (pPlayer->IsDormant())
+				continue;
+
+			// is this player on our team? (even dead players hear our radio calls)
+			//if (pPlayer->m_iTeam == m_iTeam)
+			if (g_pGameRules->PlayerRelationship(this, pPlayer) == GR_TEAMMATE)
+				bSend = TRUE;
+		}
+		// this means we're a spectator
+		else
+		{
+			// do this when spectator mode is in
+			int iSpecMode = pPlayer->IsObserver();
+
+			if (iSpecMode != OBS_CHASE_LOCKED && iSpecMode != OBS_CHASE_FREE && iSpecMode != OBS_IN_EYE)
+				continue;
+
+			if (!pPlayer->m_hObserverTarget)
+				continue;
+
+			CBasePlayer* pTarget = (CBasePlayer*)CBaseEntity::Instance(pPlayer->m_hObserverTarget->pev);
+
+			if (pTarget && g_pGameRules->PlayerRelationship(this, pPlayer) == GR_TEAMMATE)
+			{
+				bSend = TRUE;
+			}
+		}
+
+		if (bSend)
+		{
+			// ignorerad command
+			if (!pPlayer->m_bIgnoreRadio)
+			{
+				MESSAGE_BEGIN(MSG_ONE, gmsgSendAudio, NULL, pEntity->pev);
+				WRITE_BYTE(ENTINDEX(edict()));
+				WRITE_STRING(msg_id);
+				WRITE_SHORT(pitch);
+				MESSAGE_END();
+
+				// radio message icon
+				if (msg_verbose != NULL)
+				{
+					// search the place name where is located the player
+					const char* placeName = NULL;
+					if (g_bIsCzeroGame && TheBotPhrases != NULL)
+					{
+						Place playerPlace = TheNavAreaGrid.GetPlace(&pev->origin);
+						const BotPhraseList* placeList = TheBotPhrases->GetPlaceList();
+
+						for (auto phrase : *placeList)
+						{
+							if (phrase->GetID() == playerPlace)
+							{
+								placeName = phrase->GetName();
+								break;
+							}
+						}
+					}
+					if (placeName != NULL)
+						ClientPrint(pEntity->pev, HUD_PRINTCENTER, NumAsString(entindex()), "#Game_radio_location", STRING(pev->netname), placeName, msg_verbose);
+					else
+						ClientPrint(pEntity->pev, HUD_PRINTCENTER, NumAsString(entindex()), "#Game_radio", STRING(pev->netname), msg_verbose);
+				}
+
+				// icon over the head for teammates
+				if (showIcon)
+				{
+					// put an icon over this guys head to show that he used the radio
+					MESSAGE_BEGIN(MSG_ONE, SVC_TEMPENTITY, NULL, pEntity->pev);
+					WRITE_BYTE(TE_PLAYERATTACHMENT);
+					WRITE_BYTE(ENTINDEX(edict()));	// byte	(entity index of player)
+					WRITE_COORD(35); // coord (vertical offset) ( attachment origin.z = player origin.z + vertical offset)
+					WRITE_SHORT(g_sModelIndexRadio); // short (model index) of tempent
+					WRITE_SHORT(15); // short (life * 10 ) e.g. 40 = 4 seconds
+					MESSAGE_END();
+				}
+			}
+		}
+	}
+}
+
 void CBasePlayer::Radio(const char *msg_id, const char *msg_verbose, short pitch, bool showIcon)
 {
 	// Spectators don't say radio messages.

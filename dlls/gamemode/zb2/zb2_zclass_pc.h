@@ -1,0 +1,26 @@
+/* =================================================================================== *
+			 * =================== TechnoSoftware =================== *
+ * =================================================================================== */
+
+#ifndef PROJECT_ZB2_ZCLASS_PSYCHO_H
+#define PROJECT_ZB2_ZCLASS_PSYCHO_H
+
+#include "zb2_zclass.h"
+
+class CZombieClass_Psycho : public CBaseZombieClass_ZB2
+{
+public:
+	explicit CZombieClass_Psycho(CBasePlayer *player, ZombieLevel lv);
+	void InitHUD() const override;
+	void ResetMaxSpeed() const override;
+	float AdjustDamageTaken(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) const override;
+	bool ApplyKnockback(CBasePlayer *attacker, const KnockbackData & kbd) override;
+	void Pain_Zombie(int m_LastHitGroup, bool HasArmour) override;
+	void OnThink() override;
+	virtual void Precache();
+	virtual void Zombie_HealthRecoveryThink();
+	void DeathSound_Zombie() override;
+	std::shared_ptr<IZombieModeCharacter_ZB2_Extra> m_pCharacter_ZB2;
+	float m_flTimeNextZombieHealthRecovery;
+};
+#endif

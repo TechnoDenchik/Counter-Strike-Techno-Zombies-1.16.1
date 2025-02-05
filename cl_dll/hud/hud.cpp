@@ -206,7 +206,8 @@ void CHud :: Init( void )
 	sv_skipshield = gEngfuncs.pfnGetCvarPointer( "sv_skipshield" );
 	m_alarmstyle = CVAR_CREATE("alarm_style", "0", FCVAR_ARCHIVE);
 
-	cl_headname = CVAR_CREATE("cl_headname", "2", FCVAR_ARCHIVE); // seems lagging, disable by default.
+	cl_headname = CVAR_CREATE("cl_headname", "2", FCVAR_ARCHIVE); 
+	zsh_mentality = CVAR_CREATE("zsh_mentality", "1", FCVAR_ARCHIVE); 
 
 	CVAR_CREATE( "cscl_ver", Q_buildnum(), 1<<14 | FCVAR_USERINFO ); // init and userinfo
 
@@ -268,6 +269,10 @@ void CHud :: Init( void )
 	m_DeathNotice.Init();
 	m_TextMessage.Init();
 	m_FollowIcon.Init();
+	infogetitem.Init();
+	//infogetres.Init();
+	//infogetres2.Init();
+	//infogetzm.Init();
 	m_MOTD.Init();
 	m_scenarioStatus.Init();
 	m_DrawFontText.VidInit();

@@ -12,7 +12,7 @@
 class CMultiplayGameMgrHelper : public IVoiceGameMgrHelper
 {
 public:
-	virtual bool		CanPlayerHearPlayer(CBasePlayer *pListener, CBasePlayer *pTalker)
+	virtual bool CanPlayerHearPlayer(CBasePlayer *pListener, CBasePlayer *pTalker)
 	{
 		if (g_pGameRules->IsTeamplay())
 		{

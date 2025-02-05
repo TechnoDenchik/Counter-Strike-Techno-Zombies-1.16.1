@@ -512,8 +512,8 @@ void CheckStartMoney()
 {
 	int money = (int)startmoney.value;
 
-	if (money > 16000)
-		CVAR_SET_FLOAT("mp_startmoney", 16000);
+	if (money > 32000)
+		CVAR_SET_FLOAT("mp_startmoney", 32000);
 	else if (money < 800)
 		CVAR_SET_FLOAT("mp_startmoney", 800);
 }
@@ -2380,6 +2380,25 @@ void Radio1(CBasePlayer *player, int slot)
 	}
 }
 
+void SurvSkills(CBasePlayer* player, int slot)
+{
+
+	switch (slot)
+	{
+	case 1:
+		player->Skill("%!MRAD_DEX1", "#CstzUI_DEX");
+		break;
+	case 2:
+		player->Skill("%!MRAD_Master1", "#CstzUI_Master");
+		break;
+	case 3:
+		player->Skill("%!MRAD_Searching1", "#CstzUI_Searching");
+		break;
+	default:
+		break;
+	}
+}
+
 void Radio2(CBasePlayer *player, int slot)
 {
 	if (player->m_flRadioTime >= gpGlobals->time)
@@ -2759,6 +2778,30 @@ BOOL HandleBuyAliasCommands(CBasePlayer *pPlayer, const char *pszCommand)
 	pPlayer->BuildRebuyStruct();
 	return bRetVal;
 }
+
+BOOL HandleSkillsAliasCommands(CBasePlayer* pPlayer, const char* pszCommand)
+{
+	BOOL bRetVal = FALSE;
+
+	if (FStrEq(pszCommand, "dex"))
+	{
+		bRetVal = TRUE;
+		SurvSkills(pPlayer, 1);
+	}
+	else if (FStrEq(pszCommand, "surv"))
+	{
+		bRetVal = TRUE;
+		SurvSkills(pPlayer, 2);
+	}
+	else if (FStrEq(pszCommand, "search"))
+	{
+		bRetVal = TRUE;
+		SurvSkills(pPlayer, 3);
+	}
+
+	return bRetVal;
+}
+
 
 BOOL HandleRadioAliasCommands(CBasePlayer *pPlayer, const char *pszCommand)
 {
@@ -3386,6 +3429,7 @@ void EXT_FUNC ClientCommand(edict_t *pEntity)
 				}
 				break;
 			}
+		
 			case Menu_Radio1:
 			{
 				Radio1(player, slot);
@@ -3399,6 +3443,11 @@ void EXT_FUNC ClientCommand(edict_t *pEntity)
 			case Menu_Radio3:
 			{
 				Radio3(player, slot);
+				break;
+			}
+			case Menu_SurvSkills:
+			{
+				SurvSkills(player, slot);
 				break;
 			}
 			case Menu_ZbsUpgrade:
@@ -3676,6 +3725,11 @@ void EXT_FUNC ClientCommand(edict_t *pEntity)
 			{
 				ShowMenu(player, (MENU_KEY_1 | MENU_KEY_2 | MENU_KEY_3 | MENU_KEY_4 | MENU_KEY_5 | MENU_KEY_6 | MENU_KEY_7 | MENU_KEY_8 | MENU_KEY_9 | MENU_KEY_0), -1, FALSE, "#RadioC");
 				player->m_iMenu = Menu_Radio3;
+			}	
+			else if (FStrEq(pcmd, "survival"))
+			{
+				ShowMenu(player, (MENU_KEY_1 | MENU_KEY_2 | MENU_KEY_3 | MENU_KEY_0), -1, FALSE, "#Skillssurv");
+				player->m_iMenu = Menu_SurvSkills;
 			}
 			else if (FStrEq(pcmd, "drop"))
 			{
@@ -3851,7 +3905,7 @@ void EXT_FUNC ClientCommand(edict_t *pEntity)
 			{
 				player->SmartRadio();
 			}
-			else if (FStrEq(pcmd, "moe_buy"))
+			else if (FStrEq(pcmd, "cstbuy"))
 			{
 				MoE_HandleBuyCommands(player, CMD_ARGV_(1));
 			}
@@ -3862,7 +3916,9 @@ void EXT_FUNC ClientCommand(edict_t *pEntity)
 
 				if (HandleRadioAliasCommands(player, pcmd))
 					return;
-
+				
+				if (HandleSkillsAliasCommands(player, pcmd))
+					return;
 
 				if (!g_pGameRules->ClientCommand(GetClassPtr<CBasePlayer>(pev), pcmd) && !player->m_pModStrategy->ClientCommand(pcmd))
 				{
@@ -3880,7 +3936,7 @@ void EXT_FUNC ClientCommand(edict_t *pEntity)
 					command[Q_strlen(command)] = '\n';
 
 					// tell the user they entered an unknown command
-					ClientPrint(&pEntity->v, HUD_PRINTCONSOLE, "#Game_unknown_command", command);
+					ClientPrint(&pEntity->v, HUD_PRINTCONSOLE, "", command);
 				}
 			}
 		}
@@ -4012,7 +4068,7 @@ void EXT_FUNC ServerActivate(edict_t *pEdictList, int edictCount, int clientMax)
 
 	// Link user messages here to make sure first client can get them...
 	LinkUserMessages();
-	WriteSigonMessages();
+	//WriteSigonMessages();
 
 	if (g_pGameRules != NULL)
 	{

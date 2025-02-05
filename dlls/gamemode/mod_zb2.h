@@ -24,10 +24,10 @@ GNU General Public License for more details.
 #include "EventDispatcher.h"
 
 #include "zb2/zb2_zclass.h"
-#include "zb3/zb2_hero.h"
 #include "zb2/zb2_skill.h"
 
 class CSupplyBox;
+class CSupSpawn;
 
 class CMod_ZombieMod2 : public CMod_Zombi
 {
@@ -38,6 +38,7 @@ public:
 	void UpdateGameMode(CBasePlayer *pPlayer) override;
 	void RestartRound() override;
 	void Think() override;
+	void CheckMapConditions() override;
 	void PlayerSpawn(CBasePlayer *pPlayer) override;
 	void PlayerThink(CBasePlayer *pPlayer) override;
 	BOOL ClientCommand(CBasePlayer *pPlayer, const char *pcmd) override;
@@ -51,12 +52,14 @@ protected:
 	void MakeSupplyboxThink();
 	void RemoveAllSupplybox();
 	CSupplyBox *CreateSupplybox();
+	CSupSpawn* SelectSupplySpawnPoint();
 	int SupplyboxCount();
 
 public:
 	void HumanInfectionByZombie(CBasePlayer *player, CBasePlayer *attacker) override;
 
 public:
+	std::vector<CSupSpawn*> m_vecSupplySpawns;
 	EventDispatcher<void(CBasePlayer *victim, CBasePlayer *attacker)> m_eventInfection;
 	EventDispatcher<void(CBasePlayer *attacker, float &)> m_eventAdjustDamage;
 	EventDispatcher<void(CBasePlayer *attacker, HitBoxGroup &)> m_eventAdjustHitgroup;
@@ -84,6 +87,15 @@ protected:
 
 protected:
 	void BecomeZombie(ZombieLevel iEvolutionLevel) override;
+	void BecomeTank(ZombieLevel iEvolutionLevel);
+	void BecomeSpeed(ZombieLevel iEvolutionLevel);
+	void BecomeHeavy(ZombieLevel iEvolutionLevel);
+	void BecomeHeal(ZombieLevel iEvolutionLevel);
+	void BecomePsycho(ZombieLevel iEvolutionLevel);
+	void BecomeDeimos(ZombieLevel iEvolutionLevel);
+	void BecomeGanimed(ZombieLevel iEvolutionLevel);
+	void BecomeBanchee(ZombieLevel iEvolutionLevel);
+	void BecomeStamper(ZombieLevel iEvolutionLevel);
 	void BecomeHuman() override;
 	virtual void Event_OnInfection(CBasePlayer *victim, CBasePlayer *attacker);
 	virtual void Event_AdjustHumanDamage(CBasePlayer *attacker, float &flDamage);

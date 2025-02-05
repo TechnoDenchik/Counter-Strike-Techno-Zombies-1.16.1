@@ -94,29 +94,6 @@ protected:
 	float m_flTimeZombieSkillEffect;
 };
 
-class CZombieSkill_female : public BasePlayerExtra, public IZombieSkill
-{
-public:
-	explicit CZombieSkill_female(CBasePlayer* player);
-
-	void Think() override;
-	void Activate() override {}
-	void Reset() override { m_iZombieSkillStatus = SKILL_STATUS_READY; }
-	void ResetMaxSpeed() override {}
-	float GetDamageRatio() const override { return 1.0f; }
-	ZombieSkillStatus GetStatus() const override { return m_iZombieSkillStatus; }
-
-protected:
-	virtual void OnSkillEnd() {}
-	virtual void OnSkillReady() {}
-
-protected:
-	ZombieSkillStatus m_iZombieSkillStatus;
-	float m_flTimeZombieSkillEnd;
-	float m_flTimeZombieSkillNext;
-
-};
-
 class CHeroSkill : public BasePlayerExtra, public IZombieSkill
 {
 public:
@@ -172,39 +149,5 @@ protected:
 
 	float m_flTimeZombieSkillEffect;
 };
-
-class CZombieSkill_female_Empty : public BasePlayerExtra, public IZombieSkill
-{
-public:
-	explicit CZombieSkill_female_Empty(CBasePlayer* player) : BasePlayerExtra(player) {}
-
-	void Think() override {}
-	void Activate() override {}
-	void Reset() override {}
-	void ResetMaxSpeed() override {}
-	float GetDamageRatio() const override { return 1.0f; }
-	ZombieSkillStatus GetStatus() const override { return SKILL_STATUS_USED; }
-};
-
-class CZombieSkill_ZombieInvisible : public CZombieSkill_female
-{
-public:
-	explicit CZombieSkill_ZombieInvisible(CBasePlayer* player);
-
-public:
-	void Think() override;
-	void Activate() override;
-	void ResetMaxSpeed()  override;
-	void OnSkillEnd() override;
-	float GetDamageRatio() const override;
-
-protected:
-	void OnCrazyEffect();
-	float GetDurationTime() const;
-	float GetCooldownTime() const;
-
-	float m_flTimeZombieSkillEffect;
-};
-
 
 #endif

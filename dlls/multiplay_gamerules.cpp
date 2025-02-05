@@ -2949,6 +2949,12 @@ void CHalfLifeMultiplay::CheckLevelInitialized()
 		while ((ent = UTIL_FindEntityByClassname(ent, "info_player_start")) != NULL)
 			++m_iSpawnPointCount_CT;
 
+		while ((ent = UTIL_FindEntityByClassname(ent, "playerspawn")) != NULL)
+			++m_iSpawnPointCount_Terrorist;
+
+		while ((ent = UTIL_FindEntityByClassname(ent, "playerspawn")) != NULL)
+			++m_iSpawnPointCount_CT;
+
 		m_bLevelInitialized = true;
 	}
 }
@@ -3099,6 +3105,11 @@ BOOL CHalfLifeMultiplay::IsDeathmatch()
 }
 
 BOOL CHalfLifeMultiplay::IsCoOp()
+{
+	return gpGlobals->coop;
+}
+
+BOOL CHalfLifeMultiplay::IsShelter()
 {
 	return gpGlobals->coop;
 }

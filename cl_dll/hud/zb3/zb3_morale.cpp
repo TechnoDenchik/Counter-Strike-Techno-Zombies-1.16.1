@@ -28,7 +28,7 @@ int CHudZB3Morale::Draw(float time)
 
 		return 0;
 
-	int iX = ScreenWidth / 2 - 70;
+	int iX = ScreenWidth / 2 - 90;
 	int iY = ScreenHeight - 160;
 	
 	int iMorale = m_iMoraleLevel;
@@ -95,7 +95,7 @@ int CHudZB3Morale::Draw(float time)
 	// text
 	char szBuffer[64];
 	sprintf(szBuffer, "ATT : %d %%", 100 + iMorale * 10);
-	DrawUtils::DrawHudString(ScreenWidth / 2 + 1, ScreenHeight - 170, ScreenWidth, szBuffer, r, g, b);
+	DrawUtils::DrawHudString(ScreenWidth / 2 - 40, ScreenHeight - 170, ScreenWidth, szBuffer, r, g, b);
 
 	return 1;
 }

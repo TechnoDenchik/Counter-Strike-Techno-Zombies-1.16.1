@@ -175,10 +175,13 @@
     <ClCompile Include="..\cl_dll\hud\zsh\baseresourcesmenu.cpp" />
     <ClCompile Include="..\cl_dll\hud\zsh\buildmenu.cpp" />
     <ClCompile Include="..\cl_dll\hud\zsh\buymenu.cpp" />
+    <ClCompile Include="..\cl_dll\hud\zsh\infolocationhud.cpp" />
     <ClCompile Include="..\cl_dll\hud\zsh\menuspecifed.cpp" />
+    <ClCompile Include="..\cl_dll\hud\zsh\messageset.cpp" />
     <ClCompile Include="..\cl_dll\hud\zsh\skillsmenu.cpp" />
     <ClCompile Include="..\cl_dll\hud\zsh\zsh.cpp" />
     <ClCompile Include="..\cl_dll\hud\zsh\ZSHScoreboard.cpp" />
+    <ClCompile Include="..\cl_dll\hud\zsh\zsh_kill.cpp" />
     <ClCompile Include="..\cl_dll\input.cpp" />
     <ClCompile Include="..\cl_dll\inputw32.cpp" />
     <ClCompile Include="..\cl_dll\input_touch.cpp" />
@@ -209,7 +212,14 @@
     <ClCompile Include="..\dlls\wpn_shared\knife_skullaxe.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_twin_axes.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_banchee.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_deimos.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_female.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_ganimed.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_heal.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_heavy.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_pc.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_stamper.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_ak47.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_ak47l.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_arbalest.cpp" />
@@ -403,10 +413,13 @@
     <ClInclude Include="..\cl_dll\hud\zsh\baseresourcesmenu.h" />
     <ClInclude Include="..\cl_dll\hud\zsh\buildmenu.h" />
     <ClInclude Include="..\cl_dll\hud\zsh\buymenu.h" />
+    <ClInclude Include="..\cl_dll\hud\zsh\infolocationhud.h" />
     <ClInclude Include="..\cl_dll\hud\zsh\menuspecifed.h" />
+    <ClInclude Include="..\cl_dll\hud\zsh\messageset.h" />
     <ClInclude Include="..\cl_dll\hud\zsh\skillsmenu.h" />
     <ClInclude Include="..\cl_dll\hud\zsh\zsh.h" />
     <ClInclude Include="..\cl_dll\hud\zsh\ZSHScoreboard.h" />
+    <ClInclude Include="..\cl_dll\hud\zsh\zsh_kill.h" />
     <ClInclude Include="..\cl_dll\r_texture.h" />
     <ClInclude Include="..\cl_dll\vgui2\CBackGroundPanel.h" />
     <ClInclude Include="..\cl_dll\vgui2\CBaseViewport.h" />
@@ -575,14 +588,14 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>NotSet</CharacterSet>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>NotSet</CharacterSet>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">

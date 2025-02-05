@@ -98,6 +98,19 @@ void PlayerZombie_Precache()
 	PRECACHE_SOUND("zb3/zombi_death_2.wav");
 	PRECACHE_SOUND("zb3/zombi_hurt_01.wav");
 	PRECACHE_SOUND("zb3/zombi_hurt_02.wav");
-
+	PRECACHE_SOUND("zb3/zombi_hurt_banshee_1.wav");
+	PRECACHE_SOUND("zb3/zombi_death_banshee_1.wav");
+	PRECACHE_SOUND("zb3/zombi_hurt_heavy_1.wav");
+	PRECACHE_SOUND("zb3/zombi_hurt_heavy_2.wav");
+	PRECACHE_SOUND("zb3/zombi_death_heavy_1.wav");
+	PRECACHE_SOUND("zb3/zombi_death_heavy_2.wav");
+	PRECACHE_SOUND("zb3/zombi_hurt_female_1.wav");
+	PRECACHE_SOUND("zb3/zombi_hurt_female_2.wav");
+	PRECACHE_SOUND("zb3/zombi_death_female_1.wav");
+	PRECACHE_SOUND("zb3/zombi_death_female_2.wav");
+	PRECACHE_SOUND("zb3/zombi_hurt_stamper_1.wav");
+	PRECACHE_SOUND("zb3/zombi_hurt_stamper_2.wav");
+	PRECACHE_SOUND("zb3/zombi_death_stamper_1.wav");
+	PRECACHE_SOUND("zb3/zombi_death_stamper_2.wav");
 	PRECACHE_SOUND("zb3/zombi_heal.wav");
 }

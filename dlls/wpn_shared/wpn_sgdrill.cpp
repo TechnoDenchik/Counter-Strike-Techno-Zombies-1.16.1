@@ -201,39 +201,6 @@ void CSgdrill::SecondaryAttack(void)
 	m_flNextResetModel = gpGlobals->time + 1.2f;
 }
 
-void CSgdrill::DelaySecondaryAttack()
-{
-	BOOL fDidHit = FALSE;
-	UTIL_MakeVectors(m_pPlayer->pev->v_angle);
-	Vector vecSrc = m_pPlayer->GetGunPosition();
-
-#ifndef CLIENT_DLL
-	KnifeAttack(vecSrc, gpGlobals->v_forward, GetSecondaryAttackDamage(), 155, 120, DMG_NEVERGIB | DMG_BULLET, m_pPlayer->pev, m_pPlayer->pev);
-#endif
-	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1.1f;
-	SetThink(nullptr);
-}
-void CSgdrill::ItemPostFrame()
-{
-	if (m_flNextResetModel <= gpGlobals->time)
-	{
-		m_pPlayer->pev->weaponmodel = MAKE_STRING("models/p_sgdrill.mdl");
-	}
-	return CBasePlayerWeapon::ItemPostFrame();
-}
-
-void CSgdrill::WeaponIdle(void)
-{
-	ResetEmptySound();
-	m_pPlayer->GetAutoaimVector(AUTOAIM_5DEGREES);
-
-	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase())
-		return;
-
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 20;
-	SendWeaponAnim(SGDRILL_IDLE, UseDecrement() != FALSE);
-	
-}
 #ifndef CLIENT_DLL
 BOOL CSgdrill::KnifeAttack(Vector vecSrc, Vector vecDir, float flDamage, float flRadius, float flAngleDegrees, int bitsDamageType,
 	entvars_t *pevInflictor, entvars_t *pevAttacker)
@@ -331,6 +298,41 @@ BOOL CSgdrill::KnifeAttack(Vector vecSrc, Vector vecDir, float flDamage, float f
 	return result;
 }
 #endif
+
+void CSgdrill::DelaySecondaryAttack()
+{
+	BOOL fDidHit = FALSE;
+	UTIL_MakeVectors(m_pPlayer->pev->v_angle);
+	Vector vecSrc = m_pPlayer->GetGunPosition();
+
+#ifndef CLIENT_DLL
+	KnifeAttack(vecSrc, gpGlobals->v_forward, GetSecondaryAttackDamage(), 155, 120, DMG_NEVERGIB | DMG_BULLET, m_pPlayer->pev, m_pPlayer->pev);
+#endif
+	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1.1f;
+	SetThink(nullptr);
+}
+void CSgdrill::ItemPostFrame()
+{
+	if (m_flNextResetModel <= gpGlobals->time)
+	{
+		m_pPlayer->pev->weaponmodel = MAKE_STRING("models/p_sgdrill.mdl");
+	}
+	return CBasePlayerWeapon::ItemPostFrame();
+}
+
+void CSgdrill::WeaponIdle(void)
+{
+	ResetEmptySound();
+	m_pPlayer->GetAutoaimVector(AUTOAIM_5DEGREES);
+
+	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase())
+		return;
+
+	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 20;
+	SendWeaponAnim(SGDRILL_IDLE, UseDecrement() != FALSE);
+	
+}
+
 
 
 void CSgdrill::FindHullIntersection(const Vector &vecSrc, TraceResult &tr, const float *pflMins, const float *pfkMaxs, edict_t *pEntity)

@@ -198,6 +198,7 @@ public:
 	virtual BOOL IsDeathmatch() = 0;
 	virtual BOOL IsTeamplay() { return FALSE; }
 	virtual BOOL IsCoOp() = 0;
+	virtual BOOL IsShelter() = 0;
 	virtual const char *GetGameDescription() { return "Counter-Strike Techno Zombies"; }	// this is the game name that gets seen in the server browser
 	virtual BOOL ClientConnected(edict_t *pEntity, const char *pszName, const char *pszAddress, char *szRejectReason) = 0;
 	virtual void InitHUD(CBasePlayer *pl) = 0;
@@ -327,6 +328,7 @@ public:
 	virtual BOOL IsMultiplayer();
 	virtual BOOL IsDeathmatch();
 	virtual BOOL IsCoOp();
+	virtual BOOL IsShelter();
 	virtual BOOL ClientConnected(edict_t *pEntity, const char *pszName, const char *pszAddress, char szRejectReason[128]);
 	virtual void InitHUD(CBasePlayer *pl);
 	virtual void ClientDisconnected(edict_t *pClient);

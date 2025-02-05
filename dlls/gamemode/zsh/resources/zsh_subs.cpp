@@ -6,7 +6,7 @@
 #include "func_break.h"
 #include "zsh_subs.h"
 
-LINK_ENTITY_TO_CLASS(woodspawn, CResSpawn);
+LINK_ENTITY_TO_CLASS(info_resources, CResSpawn);
 
 void CResSpawn::Spawn()
 {
@@ -15,20 +15,29 @@ void CResSpawn::Spawn()
 
 void CResSpawn::KeyValue(KeyValueData *pkvd)
 {
-	if (FStrEq(pkvd->szKeyName, "master"))
-	{
-		pev->netname = ALLOC_STRING(pkvd->szValue);
-		pkvd->fHandled = TRUE;
-	}
-	else if (FStrEq(pkvd->szKeyName, "id"))
-	{
-		m_iId = Q_atoi(pkvd->szValue);
-	}
-	else
-		CPointEntity::KeyValue(pkvd);
+	//CPointEntity::KeyValue(pkvd);
 }
 
 BOOL CResSpawn::IsTriggered(CBaseEntity *pEntity)
+{
+	BOOL master = UTIL_IsMasterTriggered(pev->netname, pEntity);
+
+	return master;
+}
+
+LINK_ENTITY_TO_CLASS(info_resources2, CResSpawn);
+
+void CResSpawn2::Spawn()
+{
+	return CPointEntity::Spawn();
+}
+
+void CResSpawn2::KeyValue(KeyValueData* pkvd)
+{
+	//CPointEntity::KeyValue(pkvd);
+}
+
+BOOL CResSpawn2::IsTriggered(CBaseEntity* pEntity)
 {
 	BOOL master = UTIL_IsMasterTriggered(pev->netname, pEntity);
 

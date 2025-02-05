@@ -65,6 +65,13 @@ enum ZbsUpgradeMenuSlot
 	MENU_SLOT_UPGRADE_ATK,
 };
 
+enum ZshSkillsMenuSlot
+{
+	MENU_SLOT_UPGRADE_SPEED = 1,
+	MENU_SLOT_UPGRADE_SURVIVOR,
+	MENU_SLOT_UPGRADE_SEARCH,
+};
+
 #define CS_NUM_SKIN			4
 #define CZ_NUM_SKIN			5
 
@@ -146,9 +153,11 @@ void BuyRifle(CBasePlayer *pPlayer, int iSlot);
 void BuyMachineGun(CBasePlayer *pPlayer, int iSlot);
 void BuyItem(CBasePlayer *pPlayer, int iSlot);
 void ZbsUpgrade(CBasePlayer *pPlayer, int iSlot);
+void ZShSkills(CBasePlayer* pPlayer, int iSlot);
 void HandleMenu_ChooseAppearance(CBasePlayer *player, int slot);
 BOOL HandleMenu_ChooseTeam(CBasePlayer *player, int slot);
 void Radio1(CBasePlayer *player, int slot);
+void SurvSkills(CBasePlayer* player, int slot);
 void Radio2(CBasePlayer *player, int slot);
 void Radio3(CBasePlayer *player, int slot);
 bool BuyGunAmmo(CBasePlayer *player, CBasePlayerItem *weapon, bool bBlinkMoney);
@@ -157,6 +166,7 @@ CBaseEntity *EntityFromUserID(int userID);
 NOXREF int CountPlayersInServer();
 BOOL HandleBuyAliasCommands(CBasePlayer *pPlayer, const char *pszCommand);
 BOOL HandleRadioAliasCommands(CBasePlayer *pPlayer, const char *pszCommand);
+BOOL HandleSkillsAliasCommands(CBasePlayer* pPlayer, const char* pszCommand);
 void ClientCommand(edict_t *pEntity);
 void ClientUserInfoChanged(edict_t *pEntity, char *infobuffer);
 void ServerDeactivate();

@@ -327,6 +327,7 @@ public:
 	int IsObserver() { return pev->iuser1; }
 	void PlantC4();
 	void Radio(const char *msg_id, const char *msg_verbose = NULL, short pitch = 100, bool showIcon = true);
+	void Skill(const char* msg_id, const char* msg_verbose = NULL, short pitch = 100, bool showIcon = true);
 	CBasePlayer *GetNextRadioRecipient(CBasePlayer *pStartPlayer);
 	void SmartRadio();
 	void ThrowWeapon(const char *pszItemName);
@@ -717,6 +718,8 @@ public:
 	std::unique_ptr<IBasePlayerModStrategy> m_pModStrategy;
 	std::unique_ptr<IBasePlayerModStrategy> m_pModStrategy2;
 	std::unique_ptr<IBasePlayerModStrategy> m_pModStrategy3;
+	std::unique_ptr<IBasePlayerModStrategy> m_pModStrategy4;
+	std::unique_ptr<IBasePlayerModStrategy> m_pModStrategy5;
 };
 
 extern int gEvilImpulse101;

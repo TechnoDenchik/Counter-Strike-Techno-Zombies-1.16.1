@@ -3,7 +3,7 @@
 #ifdef _WIN32
 #pragma once
 #endif
-
+/*
 class ZSHUpdateRes : public BasePlayerExtra
 {
 public:
@@ -15,10 +15,8 @@ public:
 	float DamageWood() const;
 	float DamageMeat() const;
 
-	void touch();
 	void Reset();
 	void UpdateHUD() const;
-	//void UpdateHUD2() const;
 
 protected:
 
@@ -28,6 +26,6 @@ protected:
 	int metal;
 	int m_iAttack1;
 	int m_iAttack2;
-};
+};*/
 
 #endif

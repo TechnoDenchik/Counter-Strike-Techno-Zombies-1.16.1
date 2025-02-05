@@ -58,7 +58,7 @@ void CSTwinShadowAxes::Spawn(void)
 	SET_MODEL(ENT(pev), "models/p_dgaxe_a.mdl");
 
 	m_iWeaponState &= ~WPNSTATE_SHIELD_DRAWN;
-
+	pev->skin = 0;
 	
 	FallInit();
 }

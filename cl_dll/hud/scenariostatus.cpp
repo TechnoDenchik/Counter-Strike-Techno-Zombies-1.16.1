@@ -46,7 +46,7 @@ int CHudScenarioStatus::Draw(float fTime)
 	if (m_iFlags & HUD_ACTIVE)
 	{
 		int r, g, b;
-		DrawUtils::UnpackRGB(r, g, b, RGB_YELLOWISH);
+		DrawUtils::UnpackRGB(r, g, b, RGB_WHITE);
 
 		int x = gHUD.m_Timer.m_closestRight;
 		int y = ScreenHeight + (3 * gHUD.m_iFontHeight) / -2 - (m_rect.bottom - m_rect.top - gHUD.m_iFontHeight) / 2;

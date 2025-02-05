@@ -176,7 +176,7 @@ void CPlayerModStrategy_Default::GiveDefaultItems()
 	case CT:
 
 		m_pPlayer->GiveNamedItem("weapon_twinaxes");
-		m_pPlayer->GiveNamedItem("weapon_arbalest");
+		//m_pPlayer->GiveNamedItem("weapon_arbalest");
 		//m_pPlayer->GiveNamedItem("weapon_quantum");
 		//m_pPlayer->GiveNamedItem("weapon_ak47");
 		
@@ -244,7 +244,7 @@ void CPlayerModStrategy_Zombie::GiveDefaultItems()
 	m_pPlayer->RemoveAllItems(FALSE);
 	m_pPlayer->m_bHasPrimary = false;
 
-	m_pPlayer->GiveNamedItem("weapon_zombibomb");
+//	m_pPlayer->GiveNamedItem("weapon_zombibomb");
 	//m_pPlayer->GiveNamedItem("knife_zombi");
 
 

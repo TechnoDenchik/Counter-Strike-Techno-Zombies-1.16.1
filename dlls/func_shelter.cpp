@@ -36,6 +36,10 @@
 #include "game_shared2/bot/nav_file.h"
 #include "game_shared2/bot/nav_path.h"
 
+#include "gamemode/zsh/NPC/Zombie/zm_tank.h"
+#include "gamemode/zsh/NPC/Zombie/zm_light.h"
+#include "gamemode/zsh/buildobject/Turrets/automatic turret.h"
+
 #include "airtank.h"
 #include "h_ai.h"
 #include "h_cycler.h"
@@ -45,6 +49,7 @@
 #include "hostage/hostage.h"
 #include "hostage/hostage_localnav.h"
 #include "bot/cs_bot.h"
+#include "gamemode/zsh/zsh_const.h"
 
 /*
 * Globals initialization
@@ -186,6 +191,14 @@ void CShelter::KeyValue(KeyValueData *pkvd)
 		//m_iShards = Q_atof(pkvd->szValue);
 		pkvd->fHandled = TRUE;
 	}
+	else if (FStrEq(pkvd->szKeyName, "hmdmgratio"))
+	{
+		m_flHumanDamageRatio = Q_atof(pkvd->szValue);
+	}
+	else if (FStrEq(pkvd->szKeyName, "zbdmgratio"))
+	{
+		m_flZombiDamageRatio = Q_atof(pkvd->szValue);
+	}
 	else if (FStrEq(pkvd->szKeyName, "gibmodel"))
 	{
 		m_iszGibModel = ALLOC_STRING(pkvd->szValue);
@@ -219,6 +232,7 @@ IMPLEMENT_SAVERESTORE(CShelter, CBaseEntity);
 void CShelter::Spawn()
 {
 	Precache();
+	shelterattack(true);
 
 	if (pev->spawnflags & SF_BREAK_TRIGGER_ONLY)
 		pev->takedamage	= DAMAGE_NO;
@@ -365,6 +379,7 @@ void CShelter::Precache()
 
 	PRECACHE_SOUND("zsh/zsh_shelterdestroy.wav");
 	PRECACHE_SOUND("zsh/siren.wav");
+	PRECACHE_SOUND("zsh/zsh_dead.wav");
 	switch (m_Material)
 	{
 	case matWood:
@@ -507,7 +522,6 @@ void CShelter::DamageSound()
 		break;
 
 	default:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "zsh/siren.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 		break;
 	}
 
@@ -548,7 +562,7 @@ void CShelter::BreakTouch(CBaseEntity *pOther)
 		{
 			SetTouch(NULL);
 			TakeDamage(pevToucher, pevToucher, flDamage, DMG_CRUSH);
-			EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "zsh/siren.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+			
 			// do a little damage to player if we broke glass or computer
 			pOther->TakeDamage(pev, pev, flDamage / 4, DMG_SLASH);
 		}
@@ -634,78 +648,95 @@ void CShelter::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir
 
 int CShelter::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType)
 {
-	Vector vecTemp;
+	CBaseEntity* entAttacker = CBaseEntity::Instance(pevAttacker);
 
-	// if Attacker == Inflictor, the attack was a melee or other instant-hit attack.
-	// (that is, no actual entity projectile was involved in the attack so use the shooter's origin).
-	if (pevAttacker == pevInflictor)
+	if (!CBaseEntity::Instance(pevAttacker)->IsPlayer())
 	{
-		vecTemp = pevInflictor->origin - (pev->absmin + (pev->size * 0.5f));
+		Vector vecTemp;
 
-		// if a client hit the breakable with a crowbar, and breakable is crowbar-sensitive, break it now.
-		if ((pevAttacker->flags & FL_CLIENT) && (pev->spawnflags & SF_BREAK_CROWBAR) && (bitsDamageType & DMG_CLUB))
+		// if Attacker == Inflictor, the attack was a melee or other instant-hit attack.
+		// (that is, no actual entity projectile was involved in the attack so use the shooter's origin).
+		if (pevAttacker == pevInflictor)
 		{
-			flDamage = pev->health;
+			vecTemp = pevInflictor->origin - (pev->absmin + (pev->size * 0.5f));
+
+			// if a client hit the breakable with a crowbar, and breakable is crowbar-sensitive, break it now.
+			if ((pevAttacker->flags & FL_CLIENT) && (pev->spawnflags & SF_BREAK_CROWBAR) && (bitsDamageType & DMG_CLUB))
+			{
+				flDamage = pev->health;
+			}
 		}
-	}
-	else
-	{
-		// an actual missile was involved.
-		vecTemp = pevInflictor->origin - (pev->absmin + (pev->size * 0.5f));
-	}
+		else
+		{
+			// an actual missile was involved.
+			vecTemp = pevInflictor->origin - (pev->absmin + (pev->size * 0.5f));
+		}
 
-	if (!IsBreakable())
-		return 0;
+		if (!IsBreakable())
+			return 0;
 
-	// Breakables take double damage from the crowbar
-	if (bitsDamageType & DMG_CLUB)
-	{
-		flDamage *= 2.0f;
-	}
+		// Breakables take double damage from the crowbar
+		if (bitsDamageType & DMG_CLUB)
+		{
+			flDamage *= 2.0f;
+		}
 
-	// Boxes / glass / etc. don't take much poison damage, just the impact of the dart - consider that 10%
-	if (bitsDamageType & DMG_POISON)
-	{
-		flDamage *= 0.1f;
-	}
+		// Boxes / glass / etc. don't take much poison damage, just the impact of the dart - consider that 10%
+		if (bitsDamageType & DMG_POISON)
+		{
+			flDamage *= 0.1f;
+		}
 
-	// this global is still used for glass and other non-monster killables, along with decals.
-	g_vecAttackDir = vecTemp.Normalize();
+		// this global is still used for glass and other non-monster killables, along with decals.
+		g_vecAttackDir = vecTemp.Normalize();
 
-	// do the damage
-	pev->health -= flDamage;
+		// do the damage
+		pev->health -= flDamage;
 
-	if (CBaseEntity::Instance(pevAttacker)->IsPlayer() && flDamage > 0.0f) {
-		MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, pevAttacker);
+		MESSAGE_BEGIN(MSG_ALL, gmsgHitMsg, NULL);
 		WRITE_LONG((long)flDamage);
 		WRITE_SHORT(ENTINDEX(edict()));
 		WRITE_BYTE(0);
 		MESSAGE_END();
-	}
-		
-	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "zsh/siren.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 
-	if (pev->health <= 0)
-	{
-		pev->takedamage = DAMAGE_NO;
-		pev->deadflag = DEAD_DEAD;
-		pev->effects = EF_NODRAW;
-
-		Die();
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "zsh/zsh_shelterdestroy.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
-		if (m_flDelay == 0.0f)
+		for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
 		{
-			m_flDelay = 0.1f;
+			CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
+			if (!entity)
+				continue;
+			EMIT_SOUND_DYN(entity->edict(), CHAN_VOICE, "zsh/siren.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 		}
 
-		pev->nextthink = pev->ltime + m_flDelay;
-		return 0;
-	}
+		if (pev->health <= 0)
+		{
+			pev->takedamage = DAMAGE_NO;
+			pev->deadflag = DEAD_DEAD;
+			pev->effects = EF_NODRAW;
 
-	// Make a shard noise each time func breakable is hit.
-	// Don't play shard noise if cbreakable actually died.
-	
-	DamageSound();
+			Die();
+
+			if (m_flDelay == 0.0f)
+			{
+				m_flDelay = 0.1f;
+			}
+
+			pev->nextthink = pev->ltime + m_flDelay;
+			return 0;
+		}
+
+		DamageSound();
+	}
+	else
+	{
+		CBasePlayer* pPlayerAttacker = dynamic_ent_cast<CBasePlayer*>(pevAttacker);
+		if (pPlayerAttacker && pPlayerAttacker->m_pActiveItem)
+		{
+			if (pPlayerAttacker->m_pActiveItem->m_iId == WEAPON_KNIFE)
+			{
+				pev->health++;
+			}
+		}
+	}
 	return 1;
 }
 
@@ -717,7 +748,10 @@ void CShelter::Die()
 	char cFlag = 0;
 	int pitch;
 	float fvol;
-
+	MESSAGE_BEGIN(MSG_ALL, gmsgZSHMsgRound, NULL);
+	WRITE_BYTE(ZSHSurvivallose);
+	MESSAGE_END();
+	
 	pev->takedamage = DAMAGE_NO;
 	pev->deadflag = DEAD_DEAD;
 	pev->effects = EF_NODRAW;
@@ -734,6 +768,14 @@ void CShelter::Die()
 	if (fvol > 1.0f)
 		fvol = 1.0f;
 
+	for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
+	{
+		CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
+		if (!entity)
+			continue;
+		CLIENT_COMMAND(entity->edict(), "spk sound/zsh/zsh_shelterdestroy.wav\n");
+		CLIENT_COMMAND(entity->edict(), "spk sound/zsh/zsh_dead.wav\n");
+	}
 	
 	switch (m_Material)
 	{

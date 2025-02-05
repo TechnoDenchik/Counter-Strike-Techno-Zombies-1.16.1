@@ -34,7 +34,8 @@ void CZombieClass_Speed::Precache()
 
 CZombieClass_Speed::CZombieClass_Speed(CBasePlayer *player, ZombieLevel iEvolutionLevel) : CBaseZombieClass_ZB2(player, iEvolutionLevel)
 {
-	m_pZombieSkill.reset(new CZombieSkill_female(m_pPlayer));
+	Precache();
+	m_pZombieSkill.reset(new CZombieSkill_ZombieCrazy(m_pPlayer));
 
 	const char *szModel = iEvolutionLevel ? "speed_zombi_origin" : "speed_zombi_host";
 	SET_CLIENT_KEY_VALUE(m_pPlayer->entindex(), GET_INFO_BUFFER(m_pPlayer->edict()), "model", szModel);
@@ -152,7 +153,7 @@ void CZombieClass_Speed::Zombie_HealthRecoveryThink()
 			m_pPlayer->pev->health = std::min(m_pPlayer->pev->max_health, m_pPlayer->pev->health + flRecoverValue);
 
 			// effects
-			CLIENT_COMMAND(m_pPlayer->edict(), "spk zb3/zombi_heal.wav\n");
+			CLIENT_COMMAND(m_pPlayer->edict(), "spk zb3/zombi_heal_female.wav\n");
 
 			MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, nullptr, m_pPlayer->pev);
 			WRITE_BYTE(ZB2_MESSAGE_HEALTH_RECOVERY);

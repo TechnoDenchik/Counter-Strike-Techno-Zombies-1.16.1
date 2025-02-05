@@ -19,7 +19,7 @@
 #include <future>
 #include <atomic>
 
-LINK_ENTITY_TO_CLASS(wood_entity, CWood);
+LINK_ENTITY_TO_CLASS(Wood_entity, CWood);
 
 class CWoodImprov : public CHostageImprov
 {
@@ -112,7 +112,7 @@ void CWood::Spawn()
 		RemoveEntityHashValue(pev, STRING(pev->classname), CLASSNAME);
 	}
 
-	MAKE_STRING_CLASS("wood_entity", pev);
+	MAKE_STRING_CLASS("Wood_entity", pev);
 	AddEntityHashValue(pev, STRING(pev->classname), CLASSNAME);
 
 	SET_MODEL(edict(), "models/shelter/item_wood.mdl");
@@ -126,7 +126,7 @@ void CWood::Spawn()
 	pev->frame = 1;
 
 
-	pev->max_health = 100;
+	//pev->max_health = 100;
 	pev->health = pev->max_health;
 	pev->view_ofs = VEC_VIEW;
 	pev->velocity = Vector(6, 6, 18);
@@ -156,6 +156,7 @@ void CWood::Spawn()
 	DROP_TO_FLOOR(edict());
 
 	SetThink(&CWood::IdleThink);
+	SetThink(&CWood::WoodThink);
 	pev->nextthink = gpGlobals->time + RANDOM_FLOAT(0.1, 0.2);
 
 	nTargetNode = -1;
@@ -221,53 +222,61 @@ int CWood::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flD
 	float flActualDamage;
 	CBasePlayer *pAttacker = NULL;
 
-	flActualDamage = GetModifiedDamage(flDamage, m_LastHitGroup);
-
-	if (pevAttacker != NULL)
+	CBasePlayer* pPlayerAttacker = dynamic_ent_cast<CBasePlayer*>(pevAttacker);
+	if (pPlayerAttacker && pPlayerAttacker->m_pActiveItem)
 	{
-		CBaseEntity *pAttackingEnt = GetClassPtr<CBaseEntity>(pevAttacker);
-
-		if (pAttackingEnt->Classify() == CLASS_MACHINE)
+		if (pPlayerAttacker->m_pActiveItem->m_iId == WEAPON_KNIFE)
 		{
-			CBaseEntity *pDriver = ((CFuncVehicle *)pAttackingEnt)->m_pDriver;
+			
+			flActualDamage = GetModifiedDamage(flDamage, m_LastHitGroup);
 
-			if (pDriver != NULL)
+			if (pevAttacker != NULL)
 			{
-				pevAttacker = pDriver->pev;
+				CBaseEntity* pAttackingEnt = GetClassPtr<CBaseEntity>(pevAttacker);
+
+				if (pAttackingEnt->Classify() == CLASS_MACHINE)
+				{
+					CBaseEntity* pDriver = ((CFuncVehicle*)pAttackingEnt)->m_pDriver;
+
+					if (pDriver != NULL)
+					{
+						pevAttacker = pDriver->pev;
+					}
+				}
 			}
-		}
-	}
 
-	flActualDamage = g_pModRunning->GetAdjustedEntityDamage(this, pevInflictor, pevAttacker, flActualDamage, bitsDamageType);
+			flActualDamage = g_pModRunning->GetAdjustedEntityDamage(this, pevInflictor, pevAttacker, flActualDamage, bitsDamageType);
 
-	if (flActualDamage > pev->health)
-		flActualDamage = pev->health;
+			if (flActualDamage > pev->health)
+				flActualDamage = pev->health;
 
-	pev->health -= flActualDamage;
+			pev->health -= flActualDamage;
 
-	if (m_improv != NULL)
-	{
-		m_improv->OnInjury(flActualDamage);
-	}
+			if (m_improv != NULL)
+			{
+				m_improv->OnInjury(flActualDamage);
+			}
 
-		if (pev->health--)
-		{
 			Killed2(pevAttacker, GIB_NORMAL);
-			return 1;
-		}
 
-		if (pev->health > 0)
-		{
-			if (pAttacker != NULL)
+			// knife doesn't have extra damage
+
+
+
+
+			if (pev->health > 0)
 			{
-				return 1;
+				if (pAttacker != NULL)
+				{
+					return 1;
+				}
+			}
+			else
+			{
+				Killed(pevAttacker, GIB_NORMAL);
 			}
 		}
-		else
-		{
-			Killed(pevAttacker, GIB_NORMAL);
-		}
-	
+	}
 	return 0;
 }
 
@@ -338,7 +347,7 @@ void CWood::Remove()
 }
 
 CWood::CWood() : CHostage(), 
-	m_iKillBonusFrags(1), 
+	m_iKillBonusFrags2(1), 
 	m_pWoodStrategy(new CWoodModStrategy_Default(this))
 	
 {
@@ -368,6 +377,59 @@ void CWood::IdleThink()
 	UTIL_SetSize(pev, Vector(6, 6, 18), Vector(6, 6, 18));
 
 	m_pWoodStrategy->OnThink();
+}
+
+void CWood::WoodThink()
+{
+	if (pev->deadflag != DEAD_DEAD && !(pev->effects & EF_NODRAW))
+	{
+		if (m_flNextRadarTime <= gpGlobals->time)
+		{
+			SendPositionMsg();
+			m_flNextRadarTime = gpGlobals->time + 1;
+		}
+	}
+}
+
+void CWood::SendPositionMsg()
+{
+	CBaseEntity* pEntity = NULL;
+
+	while ((pEntity = UTIL_FindEntityByClassname(pEntity, "player")) != NULL)
+	{
+		if (FNullEnt(pEntity->edict()))
+			break;
+
+		if (!pEntity->IsPlayer())
+			continue;
+
+		if (pEntity->pev->flags == FL_DORMANT)
+			continue;
+
+		CBasePlayer* pTempPlayer = static_cast<CBasePlayer*>(pEntity);
+
+		if (pTempPlayer->pev->deadflag == DEAD_NO && pTempPlayer->m_iTeam == CT)
+		{
+			if (pev->effects & EF_NODRAW)
+			{
+				MESSAGE_BEGIN(MSG_ONE, gmsgZSHMsgResPosK, NULL, pTempPlayer->pev);
+				WRITE_BYTE(m_iWoodIndex);
+				MESSAGE_END();
+
+			}
+			else
+			{
+				MESSAGE_BEGIN(MSG_ONE, gmsgZSHMsgResPos, NULL, pTempPlayer->pev);
+				WRITE_BYTE(0);
+				WRITE_BYTE(m_iWoodIndex);
+				WRITE_COORD(pev->origin.x);
+				WRITE_COORD(pev->origin.y);
+				WRITE_COORD(pev->origin.z);
+				MESSAGE_END();
+			}
+
+		}
+	}
 }
 
 bool CWood::CheckTarget()

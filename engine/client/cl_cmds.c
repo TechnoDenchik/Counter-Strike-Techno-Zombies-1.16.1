@@ -44,7 +44,7 @@ void CL_PlayVideo_f( void )
 	switch( Cmd_Argc( ))
 	{
 	case 2:	// simple user version
-		Q_snprintf( path, sizeof( path ), "media/%s.mp4", Cmd_Argv( 1 ));
+		Q_snprintf( path, sizeof( path ), "media/%s.avi", Cmd_Argv( 1 ));
 		SCR_PlayCinematic( path );
 		break;
 	case 3:	// sequenced cinematics used this

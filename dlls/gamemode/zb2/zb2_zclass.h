@@ -71,6 +71,7 @@ protected:
 
 void ZombieSkill_Precache();
 void HumanSkill_Precache();
+void CZombieSkill_female_precache();
 
 std::shared_ptr<CBaseZombieClass_ZB2> ZombieClassFactory(CBasePlayer *player, ZombieLevel lv, const char *name = nullptr);
 

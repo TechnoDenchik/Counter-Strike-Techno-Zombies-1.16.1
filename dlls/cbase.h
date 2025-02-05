@@ -369,6 +369,7 @@ public:
 	void (CBaseEntity::*m_pfnUse)(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	void (CBaseEntity::*m_pfnBlocked)(CBaseEntity *pOther);
 	int current_ammo;
+	int m_iId;
 	int currentammo;
 	int maxammo_buckshot;
 	int ammo_buckshot;

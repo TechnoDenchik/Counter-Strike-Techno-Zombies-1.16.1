@@ -180,6 +180,7 @@ int CHud :: MsgFunc_GameMode(const char *pszName, int iSize, void *pbuf )
 		gHUD.m_WPI.m_iFlags |= HUD_ACTIVE;
 		m_Teamplay = true;
 		gHUD.m_ZSH.m_iFlags |= HUD_ACTIVE;
+		gHUD.m_StatusIcons.m_iFlags |= HUD_DRAW;
 		
 		break;
 	}

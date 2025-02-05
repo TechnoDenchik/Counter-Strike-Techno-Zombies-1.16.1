@@ -462,7 +462,7 @@ void CArbalest::RadiusDamage(Vector vecAiming, float flDamage)
 	WRITE_BYTE(TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOSOUND);
 	MESSAGE_END();
 
-	EMIT_SOUND_DYN(this->edict(), CHAN_STATIC, "weapons/halogun-1_exp.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+	EMIT_SOUND_DYN(this->edict(), CHAN_WEAPON, "weapons/halogun-1_exp.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 
 }
 
@@ -707,7 +707,7 @@ void CArbalest::ArbalestFire(float flSpread, duration_t flCycleTime, BOOL fUseAu
 		tDelta4 += gpGlobals->time - tWorldTime4;
 	}
 	SendWeaponAnim(ARBALEST_SHOOT_A, UseDecrement() != FALSE);
-	EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/halogun-1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+	EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/halogun-1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 
 	CBaseEntity* pevAttacker = this->m_pPlayer;
 	auto vecShootPosition = Get_ShootPosition(pevAttacker, vecSrc);
@@ -838,6 +838,10 @@ void CArbalest::ItemPostFrame()
 				m_iClip_c++;
 				UpdateHUD();
 			}
+			if (m_iClip_c > 40)
+			{
+				pev->skin = 1;
+			}
 		}
 	}
 	tWorldTime3 = gpGlobals->time;
@@ -860,7 +864,7 @@ void CArbalest::ItemPostFrame()
 					this->SendWeaponAnim(ARBALEST_SHOOT_B_LOOP, UseDecrement() != FALSE); // 4
 					phs3 = gpGlobals->time + 9.0f;
 					
-					EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/halogun-2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+					EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/halogun-2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 					return CBasePlayerWeapon::ItemPostFrame();
 				}
 				if (m_iClip_c > 0)
@@ -877,7 +881,7 @@ void CArbalest::ItemPostFrame()
 			}
 			else
 			{
-				EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/halogun-2.wav", 0, 0, 0, PITCH_NORM);
+				EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/halogun-2.wav", 0, 0, 0, PITCH_NORM);
 				this->SendWeaponAnim(ARBALEST_SHOOT_B_END, UseDecrement() != FALSE); // 5
 				phs3 = -1;
 				m_flNextPrimaryAttack = m_flNextSecondaryAttack = m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.4f;

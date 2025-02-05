@@ -25,15 +25,17 @@
 #include "parsemsg.h"
 #include "event_api.h"
 #include "com_weapons.h"
-
+#include "gamemode/mods_const.h"
 #include "draw_util.h"
 #include "triangleapi.h"
 
 DECLARE_MESSAGE( m_StatusIcons, StatusIcon )
+DECLARE_MESSAGE( m_StatusIcons, ShelterIcon)
 
 int CHudStatusIcons::Init( void )
 {
 	HOOK_MESSAGE( StatusIcon );
+	HOOK_MESSAGE( ShelterIcon);
 
 	gHUD.AddHudElem( this );
 
@@ -49,13 +51,22 @@ int CHudStatusIcons::VidInit( void )
 	m_tgaC4[0] = gRenderAPI.GL_LoadTexture("resource/helperhud/c4_left_default", NULL, 0, TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
 	m_tgaC4[1] = gRenderAPI.GL_LoadTexture("resource/helperhud/c4_left_install", NULL, 0, TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
 	R_InitTexture(b_iconimage, "resource/shelterteam/ingame_shopkey");
+	R_InitTexture(b_iconbuild, "resource/shelterteam/ingame_housingkey");
+	R_InitTexture(b_iconskills, "resource/shelterteam/ingame_skillkey");
 	return 1;
 }
 
 void CHudStatusIcons::Reset( void )
 {
 	memset( m_IconList, 0, sizeof m_IconList );
-	m_iFlags &= ~HUD_DRAW;
+	if (gHUD.m_iModRunning == MOD_ZSH)
+	{
+		m_iFlags |= HUD_DRAW;
+	}
+	else
+	{
+		m_iFlags &= ~HUD_DRAW;
+	}
 }
 
 void CHudStatusIcons::Shutdown(void)
@@ -64,30 +75,75 @@ void CHudStatusIcons::Shutdown(void)
 		gRenderAPI.GL_FreeTexture(iTexture);
 }
 
-// Draw status icons along the left-hand side of the screen
 int CHudStatusIcons::Draw( float flTime )
 {
 	if (gEngfuncs.IsSpectateOnly())
 		return 1;
-	// find starting position to draw from, along right-hand side of screen
+
 	int x = 5;
 	int y = ScreenHeight / 2;
 
-	// loop through icon list, and draw any valid icons drawing up from the middle of screen
-	for ( int i = 0; i < MAX_ICONSPRITES; i++ )
-	{
-		if ( m_IconList[i].spr )
-		{
-			y -= ( m_IconList[i].rc.bottom - m_IconList[i].rc.top ) + 5;
-			
-			int x2 = ScreenWidth / 2;
-			int y2 = ScreenHeight / 1.26;
+	int x2 = ScreenWidth / 1.93;
+	int y2 = ScreenHeight / 1.23;
 
+	int x3 = ScreenWidth / 2.10;
+	int y3 = ScreenHeight / 1.23;
+
+	int x4 = ScreenWidth / 2;
+	int y4 = ScreenHeight / 1.36;
+	
+	char szTitle[90];
+	const float flScale = 0.0f;
+
+	const int iStartX = (float)ScreenHeight / (float)ScreenWidth < 0.75 ? 100 * (ScreenHeight / 768.0) + 4 : 4;
+	const int iStartY = 40 * (ScreenHeight / 768.0);
+	const int iStartW = ScreenWidth - 2 * iStartX + 4;
+	const int iStartH = ScreenHeight - 2 * iStartY + 25;
+	const int iCharHeightOffset = 0;
+	int iDraw = 0;
+	int offsetY = 120 + 21 * iDraw + iCharHeightOffset - 6;
+
+	if (gHUD.m_iModRunning == MOD_ZSH)
+	{
+		gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
+		gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
+		b_iconskills->Bind();
+		DrawUtils::Draw2DQuadScaled(x2 - 25, y2 - 3.5, x2 + 25, y2 + 42);
+
+		m_colors.r = 0;
+		m_colors.g = 0;
+		m_colors.b = 0;
+		m_colors.a = 153;
+		m_bDrawStroke = true;
+
+		sprintf(szTitle, "Навыки");
+		DrawUtils::DrawHudStringReverse(x2 + 25, y2 + 43.5, 0, szTitle, 140, 92, 3, flScale);
+
+		if (buyzones == false)
+		{
 			gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
 			gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
-			b_iconimage->Bind();
-			DrawUtils::Draw2DQuadScaled(x2 - 30, y2 - 3.5, x2 + 30, y2 + 42);
-			
+			b_iconbuild->Bind();
+			DrawUtils::Draw2DQuadScaled(x3 - 25, y3 - 3.5, x3 + 25, y3 + 42);
+			sprintf(szTitle, "Стройка");
+			DrawUtils::DrawHudStringReverse(x3 + 25, x3 + 7.0, 0, szTitle, 140, 92, 3, flScale);
+		}
+	}
+	else
+	{
+		for (int i = 0; i < MAX_ICONSPRITES; i++)
+		{
+			if (m_IconList[i].spr)
+			{
+				y -= (m_IconList[i].rc.bottom - m_IconList[i].rc.top) + 5;
+
+				gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
+				gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
+				b_iconimage->Bind();
+				DrawUtils::Draw2DQuadScaled(x4 - 30, y4 - 3.5, x4 + 30, y4 + 42);
+				sprintf(szTitle, "Магазин");
+				DrawUtils::DrawHudStringReverse(x4 + 25, y4 + 40.0, 0, szTitle, 0, 200, 0, flScale);
+			}
 		}
 	}
 	
@@ -113,12 +169,39 @@ int CHudStatusIcons::MsgFunc_StatusIcon( const char *pszName, int iSize, void *p
 		int r = reader.ReadByte();
 		int g = reader.ReadByte();
 		int b = reader.ReadByte();
-		EnableIcon( pszIconName, r, g, b );
+		EnableIcon( pszIconName, r, g, b );	
 		m_iFlags |= HUD_DRAW;
+		buyzones = true;
 	}
 	else
 	{
+		buyzones = false;
 		DisableIcon( pszIconName );
+	}
+
+	return 1;
+}
+
+int CHudStatusIcons::MsgFunc_ShelterIcon(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader reader(pszName, pbuf, iSize);
+
+	int ShouldEnable = reader.ReadByte();
+	char* pszIconName = reader.ReadString();
+
+	if (ShouldEnable)
+	{
+		int r = reader.ReadByte();
+		int g = reader.ReadByte();
+		int b = reader.ReadByte();
+		EnableIcon(pszIconName, r, g, b);
+	
+		//m_iFlags |= HUD_DRAW;
+	}
+	else
+	{
+	
+		DisableIcon(pszIconName);
 	}
 
 	return 1;

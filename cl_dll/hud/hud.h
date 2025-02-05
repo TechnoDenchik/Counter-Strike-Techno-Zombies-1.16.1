@@ -128,6 +128,7 @@ struct HUDLIST {
 //#include "voice_status.h"
 #include "hud_spectator.h"
 #include "followicon.h"
+#include "zsh/infolocationhud.h"
 #include "scenariostatus.h"
 #include "health.h"
 #include "radar.h"
@@ -440,14 +441,72 @@ struct hostage_info_t
 	int radarflashes;
 };
 
-extern hud_player_info_t	g_PlayerInfoList[MAX_PLAYERS+1];	   // player info from the engine
-extern extra_player_info_t  g_PlayerExtraInfo[MAX_PLAYERS+1];  
-extern extra_player_info_t  g_location[MAX_PLAYERS + 32]; // additional player info sent directly to the client dll
-extern team_info_t			g_TeamInfo[MAX_TEAMS+1];
-extern hostage_info_t		g_HostageInfo[MAX_HOSTAGES+1];
-extern RoundPlayerInfo      g_PlayerExtraInfoEx[MAX_PLAYERS + 1];
-extern int					g_IsSpectator[MAX_PLAYERS+1];
 
+
+struct zombie_info_t
+{
+	vec3_t origin;
+	float radarflashtimedelta;
+	float radarflashtime;
+	bool dead;
+	bool nextflash;
+	int radarflashes;
+};
+
+struct wood_info_t
+{
+	vec3_t origin;
+	float radarflashtimedelta;
+	float radarflashtime;
+	bool dead;
+	bool nextflash;
+	int radarflashes;
+};
+
+struct metal_info_t
+{
+	vec3_t origin;
+	float radarflashtimedelta;
+	float radarflashtime;
+	bool dead;
+	bool nextflash;
+	int radarflashes;
+};
+
+struct shelter_info_t
+{
+	vec3_t origin;
+	float radarflashtimedelta;
+	float radarflashtime;
+	bool dead;
+	bool nextflash;
+	int radarflashes;
+};
+
+struct buyzone_info_t
+{
+	vec3_t origin;
+	float radarflashtimedelta;
+	float radarflashtime;
+	bool dead;
+	bool nextflash;
+	int radarflashes;
+};
+
+extern hud_player_info_t	g_PlayerInfoList[MAX_PLAYERS + 1];	   // player info from the engine
+extern extra_player_info_t  g_PlayerExtraInfo[MAX_PLAYERS + 1];  
+extern extra_player_info_t  g_location[MAX_PLAYERS + 32]; // additional player info sent directly to the client dll
+extern team_info_t			g_TeamInfo[MAX_TEAMS + 1];
+extern hostage_info_t		g_HostageInfo[MAX_HOSTAGES + 1];
+extern RoundPlayerInfo      g_PlayerExtraInfoEx[MAX_PLAYERS + 1];
+
+extern zombie_info_t		g_ZombieInfo[MAX_HOSTAGES + 1];
+extern wood_info_t		g_WoodInfo[MAX_HOSTAGES + 1];
+extern metal_info_t		g_MetalInfo[MAX_HOSTAGES + 1];
+extern shelter_info_t		g_ShelterInfo[MAX_HOSTAGES + 1];
+extern buyzone_info_t		g_BuyZoneInfo[MAX_HOSTAGES + 1];
+
+extern int					g_IsSpectator[MAX_PLAYERS + 1];
 
 class AlarmBasicdata
 {
@@ -985,6 +1044,7 @@ public:
 	void Shutdown(void);
 	int Draw(float flTime);
 	CHudMsgFunc(StatusIcon);
+	CHudMsgFunc(ShelterIcon);
 
 	enum {
 		MAX_ICONSPRITENAME_LENGTH = MAX_SPRITE_NAME_LENGTH,
@@ -996,13 +1056,17 @@ public:
 	//could use a friend declaration instead...
 	void EnableIcon( const char *pszIconName, unsigned char red, unsigned char green, unsigned char blue );
 	void DisableIcon( const char *pszIconName );
-	
-	
+	void EnableIcon2();
+	bool buyzones;
 	friend class CHudScoreboard;
+	
 protected:
 	UniqueTexture b_iconimage;
+	UniqueTexture b_iconbuild;
+	UniqueTexture b_iconskills;
 private:
-
+	RGBA m_colors;
+	bool m_bDrawStroke;
 	typedef struct
 	{
 		char szSpriteName[MAX_ICONSPRITENAME_LENGTH];
@@ -1385,6 +1449,7 @@ public:
 	cvar_t* m_alarmstyle;
 
 	cvar_t *cl_headname;
+	cvar_t* zsh_mentality;
 #ifdef __ANDROID__
 	cvar_t *cl_android_force_defaults;
 #endif
@@ -1426,6 +1491,10 @@ public:
 	CHudSpectatorGui m_SpectatorGui;
 	CHudDeathInfo m_DeathInfo;
 	CHudNewHud m_NewHud;
+	CHudInfoShelterIcon infogetitem;
+	CHudInfoWoodIcon infogetres;
+	CHudInfoMetalIcon infogetres2;
+	CHudInfoZombieIcon infogetzm;
 	CHudNewAlarm  m_NewAlarm;
 	//CHudDrawFontText m_DrawFontText;
 	CHudFollowIcon	m_FollowIcon;

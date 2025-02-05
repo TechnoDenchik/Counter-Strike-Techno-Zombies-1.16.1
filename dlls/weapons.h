@@ -560,6 +560,7 @@ extern short g_sModelIndexZombiebomb_exp;
 extern short g_sModelIndexC4Glow;
 
 extern short g_sModelIndexRadio;
+extern short g_sModelIndexSurvival;
 extern MULTIDAMAGE gMultiDamage;
 
 void FindHullIntersection(const Vector &vecSrc, TraceResult &tr, float *mins, float *maxs, edict_t *pEntity);

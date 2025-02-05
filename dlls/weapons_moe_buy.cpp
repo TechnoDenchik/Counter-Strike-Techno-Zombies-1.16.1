@@ -61,21 +61,22 @@ static MoEWeaponBuyInfo_s g_MoEWeaponBuyInfo[] = {
 	{ "weapon_mg3", "MG-3", 5750, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	
 	{ "weapon_cannon", "Blackdragon Cannon", 3800, PRIMARY_WEAPON_SLOT, UNASSIGNED },
-	{ "weapon_gungnir", "Gungnir", 6000, PRIMARY_WEAPON_SLOT, UNASSIGNED },
-	{ "weapon_quant", "QuantumHorizon", 6000, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_gungnir", "Gungnir", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_quant", "QuantumHorizon", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_twinaxes", "Twin Shadow Axes", 0, KNIFE_SLOT, UNASSIGNED },
+	{ "weapon_arbalest", "Arbalest", 0, KNIFE_SLOT, UNASSIGNED },
 	
 	{ "weapon_knife", "Seal Knife", 0, KNIFE_SLOT, UNASSIGNED },
 	{ "knife_skullaxe", "Skull-9", 0, KNIFE_SLOT, UNASSIGNED },
 	{ "weapon_shelteraxe", "ShelterAxe", 0, KNIFE_SLOT, UNASSIGNED },
-	{ "weapon_voidpistol",         "Voidpistol",                  1700, PISTOL_SLOT, UNASSIGNED },
-	{"weapon_bow",      "BOW",               6200, PRIMARY_WEAPON_SLOT, UNASSIGNED },
-	{"weapon_chainsaw",         "Ripper",                  5750, PRIMARY_WEAPON_SLOT, UNASSIGNED},
-	{"knife_dragonsword",     "Green Dragon Crescent Blade",               0,    KNIFE_SLOT,          UNASSIGNED },
-	{"knife_dualsword",    "Dual Sword Phantom Slayer",0, KNIFE_SLOT,          UNASSIGNED},
-	{"weapon_starchaserar",      "Star Chaser AR",               5000, PRIMARY_WEAPON_SLOT, UNASSIGNED },
-	{"weapon_gunkata",	 "Dual Beretta Gunslinger",			  1500,  PISTOL_SLOT,         UNASSIGNED},
-	{"weapon_sgdrill",         "Magnum Drill",                 6250, PRIMARY_WEAPON_SLOT, UNASSIGNED},
+	{ "weapon_voidpistol",         "Voidpistol",                  0, PISTOL_SLOT, UNASSIGNED },
+	{ "weapon_bow",      "BOW",               6200, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_chainsaw",         "Ripper",                  5750, PRIMARY_WEAPON_SLOT, UNASSIGNED},
+	{ "knife_dragonsword",     "Green Dragon Crescent Blade",               0,    KNIFE_SLOT,          UNASSIGNED },
+	{ "knife_dualsword",    "Dual Sword Phantom Slayer",0, KNIFE_SLOT,          UNASSIGNED},
+	{ "weapon_starchaserar",      "Star Chaser AR",               5000, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_gunkata",	 "Dual Beretta Gunslinger",			  1500,  PISTOL_SLOT,         UNASSIGNED},
+	{ "weapon_sgdrill",         "Magnum Drill",                 0, PRIMARY_WEAPON_SLOT, UNASSIGNED},
 };
 
 bool HasPlayerItem(CBasePlayer *pPlayer, const char *pszCheckItem)

@@ -19,6 +19,7 @@ GNU General Public License for more details.
 #include "mod_zb2.h"
 #include "zb3/zb3_const.h"
 #include "zb3/zb3_morale.h"
+#include "zb3/zb3_hero.h"
 
 class CMod_ZombieHero : public CMod_ZombieMod2
 {
@@ -60,6 +61,7 @@ public:
 
 	virtual void Event_OnBecomeHero(CBasePlayer *who);
 	virtual void Event_OnRoundStart();
+	void BecomeHero();
 
 	bool IsHero() const { return m_pPlayer->m_bIsVIP; }
 
@@ -67,7 +69,7 @@ private:
 	CMod_ZombieHero * const m_pModZB3;
 	const EventListener m_eventBecomeHeroListener;
 	const EventListener m_eventRoundStartListener;
-
+	std::shared_ptr<IHeroModeCharacter> m_pCharacter_ZB3;
 	float m_flRagePercent; // [0.0-100.0]
 	float m_flDeadTime;
 	float m_flBackupMaxHealth;

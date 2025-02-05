@@ -20,7 +20,6 @@ GNU General Public License for more details.
 #include "game.h"
 
 #include "mod_zb3.h"
-#include "zb3/zb2_hero.h"
 #include "util/u_range.hpp"
 
 #include <vector>
@@ -36,9 +35,7 @@ CPlayerModStrategy_ZB3::CPlayerModStrategy_ZB3(CBasePlayer *player, CMod_ZombieH
 		m_eventBecomeHeroListener(mp->m_eventBecomeHero.subscribe(&CPlayerModStrategy_ZB3::Event_OnBecomeHero, this)),
 		m_eventRoundStartListener(mp->m_eventRoundStart.subscribe(&CPlayerModStrategy_ZB3::Event_OnRoundStart, this)),
 		m_flRagePercent(0.0f)
-{
-	
-}
+{}
 
 void CPlayerModStrategy_ZB3::OnSpawn()
 {
@@ -53,22 +50,124 @@ void CPlayerModStrategy_ZB3::CheckEvolution()
 	auto iLastLevel = m_pPlayer->m_iZombieLevel;
 	if (m_pPlayer->m_iZombieLevel == ZOMBIE_LEVEL_HOST && m_flRagePercent > 100.0f)
 	{
-		BecomeZombie(ZOMBIE_LEVEL_ORIGIN);
-		m_flRagePercent = (flLastRagePercent - 100.0f) * 0.5f;
+		if (m_pPlayer->m_bIsZombieTank == true)
+		{
+			BecomeTank(ZOMBIE_LEVEL_ORIGIN);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 15000.0f;
+			m_pPlayer->pev->armorvalue = 4000.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieFemale == true)
+		{
+			BecomeSpeed(ZOMBIE_LEVEL_ORIGIN);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 12000.0f;
+			m_pPlayer->pev->armorvalue = 3200.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieHeavy == true)
+		{
+			BecomeHeavy(ZOMBIE_LEVEL_ORIGIN);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 20000.0f;
+			m_pPlayer->pev->armorvalue = 5500.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieHeal == true)
+		{
+			BecomeHeal(ZOMBIE_LEVEL_ORIGIN);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 25000.0f;
+			m_pPlayer->pev->armorvalue = 2500.0f;
+		}
+		else if (m_pPlayer->m_bIsZombiePc == true)
+		{
+			BecomePsycho(ZOMBIE_LEVEL_ORIGIN);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 22000.0f;
+			m_pPlayer->pev->armorvalue = 3500.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieDeimos == true)
+		{
+			BecomeDeimos(ZOMBIE_LEVEL_ORIGIN);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 25000.0f;
+			m_pPlayer->pev->armorvalue = 4000.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieGanimed == true)
+		{
+			BecomeGanimed(ZOMBIE_LEVEL_ORIGIN);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 25000.0f;
+			m_pPlayer->pev->armorvalue = 4000.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieBanchee == true)
+		{
+			BecomeBanchee(ZOMBIE_LEVEL_ORIGIN);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 17500.0f;
+			m_pPlayer->pev->armorvalue = 3300.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieStamp == true)
+		{
+			BecomeStamper(ZOMBIE_LEVEL_ORIGIN);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 18000.0f;
+			m_pPlayer->pev->armorvalue = 4500.0f;
+		}
 
-		m_pPlayer->pev->health = m_pPlayer->pev->max_health = 7000.0f;
-		m_pPlayer->pev->armorvalue = 500.0f;
+		m_flRagePercent = (flLastRagePercent - 100.0f) * 0.5f;
 
 		EvolutionSound();
 	}
 
 	if (m_pPlayer->m_iZombieLevel == ZOMBIE_LEVEL_ORIGIN && m_flRagePercent > 100.0f)
 	{
-		BecomeZombie(ZOMBIE_LEVEL_ORIGIN_LV2);
-		m_flRagePercent = (flLastRagePercent - 100.0f) * 0.5f;
+		if (m_pPlayer->m_bIsZombieTank == true)
+		{
+			BecomeTank(ZOMBIE_LEVEL_ORIGIN_LV2);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 25000.0f;
+			m_pPlayer->pev->armorvalue = 5000.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieFemale == true)
+		{
+			BecomeSpeed(ZOMBIE_LEVEL_ORIGIN_LV2);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 20000.0f;
+			m_pPlayer->pev->armorvalue = 3500.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieHeavy == true)
+		{
+			BecomeHeavy(ZOMBIE_LEVEL_ORIGIN_LV2);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 30000.0f;
+			m_pPlayer->pev->armorvalue = 7500.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieHeal == true)
+		{
+			BecomeHeal(ZOMBIE_LEVEL_ORIGIN_LV2);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 27000.0f;
+			m_pPlayer->pev->armorvalue = 3700.0f;
+		}
+		else if (m_pPlayer->m_bIsZombiePc == true)
+		{
+			BecomePsycho(ZOMBIE_LEVEL_ORIGIN_LV2);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 25000.0f;
+			m_pPlayer->pev->armorvalue = 4500.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieDeimos == true)
+		{
+			BecomeDeimos(ZOMBIE_LEVEL_ORIGIN_LV2);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 28000.0f;
+			m_pPlayer->pev->armorvalue = 6500.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieGanimed == true)
+		{
+			BecomeGanimed(ZOMBIE_LEVEL_ORIGIN_LV2);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 28000.0f;
+			m_pPlayer->pev->armorvalue = 6500.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieBanchee == true)
+		{
+			BecomeBanchee(ZOMBIE_LEVEL_ORIGIN_LV2);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 24000.0f;
+			m_pPlayer->pev->armorvalue = 4000.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieStamp == true)
+		{
+			BecomeStamper(ZOMBIE_LEVEL_ORIGIN_LV2);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 22000.0f;
+			m_pPlayer->pev->armorvalue = 5000.0f;
+		}
 
-		m_pPlayer->pev->health = m_pPlayer->pev->max_health = 14000.0f;
-		m_pPlayer->pev->armorvalue = 1500.0f;
+		m_flRagePercent = (flLastRagePercent - 100.0f) * 0.5f;
 
 		EvolutionSound();
 	}
@@ -87,7 +186,6 @@ void CPlayerModStrategy_ZB3::BecomeZombie(ZombieLevel iEvolutionLevel)
 	
 	return CPlayerModStrategy_ZB2::BecomeZombie(iEvolutionLevel);
 }
-
 
 void CPlayerModStrategy_ZB3::Event_OnInfection(CBasePlayer * victim, CBasePlayer * attacker)
 {
@@ -174,9 +272,16 @@ void CPlayerModStrategy_ZB3::Event_OnBecomeHero(CBasePlayer * who)
 {
 	if (m_pPlayer != who)
 		return;
-
+	BecomeHero();
 	// TODO : hero weapons & model
 	m_pPlayer->m_bIsVIP = true;
+}
+
+void CPlayerModStrategy_ZB3::BecomeHero()
+{
+	auto sp = std::make_shared<CHero_ZB1>(m_pPlayer);
+
+	sp->ResetMaxSpeed();
 }
 
 void CPlayerModStrategy_ZB3::Event_OnRoundStart()
@@ -196,10 +301,7 @@ void CZB3HumanMorale::UpdateHUD(CBasePlayer *player, ZB3HumanMoraleType_e type) 
 	MESSAGE_END();
 }
 
-CMod_ZombieHero::CMod_ZombieHero()
-{
-
-}
+CMod_ZombieHero::CMod_ZombieHero(){}
 
 void CMod_ZombieHero::InstallPlayerModStrategy(CBasePlayer *player)
 {
@@ -209,19 +311,16 @@ void CMod_ZombieHero::InstallPlayerModStrategy(CBasePlayer *player)
 void CMod_ZombieHero::PickZombieOrigin()
 {
 	CMod_Zombi::PickZombieOrigin();
-	// TODO : pick hero
-	 PickHero();
+	PickHero();
 }
-
-
 
 void CMod_ZombieHero::UpdateGameMode(CBasePlayer * pPlayer)
 {
 	MESSAGE_BEGIN(MSG_ONE, gmsgGameMode, NULL, pPlayer->edict());
 	WRITE_BYTE(MOD_ZB3);
-	WRITE_BYTE(0); // Reserved. (weapon restriction? )
-	WRITE_BYTE(maxrounds.value); // MaxRound (mp_roundlimit)
-	WRITE_BYTE(0); // Reserved. (MaxTime?)
+	WRITE_BYTE(0);
+	WRITE_BYTE(maxrounds.value);
+	WRITE_BYTE(0);
 	MESSAGE_END();
 }
 

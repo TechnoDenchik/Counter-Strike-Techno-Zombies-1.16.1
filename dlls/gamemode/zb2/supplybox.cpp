@@ -141,3 +141,22 @@ void CSupplyBox::SendPositionMsg()
 		}
 	}
 }
+
+LINK_ENTITY_TO_CLASS(info_supplybox, CSupSpawn);
+
+void CSupSpawn::Spawn()
+{
+	return CPointEntity::Spawn();
+}
+
+void CSupSpawn::KeyValue(KeyValueData* pkvd)
+{
+	
+}
+
+BOOL CSupSpawn::IsTriggered(CBaseEntity* pEntity)
+{
+	BOOL master = UTIL_IsMasterTriggered(pev->netname, pEntity);
+
+	return master;
+}

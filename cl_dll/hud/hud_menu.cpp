@@ -200,6 +200,14 @@ int CHudMenu :: MsgFunc_ShowMenu( const char *pszName, int iSize, void *pbuf )
 			}
 			else ShowVGUIMenu( MENU_NUMERICAL_MENU ); // we just show touch screen numbers
 		}
+		if (!strncmp(menustring, "#Skillssurv", 3))
+		{
+			if (menustring[3])
+			{
+				ShowVGUIMenu(MENU_SURVSKILLS); return 1;
+			}
+			else ShowVGUIMenu(MENU_SURVSKILLS); // we just show touch screen numbers
+		}
 		else ShowVGUIMenu(MENU_NUMERICAL_MENU);
 	}
 	else ShowVGUIMenu(MENU_NUMERICAL_MENU);
@@ -333,6 +341,9 @@ void CHudMenu::ShowVGUIMenu( int menuType )
 		break;
 	case MENU_RADIOA:
 		szCmd = "exec touch/radioa.cfg";
+		break;
+	case MENU_SURVSKILLS:
+		szCmd = "exec touch/survskills.cfg";
 		break;
 	case MENU_RADIOB:
 		szCmd = "exec touch/radiob.cfg";

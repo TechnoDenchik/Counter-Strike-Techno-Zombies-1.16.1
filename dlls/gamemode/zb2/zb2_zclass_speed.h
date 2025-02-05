@@ -35,5 +35,4 @@ public:
 	std::shared_ptr<IZombieModeCharacter_ZB2_Extra> m_pCharacter_ZB2;
 	float m_flTimeNextZombieHealthRecovery;
 };
-
-#endif //PROJECT_ZB2_ZCLASS_SPEED_H
+#endif

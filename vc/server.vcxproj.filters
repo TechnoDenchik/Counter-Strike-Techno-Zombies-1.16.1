@@ -143,8 +143,26 @@
     <Filter Include="dlls\physic">
       <UniqueIdentifier>{34761316-1bc0-4d36-846e-2ae658c998b7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="dlls\player\weapons_const">
-      <UniqueIdentifier>{3ccd81f9-51b5-4e8a-a780-1f96bd78c759}</UniqueIdentifier>
+    <Filter Include="dlls\gamemode\zsh\Build\Turrets\Maneger">
+      <UniqueIdentifier>{65f7c4b5-21f5-4393-91fe-ef5a42e5cfc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\gamemode\zb2\Entity">
+      <UniqueIdentifier>{1c24ffb3-8567-4112-82f3-e60a13ef925a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\gamemode\zb2\Class">
+      <UniqueIdentifier>{c3243b90-8c2c-4dea-bb4f-4fa1873c7bac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\gamemode\zb2\Class\Zombie">
+      <UniqueIdentifier>{746f417f-caa6-4926-9820-c513bbe24809}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\gamemode\zb2\Class\Skill">
+      <UniqueIdentifier>{acad6310-f5c4-41bf-9fee-0e0581629ea3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\gamemode\zb3\Human">
+      <UniqueIdentifier>{e556fee0-fa2e-4e00-9c27-f54b174fa3b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\gamemode\zb3\MoraleState">
+      <UniqueIdentifier>{4b7b4880-00e0-47e0-9b6a-0a1288850f1c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -580,9 +598,6 @@
     <ClCompile Include="..\dlls\gamemode\mod_zb2.cpp">
       <Filter>dlls\gamemode</Filter>
     </ClCompile>
-    <ClCompile Include="..\dlls\gamemode\zb2\supplybox.cpp">
-      <Filter>dlls\gamemode\zb2</Filter>
-    </ClCompile>
     <ClCompile Include="..\dlls\bot\cs_bot_bhopjump.cpp">
       <Filter>dlls\bot</Filter>
     </ClCompile>
@@ -667,21 +682,6 @@
     <ClCompile Include="..\dlls\wpn_shared\wpn_infinitys.cpp">
       <Filter>dlls\wpn_shared</Filter>
     </ClCompile>
-    <ClCompile Include="..\dlls\gamemode\zb2\zb2_skill_human.cpp">
-      <Filter>dlls\gamemode\zb2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\gamemode\zb2\zb2_skill_zombie.cpp">
-      <Filter>dlls\gamemode\zb2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass_tank.cpp">
-      <Filter>dlls\gamemode\zb2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass.cpp">
-      <Filter>dlls\gamemode\zb2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass_speed.cpp">
-      <Filter>dlls\gamemode\zb2</Filter>
-    </ClCompile>
     <ClCompile Include="..\dlls\weapons_moe_buy.cpp">
       <Filter>dlls</Filter>
     </ClCompile>
@@ -715,9 +715,6 @@
     <ClCompile Include="..\dlls\wpn_shared\knife_shelter_axe.cpp">
       <Filter>dlls\wpn_shared</Filter>
     </ClCompile>
-    <ClCompile Include="..\dlls\player\zsh_updateday.cpp">
-      <Filter>dlls\player</Filter>
-    </ClCompile>
     <ClCompile Include="..\dlls\gamemode\zsh\skills.cpp">
       <Filter>dlls\gamemode\zsh\Skills</Filter>
     </ClCompile>
@@ -726,9 +723,6 @@
     </ClCompile>
     <ClCompile Include="..\dlls\gamemode\zsh\build.cpp">
       <Filter>dlls\gamemode\zsh\Build</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\gamemode\zsh\spawnres.cpp">
-      <Filter>dlls\gamemode\zsh\resources</Filter>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\knife_dualsword.cpp">
       <Filter>dlls\wpn_shared</Filter>
@@ -783,12 +777,6 @@
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_female.cpp">
       <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\gamemode\zb2\zb2_skill_zombie_female.cpp">
-      <Filter>dlls\gamemode\zb2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\player\player_hero.cpp">
-      <Filter>dlls\player</Filter>
     </ClCompile>
     <ClCompile Include="..\dlls\func_shelter.cpp">
       <Filter>dlls</Filter>
@@ -958,12 +946,6 @@
     <ClCompile Include="..\dlls\gamemode\zsh\skill\Enginner\moving turrets.cpp">
       <Filter>dlls\gamemode\zsh\Skills\Engineer</Filter>
     </ClCompile>
-    <ClCompile Include="..\dlls\gamemode\zb3\zb2_hero.cpp">
-      <Filter>dlls\gamemode\zb2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\gamemode\zb3\zb2_class_hero.cpp">
-      <Filter>dlls\gamemode\zb2</Filter>
-    </ClCompile>
     <ClCompile Include="..\dlls\gamemode\zbs\monster_entity_boss.cpp">
       <Filter>dlls\gamemode\zbs</Filter>
     </ClCompile>
@@ -985,8 +967,92 @@
     <ClCompile Include="..\dlls\wpn_shared\wpn_arbalest.cpp">
       <Filter>dlls\wpn_shared</Filter>
     </ClCompile>
-    <ClCompile Include="..\dlls\player\weapons_const\arbalest_const.cpp">
-      <Filter>dlls\player\weapons_const</Filter>
+    <ClCompile Include="..\dlls\gamemode\zsh\NPC\npc_group.cpp">
+      <Filter>dlls\gamemode\zsh\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zsh\NPC\zsh_zm.cpp">
+      <Filter>dlls\gamemode\zsh\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zsh\NPC\Zombie\zm_tank.cpp">
+      <Filter>dlls\gamemode\zsh\NPC\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zsh\NPC\Zombie\zm_light.cpp">
+      <Filter>dlls\gamemode\zsh\NPC\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zsh\NPC\Zombie\zm_tank_manager.cpp">
+      <Filter>dlls\gamemode\zsh\NPC\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zsh\NPC\Zombie\zm_light_manager.cpp">
+      <Filter>dlls\gamemode\zsh\NPC\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zsh\buildobject\Generator\male_generator.cpp">
+      <Filter>dlls\gamemode\zsh\Build\Generator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zsh\buildobject\Turrets\gatling turret_manager.cpp">
+      <Filter>dlls\gamemode\zsh\Build\Turrets\Maneger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_heavy.cpp">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb2\supplybox.cpp">
+      <Filter>dlls\gamemode\zb2\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass.cpp">
+      <Filter>dlls\gamemode\zb2\Class</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb2\zb2_skill_human.cpp">
+      <Filter>dlls\gamemode\zb2\Class\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb2\zb2_skill_zombie.cpp">
+      <Filter>dlls\gamemode\zb2\Class\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass_heavy.cpp">
+      <Filter>dlls\gamemode\zb2\Class\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass_speed.cpp">
+      <Filter>dlls\gamemode\zb2\Class\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass_tank.cpp">
+      <Filter>dlls\gamemode\zb2\Class\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass_banchee.cpp">
+      <Filter>dlls\gamemode\zb2\Class\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass_deimos.cpp">
+      <Filter>dlls\gamemode\zb2\Class\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass_ganimed.cpp">
+      <Filter>dlls\gamemode\zb2\Class\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass_heal.cpp">
+      <Filter>dlls\gamemode\zb2\Class\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass_pc.cpp">
+      <Filter>dlls\gamemode\zb2\Class\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass_stamper.cpp">
+      <Filter>dlls\gamemode\zb2\Class\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_banchee.cpp">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_deimos.cpp">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_ganimed.cpp">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_heal.cpp">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_pc.cpp">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_stamper.cpp">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb3\zb3_hero.cpp">
+      <Filter>dlls\gamemode\zb3\Human</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1380,9 +1446,6 @@
     <ClInclude Include="..\dlls\gamemode\mod_zb2.h">
       <Filter>dlls\gamemode</Filter>
     </ClInclude>
-    <ClInclude Include="..\dlls\gamemode\zb2\supplybox.h">
-      <Filter>dlls\gamemode\zb2</Filter>
-    </ClInclude>
     <ClInclude Include="..\dlls\gamemode\zb2\zb2_const.h">
       <Filter>dlls\gamemode\zb2</Filter>
     </ClInclude>
@@ -1488,9 +1551,6 @@
     <ClInclude Include="..\dlls\gamemode\mod_zb3.h">
       <Filter>dlls\gamemode</Filter>
     </ClInclude>
-    <ClInclude Include="..\dlls\gamemode\zb3\zb3_morale.h">
-      <Filter>dlls\gamemode\zb3</Filter>
-    </ClInclude>
     <ClInclude Include="..\dlls\gamemode\zb3\zb3_const.h">
       <Filter>dlls\gamemode\zb3</Filter>
     </ClInclude>
@@ -1511,12 +1571,6 @@
     </ClInclude>
     <ClInclude Include="..\dlls\weapons\WeaponDataVaribles.hpp">
       <Filter>dlls\weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\gamemode\zb2\zb2_zclass.h">
-      <Filter>dlls\gamemode\zb2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\gamemode\zb2\zb2_skill.h">
-      <Filter>dlls\gamemode\zb2</Filter>
     </ClInclude>
     <ClInclude Include="..\dlls\weapons_moe_buy.h">
       <Filter>dlls</Filter>
@@ -1558,9 +1612,6 @@
       <Filter>dlls\wpn_shared</Filter>
     </ClInclude>
     <ClInclude Include="..\public2\osconfig.h" />
-    <ClInclude Include="..\dlls\player\zsh_updateday.h">
-      <Filter>dlls\player</Filter>
-    </ClInclude>
     <ClInclude Include="..\dlls\gamemode\zsh\skills.h">
       <Filter>dlls\gamemode\zsh\Skills</Filter>
     </ClInclude>
@@ -1569,9 +1620,6 @@
     </ClInclude>
     <ClInclude Include="..\dlls\gamemode\zsh\build.h">
       <Filter>dlls\gamemode\zsh\Build</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\gamemode\zsh\spawnres.h">
-      <Filter>dlls\gamemode\zsh\resources</Filter>
     </ClInclude>
     <ClInclude Include="..\dlls\gamemode\gd\gd_const.h">
       <Filter>dlls\gamemode\gd</Filter>
@@ -1618,12 +1666,6 @@
     <ClInclude Include="..\dlls\wpn_shared\wpn_zombiebomb.h">
       <Filter>dlls\wpn_shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\dlls\player\player_hero.h">
-      <Filter>dlls\player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\gamemode\zb3\zb3_human.h">
-      <Filter>dlls\gamemode\zb3</Filter>
-    </ClInclude>
     <ClInclude Include="..\dlls\func_shelter.h">
       <Filter>dlls</Filter>
     </ClInclude>
@@ -1632,9 +1674,6 @@
     </ClInclude>
     <ClInclude Include="..\dlls\wpn_shared\wpn_c4shelter.h">
       <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\gamemode\zsh\resources\resources.h">
-      <Filter>dlls\gamemode\zsh\resources</Filter>
     </ClInclude>
     <ClInclude Include="..\dlls\gamemode\zsh\skill\Survival\survival.h">
       <Filter>dlls\gamemode\zsh\Skills\Survival</Filter>
@@ -1867,9 +1906,6 @@
     <ClInclude Include="..\engine2\customentity.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\dlls\gamemode\zb3\zb2_hero.h">
-      <Filter>dlls\gamemode\zb2</Filter>
-    </ClInclude>
     <ClInclude Include="..\dlls\gamemode\zbs\monster_entity_boss.h">
       <Filter>dlls\gamemode\zbs</Filter>
     </ClInclude>
@@ -1891,8 +1927,71 @@
     <ClInclude Include="..\dlls\wpn_shared\wpn_arbalest.h">
       <Filter>dlls\wpn_shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\dlls\player\weapons_const\arbalest_const.h">
-      <Filter>dlls\player\weapons_const</Filter>
+    <ClInclude Include="..\dlls\gamemode\zsh\NPC\npc_group.h">
+      <Filter>dlls\gamemode\zsh\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zsh\NPC\zsh_zm.h">
+      <Filter>dlls\gamemode\zsh\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zsh\NPC\Zombie\zm_tank.h">
+      <Filter>dlls\gamemode\zsh\NPC\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zsh\NPC\Zombie\zm_light.h">
+      <Filter>dlls\gamemode\zsh\NPC\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zsh\NPC\Zombie\zm_tank_manager.h">
+      <Filter>dlls\gamemode\zsh\NPC\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zsh\NPC\Zombie\zm_light_manager.h">
+      <Filter>dlls\gamemode\zsh\NPC\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zsh\buildobject\Generator\male_generator.h">
+      <Filter>dlls\gamemode\zsh\Build\Generator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zsh\buildobject\Turrets\gatling turret_manager.h">
+      <Filter>dlls\gamemode\zsh\Build\Turrets\Maneger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb2\supplybox.h">
+      <Filter>dlls\gamemode\zb2\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb2\zb2_zclass.h">
+      <Filter>dlls\gamemode\zb2\Class</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb2\zb2_skill.h">
+      <Filter>dlls\gamemode\zb2\Class\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb2\zb2_zclass_heavy.h">
+      <Filter>dlls\gamemode\zb2\Class\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb2\zb2_zclass_speed.h">
+      <Filter>dlls\gamemode\zb2\Class\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb2\zb2_zclass_tank.h">
+      <Filter>dlls\gamemode\zb2\Class\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb2\zb2_zclass_banchee.h">
+      <Filter>dlls\gamemode\zb2\Class\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb2\zb2_zclass_deimos.h">
+      <Filter>dlls\gamemode\zb2\Class\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb2\zb2_zclass_ganimed.h">
+      <Filter>dlls\gamemode\zb2\Class\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb2\zb2_zclass_heal.h">
+      <Filter>dlls\gamemode\zb2\Class\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb2\zb2_zclass_pc.h">
+      <Filter>dlls\gamemode\zb2\Class\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb2\zb2_zclass_stamper.h">
+      <Filter>dlls\gamemode\zb2\Class\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb3\zb3_hero.h">
+      <Filter>dlls\gamemode\zb3\Human</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb3\zb3_morale.h">
+      <Filter>dlls\gamemode\zb3\MoraleState</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

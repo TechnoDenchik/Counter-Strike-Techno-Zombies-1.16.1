@@ -64,8 +64,6 @@ LINK_ENTITY_TO_CLASS(info_player_deathmatch, CBaseDMStart);
 
 LINK_ENTITY_TO_CLASS(info_player_start, CPointEntity);
 
-LINK_ENTITY_TO_CLASS(playerspawn, CPointEntity);
-
 LINK_ENTITY_TO_CLASS(info_vip_start, CBaseDMStart);
 
 LINK_ENTITY_TO_CLASS(info_landmark, CPointEntity);

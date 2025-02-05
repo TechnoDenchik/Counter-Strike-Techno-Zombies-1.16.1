@@ -19,6 +19,18 @@ public:
 	// pev->origin, pev_angles
 };
 
+class CResSpawn2 : public CPointEntity
+{
+public:
+	void Spawn() override;
+	void KeyValue(KeyValueData* pkvd) override;
+	BOOL IsTriggered(CBaseEntity* pEntity) override;
+
+public:
+	int m_iId;
+	// pev->origin, pev_angles
+};
+
 class CZSHBreak : public CBreakable
 {
 public:

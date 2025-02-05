@@ -26,6 +26,13 @@
 	RoundPlayerInfo     g_PlayerExtraInfoEx[MAX_PLAYERS + 1];
 	team_info_t         g_TeamInfo[MAX_TEAMS + 1];
 	hostage_info_t      g_HostageInfo[MAX_HOSTAGES + 1];
+
+	zombie_info_t		g_ZombieInfo[MAX_HOSTAGES + 1];
+	wood_info_t		g_WoodInfo[MAX_HOSTAGES + 1];
+	metal_info_t		g_MetalInfo[MAX_HOSTAGES + 1];
+	shelter_info_t		g_ShelterInfo[MAX_HOSTAGES + 1];
+	buyzone_info_t		g_BuyZoneInfo[MAX_HOSTAGES + 1];
+
 	int g_iUser1;
 	int g_iUser2;
 	int g_iUser3;
@@ -195,19 +202,19 @@
 	{
 		switch (gHUD.m_iModRunning)
 		{
-		case MOD_NONE: return "Original";
-		case MOD_DM: return "DeathMatch";
-		case MOD_TDM: return "Team DeathMatch";
-		case MOD_ZB1: return "Zombie Classic";
-		case MOD_ZB2: return "Zombie Mutation";
-		case MOD_ZBU: return "Zombie United";
-		case MOD_ZB3: return "Zombie Hero";
-		case MOD_ZBS: return "Scenario Zombie";
-		case MOD_ZE: return "Zombie Escape";
-		case MOD_ZB4: return "Zombie Darkness";
-		case MOD_GD: return "GunDeath Match";
-		case MOD_ZSH: return "Zombie Shelter";
-		default: break;
+			case MOD_NONE: return "Классический";
+			case MOD_DM: return "Бой Насмерть";
+			case MOD_TDM: return "Командный бой насмерть";
+			case MOD_ZB1: return "Zombie Classic";
+			case MOD_ZB2: return "Зомби Классика";
+			case MOD_ZBU: return "Zombie United";
+			case MOD_ZB3: return "Зомби Герой";
+			case MOD_ZBS: return "Сценарий зомби";
+			case MOD_ZE: return "Зомби побег";
+			case MOD_ZB4: return "Zombie Darkness";
+			case MOD_GD: return "Бой насмерть 'Оружие'";
+			case MOD_ZSH: return "Убежище зомби";
+			default: break;
 		}
 		return "Unknown";
 	}
@@ -372,9 +379,9 @@
 				{
 					const char* isBotString = gEngfuncs.PlayerInfo_ValueForKey(id, "*bot");
 					if (isBotString && atoi(isBotString) > 0)
-						sprintf(szBuf, "BOT");
+						sprintf(szBuf, "Бот");
 					else
-						sprintf(szBuf, "HOST");
+						sprintf(szBuf, "Хост");
 				}
 				else
 				{
@@ -414,9 +421,9 @@
 			{
 				const bool bIsZombieMode = gHUD.m_iModRunning == MOD_ZB1 || gHUD.m_iModRunning == MOD_ZB2 || gHUD.m_iModRunning == MOD_ZB3 || gHUD.m_iModRunning == MOD_ZB4 || gHUD.m_iModRunning == MOD_ZBB;
 				if (iColumn == 2)
-					sprintf(szBuf, "%s  (%d)", bIsZombieMode ? "Counter-Terrorists" : "CT", iPlayerCount);
+					sprintf(szBuf, "%s  (%d)", bIsZombieMode ? "Контр-Террористы" : "CT", iPlayerCount);
 				else
-					sprintf(szBuf, "%s  (%d)", bIsZombieMode ? "Terrorists" : "TR", iPlayerCount);
+					sprintf(szBuf, "%s  (%d)", bIsZombieMode ? "Террористы" : "TR", iPlayerCount);
 
 				DrawUtils::DrawHudString(x + 105, y + 110 + iCharHeightOffset, 1000, szBuf, r, g, b, flScale);
 
@@ -523,6 +530,15 @@
 		}
 	}
 
+	void CHudScoreboard::GetAllZombieInfo(void)
+	{
+		for (int i = 1; i < MAX_HOSTAGES; i++)
+		{
+			if (g_ZombieInfo[i].nextflash)
+				m_iZombieNum = i;
+		}
+	}
+
 	int CHudScoreboard::MsgFunc_ScoreInfo(const char* pszName, int iSize, void* pbuf)
 	{
 		m_iFlags |= HUD_DRAW;
@@ -589,6 +605,7 @@
 
 		// rebuild the team list
 		GetAllPlayersInfo();
+		GetAllZombieInfo();
 		m_iNumTeams = 0;
 
 		for (int i = 1; i < MAX_PLAYERS; i++)

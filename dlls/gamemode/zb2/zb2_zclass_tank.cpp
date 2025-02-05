@@ -111,9 +111,9 @@ void CZombieClass_Default::DeathSound_Zombie()
 	}
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 	WRITE_BYTE(TE_EXPLOSION);
-	WRITE_COORD(0);
-	WRITE_COORD(0);
-	WRITE_COORD(0);
+	WRITE_COORD(m_pPlayer->pev->origin.x);
+	WRITE_COORD(m_pPlayer->pev->origin.y);
+	WRITE_COORD(m_pPlayer->pev->origin.z);
 	WRITE_SHORT(MODEL_INDEX("sprites/deathres_zombie.spr"));
 	WRITE_BYTE(8);
 	WRITE_BYTE(40);

@@ -31,6 +31,22 @@ DECLARE_COMMAND(m_Radar, HideRadar)
 DECLARE_MESSAGE(m_Radar, Radar)
 DECLARE_MESSAGE(m_Radar, HostageK)
 DECLARE_MESSAGE(m_Radar, HostagePos)
+
+DECLARE_MESSAGE(m_Radar, ShelterK)
+DECLARE_MESSAGE(m_Radar, ShelterPos)
+
+DECLARE_MESSAGE(m_Radar, WoodK)
+DECLARE_MESSAGE(m_Radar, WoodPos)
+
+DECLARE_MESSAGE(m_Radar, MetalK)
+DECLARE_MESSAGE(m_Radar, MetalPos)
+
+DECLARE_MESSAGE(m_Radar, ZombieK)
+DECLARE_MESSAGE(m_Radar, ZombiePos)
+
+DECLARE_MESSAGE(m_Radar, BuyZoneK)
+DECLARE_MESSAGE(m_Radar, BuyZonePos)
+
 DECLARE_MESSAGE(m_Radar, BombDrop)
 DECLARE_MESSAGE(m_Radar, BombPickup)
 DECLARE_MESSAGE(m_Radar, Location)
@@ -51,6 +67,22 @@ int CHudRadar::Init()
 	HOOK_COMMAND("hideradar", HideRadar);
 	HOOK_MESSAGE(HostageK);
 	HOOK_MESSAGE(HostagePos);
+
+	HOOK_MESSAGE(ShelterK);
+	HOOK_MESSAGE(ShelterPos);
+
+	HOOK_MESSAGE(WoodK);
+	HOOK_MESSAGE(WoodPos);
+
+	HOOK_MESSAGE(MetalK);
+	HOOK_MESSAGE(MetalPos);
+
+	HOOK_MESSAGE(ZombieK);
+	HOOK_MESSAGE(ZombiePos);
+
+	HOOK_MESSAGE(BuyZoneK);
+	HOOK_MESSAGE(BuyZonePos);
+
 	HOOK_MESSAGE(BombDrop);
 	HOOK_MESSAGE(BombPickup);
 	HOOK_MESSAGE(Location);
@@ -74,6 +106,21 @@ void CHudRadar::Reset()
 		{
 			g_HostageInfo[i].radarflashes = 0;
 			g_HostageInfo[i].dead = true;
+
+			g_ZombieInfo[i].radarflashes = 0;
+			g_ZombieInfo[i].dead = true;
+
+			g_WoodInfo[i].radarflashes = 0;
+			g_WoodInfo[i].dead = true;
+
+			g_MetalInfo[i].radarflashes = 0;
+			g_MetalInfo[i].dead = true;
+
+			g_ShelterInfo[i].radarflashes = 0;
+			g_ShelterInfo[i].dead = true;
+		
+			g_BuyZoneInfo[i].radarflashes = 0;
+			g_BuyZoneInfo[i].dead = true;
 		}
 	}
 	pimpl->for_each(&IBaseHudSub::Reset);
@@ -178,7 +225,6 @@ int CHudRadar::MsgFunc_BombPickup(const char* pszName, int iSize, void* pbuf)
 
 int CHudRadar::MsgFunc_HostagePos(const char* pszName, int iSize, void* pbuf)
 {
-
 	BufferReader reader(pszName, pbuf, iSize);
 	int Flag = reader.ReadByte();
 	int idx = reader.ReadByte();
@@ -210,6 +256,197 @@ int CHudRadar::MsgFunc_HostageK(const char* pszName, int iSize, void* pbuf)
 		g_HostageInfo[idx].radarflashtime = gHUD.m_flTime;
 		g_HostageInfo[idx].radarflashes = 15;
 		g_HostageInfo[idx].radarflashtimedelta = 0.1f;
+	}
+
+	return 1;
+}
+
+int CHudRadar::MsgFunc_ShelterPos(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader reader(pszName, pbuf, iSize);
+	int Flag = reader.ReadByte();
+	int idx = reader.ReadByte();
+	if (idx <= MAX_HOSTAGES)
+	{
+
+		g_ShelterInfo[idx].origin.x = reader.ReadCoord();
+		g_ShelterInfo[idx].origin.y = reader.ReadCoord();
+		g_ShelterInfo[idx].origin.z = reader.ReadCoord();
+		g_ShelterInfo[idx].dead = false;
+
+		if (Flag == 1) // first message about this hostage, start flashing
+		{
+			g_ShelterInfo[idx].radarflashes = 99999;
+			g_ShelterInfo[idx].radarflashtime = gHUD.m_flTime;
+			g_ShelterInfo[idx].radarflashtimedelta = 0.5f;
+		}
+	}
+
+	return 1;
+}
+
+int CHudRadar::MsgFunc_ShelterK(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader reader(pszName, pbuf, iSize);
+	int idx = reader.ReadByte();
+	if (idx <= MAX_HOSTAGES)
+	{
+		g_ShelterInfo[idx].dead = true;
+		g_ShelterInfo[idx].radarflashtime = gHUD.m_flTime;
+		g_ShelterInfo[idx].radarflashes = 15;
+		g_ShelterInfo[idx].radarflashtimedelta = 0.1f;
+	}
+
+	return 1;
+}
+
+int CHudRadar::MsgFunc_WoodPos(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader reader(pszName, pbuf, iSize);
+	int Flag = reader.ReadByte();
+	int idx = reader.ReadByte();
+	if (idx <= MAX_HOSTAGES)
+	{
+		g_WoodInfo[idx].origin.x = reader.ReadCoord();
+		g_WoodInfo[idx].origin.y = reader.ReadCoord();
+		g_WoodInfo[idx].origin.z = reader.ReadCoord();
+		g_WoodInfo[idx].dead = false;
+
+		if (Flag == 1) // first message about this hostage, start flashing
+		{
+			g_WoodInfo[idx].radarflashes = 99999;
+			g_WoodInfo[idx].radarflashtime = gHUD.m_flTime;
+			g_WoodInfo[idx].radarflashtimedelta = 0.5f;
+		}
+	}
+
+	return 1;
+}
+
+int CHudRadar::MsgFunc_WoodK(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader reader(pszName, pbuf, iSize);
+	int idx = reader.ReadByte();
+	if (idx <= MAX_HOSTAGES)
+	{
+		g_WoodInfo[idx].dead = true;
+		g_WoodInfo[idx].radarflashtime = gHUD.m_flTime;
+		g_WoodInfo[idx].radarflashes = 15;
+		g_WoodInfo[idx].radarflashtimedelta = 0.1f;
+	}
+
+	return 1;
+}
+
+int CHudRadar::MsgFunc_MetalPos(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader reader(pszName, pbuf, iSize);
+	int Flag = reader.ReadByte();
+	int idx = reader.ReadByte();
+	if (idx <= MAX_HOSTAGES)
+	{
+		g_MetalInfo[idx].origin.x = reader.ReadCoord();
+		g_MetalInfo[idx].origin.y = reader.ReadCoord();
+		g_MetalInfo[idx].origin.z = reader.ReadCoord();
+		g_MetalInfo[idx].dead = false;
+
+		if (Flag == 1) // first message about this hostage, start flashing
+		{
+			g_MetalInfo[idx].radarflashes = 99999;
+			g_MetalInfo[idx].radarflashtime = gHUD.m_flTime;
+			g_MetalInfo[idx].radarflashtimedelta = 0.5f;
+		}
+	}
+
+	return 1;
+}
+
+int CHudRadar::MsgFunc_MetalK(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader reader(pszName, pbuf, iSize);
+	int idx = reader.ReadByte();
+	if (idx <= MAX_HOSTAGES)
+	{
+		g_MetalInfo[idx].dead = true;
+		g_MetalInfo[idx].radarflashtime = gHUD.m_flTime;
+		g_MetalInfo[idx].radarflashes = 15;
+		g_MetalInfo[idx].radarflashtimedelta = 0.1f;
+	}
+
+	return 1;
+}
+
+int CHudRadar::MsgFunc_ZombiePos(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader reader(pszName, pbuf, iSize);
+	int Flag = reader.ReadByte();
+	int idx = reader.ReadByte();
+	if (idx <= MAX_HOSTAGES)
+	{
+		g_ZombieInfo[idx].origin.x = reader.ReadCoord();
+		g_ZombieInfo[idx].origin.y = reader.ReadCoord();
+		g_ZombieInfo[idx].origin.z = reader.ReadCoord();
+		g_ZombieInfo[idx].dead = false;
+
+		if (Flag == 1) // first message about this hostage, start flashing
+		{
+			g_ZombieInfo[idx].radarflashes = 99999;
+			g_ZombieInfo[idx].radarflashtime = gHUD.m_flTime;
+			g_ZombieInfo[idx].radarflashtimedelta = 0.5f;
+		}
+	}
+
+	return 1;
+}
+
+int CHudRadar::MsgFunc_ZombieK(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader reader(pszName, pbuf, iSize);
+	int idx = reader.ReadByte();
+	if (idx <= MAX_HOSTAGES)
+	{
+		g_ZombieInfo[idx].dead = true;
+		g_ZombieInfo[idx].radarflashtime = gHUD.m_flTime;
+		g_ZombieInfo[idx].radarflashes = 15;
+		g_ZombieInfo[idx].radarflashtimedelta = 0.1f;
+	}
+
+	return 1;
+}
+
+int CHudRadar::MsgFunc_BuyZonePos(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader reader(pszName, pbuf, iSize);
+	int Flag = reader.ReadByte();
+	int idx = reader.ReadByte();
+	if (idx <= MAX_HOSTAGES)
+	{
+		g_BuyZoneInfo[idx].origin.x = reader.ReadCoord();
+		g_BuyZoneInfo[idx].origin.y = reader.ReadCoord();
+		g_BuyZoneInfo[idx].origin.z = reader.ReadCoord();
+		g_BuyZoneInfo[idx].dead = false;
+
+		if (Flag == 1) // first message about this hostage, start flashing
+		{
+			g_BuyZoneInfo[idx].radarflashes = 99999;
+			g_BuyZoneInfo[idx].radarflashtime = gHUD.m_flTime;
+			g_BuyZoneInfo[idx].radarflashtimedelta = 0.5f;
+		}
+	}
+
+	return 1;
+}
+
+int CHudRadar::MsgFunc_BuyZoneK(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader reader(pszName, pbuf, iSize);
+	int idx = reader.ReadByte();
+	if (idx <= MAX_HOSTAGES)
+	{
+		g_BuyZoneInfo[idx].dead = true;
+		g_BuyZoneInfo[idx].radarflashtime = gHUD.m_flTime;
+		g_BuyZoneInfo[idx].radarflashes = 15;
+		g_BuyZoneInfo[idx].radarflashtimedelta = 0.1f;
 	}
 
 	return 1;

@@ -45,9 +45,7 @@ template<class CBase = IBaseMod>
 class TBaseMod_RemoveObjects : public CBase
 {
 	friend BOOL _IBaseMod_RemoveObjects_IsAllowedToSpawn_impl(IBaseMod *mod, CBaseEntity *pEntity);
-	friend BOOL _IBaseMod_RemoveObjects_IsAllowedToSpawn_impl2(IBaseMod* mod, CBaseEntity* pEntity);
 	friend void _IBaseMod_RemoveObjects_CheckMapConditions_impl(IBaseMod *mod);
-	friend void _IBaseMod_RemoveObjects_CheckMapConditions_impl2(IBaseMod* mod);
 
 public: // CHalfLifeMultiplay
 	BOOL IsAllowedToSpawn(CBaseEntity *pEntity) override

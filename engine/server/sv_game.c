@@ -5385,7 +5385,7 @@ qboolean SV_LoadProgs( const char *name )
 
 	// grab function SV_SaveGameComment
 	SV_InitSaveRestore ();
-	svgame.globals->maxEntities = 270000;
+	svgame.globals->maxEntities = GI->max_edicts;
 	svgame.globals->maxClients = sv_maxclients->integer;
 	svgame.edicts = Mem_Alloc( svgame.mempool, sizeof( edict_t ) * svgame.globals->maxEntities );
 	svgame.numEntities = svgame.globals->maxClients + 1; // clients + world

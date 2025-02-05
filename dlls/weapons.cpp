@@ -107,6 +107,7 @@ short g_sModelIndexFireball2;
 short g_sModelIndexFireball3;
 short g_sModelIndexFireball4;
 short g_sModelIndexRadio;
+short g_sModelIndexSurvival;
 short g_sModelIndexZombiebomb_exp;
 
 short int g_sModelIndexCTGhost;

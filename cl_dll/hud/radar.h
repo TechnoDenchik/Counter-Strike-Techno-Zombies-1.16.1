@@ -29,6 +29,21 @@ public:
 	int MsgFunc_HostageK(const char* pszName, int iSize, void* pbuf);
 	int MsgFunc_Location(const char* pszName, int iSize, void* pbuf);
 
+	int MsgFunc_ShelterPos(const char* pszName, int iSize, void* pbuf);
+	int MsgFunc_ShelterK(const char* pszName, int iSize, void* pbuf);
+
+	int MsgFunc_WoodPos(const char* pszName, int iSize, void* pbuf);
+	int MsgFunc_WoodK(const char* pszName, int iSize, void* pbuf);
+
+	int MsgFunc_MetalPos(const char* pszName, int iSize, void* pbuf);
+	int MsgFunc_MetalK(const char* pszName, int iSize, void* pbuf);
+
+	int MsgFunc_ZombiePos(const char* pszName, int iSize, void* pbuf);
+	int MsgFunc_ZombieK(const char* pszName, int iSize, void* pbuf);
+
+	int MsgFunc_BuyZonePos(const char* pszName, int iSize, void* pbuf);
+	int MsgFunc_BuyZoneK(const char* pszName, int iSize, void* pbuf);
+
 private:
 	struct impl_t;
 	std::unique_ptr<impl_t> pimpl;

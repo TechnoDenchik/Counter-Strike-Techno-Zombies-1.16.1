@@ -121,6 +121,13 @@ void W_Precache()
 	UTIL_PrecacheOtherWeapon("weapon_mp7a1p");
 	UTIL_PrecacheOtherWeapon("knife_zombi");
 	UTIL_PrecacheOtherWeapon("knife_zombi_female");
+	UTIL_PrecacheOtherWeapon("Knife_Zombi_heavy");
+	UTIL_PrecacheOtherWeapon("Knife_Zombi_heal");
+	UTIL_PrecacheOtherWeapon("Knife_Zombi_psycho");
+	UTIL_PrecacheOtherWeapon("Knife_Zombi_deimos");
+	UTIL_PrecacheOtherWeapon("Knife_Zombi_ganimed");
+	UTIL_PrecacheOtherWeapon("Knife_Zombi_banchee");
+	UTIL_PrecacheOtherWeapon("Knife_Zombi_stamper");
 	UTIL_PrecacheOtherWeapon("weapon_infinityex1");
 	UTIL_PrecacheOtherWeapon("weapon_infinityex2");
 	UTIL_PrecacheOtherWeapon("knife_katana");
@@ -154,6 +161,7 @@ void W_Precache()
 	g_sModelIndexFireball3 = PRECACHE_MODEL("sprites/fexplo.spr");
 	g_sModelIndexFireball4 = PRECACHE_MODEL("sprites/fexplo1.spr");
 	g_sModelIndexRadio = PRECACHE_MODEL("sprites/radio.spr");
+	g_sModelIndexSurvival = PRECACHE_MODEL("sprites/radio.spr");
 
 	g_sModelIndexCTGhost = PRECACHE_MODEL("sprites/b-tele1.spr");
 	g_sModelIndexTGhost = PRECACHE_MODEL("sprites/c-tele1.spr");
