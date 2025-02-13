@@ -74,10 +74,10 @@ CMenuYesNoMessageBox::Init
 void CMenuYesNoMessageBox::_Init( void )
 {
 	if( !m_bSetYes )
-		SetPositiveButton( "Ok", PC_OK );
+		yes.SetNameAndStatus(L("CstzUI_GameMenu_Quit"), L(""));
 
 	if( !m_bSetNo )
-		SetNegativeButton( "Cancel", PC_CANCEL );
+		no.SetNameAndStatus(L("CstzUI_RefreshLogin_Cancel"), L(""));
 
 	if( !(bool)onNegative )
 		onNegative = CEventCallback::NoopCb;
@@ -87,7 +87,7 @@ void CMenuYesNoMessageBox::_Init( void )
 
 	background.bForceColor = true;
 	background.colorBase = uiPromptBgColor;
-	AddItem( background );
+	//AddItem( background );
 	AddItem( dlgMessage1 );
 	AddItem( yes );
 

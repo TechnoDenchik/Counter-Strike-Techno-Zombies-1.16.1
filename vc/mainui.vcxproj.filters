@@ -389,5 +389,8 @@
     <ClCompile Include="..\mainui_cpp\utl\unicode_strtools.cpp">
       <Filter>Source Files\Utl</Filter>
     </ClCompile>
+    <ClCompile Include="..\mainui_cpp\menus\Music.cpp">
+      <Filter>Source Files\menus</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

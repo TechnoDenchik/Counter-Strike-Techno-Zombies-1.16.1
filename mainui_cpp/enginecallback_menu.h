@@ -152,7 +152,7 @@ public:
 
 	// TODO: Move into UI class
 
-	// custom rendering (for playermodel preview)
+	/*custom rendering(for playermodel preview)
 	static inline struct cl_entity_s* GetPlayerModel( void )	// for drawing playermodel previews
 	{ return engfuncs.pfnGetPlayerModel(); }
 	static inline void	SetModel( struct cl_entity_s *ed, const char *path )
@@ -162,7 +162,7 @@ public:
 	static inline void	RenderScene( const struct ref_menu_params_s *fd )
 	{  engfuncs.pfnRenderScene( fd ); }
 	static inline int	CL_CreateVisibleEntity( int type, struct cl_entity_s *ent )
-	{  return engfuncs.CL_CreateVisibleEntity( type, ent ); }
+	{  return engfuncs.CL_CreateVisibleEntity( type, ent ); }*/
 
 	// misc handlers
 	// static inline void	HostError( const char *szFmt, ... );

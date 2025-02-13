@@ -42,7 +42,7 @@
 #include "player/player_spawnpoint.h"
 #include "player/player_knockback.h"
 #include "gamemode/interface/interface_const.h"
-
+#include <dlls/util/u_range.hpp>
 /*
 * Globals initialization
 */

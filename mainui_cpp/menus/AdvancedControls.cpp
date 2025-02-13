@@ -1,5 +1,5 @@
 /*
-Copyright (C) 1997-2001 Id Software, Inc.
+Copyright (C) 1997-2001 Id Software & TechnoSoftware, Inc.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ private:
 	void GetConfig( void );
 	void PitchInvert( void );
 
-	CMenuPicButton done, inputDev;
+	CMenuPicButton Apply, inputDev;
 
 	CMenuCheckBox	crosshair;
 	CMenuCheckBox	invertMouse;
@@ -111,31 +111,33 @@ void CAdvancedControls::_Init( void )
 {
 	banner.SetPicture( ART_BANNER );
 
-	done.SetNameAndStatus(L("Done"), L("CstzUI_done") );
-	done.SetPicture( PC_DONE );
-	done.onActivated = VoidCb( &CAdvancedControls::SaveAndPopMenu );
-	done.SetCoord( 72, 680 );
-
-	crosshair.SetNameAndStatus(L("Crosshair"), "Enable the weapon aiming crosshair" );
+	crosshair.SetNameAndStatus(L("CstzUI_Crosshair"), L(""));
 	crosshair.iFlags |= QMF_NOTIFY;
 	crosshair.SetCoord( 72, 280 );
 
-	invertMouse.SetNameAndStatus(L("GameUI_MouseLook"), "Reverse mouse up/down axis" );
+	invertMouse.SetNameAndStatus(L("GameUI_MouseLook"), L(""));
 	invertMouse.iFlags |= QMF_NOTIFY;
 	invertMouse.onChanged = VoidCb( &CAdvancedControls::PitchInvert );
 	invertMouse.SetCoord( 72, 330 );
 
-	lookFilter.SetNameAndStatus( "Look filter", "Average look inputs over the last two frames to smooth out movements(generic)" );
+	lookFilter.SetNameAndStatus(L("GameUI_MouseFilter"), L(""));
 	lookFilter.iFlags |= QMF_NOTIFY;
 	lookFilter.SetCoord( 72, 530 );
 
-	sensitivity.SetNameAndStatus( "Senitivity", "Set in-game mouse sensitivity" );
+	sensitivity.SetNameAndStatus(L("GameUI_MouseSensitivity"), L(""));
 	sensitivity.Setup( 0.0, 20.0f, 0.1 );
 	sensitivity.SetCoord( 72, 660 );
 
+	Apply.SetNameAndStatus(L("GameUI_Apply"), L(""));
+	Apply.onActivated = VoidCb(&CAdvancedControls::SaveAndPopMenu);
+	Apply.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Apply.SetGrayed(true);
+	Apply.SetCoord(72, 680);
+
 	AddItem( background );
 	AddItem( banner );
-	AddItem( done );
+	AddItem( Apply );
 	AddItem( crosshair );
 	AddItem( invertMouse );
 	AddItem( lookFilter );

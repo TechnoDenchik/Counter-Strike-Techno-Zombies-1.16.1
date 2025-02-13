@@ -1,5 +1,5 @@
 /*
-Copyright (C) 1997-2001 Id Software, Inc.
+Copyright (C) 1997-2025 Id Software & TechnoSoftware, Inc.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -41,7 +41,11 @@ public:
 	typedef CMenuFramework BaseClass;
 	CMenuOptions() : CMenuFramework("CMenuOptions") { }
 
-	// update dialog
+	CMenuPicButton Config1, Config;
+	CMenuPicButton Profile1, Profile;
+	CMenuPicButton Audio1, Audio;
+	CMenuPicButton Video1, Video;
+	CMenuPicButton Exit1, Exit;
 	
 };
 
@@ -56,20 +60,45 @@ void CMenuOptions::_Init( void )
 {
 	banner.SetPicture( ART_BANNER );
 
-	//msgBox.SetMessage( "Check the Internet for updates?" );
-	//SET_EVENT( msgBox.onPositive, UI_OpenUpdatePage( false, true ) );
-
 	AddItem( background );
 	AddItem( banner );
-	AddButton(L("Controls"), L("Change keyboard and mouse settings"), PC_CONTROLS, UI_Controls_Menu, QMF_NOTIFY );
-	//AddButton("Customize", "Choose your player name, and select visual options for your character", PC_CUSTOMIZE, UI_PlayerSetup_Menu, QMF_NOTIFY);
-	AddButton("Customize", L("Change sound volume and quality"), PC_CUSTOMIZE, UI_PlayerSetup_Menu, QMF_NOTIFY);
-	AddButton(L("GameUI_Video"), L("Change screen size, video mode and gamma"), PC_AUDIO, UI_Audio_Menu, QMF_NOTIFY );
-	AddButton( "Video",    "Change screen size, video mode and gamma", PC_VIDEO, UI_Video_Menu, QMF_NOTIFY );
-//	AddButton( "Gamepad",  "Change gamepad axis and button settings", PC_GAMEPAD, UI_GamePad_Menu, QMF_NOTIFY );
-	//AddButton(L("Update"), L("Check for updates"), PC_UPDATE, msgBox.MakeOpenEvent(), QMF_NOTIFY );
-	AddButton(L("Done"), L("Go back to the Main menu"), PC_DONE, VoidCb( &CMenuOptions::Hide ), QMF_NOTIFY );
 
+	Config.SetNameAndStatus(L("GameUI_Options"), L(""));
+	Config.onActivated = UI_Controls_Menu;
+	Config.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Config.SetGrayed(true);
+	Config.SetCoord(80, 300);
+
+	Profile.SetNameAndStatus(L("GameUI_Profile"), L(""));
+	Profile.onActivated = UI_PlayerSetup_Menu;
+	Profile.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Profile.SetGrayed(true);
+	Profile.SetCoord(80, 350);
+	
+	Audio.SetNameAndStatus(L("GameUI_Audio"), L(""));
+	Audio.onActivated = UI_Audio_Menu;
+	Audio.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Audio.SetGrayed(true);
+	Audio.SetCoord(80, 400);
+
+	Video.SetNameAndStatus(L("GameUI_Video"), L(""));
+	Video.onActivated = UI_Video_Menu;
+	Video.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Video.SetGrayed(true);
+	Video.SetCoord(80, 450);
+
+	Exit.SetNameAndStatus(L("GameUI_Close"), L(""));
+	Exit.onActivated = VoidCb(&CMenuOptions::Hide);
+	Exit.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Exit.SetGrayed(true);
+	Exit.SetCoord(80, 500);
+
+	
 	msgBox.SetMessage("It is recomended to enable client movement prediction.\nPress OK to enable it now or enable it later in ^5(Multiplayer/Customize)");
 	msgBox.SetPositiveButton("Ok", PC_OK);
 	msgBox.SetNegativeButton("Cancel", PC_CANCEL);
@@ -92,6 +121,12 @@ void CMenuOptions::_Init( void )
 		}
 	);
 	msgBox.Link(this);
+
+	AddItem(Config);
+	AddItem(Profile);
+	AddItem(Audio);
+	AddItem(Video);
+	AddItem(Exit);
 }
 
 /*
@@ -111,7 +146,6 @@ CMenuOptions::Menu
 */
 void UI_Options_Menu( void )
 {
-	
 	if (gMenu.m_gameinfo.gamemode == GAME_SINGLEPLAYER_ONLY)
 		return;
 

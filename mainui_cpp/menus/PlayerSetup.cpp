@@ -1,5 +1,5 @@
 /*
-Copyright (C) 1997-2001 Id Software, Inc.
+Copyright (C) 1997-2001 Id Software & TechnoSoftware, Inc.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -63,7 +63,7 @@ static byte g_iCrosshairAvailColors[6][3] =
 	{ 50,  250, 250 },
 };
 
-static const char *g_szCrosshairAvailSizes[] =
+/**/static const char* g_szCrosshairAvailSizes[] =
 {
 	"auto", "small", "medium", "large"
 };
@@ -128,7 +128,7 @@ public:
 	CMenuSpinControl	playerinfo;
 	CMenuCheckBox	crosshairTranslucent;
 	CMenuCheckBox	uirenderworld;
-
+	CMenuPicButton Exit, Exit1;
 	CMenuYesNoMessageBox msgBox;
 
 } uiPlayerSetup;
@@ -541,22 +541,29 @@ void CMenuPlayerSetup::_Init( void )
 	crosshairView.SetNameAndStatus(L("CstzUI_Crosshair_preview"), L("CstzUI_Crosshair_preview"));
 	crosshairView.hWhite = EngFuncs::PIC_Load("*white");
 
-	static CStringArrayModel modelSizes( g_szCrosshairAvailSizes, ARRAYSIZE( g_szCrosshairAvailSizes ));
+	static CStringArrayModel modelSizes( g_szCrosshairAvailSizes, ARRAYSIZE(g_szCrosshairAvailSizes));
+
 	crosshairSize.SetRect( 480, 345, 256, 26 );
 	crosshairSize.SetNameAndStatus(L("CstzUI_Crosshair_size"), L("CstzUI_Crosshair_size"));
 	crosshairSize.Setup(&modelSizes);
+	crosshairSize.onChanged = CMenuEditable::WriteCvarCb;
 	crosshairSize.LinkCvar("cl_crosshair_size", CMenuEditable::CVAR_STRING);
+	crosshairSize.font = QM_SMALLFONT;
 
 	static CStringArrayModel modelColors( g_szCrosshairAvailColors, ARRAYSIZE( g_szCrosshairAvailColors ));
 	crosshairColor.SetRect( 480, 415, 256, 26 );
 	crosshairColor.SetNameAndStatus(L("CstzUI_Crosshair_color"), L("CstzUI_Crosshair_color"));
 	crosshairColor.Setup(&modelColors);
+	crosshairColor.onChanged = CMenuEditable::WriteCvarCb;
+	crosshairColor.font = QM_SMALLFONT;
 
 	static CStringArrayModel modelTypes(g_szCrosshairTypes, ARRAYSIZE(g_szCrosshairTypes));
 	crosshairType.SetRect(480, 485, 256, 26);
 	crosshairType.SetNameAndStatus(L("CstzUI_Crosshair_type"), L("CstzUI_Crosshair_type"));
 	crosshairType.Setup(&modelTypes);
+	
 	crosshairType.LinkCvar("cl_crosshair_type", CMenuEditable::CVAR_VALUE);
+	crosshairType.font = QM_SMALLFONT;
 
 	crosshairTranslucent.SetCoord( 320, 540 );
 	crosshairTranslucent.SetNameAndStatus(L("CstzUI_Translucent"), L("CstzUI_Translucent"));
@@ -579,8 +586,14 @@ void CMenuPlayerSetup::_Init( void )
 
 	AddItem( background );
 	AddItem( banner );
-	AddButton("Done", 0, PC_DONE, VoidCb(&CMenuPlayerSetup::SaveAndPopMenu), QMF_NOTIFY);
+	//AddButton("Done", 0, PC_DONE, VoidCb(&CMenuPlayerSetup::SaveAndPopMenu), QMF_NOTIFY);
 
+	Exit.SetNameAndStatus(L("GameUI_Apply"), L(""));
+	Exit.onActivated = VoidCb(&CMenuPlayerSetup::SaveAndPopMenu);
+	Exit.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Exit.SetGrayed(true);
+	Exit.SetCoord(80, 250);
 
 	if( !hideLogos )
 	{
@@ -619,7 +632,7 @@ void CMenuPlayerSetup::_Init( void )
 	AddItem( crosshairView );
 	AddItem( uirenderworld );
 	AddItem( playerinfo );
-
+	AddItem(Exit);
 	if( !hideLogos )
 	{
 		AddItem( logo );

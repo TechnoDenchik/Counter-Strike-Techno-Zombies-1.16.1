@@ -1,5 +1,5 @@
 /*
-Copyright (C) 1997-2001 Id Software, Inc.
+Copyright (C) 1997-2025 Id Software & TechnoSoftware, Inc.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -69,6 +69,9 @@ public:
 	CMenuVidModesModel vidListModel;
 
 	CMenuYesNoMessageBox testModeMsgBox;
+
+	CMenuPicButton Apply1, Apply;
+	CMenuPicButton Exit1, Exit;
 
 	int prevMode;
 	bool prevFullscreen;
@@ -219,18 +222,31 @@ void CMenuVidModes::_Init( void )
 	testModeMsgBox.onNegative = VoidCb( &CMenuVidModes::RevertChanges );
 	testModeMsgBox.Link( this );
 
+	Apply.SetNameAndStatus(L("GameUI_Apply"), L(""));
+	Apply.onActivated = VoidCb(&CMenuVidModes::SetConfig);
+	Apply.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Apply.SetGrayed(true);
+	Apply.SetCoord(80, 250);
+
+	Exit.SetNameAndStatus(L("GameUI_GameMenu_Quit"), L(""));
+	Exit.onActivated = VoidCb(&CMenuVidModes::Hide);
+	Exit.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Exit.SetGrayed(true);
+	Exit.SetCoord(80, 300);
+
 	AddItem( background );
 	AddItem( banner );
-	AddButton( "Apply", "Apply changes", PC_OK, VoidCb( &CMenuVidModes::SetConfig ) );
-	AddButton( "Cancel", "Return back to previous menu", PC_CANCEL, VoidCb( &CMenuVidModes::Hide ) );
 	AddItem( windowed );
 	AddItem( vsync );
+	AddItem( Apply );
+	AddItem( Exit );
 	AddItem( vidList );
 }
 
 void CMenuVidModes::_VidInit()
 {
-	// don't overwrite prev values
 	if( !testModeMsgBox.IsVisible() )
 	{
 		prevMode = EngFuncs::GetCvarFloat( "vid_mode" );

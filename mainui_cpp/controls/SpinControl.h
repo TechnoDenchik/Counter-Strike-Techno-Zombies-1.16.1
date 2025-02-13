@@ -35,7 +35,7 @@ public:
 
 	void Setup( CMenuBaseArrayModel *model );
 	void Setup( float minValue, float maxValue, float range );
-
+	int SetStatusMusic();
 	void SetDisplayPrecision( short precision );
 
 	void SetCurrentValue( const char *stringValue );

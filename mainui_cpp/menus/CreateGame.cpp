@@ -1,5 +1,5 @@
 /*
-Copyright (C) 1997-2001 Id Software, Inc.
+Copyright (C) 1997-2025 Id Software & TechnoSoftware, Inc.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -84,6 +84,9 @@ public:
 	CMenuMapListModel mapsListModel;
 
 	CMenuPicButton *done;
+	CMenuPicButton Adv, Adv1;
+	CMenuPicButton Apply, Apply1;
+	CMenuPicButton Exit, Exit1;
 private:
 	void _Init() override;
 	void _VidInit() override;
@@ -113,7 +116,11 @@ void CMenuCreateGame::Begin( CMenuBaseItem *pSelf, void *pExtra )
 
 	
 	const char *mapName;
-	if( menu->mapsList.GetCurrentIndex() == 0 )
+	if (menu->gamemode.GetCurrentValue() == 7)
+	{
+		mapName = menu->mapsListModel.mapName[133];
+	}
+	else if( menu->mapsList.GetCurrentIndex() == 0 )
 	{
 		int idx = EngFuncs::RandomLong( 1, menu->mapsListModel.GetRows() );
 		mapName = menu->mapsListModel.mapName[idx];
@@ -256,14 +263,23 @@ void CMenuCreateGame::_Init( void )
 	hltv.SetNameAndStatus( "HLTV", "Enable HLTV mode in Multiplayer" );
 	hltv.LinkCvar( "hltv" );
 
-	// add them here, so "done" button can be used by mapsListModel::Update
 	AddItem( background );
 	AddItem( banner );
-	CMenuPicButton *advOpt = AddButton(L("Adv. Options"), "Open the game advanced options menu", PC_ADV_OPT, UI_AdvServerOptions_Menu );
-	advOpt->SetGrayed( !UI_AdvServerOptions_IsAvailable() );
 
-	done = AddButton(L("GameUI_OK"), "Start the multiplayer game", PC_DONE, Begin );
-	done->onActivatedClActive = msgBox.MakeOpenEvent();
+	Adv.SetNameAndStatus(L("GameUI_ServerSettings"), L(""));
+	Adv.onActivated = UI_AdvServerOptions_Menu;
+	Adv.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Adv.SetGrayed(true);
+	Adv.SetCoord(80, 300);
+
+	Apply.SetNameAndStatus(L("GameUI_StartGame"), L(""));
+	Apply.onActivated = Begin;
+	Apply.onChanged = msgBox.MakeOpenEvent();
+	Apply.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Apply.SetGrayed(true);
+	Apply.SetCoord(80, 250);
 
 	mapsList.SetCharSize( QM_SMALLFONT );
 	mapsList.SetupColumn( 0, L("GameUI_Map"), 0.5f ); // Map
@@ -299,7 +315,7 @@ void CMenuCreateGame::_Init( void )
 
 	botNum.iMaxLength = 3;
 	botNum.bNumbersOnly = true;
-	botNum.szName = "BOT Quota:";
+	botNum.SetNameAndStatus(L("GameUI_Bots"), L(""));
 	botNum.LinkCvar("bot_quota");
 	botNum.UpdateCvar();
 	botNum.onCvarGet = botNum.onChanged;
@@ -331,7 +347,13 @@ void CMenuCreateGame::_Init( void )
 		break;
 	}
 
-	AddButton(L("GameUI_Cancel"), "Return to the previous menu", PC_CANCEL, VoidCb( &CMenuCreateGame::Hide ) );
+	Exit.SetNameAndStatus(L("GameUI_Cancel"), L(""));
+	Exit.onActivated = VoidCb(&CMenuCreateGame::Hide);
+	Exit.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Exit.SetGrayed(true);
+	Exit.SetCoord(80, 350);
+
 	AddItem( maxClients );
 	AddItem( hostName );
 	AddItem( password );
@@ -339,10 +361,12 @@ void CMenuCreateGame::_Init( void )
 #if defined(__ANDROID__) || TARGET_OS_IPHONE || defined(__SAILFISH__)
 	AddItem( dedicatedServer );
 #endif
-	// HLTV not yet supported
-	//AddItem( hltv );
+
 	AddItem( nat );
 	AddItem( mapsList );
+	AddItem( Adv );
+	AddItem( Apply );
+	AddItem( Exit );
 	AddItem( gamemode );
 }
 

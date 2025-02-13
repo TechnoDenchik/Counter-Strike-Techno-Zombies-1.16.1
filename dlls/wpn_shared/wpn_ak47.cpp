@@ -175,6 +175,24 @@ void CAK47::Reload(void)
 	}
 }
 
+void CAK47::ItemPostFrame()
+{
+	int usableButtons = m_pPlayer->pev->button;
+
+	if (usableButtons & (IN_VIEW))
+	{
+		ResetEmptySound();
+
+		if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase())
+			return;
+
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 5;
+		SendWeaponAnim(AK47_VIEW, UseDecrement() != FALSE);
+	}
+
+	return CBasePlayerWeapon::ItemPostFrame();
+}
+
 void CAK47::WeaponIdle(void)
 {
 	ResetEmptySound();

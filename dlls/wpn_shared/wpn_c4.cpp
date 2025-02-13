@@ -22,6 +22,7 @@
 #include "gamerules.h"
 #include "wpn_c4.h"
 #include "gamemode/interface/interface_const.h"
+#include <util/u_range.hpp>
 
 //#define C4MADNESS
 #ifdef CLIENT_DLL
@@ -242,6 +243,60 @@ void CC4::PrimaryAttack(void)
 				MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg2);
 				WRITE_BYTE(ORIG_BOMB_MSG);
 				MESSAGE_END();
+
+				int music = (int)CVAR_GET_FLOAT("menu_musicpack");
+
+				if (music == 0)
+				{
+
+					for (CBasePlayer* player : moe::range::PlayersList())
+						if (player->m_iTeam == TEAM_CT)
+						{
+							CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/valve_01/bombplanted\n");
+						}
+						else
+						{
+							CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/valve_01/bombplanted\n");
+						}
+
+
+				}
+				else if (music == 1)
+				{
+					for (CBasePlayer* player : moe::range::PlayersList())
+						if (player->m_iTeam == TEAM_CT)
+						{
+							CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/valve_cs2_01/bombplanted\n");
+						}
+						else
+						{
+							CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/valve_cs2_01/bombplanted\n");
+						}
+				}
+				else if (music == 2)
+				{
+					for (CBasePlayer* player : moe::range::PlayersList())
+						if (player->m_iTeam == TEAM_CT)
+						{
+							CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/radcat_01/bombplanted\n");
+						}
+						else
+						{
+							CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/radcat_01/bombplanted\n");
+						}
+				}
+				else if (music == 3)
+				{
+					for (CBasePlayer* player : moe::range::PlayersList())
+						if (player->m_iTeam == TEAM_CT)
+						{
+							CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/3kliksphilip_01/bombplanted\n");
+						}
+						else
+						{
+							CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/3kliksphilip_01/bombplanted\n");
+						}
+				}
 
 				UTIL_LogPrintf("\"%s<%i><%s><TERRORIST>\" triggered \"Planted_The_Bomb\"\n", STRING(m_pPlayer->pev->netname), GETPLAYERUSERID(m_pPlayer->edict()), GETPLAYERAUTHID(m_pPlayer->edict()));
 				g_pGameRules->m_bBombDropped = false;

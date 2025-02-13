@@ -234,6 +234,74 @@ int CHudTimer::Draw(float fTime)
 		{
 			DrawTexturedNumbersTopRightAligned(*m_timer, rc_m_timer_s, seconds, x3 + 42, y3, 1.0f);
 		}
+
+		if (minutes == 0)
+		{
+			switch ((int)gHUD.menu_musicpack->value)
+			{
+			case 0:	
+				if (seconds == 17)
+				{
+					ClientCmd("menu_tentime 0");
+				}
+				else if (seconds == 1)
+				{
+					ClientCmd("mp3 stop");
+				}
+				else
+				{
+					ClientCmd("menu_tentime 1");
+				}; 
+				break;
+
+			case 1: 
+				if (seconds == 13)
+				{
+					ClientCmd("menu_tentime 0");
+				}
+				else if (seconds == 1)
+				{
+					ClientCmd("mp3 stop");
+				}
+				else
+				{
+					ClientCmd("menu_tentime 1");
+				};
+				break;
+
+			case 2: 
+				if (seconds == 19)
+				{
+					ClientCmd("menu_tentime 0");
+				}
+				else if (seconds == 1)
+				{
+					ClientCmd("mp3 stop");
+				}
+				else
+				{
+					ClientCmd("menu_tentime 1");
+				};
+				break;
+
+			case 3: 
+				if (seconds == 16)
+				{
+					ClientCmd("menu_tentime 0");
+				}
+				else if (seconds == 1)
+				{
+					ClientCmd("mp3 stop");
+				}
+				else
+				{
+					ClientCmd("menu_tentime 1");
+				};
+				break;
+								
+			}
+			
+		}
 		
 		
 		break;

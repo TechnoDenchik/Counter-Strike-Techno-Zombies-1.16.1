@@ -123,6 +123,7 @@
     <ClCompile Include="..\mainui_cpp\menus\InputDevices.cpp" />
     <ClCompile Include="..\mainui_cpp\menus\LoadGame.cpp" />
     <ClCompile Include="..\mainui_cpp\menus\Main.cpp" />
+    <ClCompile Include="..\mainui_cpp\menus\Music.cpp" />
     <ClCompile Include="..\mainui_cpp\menus\NewGame.cpp" />
     <ClCompile Include="..\mainui_cpp\menus\PlayerIntroduceDialog.cpp" />
     <ClCompile Include="..\mainui_cpp\menus\PlayerSetup.cpp" />

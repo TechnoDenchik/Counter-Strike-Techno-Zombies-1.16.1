@@ -1,5 +1,5 @@
 /*
-Copyright (C) 1997-2001 Id Software, Inc.
+Copyright (C) 1997-2001 Id Software & TechnoSoftware, Inc.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -106,6 +106,10 @@ private:
 	CMenuMessageBox msgBox1; // small msgbox
 
 	CMenuYesNoMessageBox msgBox2; // large msgbox
+	CMenuPicButton Default1, Default;
+	CMenuPicButton Adv, Adv1;
+	CMenuPicButton Apply1, Apply;
+	CMenuPicButton Exit1, Exit;
 
 	int bind_grab;
 } uiControls;
@@ -392,13 +396,40 @@ void CMenuControls::_Init( void )
 
 	AddItem( background );
 	AddItem( banner );
-	AddButton("Default", L("GameUI_UseDefaults"), PC_USE_DEFAULTS, msgBox2.MakeOpenEvent() );
-	AddButton(L("Adv. Controls"), "Change mouse sensitivity, enable autoaim, mouselook and crosshair", PC_ADV_CONTROLS, UI_AdvControls_Menu );
-	AddButton(L("GameUI_OK"), L("CstzUI_done"), PC_DONE,
-		VoidCb( &CMenuControls::SaveAndPopMenu ) );
-	AddButton(L("GameUI_Cancel"), "Discard changes and return to configuration menu", PC_CANCEL,
-		VoidCb( &CMenuControls::Cancel ) );
+
+	Default.SetNameAndStatus(L("GameUI_UseDefaults"), L(""));
+	Default.onActivated = msgBox2.MakeOpenEvent();
+	Default.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Default.SetGrayed(true);
+	Default.SetCoord(80, 250);
+
+	Adv.SetNameAndStatus(L("GameUI_AdvancedNoEllipsis"), L(""));
+	Adv.onActivated = UI_AdvControls_Menu;
+	Adv.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Adv.SetGrayed(true);
+	Adv.SetCoord(80, 300);
+
+	Apply.SetNameAndStatus(L("GameUI_Apply"), L(""));
+	Apply.onActivated = VoidCb(&CMenuControls::SaveAndPopMenu) ;
+	Apply.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Apply.SetGrayed(true);
+	Apply.SetCoord(80, 350);
+
+	Exit.SetNameAndStatus(L("GameUI_Cancel"), L(""));
+	Exit.onActivated = VoidCb(&CMenuControls::Cancel);
+	Exit.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Exit.SetGrayed(true);
+	Exit.SetCoord(80, 400);
+
 	AddItem( keysList );
+	AddItem(Default);
+	AddItem(Adv);
+	AddItem(Apply);
+	AddItem(Exit);
 }
 
 void CMenuControls::_VidInit()

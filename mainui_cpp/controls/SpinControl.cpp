@@ -81,10 +81,12 @@ const char *CMenuSpinControl::Key( int key, int down )
 		// now see if either left or right arrow has focus
 		if( UI_CursorInRect( left, arrow ))
 		{
+			EngFuncs::PlayLocalSound(uiSoundLaunch);
 			sound = MoveLeft();
 		}
 		else if( UI_CursorInRect( right, arrow ))
 		{
+			EngFuncs::PlayLocalSound(uiSoundLaunch);
 			sound = MoveRight();
 		}
 		break;
@@ -92,14 +94,14 @@ const char *CMenuSpinControl::Key( int key, int down )
 	case K_KP_LEFTARROW:
 		if( iFlags & QMF_MOUSEONLY )
 			break;
-
+		
 		sound = MoveLeft();
 		break;
 	case K_RIGHTARROW:
 	case K_KP_RIGHTARROW:
 		if( iFlags & QMF_MOUSEONLY )
 			break;
-
+		
 		sound = MoveRight();
 		break;
 	}

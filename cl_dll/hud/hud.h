@@ -1450,6 +1450,8 @@ public:
 
 	cvar_t *cl_headname;
 	cvar_t* zsh_mentality;
+	cvar_t* menu_musicpack;
+	cvar_t* menu_tentime;
 #ifdef __ANDROID__
 	cvar_t *cl_android_force_defaults;
 #endif

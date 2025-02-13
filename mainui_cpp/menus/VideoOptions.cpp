@@ -1,5 +1,5 @@
 /*
-Copyright (C) 1997-2001 Id Software, Inc.
+Copyright (C) 1997-2001 Id Software & TechnoSoftware, Inc.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -56,7 +56,7 @@ public:
 	CMenuCheckBox	hiTextures;
 	CMenuCheckBox   vbo;
 	CMenuCheckBox   bump;
-
+	CMenuPicButton Apply1, Apply;
 	HIMAGE		hTestImage;
 } uiVidOptions;
 
@@ -156,10 +156,13 @@ void CMenuVidOptions::_Init( void )
 	testImage.SetRect( 590, 225, 480, 450 );
 	testImage.SetPicture( ART_GAMMA );
 
-	done.SetNameAndStatus( "Done", "Go back to the Video Menu" );
-	done.SetCoord( 72, 435 );
-	done.SetPicture( PC_DONE );
-	done.onActivated = VoidCb( &CMenuVidOptions::SaveAndPopMenu );
+
+	Apply.SetNameAndStatus(L("GameUI_Apply"), L(""));
+	Apply.onActivated = VoidCb(&CMenuVidOptions::SaveAndPopMenu);
+	Apply.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Apply.SetGrayed(true);
+	Apply.SetCoord(72, 435);
 
 	screenSize.SetNameAndStatus( L("CstzUI_VideoScreen"), L("CstzUI_VideoScreen2"));
 	screenSize.SetCoord( 72, 280 );
@@ -224,7 +227,7 @@ void CMenuVidOptions::_Init( void )
 
 	AddItem( background );
 	AddItem( banner );
-	AddItem( done );
+	AddItem( Apply );
 	AddItem( screenSize );
 	AddItem( gammaIntensity );
 	AddItem( glareReduction );

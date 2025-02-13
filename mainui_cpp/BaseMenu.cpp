@@ -737,8 +737,28 @@ void UI_UpdateMenu( float flTime )
 		if( first )
 		{
 			// if game was launched with commandline e.g. +map or +load ignore the music
-			if( !CL_IsActive( ))
-				EngFuncs::PlayBackgroundTrack( "gamestartup", "gamestartup" );
+
+			int musicset = (int)EngFuncs::GetCvarFloat("menu_musicpack");
+
+			if (!CL_IsActive())
+			{
+				if (musicset == 0)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/valve_01/mainmenu", "Music/valve_01/mainmenu");
+				}
+				else if (musicset == 1)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/valve_cs2_01/mainmenu", "Music/valve_cs2_01/mainmenu");
+				}
+				else if (musicset == 2)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/radcat_01/mainmenu", "Music/radcat_01/mainmenu");
+				}
+				else if (musicset == 3)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/3kliksphilip_01/mainmenu", "Music/3kliksphilip_01/mainmenu");
+				}
+			}
 			first = FALSE;
 		}
 	}

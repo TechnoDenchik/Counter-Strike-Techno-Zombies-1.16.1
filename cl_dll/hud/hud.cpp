@@ -208,6 +208,8 @@ void CHud :: Init( void )
 
 	cl_headname = CVAR_CREATE("cl_headname", "2", FCVAR_ARCHIVE); 
 	zsh_mentality = CVAR_CREATE("zsh_mentality", "1", FCVAR_ARCHIVE); 
+	menu_musicpack = CVAR_CREATE("menu_musicpack", "3", FCVAR_ARCHIVE);
+	menu_tentime = CVAR_CREATE("menu_tentime", "1", FCVAR_ARCHIVE);
 
 	CVAR_CREATE( "cscl_ver", Q_buildnum(), 1<<14 | FCVAR_USERINFO ); // init and userinfo
 

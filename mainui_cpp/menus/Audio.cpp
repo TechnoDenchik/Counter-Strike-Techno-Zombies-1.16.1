@@ -40,15 +40,15 @@ private:
 	void _VidInit() override;
 	void GetConfig();
 	void SaveAndPopMenu() override;
-	void LerpingCvarWrite();
 
+	CMenuPicButton done, getmusicmenu;
+	CMenuPicButton exit2, exit;
 	CMenuSlider	soundVolume;
 	CMenuSlider	musicVolume;
 	CMenuSpinControl lerping;
 	CMenuCheckBox noDSP;
 	CMenuCheckBox muteFocusLost;
 	CMenuCheckBox reverseChannels;
-
 
 };
 
@@ -107,16 +107,28 @@ void CMenuAudio::_Init( void )
 	soundVolume.SetCoord( 320, 280 );
 
 	musicVolume.SetNameAndStatus(L("GameUI_MP3Volume"), "Set background music volume level" );
-	musicVolume.Setup( 0.0, 1.0, 0.05f );
+	musicVolume.Setup( 0.00, 2.0, 0.001 );
 	musicVolume.onChanged = CMenuEditable::WriteCvarCb;
 	musicVolume.SetCoord( 320, 340 );
 
+	getmusicmenu.SetNameAndStatus(L("CstzUI_musicpackb"), L(""));
+	getmusicmenu.onActivated = UI_Music_Menu;
+	getmusicmenu.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		getmusicmenu.SetGrayed(true);
+	getmusicmenu.SetCoord(320, 380);
+
 	static CStringArrayModel model( lerpingStr, ARRAYSIZE( lerpingStr ));
-	lerping.SetNameAndStatus(L("Disable DSP effects"), "Enable/disable interpolation on sound output" );
-	lerping.Setup( &model );
+	lerping.SetNameAndStatus(L("Disable DSP effects"), "Enable/disable interpolation on sound output");
+	lerping.Setup(&model);
 	lerping.onChanged = CMenuEditable::WriteCvarCb;
-	lerping.font = QM_SMALLFONT;
-	lerping.SetRect( 320, 470, 300, 32 );
+	lerping.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		lerping.SetGrayed(true);
+	lerping.SetRect(320, 470, 300, 32);
+	//getmusicmenu.SetCoord(320, 380);
+	
+	
 
 	noDSP.SetNameAndStatus(L("Use Alpha DSP effects"), "Disable sound processing (like echo, flanger, etc)" );
 	noDSP.onChanged = CMenuEditable::WriteCvarCb;
@@ -130,14 +142,24 @@ void CMenuAudio::_Init( void )
 	reverseChannels.onChanged = CMenuEditable::WriteCvarCb;
 	reverseChannels.SetCoord( 320, 620 );
 
+	
+
 	AddItem( background );
+	AddItem( getmusicmenu );
 	AddItem( banner );
-	AddButton(L("Done"), "Go back to the Configuration Menu", PC_DONE,
-		VoidCb( &CMenuAudio::SaveAndPopMenu ) );
+
+	exit.SetNameAndStatus(L("GameUI_Close"), L(""));
+	exit.onActivated = VoidCb(( & CMenuAudio::SaveAndPopMenu) );
+	exit.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		exit.SetGrayed(true);
+	exit.SetCoord(80, 250);
+
 	AddItem( soundVolume );
 	AddItem( musicVolume );
 	AddItem( lerping );
 	AddItem( noDSP );
+	AddItem( exit );
 	AddItem( muteFocusLost );
 }
 

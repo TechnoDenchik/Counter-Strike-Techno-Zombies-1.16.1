@@ -43,6 +43,12 @@ void CMenuBaseWindow::Hide()
 	EnableTransition();
 }
 
+void CMenuBaseWindow::Hide2()
+{
+	//PopMenu(*m_pStack);
+	//EnableTransition();
+}
+
 bool CMenuBaseWindow::IsVisible() const
 {
 	// slow!
@@ -175,6 +181,13 @@ void CMenuBaseWindow::SaveAndPopMenu()
 	EngFuncs::ClientCmd( FALSE, "trysaveconfig\n" );
 	Hide();
 }
+
+void CMenuBaseWindow::exits()
+{
+	EngFuncs::ClientCmd(FALSE, "trysaveconfig\n");
+	Hide2();
+}
+
 
 const char *CMenuBaseWindow::Key(int key, int down)
 {

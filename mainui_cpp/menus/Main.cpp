@@ -179,6 +179,27 @@ const char *CMenuMain::Key( int key, int down )
 		{
 			if( !dialog.IsVisible() )
 				UI_CloseMenu();
+			int musicset = (int)EngFuncs::GetCvarFloat("menu_musicpack");
+
+			if (!CL_IsActive())
+			{
+				if (musicset == 0)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/valve_01/mainmenu", "Music/valve_01/mainmenu");
+				}
+				else if (musicset == 1)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/valve_cs2_01/mainmenu", "Music/valve_cs2_01/mainmenu");
+				}
+				else if (musicset == 2)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/radcat_01/mainmenu", "Music/radcat_01/mainmenu");
+				}
+				else if (musicset == 3)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/3kliksphilip_01/mainmenu", "Music/3kliksphilip_01/mainmenu");
+				}
+			}
 		}
 		else
 		{
@@ -203,6 +224,7 @@ const char *CMenuMain::Activate( void )
 	}
 	else
 	{
+
 		resumeGame.Hide();
 		disconnect.Hide();
 	}
@@ -231,9 +253,9 @@ void CMenuMain::HazardCourseCb()
 	EngFuncs::CvarSetValue( "skill", 1.0f );
 	EngFuncs::CvarSetValue( "deathmatch", 0.0f );
 	EngFuncs::CvarSetValue( "teamplay", 0.0f );
-	EngFuncs::CvarSetValue( "pausable", 1.0f ); // singleplayer is always allowing pause
+	EngFuncs::CvarSetValue( "pausable", 1.0f );
 	EngFuncs::CvarSetValue( "coop", 0.0f );
-	EngFuncs::CvarSetValue( "maxplayers", 1.0f ); // singleplayer
+	EngFuncs::CvarSetValue( "maxplayers", 1.0f );
 
 	EngFuncs::PlayBackgroundTrack( NULL, NULL );
 
@@ -245,10 +267,9 @@ void CMenuMain::_Init( void )
 	bTrainMap = false;
 	bCustomGame = false;
 
-	// console
-	console.SetNameAndStatus(L("GameUI_Console"), "Show console" );
+	console.SetNameAndStatus(L("GameUI_Console"), L(""));
+	console.onActivated = UI_CloseMenu;
 	console.iFlags |= QMF_NOTIFY;
-	console.SetPicture( PC_CONSOLE );
 	SET_EVENT_MULTI( console.onActivated,
 	{
 		UI_SetActiveMenu( FALSE );
@@ -259,52 +280,60 @@ void CMenuMain::_Init( void )
 	testImage.SetRect(490, 225, 480, 450);
 	testImage.SetPicture(ART_DISCORD);
 
-	resumeGame.SetNameAndStatus(L("GameUI_GameMenu_ResumeGame"), 0);
-	resumeGame.SetPicture( PC_RESUME_GAME );
-	resumeGame.iFlags |= QMF_NOTIFY;
+	resumeGame.SetNameAndStatus(L("GameUI_GameMenu_ResumeGame"), L(""));
 	resumeGame.onActivated = UI_CloseMenu;
+	resumeGame.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		resumeGame.SetGrayed(true);
 
-	disconnect.SetNameAndStatus(L("GameUI_GameMenu_Disconnect"), 0);
-	disconnect.SetPicture( PC_DISCONNECT );
+	disconnect.SetNameAndStatus(L("GameUI_GameMenu_Disconnect"), L(""));
+	disconnect.onActivated = VoidCb(&CMenuMain::DisconnectDialogCb);
 	disconnect.iFlags |= QMF_NOTIFY;
-	disconnect.onActivated = VoidCb( &CMenuMain::DisconnectDialogCb );
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		disconnect.SetGrayed(true);
 
-	credits.SetNameAndStatus( "Credits", 0);
-	credits.SetPicture( PC_VIEW_README );
-	credits.iFlags |= QMF_NOTIFY;
-	credits.onActivated = UI_Credits_Menu;
-
-	createGame.SetNameAndStatus( "Create Game", 0);
-	createGame.SetPicture(PC_CREATE_GAME);
-	createGame.iFlags |= QMF_NOTIFY;
+	createGame.SetNameAndStatus(L("GameUI_GameMenu_CreateServer"), L(""));
 	createGame.onActivated = UI_CreateGame_Menu;
+	createGame.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		createGame.SetGrayed(true);
 
-	multiPlayer.SetNameAndStatus(L("GameUI_Multiplayer"), 0);
-	multiPlayer.SetPicture( PC_MULTIPLAYER );
-	multiPlayer.iFlags |= QMF_NOTIFY;
+	credits.SetNameAndStatus(L("CstzUI_musicpackb"), L(""));
+	credits.onActivated = UI_Credits_Menu;
+	credits.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		credits.SetGrayed(true);
+
+	multiPlayer.SetNameAndStatus(L("GameUI_GameMenu_FindServers"), L(""));
 	multiPlayer.onActivated = UI_InternetGames_Menu;
+	multiPlayer.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		multiPlayer.SetGrayed(true);
 
-	configuration.SetNameAndStatus(L("GameUI_Options"), 0);
-	configuration.SetPicture( PC_CONFIG );
-	configuration.iFlags |= QMF_NOTIFY;
+	configuration.SetNameAndStatus(L("GameUI_GameMenu_Options"), L(""));
 	configuration.onActivated = UI_Options_Menu;
+	configuration.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		configuration.SetGrayed(true);
 
-	previews.SetNameAndStatus(L("Previews"), 0);
-	previews.SetPicture( PC_PREVIEWS );
+	previews.SetNameAndStatus(L("GameUI_Previews"), L(""));
+	previews.onActivated = UI_Options_Menu;
 	previews.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		previews.SetGrayed(true);
 	SET_EVENT( previews.onActivated, EngFuncs::ShellExecute( MenuStrings[IDS_MEDIA_PREVIEWURL], NULL, false ) );
-
 
 	discord.SetNameAndStatus(0, L("CstzUI_Discord"));
 	discord.SetPicture(ART_DISCORD);
 	discord.iFlags |= QMF_MOUSEONLY;
 	discord.eFocusAnimation = QM_HIGHLIGHTIFFOCUS;
-	SET_EVENT(discord.onActivated, EngFuncs::ShellExecute("https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.1", NULL, false));
+	SET_EVENT(discord.onActivated, EngFuncs::ShellExecute("https://discord.gg/U9sdYbZrRU", NULL, false));
 
-	quit.SetNameAndStatus(L("GameUI_GameMenu_Quit"), 0);
-	quit.SetPicture( PC_QUIT );
+	quit.SetNameAndStatus(L("GameUI_GameMenu_Quit"), L(""));
+	quit.onActivated = MenuCb(&CMenuMain::QuitDialog);
 	quit.iFlags |= QMF_NOTIFY;
-	quit.onActivated = MenuCb( &CMenuMain::QuitDialog );
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		quit.SetGrayed(true);
 
 
 	if ( gMenu.m_gameinfo.gamemode == GAME_MULTIPLAYER_ONLY || gMenu.m_gameinfo.startmap[0] == 0 )
@@ -313,7 +342,6 @@ void CMenuMain::_Init( void )
 	if ( gMenu.m_gameinfo.gamemode == GAME_SINGLEPLAYER_ONLY )
 		multiPlayer.SetGrayed( true );
 
-	// server.dll needs for reading savefiles or startup newgame
 	if( !EngFuncs::CheckGameDll( ))
 	{
 		credits.SetGrayed( true );
@@ -330,16 +358,11 @@ void CMenuMain::_Init( void )
 	AddItem( disconnect );
 	AddItem( discord );
 	AddItem( resumeGame );
-	//AddItem( credits );
-
 	AddItem( createGame );
 	AddItem( configuration );
 	AddItem( multiPlayer );
-
 	AddItem( previews );
 	AddItem( quit );
-	//AddItem( minimizeBtn );
-	//AddItem( quitButton );
 }
 
 /*
@@ -354,17 +377,13 @@ void CMenuMain::_VidInit( void )
 	console.pos.x = 32;
 	resumeGame.SetCoord( 32, 440);
 	disconnect.SetCoord( 32, 480);
-	//credits.SetCoord( 72, 280 );
 	createGame.SetCoord( 32, 520 );
-
-	configuration.SetCoord( 32, 560 );
-	multiPlayer.SetCoord( 32, 600 );
-
-	previews.SetCoord( 32,  640);
+	multiPlayer.SetCoord( 32, 560 );
+	previews.SetCoord( 32,  600);
+	configuration.SetCoord( 32, 640 );
 	discord.SetRect(uiStatic.width - 102, 220, 32, 32);
 
-	// too short execute string - not a real command
-	if( strlen("https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.0") <= 3 )
+	if( strlen("https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.1") <= 3 )
 		previews.SetGrayed( true );
 
 	if (strlen("https://discord.gg/U9sdYbZrRU") <= 3)
@@ -374,10 +393,6 @@ void CMenuMain::_VidInit( void )
 
 	outlineWidth = 2;
 	UI_ScaleCoords(NULL, NULL, &outlineWidth, NULL);
-
-	//minimizeBtn.SetRect( uiStatic.width - 72, 13, 32, 32 );
-
-	//quitButton.SetRect( uiStatic.width - 36, 13, 32, 32 );
 }
 
 /*
@@ -393,8 +408,7 @@ void UI_Main_Precache( void )
 	EngFuncs::PIC_Load( ART_CLOSEBTN_N );
 	EngFuncs::PIC_Load( ART_CLOSEBTN_F );
 	EngFuncs::PIC_Load( ART_CLOSEBTN_D );
-	EngFuncs::PIC_Load(ART_DISCORD);
-	// precache .avi file and get logo width and height
+	EngFuncs::PIC_Load( ART_DISCORD );
 	EngFuncs::PrecacheLogo( "technocorp.avi" );
 }
 

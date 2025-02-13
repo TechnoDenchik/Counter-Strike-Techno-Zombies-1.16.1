@@ -22,6 +22,7 @@ public:
 	void PrimaryAttack() override;
 	void SecondaryAttack() override {}
 	void Reload() override;
+	void ItemPostFrame() override;
 	void WeaponIdle() override;
 	BOOL UseDecrement() override {
 #ifdef CLIENT_WEAPONS

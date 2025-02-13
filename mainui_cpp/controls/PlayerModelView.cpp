@@ -50,7 +50,7 @@ void CMenuPlayerModelView::VidInit()
 	refdef.viewport[3] = m_scSize.h;
 	CalcFov();
 
-	ent = EngFuncs::GetPlayerModel();
+	//ent = EngFuncs::GetPlayerModel();
 
 	memset( ent, 0, sizeof( cl_entity_t ));
 
@@ -162,7 +162,7 @@ void CMenuPlayerModelView::Draw()
 	}
 	else
 	{
-		EngFuncs::ClearScene();
+		//EngFuncs::ClearScene();
 
 		// update renderer timings
 #ifndef NEW_ENGINE_INTERFACE
@@ -218,8 +218,8 @@ void CMenuPlayerModelView::Draw()
 		}
 
 		// draw the player model
-		EngFuncs::CL_CreateVisibleEntity( ET_NORMAL, ent );
-		EngFuncs::RenderScene( &refdef );
+		//EngFuncs::CL_CreateVisibleEntity( ET_NORMAL, ent );
+		//EngFuncs::RenderScene( &refdef );
 	}
 }
 

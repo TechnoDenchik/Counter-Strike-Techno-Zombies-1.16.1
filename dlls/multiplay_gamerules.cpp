@@ -76,7 +76,7 @@ cvar_t *sv_clienttrace = NULL;
 
 CCStrikeGameMgrHelper g_GameMgrHelper;
 CHalfLifeMultiplay *g_pMPGameRules = NULL;
-
+//Think
 bool IsBotSpeaking()
 {
 	for (int i = 1; i <= gpGlobals->maxClients; ++i)
@@ -449,8 +449,6 @@ void ReadMultiplayCvars(CHalfLifeMultiplay *mp)
 
 CHalfLifeMultiplay::CHalfLifeMultiplay()
 {
-	PRECACHE_GENERIC("sound/Music/ct/musicforfb_1.mp3");
-	PRECACHE_GENERIC("sound/Music/t/musicforfb_2.mp3");
 	m_VoiceGameMgr.Init(&g_GameMgrHelper, gpGlobals->maxClients);
 	RefreshSkillData();
 
@@ -1167,6 +1165,13 @@ bool CHalfLifeMultiplay::NeededPlayersCheck(bool &bNeededPlayers)
 		m_bFreezePeriod = FALSE;
 		m_bCompleteReset = true;
 
+		for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
+		{
+			CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
+			if (!entity)
+				continue;
+			CLIENT_COMMAND(entity->edict(), "spk media/mm_success_lets_roll\n");
+		}
 		MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg);
 		WRITE_BYTE(ORIG_START_MSG);
 		MESSAGE_END();
@@ -1435,9 +1440,60 @@ bool CHalfLifeMultiplay::TeamExterminationCheck(int NumAliveTerrorist, int NumAl
 					// Update the clients team score
 					UpdateTeamScores();
 				}
+				int music = (int)CVAR_GET_FLOAT("menu_musicpack");
 
-				for (CBasePlayer* player : moe::range::PlayersList())
-					CLIENT_COMMAND(player->edict(), "mp3 loop sound/Music/ct/musicforfb_1\n");
+				if (music == 0)
+				{
+
+					for (CBasePlayer* player : moe::range::PlayersList())
+						if (player->m_iTeam == TEAM_TERRORIST)
+						{
+							CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/valve_01/lostround\n");
+						}
+						else
+						{
+							CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/valve_01/wonround\n");
+						}
+				}
+				else if (music == 1)
+				{
+					for (CBasePlayer* player : moe::range::PlayersList())
+						if (player->m_iTeam == TEAM_TERRORIST)
+						{
+							CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/valve_cs2_01/lostround\n");
+						}
+						else
+						{
+							CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/valve_cs2_01/roundmvpanthem_01\n");
+						}
+				}
+				else if (music == 2)
+				{
+					for (CBasePlayer* player : moe::range::PlayersList())
+						if (player->m_iTeam == TEAM_TERRORIST)
+						{
+							CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/radcat_01/lostround\n");
+						}
+						else
+						{
+							CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/radcat_01/roundmvpanthem_01\n");						
+						}
+				}
+				else if (music == 3)
+				{
+					for (CBasePlayer* player : moe::range::PlayersList())
+						if (player->m_iTeam == TEAM_TERRORIST)
+						{
+							CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/3kliksphilip_01/lostround\n");
+						}
+						else
+						{
+							CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/3kliksphilip_01/roundmvpanthem_01\n");
+							
+						}
+				}
+
+				
 			
 				MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg4);
 				WRITE_BYTE(ORIG_CTWIN_MSG);
@@ -1467,13 +1523,63 @@ bool CHalfLifeMultiplay::TeamExterminationCheck(int NumAliveTerrorist, int NumAl
 				UpdateTeamScores();
 			}
 
-			for (CBasePlayer* player : moe::range::PlayersList())
-				CLIENT_COMMAND(player->edict(), "mp3 loop sound/Music/t/musicforfb_2\n");
+			int music = (int)CVAR_GET_FLOAT("menu_musicpack");
+
+			if (music == 0)
+			{
+				
+				for (CBasePlayer* player : moe::range::PlayersList())
+					if (player->m_iTeam == TEAM_CT)
+					{
+						CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/valve_01/lostround\n");
+					}
+					else
+					{
+						CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/valve_01/wonround\n");
+					}
+
+					
+			}
+			else if (music == 1)
+			{
+				for (CBasePlayer* player : moe::range::PlayersList())
+					if (player->m_iTeam == TEAM_CT)
+					{
+						CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/valve_cs2_01/lostround\n");
+					}
+					else
+					{
+						CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/valve_cs2_01/roundmvpanthem_01\n");
+					}
+			}
+			else if (music == 2)
+			{
+				for (CBasePlayer* player : moe::range::PlayersList())
+					if (player->m_iTeam == TEAM_CT)
+					{
+						CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/radcat_01/lostround\n");
+					}
+					else
+					{
+						CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/radcat_01/roundmvpanthem_01\n");
+					}
+			}
+			else if (music == 3)
+			{
+				for (CBasePlayer* player : moe::range::PlayersList())
+					if (player->m_iTeam == TEAM_CT)
+					{
+						CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/3kliksphilip_01/lostround\n");
+					}
+					else
+					{
+						CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/3kliksphilip_01/roundmvpanthem_01\n");
+					}
+			}
 
 			MESSAGE_BEGIN(MSG_ALL, gmsgOriginalMsg5);
 			WRITE_BYTE(ORIG_TRWIN_MSG);
 			MESSAGE_END();
-
 			TerminateRound(10, WINSTATUS_TERRORISTS);
 
 			if (IsCareer())
@@ -2463,6 +2569,95 @@ void CHalfLifeMultiplay::Think()
 	// have we hit the timelimit?
 	if (CheckTimeLimit())
 		return;
+
+
+	int music = (int)CVAR_GET_FLOAT("menu_musicpack");
+	int tentime = (int)CVAR_GET_FLOAT("menu_tentime");
+
+
+	if (tentime == 0)
+	{
+
+
+		if (music == 0)
+		{
+			for (CBasePlayer* player : moe::range::PlayersList())
+				if (player->m_iTeam == TEAM_CT)
+				{
+					if (tentime == 0)
+					{
+						CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/valve_01/roundtenseccount\n");
+					}
+				}
+				else
+				{
+					if (tentime == 0)
+					{
+						CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/valve_01/roundtenseccount\n");
+					}
+				}
+
+		}
+		else if (music == 1)
+		{
+			for (CBasePlayer* player : moe::range::PlayersList())
+				if (player->m_iTeam == TEAM_CT)
+				{
+					if (tentime == 0)
+					{
+						CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/valve_cs2_01/roundtenseccount\n");
+					}
+				}
+				else
+				{
+					if (tentime == 0)
+					{
+						CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/valve_cs2_01/roundtenseccount\n");
+					}
+				}
+
+		}
+		else if (music == 2)
+		{
+
+			for (CBasePlayer* player : moe::range::PlayersList())
+				if (player->m_iTeam == TEAM_CT)
+				{
+					if (tentime == 0)
+					{
+						CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/radcat_01/roundtenseccount\n");
+					}
+				}
+				else
+				{
+					if (tentime == 0)
+					{
+						CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/radcat_01/roundtenseccount\n");
+					}
+				}
+
+		}
+		else if (music == 3)
+		{
+
+			for (CBasePlayer* player : moe::range::PlayersList())
+				if (player->m_iTeam == TEAM_CT)
+				{
+					if (tentime == 0)
+					{
+						CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/3kliksphilip_01/roundtenseccount\n");
+					}
+				}
+				else
+				{
+					if (tentime == 0)
+					{
+						CLIENT_COMMAND(player->edict(), "mp3 loop media/Music/3kliksphilip_01/roundtenseccount\n");
+					}
+				}
+
+		}
+	}
 
 	if (!IsCareer())
 	{

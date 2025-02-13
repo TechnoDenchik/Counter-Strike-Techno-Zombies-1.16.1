@@ -1,5 +1,5 @@
 /*
-Copyright (C) 1997-2001 Id Software, Inc.
+Copyright (C) 1997-2025 Id Software & TechnoSoftware, Inc.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -42,17 +42,23 @@ private:
 	void Restore();
 	void GetConfig();
 
-	CMenuSpinControl	maxFPS;
+	
 	//CMenuCheckBox	hand;
-	CMenuCheckBox	allowDownload;
-	CMenuCheckBox	cl_predict;
-	CMenuCheckBox	cl_lw;
-
-	CMenuPicButton	allowConsole;
-	CMenuSpinControl	maxpacket, maxpayload, cmdrate, updaterate, rate;
-	CMenuAction networkMode;
+	CMenuCheckBox allowDownload;
+	CMenuCheckBox cl_predict;
+	CMenuCheckBox cl_lw;
 	CMenuCheckBox normal, dsl, slowest;
 	CMenuCheckBox split, compress;
+
+	CMenuPicButton allowConsole;
+	CMenuPicButton Apply, Apply1;
+	CMenuPicButton Exit, Exit1;
+
+	CMenuSpinControl maxFPS;
+	CMenuSpinControl maxpacket, maxpayload, cmdrate, updaterate, rate;
+
+	CMenuAction networkMode;
+	
 };
 
 static CMenuGameOptions	uiGameOptions;
@@ -95,7 +101,7 @@ void CMenuGameOptions::SaveCb()
 	rate.WriteCvar();
 	split.WriteCvar();
 	compress.WriteCvar();
-	cl_predict.WriteCvar();
+	//cl_predict.WriteCvar();
 	cl_lw.WriteCvar();
 
 	SaveAndPopMenu();
@@ -114,7 +120,7 @@ void CMenuGameOptions::Restore()
 	split.DiscardChanges();
 	compress.DiscardChanges();
 	cl_lw.DiscardChanges();
-	cl_predict.DiscardChanges();
+	//cl_predict.DiscardChanges();
 }
 
 void CMenuGameOptions::RestoreCb()
@@ -133,13 +139,9 @@ void CMenuGameOptions::_Init( void )
 	banner.SetPicture( ART_BANNER );
 	maxFPS.szName = L("FPS limit");
 	maxFPS.szStatusText = "Cap your game frame rate";
-	maxFPS.Setup( 20, 500, 20 );
+	maxFPS.Setup( 60, 1000, 40 );
 	maxFPS.LinkCvar( "fps_max", CMenuEditable::CVAR_VALUE );
-	maxFPS.SetRect( 240, 270, 220, 32 );
-
-	allowConsole.SetNameAndStatus(L("Enable developer console"), L("Turns on console when engine was run without -console or -dev parameter"));
-	allowConsole.SetCoord(360, 365);
-	allowConsole.onReleased.SetCommand(FALSE, "ui_allowconsole\n");
+	maxFPS.SetRect(320, 270, 220, 32 );
 
 	//hand.SetNameAndStatus( "Use left hand", "Draw gun at left side" );
 	//hand.LinkCvar( "cl_righthand" );
@@ -147,20 +149,20 @@ void CMenuGameOptions::_Init( void )
 
 	allowDownload.SetNameAndStatus(L("Allow download"), "Allow download of files from servers" );
 	allowDownload.LinkCvar( "sv_allow_download" );
-	allowDownload.SetCoord( 240, 315 );
+	allowDownload.SetCoord(320, 315 );
 
 #ifdef NEW_ENGINE_INTERFACE
 	cl_predict.SetNameAndStatus( "Disable predicting", "Disable player movement prediction" );
 	cl_predict.LinkCvar( "cl_nopred" );
 #else
-	cl_predict.SetNameAndStatus( "Predict movement", "Enable player movement prediction" );
-	cl_predict.LinkCvar( "cl_predict" );
+	//cl_predict.SetNameAndStatus( "Predict movement", "Enable player movement prediction" );
+	//cl_predict.LinkCvar( "cl_predict" );
 #endif
-	cl_predict.SetCoord( 240, 365 );
+	//cl_predict.SetCoord(320, 365 );
 
 	cl_lw.SetNameAndStatus( "Local weapons", "Enable local weapons" );
 	cl_lw.LinkCvar( "cl_lw" );
-	cl_lw.SetCoord( 240, 415 );
+	cl_lw.SetCoord(320, 415 );
 
 	maxpacket.SetRect( 650, 270, 200, 32 );
 	maxpacket.Setup( 150, 1550, 50 );
@@ -221,9 +223,9 @@ void CMenuGameOptions::_Init( void )
 	networkMode.szName = "Select network mode:";
 	networkMode.colorBase = uiColorHelp;
 	networkMode.SetCharSize( QM_BIGFONT );
-	networkMode.SetRect( 240, 450, 400, 32 );
+	networkMode.SetRect(320, 450, 400, 32 );
 
-	normal.SetRect( 240, 510, 24, 24 );
+	normal.SetRect(320, 510, 24, 24 );
 	normal.szName = "Normal internet connection";
 	SET_EVENT_MULTI( normal.onChanged,
 	{
@@ -231,7 +233,7 @@ void CMenuGameOptions::_Init( void )
 		((CMenuCheckBox*)pSelf)->bChecked = true;
 	});
 
-	dsl.SetRect( 240, 560, 24, 24 );
+	dsl.SetRect(320, 560, 24, 24 );
 	dsl.szName = "DSL or PPTP with limited packet size";
 	SET_EVENT_MULTI( dsl.onChanged,
 	{
@@ -240,7 +242,7 @@ void CMenuGameOptions::_Init( void )
 	});
 
 
-	slowest.SetRect( 240, 610, 24, 24 );
+	slowest.SetRect(320, 610, 24, 24 );
 	slowest.szName = "Slow connection mode (64kbps)";
 	SET_EVENT_MULTI( slowest.onChanged,
 	{
@@ -249,22 +251,34 @@ void CMenuGameOptions::_Init( void )
 	});
 	compress.SetNameAndStatus( "Compress", "Compress splitted packets (need split to work)" );
 	compress.LinkCvar("cl_enable_splitcompress" );
-	compress.SetCoord( 390, 680 );
+	compress.SetCoord( 440, 680 );
 
-	split.SetCoord( 240, 680 );
+	split.SetCoord( 320, 680 );
 	split.SetNameAndStatus( "Split", "Split network packets" );
 	split.LinkCvar("cl_enable_split" );
 
 	AddItem( background );
 	AddItem( banner );
-	AddButton( "Done", "Save changes and go back to the Customize Menu", PC_DONE, VoidCb( &CMenuGameOptions::SaveCb ) );
-	AddButton( "Cancel", "Go back to the Customize Menu", PC_CANCEL, VoidCb( &CMenuGameOptions::RestoreCb ) );
+
+	Apply.SetNameAndStatus(L("GameUI_Apply"), L(""));
+	Apply.onActivated = VoidCb(&CMenuGameOptions::SaveCb);
+	Apply.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Apply.SetGrayed(true);
+	Apply.SetCoord(80, 250);
+
+	Exit.SetNameAndStatus(L("GameUI_Cancel"), L(""));
+	Exit.onActivated = VoidCb(&CMenuGameOptions::RestoreCb);
+	Exit.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Exit.SetGrayed(true);
+	Exit.SetCoord(80, 300);
 
 	AddItem( maxFPS );
 	//AddItem( hand );
 
 	AddItem( allowDownload );
-	AddItem( cl_predict );
+	//AddItem( cl_predict );
 	AddItem( cl_lw );
 	AddItem( maxpacket );
 	AddItem( maxpayload );
@@ -277,6 +291,9 @@ void CMenuGameOptions::_Init( void )
 	AddItem( slowest );
 	AddItem( split );
 	AddItem( compress );
+	AddItem( allowConsole);
+	AddItem( Apply );
+	AddItem( Exit );
 
 	// only for game/engine developers
 #ifdef NEW_ENGINE_INTERFACE

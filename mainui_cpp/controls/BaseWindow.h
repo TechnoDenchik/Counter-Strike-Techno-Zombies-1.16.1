@@ -30,6 +30,7 @@ public:
 	// Overloaded functions
 	// Window visibility is switched through window stack
 	void Hide() override;
+	void Hide2() override;
 	void Show() override;
 	bool IsVisible() const override;
 
@@ -60,6 +61,7 @@ public:
 
 	// Hide current window and save changes
 	virtual void SaveAndPopMenu();
+	virtual void exits();
 
 	bool IsWindow() override { return true; }
 

@@ -80,7 +80,7 @@ public:
 	// Simple item will be hidden
 	// Window will be removed from current window stack
 	virtual void Hide() { iFlags |= QMF_HIDDEN;  }
-
+	virtual void Hide2() { ; }
 	// Determine, is this item is visible
 	virtual bool IsVisible() const { return !(iFlags & QMF_HIDDEN); }
 

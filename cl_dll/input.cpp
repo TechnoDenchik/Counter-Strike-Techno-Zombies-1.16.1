@@ -117,6 +117,7 @@ kbutton_t	in_down;
 kbutton_t	in_duck;
 kbutton_t	in_reload;
 kbutton_t	in_alt1;
+kbutton_t	in_lookatweapon;
 kbutton_t	in_score;
 kbutton_t	in_break;
 kbutton_t	in_graph;  // Display the netgraph
@@ -482,6 +483,13 @@ void IN_DuckUp(void) {KeyUp(&in_duck);}
 void IN_ReloadDown(void) {KeyDown(&in_reload);}
 void IN_ReloadUp(void) {KeyUp(&in_reload);}
 void IN_Alt1Down(void) {KeyDown(&in_alt1);}
+void IN_LookAtWeaponDown(void)
+{
+	KeyDown(&in_lookatweapon);
+	gHUD.m_Spectator.HandleButtonsDown(IN_VIEW);
+
+}
+void IN_LookAtWeapon(void) { KeyUp(&in_lookatweapon); }
 void IN_Alt1Up(void) {KeyUp(&in_alt1);}
 void IN_GraphDown(void) {KeyDown(&in_graph);}
 void IN_GraphUp(void) {KeyUp(&in_graph);}
@@ -849,6 +857,11 @@ int CL_ButtonBits( int bResetState )
 		bits |= IN_SCORE;
 	}
 
+	if (in_lookatweapon.state & 3)
+	{
+		bits |= IN_VIEW;
+	}
+
 	// Dead or in intermission? Shore scoreboard, too
 	if ( CL_IsDead() || gHUD.m_iIntermission )
 	{
@@ -871,6 +884,7 @@ int CL_ButtonBits( int bResetState )
 		in_reload.state &= ~2;
 		in_alt1.state &= ~2;
 		in_score.state &= ~2;
+		in_lookatweapon.state &= ~2;
 	}
 
 	return bits;
@@ -960,7 +974,8 @@ void InitInput (void)
 	gEngfuncs.pfnAddCommand ("-graph", IN_GraphUp);
 	gEngfuncs.pfnAddCommand ("+break",IN_BreakDown);
 	gEngfuncs.pfnAddCommand ("-break",IN_BreakUp);
-
+	gEngfuncs.pfnAddCommand ("+lookatweapon", IN_LookAtWeapon);
+	gEngfuncs.pfnAddCommand ("-lookatweapon", IN_LookAtWeaponDown);
 	lookstrafe			= gEngfuncs.pfnRegisterVariable ( "lookstrafe", "0", FCVAR_ARCHIVE );
 	lookspring			= gEngfuncs.pfnRegisterVariable ( "lookspring", "0", FCVAR_ARCHIVE );
 	cl_anglespeedkey	= gEngfuncs.pfnRegisterVariable ( "cl_anglespeedkey", "0.67", 0 );
