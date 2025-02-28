@@ -116,11 +116,11 @@ void CMenuCreateGame::Begin( CMenuBaseItem *pSelf, void *pExtra )
 
 	
 	const char *mapName;
-	if (menu->gamemode.GetCurrentValue() == 7)
+	/*if (menu->gamemode.GetCurrentValue() == 8)
 	{
 		mapName = menu->mapsListModel.mapName[133];
 	}
-	else if( menu->mapsList.GetCurrentIndex() == 0 )
+	else*/ if( menu->mapsList.GetCurrentIndex() == 0 )
 	{
 		int idx = EngFuncs::RandomLong( 1, menu->mapsListModel.GetRows() );
 		mapName = menu->mapsListModel.mapName[idx];
@@ -143,7 +143,9 @@ void CMenuCreateGame::Begin( CMenuBaseItem *pSelf, void *pExtra )
 
 	EngFuncs::CvarSetValue( "deathmatch", 1.0f );	// start deathmatch as default
 	EngFuncs::CvarSetString( "defaultmap", mapName );
-	EngFuncs::CvarSetValue( "sv_nat", EngFuncs::GetCvarFloat( "public" ) ? menu->nat.bChecked : 0 );
+//	EngFuncs::CvarSetValue("sv_nat", 1.0f);
+	EngFuncs::CvarSetValue("public", 1.0f);
+	//EngFuncs::CvarSetValue( "sv_nat", EngFuncs::GetCvarFloat( "public" ) ? menu->nat.bChecked : 0 );
 	menu->password.WriteCvar();
 	menu->hostName.WriteCvar();
 	menu->hltv.WriteCvar();
@@ -180,7 +182,7 @@ void CMenuCreateGame::Begin( CMenuBaseItem *pSelf, void *pExtra )
 		Com_EscapeCommand( cmd2, mapName, 256 );
 
 		// hack: wait three frames allowing server to completely shutdown, reapply maxplayers and start new map
-		sprintf( cmd, "endgame;menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map %s\n", atoi( menu->maxClients.GetBuffer() ), cmd2 );
+		sprintf( cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map %s\n", atoi( menu->maxClients.GetBuffer() ), cmd2 );
 		EngFuncs::ClientCmd( FALSE, cmd );
 
 	}
@@ -269,16 +271,12 @@ void CMenuCreateGame::_Init( void )
 	Adv.SetNameAndStatus(L("GameUI_ServerSettings"), L(""));
 	Adv.onActivated = UI_AdvServerOptions_Menu;
 	Adv.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		Adv.SetGrayed(true);
 	Adv.SetCoord(80, 300);
 
 	Apply.SetNameAndStatus(L("GameUI_StartGame"), L(""));
 	Apply.onActivated = Begin;
 	Apply.onChanged = msgBox.MakeOpenEvent();
 	Apply.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		Apply.SetGrayed(true);
 	Apply.SetCoord(80, 250);
 
 	mapsList.SetCharSize( QM_SMALLFONT );
@@ -350,8 +348,6 @@ void CMenuCreateGame::_Init( void )
 	Exit.SetNameAndStatus(L("GameUI_Cancel"), L(""));
 	Exit.onActivated = VoidCb(&CMenuCreateGame::Hide);
 	Exit.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		Exit.SetGrayed(true);
 	Exit.SetCoord(80, 350);
 
 	AddItem( maxClients );

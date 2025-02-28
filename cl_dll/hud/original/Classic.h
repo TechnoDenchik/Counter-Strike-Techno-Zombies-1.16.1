@@ -23,7 +23,7 @@ public:
 	CHudMsgFunc(Bombdrop);
 	CHudMsgFunc(Bombgive);
 	CHudMsgFunc(WPNDrop);
-	CHudMsgFunc(AK47);
+	CHudMsgFunc(MusicKit);
 
 public:
 	class CHudClassic_impl_t* pimpl = nullptr;

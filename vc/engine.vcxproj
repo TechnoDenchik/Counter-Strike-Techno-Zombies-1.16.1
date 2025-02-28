@@ -26,7 +26,6 @@
     <ClInclude Include="..\engine\client\gl_export.h" />
     <ClInclude Include="..\engine\client\gl_local.h" />
     <ClInclude Include="..\engine\client\gl_static.h" />
-    <ClInclude Include="..\engine\client\gl_vidnt.h" />
     <ClInclude Include="..\engine\client\input.h" />
     <ClInclude Include="..\engine\client\joyinput.h" />
     <ClInclude Include="..\engine\client\sound.h" />
@@ -66,8 +65,11 @@
     <ClInclude Include="..\engine\common\sse_mathfun.h" />
     <ClInclude Include="..\engine\common\stb\stb_sprintf.h" />
     <ClInclude Include="..\engine\common\system.h" />
+    <ClInclude Include="..\engine\common\tests.h" />
     <ClInclude Include="..\engine\common\world.h" />
     <ClInclude Include="..\engine\platform\sdl\events.h" />
+    <ClInclude Include="..\engine\platform\win32\lib_win.h" />
+    <ClInclude Include="..\engine\platform\win32\net.h" />
     <ClInclude Include="..\engine\server\server.h" />
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +196,9 @@
     <ClCompile Include="..\engine\platform\sdl\snd_sdl.c" />
     <ClCompile Include="..\engine\platform\sdl\vid_sdl.c" />
     <ClCompile Include="..\engine\platform\win32\con_win.c" />
+    <ClCompile Include="..\engine\platform\win32\lib_custom_win.c" />
+    <ClCompile Include="..\engine\platform\win32\lib_win.c" />
+    <ClCompile Include="..\engine\platform\win32\sys_win.c" />
     <ClCompile Include="..\engine\server\sv_client.c" />
     <ClCompile Include="..\engine\server\sv_cmds.c" />
     <ClCompile Include="..\engine\server\sv_custom.c" />

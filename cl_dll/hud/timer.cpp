@@ -176,6 +176,8 @@ int CHudTimer::Draw(float fTime)
 
 	}
 	gEngfuncs.pTriAPI->Color4ub(r, g, b, 255);
+
+	int imusicpack = (int)CVAR_GET_FLOAT("menu_musicpack");
 	switch (gHUD.m_iModRunning)
 	{
 	case MOD_ZB1:
@@ -237,7 +239,7 @@ int CHudTimer::Draw(float fTime)
 
 		if (minutes == 0)
 		{
-			switch ((int)gHUD.menu_musicpack->value)
+			switch (imusicpack)
 			{
 			case 0:	
 				if (seconds == 17)

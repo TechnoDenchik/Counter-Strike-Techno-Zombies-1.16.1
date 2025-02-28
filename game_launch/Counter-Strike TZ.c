@@ -47,9 +47,11 @@
 #ifdef WIN32
 __declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
 __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
+__declspec(dllexport) void glGetString(GL_VENDOR);
+__declspec(dllexport) void glGetString(GL_RENDERER);
 #endif
 
-#define GAME_PATH	"cstz"	
+#define GAME_PATH	"Counter-Strike-TZ"	
 
 typedef void (*pfnChangeGame)( const char *progname );
 typedef int  (*pfnInit)( int argc, char **argv, const char *progname, int bChangeGame, pfnChangeGame func );
@@ -158,15 +160,15 @@ BOOL DirIsExist(const TCHAR* dir)
 
 static void Sys_LoadEngine( void )
 {
-	const char* NamedMutex = "Launcher CST:Z";
+	const char* NamedMutex = "Counter-Strike T:Z";
 
-	if (DirIsExist("cstz"))
+	if (DirIsExist("Counter-Strike-TZ"))
 	{
-		if (DirIsExist("cstz/cl_dlls"))
+		if (DirIsExist("Counter-Strike-TZ/cl_dlls"))
 		{
-			if (DirIsExist("cstz/dlls"))
+			if (DirIsExist("Counter-Strike-TZ/dlls"))
 			{
-				if (DirIsExist("cstz/media"))
+				if (DirIsExist("Counter-Strike-TZ/media"))
 				{
 					HANDLE Mutex = CheckInstance(NamedMutex);
 
@@ -174,7 +176,7 @@ static void Sys_LoadEngine( void )
 					{
 						ReleaseMutex(Mutex);
 						TechnoEngine_Warning("Игра запущена!");
-						HWND hWnd = FindWindow(0, "Launcher CST:Z");
+						HWND hWnd = FindWindow(0, "Counter-Strike T:Z");
 						SetForegroundWindow(hWnd);
 						return 1;
 					}
@@ -195,17 +197,17 @@ static void Sys_LoadEngine( void )
 				}
 				else
 				{
-					TechnoEngine_Warning2("Папка медиаплеера cstz/media не обнаружена Error:0x000427g", dlerror());
+					TechnoEngine_Warning2("Папка медиаплеера Counter-Strike-TZ/media не обнаружена Error:0x000427g", dlerror());
 				}
 			}
 			else
 			{
-				TechnoEngine_Warning2("Папка сервера cstz/dlls не найдена Error:0x000327g", dlerror());
+				TechnoEngine_Warning2("Папка сервера Counter-Strike-TZ/dlls не найдена Error:0x000327g", dlerror());
 			}
 		}
 		else
 		{
-			TechnoEngine_Warning2("Папка клиента cstz/cl_dlls не найдена Error:0x000127g", dlerror());
+			TechnoEngine_Warning2("Папка клиента Counter-Strike-TZ/cl_dlls не найдена Error:0x000127g", dlerror());
 		}
 	}
 	else

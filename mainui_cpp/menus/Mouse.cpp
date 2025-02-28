@@ -28,11 +28,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define ART_BANNER			"gfx/shell/head_advanced"
 
-class CAdvancedControls : public CMenuFramework
+class CMouseControls : public CMenuFramework
 {
 public:
 	typedef CMenuFramework BaseClass;
-	CAdvancedControls() : CMenuFramework("CAdvancedControls") { }
+	CMouseControls() : CMenuFramework("CAdvancedControls") { }
 
 	void ToggleLookCheckboxes( bool write );
 
@@ -45,36 +45,35 @@ private:
 	void PitchInvert( void );
 
 	CMenuPicButton Apply, inputDev;
-
-	CMenuCheckBox	crosshair;
 	CMenuCheckBox	invertMouse;
 	CMenuCheckBox	lookFilter;
+	CMenuCheckBox	console;
 	CMenuCheckBox	autoaim;
 	CMenuSlider	sensitivity;
 };
 
-static CAdvancedControls	uiAdvControls;
+static CMouseControls	uimouseControls;
 
 /*
 =================
 UI_AdvControls_GetConfig
 =================
 */
-void CAdvancedControls::GetConfig( )
+void CMouseControls::GetConfig( )
 {
 	kbutton_t	*mlook;
 
 	if( EngFuncs::GetCvarFloat( "m_pitch" ) < 0 )
 		invertMouse.bChecked = true;
 
-	crosshair.LinkCvar( "crosshair" );
 	lookFilter.LinkCvar( "look_filter" );
+	console.LinkCvar("menu_getconsole");
 	sensitivity.LinkCvar( "sensitivity" );
 
 	ToggleLookCheckboxes( false );
 }
 
-void CAdvancedControls::PitchInvert()
+void CMouseControls::PitchInvert()
 {
 	bool invert = invertMouse.bChecked;
 	float m_pitch = EngFuncs::GetCvarFloat( "m_pitch" );
@@ -85,18 +84,22 @@ void CAdvancedControls::PitchInvert()
 	}
 }
 
-void CAdvancedControls::ToggleLookCheckboxes( bool write )
+void CMouseControls::ToggleLookCheckboxes( bool write )
 {
 }
 
-void CAdvancedControls::SaveAndPopMenu()
+void CMouseControls::SaveAndPopMenu()
 {
-	crosshair.WriteCvar();
 	lookFilter.WriteCvar();
 	if( EngFuncs::GetCvarString("m_filter")[0] )
 		EngFuncs::CvarSetValue( "m_filter", lookFilter.bChecked );
 	sensitivity.WriteCvar();
+	console.WriteCvar();
 
+	if (EngFuncs::GetCvarString("menu_getconsole")[0])
+		EngFuncs::CvarSetValue("menu_getconsole", console.bChecked);
+
+	
 	ToggleLookCheckboxes( true );
 
 	CMenuFramework::SaveAndPopMenu();
@@ -107,45 +110,43 @@ void CAdvancedControls::SaveAndPopMenu()
 UI_AdvControls_Init
 =================
 */
-void CAdvancedControls::_Init( void )
+void CMouseControls::_Init( void )
 {
 	banner.SetPicture( ART_BANNER );
 
-	crosshair.SetNameAndStatus(L("CstzUI_Crosshair"), L(""));
-	crosshair.iFlags |= QMF_NOTIFY;
-	crosshair.SetCoord( 72, 280 );
-
 	invertMouse.SetNameAndStatus(L("GameUI_MouseLook"), L(""));
 	invertMouse.iFlags |= QMF_NOTIFY;
-	invertMouse.onChanged = VoidCb( &CAdvancedControls::PitchInvert );
-	invertMouse.SetCoord( 72, 330 );
+	invertMouse.onChanged = VoidCb( &CMouseControls::PitchInvert );
+	invertMouse.SetCoord( 72, 300 );
 
 	lookFilter.SetNameAndStatus(L("GameUI_MouseFilter"), L(""));
 	lookFilter.iFlags |= QMF_NOTIFY;
-	lookFilter.SetCoord( 72, 530 );
+	lookFilter.SetCoord( 72, 350 );
+
+	console.SetNameAndStatus(L("GameUI_MouseFilter"), L(""));
+	console.iFlags |= QMF_NOTIFY;
+	console.SetCoord(72, 400);
 
 	sensitivity.SetNameAndStatus(L("GameUI_MouseSensitivity"), L(""));
 	sensitivity.Setup( 0.0, 20.0f, 0.1 );
-	sensitivity.SetCoord( 72, 660 );
+	sensitivity.SetCoord( 72, 500 );
 
 	Apply.SetNameAndStatus(L("GameUI_Apply"), L(""));
-	Apply.onActivated = VoidCb(&CAdvancedControls::SaveAndPopMenu);
+	Apply.onActivated = VoidCb(&CMouseControls::SaveAndPopMenu);
 	Apply.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		Apply.SetGrayed(true);
-	Apply.SetCoord(72, 680);
+	Apply.SetCoord(72, 550);
 
 	AddItem( background );
 	AddItem( banner );
 	AddItem( Apply );
-	AddItem( crosshair );
 	AddItem( invertMouse );
+	AddItem( console );
 	AddItem( lookFilter );
 	AddItem( sensitivity );
 }
 
 
-void CAdvancedControls::_VidInit()
+void CMouseControls::_VidInit()
 {
 	GetConfig();
 }
@@ -155,7 +156,7 @@ void CAdvancedControls::_VidInit()
 UI_AdvControls_Precache
 =================
 */
-void UI_AdvControls_Precache( void )
+void UI_MouseControls_Precache( void )
 {
 	EngFuncs::PIC_Load( ART_BANNER );
 }
@@ -165,8 +166,8 @@ void UI_AdvControls_Precache( void )
 UI_AdvControls_Menu
 =================
 */
-void UI_AdvControls_Menu( void )
+void UI_MouseControls_Menu( void )
 {
-	uiAdvControls.Show();
+	uimouseControls.Show();
 }
-ADD_MENU( menu_advcontrols, UI_AdvControls_Precache, UI_AdvControls_Menu );
+ADD_MENU( menu_mousecontrols, UI_MouseControls_Precache, UI_MouseControls_Menu );

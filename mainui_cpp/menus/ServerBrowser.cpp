@@ -476,22 +476,16 @@ void CMenuServerBrowser::_Init( void )
 	Create.SetNameAndStatus(L("GameUI_GameMenu_CreateServer"), L(""));
 	Create.iFlags |= QMF_NOTIFY;
 	Create.onActivated = UI_CreateGame_Menu;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		Create.SetGrayed(true);
 	Create.SetCoord(80, 250);
 
 	Config.SetNameAndStatus(L("GameUI_Game"), L(""));
 	Config.onActivated = UI_GameOptions_Menu;
 	Config.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		Config.SetGrayed(true);
 	Config.SetCoord(80, 300);
 
 	Adv.SetNameAndStatus(L("GameUI_ServerSettings"), L(""));
 	Adv.onActivated = UI_AdvUserOptions_Menu;
 	Adv.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		Adv.SetGrayed(true);
 	Adv.SetCoord(80, 350);
 
 	/*Info.SetNameAndStatus(L("GameUI_StartGame"), L(""));
@@ -504,15 +498,11 @@ void CMenuServerBrowser::_Init( void )
 	Refresh.SetNameAndStatus(L("CstzUI_Refresh"), L(""));
 	Refresh.onActivated = VoidCb(&CMenuServerBrowser::RefreshList);
 	Refresh.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		Refresh.SetGrayed(true);
 	Refresh.SetCoord(80, 400);
 
 	Exit.SetNameAndStatus(L("GameUI_Cancel"), L(""));
 	Exit.onActivated = VoidCb(&CMenuServerBrowser::Hide);
 	Exit.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		Exit.SetGrayed(true);
 	Exit.SetCoord(80, 450);
 
 	msgBox.SetMessage( "Join a network game will exit any current game, OK to exit?" );

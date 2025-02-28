@@ -55,22 +55,16 @@ void UI_Video_Menu( void )
 		Graphic.SetNameAndStatus(L("CstzUI_VideoGraphic"), L(""));
 		Graphic.onActivated = UI_VidOptions_Menu;
 		Graphic.iFlags |= QMF_NOTIFY;
-		if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-			Graphic.SetGrayed(true);
 		Graphic.SetCoord(80, 300);
 
 		VidoeMode.SetNameAndStatus(L("CstzUI_VideoModes"), L(""));
 		VidoeMode.onActivated = UI_VidModes_Menu;
 		VidoeMode.iFlags |= QMF_NOTIFY;
-		if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-			VidoeMode.SetGrayed(true);
 		VidoeMode.SetCoord(80, 350);
 
 		Exit.SetNameAndStatus(L("GameUI_Close"), L(""));
 		Exit.onActivated = VoidCb(&CMenuFramework::Hide);
 		Exit.iFlags |= QMF_NOTIFY;
-		if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-			Exit.SetGrayed(true);
 		Exit.SetCoord(80, 400);
 
 		video.AddItem( video.background );

@@ -92,6 +92,7 @@ public:
 				uiStatic.enterSound = -1;
 			}
 			strcpy( sTitleString, L("CstzUI_MainStart"));
+
 		}
 		else
 		{
@@ -181,8 +182,8 @@ void CMenuConnectionProgress::HandleDisconnect( void )
 		}
 	}
 	
-	SetCommonText( L("CstzUI_MainDiscon2") );
-
+//	SetCommonText( L("CstzUI_MainDiscon2") );
+	SetNameAndStatus(L("CstzUI_MainDiscon2"), L(""));
 	m_iState = STATE_NONE;
 	VidInit();
 }
@@ -219,12 +220,15 @@ void CMenuConnectionProgress::_Init( void )
 	});
 	consoleButton.bEnableTransitions = false;
 
-	disconnectButton.SetPicture( PC_DISCONNECT );
-	disconnectButton.szName = "Disconnect";
-	disconnectButton.onActivated = VoidCb( &CMenuConnectionProgress::Disconnect );
-	disconnectButton.bEnableTransitions = false;
 
-	dialog.SetMessage( L("CstzUI_MainDiscon") );
+	disconnectButton.SetNameAndStatus(L("GameUI_GameMenu_Disconnect"), L(""));
+	disconnectButton.onActivated = VoidCb(&CMenuConnectionProgress::Disconnect);
+	disconnectButton.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		disconnectButton.SetGrayed(true);
+	disconnectButton.bEnableTransitions = false;
+	
+	dialog.SetNameAndStatus(L("CstzUI_MainDiscon"), L(""));
 	dialog.Link( this );
 	dialog.onPositive = VoidCb( &CMenuConnectionProgress::Disconnect );
 
@@ -373,7 +377,7 @@ void UI_ConnectionProgress_f( void )
 		uiConnectionProgress.m_iState = STATE_MENU;
 		uiConnectionProgress.m_iSource = SOURCE_CREATEGAME;
 		uiConnectionProgress.SetServer( "" );
-		uiConnectionProgress.SetCommonText( L("CstzUI_MainStart"));
+		uiConnectionProgress.SetCommonText(L("CstzUI_MainStart2"));
 		uiConnectionProgress.Show();
 	}
 

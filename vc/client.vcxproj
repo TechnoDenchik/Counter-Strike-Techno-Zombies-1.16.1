@@ -427,6 +427,7 @@
     <ClInclude Include="..\cl_dll\vgui2\CClientVGUI.h" />
     <ClInclude Include="..\cl_dll\vgui2\CGameUITestPanel.h" />
     <ClInclude Include="..\cl_dll\vgui2\CHudViewPort.h" />
+    <ClInclude Include="..\cl_dll\vgui2\game_controls\buysubmenu.h" />
     <ClInclude Include="..\cl_dll\vgui2\IEngineVgui.h" />
     <ClInclude Include="..\cl_dll\vgui2\IGameUIPanel.h" />
     <ClInclude Include="..\cl_dll\vgui2\IViewport.h" />

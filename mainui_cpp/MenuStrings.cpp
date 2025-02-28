@@ -28,7 +28,7 @@ GNU General Public License for more details.
 #define EMPTY_STRINGS_50 EMPTY_STRINGS_20, EMPTY_STRINGS_20, EMPTY_STRINGS_10
 #define EMPTY_STRINGS_100 EMPTY_STRINGS_50, EMPTY_STRINGS_50
 
-#define HASH_SIZE 256 // 256 * 4 * 4 == 4096 bytes
+#define HASH_SIZE 512 // 256 * 4 * 4 == 4096 bytes
 static struct dictionary_t
 {
 	const char *name;

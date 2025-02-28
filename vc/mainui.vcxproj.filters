@@ -314,7 +314,7 @@
     <ClCompile Include="..\mainui_cpp\menus\Zoo.cpp">
       <Filter>Source Files\menus</Filter>
     </ClCompile>
-    <ClCompile Include="..\mainui_cpp\menus\AdvancedControls.cpp">
+    <ClCompile Include="..\mainui_cpp\menus\Mouse.cpp">
       <Filter>Source Files\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\Audio.cpp">

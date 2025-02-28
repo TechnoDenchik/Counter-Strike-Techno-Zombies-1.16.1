@@ -68,8 +68,8 @@ extern "C" {
 #define PATH_MAX 4096 // Try workaround some strange bugs
 #endif
 
-#define MAX_STRING		256	// generic string
-#define MAX_INFO_STRING	256	// infostrings are transmitted across network
+#define MAX_STRING		2048	// generic string
+#define MAX_INFO_STRING	2048	// infostrings are transmitted across network
 #define MAX_SYSPATH		PATH_MAX	// system filepath
 #define MAX_MODS		512	// environment games that engine can keep visible
 #define BIT( n )		(1U << ( n ))

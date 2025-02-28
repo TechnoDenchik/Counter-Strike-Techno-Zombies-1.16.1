@@ -45,11 +45,7 @@ private:
 	CMenuPicButton exit2, exit;
 	CMenuSlider	soundVolume;
 	CMenuSlider	musicVolume;
-	CMenuSpinControl lerping;
-	CMenuCheckBox noDSP;
 	CMenuCheckBox muteFocusLost;
-	CMenuCheckBox reverseChannels;
-
 };
 
 static CMenuAudio		uiAudio;
@@ -63,11 +59,7 @@ void CMenuAudio::GetConfig( void )
 {
 	soundVolume.LinkCvar( "volume" );
 	musicVolume.LinkCvar( "MP3Volume" );
-
-	lerping.LinkCvar( "s_lerping", CMenuEditable::CVAR_VALUE );
-	noDSP.LinkCvar( "dsp_off" );
 	muteFocusLost.LinkCvar( "snd_mute_losefocus" );
-	reverseChannels.LinkCvar( "s_reverse_channels" );
 }
 
 /*
@@ -79,10 +71,7 @@ void CMenuAudio::SaveAndPopMenu()
 {
 	soundVolume.WriteCvar();
 	musicVolume.WriteCvar();
-	lerping.WriteCvar();
-	noDSP.WriteCvar();
 	muteFocusLost.WriteCvar();
-	reverseChannels.WriteCvar();
 
 	CMenuFramework::SaveAndPopMenu();
 }
@@ -102,7 +91,7 @@ void CMenuAudio::_Init( void )
 	banner.SetPicture(ART_BANNER);
 
 	soundVolume.SetNameAndStatus(L("GameUI_SoundEffectVolume"), "Set master volume level" );
-	soundVolume.Setup( 0.0, 1.0, 0.05f );
+	soundVolume.Setup( 0.00, 2.0, 0.001 );
 	soundVolume.onChanged = CMenuEditable::WriteCvarCb;
 	soundVolume.SetCoord( 320, 280 );
 
@@ -114,35 +103,11 @@ void CMenuAudio::_Init( void )
 	getmusicmenu.SetNameAndStatus(L("CstzUI_musicpackb"), L(""));
 	getmusicmenu.onActivated = UI_Music_Menu;
 	getmusicmenu.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		getmusicmenu.SetGrayed(true);
 	getmusicmenu.SetCoord(320, 380);
 
-	static CStringArrayModel model( lerpingStr, ARRAYSIZE( lerpingStr ));
-	lerping.SetNameAndStatus(L("Disable DSP effects"), "Enable/disable interpolation on sound output");
-	lerping.Setup(&model);
-	lerping.onChanged = CMenuEditable::WriteCvarCb;
-	lerping.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		lerping.SetGrayed(true);
-	lerping.SetRect(320, 470, 300, 32);
-	//getmusicmenu.SetCoord(320, 380);
-	
-	
-
-	noDSP.SetNameAndStatus(L("Use Alpha DSP effects"), "Disable sound processing (like echo, flanger, etc)" );
-	noDSP.onChanged = CMenuEditable::WriteCvarCb;
-	noDSP.SetCoord( 320, 520 );
-
-	muteFocusLost.SetNameAndStatus(L("Mute when inactive"), "Disable sound when game goes into background" );
+	muteFocusLost.SetNameAndStatus(L("CstzUI_MuteGame"), L("CstzUI_MuteGame2") );
 	muteFocusLost.onChanged = CMenuEditable::WriteCvarCb;
-	muteFocusLost.SetCoord( 320, 570 );
-
-	reverseChannels.SetNameAndStatus( "Reverse audio channels", "Use it when you can't swap your headphones' speakers" );
-	reverseChannels.onChanged = CMenuEditable::WriteCvarCb;
-	reverseChannels.SetCoord( 320, 620 );
-
-	
+	muteFocusLost.SetCoord( 320, 470 );
 
 	AddItem( background );
 	AddItem( getmusicmenu );
@@ -151,14 +116,10 @@ void CMenuAudio::_Init( void )
 	exit.SetNameAndStatus(L("GameUI_Close"), L(""));
 	exit.onActivated = VoidCb(( & CMenuAudio::SaveAndPopMenu) );
 	exit.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		exit.SetGrayed(true);
 	exit.SetCoord(80, 250);
 
 	AddItem( soundVolume );
 	AddItem( musicVolume );
-	AddItem( lerping );
-	AddItem( noDSP );
 	AddItem( exit );
 	AddItem( muteFocusLost );
 }

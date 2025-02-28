@@ -68,6 +68,8 @@ extern cvar_t	*ui_precache;
 extern cvar_t	*ui_showmodels;
 extern cvar_t   *ui_show_window_stack;
 extern cvar_t	*ui_borderclip;
+extern cvar_t	*ui_musicpack;
+extern cvar_t	*ui_getconsole;
 
 class CMenuBaseWindow;
 
@@ -278,7 +280,7 @@ void UI_LanGame_Menu( void );
 void UI_ServerBrowser_Menu( void );
 void UI_PlayerSetup_Menu( void );
 void UI_Controls_Menu( void );
-void UI_AdvControls_Menu( void );
+void UI_MouseControls_Menu( void );
 void UI_GameOptions_Menu( void );
 void UI_CreateGame_Menu( void );
 void UI_Audio_Menu( void );

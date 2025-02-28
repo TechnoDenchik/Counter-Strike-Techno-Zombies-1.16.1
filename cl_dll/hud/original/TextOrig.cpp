@@ -441,14 +441,14 @@ void CHudWPNDrop::Settext()
 	m_flDisplayTime = gHUD.m_flTime;
 }
 
-int CHudAK47::VidInit(void)
+int CClientMusicPack::VidInit(void)
 {
 	if (!stringtext)
 		stringtext = R_LoadTextureShared("resource/hud/zb3/hud_string_bg", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
 	return 1;
 }
 
-int CHudAK47::Draw(float time)
+int CClientMusicPack::Draw(float time)
 {
 	if (!m_pCurTexture)
 		return 1;
@@ -475,13 +475,262 @@ int CHudAK47::Draw(float time)
 	char szbuffer[64];
 	sprintf(szbuffer, "AK47");
 
-	DrawUtils::DrawHudString(x - 100, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+	//DrawUtils::DrawHudString(x - 100, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
 
 	return 1;
 }
 
-void CHudAK47::Settext()
+void CClientMusicPack::SetMusicCT(int team)
 {
 	m_pCurTexture = stringtext;
 	m_flDisplayTime = gHUD.m_flTime;
+	for (int i = 1; i < MAX_PLAYERS; i++)
+	{
+
+	//	if (team == 2)
+		//{
+
+			if (g_PlayerExtraInfo[gHUD.m_Scoreboard.m_iPlayerNum].teamnumber == TEAM_TERRORIST)
+			{
+				int music = (int)CVAR_GET_FLOAT("menu_musicpack");
+
+				if (music == 0)
+				{
+					ClientCmd("mp3 loop media/Music/valve_01/lostround\n");
+				}
+				else if (music == 1)
+				{
+					ClientCmd("mp3 loop media/Music/valve_cs2_01/lostround\n");
+				}
+				else if (music == 2)
+				{
+					ClientCmd("mp3 loop media/Music/radcat_01/lostround\n");
+				}
+				else if (music == 3)
+				{
+					ClientCmd("mp3 loop media/Music/3kliksphilip_01/lostround\n");
+				}
+				else if (music == 4)
+				{
+					ClientCmd("mp3 loop media/Music/bbnos_01/lostround\n");
+				}
+				else if (music == 5)
+				{
+					ClientCmd("mp3 loop media/Music/chipzel_01/lostround\n");
+				}
+				else if (music == 6)
+				{
+					ClientCmd("mp3 loop media/Music/dryden_01/lostround\n");
+				}
+				else if (music == 7)
+				{
+					ClientCmd("mp3 loop media/Music/freakydna_01/lostround\n");
+				}
+				else if (music == 8)
+				{
+					ClientCmd("mp3 loop media/Music/isoxo_01/lostround\n");
+				}
+				else if (music == 9)
+				{
+					ClientCmd("mp3 loop media/Music/knock2_01/lostround\n");
+				}
+				else if (music == 10)
+				{
+					ClientCmd("mp3 loop media/Music/mattlevine_01/lostround\n");
+				}
+				else if (music == 11)
+				{
+					ClientCmd("mp3 loop media/Music/meechydarko_01/lostround\n");
+				}
+				else if (music == 12)
+				{
+					ClientCmd("mp3 loop media/Music/mordfustang_01/lostround\n");	//lose tr
+				}
+			}
+
+		//}
+		else if (g_PlayerExtraInfo[gHUD.m_Scoreboard.m_iPlayerNum].teamnumber == TEAM_CT)
+		{
+			int music = (int)CVAR_GET_FLOAT("menu_musicpack");
+
+			if (music == 0)
+			{
+				ClientCmd("mp3 loop media/Music/valve_01/wonround\n");
+			}
+			else if (music == 1)
+			{
+				ClientCmd("mp3 loop media/Music/valve_cs2_01/roundmvpanthem_01\n");
+			}
+			else if (music == 2)
+			{
+				ClientCmd("mp3 loop media/Music/radcat_01/roundmvpanthem_01\n");
+			}
+			else if (music == 3)
+			{
+				ClientCmd("mp3 loop media/Music/3kliksphilip_01/roundmvpanthem_01\n");
+			}
+			else if (music == 4)
+			{
+				ClientCmd("mp3 loop media/Music/bbnos_01/roundmvpanthem_01\n");
+			}
+			else if (music == 5)
+			{
+				ClientCmd("mp3 loop media/Music/chipzel_01/roundmvpanthem_01\n");
+			}
+			else if (music == 6)
+			{
+				ClientCmd("mp3 loop media/Music/dryden_01/roundmvpanthem_01\n");
+			}
+			else if (music == 7)
+			{
+				ClientCmd("mp3 loop media/Music/freakydna_01/roundmvpanthem_01\n");
+			}
+			else if (music == 8)
+			{
+				ClientCmd("mp3 loop media/Music/isoxo_01/roundmvpanthem_01\n");
+			}
+			else if (music == 9)
+			{
+				ClientCmd("mp3 loop media/Music/knock2_01/roundmvpanthem_01\n");
+			}
+			else if (music == 10)
+			{
+				ClientCmd("mp3 loop media/Music/mattlevine_01/roundmvpanthem_01\n");
+			}
+			else if (music == 11)
+			{
+				ClientCmd("mp3 loop media/Music/meechydarko_01/roundmvpanthem_01\n");
+			}
+			else if (music == 12)
+			{
+				ClientCmd("mp3 loop media/Music/mordfustang_01/roundmvpanthem_01\n");
+			}	//win
+		}
+	}
+}
+
+void CClientMusicPack::SetMusicTR(int team)
+{
+	m_pCurTexture = stringtext;
+	m_flDisplayTime = gHUD.m_flTime;
+
+	
+	for (int i = 1; i < MAX_PLAYERS; i++)
+	{
+		if (g_PlayerExtraInfo[gHUD.m_Scoreboard.m_iPlayerNum].teamnumber == TEAM_CT)
+		{
+			int music = (int)CVAR_GET_FLOAT("menu_musicpack");
+
+			if (music == 0)
+			{
+				ClientCmd("mp3 loop media/Music/valve_01/lostround\n");
+			}
+			else if (music == 1)
+			{
+				ClientCmd("mp3 loop media/Music/valve_cs2_01/lostround\n");
+			}
+			else if (music == 2)
+			{
+				ClientCmd("mp3 loop media/Music/radcat_01/lostround\n");
+			}
+			else if (music == 3)
+			{
+				ClientCmd("mp3 loop media/Music/3kliksphilip_01/lostround\n");
+			}
+			else if (music == 4)
+			{
+				ClientCmd("mp3 loop media/Music/bbnos_01/lostround\n");
+			}
+			else if (music == 5)
+			{
+				ClientCmd("mp3 loop media/Music/chipzel_01/lostround\n");
+			}
+			else if (music == 6)
+			{
+				ClientCmd("mp3 loop media/Music/dryden_01/lostround\n");
+			}
+			else if (music == 7)
+			{
+				ClientCmd("mp3 loop media/Music/freakydna_01/lostround\n");
+			}
+			else if (music == 8)
+			{
+				ClientCmd("mp3 loop media/Music/isoxo_01/lostround\n");
+			}
+			else if (music == 9)
+			{
+				ClientCmd("mp3 loop media/Music/knock2_01/lostround\n");
+			}
+			else if (music == 10)
+			{
+				ClientCmd("mp3 loop media/Music/mattlevine_01/lostround\n");
+			}
+			else if (music == 11)
+			{
+				ClientCmd("mp3 loop media/Music/meechydarko_01/lostround\n");
+			}
+			else if (music == 12)
+			{
+				ClientCmd("mp3 loop media/Music/mordfustang_01/lostround\n");	//lose tr
+			}
+		}
+
+		else if (g_PlayerExtraInfo[gHUD.m_Scoreboard.m_iPlayerNum].teamnumber == TEAM_TERRORIST)
+		{
+			int music = (int)CVAR_GET_FLOAT("menu_musicpack");
+
+			if (music == 0)
+			{
+				ClientCmd("mp3 loop media/Music/valve_01/wonround\n");
+			}
+			else if (music == 1)
+			{
+				ClientCmd("mp3 loop media/Music/valve_cs2_01/roundmvpanthem_01\n");
+			}
+			else if (music == 2)
+			{
+				ClientCmd("mp3 loop media/Music/radcat_01/roundmvpanthem_01\n");
+			}
+			else if (music == 3)
+			{
+				ClientCmd("mp3 loop media/Music/3kliksphilip_01/roundmvpanthem_01\n");
+			}
+			else if (music == 4)
+			{
+				ClientCmd("mp3 loop media/Music/bbnos_01/roundmvpanthem_01\n");
+			}
+			else if (music == 5)
+			{
+				ClientCmd("mp3 loop media/Music/chipzel_01/roundmvpanthem_01\n");
+			}
+			else if (music == 6)
+			{
+				ClientCmd("mp3 loop media/Music/dryden_01/roundmvpanthem_01\n");
+			}
+			else if (music == 7)
+			{
+				ClientCmd("mp3 loop media/Music/freakydna_01/roundmvpanthem_01\n");
+			}
+			else if (music == 8)
+			{
+				ClientCmd("mp3 loop media/Music/isoxo_01/roundmvpanthem_01\n");
+			}
+			else if (music == 9)
+			{
+				ClientCmd("mp3 loop media/Music/knock2_01/roundmvpanthem_01\n");
+			}
+			else if (music == 10)
+			{
+				ClientCmd("mp3 loop media/Music/mattlevine_01/roundmvpanthem_01\n");
+			}
+			else if (music == 11)
+			{
+				ClientCmd("mp3 loop media/Music/meechydarko_01/roundmvpanthem_01\n");
+			}
+			else if (music == 12)
+			{
+				ClientCmd("mp3 loop media/Music/mordfustang_01/roundmvpanthem_01\n");
+			}	//win
+		}
+	}
 }

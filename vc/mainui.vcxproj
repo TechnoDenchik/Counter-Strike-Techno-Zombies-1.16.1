@@ -107,7 +107,7 @@
     <ClCompile Include="..\mainui_cpp\font\StbFont.cpp" />
     <ClCompile Include="..\mainui_cpp\font\WinAPIFont.cpp" />
     <ClCompile Include="..\mainui_cpp\MenuStrings.cpp" />
-    <ClCompile Include="..\mainui_cpp\menus\AdvancedControls.cpp" />
+    <ClCompile Include="..\mainui_cpp\menus\Mouse.cpp" />
     <ClCompile Include="..\mainui_cpp\menus\Audio.cpp" />
     <ClCompile Include="..\mainui_cpp\menus\Configuration.cpp" />
     <ClCompile Include="..\mainui_cpp\menus\ConnectionProgress.cpp" />

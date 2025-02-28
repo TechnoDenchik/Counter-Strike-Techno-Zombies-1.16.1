@@ -23,6 +23,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "PicButton.h"
 #include "Slider.h"
 #include "CheckBox.h"
+#include "SpinControl.h"
+
+#include "keydefs.h"
+#include "Action.h"
+
 
 #define ART_BANNER	  	"gfx/shell/head_vidoptions"
 #define ART_GAMMA		"gfx/shell/gamma"
@@ -38,13 +43,14 @@ public:
 	void SaveAndPopMenu() override;
 	void GammaUpdate();
 	void GammaGet();
+	void Restore();
 	int		outlineWidth;
 
 	class CMenuVidPreview : public CMenuBitmap
 	{
 		void Draw() override;
 	} testImage;
-
+	const char* Key(int key, int down) override;
 	CMenuPicButton	done;
 
 	CMenuSlider	screenSize;
@@ -57,6 +63,7 @@ public:
 	CMenuCheckBox   vbo;
 	CMenuCheckBox   bump;
 	CMenuPicButton Apply1, Apply;
+	CMenuSpinControl maxFPS;
 	HIMAGE		hTestImage;
 } uiVidOptions;
 
@@ -71,6 +78,7 @@ void CMenuVidOptions::GammaUpdate( void )
 	float val = RemapVal( uiVidOptions.gammaIntensity.GetCurrentValue(), 0.0, 1.0, 1.8, 7.0 );
 	EngFuncs::CvarSetValue( "gamma", val );
 	EngFuncs::ProcessImage( uiVidOptions.hTestImage, val );
+	maxFPS.WriteCvar();
 }
 
 void CMenuVidOptions::GammaGet( void )
@@ -79,12 +87,25 @@ void CMenuVidOptions::GammaGet( void )
 
 	uiVidOptions.gammaIntensity.SetCurrentValue( RemapVal( val, 1.8f, 7.0f, 0.0f, 1.0f ) );
 	EngFuncs::ProcessImage( uiVidOptions.hTestImage, val );
-
+	
 	uiVidOptions.gammaIntensity.SetOriginalValue( val );
+}
+
+const char* CMenuVidOptions::Key(int key, int down)
+{
+	if (down && UI::Key::IsEscape(key))
+		Restore();
+	return CMenuFramework::Key(key, down);
+}
+
+void CMenuVidOptions::Restore()
+{
+	maxFPS.DiscardChanges();
 }
 
 void CMenuVidOptions::SaveAndPopMenu( void )
 {
+	maxFPS.WriteCvar();
 	screenSize.WriteCvar();
 	glareReduction.WriteCvar();
 	fastSky.WriteCvar();
@@ -93,8 +114,7 @@ void CMenuVidOptions::SaveAndPopMenu( void )
 	bump.WriteCvar();
 	anisatropic.WriteCvar();
 	qualitygraphics.WriteCvar();
-	// gamma is already written
-
+	Restore();
 	CMenuFramework::SaveAndPopMenu();
 }
 
@@ -225,6 +245,15 @@ void CMenuVidOptions::_Init( void )
 	qualitygraphics.SetCoord(320, 340);
 	qualitygraphics.LinkCvar("gl_texture_lodbias");
 
+	maxFPS.SetNameAndStatus(L("CstzUI_GLGraph"), L("CstzUI_GLGraph2"));
+	//maxFPS.szName = L("FPS limit");
+	maxFPS.szStatusText = "Cap your game frame rate";
+	maxFPS.Setup(60, 1000, 40);
+	maxFPS.LinkCvar("fps_max", CMenuEditable::CVAR_VALUE);
+	maxFPS.SetRect(330, 400, 220, 32);
+	//maxFPS.iFlags |= QMF_NOTIFY;
+
+	AddItem( maxFPS );
 	AddItem( background );
 	AddItem( banner );
 	AddItem( Apply );

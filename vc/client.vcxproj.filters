@@ -142,6 +142,12 @@
     <Filter Include="cl_dll\hud\vgui2\weapons\overcoming">
       <UniqueIdentifier>{02ecc6cc-39f2-4803-993a-ff84a96781e0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="cl_dll\vgui2\cstz">
+      <UniqueIdentifier>{b625d599-b9d4-4591-a860-f4dd3f52d4be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cl_dll\vgui2\game_controls">
+      <UniqueIdentifier>{c8769fad-115d-4684-8d78-5463a1e6eec9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\cl_dll\events\ev_cs16.cpp">
@@ -1167,6 +1173,7 @@
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_stamper.cpp">
       <Filter>dlls\wpn_shared</Filter>
     </ClCompile>
+    <ClCompile Include="..\cl_dll\vgui2\game_controls\buysubmenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\dlls\wpn_shared\wpn_m249.h">
@@ -1772,5 +1779,6 @@
     <ClInclude Include="..\cl_dll\hud\zsh\infolocationhud.h">
       <Filter>cl_dll\hud\zsh\header</Filter>
     </ClInclude>
+    <ClInclude Include="..\cl_dll\vgui2\game_controls\buysubmenu.h" />
   </ItemGroup>
 </Project>

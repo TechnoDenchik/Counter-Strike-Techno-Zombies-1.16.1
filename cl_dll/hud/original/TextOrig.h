@@ -138,13 +138,14 @@ protected:
 	float m_flDisplayTime;
 };
 
-class CHudAK47 : public IBaseHudSub
+class CClientMusicPack : public IBaseHudSub
 {
 public:
 	int VidInit(void) override;
 	int Draw(float time) override;
 
-	void Settext();
+	void SetMusicCT(int team);
+	void SetMusicTR(int team);
 
 protected:
 	int names;

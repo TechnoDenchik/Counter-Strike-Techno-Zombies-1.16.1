@@ -591,8 +591,6 @@ void CMenuPlayerSetup::_Init( void )
 	Exit.SetNameAndStatus(L("GameUI_Apply"), L(""));
 	Exit.onActivated = VoidCb(&CMenuPlayerSetup::SaveAndPopMenu);
 	Exit.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		Exit.SetGrayed(true);
 	Exit.SetCoord(80, 250);
 
 	if( !hideLogos )

@@ -95,19 +95,17 @@ private:
 		Hide();
 	}
 
-
 	CMenuBannerBitmap banner;
 
-	// state toggle by
 	CMenuTable keysList;
+
 	CMenuKeysModel keysListModel;
 
-	// redefine key wait dialog
-	CMenuMessageBox msgBox1; // small msgbox
+	CMenuMessageBox msgBox1; 
 
-	CMenuYesNoMessageBox msgBox2; // large msgbox
+	CMenuYesNoMessageBox msgBox2; 
+
 	CMenuPicButton Default1, Default;
-	CMenuPicButton Adv, Adv1;
 	CMenuPicButton Apply1, Apply;
 	CMenuPicButton Exit1, Exit;
 
@@ -397,26 +395,19 @@ void CMenuControls::_Init( void )
 	AddItem( background );
 	AddItem( banner );
 
-	Default.SetNameAndStatus(L("GameUI_UseDefaults"), L(""));
-	Default.onActivated = msgBox2.MakeOpenEvent();
-	Default.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		Default.SetGrayed(true);
-	Default.SetCoord(80, 250);
-
-	Adv.SetNameAndStatus(L("GameUI_AdvancedNoEllipsis"), L(""));
-	Adv.onActivated = UI_AdvControls_Menu;
-	Adv.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		Adv.SetGrayed(true);
-	Adv.SetCoord(80, 300);
-
 	Apply.SetNameAndStatus(L("GameUI_Apply"), L(""));
 	Apply.onActivated = VoidCb(&CMenuControls::SaveAndPopMenu) ;
 	Apply.iFlags |= QMF_NOTIFY;
 	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
 		Apply.SetGrayed(true);
-	Apply.SetCoord(80, 350);
+	Apply.SetCoord(80, 300);
+
+	Default.SetNameAndStatus(L("GameUI_UseDefaults"), L(""));
+	Default.onActivated = msgBox2.MakeOpenEvent();
+	Default.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Default.SetGrayed(true);
+	Default.SetCoord(80, 350);
 
 	Exit.SetNameAndStatus(L("GameUI_Cancel"), L(""));
 	Exit.onActivated = VoidCb(&CMenuControls::Cancel);
@@ -426,10 +417,9 @@ void CMenuControls::_Init( void )
 	Exit.SetCoord(80, 400);
 
 	AddItem( keysList );
-	AddItem(Default);
-	AddItem(Adv);
-	AddItem(Apply);
-	AddItem(Exit);
+	AddItem( Default );
+	AddItem( Apply );
+	AddItem( Exit );
 }
 
 void CMenuControls::_VidInit()

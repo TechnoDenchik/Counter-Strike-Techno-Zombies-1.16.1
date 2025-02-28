@@ -42,6 +42,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 cvar_t		*ui_showmodels;
 cvar_t		*ui_show_window_stack;
 cvar_t		*ui_borderclip;
+cvar_t		*ui_musicpack;
+cvar_t		*ui_getconsole;
+
 
 uiStatic_t	uiStatic;
 static CMenuEntry	*s_pEntries = NULL;
@@ -580,18 +583,41 @@ bool UI_StartBackGroundMap( void )
 
 	first = FALSE;
 
+	
 	// some map is already running
 	if( !uiStatic.bgmapcount || CL_IsActive() || gpGlobals->demoplayback )
 		return FALSE;
 
 	int bgmapid = EngFuncs::RandomLong( 0, uiStatic.bgmapcount - 1 );
-
+	
 	char cmd[128];
 	sprintf( cmd, "maps/%s.bsp", uiStatic.bgmaps[bgmapid] );
 	if( !EngFuncs::FileExists( cmd, TRUE )) return FALSE;
+	EngFuncs::CvarSetValue("mp_gamemode", 1);
 
 	sprintf( cmd, "map_background %s\n", uiStatic.bgmaps[bgmapid] );
 	EngFuncs::ClientCmd( FALSE, cmd );
+
+
+	if (uiStatic.enterSound > 0.0f && uiStatic.enterSound <= gpGlobals->time)
+	{
+		EngFuncs::PlayLocalSound(uiStartGame);
+		uiStatic.enterSound = -1;
+	}
+
+
+
+	EngFuncs::CvarSetValue("deathmatch", 1.0f);	// start deathmatch as default
+	EngFuncs::CvarSetValue("sv_nat", EngFuncs::GetCvarFloat("public"));
+	
+		EngFuncs::WriteServerConfig(EngFuncs::GetCvarString("lservercfgfile"));
+
+		char cmd1[128], cmd2[256];
+		sprintf(cmd1, "exec %s\n", EngFuncs::GetCvarString("lservercfgfile"));
+
+		// hack: wait three frames allowing server to completely shutdown, reapply maxplayers and start new map
+		EngFuncs::ClientCmd(FALSE, cmd1);
+
 
 	return TRUE;
 }
@@ -747,16 +773,52 @@ void UI_UpdateMenu( float flTime )
 					EngFuncs::PlayBackgroundTrack("Music/valve_01/mainmenu", "Music/valve_01/mainmenu");
 				}
 				else if (musicset == 1)
-				{
+				{				
 					EngFuncs::PlayBackgroundTrack("Music/valve_cs2_01/mainmenu", "Music/valve_cs2_01/mainmenu");
 				}
 				else if (musicset == 2)
-				{
+				{				
 					EngFuncs::PlayBackgroundTrack("Music/radcat_01/mainmenu", "Music/radcat_01/mainmenu");
 				}
 				else if (musicset == 3)
-				{
+				{					
 					EngFuncs::PlayBackgroundTrack("Music/3kliksphilip_01/mainmenu", "Music/3kliksphilip_01/mainmenu");
+				}
+				else if (musicset == 4)
+				{					
+					EngFuncs::PlayBackgroundTrack("Music/bbnos_01/mainmenu", "Music/bbnos_01/mainmenu");
+				}
+				else if (musicset == 5)
+				{				
+					EngFuncs::PlayBackgroundTrack("Music/chipzel_01/mainmenu", "Music/chipzel_01/mainmenu");
+				}
+				else if (musicset == 6)
+				{				
+					EngFuncs::PlayBackgroundTrack("Music/dryden_01/mainmenu", "Music/dryden_01/mainmenu");
+				}
+				else if (musicset == 7)
+				{					
+					EngFuncs::PlayBackgroundTrack("Music/freakydna_01/mainmenu", "Music/freakydna_01/mainmenu");
+				}
+				else if (musicset == 8)
+				{				
+					EngFuncs::PlayBackgroundTrack("Music/isoxo_01/mainmenu", "Music/isoxo_01/mainmenu");
+				}
+				else if (musicset == 9)
+				{				
+					EngFuncs::PlayBackgroundTrack("Music/knock2_01/mainmenu", "Music/knock2_01/mainmenu");
+				}
+				else if (musicset == 10)
+				{					
+					EngFuncs::PlayBackgroundTrack("Music/mattlevine_01/mainmenu", "Music/mattlevine_01/mainmenu");
+				}
+				else if (musicset == 11)
+				{					
+					EngFuncs::PlayBackgroundTrack("Music/meechydarko_01/mainmenu", "Music/meechydarko_01/mainmenu");
+				}
+				else if (musicset == 12)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/mordfustang_01/mainmenu", "Music/mordfustang_01/mainmenu");
 				}
 			}
 			first = FALSE;
@@ -1068,7 +1130,7 @@ void UI_Precache( void )
 	EngFuncs::PIC_Load( UI_UPARROWFOCUS );
 	EngFuncs::PIC_Load( UI_DOWNARROW );
 	EngFuncs::PIC_Load( UI_DOWNARROWFOCUS );
-	EngFuncs::PIC_Load( "gfx/shell/splash" );
+	EngFuncs::PIC_Load( "gfx/shell/main" );
 
 	for( CMenuEntry *entry = s_pEntries; entry; entry = entry->m_pNext )
 	{
@@ -1094,7 +1156,7 @@ void UI_ParseColor( char *&pfile, unsigned int *outColor )
 
 void UI_ApplyCustomColors( void )
 {
-	char *afile = (char *)EngFuncs::COM_LoadFile( "gfx/shell/colors.lst" );
+	char *afile = (char *)EngFuncs::COM_LoadFile( "gfx/shell/colors.cst" );
 	char *pfile = afile;
 	char token[1024];
 
@@ -1351,6 +1413,9 @@ void UI_Init( void )
 	ui_showmodels = EngFuncs::CvarRegister( "ui_showmodels", "0", FCVAR_ARCHIVE );
 	ui_show_window_stack = EngFuncs::CvarRegister( "ui_show_window_stack", "0", FCVAR_ARCHIVE );
 	ui_borderclip = EngFuncs::CvarRegister( "ui_borderclip", "0", FCVAR_ARCHIVE );
+
+	ui_getconsole = EngFuncs::CvarRegister("menu_getconsole", "0", FCVAR_ARCHIVE);
+	ui_musicpack = EngFuncs::CvarRegister("menu_musicpack", "12", FCVAR_ARCHIVE);
 
 	EngFuncs::CvarRegister( "ui_cs_autofill", "0", FCVAR_ARCHIVE );
 

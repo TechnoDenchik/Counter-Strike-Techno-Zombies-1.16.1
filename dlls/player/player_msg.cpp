@@ -132,6 +132,7 @@ int gmsgOriginalMsg10 = 0;
 int gmsgOriginalMsg11 = 0;
 int gmsgOriginalMsg12 = 0;
 int gmsgOriginalMsg13 = 0;
+int gmsgOriginalMsgMusic = 0;
 int gmsgTwinAxesMsg = 0;
 int gmsgQuantumMsg = 0;
 int gmsgArbalestMsg = 0;
@@ -286,6 +287,7 @@ void LinkUserMessages()
 	gmsgOriginalMsg11 = REG_USER_MSG("WPNDrop", -1);
 	gmsgOriginalMsg12 = REG_USER_MSG("", -1);
 	gmsgOriginalMsg13 = REG_USER_MSG("AK47", -1);
+	gmsgOriginalMsgMusic = REG_USER_MSG("MusicKit", -1);
 	gmsgTwinAxesMsg = REG_USER_MSG("HudTwinAxesMsg", -1);
 	gmsgQuantumMsg = REG_USER_MSG("HudQuantumMsg", -1);
 	gmsgArbalestMsg = REG_USER_MSG("ArbalestMsg", -1);

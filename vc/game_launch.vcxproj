@@ -145,7 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\game_launch\cstz.c" />
+    <ClCompile Include="..\game_launch\Counter-Strike TZ.c" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\game_launch\game.ico" />

@@ -225,15 +225,11 @@ void CMenuVidModes::_Init( void )
 	Apply.SetNameAndStatus(L("GameUI_Apply"), L(""));
 	Apply.onActivated = VoidCb(&CMenuVidModes::SetConfig);
 	Apply.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		Apply.SetGrayed(true);
 	Apply.SetCoord(80, 250);
 
 	Exit.SetNameAndStatus(L("GameUI_GameMenu_Quit"), L(""));
 	Exit.onActivated = VoidCb(&CMenuVidModes::Hide);
 	Exit.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		Exit.SetGrayed(true);
 	Exit.SetCoord(80, 300);
 
 	AddItem( background );

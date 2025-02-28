@@ -14,7 +14,7 @@
 #include "OrigWinhud.h"
 #include <vector>
 
-class CHudClassic_impl_t : public THudSubDispatcher<CHudGameStart, CHudBombPlant, CHudBombDefuse, CHudOrigWins, CHudRoundDraw, CHudBombnozone, CHudBombnoground, CHudBombgive, CHudBombdrop, CHudWPNDrop, CHudAK47>
+class CHudClassic_impl_t : public THudSubDispatcher<CHudGameStart, CHudBombPlant, CHudBombDefuse, CHudOrigWins, CHudRoundDraw, CHudBombnozone, CHudBombnoground, CHudBombgive, CHudBombdrop, CHudWPNDrop, CClientMusicPack>
 {
 public:
 };
@@ -30,7 +30,7 @@ DECLARE_MESSAGE(m_CLS, Bombnoground)
 DECLARE_MESSAGE(m_CLS, Bombgive)
 DECLARE_MESSAGE(m_CLS, Bombdrop)
 DECLARE_MESSAGE(m_CLS, WPNDrop)
-DECLARE_MESSAGE(m_CLS, AK47)
+DECLARE_MESSAGE(m_CLS, MusicKit)
 
 int CHudClassic::MsgFunc_StartGame(const char* pszName, int iSize, void* pbuf)
 {
@@ -208,19 +208,26 @@ int CHudClassic::MsgFunc_WPNDrop(const char* pszName, int iSize, void* pbuf)
 	return 1;
 }
 
-int CHudClassic::MsgFunc_AK47(const char* pszName, int iSize, void* pbuf)
+int CHudClassic::MsgFunc_MusicKit(const char* pszName, int iSize, void* pbuf)
 {
 	BufferReader buf(pszName, pbuf, iSize);
-
 	auto type = static_cast<INTMessage>(buf.ReadByte());
+	int team = buf.ReadByte();
+
 	switch (type)
 	{
-	case WEAPONAK47:
+	case MUSIC_PACK_CT:
 	{
-		pimpl->get<CHudAK47>().Settext();
+		pimpl->get<CClientMusicPack>().SetMusicCT(team);
+		break;
+	}
+	case MUSIC_PACK_TR:
+	{
+		pimpl->get<CClientMusicPack>().SetMusicTR(team);
 		break;
 	}
 	}
+
 	return 1;
 }
 
@@ -241,7 +248,7 @@ int CHudClassic::Init()
 	HOOK_MESSAGE(Bombgive);
 	HOOK_MESSAGE(Bombdrop);
 	HOOK_MESSAGE(WPNDrop);
-	HOOK_MESSAGE(AK47);
+	HOOK_MESSAGE(MusicKit);
 
 	return 1;
 }

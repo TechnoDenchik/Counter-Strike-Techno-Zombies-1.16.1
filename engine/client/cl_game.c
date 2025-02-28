@@ -198,34 +198,6 @@ void CL_CreatePlaylist( const char *filename )
 	if( !f ) return;
 
 	// make standard cdaudio playlist
-	FS_Print( f, "playlist\n" );		// #1
-	FS_Print( f, "Half-Life01.mp3\n" );	// #2
-	FS_Print( f, "Prospero01.mp3\n" );	// #3
-	FS_Print( f, "Half-Life12.mp3\n" );	// #4
-	FS_Print( f, "Half-Life07.mp3\n" );	// #5
-	FS_Print( f, "Half-Life10.mp3\n" );	// #6
-	FS_Print( f, "Suspense01.mp3\n" );	// #7
-	FS_Print( f, "Suspense03.mp3\n" );	// #8
-	FS_Print( f, "Half-Life09.mp3\n" );	// #9
-	FS_Print( f, "Half-Life02.mp3\n" );	// #10
-	FS_Print( f, "Half-Life13.mp3\n" );	// #11
-	FS_Print( f, "Half-Life04.mp3\n" );	// #12
-	FS_Print( f, "Half-Life15.mp3\n" );	// #13
-	FS_Print( f, "Half-Life14.mp3\n" );	// #14
-	FS_Print( f, "Half-Life16.mp3\n" );	// #15
-	FS_Print( f, "Suspense02.mp3\n" );	// #16
-	FS_Print( f, "Half-Life03.mp3\n" );	// #17
-	FS_Print( f, "Half-Life08.mp3\n" );	// #18
-	FS_Print( f, "Prospero02.mp3\n" );	// #19
-	FS_Print( f, "Half-Life05.mp3\n" );	// #20
-	FS_Print( f, "Prospero04.mp3\n" );	// #21
-	FS_Print( f, "Half-Life11.mp3\n" );	// #22
-	FS_Print( f, "Half-Life06.mp3\n" );	// #23
-	FS_Print( f, "Prospero03.mp3\n" );	// #24
-	FS_Print( f, "Half-Life17.mp3\n" );	// #25
-	FS_Print( f, "Prospero05.mp3\n" );	// #26
-	FS_Print( f, "Suspense05.mp3\n" );	// #27
-	FS_Print( f, "Suspense07.mp3\n" );	// #28
 	FS_Close( f );
 }
 
@@ -254,17 +226,6 @@ void CL_InitCDAudio( const char *filename )
 	pfile = afile;
 
 	// format: trackname\n [num]
-	while(( pfile = COM_ParseFile( pfile, token )) != NULL )
-	{
-		if( !Q_stricmp( token, "playlist" )) token[0] = '\0';
-		Q_strncpy( clgame.cdtracks[c], token, sizeof( clgame.cdtracks[0] ));
-
-		if( ++c > MAX_CDTRACKS - 1 )
-		{
-			MsgDev( D_WARN, "CD_Init: too many tracks %i in %s (only %d allowed)\n", c, filename, MAX_CDTRACKS );
-			break;
-		}
-	}
 
 	Mem_Free( afile );
 }

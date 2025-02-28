@@ -30,6 +30,8 @@ GNU General Public License for more details.
 #define ref_menu_params_s ref_params_s
 #endif
 
+//#define PRECACHE_GENERIC (*EngFuncs::engfuncs.pfnPrecacheGeneric)
+
 class EngFuncs
 {
 public:
@@ -123,6 +125,11 @@ public:
 	// sound handlers
 	static inline void	PlayLocalSound( const char *szSound )
 	{ engfuncs.pfnPlayLocalSound( szSound ); }
+
+	
+
+	static inline void	PrecacheGeneric(const char *s)
+	{ engfuncs.pfnPrecacheGeneric(s); }
 
 	// cinematic handlers
 	static void	DrawLogo( const char *filename, float x, float y, float width, float height );

@@ -21,7 +21,8 @@ enum INTMessage : byte
 	ORIG_TRWIN_MSG,
 	ORIG_RDRAW_MSG,
 	ORIG_WDROP_MSG,
-	WEAPONAK47
+	MUSIC_PACK_CT,
+	MUSIC_PACK_TR,
 };
 
 enum INTWeaponMsg : byte

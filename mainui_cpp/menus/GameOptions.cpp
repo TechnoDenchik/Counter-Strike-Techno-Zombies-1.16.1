@@ -263,15 +263,11 @@ void CMenuGameOptions::_Init( void )
 	Apply.SetNameAndStatus(L("GameUI_Apply"), L(""));
 	Apply.onActivated = VoidCb(&CMenuGameOptions::SaveCb);
 	Apply.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		Apply.SetGrayed(true);
 	Apply.SetCoord(80, 250);
 
 	Exit.SetNameAndStatus(L("GameUI_Cancel"), L(""));
 	Exit.onActivated = VoidCb(&CMenuGameOptions::RestoreCb);
 	Exit.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		Exit.SetGrayed(true);
 	Exit.SetCoord(80, 300);
 
 	AddItem( maxFPS );

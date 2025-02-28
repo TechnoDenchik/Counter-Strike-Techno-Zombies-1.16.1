@@ -178,7 +178,7 @@ int DLLEXPORT HUD_VidInit( void )
 
 	isLoaded = true;
 
-	//VGui_Startup();
+	vgui2::ivgui;
 
 	return 1;
 }
@@ -197,7 +197,7 @@ void DLLEXPORT HUD_Init( void )
 {
 	InitInput();
 	gHUD.Init();
-	//Scheme_Init();
+	vgui2::scheme;
 }
 
 

@@ -41,7 +41,8 @@ public:
 	typedef CMenuFramework BaseClass;
 	CMenuOptions() : CMenuFramework("CMenuOptions") { }
 
-	CMenuPicButton Config1, Config;
+	CMenuPicButton KeyBoard, Keyboard1;
+	CMenuPicButton Mouse, Mouse1;
 	CMenuPicButton Profile1, Profile;
 	CMenuPicButton Audio1, Audio;
 	CMenuPicButton Video1, Video;
@@ -63,40 +64,35 @@ void CMenuOptions::_Init( void )
 	AddItem( background );
 	AddItem( banner );
 
-	Config.SetNameAndStatus(L("GameUI_Options"), L(""));
-	Config.onActivated = UI_Controls_Menu;
-	Config.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		Config.SetGrayed(true);
-	Config.SetCoord(80, 300);
+	KeyBoard.SetNameAndStatus(L("GameUI_Keyboard"), L(""));
+	KeyBoard.onActivated = UI_Controls_Menu;
+	KeyBoard.iFlags |= QMF_NOTIFY;
+	KeyBoard.SetCoord(80, 300);
+
+	Mouse.SetNameAndStatus(L("GameUI_Mouse"), L(""));
+	Mouse.onActivated = UI_MouseControls_Menu;
+	Mouse.iFlags |= QMF_NOTIFY;
+	Mouse.SetCoord(80, 350);
 
 	Profile.SetNameAndStatus(L("GameUI_Profile"), L(""));
 	Profile.onActivated = UI_PlayerSetup_Menu;
 	Profile.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		Profile.SetGrayed(true);
-	Profile.SetCoord(80, 350);
+	Profile.SetCoord(80, 400);
 	
 	Audio.SetNameAndStatus(L("GameUI_Audio"), L(""));
 	Audio.onActivated = UI_Audio_Menu;
 	Audio.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		Audio.SetGrayed(true);
-	Audio.SetCoord(80, 400);
+	Audio.SetCoord(80, 450);
 
 	Video.SetNameAndStatus(L("GameUI_Video"), L(""));
 	Video.onActivated = UI_Video_Menu;
 	Video.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		Video.SetGrayed(true);
-	Video.SetCoord(80, 450);
+	Video.SetCoord(80, 500);
 
 	Exit.SetNameAndStatus(L("GameUI_Close"), L(""));
 	Exit.onActivated = VoidCb(&CMenuOptions::Hide);
 	Exit.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		Exit.SetGrayed(true);
-	Exit.SetCoord(80, 500);
+	Exit.SetCoord(80, 550);
 
 	
 	msgBox.SetMessage("It is recomended to enable client movement prediction.\nPress OK to enable it now or enable it later in ^5(Multiplayer/Customize)");
@@ -122,7 +118,8 @@ void CMenuOptions::_Init( void )
 	);
 	msgBox.Link(this);
 
-	AddItem(Config);
+	AddItem(KeyBoard);
+	AddItem(Mouse);
 	AddItem(Profile);
 	AddItem(Audio);
 	AddItem(Video);

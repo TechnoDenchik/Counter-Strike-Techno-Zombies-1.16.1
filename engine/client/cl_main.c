@@ -2381,6 +2381,11 @@ void CL_Init( void )
 			loaded = CL_LoadProgs( CLIENTDLL );
 		}
 	}
+#ifdef XASH_VGUI2
+	extern void VGui2_Startup();
+	VGui2_Startup();
+#endif
+
 
 	if( loaded )
 	{

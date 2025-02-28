@@ -39,9 +39,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\engine\client\gl_vidnt.h">
-      <Filter>engine\client</Filter>
-    </ClInclude>
     <ClInclude Include="..\engine\client\input.h">
       <Filter>engine\client</Filter>
     </ClInclude>
@@ -188,6 +185,15 @@
     </ClInclude>
     <ClInclude Include="..\engine\client\vgui2_surface.h">
       <Filter>engine\client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\common\tests.h">
+      <Filter>engine\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\platform\win32\lib_win.h">
+      <Filter>engine\platform\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\platform\win32\net.h">
+      <Filter>engine\platform\win32</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -592,6 +598,15 @@
     </ClCompile>
     <ClCompile Include="..\engine\client\gl_rstrobe.c">
       <Filter>engine\client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\platform\win32\lib_custom_win.c">
+      <Filter>engine\platform\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\platform\win32\lib_win.c">
+      <Filter>engine\platform\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\platform\win32\sys_win.c">
+      <Filter>engine\platform\win32</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -13,14 +13,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\game_launch\resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\game_launch\resource.h">
       <Filter>Header File</Filter>
     </ClInclude>
+    <ClInclude Include="..\game_launch\resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\game_launch\cstz.c">
+    <ClCompile Include="..\game_launch\Counter-Strike TZ.c">
       <Filter>Source File</Filter>
     </ClCompile>
   </ItemGroup>
