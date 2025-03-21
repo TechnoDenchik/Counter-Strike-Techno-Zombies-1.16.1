@@ -148,6 +148,9 @@
     <Filter Include="cl_dll\vgui2\game_controls">
       <UniqueIdentifier>{c8769fad-115d-4684-8d78-5463a1e6eec9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{c7b68013-2c6f-40ba-b1c2-a257914323a4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\cl_dll\events\ev_cs16.cpp">
@@ -1173,7 +1176,6 @@
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_stamper.cpp">
       <Filter>dlls\wpn_shared</Filter>
     </ClCompile>
-    <ClCompile Include="..\cl_dll\vgui2\game_controls\buysubmenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\dlls\wpn_shared\wpn_m249.h">
@@ -1779,6 +1781,13 @@
     <ClInclude Include="..\cl_dll\hud\zsh\infolocationhud.h">
       <Filter>cl_dll\hud\zsh\header</Filter>
     </ClInclude>
-    <ClInclude Include="..\cl_dll\vgui2\game_controls\buysubmenu.h" />
+    <ClInclude Include="resource1.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="client.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

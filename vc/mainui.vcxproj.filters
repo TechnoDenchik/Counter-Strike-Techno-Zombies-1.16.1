@@ -183,6 +183,9 @@
     <ClInclude Include="..\mainui_cpp\utl\utlvector.h">
       <Filter>Source Files\Utl</Filter>
     </ClInclude>
+    <ClInclude Include="resource3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\mainui_cpp\EventSystem.cpp">
@@ -392,5 +395,10 @@
     <ClCompile Include="..\mainui_cpp\menus\Music.cpp">
       <Filter>Source Files\menus</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Interface.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

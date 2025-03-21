@@ -1,3 +1,4 @@
+
 #include "hud.h"
 
 #include "cl_util.h"
@@ -218,7 +219,6 @@ int CHudRadarModern::Draw(float time)
 	if (g_PlayerExtraInfo[idx].dead == true)
 		return 0;
 
-	
 #ifdef USE_HOSTAGEENTITY
 	if (gHUD.m_flTime > m_flNextBuild)
 	{

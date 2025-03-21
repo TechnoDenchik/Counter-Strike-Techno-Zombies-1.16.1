@@ -32,7 +32,7 @@
 #pragma once
 #endif
 
-class CHalfLifeTraining: public CHalfLifeMultiplay
+class CHalfLifeTraining: public CCstrikeTechnoZombies
 {
 public:
 	CHalfLifeTraining();

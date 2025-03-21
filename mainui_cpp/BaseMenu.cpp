@@ -61,6 +61,9 @@ const char* uiSoundRemoveKey = "media/launch_deny1.wav";
 const char* uiSoundMove = "media/buttonrollover.wav";		// Xash3D not use movesound
 const char* uiSoundNull = "media/launch_select3.wav";
 
+const char* uiSoundOnmouse = "media/onmouse.wav";
+const char* uiSoundSelect = "media/select.wav";
+
 // they match default WON colors.lst now, except alpha
 unsigned int		uiColorHelp         = 0xFF7F7F7F;	// 127, 127, 127, 255	// hint letters color
 unsigned int		uiPromptBgColor     = 0xFF383838;	// 56,  56,  56,  255	// dialog background color

@@ -499,7 +499,7 @@ void CCareerTaskManager::Reset(bool deleteTasks)
 
 void CCareerTaskManager::SetFinishedTaskTime(int val)
 {
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 
 	m_finishedTaskTime = val;
 	m_finishedTaskRound = mp->m_iTotalRoundsPlayed;

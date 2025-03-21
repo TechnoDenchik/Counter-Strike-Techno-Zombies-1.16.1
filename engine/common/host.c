@@ -414,11 +414,11 @@ void Host_Exec_f( void )
 	if( !Q_stricmp( Cvar_VariableString( "lservercfgfile" ),  Cmd_Argv( 1 )))
 	{
 		if( Q_strstr( f, "//=======================================================================" ) &&
-			Q_strstr( f, "//\t\t\tCopyright XashXT Group" ) &&
+			Q_strstr( f, "//\t\t\tCopyright TechnoSoftware Inc" ) &&
 			Q_strstr( f, "//\t\t\tserver.cfg - server temp" ) )
 		{
-			Msg( "^1Found old generated xash3d listenserver config, skipping!\n" );
-			Msg( "^1Remove Xash3D header to use it\n" );
+			Msg( "^1Found old generated TechnoEngine listenserver config, skipping!\n" );
+			Msg( "^1Remove TechnoEngine header to use it\n" );
 			Mem_Free( f );
 			return;
 		}
@@ -1126,7 +1126,7 @@ void Host_InitCommon( int argc, const char** argv, const char *progname, qboolea
 
 	host.mempool = Mem_AllocPool( "Zone Engine" );
 
-	if( Sys_CheckParm( "-console" )) host.developer = 1;
+	host.developer = 1;
 	if( Sys_CheckParm( "-dev" ))
 	{
 		if( Sys_GetParmFromCmdLine( "-dev", dev_level ))
@@ -1487,5 +1487,4 @@ void EXPORT Host_Shutdown( void )
 	Sys_DestroyConsole();
 	Sys_CloseLog();
 	Sys_RestoreCrashHandler();
-
 }

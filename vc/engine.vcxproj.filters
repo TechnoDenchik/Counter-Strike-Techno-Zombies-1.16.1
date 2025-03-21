@@ -37,6 +37,9 @@
     <Filter Include="engine\platform\sdl">
       <UniqueIdentifier>{e1e4056c-fa78-4289-9042-877d1fe349a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{89ba6504-f168-46c0-b1ee-5a693983a741}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\engine\client\input.h">
@@ -194,6 +197,9 @@
     </ClInclude>
     <ClInclude Include="..\engine\platform\win32\net.h">
       <Filter>engine\platform\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="resource2.h">
+      <Filter>Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -613,5 +619,10 @@
     <None Include="..\engine\common\soundlib\libmpg\libmpg.dsp">
       <Filter>engine\common\soundlib\libmpg</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="technoengine2.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

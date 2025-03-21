@@ -210,6 +210,9 @@ bool CMenuItemsHolder::MouseMove( int x, int y )
 
 			if( !( m_pItems[m_iCursor]->iFlags & QMF_SILENT ) )
 				EngFuncs::PlayLocalSound( uiSoundMove );
+
+			if (!(m_pItems[m_iCursor]->iFlags & QMF_SILENT))
+				EngFuncs::PlayLocalSound(uiSoundMove);
 		}
 
 		m_pItems[m_iCursor]->iFlags |= QMF_HASMOUSEFOCUS;

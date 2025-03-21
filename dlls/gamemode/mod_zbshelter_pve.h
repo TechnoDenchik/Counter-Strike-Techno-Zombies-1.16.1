@@ -68,7 +68,7 @@ public:
 	void RemoveAllMen();
 	
 	int MenCount();
-	void ReadMultiplayCvars(CHalfLifeMultiplay* mp);
+	void ReadMultiplayCvars(CCstrikeTechnoZombies* mp);
 	BOOL FRoundStarted();
 	void DaySound();
 

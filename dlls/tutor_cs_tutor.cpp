@@ -2118,7 +2118,7 @@ void CCSTutor::HandleHostageKilled(CBaseEntity *entity, CBaseEntity *other)
 
 void CCSTutor::HandleRoundDraw(CBaseEntity *entity, CBaseEntity *other)
 {
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 
 	if (mp->m_iTotalRoundsPlayed)
 	{
@@ -2716,7 +2716,7 @@ void CCSTutor::CheckForHostageViewable()
 void CCSTutor::CheckForTimeRunningOut()
 {
 	CBasePlayer *localPlayer = UTIL_GetLocalPlayer();
-	CHalfLifeMultiplay *mpRules = g_pGameRules;
+	CCstrikeTechnoZombies *mpRules = g_pGameRules;
 
 	if (localPlayer == NULL || mpRules->IsFreezePeriod() || mpRules->TimeRemaining() > 30.0f)
 	{
@@ -3199,7 +3199,7 @@ bool CCSTutor::IsHostageMap()
 
 bool CCSTutor::IsBombMap()
 {
-	CHalfLifeMultiplay *mpRules = g_pGameRules;
+	CCstrikeTechnoZombies *mpRules = g_pGameRules;
 
 	return mpRules->m_bMapHasBombTarget;
 }

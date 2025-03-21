@@ -185,7 +185,7 @@ BOOL CMod_TeamDeathMatch::FPlayerCanTakeDamage(CBasePlayer *pPlayer, CBaseEntity
 		}
 	}
 
-	return CHalfLifeMultiplay::FPlayerCanTakeDamage(pPlayer, pAttacker);
+	return CCstrikeTechnoZombies::FPlayerCanTakeDamage(pPlayer, pAttacker);
 }
 
 BOOL CMod_TeamDeathMatch::FPlayerCanRespawn(CBasePlayer *pPlayer)

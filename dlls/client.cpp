@@ -226,7 +226,7 @@ void respawn(entvars_t *pev, BOOL fCopyCorpse)
 {
 	if (gpGlobals->coop || gpGlobals->deathmatch)
 	{
-		CHalfLifeMultiplay *mp = g_pGameRules;
+		CCstrikeTechnoZombies *mp = g_pGameRules;
 
 		if (mp->m_iTotalRoundsPlayed > 0)
 			mp->MarkSpawnSkipped();
@@ -250,7 +250,7 @@ void respawn(entvars_t *pev, BOOL fCopyCorpse)
 void EXT_FUNC ClientKill(edict_t *pEntity)
 {
 	entvars_t *pev = &pEntity->v;
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 	CBasePlayer *pl = (CBasePlayer *)CBasePlayer::Instance(pev);
 
 	if (pl->IsObserver())
@@ -453,7 +453,7 @@ void ProcessKickVote(CBasePlayer *pVotingPlayer, CBasePlayer *pKickPlayer)
 TeamName SelectDefaultTeam()
 {
 	TeamName team = UNASSIGNED;
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 
 	if (mp->m_iNumTerrorist < mp->m_iNumCT)
 	{
@@ -524,7 +524,7 @@ void EXT_FUNC ClientPutInServer(edict_t *pEntity)
 
 	entvars_t *pev = &pEntity->v;
 	CBasePlayer *pPlayer = GetClassPtr<CBasePlayer>(pev);
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 
 	pPlayer->SetCustomDecalFrames(-1);
 	pPlayer->SetPrefsFromUserinfo(GET_INFO_BUFFER(pEntity));
@@ -972,7 +972,7 @@ void DropPrimary(CBasePlayer *pPlayer)
 
 bool CanBuyThis(CBasePlayer *pPlayer, int iWeapon)
 {
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 #ifdef ENABLE_SHIELD
 	if (pPlayer->HasShield() && iWeapon == WEAPON_ELITE)
 	{
@@ -1833,7 +1833,7 @@ void BuyItem(CBasePlayer *pPlayer, int iSlot)
 
 void HandleMenu_ChooseAppearance(CBasePlayer *player, int slot)
 {
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 	int numSkins = g_bIsCzeroGame ? CZ_NUM_SKIN : CS_NUM_SKIN;
 
 	struct
@@ -1992,7 +1992,7 @@ void HandleMenu_ChooseAppearance(CBasePlayer *player, int slot)
 
 BOOL HandleMenu_ChooseTeam(CBasePlayer *player, int slot)
 {
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 
 	int oldTeam;
 	const char *szOldTeam;
@@ -2922,7 +2922,7 @@ void EXT_FUNC ClientCommand(edict_t *pEntity)
 {
 	const char *pcmd = CMD_ARGV_(0);
 	const char *pstr = NULL;
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 
 	// Is the client spawned yet?
 	if (!pEntity->pvPrivateData)

@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "CheckBox.h"
 #include "Action.h"
 #include "YesNoMessageBox.h"
+#include "SpinControl.h"
 
 #define ART_BANNER		"gfx/shell/head_vidmodes"
 
@@ -72,7 +73,7 @@ public:
 
 	CMenuPicButton Apply1, Apply;
 	CMenuPicButton Exit1, Exit;
-
+	CMenuSpinControl FPSmax;
 	int prevMode;
 	bool prevFullscreen;
 	float testModeTimer;
@@ -88,7 +89,7 @@ UI_VidModes_GetModesList
 void CMenuVidModesModel::Update( void )
 {
 	unsigned int i;
-
+	uiVidModes.FPSmax.WriteCvar();
 	m_szModes[0] = "<Current window size>";
 	m_szModes[1] = "<Desktop size>";
 
@@ -143,7 +144,7 @@ void CMenuVidModes::SetConfig( )
 	}
 
 	vsync.WriteCvar();
-
+	FPSmax.WriteCvar();
 	if( testMode )
 	{
 		testModeMsgBox.Show();
@@ -222,6 +223,11 @@ void CMenuVidModes::_Init( void )
 	testModeMsgBox.onNegative = VoidCb( &CMenuVidModes::RevertChanges );
 	testModeMsgBox.Link( this );
 
+	FPSmax.szName = L("FPS limit");
+	FPSmax.szStatusText = "Cap your game frame rate";
+	FPSmax.Setup(60, 1000, 40);
+	FPSmax.LinkCvar("fps_max", CMenuEditable::CVAR_VALUE);
+
 	Apply.SetNameAndStatus(L("GameUI_Apply"), L(""));
 	Apply.onActivated = VoidCb(&CMenuVidModes::SetConfig);
 	Apply.iFlags |= QMF_NOTIFY;
@@ -233,6 +239,7 @@ void CMenuVidModes::_Init( void )
 	Exit.SetCoord(80, 300);
 
 	AddItem( background );
+	AddItem(FPSmax);
 	AddItem( banner );
 	AddItem( windowed );
 	AddItem( vsync );
@@ -243,6 +250,7 @@ void CMenuVidModes::_Init( void )
 
 void CMenuVidModes::_VidInit()
 {
+	FPSmax.SetRect(650, 205, 220, 32);
 	if( !testModeMsgBox.IsVisible() )
 	{
 		prevMode = EngFuncs::GetCvarFloat( "vid_mode" );

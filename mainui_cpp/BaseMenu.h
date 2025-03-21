@@ -26,8 +26,8 @@ GNU General Public License for more details.
 #include "FontManager.h"
 #include "BtnsBMPTable.h"
 
-#define UI_MAX_MENUDEPTH		64
-#define UI_MAX_MENUITEMS		64
+#define UI_MAX_MENUDEPTH		1024
+#define UI_MAX_MENUITEMS		1024
 
 #define UI_PULSE_DIVISOR		75.0f
 
@@ -171,6 +171,8 @@ extern const char		*uiSoundBuzz;
 extern const char		*uiSoundGlow;
 extern const char		*uiSoundMove;
 extern const char		*uiSoundNull;
+extern const char* uiSoundOnmouse;
+extern const char* uiSoundSelect;
 
 extern unsigned int	uiColorHelp;
 extern unsigned int	uiPromptBgColor;

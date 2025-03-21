@@ -83,15 +83,16 @@ public:
 						m_pPlayer->AddAccount(victim->m_iKillBonusMoney);
 					m_HumanLevel.LevelUpHealth();
 					m_HumanLevel.LevelUpAttack();
+
 					MESSAGE_BEGIN(MSG_ONE, gmsgZBSTip, NULL, m_pPlayer->pev);
 					WRITE_BYTE(ZBS_TIP_KILL);
 					MESSAGE_END();
-					CMod_ZombieScenario Win;
+					
 					Win.HumanWin();
-					Win.TerminateRound(5, WINSTATUS_CTS);
 					Win.ClearZombieNPC();
-					CLIENT_COMMAND(0, "mp3 stop\n");
 					Win.CheckRestartRound();
+
+					CLIENT_COMMAND(0, "mp3 stop\n");
 				}
 			}
 
@@ -132,7 +133,7 @@ protected:
 	EventListener m_listenerMonsterKilled2;
 	EventListener m_listenerMonsterKilled3;
 	PlayerExtraHumanLevel_ZBS m_HumanLevel;
-
+	CMod_ZombieScenario Win;
 };
 
 class CMonsterModStrategy_ZBS : public CMonsterModStrategy_Default
@@ -492,6 +493,7 @@ void CMod_ZombieScenario::Think()
 			MakeZombieNPC9();
 			MakeZombieNPC10();
 			MakeZombieNPC11();
+			MakeZombieBoss();
 			m_flNextSpawnNPC = gpGlobals->time + 18.0f;
 	  }
 	}
@@ -529,6 +531,11 @@ void CMod_ZombieScenario::HumanWin()
 	UpdateTeamScores();
 	ClearZombieNPC();
     CLIENT_COMMAND(0, "mp3 stop\n");
+	m_iRoundTimeSecs = m_fRoundCount = 0;
+	m_iRoundTimeSecs = 0;
+	m_iRoundTime = 0;
+	m_fTeamCount = 0;
+	m_fRoundCount = 0;
 }
 
 void CMod_ZombieScenario::ZombieWin()
@@ -611,7 +618,7 @@ CBaseEntity *CMod_ZombieScenario::MakeZombieNPC()
 	{
 		monster->pev->origin = sp->pev->origin;
 		monster->pev->angles = sp->pev->angles;
-	}
+	} 
 	else
 	{
 		Vector backup_v_angle = monster->pev->v_angle;

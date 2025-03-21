@@ -487,7 +487,7 @@ void CWorld::Precache()
 	{
 		delete g_pGameRules; // CS16ND/ReGameDll : NOT virtual destructor ??? Fuck it.
 	}
-	g_pGameRules = (CHalfLifeMultiplay *)InstallGameRules();
+	g_pGameRules = (CCstrikeTechnoZombies*)InstallGameRules();
 	CSDM_LoadSpawnPoints();
 	RES_LoadSpawnPoints();
 	

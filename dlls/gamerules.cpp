@@ -45,7 +45,7 @@
 
 enum GameMode_e : byte;
 
-CHalfLifeMultiplay *g_pGameRules = NULL;
+CCstrikeTechnoZombies *g_pGameRules = NULL;
 
 BOOL CGameRules::CanHaveAmmo(CBasePlayer *pPlayer, const char *pszAmmoName, int iMaxCarry)
 {

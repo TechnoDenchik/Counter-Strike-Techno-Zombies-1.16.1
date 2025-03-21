@@ -107,7 +107,7 @@ int CSTwinShadowAxes::GetItemInfo(ItemInfo* p)
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
 	p->iMaxClip = TWINSHADOWAXES;
-	p->iSlot = 3;
+	p->iSlot = 2;
 	p->iPosition = 1;
 	p->iId = WEAPON_KNIFE;
 	p->iFlags = 0;

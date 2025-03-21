@@ -7,15 +7,12 @@
     <Filter Include="Resource">
       <UniqueIdentifier>{087881cc-260d-437a-b5e0-0cd62a9920ae}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header File">
-      <UniqueIdentifier>{e3da78b9-894a-4e29-b7c8-2e18d0ae6af7}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\game_launch\resource.h">
-      <Filter>Header File</Filter>
-    </ClInclude>
     <ClInclude Include="..\game_launch\resource.h" />
+    <ClInclude Include="..\game_launch\resource.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\game_launch\Counter-Strike TZ.c">

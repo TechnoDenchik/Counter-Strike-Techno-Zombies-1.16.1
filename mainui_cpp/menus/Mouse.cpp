@@ -123,7 +123,7 @@ void CMouseControls::_Init( void )
 	lookFilter.iFlags |= QMF_NOTIFY;
 	lookFilter.SetCoord( 72, 350 );
 
-	console.SetNameAndStatus(L("GameUI_MouseFilter"), L(""));
+	console.SetNameAndStatus(L("GameUI_Console"), L(""));
 	console.iFlags |= QMF_NOTIFY;
 	console.SetCoord(72, 400);
 

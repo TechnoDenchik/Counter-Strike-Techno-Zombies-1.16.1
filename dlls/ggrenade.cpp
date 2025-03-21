@@ -157,7 +157,7 @@ void CGrenade::Explode(TraceResult *pTrace, int bitsDamageType)
 void CGrenade::Explode2(TraceResult *pTrace, int bitsDamageType)
 {
 	float flRndSound; // sound randomizer
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 
 	pev->model = iStringNull; // invisible
 	pev->solid = SOLID_NOT; // intangible

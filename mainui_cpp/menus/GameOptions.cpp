@@ -54,7 +54,7 @@ private:
 	CMenuPicButton Apply, Apply1;
 	CMenuPicButton Exit, Exit1;
 
-	CMenuSpinControl maxFPS;
+	//CMenuSpinControl maxFPS;
 	CMenuSpinControl maxpacket, maxpayload, cmdrate, updaterate, rate;
 
 	CMenuAction networkMode;
@@ -91,7 +91,7 @@ void CMenuGameOptions::SetNetworkMode( int maxpacket1, int maxpayload1, int cmdr
 
 void CMenuGameOptions::SaveCb()
 {
-	maxFPS.WriteCvar();
+	//maxFPS.WriteCvar();
 	//hand.WriteCvar();
 	allowDownload.WriteCvar();
 	maxpacket.WriteCvar();
@@ -109,7 +109,7 @@ void CMenuGameOptions::SaveCb()
 
 void CMenuGameOptions::Restore()
 {
-	maxFPS.DiscardChanges();
+//	maxFPS.DiscardChanges();
 	//hand.DiscardChanges();
 	allowDownload.DiscardChanges();
 	maxpacket.DiscardChanges();
@@ -137,11 +137,11 @@ UI_GameOptions_Init
 void CMenuGameOptions::_Init( void )
 {
 	banner.SetPicture( ART_BANNER );
-	maxFPS.szName = L("FPS limit");
-	maxFPS.szStatusText = "Cap your game frame rate";
-	maxFPS.Setup( 60, 1000, 40 );
-	maxFPS.LinkCvar( "fps_max", CMenuEditable::CVAR_VALUE );
-	maxFPS.SetRect(320, 270, 220, 32 );
+//	maxFPS.szName = L("FPS limit");
+//	maxFPS.szStatusText = "Cap your game frame rate";
+//	maxFPS.Setup( 60, 1000, 40 );
+//	maxFPS.LinkCvar( "fps_max", CMenuEditable::CVAR_VALUE );
+	//maxFPS.SetRect(320, 270, 220, 32 );
 
 	//hand.SetNameAndStatus( "Use left hand", "Draw gun at left side" );
 	//hand.LinkCvar( "cl_righthand" );
@@ -270,7 +270,7 @@ void CMenuGameOptions::_Init( void )
 	Exit.iFlags |= QMF_NOTIFY;
 	Exit.SetCoord(80, 300);
 
-	AddItem( maxFPS );
+	//AddItem( maxFPS );
 	//AddItem( hand );
 
 	AddItem( allowDownload );

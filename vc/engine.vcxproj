@@ -71,6 +71,7 @@
     <ClInclude Include="..\engine\platform\win32\lib_win.h" />
     <ClInclude Include="..\engine\platform\win32\net.h" />
     <ClInclude Include="..\engine\server\server.h" />
+    <ClInclude Include="resource2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\engine\client\cl_cmds.c" />
@@ -217,6 +218,9 @@
   <ItemGroup>
     <None Include="..\engine\common\soundlib\libmpg\libmpg.dsp" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="technoengine2.rc" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{968E2A53-1185-43C9-A6D9-1F5C8C8AAA23}</ProjectGuid>
@@ -272,7 +276,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <TargetName>technoengine2</TargetName>
     <LibraryPath>../SDL2/lib/x86;$(VC_LibraryPath_x86);$(WindowsSdk_71A_LibraryPath_x86);</LibraryPath>
-    <OutDir>..\Debug</OutDir>
+    <OutDir>F:\Release 2</OutDir>
     <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

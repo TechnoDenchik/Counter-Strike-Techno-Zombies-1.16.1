@@ -331,23 +331,23 @@ void UI_LoadCustomStrings( void )
 
 		// parse new string
 		pfile = EngFuncs::COM_ParseFile( pfile, token );
-		//MenuStrings[string_num] = StringCopy( token ); // replace default string with custom
+		MenuStrings[string_num] = StringCopy( token ); // replace default string with custom
 	}
 
 	EngFuncs::COM_FreeFile( afile );
 }
 
-const char *L( const char *szStr ) // L means Localize!
+const char* L(const char* szStr) // L means Localize!
 {
-	if( szStr )
+	if (szStr)
 	{
-		if( *szStr == '#' )
+		if (*szStr == '#')
 			szStr++;
 
-		dictionary_t *base = Dictionary_GetBucket( szStr );
-		dictionary_t *found = Dictionary_FindInBucket( base, szStr );
+		dictionary_t* base = Dictionary_GetBucket(szStr);
+		dictionary_t* found = Dictionary_FindInBucket(base, szStr);
 
-		if( found )
+		if (found)
 			return found->value;
 	}
 
@@ -375,3 +375,10 @@ void UI_FreeCustomStrings( void )
 {
 	Localize_Free();
 }
+
+
+
+
+
+
+

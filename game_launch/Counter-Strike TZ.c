@@ -233,12 +233,12 @@ static void Sys_ChangeGame( const char *progname )
 	if(TechnoEngine_Shutdown == NULL )
 		TechnoEngine_Error( "Точка входа в 'Host_Shutdown' client.dll не найдена" );
 
-	strncpy( szGameDir, progname, sizeof( szGameDir ) - 1 );
+	strncpy(szGameDir, progname, sizeof(szGameDir) - 1);
 
 	Sys_UnloadEngine ();
 	Sys_LoadEngine ();
 
-	TechnoEngine_Main( szArgc, szArgv, szGameDir, true, Sys_ChangeGame );
+	TechnoEngine_Main( szArgc, szArgv, szGameDir, true, Sys_ChangeGame);
 }
 
 _inline int Sys_Start( void )

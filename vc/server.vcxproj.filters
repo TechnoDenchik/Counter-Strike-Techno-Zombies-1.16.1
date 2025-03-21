@@ -164,6 +164,9 @@
     <Filter Include="dlls\gamemode\zb3\MoraleState">
       <UniqueIdentifier>{4b7b4880-00e0-47e0-9b6a-0a1288850f1c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{a9e53952-f8e0-4452-a08c-9de9ff3639b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\dlls\h_export.cpp">
@@ -1993,5 +1996,13 @@
     <ClInclude Include="..\dlls\gamemode\zb3\zb3_morale.h">
       <Filter>dlls\gamemode\zb3\MoraleState</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="mp.rc">
+      <Filter>public\Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

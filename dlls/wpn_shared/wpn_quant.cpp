@@ -823,7 +823,7 @@ void CQuantum::WeaponIdle(void)
 
 	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase())
 		return;
-	EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/revivegun_idle1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+	EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/revivegun_idle1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 4.0;
 	SendWeaponAnim(QUANT_IDLE1, UseDecrement() != FALSE);
 }

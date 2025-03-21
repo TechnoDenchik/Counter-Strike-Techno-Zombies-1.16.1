@@ -75,7 +75,7 @@ static char mp_com_token[ COM_TOKEN_LEN ];
 cvar_t *sv_clienttrace = NULL;
 
 CCStrikeGameMgrHelper g_GameMgrHelper;
-CHalfLifeMultiplay *g_pMPGameRules = NULL;
+CCstrikeTechnoZombies*g_pMPGameRules = NULL;
 //Think
 bool IsBotSpeaking()
 {
@@ -97,7 +97,7 @@ bool IsBotSpeaking()
 
 void SV_Continue_f()
 {
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies*mp = g_pGameRules;
 
 	if (mp->IsCareer() && mp->m_fTeamCount > 100000.0)
 	{
@@ -130,7 +130,7 @@ void SV_Tutor_Toggle_f()
 
 void SV_Career_Restart_f()
 {
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 
 	if (mp->IsCareer())
 	{
@@ -140,7 +140,7 @@ void SV_Career_Restart_f()
 
 void SV_Career_EndRound_f()
 {
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies*mp = g_pGameRules;
 
 	if (!mp->IsCareer() || !mp->IsInCareerRound())
 	{
@@ -168,7 +168,7 @@ void SV_Career_EndRound_f()
 	}
 }
 
-bool CHalfLifeMultiplay::IsInCareerRound()
+bool CCstrikeTechnoZombies::IsInCareerRound()
 {
 	return IsMatchStarted() ? false : true;
 }
@@ -199,7 +199,7 @@ void SV_CareerMatchLimit_f()
 		return;
 	}
 
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 
 	if (mp->IsCareer())
 	{
@@ -207,7 +207,7 @@ void SV_CareerMatchLimit_f()
 	}
 }
 
-void CHalfLifeMultiplay::SetCareerMatchLimit(int minWins, int winDifference)
+void CCstrikeTechnoZombies::SetCareerMatchLimit(int minWins, int winDifference)
 {
 	if (!IsCareer())
 	{
@@ -221,12 +221,12 @@ void CHalfLifeMultiplay::SetCareerMatchLimit(int minWins, int winDifference)
 	}
 }
 
-BOOL CHalfLifeMultiplay::IsCareer()
+BOOL CCstrikeTechnoZombies::IsCareer()
 {
 	return IS_CAREER_MATCH();
 }
 
-void CHalfLifeMultiplay::ServerDeactivate()
+void CCstrikeTechnoZombies::ServerDeactivate()
 {
 	if (!IsCareer())
 	{
@@ -332,7 +332,7 @@ const char * GetTeam(int teamNo)
 
 void EndRoundMessage(const char *sentence, int event)
 {
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 	const char *team = NULL;
 	const char *message = &(sentence[1]);
 	int teamTriggered = 1;
@@ -394,7 +394,7 @@ void EndRoundMessage(const char *sentence, int event)
 	UTIL_LogPrintf("World triggered \"Round_End\"\n");
 }
 
-void ReadMultiplayCvars(CHalfLifeMultiplay *mp)
+void ReadMultiplayCvars(CCstrikeTechnoZombies*mp)
 {
 	mp->m_iRoundTime = (int)(CVAR_GET_FLOAT("mp_roundtime") * 60);
 	mp->m_iC4Timer = (int)CVAR_GET_FLOAT("mp_c4timer");
@@ -447,7 +447,7 @@ void ReadMultiplayCvars(CHalfLifeMultiplay *mp)
 	}
 }
 
-CHalfLifeMultiplay::CHalfLifeMultiplay()
+CCstrikeTechnoZombies::CCstrikeTechnoZombies()
 {
 	m_VoiceGameMgr.Init(&g_GameMgrHelper, gpGlobals->maxClients);
 	RefreshSkillData();
@@ -626,7 +626,7 @@ CHalfLifeMultiplay::CHalfLifeMultiplay()
 	g_pMPGameRules = this;
 }
 
-void CHalfLifeMultiplay::RefreshSkillData()
+void CCstrikeTechnoZombies::RefreshSkillData()
 {
 	CGameRules::RefreshSkillData();
 
@@ -640,7 +640,7 @@ void CHalfLifeMultiplay::RefreshSkillData()
 	gSkillData.plrDmgRPG = 120;
 }
 
-void CHalfLifeMultiplay::RemoveGuns()
+void CCstrikeTechnoZombies::RemoveGuns()
 {
 	CBaseEntity *toremove = NULL;
 
@@ -656,7 +656,7 @@ void CHalfLifeMultiplay::RemoveGuns()
 	}
 }
 
-void CHalfLifeMultiplay::UpdateTeamScores()
+void CCstrikeTechnoZombies::UpdateTeamScores()
 {
 	MESSAGE_BEGIN(MSG_ALL, gmsgTeamScore);
 		WRITE_STRING("CT");
@@ -669,7 +669,7 @@ void CHalfLifeMultiplay::UpdateTeamScores()
 	MESSAGE_END();
 }
 
-void CHalfLifeMultiplay::CleanUpMap()
+void CCstrikeTechnoZombies::CleanUpMap()
 {
 	// Recreate all the map entities from the map data (preserving their indices),
 	// then remove everything else except the players.
@@ -791,7 +791,7 @@ void CHalfLifeMultiplay::CleanUpMap()
 	PLAYBACK_EVENT((FEV_GLOBAL | FEV_RELIABLE), 0, m_usResetDecals);
 }
 
-void CHalfLifeMultiplay::GiveC4()
+void CCstrikeTechnoZombies::GiveC4()
 {
 	int iTeamCount;
 	int iTemp = 0;
@@ -902,14 +902,14 @@ void CHalfLifeMultiplay::GiveC4()
 	}
 }
 
-void CHalfLifeMultiplay::TerminateRound(float tmDelay, int iWinStatus)
+void CCstrikeTechnoZombies::TerminateRound(float tmDelay, int iWinStatus)
 {
 	m_iRoundWinStatus = iWinStatus;
 	m_fTeamCount = gpGlobals->time + tmDelay;
 	m_bRoundTerminating = true;
 }
 
-void CHalfLifeMultiplay::QueueCareerRoundEndMenu(float tmDelay, int iWinStatus)
+void CCstrikeTechnoZombies::QueueCareerRoundEndMenu(float tmDelay, int iWinStatus)
 {
 	if (TheCareerTasks == NULL)
 		return;
@@ -1009,7 +1009,7 @@ void CHalfLifeMultiplay::QueueCareerRoundEndMenu(float tmDelay, int iWinStatus)
 
 // Check if the scenario has been won/lost.
 
-void CHalfLifeMultiplay::CheckWinConditions()
+void CCstrikeTechnoZombies::CheckWinConditions()
 {
 	// If a winner has already been determined and game of started.. then get the heck out of here
 	if (m_bFirstConnected && m_iRoundWinStatus != WINNER_NONE)
@@ -1053,7 +1053,7 @@ void CHalfLifeMultiplay::CheckWinConditions()
 	// scenario not won - still in progress
 }
 
-void CHalfLifeMultiplay::InitializePlayerCounts(int &NumAliveTerrorist, int &NumAliveCT, int &NumDeadTerrorist, int &NumDeadCT)
+void CCstrikeTechnoZombies::InitializePlayerCounts(int &NumAliveTerrorist, int &NumAliveCT, int &NumDeadTerrorist, int &NumDeadCT)
 {
 	NumAliveTerrorist = NumAliveCT = NumDeadCT = NumDeadTerrorist = 0;
 	m_iNumTerrorist = m_iNumCT = m_iNumSpawnableTerrorist = m_iNumSpawnableCT = 0;
@@ -1134,7 +1134,7 @@ void CHalfLifeMultiplay::InitializePlayerCounts(int &NumAliveTerrorist, int &Num
 	}
 }
 
-bool CHalfLifeMultiplay::NeededPlayersCheck(bool &bNeededPlayers)
+bool CCstrikeTechnoZombies::NeededPlayersCheck(bool &bNeededPlayers)
 {
 	// We needed players to start scoring
 	// Do we have them now?
@@ -1189,7 +1189,7 @@ bool CHalfLifeMultiplay::NeededPlayersCheck(bool &bNeededPlayers)
 	return false;
 }
 
-bool CHalfLifeMultiplay::VIPRoundEndCheck(bool bNeededPlayers)
+bool CCstrikeTechnoZombies::VIPRoundEndCheck(bool bNeededPlayers)
 {
 	// checks to scenario Escaped VIP on map with vip safety zones
 	if (m_iMapHasVIPSafetyZone == MAP_HAVE_VIP_SAFETYZONE_YES && m_pVIP != NULL)
@@ -1264,7 +1264,7 @@ bool CHalfLifeMultiplay::VIPRoundEndCheck(bool bNeededPlayers)
 	return false;
 }
 
-bool CHalfLifeMultiplay::PrisonRoundEndCheck(int NumAliveTerrorist, int NumAliveCT, int NumDeadTerrorist, int NumDeadCT, bool bNeededPlayers)
+bool CCstrikeTechnoZombies::PrisonRoundEndCheck(int NumAliveTerrorist, int NumAliveCT, int NumDeadTerrorist, int NumDeadCT, bool bNeededPlayers)
 {
 	// checks to scenario Escaped Terrorist's
 	if (m_bMapHasEscapeZone)
@@ -1347,7 +1347,7 @@ bool CHalfLifeMultiplay::PrisonRoundEndCheck(int NumAliveTerrorist, int NumAlive
 	return false;
 }
 
-bool CHalfLifeMultiplay::BombRoundEndCheck(bool bNeededPlayers)
+bool CCstrikeTechnoZombies::BombRoundEndCheck(bool bNeededPlayers)
 {
 	// Check to see if the bomb target was hit or the bomb defused.. if so, then let's end the round!
 	if (m_bTargetBombed && m_bMapHasBombTarget)
@@ -1409,7 +1409,7 @@ bool CHalfLifeMultiplay::BombRoundEndCheck(bool bNeededPlayers)
 #include "util\u_range.hpp"
 using namespace moe;
 
-bool CHalfLifeMultiplay::TeamExterminationCheck(int NumAliveTerrorist, int NumAliveCT, int NumDeadTerrorist, int NumDeadCT, bool bNeededPlayers)
+bool CCstrikeTechnoZombies::TeamExterminationCheck(int NumAliveTerrorist, int NumAliveCT, int NumDeadTerrorist, int NumDeadCT, bool bNeededPlayers)
 {
 	if ((m_iNumCT > 0 && m_iNumSpawnableCT > 0) && (m_iNumTerrorist > 0 && m_iNumSpawnableTerrorist > 0))
 	{
@@ -1506,7 +1506,7 @@ bool CHalfLifeMultiplay::TeamExterminationCheck(int NumAliveTerrorist, int NumAl
 	return false;
 }
 
-bool CHalfLifeMultiplay::HostageRescueRoundEndCheck(bool bNeededPlayers)
+bool CCstrikeTechnoZombies::HostageRescueRoundEndCheck(bool bNeededPlayers)
 {
 	// Check to see if 50% of the hostages have been rescued.
 	CBaseEntity *hostage = NULL;
@@ -1570,7 +1570,7 @@ bool CHalfLifeMultiplay::HostageRescueRoundEndCheck(bool bNeededPlayers)
 	return false;
 }
 
-void CHalfLifeMultiplay::SwapAllPlayers()
+void CCstrikeTechnoZombies::SwapAllPlayers()
 {
 	CBaseEntity *pPlayer = NULL;
 
@@ -1597,7 +1597,7 @@ void CHalfLifeMultiplay::SwapAllPlayers()
 	UpdateTeamScores();
 }
 
-void CHalfLifeMultiplay::BalanceTeams()
+void CCstrikeTechnoZombies::BalanceTeams()
 {
 	int iTeamToSwap = UNASSIGNED;
 	int iNumToSwap;
@@ -1687,7 +1687,7 @@ void CHalfLifeMultiplay::BalanceTeams()
 	}
 }
 
-void CHalfLifeMultiplay::CheckMapConditions()
+void CCstrikeTechnoZombies::CheckMapConditions()
 {
 	// Check to see if this map has a bomb target in it
 	if (UTIL_FindEntityByClassname(NULL, "func_bomb_target"))
@@ -1723,7 +1723,7 @@ void CHalfLifeMultiplay::CheckMapConditions()
 		m_iMapHasVIPSafetyZone = MAP_HAVE_VIP_SAFETYZONE_NO;
 }
 
-void CHalfLifeMultiplay::RestartRound()
+void CCstrikeTechnoZombies::RestartRound()
 {
 	// tell bots that the round is restarting
 	if (TheBots != NULL)
@@ -2124,7 +2124,7 @@ void CHalfLifeMultiplay::RestartRound()
 
 }
 
-BOOL CHalfLifeMultiplay::IsThereABomber()
+BOOL CCstrikeTechnoZombies::IsThereABomber()
 {
 	CBasePlayer *pPlayer = NULL;
 
@@ -2144,7 +2144,7 @@ BOOL CHalfLifeMultiplay::IsThereABomber()
 	return FALSE;
 }
 //Cstrike_TitlesTXT_Bomb_Planted
-BOOL CHalfLifeMultiplay::IsThereABomb()
+BOOL CCstrikeTechnoZombies::IsThereABomb()
 {
 	CGrenade *pC4 = NULL;
 	CBaseEntity *pWeaponC4 = NULL;
@@ -2173,7 +2173,7 @@ BOOL CHalfLifeMultiplay::IsThereABomb()
 
 }
 
-BOOL CHalfLifeMultiplay::TeamFull(int team_id)
+BOOL CCstrikeTechnoZombies::TeamFull(int team_id)
 {
 	switch (team_id)
 	{
@@ -2189,7 +2189,7 @@ BOOL CHalfLifeMultiplay::TeamFull(int team_id)
 
 // checks to see if the desired team is stacked, returns true if it is
 
-BOOL CHalfLifeMultiplay::TeamStacked(int newTeam_id, int curTeam_id)
+BOOL CCstrikeTechnoZombies::TeamStacked(int newTeam_id, int curTeam_id)
 {
 	// players are allowed to change to their own team
 	if (newTeam_id == curTeam_id)
@@ -2215,7 +2215,7 @@ BOOL CHalfLifeMultiplay::TeamStacked(int newTeam_id, int curTeam_id)
 	return FALSE;
 }
 
-void CHalfLifeMultiplay::StackVIPQueue()
+void CCstrikeTechnoZombies::StackVIPQueue()
 {
 	for (int i = MAX_VIP_QUEUES - 2; i > 0; --i)
 	{
@@ -2236,7 +2236,7 @@ void CHalfLifeMultiplay::StackVIPQueue()
 	}
 }
 
-bool CHalfLifeMultiplay::IsVIPQueueEmpty()
+bool CCstrikeTechnoZombies::IsVIPQueueEmpty()
 {
 	for (int i = 0; i < MAX_VIP_QUEUES; ++i)
 	{
@@ -2252,7 +2252,7 @@ bool CHalfLifeMultiplay::IsVIPQueueEmpty()
 	return (VIPQueue[0] == NULL && VIPQueue[1] == NULL && VIPQueue[2] == NULL && VIPQueue[3] == NULL && VIPQueue[4] == NULL);
 }
 
-bool CHalfLifeMultiplay::AddToVIPQueue(CBasePlayer *toAdd)
+bool CCstrikeTechnoZombies::AddToVIPQueue(CBasePlayer *toAdd)
 {
 	for (int i = 0; i < MAX_VIP_QUEUES; ++i)
 	{
@@ -2296,7 +2296,7 @@ bool CHalfLifeMultiplay::AddToVIPQueue(CBasePlayer *toAdd)
 	return FALSE;
 }
 
-void CHalfLifeMultiplay::ResetCurrentVIP()
+void CCstrikeTechnoZombies::ResetCurrentVIP()
 {
 	char *infobuffer = GET_INFO_BUFFER(m_pVIP->edict());
 	int numSkins = g_bIsCzeroGame ? CZ_NUM_SKIN : CS_NUM_SKIN;
@@ -2332,7 +2332,7 @@ void CHalfLifeMultiplay::ResetCurrentVIP()
 	m_pVIP->m_bNotKilled = false;
 }
 
-void CHalfLifeMultiplay::PickNextVIP()
+void CCstrikeTechnoZombies::PickNextVIP()
 {
 	if (!IsVIPQueueEmpty())
 	{
@@ -2430,7 +2430,7 @@ void CHalfLifeMultiplay::PickNextVIP()
 	}
 }
 
-void CHalfLifeMultiplay::Think()
+void CCstrikeTechnoZombies::Think()
 {
 	MonitorTutorStatus();
 
@@ -2900,7 +2900,7 @@ void CHalfLifeMultiplay::Think()
 	}
 }
 
-bool CHalfLifeMultiplay::CheckGameOver()
+bool CCstrikeTechnoZombies::CheckGameOver()
 {
 	// someone else quit the game already
 	if (g_fGameOver)
@@ -2934,7 +2934,7 @@ bool CHalfLifeMultiplay::CheckGameOver()
 	return false;
 }
 
-bool CHalfLifeMultiplay::CheckTimeLimit()
+bool CCstrikeTechnoZombies::CheckTimeLimit()
 {
 	float fTimeLimit = timelimit.value;
 
@@ -2962,7 +2962,7 @@ bool CHalfLifeMultiplay::CheckTimeLimit()
 	return false;
 }
 
-bool CHalfLifeMultiplay::CheckMaxRounds()
+bool CCstrikeTechnoZombies::CheckMaxRounds()
 {
 	if (m_iMaxRounds != 0 && m_iTotalRoundsPlayed >= m_iMaxRounds)
 	{
@@ -2974,7 +2974,7 @@ bool CHalfLifeMultiplay::CheckMaxRounds()
 	return false;
 }
 
-bool CHalfLifeMultiplay::CheckWinLimit()
+bool CCstrikeTechnoZombies::CheckWinLimit()
 {
 	// has one team won the specified number of rounds?
 	if (m_iMaxRoundsWon != 0 && (m_iNumCTWins >= m_iMaxRoundsWon || m_iNumTerroristWins >= m_iMaxRoundsWon))
@@ -2990,7 +2990,7 @@ bool CHalfLifeMultiplay::CheckWinLimit()
 	return false;
 }
 
-void CHalfLifeMultiplay::CheckFreezePeriodExpired()
+void CCstrikeTechnoZombies::CheckFreezePeriodExpired()
 {
 	if (TimeRemaining() > 0)
 		return;
@@ -3094,7 +3094,7 @@ void CHalfLifeMultiplay::CheckFreezePeriodExpired()
 	}
 }
 
-void CHalfLifeMultiplay::CheckRoundTimeExpired()
+void CCstrikeTechnoZombies::CheckRoundTimeExpired()
 {
 	if (!HasRoundTimeExpired())
 		return;
@@ -3187,7 +3187,7 @@ void CHalfLifeMultiplay::CheckRoundTimeExpired()
 	m_fRoundCount = gpGlobals->time + 60.0f;
 }
 
-void CHalfLifeMultiplay::CheckLevelInitialized()
+void CCstrikeTechnoZombies::CheckLevelInitialized()
 {
 	if (!m_bLevelInitialized)
 	{
@@ -3214,7 +3214,7 @@ void CHalfLifeMultiplay::CheckLevelInitialized()
 	}
 }
 
-void CHalfLifeMultiplay::CheckRestartRound()
+void CCstrikeTechnoZombies::CheckRestartRound()
 {
 	// Restart the round if specified by the server
 	int iRestartDelay = (int)restartround.value;
@@ -3253,7 +3253,7 @@ void CHalfLifeMultiplay::CheckRestartRound()
 		MESSAGE_END();
 }
 
-bool CHalfLifeMultiplay::HasRoundTimeExpired()
+bool CCstrikeTechnoZombies::HasRoundTimeExpired()
 {
 	// We haven't completed other objectives, so go for this!.
 	if (TimeRemaining() > 0 || m_iRoundWinStatus != WINNER_NONE)
@@ -3274,7 +3274,7 @@ bool CHalfLifeMultiplay::HasRoundTimeExpired()
 	return false;
 }
 
-bool CHalfLifeMultiplay::IsBombPlanted()
+bool CCstrikeTechnoZombies::IsBombPlanted()
 {
 	if (m_bMapHasBombTarget)
 	{
@@ -3295,7 +3295,7 @@ bool CHalfLifeMultiplay::IsBombPlanted()
 // living players on the given team need to be marked as not receiving any money
 // next round.
 
-void CHalfLifeMultiplay::MarkLivingPlayersOnTeamAsNotReceivingMoneyNextRound(int iTeam)
+void CCstrikeTechnoZombies::MarkLivingPlayersOnTeamAsNotReceivingMoneyNextRound(int iTeam)
 {
 	for (int i = 1; i <= gpGlobals->maxClients; ++i)
 	{
@@ -3314,7 +3314,7 @@ void CHalfLifeMultiplay::MarkLivingPlayersOnTeamAsNotReceivingMoneyNextRound(int
 	}
 }
 
-void CHalfLifeMultiplay::CareerRestart()
+void CCstrikeTechnoZombies::CareerRestart()
 {
 	g_fGameOver = FALSE;
 
@@ -3349,27 +3349,27 @@ void CHalfLifeMultiplay::CareerRestart()
 	}
 }
 
-BOOL CHalfLifeMultiplay::IsMultiplayer()
+BOOL CCstrikeTechnoZombies::IsMultiplayer()
 {
 	return TRUE;
 }
 
-BOOL CHalfLifeMultiplay::IsDeathmatch()
+BOOL CCstrikeTechnoZombies::IsDeathmatch()
 {
 	return TRUE;
 }
 
-BOOL CHalfLifeMultiplay::IsCoOp()
+BOOL CCstrikeTechnoZombies::IsCoOp()
 {
 	return gpGlobals->coop;
 }
 
-BOOL CHalfLifeMultiplay::IsShelter()
+BOOL CCstrikeTechnoZombies::IsShelter()
 {
 	return gpGlobals->coop;
 }
 
-BOOL CHalfLifeMultiplay::FShouldSwitchWeapon(CBasePlayer *pPlayer, CBasePlayerItem *pWeapon)
+BOOL CCstrikeTechnoZombies::FShouldSwitchWeapon(CBasePlayer *pPlayer, CBasePlayerItem *pWeapon)
 {
 	if (!pWeapon->CanDeploy())
 		return FALSE;
@@ -3389,7 +3389,7 @@ BOOL CHalfLifeMultiplay::FShouldSwitchWeapon(CBasePlayer *pPlayer, CBasePlayerIt
 	return FALSE;
 }
 
-BOOL CHalfLifeMultiplay::GetNextBestWeapon(CBasePlayer *pPlayer, CBasePlayerItem *pCurrentWeapon)
+BOOL CCstrikeTechnoZombies::GetNextBestWeapon(CBasePlayer *pPlayer, CBasePlayerItem *pCurrentWeapon)
 {
 	CBasePlayerItem *pCheck;
 	CBasePlayerItem *pBest; // this will be used in the event that we don't find a weapon in the same category.
@@ -3445,30 +3445,30 @@ BOOL CHalfLifeMultiplay::GetNextBestWeapon(CBasePlayer *pPlayer, CBasePlayerItem
 	return TRUE;
 }
 
-BOOL CHalfLifeMultiplay::ClientCommand_DeadOrAlive(CBasePlayer *pPlayer, const char *pcmd)
+BOOL CCstrikeTechnoZombies::ClientCommand_DeadOrAlive(CBasePlayer *pPlayer, const char *pcmd)
 {
 	return m_VoiceGameMgr.ClientCommand(pPlayer, pcmd);
 }
 
-BOOL CHalfLifeMultiplay::ClientCommand(CBasePlayer *pPlayer, const char *pcmd)
+BOOL CCstrikeTechnoZombies::ClientCommand(CBasePlayer *pPlayer, const char *pcmd)
 {
 	return FALSE;
 }
 
-BOOL CHalfLifeMultiplay::ClientConnected(edict_t *pEntity, const char *pszName, const char *pszAddress, char *szRejectReason)
+BOOL CCstrikeTechnoZombies::ClientConnected(edict_t *pEntity, const char *pszName, const char *pszAddress, char *szRejectReason)
 {
 	m_VoiceGameMgr.ClientConnected(pEntity);
 	return TRUE;
 }
 
-void CHalfLifeMultiplay::UpdateGameMode(CBasePlayer *pPlayer)
+void CCstrikeTechnoZombies::UpdateGameMode(CBasePlayer *pPlayer)
 {
 	MESSAGE_BEGIN(MSG_ONE, gmsgGameMode, NULL, pPlayer->edict());
 		WRITE_BYTE(1);
 	MESSAGE_END();
 }
 
-void CHalfLifeMultiplay::InitHUD(CBasePlayer *pl)
+void CCstrikeTechnoZombies::InitHUD(CBasePlayer *pl)
 {
 	int i;
 
@@ -3612,7 +3612,7 @@ void CHalfLifeMultiplay::InitHUD(CBasePlayer *pl)
 	}
 }
 
-void CHalfLifeMultiplay::ClientDisconnected(edict_t *pClient)
+void CCstrikeTechnoZombies::ClientDisconnected(edict_t *pClient)
 {
 	if (pClient != NULL)
 	{
@@ -3706,13 +3706,13 @@ void CHalfLifeMultiplay::ClientDisconnected(edict_t *pClient)
 	CheckWinConditions();
 }
 
-float CHalfLifeMultiplay::FlPlayerFallDamage(CBasePlayer *pPlayer)
+float CCstrikeTechnoZombies::FlPlayerFallDamage(CBasePlayer *pPlayer)
 {
 	pPlayer->m_flFallVelocity -= PLAYER_MAX_SAFE_FALL_SPEED;
 	return pPlayer->m_flFallVelocity * DAMAGE_FOR_FALL_SPEED * 1.25;
 }
 
-BOOL CHalfLifeMultiplay::FPlayerCanTakeDamage(CBasePlayer *pPlayer, CBaseEntity *pAttacker)
+BOOL CCstrikeTechnoZombies::FPlayerCanTakeDamage(CBasePlayer *pPlayer, CBaseEntity *pAttacker)
 {
 	if (!pAttacker || PlayerRelationship(pPlayer, pAttacker) != GR_TEAMMATE)
 	{
@@ -3727,7 +3727,7 @@ BOOL CHalfLifeMultiplay::FPlayerCanTakeDamage(CBasePlayer *pPlayer, CBaseEntity 
 	return FALSE;
 }
 
-void CHalfLifeMultiplay::PlayerThink(CBasePlayer *pPlayer)
+void CCstrikeTechnoZombies::PlayerThink(CBasePlayer *pPlayer)
 {
 	if (g_fGameOver)
 	{
@@ -3796,7 +3796,7 @@ void CHalfLifeMultiplay::PlayerThink(CBasePlayer *pPlayer)
 
 // Purpose: Player has just spawned. Equip them.
 
-void CHalfLifeMultiplay::PlayerSpawn(CBasePlayer *pPlayer)
+void CCstrikeTechnoZombies::PlayerSpawn(CBasePlayer *pPlayer)
 {
 	// This is tied to the joining state (m_iJoiningState).. add it when the joining state is there.
 	if (pPlayer->m_bJustConnected)
@@ -3826,7 +3826,7 @@ void CHalfLifeMultiplay::PlayerSpawn(CBasePlayer *pPlayer)
 	pPlayer->SetPlayerModel(false);
 }
 
-BOOL CHalfLifeMultiplay::FPlayerCanRespawn(CBasePlayer *pPlayer)
+BOOL CCstrikeTechnoZombies::FPlayerCanRespawn(CBasePlayer *pPlayer)
 {
 	// Player cannot respawn twice in a round
 	if (pPlayer->m_iNumSpawns > 0)
@@ -3865,12 +3865,12 @@ BOOL CHalfLifeMultiplay::FPlayerCanRespawn(CBasePlayer *pPlayer)
 	return TRUE;
 }
 
-float CHalfLifeMultiplay::FlPlayerSpawnTime(CBasePlayer *pPlayer)
+float CCstrikeTechnoZombies::FlPlayerSpawnTime(CBasePlayer *pPlayer)
 {
 	return gpGlobals->time;//now!
 }
 
-BOOL CHalfLifeMultiplay::AllowAutoTargetCrosshair()
+BOOL CCstrikeTechnoZombies::AllowAutoTargetCrosshair()
 {
 	return FALSE;
 }
@@ -3878,12 +3878,12 @@ BOOL CHalfLifeMultiplay::AllowAutoTargetCrosshair()
 // IPointsForKill - how many points awarded to anyone
 // that kills this player?
 
-int CHalfLifeMultiplay::IPointsForKill(CBasePlayer *pAttacker, CBasePlayer *pKilled)
+int CCstrikeTechnoZombies::IPointsForKill(CBasePlayer *pAttacker, CBasePlayer *pKilled)
 {
 	return 1;
 }
 
-void CHalfLifeMultiplay::PlayerKilled(CBasePlayer *pVictim, entvars_t *pKiller, entvars_t *pInflictor)
+void CCstrikeTechnoZombies::PlayerKilled(CBasePlayer *pVictim, entvars_t *pKiller, entvars_t *pInflictor)
 {
 	DeathNotice(pVictim, pKiller, pInflictor);
 
@@ -4024,7 +4024,7 @@ void CHalfLifeMultiplay::PlayerKilled(CBasePlayer *pVictim, entvars_t *pKiller, 
 	}
 }
 
-void CHalfLifeMultiplay::DeathNotice(CBasePlayer *pVictim, entvars_t *pKiller, entvars_t *pevInflictor)
+void CCstrikeTechnoZombies::DeathNotice(CBasePlayer *pVictim, entvars_t *pKiller, entvars_t *pevInflictor)
 {
 	// Work out what killed the player, and send a message to all clients about it
 	// CBaseEntity *Killer = CBaseEntity::Instance(pKiller);
@@ -4148,7 +4148,7 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer *pVictim, entvars_t *pKiller, e
 // PlayerGotWeapon - player has grabbed a weapon that was
 // sitting in the world
 
-void CHalfLifeMultiplay::PlayerGotWeapon(CBasePlayer *pPlayer, CBasePlayerItem *pWeapon)
+void CCstrikeTechnoZombies::PlayerGotWeapon(CBasePlayer *pPlayer, CBasePlayerItem *pWeapon)
 {
 	;
 }
@@ -4156,7 +4156,7 @@ void CHalfLifeMultiplay::PlayerGotWeapon(CBasePlayer *pPlayer, CBasePlayerItem *
 // FlWeaponRespawnTime - what is the time in the future
 // at which this weapon may spawn?
 
-float CHalfLifeMultiplay::FlWeaponRespawnTime(CBasePlayerItem *pWeapon)
+float CCstrikeTechnoZombies::FlWeaponRespawnTime(CBasePlayerItem *pWeapon)
 {
 	return gpGlobals->time + WEAPON_RESPAWN_TIME;
 }
@@ -4165,7 +4165,7 @@ float CHalfLifeMultiplay::FlWeaponRespawnTime(CBasePlayerItem *pWeapon)
 // now, otherwise it returns the time at which it can try
 // to spawn again.
 
-float CHalfLifeMultiplay::FlWeaponTryRespawn(CBasePlayerItem *pWeapon)
+float CCstrikeTechnoZombies::FlWeaponTryRespawn(CBasePlayerItem *pWeapon)
 {
 	if (pWeapon && pWeapon->m_iId && (pWeapon->iFlags() & ITEM_FLAG_LIMITINWORLD))
 	{
@@ -4179,12 +4179,12 @@ float CHalfLifeMultiplay::FlWeaponTryRespawn(CBasePlayerItem *pWeapon)
 	return 0;
 }
 
-Vector CHalfLifeMultiplay::VecWeaponRespawnSpot(CBasePlayerItem *pWeapon)
+Vector CCstrikeTechnoZombies::VecWeaponRespawnSpot(CBasePlayerItem *pWeapon)
 {
 	return pWeapon->pev->origin;
 }
 
-int CHalfLifeMultiplay::WeaponShouldRespawn(CBasePlayerItem *pWeapon)
+int CCstrikeTechnoZombies::WeaponShouldRespawn(CBasePlayerItem *pWeapon)
 {
 	if (pWeapon->pev->spawnflags & SF_NORESPAWN)
 	{
@@ -4194,22 +4194,22 @@ int CHalfLifeMultiplay::WeaponShouldRespawn(CBasePlayerItem *pWeapon)
 	return GR_WEAPON_RESPAWN_YES;
 }
 
-BOOL CHalfLifeMultiplay::CanHavePlayerItem(CBasePlayer *pPlayer, CBasePlayerItem *pItem)
+BOOL CCstrikeTechnoZombies::CanHavePlayerItem(CBasePlayer *pPlayer, CBasePlayerItem *pItem)
 {
 	return CGameRules::CanHavePlayerItem(pPlayer, pItem);
 }
 
-BOOL CHalfLifeMultiplay::CanHaveItem(CBasePlayer *pPlayer, CItem *pItem)
+BOOL CCstrikeTechnoZombies::CanHaveItem(CBasePlayer *pPlayer, CItem *pItem)
 {
 	return TRUE;
 }
 
-void CHalfLifeMultiplay::PlayerGotItem(CBasePlayer *pPlayer, CItem *pItem)
+void CCstrikeTechnoZombies::PlayerGotItem(CBasePlayer *pPlayer, CItem *pItem)
 {
 	;
 }
 
-int CHalfLifeMultiplay::ItemShouldRespawn(CItem *pItem)
+int CCstrikeTechnoZombies::ItemShouldRespawn(CItem *pItem)
 {
 	if (pItem->pev->spawnflags & SF_NORESPAWN)
 	{
@@ -4219,27 +4219,27 @@ int CHalfLifeMultiplay::ItemShouldRespawn(CItem *pItem)
 	return GR_ITEM_RESPAWN_YES;
 }
 
-float CHalfLifeMultiplay::FlItemRespawnTime(CItem *pItem)
+float CCstrikeTechnoZombies::FlItemRespawnTime(CItem *pItem)
 {
 	return gpGlobals->time + ITEM_RESPAWN_TIME;
 }
 
-Vector CHalfLifeMultiplay::VecItemRespawnSpot(CItem *pItem)
+Vector CCstrikeTechnoZombies::VecItemRespawnSpot(CItem *pItem)
 {
 	return pItem->pev->origin;
 }
 
-void CHalfLifeMultiplay::PlayerGotAmmo(CBasePlayer *pPlayer, char *szName, int iCount)
+void CCstrikeTechnoZombies::PlayerGotAmmo(CBasePlayer *pPlayer, char *szName, int iCount)
 {
 	;
 }
 
-BOOL CHalfLifeMultiplay::IsAllowedToSpawn(CBaseEntity *pEntity)
+BOOL CCstrikeTechnoZombies::IsAllowedToSpawn(CBaseEntity *pEntity)
 {
 	return TRUE;
 }
 
-int CHalfLifeMultiplay::AmmoShouldRespawn(CBasePlayerAmmo *pAmmo)
+int CCstrikeTechnoZombies::AmmoShouldRespawn(CBasePlayerAmmo *pAmmo)
 {
 	if (pAmmo->pev->spawnflags & SF_NORESPAWN)
 	{
@@ -4249,37 +4249,37 @@ int CHalfLifeMultiplay::AmmoShouldRespawn(CBasePlayerAmmo *pAmmo)
 	return GR_AMMO_RESPAWN_YES;
 }
 
-float CHalfLifeMultiplay::FlAmmoRespawnTime(CBasePlayerAmmo *pAmmo)
+float CCstrikeTechnoZombies::FlAmmoRespawnTime(CBasePlayerAmmo *pAmmo)
 {
 	return gpGlobals->time + 20.0f;
 }
 
-Vector CHalfLifeMultiplay::VecAmmoRespawnSpot(CBasePlayerAmmo *pAmmo)
+Vector CCstrikeTechnoZombies::VecAmmoRespawnSpot(CBasePlayerAmmo *pAmmo)
 {
 	return pAmmo->pev->origin;
 }
 
-float CHalfLifeMultiplay::FlHealthChargerRechargeTime()
+float CCstrikeTechnoZombies::FlHealthChargerRechargeTime()
 {
 	return 60;
 }
 
-float CHalfLifeMultiplay::FlHEVChargerRechargeTime()
+float CCstrikeTechnoZombies::FlHEVChargerRechargeTime()
 {
 	return 30;
 }
 
-int CHalfLifeMultiplay::DeadPlayerWeapons(CBasePlayer *pPlayer)
+int CCstrikeTechnoZombies::DeadPlayerWeapons(CBasePlayer *pPlayer)
 {
 	return GR_PLR_DROP_GUN_ACTIVE;
 }
 
-int CHalfLifeMultiplay::DeadPlayerAmmo(CBasePlayer *pPlayer)
+int CCstrikeTechnoZombies::DeadPlayerAmmo(CBasePlayer *pPlayer)
 {
 	return GR_PLR_DROP_AMMO_ACTIVE;
 }
 
-edict_t *CHalfLifeMultiplay::GetPlayerSpawnSpot(CBasePlayer *pPlayer)
+edict_t * CCstrikeTechnoZombies::GetPlayerSpawnSpot(CBasePlayer *pPlayer)
 {
 	// gat valid spawn point
 	edict_t *pentSpawnSpot = CGameRules::GetPlayerSpawnSpot(pPlayer);
@@ -4295,7 +4295,7 @@ edict_t *CHalfLifeMultiplay::GetPlayerSpawnSpot(CBasePlayer *pPlayer)
 	return pentSpawnSpot;
 }
 
-int CHalfLifeMultiplay::PlayerRelationship(CBasePlayer *pPlayer, CBaseEntity *pTarget)
+int CCstrikeTechnoZombies::PlayerRelationship(CBasePlayer *pPlayer, CBaseEntity *pTarget)
 {
 	if (!pPlayer || !pTarget)
 	{
@@ -4318,7 +4318,7 @@ int CHalfLifeMultiplay::PlayerRelationship(CBasePlayer *pPlayer, CBaseEntity *pT
 	return GR_TEAMMATE;
 }
 
-BOOL CHalfLifeMultiplay::FAllowFlashlight()
+BOOL CCstrikeTechnoZombies::FAllowFlashlight()
 {
 	static cvar_t *mp_flashlight = NULL;
 
@@ -4331,12 +4331,12 @@ BOOL CHalfLifeMultiplay::FAllowFlashlight()
 	return FALSE;
 }
 
-BOOL CHalfLifeMultiplay::FAllowMonsters()
+BOOL CCstrikeTechnoZombies::FAllowMonsters()
 {
 	return CVAR_GET_FLOAT("mp_allowmonsters") != 0;
 }
 
-void CHalfLifeMultiplay::GoToIntermission()
+void CCstrikeTechnoZombies::GoToIntermission()
 {
 	if (g_fGameOver)
 		return;
@@ -4717,7 +4717,7 @@ void ExtractCommandString(char *s, char *szCommand)
 	}
 }
 
-void CHalfLifeMultiplay::ResetAllMapVotes()
+void CCstrikeTechnoZombies::ResetAllMapVotes()
 {
 	CBaseEntity *pTempEntity = NULL;
 
@@ -4758,7 +4758,7 @@ int GetMapCount()
 	return iCount;
 }
 
-void CHalfLifeMultiplay::DisplayMaps(CBasePlayer *player, int iVote)
+void CCstrikeTechnoZombies::DisplayMaps(CBasePlayer *player, int iVote)
 {
 	static mapcycle_t mapcycle2;
 	char *mapcfile = (char *)CVAR_GET_STRING("mapcyclefile");
@@ -4815,7 +4815,7 @@ void CHalfLifeMultiplay::DisplayMaps(CBasePlayer *player, int iVote)
 	ResetAllMapVotes();
 }
 
-void CHalfLifeMultiplay::ProcessMapVote(CBasePlayer *player, int iVote)
+void CCstrikeTechnoZombies::ProcessMapVote(CBasePlayer *player, int iVote)
 {
 	CBaseEntity *pTempEntity = NULL;
 
@@ -4868,7 +4868,7 @@ void CHalfLifeMultiplay::ProcessMapVote(CBasePlayer *player, int iVote)
 
 // Server is changing to a new level, check mapcycle.txt for map name and setup info
 
-void CHalfLifeMultiplay::ChangeLevel()
+void CCstrikeTechnoZombies::ChangeLevel()
 {
 	static char szPreviousMapCycleFile[256];
 	static mapcycle_t mapcycle;
@@ -4999,7 +4999,7 @@ void CHalfLifeMultiplay::ChangeLevel()
 	}
 }
 
-void CHalfLifeMultiplay::SendMOTDToClient(edict_t *client)
+void CCstrikeTechnoZombies::SendMOTDToClient(edict_t *client)
 {
 	// read from the MOTD.txt file
 	int length, char_count = 0;
@@ -5044,7 +5044,7 @@ void CHalfLifeMultiplay::SendMOTDToClient(edict_t *client)
 	FREE_FILE(aFileList);
 }
 
-void CHalfLifeMultiplay::ClientUserInfoChanged(CBasePlayer *pPlayer, char *infobuffer)
+void CCstrikeTechnoZombies::ClientUserInfoChanged(CBasePlayer *pPlayer, char *infobuffer)
 {
 	pPlayer->SetPlayerModel(pPlayer->m_bHasC4);
 	pPlayer->SetPrefsFromUserinfo(infobuffer);

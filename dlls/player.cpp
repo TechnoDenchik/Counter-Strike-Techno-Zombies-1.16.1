@@ -959,7 +959,7 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 
 		if (fTookDamage > 0)
 		{
-			CHalfLifeMultiplay *mp = g_pGameRules;
+			CCstrikeTechnoZombies *mp = g_pGameRules;
 
 			if (TheBots != NULL)
 			{
@@ -1191,7 +1191,7 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 
 	if (fTookDamage > 0)
 	{
-		CHalfLifeMultiplay *mp = g_pGameRules;
+		CCstrikeTechnoZombies *mp = g_pGameRules;
 
 		if (TheBots != NULL)
 		{
@@ -2946,7 +2946,7 @@ void CBasePlayer::ResetMenu()
 void CBasePlayer::SyncRoundTimer()
 {
 	float tmRemaining;
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 
 	if (mp->IsMultiplayer())
 		tmRemaining = mp->TimeRemaining();
@@ -3016,7 +3016,7 @@ void CBasePlayer::SyncRoundTimer()
 void CBasePlayer::SyncRoundTimer2()
 {
 	float tmRemaining;
-	CHalfLifeMultiplay* mp = g_pGameRules;
+	CCstrikeTechnoZombies* mp = g_pGameRules;
 
 	if (mp->IsMultiplayer())
 		tmRemaining = mp->TimeRemaining2();
@@ -3086,7 +3086,7 @@ void CBasePlayer::SyncRoundTimer2()
 void CBasePlayer::SyncRoundTimer3()
 {
 	float tmRemaining;
-	CHalfLifeMultiplay* mp = g_pGameRules;
+	CCstrikeTechnoZombies* mp = g_pGameRules;
 
 	if (mp->IsMultiplayer())
 		tmRemaining = mp->TimeRemaining3();
@@ -3250,7 +3250,7 @@ void CBasePlayer::JoiningThink()
 		}
 		case GETINTOGAME:
 		{
-			CHalfLifeMultiplay *mp = g_pGameRules;
+			CCstrikeTechnoZombies *mp = g_pGameRules;
 
 			m_bNotKilled = false;
 			m_iIgnoreGlobalChat = IGNOREMSG_NONE;
@@ -3661,7 +3661,7 @@ void CBasePlayer::StartObserver(Vector vecPosition, Vector vecViewAngle)
 	pev->iuser1 = OBS_NONE;
 
 	static int iFirstTime = 1;
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 
 	if (iFirstTime && mp && mp->IsCareer() && !IsBot())
 	{
@@ -4018,7 +4018,7 @@ void CBasePlayer::AddPointsToTeam(int score, BOOL bAllowNegativeScore)
 
 bool CBasePlayer::CanPlayerBuy(bool display)
 {
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 
 	if (!mp->IsMultiplayer())
 	{
@@ -5967,7 +5967,7 @@ void OLD_CheckRescueZone(CBasePlayer *player)
 
 void CBasePlayer::HandleSignals()
 {
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 
 	if (mp->IsMultiplayer())
 	{
@@ -6357,7 +6357,7 @@ void CBasePlayer::UpdateClientData()
 		MESSAGE_BEGIN(MSG_ONE, gmsgResetHUD, NULL, pev);
 		MESSAGE_END();
 
-		CHalfLifeMultiplay *mp = g_pGameRules;
+		CCstrikeTechnoZombies *mp = g_pGameRules;
 
 		if (!m_fGameHUDInitialized)
 		{
@@ -8113,7 +8113,7 @@ bool CBasePlayer::NeedsArmor()
 
 bool CBasePlayer::NeedsDefuseKit()
 {
-	CHalfLifeMultiplay *mpRules = g_pGameRules;
+	CCstrikeTechnoZombies *mpRules = g_pGameRules;
 
 	if (m_bHasDefuser || m_iTeam != CT)
 		return false;

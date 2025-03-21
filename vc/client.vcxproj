@@ -427,7 +427,6 @@
     <ClInclude Include="..\cl_dll\vgui2\CClientVGUI.h" />
     <ClInclude Include="..\cl_dll\vgui2\CGameUITestPanel.h" />
     <ClInclude Include="..\cl_dll\vgui2\CHudViewPort.h" />
-    <ClInclude Include="..\cl_dll\vgui2\game_controls\buysubmenu.h" />
     <ClInclude Include="..\cl_dll\vgui2\IEngineVgui.h" />
     <ClInclude Include="..\cl_dll\vgui2\IGameUIPanel.h" />
     <ClInclude Include="..\cl_dll\vgui2\IViewport.h" />
@@ -564,6 +563,10 @@
     <ClInclude Include="..\vgui2_support\vgui_controls\ToggleButton.h" />
     <ClInclude Include="..\vgui2_support\vgui_controls\Tooltip.h" />
     <ClInclude Include="..\vgui2_support\vgui_controls\URLLabel.h" />
+    <ClInclude Include="resource1.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="client.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DC1DD765-CFEB-47DA-A2EA-9F1E20A24272}</ProjectGuid>
@@ -616,7 +619,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>F:\Release 2\cstz\cl_dlls</OutDir>
+    <OutDir>F:\Release 2\Counter-Strike-TZ\cl_dlls</OutDir>
     <TargetName>client</TargetName>
     <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>..\vgui2_support\SourceSDK\lib\public;$(VC_LibraryPath_x86);$(WindowsSdk_71A_LibraryPath_x86);</LibraryPath>

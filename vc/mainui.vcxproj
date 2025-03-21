@@ -70,6 +70,7 @@
     <ClInclude Include="..\mainui_cpp\utl\utlmemory.h" />
     <ClInclude Include="..\mainui_cpp\utl\utlrbtree.h" />
     <ClInclude Include="..\mainui_cpp\utl\utlvector.h" />
+    <ClInclude Include="resource3.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\mainui_cpp\BaseMenu.cpp" />
@@ -141,6 +142,9 @@
     <ClCompile Include="..\mainui_cpp\udll_int.cpp" />
     <ClCompile Include="..\mainui_cpp\Utils.cpp" />
     <ClCompile Include="..\mainui_cpp\utl\unicode_strtools.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Interface.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{90F48F37-D9F8-4F36-B04F-1FC8CC834424}</ProjectGuid>

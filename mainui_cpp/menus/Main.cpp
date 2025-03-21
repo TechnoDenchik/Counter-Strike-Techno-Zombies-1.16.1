@@ -345,7 +345,7 @@ void CMenuMain::_Init( void )
 	iconplay.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	iconplay.onActivated = UI_CreateGame_Menu;
 
-	createGame.SetNameAndStatus(L("GameUI_GameMenu_CreateServer"), L(""));
+	createGame.SetNameAndStatus(LL("GameUI_GameMenu_CreateServer"), L(""));
 	createGame.onActivated = UI_CreateGame_Menu;
 	createGame.iFlags |= QMF_NOTIFY;
 

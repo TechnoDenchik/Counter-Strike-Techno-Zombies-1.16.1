@@ -64,7 +64,7 @@ static MoEWeaponBuyInfo_s g_MoEWeaponBuyInfo[] = {
 	{ "weapon_gungnir", "Gungnir", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_quantum", "QuantumHorizon", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_twinaxes", "Twin Shadow Axes", 0, KNIFE_SLOT, UNASSIGNED },
-	{ "weapon_arbalest", "Arbalest", 0, KNIFE_SLOT, UNASSIGNED },
+	{ "weapon_arbalest", "Arbalest", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	
 	{ "weapon_knife", "Seal Knife", 0, KNIFE_SLOT, UNASSIGNED },
 	{ "knife_skullaxe", "Skull-9", 0, KNIFE_SLOT, UNASSIGNED },

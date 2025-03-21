@@ -56,7 +56,7 @@ const char *CMenuBitmap::Key( int key, int down )
 	case K_MOUSE1:
 		if(!( iFlags & QMF_HASMOUSEFOCUS ))
 			break;
-		sound = uiSoundLaunch;
+		sound = uiSoundSelect;
 		break;
 	case K_ENTER:
 	case K_KP_ENTER:
@@ -64,12 +64,11 @@ const char *CMenuBitmap::Key( int key, int down )
 		//if( !down ) return sound;
 		if( iFlags & QMF_MOUSEONLY )
 			break;
-		sound = uiSoundLaunch;
+		sound = uiSoundSelect;
 		break;
 	}
 
-	if( sound && ( iFlags & QMF_SILENT ))
-		sound = uiSoundNull;
+	sound = uiSoundOnmouse;
 
 	if( iFlags & QMF_ACT_ONRELEASE )
 	{

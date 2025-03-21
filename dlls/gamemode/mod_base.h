@@ -29,7 +29,7 @@ GNU General Public License for more details.
 class CBaseEntity;
 class CBasePlayer; // player.h
 
-class IBaseMod : public CHalfLifeMultiplay, ruleof350::unique
+class IBaseMod : public CCstrikeTechnoZombies, ruleof350::unique
 {
 public:
 	virtual DamageTrack_e DamageTrack() { return DT_NONE; }

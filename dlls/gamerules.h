@@ -314,10 +314,10 @@ public:
 	virtual BOOL FAllowMonsters();
 };
 
-class CHalfLifeMultiplay: public CGameRules
+class CCstrikeTechnoZombies: public CGameRules
 {
 public:
-	CHalfLifeMultiplay();
+	CCstrikeTechnoZombies();
 public:
 	virtual void RefreshSkillData();
 	virtual void Think();
@@ -589,7 +589,7 @@ public:
 	virtual bool CanPlayerHearPlayer(CBasePlayer *pListener, CBasePlayer *pSender);
 };
 
-extern CHalfLifeMultiplay *g_pGameRules;
+extern CCstrikeTechnoZombies*g_pGameRules;
 
 CGameRules *InstallGameRules();
 
@@ -607,7 +607,7 @@ void Broadcast(const char *sentence);
 #endif
 const char * GetTeam(int teamNo);
 void EndRoundMessage(const char *sentence, int event);
-void ReadMultiplayCvars(CHalfLifeMultiplay *mp);
+void ReadMultiplayCvars(CCstrikeTechnoZombies *mp);
 void DestroyMapCycle(mapcycle_t *cycle);
 
 char *MP_COM_GetToken();
