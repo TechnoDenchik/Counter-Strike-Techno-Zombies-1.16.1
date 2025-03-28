@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/dlls/wpn_shared/knife_twin_axesex.cpp
+/dlls/wpn_shared/knife_twin_axesex.h
