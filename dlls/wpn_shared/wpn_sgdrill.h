@@ -40,7 +40,7 @@ public:
 	float GetSecondaryAttackDamage() const;
 	void Holster(int skiplocal) override;
 #ifndef CLIENT_DLL
-	WeaponBuyAmmoConfig GetBuyAmmoConfig() override { return { "ammo_sgdrill" , 150 }; }
+	WeaponBuyAmmoConfig GetBuyAmmoConfig() override { return { "ammo_buckshot" , 150 }; }
 #endif
 	BOOL UseDecrement() override {
 #ifdef CLIENT_WEAPONS

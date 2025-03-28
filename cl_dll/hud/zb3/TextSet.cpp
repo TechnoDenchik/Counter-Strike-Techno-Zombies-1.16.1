@@ -151,7 +151,7 @@ int CHudTextZB3::Draw(float time)
 	}
 
 	DrawUtils::DrawHudString(x - 190, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
-	
+
 	return 1;
 }
 

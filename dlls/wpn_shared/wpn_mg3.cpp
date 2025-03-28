@@ -72,6 +72,10 @@ int CMG3::GetItemInfo(ItemInfo *p)
 	p->iMaxAmmo1 = MAX_AMMO_556NATOBOX;
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
+	p->pszAmmo3 = NULL;
+	p->iMaxAmmo3 = -1;
+	p->pszAmmoGrenade = NULL;
+	p->iMaxAmmoGrenade = -1;
 	p->iMaxClip = MG3_AMMO_GIVE;
 	p->iSlot = 0;
 	p->iPosition = 4;

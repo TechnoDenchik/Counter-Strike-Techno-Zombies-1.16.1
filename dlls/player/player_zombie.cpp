@@ -28,17 +28,31 @@ CHuman_ZB1::CHuman_ZB1(CBasePlayer *player) : BasePlayerExtra(player)
 	m_pPlayer->m_bIsZombie = false;
 	// Give Armor
 	m_pPlayer->pev->health = m_pPlayer->pev->max_health= 1000;
-	//pPlayer->pev->gravity = 0.86f;
+	m_pPlayer->pev->gravity = 0.86f;
 	m_pPlayer->m_iKevlar = ARMOR_TYPE_HELMET;
 	m_pPlayer->pev->armorvalue = 500;
+	m_pPlayer->pev->maxspeed = 450;
 }
 
 //void CBasePlayer::MakeZombie(ZombieLevel iEvolutionLevel)
 CZombie_ZB1::CZombie_ZB1(CBasePlayer *player, ZombieLevel iEvolutionLevel) : BasePlayerExtra(player)
 {
 	m_pPlayer->m_bIsZombie = true;
+	m_pPlayer->m_bIsZombieTank = false;
+	m_pPlayer->m_bIsZombieFemale = false;
+	m_pPlayer->m_bIsZombieHeavy = false;
+	m_pPlayer->m_bIsZombieHeal = false;
+	m_pPlayer->m_bIsZombiePc = false;
+	m_pPlayer->m_bIsZombieDeimos = false;
+	m_pPlayer->m_bIsZombieGanimed = false;
+	m_pPlayer->m_bIsZombieBanchee = false;
+	m_pPlayer->m_bIsZombieStamp = false;
 	m_pPlayer->m_bNotKilled = false;
 	m_pPlayer->m_iZombieLevel = iEvolutionLevel;
+	if(m_pPlayer->m_bIsZombieTank == true)
+	{
+		m_pPlayer->GiveNamedItem("knife_zombi"); 
+	}
 
 	m_pPlayer->pev->body = 0;
 	m_pPlayer->m_iModelName = iEvolutionLevel ? MODEL_ZOMBIE_ORIGIN : MODEL_ZOMBIE_HOST;
@@ -58,12 +72,12 @@ CZombie_ZB1::CZombie_ZB1(CBasePlayer *player, ZombieLevel iEvolutionLevel) : Bas
 	m_pPlayer->ClientCommand("nightvision");
 
 	// set default property
-	m_pPlayer->pev->health = m_pPlayer->pev->max_health = 2000;
+	m_pPlayer->pev->health = m_pPlayer->pev->max_health = 25000;
 	m_pPlayer->pev->armortype = ARMOR_TYPE_HELMET;
 	m_pPlayer->pev->armorvalue = 800;
 	m_pPlayer->pev->gravity = 0.83f;
 	m_pPlayer->ResetMaxSpeed();
-
+	
 }
 
 void CZombie_ZB1::ResetMaxSpeed() const

@@ -67,10 +67,14 @@ void CSgdrill::Precache(void)
 int CSgdrill::GetItemInfo(ItemInfo *p)
 {
 	p->pszName = STRING(pev->classname);
-	p->pszAmmo1 = "SgdrillAmmo";
+	p->pszAmmo1 = "buckshot";
 	p->iMaxAmmo1 = 105;
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
+	p->pszAmmo3 = NULL;
+	p->iMaxAmmo3 = -1;
+	p->pszAmmoGrenade = NULL;
+	p->iMaxAmmoGrenade = -1;
 	p->iMaxClip = SGDRILL_MAX_CLIP;
 	p->iSlot = 0;
 	p->iPosition = 12;
@@ -152,6 +156,8 @@ void CSgdrill::PrimaryAttack(void)
 
 	PLAYBACK_EVENT_FULL(flags, ENT(m_pPlayer->pev), m_usFireSgdrill, 0, (float *)&g_vecZero, (float *)&g_vecZero, m_vVecAiming.x, m_vVecAiming.y, 7, m_vVecAiming.x * 100, m_iClip != 0, FALSE);
 
+	SendWeaponAnim(SGDRILL_FIRE, UseDecrement() != FALSE);
+	EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/sgdrill-1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 
 #ifndef CLIENT_DLL
 	if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)

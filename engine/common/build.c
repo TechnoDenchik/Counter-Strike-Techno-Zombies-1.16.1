@@ -19,7 +19,7 @@ GNU General Public License for more details.
 
 #if defined(XASH_GENERATE_BUILDNUM)
 static char *date = __DATE__;
-static char *mon[12] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+static char *mon[12] = { "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" };
 static char mond[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 #endif
 
@@ -120,7 +120,7 @@ const char *Q_buildarch( void )
 #if defined( __x86_64__) || defined(_M_X64)
 	archname = "amd64";
 #elif defined(__i386__) || defined(_X86_) || defined(_M_IX86)
-	archname = "x32";
+	archname = "x86";
 #elif defined(__aarch64__) || defined(_M_ARM64)
 	archname = "arm64";
 #elif defined __arm__ || defined _M_ARM

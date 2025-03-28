@@ -116,6 +116,7 @@ extern int gmsgZB3Msg;
 extern int gmsgZB3RenMsg;
 extern int gmsgZB3UsedMsg;
 extern int gmsgZB3UsedMsg2;
+extern int gmsgZB3InventorySet;
 extern int gmsgZSHMsg;
 extern int gmsgZSHMsgText;
 extern int gmsgZSHMsgTextNextDay;
@@ -150,6 +151,7 @@ extern int gmsgTwinAxesMsg;
 extern int gmsgQuantumMsg;
 extern int gmsgArbalestMsg;
 extern int gmsgZSHUpdateTime;
+extern int gmsgMPToCL;
 
 void LinkUserMessages();
 void WriteSigonMessages();

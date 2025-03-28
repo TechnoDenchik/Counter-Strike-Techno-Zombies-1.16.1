@@ -110,7 +110,8 @@
 #define EF_NOINTERP			32	// don't interpolate the next frame
 #define EF_LIGHT			64	// rocket flare glow sprite
 #define EF_NODRAW			128	// don't draw entity
-
+#define EF_MUZZLEFLASH2		256	// single frame ELIGHT on entity attachment 0
+#define EF_MUZZLEFLASH3		512	// single frame ELIGHT on entity attachment 0
 
 
 #define EF_NOREFLECT		(1<<24)	// Entity won't reflecting in mirrors
@@ -535,7 +536,7 @@
 // From HLSDK 2.4
 #define TEFIRE_FLAG_ADDITIVE	32 // if set, sprite is rendered non-opaque with additive
 
-#define TE_PLAYERATTACHMENT		124	// attaches a TENT to a player (this is a high-priority tent)
+#define TE_PLAYERATTACHMENT		1024	// attaches a TENT to a player (this is a high-priority tent)
 // byte (entity index of player)
 // coord (vertical offset) ( attachment origin.z = player origin.z + vertical offset )
 // short (model index)
@@ -563,6 +564,25 @@
 // byte (count)
 // byte (bullethole decal texture index)
 
+#define TE_TEMPMODEL				131	// a customized model
+// coord, coord, coord (position)
+// angle, angle, angle (angles)
+// coord, coord, coord (velocity)
+// short (model index)
+// byte (life * 10)
+// short (sequence)
+// byte (framerate)
+// byte (fade out)
+// byte (brightness)
+// byte (rendermode)
+// short (player index)
+// byte (fade out speed)
+// byte (fade in)
+// byte (fade in speed)
+// byte (scale * 10)
+// short (frame max)
+// long (tempentity flags)
+
 #define TE_USERTRACER		127	// larger message than the standard tracer, but allows some customization.
 // coord (origin)
 // coord (origin)
@@ -584,6 +604,7 @@
 #define MSG_PAS_R			7	// Reliable to PAS
 #define MSG_ONE_UNRELIABLE		8	// Send to one client, but don't put in reliable stream, put in unreliable datagram ( could be dropped )
 #define MSG_SPEC			9	// Sends to all spectator proxies
+#define MSG_EXCLUDESOURCE			10	// Sends to all spectator proxies
 
 // contents of a spot in the world
 #define CONTENTS_EMPTY		-1

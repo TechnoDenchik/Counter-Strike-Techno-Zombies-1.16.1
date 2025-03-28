@@ -109,6 +109,10 @@ struct ItemInfo
 	int iMaxAmmo1;
 	const char *pszAmmo2;
 	int iMaxAmmo2;
+	const char* pszAmmo3;
+	int iMaxAmmo3;
+	const char* pszAmmoGrenade;
+	int iMaxAmmoGrenade;
 	const char *pszName;
 	int iMaxClip;
 	int iId;
@@ -333,6 +337,10 @@ public:
 	inline int iMaxAmmo1() const		{ return ItemInfoInstance().iMaxAmmo1; }
 	inline const char *pszAmmo2() const	{ return ItemInfoInstance().pszAmmo2; }
 	inline int iMaxAmmo2() const		{ return ItemInfoInstance().iMaxAmmo2; }
+	inline const char* pszAmmo3() const { return ItemInfoInstance().pszAmmo3; }
+	inline int iMaxAmmo3() const { return ItemInfoInstance().iMaxAmmo3; }
+	inline const char* pszAmmoGrenade() const { return ItemInfoInstance().pszAmmoGrenade; }
+	inline int iMaxAmmoGrenade() const { return ItemInfoInstance().iMaxAmmoGrenade; }
 	inline const char *pszName() const	{ return ItemInfoInstance().pszName; }
 	inline int iMaxClip() const		{ return ItemInfoInstance().iMaxClip; }
 	inline int iWeight() const		{ return ItemInfoInstance().iWeight; }
@@ -442,6 +450,8 @@ public:
 	float m_flTimeWeaponIdle;
 	int m_iPrimaryAmmoType;
 	int m_iSecondaryAmmoType;
+	int m_iKnifeAmmoType;
+	int m_iGrenadeAmmoType;
 	int m_iClip;
 	int m_iClip2;
 	int m_iClientClip;

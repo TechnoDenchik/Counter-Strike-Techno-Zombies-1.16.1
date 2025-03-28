@@ -23,7 +23,6 @@
 #include "netadr.h"
 
 #include <string.h>
-//#include "interface.h" // not used here
 #include "render_api.h"
 #include "mobility_int.h"
 #include "vgui_parser.h"
@@ -178,8 +177,6 @@ int DLLEXPORT HUD_VidInit( void )
 
 	isLoaded = true;
 
-	vgui2::ivgui;
-
 	return 1;
 }
 
@@ -197,7 +194,6 @@ void DLLEXPORT HUD_Init( void )
 {
 	InitInput();
 	gHUD.Init();
-	vgui2::scheme;
 }
 
 
@@ -325,17 +321,6 @@ int DLLEXPORT HUD_GetRenderInterface( int version, render_api_t *renderfuncs, re
 
 	gRenderAPI = *renderfuncs;
 
-	// we didn't send callbacks to engine, because we don't use it
-	// *callback = renderInterface;
-
-	// we have here a Host_Error, so check Xash for version
-#ifdef __ANDROID__
-	if( g_iXash < 3224 )
-	{
-		gRenderAPI.Host_Error("Xash3D Android version check failed!\nPlease update your Xash3D Android!\n");
-	}
-#endif
-
 	return true;
 }
 
@@ -350,13 +335,6 @@ int DLLEXPORT HUD_MobilityInterface( mobile_engfuncs_t *mobileapi )
 	{
 		gEngfuncs.Con_Printf("Client Error: Mobile API version mismatch. Got: %i, want: %i\n",
 			mobileapi->version, MOBILITY_API_VERSION);
-
-#ifdef __ANDROID__
-		if( gRenderAPI.Host_Error )
-		{
-			gRenderAPI.Host_Error("Xash3D Android version check failed!\nPlease update your Xash3D Android!\n");
-		}
-#endif
 		return 1;
 	}
 

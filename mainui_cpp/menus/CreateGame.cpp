@@ -124,14 +124,23 @@ public:
 	void ResetMap(int value);
 	void ResetMode(const char* value);
 
-	
-
 	char* mapsDescriptionPtr[UI_MAXGAMES];
 
 	bool ischecksetmap;
 	bool ischecksetmode;
 
+	bool modenone;
+	bool modedm;
+	bool modetdm;
+	bool modegd;
+	bool modezb1;
+	bool modezb3;
+	bool modezbs;
+	bool modezsh;
+
 	int stringmaplist;
+	int stringmaplist2;
+	int stringmaplist3;
 
 	CMenuField	maxClients;
 	CMenuField	hostName;
@@ -195,7 +204,7 @@ public:
 class CMenuVidPreview : public 
 
 	CMenuBitmap {} 
-						uparrow, downarrow, playbutton, mapassault, mapitaly, mapvertigo, mapinferno, mapnuke, mapdust, mapmirage,
+			uparrow, downarrow, playbutton, mapassault, mapitaly, mapvertigo, mapinferno, mapnuke, mapdust, mapmirage,
 					mapgressia, mapruin,mapbigtree, mapdustmini, mapcs747, mapestate, maphavana, mapmilitia,
 				 mapoffice, mapsiege, mapangelcity, mapaztec, mapcbble, mapchateau, mapprodigy, maprats, mapsantorini,
 					 mapskyscraper, maptorn, mapdarksnow, mapgalery, mapindustry, mapindustry2, mapmoonlight, mapport, mapabyss,
@@ -227,8 +236,38 @@ class CMenuVidPreview : public
 	CMenuTable        mapsList;
 	CMenuMapListModel mapsListModel;
 
+	CMenuPicButton Inventory;
 	CMenuPicButton* done;
-	CMenuPicButton Adv, Adv1;
+	CMenuPicButton 
+		Adv, 
+		textmap, 
+		textmap2, 
+		textmap3, 
+		textmap4, 
+		textmap5, 
+		textmap6, 
+		textmap7, 
+		textmap8,
+		textmap9,
+		textmap10,
+		textmap11,
+		textmap12,
+		textmap13,
+		textmap14,
+		textmap15,
+		textmap16,
+		textmap17,
+		textmap18,
+		textmap19,
+		textmap20,
+		textmap21,
+		textmap22,
+		textmap23,
+		textmap24,
+		textmap25,
+		textmap26,
+		textmap27,
+		textmap28;
 	CMenuPicButton Exit, Exit1;
 private:
 	void _Init() override;
@@ -427,6 +466,15 @@ void CMenuCreateGame::ResetMode(const char *value)
 		EngFuncs::CvarSetString("mp_gamemode", value);
 		ischecksetmode = true;
 
+		modenone = true;
+		modedm = false;
+		modetdm = false;
+		modegd = false;
+		modezb1 = false;
+		modezb3 = false;
+		modezbs = false;
+		modezsh = false;
+
 		classic.bChecked = true;
 		dm.bChecked = false;
 		tdm.bChecked = false;
@@ -475,6 +523,15 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetTorn.Hide();
 		MapSetDarkSnow.Hide();
 
+		uparrow.Show();
+		downarrow.Show();
+
+		mapnightmare.Hide();
+		MapSetNightMare.Hide();
+		nightmare.Hide();
+		textmap28.Hide();
+		nightmare.bChecked = false;
+
 		MapSetBigTree.Hide();
 		MapSetDustMini.Hide();
 		MapSet747.Hide();
@@ -493,6 +550,321 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetMirage.Hide();
 		MapSetGressia.Hide();
 		MapSetRuin.Hide();
+
+		if (stringmaplist == 1)
+		{
+			textmap.SetNameAndStatus(L("Assault"), L(""));
+			textmap2.SetNameAndStatus(L("Italy"), L(""));
+			textmap3.SetNameAndStatus(L("Vertigo"), L(""));
+
+			textmap4.SetNameAndStatus(L("Inferno"), L(""));
+			textmap5.SetNameAndStatus(L("Nuke"), L(""));
+			textmap6.SetNameAndStatus(L("Dust II"), L(""));
+
+			textmap7.SetNameAndStatus(L("Mirage"), L(""));
+			textmap8.SetNameAndStatus(L("Greesia"), L(""));
+			textmap9.SetNameAndStatus(L("Ruin"), L(""));
+
+			textmap.Show();
+			textmap2.Show();
+			textmap3.Show();
+			textmap4.Show();
+			textmap5.Show();
+			textmap6.Show();
+			textmap7.Show();
+			textmap8.Show();
+			textmap9.Show();
+
+			textmap10.Hide();
+			textmap11.Hide();
+			textmap12.Hide();
+			textmap13.Hide();
+			textmap14.Hide();
+			textmap15.Hide();
+			textmap16.Hide();
+			textmap17.Hide();
+			textmap18.Hide();
+
+			textmap19.Hide();
+			textmap20.Hide();
+			textmap21.Hide();
+			textmap22.Hide();
+			textmap23.Hide();
+			textmap24.Hide();
+			textmap25.Hide();
+			textmap26.Hide();
+			textmap27.Hide();
+
+			mapassault.Show();
+			mapitaly.Show();
+			mapvertigo.Show();
+			mapinferno.Show();
+			mapnuke.Show();
+			mapdust.Show();
+			mapmirage.Show();
+			mapgressia.Show();
+			mapruin.Show();
+
+			assault.Show();
+			vertigo.Show();
+			italy.Show();
+			nuke.Show();
+			dust2.Show();
+			inferno.Show();
+			mirage.Show();
+			gressia.Show();
+			ruin.Show();
+
+			bigtree.Hide();
+			dustmini.Hide();
+			cs747.Hide();
+			estate.Hide();
+			havana.Hide();
+			militia.Hide();
+			office.Hide();
+			siege.Hide();
+			angelcity.Hide();
+
+			mapbigtree.Hide();
+			mapdustmini.Hide();
+			mapcs747.Hide();
+			mapestate.Hide();
+			maphavana.Hide();
+			mapmilitia.Hide();
+			mapoffice.Hide();
+			mapsiege.Hide();
+			mapangelcity.Hide();
+
+			aztec.Hide();
+			cbble.Hide();
+			chateau.Hide();
+			prodigy.Hide();
+			rats.Hide();
+			santorini.Hide();
+			skyscraper.Hide();
+			torn.Hide();
+			darksnow.Hide();
+
+			mapaztec.Hide();
+			mapcbble.Hide();
+			mapchateau.Hide();
+			mapprodigy.Hide();
+			maprats.Hide();
+			mapsantorini.Hide();
+			mapskyscraper.Hide();
+			maptorn.Hide();
+			mapdarksnow.Hide();
+		}
+		else if (stringmaplist == 2)
+		{
+			textmap10.SetNameAndStatus(L("BigTree"), L(""));
+			textmap11.SetNameAndStatus(L("Dust EX"), L(""));
+			textmap12.SetNameAndStatus(L("747"), L(""));
+
+			textmap13.SetNameAndStatus(L("Estate"), L(""));
+			textmap14.SetNameAndStatus(L("Havana"), L(""));
+			textmap15.SetNameAndStatus(L("Militia"), L(""));
+
+			textmap16.SetNameAndStatus(L("Office"), L(""));
+			textmap17.SetNameAndStatus(L("Siege"), L(""));
+			textmap18.SetNameAndStatus(L("Angel City"), L(""));
+
+			textmap.Hide();
+			textmap2.Hide();
+			textmap3.Hide();
+			textmap4.Hide();
+			textmap5.Hide();
+			textmap6.Hide();
+			textmap7.Hide();
+			textmap8.Hide();
+			textmap9.Hide();
+
+			textmap10.Show();
+			textmap11.Show();
+			textmap12.Show();
+			textmap13.Show();
+			textmap14.Show();
+			textmap15.Show();
+			textmap16.Show();
+			textmap17.Show();
+			textmap18.Show();
+
+			textmap19.Hide();
+			textmap20.Hide();
+			textmap21.Hide();
+			textmap22.Hide();
+			textmap23.Hide();
+			textmap24.Hide();
+			textmap25.Hide();
+			textmap26.Hide();
+			textmap27.Hide();
+
+			mapassault.Hide();
+			mapitaly.Hide();
+			mapvertigo.Hide();
+			mapinferno.Hide();
+			mapnuke.Hide();
+			mapdust.Hide();
+			mapmirage.Hide();
+			mapgressia.Hide();
+			mapruin.Hide();
+
+			assault.Hide();
+			vertigo.Hide();
+			italy.Hide();
+			nuke.Hide();
+			dust2.Hide();
+			inferno.Hide();
+			mirage.Hide();
+			gressia.Hide();
+			ruin.Hide();
+
+			bigtree.Show();
+			dustmini.Show();
+			cs747.Show();
+			estate.Show();
+			havana.Show();
+			militia.Show();
+			office.Show();
+			siege.Show();
+			angelcity.Show();
+
+			mapbigtree.Show();
+			mapdustmini.Show();
+			mapcs747.Show();
+			mapestate.Show();
+			maphavana.Show();
+			mapmilitia.Show();
+			mapoffice.Show();
+			mapsiege.Show();
+			mapangelcity.Show();
+
+			aztec.Hide();
+			cbble.Hide();
+			chateau.Hide();
+			prodigy.Hide();
+			rats.Hide();
+			santorini.Hide();
+			skyscraper.Hide();
+			torn.Hide();
+			darksnow.Hide();
+
+			mapaztec.Hide();
+			mapcbble.Hide();
+			mapchateau.Hide();
+			mapprodigy.Hide();
+			maprats.Hide();
+			mapsantorini.Hide();
+			mapskyscraper.Hide();
+			maptorn.Hide();
+			mapdarksnow.Hide();
+		}
+		else if (stringmaplist == 3)
+		{
+			textmap19.SetNameAndStatus(L("Aztec"), L(""));
+			textmap20.SetNameAndStatus(L("CobbleStone"), L(""));
+			textmap21.SetNameAndStatus(L("ChateAu"), L(""));
+
+			textmap22.SetNameAndStatus(L("Prodigy"), L(""));
+			textmap23.SetNameAndStatus(L("Rats"), L(""));
+			textmap24.SetNameAndStatus(L("Santorini"), L(""));
+
+			textmap25.SetNameAndStatus(L("SkyScraper"), L(""));
+			textmap26.SetNameAndStatus(L("Torn"), L(""));
+			textmap27.SetNameAndStatus(L("DarkSnow"), L(""));
+
+			textmap.Hide();
+			textmap2.Hide();
+			textmap3.Hide();
+			textmap4.Hide();
+			textmap5.Hide();
+			textmap6.Hide();
+			textmap7.Hide();
+			textmap8.Hide();
+			textmap9.Hide();
+
+			textmap10.Hide();
+			textmap11.Hide();
+			textmap12.Hide();
+			textmap13.Hide();
+			textmap14.Hide();
+			textmap15.Hide();
+			textmap16.Hide();
+			textmap17.Hide();
+			textmap18.Hide();
+
+			textmap19.Show();
+			textmap20.Show();
+			textmap21.Show();
+			textmap22.Show();
+			textmap23.Show();
+			textmap24.Show();
+			textmap25.Show();
+			textmap26.Show();
+			textmap27.Show();
+
+			mapassault.Hide();
+			mapitaly.Hide();
+			mapvertigo.Hide();
+			mapinferno.Hide();
+			mapnuke.Hide();
+			mapdust.Hide();
+			mapmirage.Hide();
+			mapgressia.Hide();
+			mapruin.Hide();
+
+			assault.Hide();
+			vertigo.Hide();
+			italy.Hide();
+			nuke.Hide();
+			dust2.Hide();
+			inferno.Hide();
+			mirage.Hide();
+			gressia.Hide();
+			ruin.Hide();
+
+
+
+			bigtree.Hide();
+			dustmini.Hide();
+			cs747.Hide();
+			estate.Hide();
+			havana.Hide();
+			militia.Hide();
+			office.Hide();
+			siege.Hide();
+			angelcity.Hide();
+
+			mapbigtree.Hide();
+			mapdustmini.Hide();
+			mapcs747.Hide();
+			mapestate.Hide();
+			maphavana.Hide();
+			mapmilitia.Hide();
+			mapoffice.Hide();
+			mapsiege.Hide();
+			mapangelcity.Hide();
+
+			aztec.Show();
+			cbble.Show();
+			chateau.Show();
+			prodigy.Show();
+			rats.Show();
+			santorini.Show();
+			skyscraper.Show();
+			torn.Show();
+			darksnow.Show();
+
+			mapaztec.Show();
+			mapcbble.Show();
+			mapchateau.Show();
+			mapprodigy.Show();
+			maprats.Show();
+			mapsantorini.Show();
+			mapskyscraper.Show();
+			maptorn.Show();
+			mapdarksnow.Show();
+		}
 	}
 	else if (value == "dm")
 	{
@@ -500,6 +872,15 @@ void CMenuCreateGame::ResetMode(const char *value)
 		EngFuncs::CvarSetString("mp_gamemode", value);
 		ischecksetmode = true;
 		
+		modenone = false;
+		modedm = true;
+		modetdm = false;
+		modegd = false;
+		modezb1 = false;
+		modezb3 = false;
+		modezbs = false;
+		modezsh = false;
+
 		classic.bChecked = false;
 		dm.bChecked = true;
 		tdm.bChecked = false;
@@ -548,6 +929,15 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetTorn.Hide();
 		MapSetDarkSnow.Hide();
 
+		uparrow.Show();
+		downarrow.Show();
+
+		mapnightmare.Hide();
+		MapSetNightMare.Hide();
+		nightmare.Hide();
+		textmap28.Hide();
+		nightmare.bChecked = false;
+
 		MapSetBigTree.Hide();
 		MapSetDustMini.Hide();
 		MapSet747.Hide();
@@ -566,12 +956,336 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetMirage.Hide();
 		MapSetGressia.Hide();
 		MapSetRuin.Hide();
+
+		if (stringmaplist == 1)
+		{
+			textmap.SetNameAndStatus(L("Assault"), L(""));
+			textmap2.SetNameAndStatus(L("Italy"), L(""));
+			textmap3.SetNameAndStatus(L("Vertigo"), L(""));
+
+			textmap4.SetNameAndStatus(L("Inferno"), L(""));
+			textmap5.SetNameAndStatus(L("Nuke"), L(""));
+			textmap6.SetNameAndStatus(L("Dust II"), L(""));
+
+			textmap7.SetNameAndStatus(L("Mirage"), L(""));
+			textmap8.SetNameAndStatus(L("Greesia"), L(""));
+			textmap9.SetNameAndStatus(L("Ruin"), L(""));
+
+			textmap.Show();
+			textmap2.Show();
+			textmap3.Show();
+			textmap4.Show();
+			textmap5.Show();
+			textmap6.Show();
+			textmap7.Show();
+			textmap8.Show();
+			textmap9.Show();
+
+			textmap10.Hide();
+			textmap11.Hide();
+			textmap12.Hide();
+			textmap13.Hide();
+			textmap14.Hide();
+			textmap15.Hide();
+			textmap16.Hide();
+			textmap17.Hide();
+			textmap18.Hide();
+
+			textmap19.Hide();
+			textmap20.Hide();
+			textmap21.Hide();
+			textmap22.Hide();
+			textmap23.Hide();
+			textmap24.Hide();
+			textmap25.Hide();
+			textmap26.Hide();
+			textmap27.Hide();
+
+			mapassault.Show();
+			mapitaly.Show();
+			mapvertigo.Show();
+			mapinferno.Show();
+			mapnuke.Show();
+			mapdust.Show();
+			mapmirage.Show();
+			mapgressia.Show();
+			mapruin.Show();
+
+			assault.Show();
+			vertigo.Show();
+			italy.Show();
+			nuke.Show();
+			dust2.Show();
+			inferno.Show();
+			mirage.Show();
+			gressia.Show();
+			ruin.Show();
+
+			bigtree.Hide();
+			dustmini.Hide();
+			cs747.Hide();
+			estate.Hide();
+			havana.Hide();
+			militia.Hide();
+			office.Hide();
+			siege.Hide();
+			angelcity.Hide();
+
+			mapbigtree.Hide();
+			mapdustmini.Hide();
+			mapcs747.Hide();
+			mapestate.Hide();
+			maphavana.Hide();
+			mapmilitia.Hide();
+			mapoffice.Hide();
+			mapsiege.Hide();
+			mapangelcity.Hide();
+
+			aztec.Hide();
+			cbble.Hide();
+			chateau.Hide();
+			prodigy.Hide();
+			rats.Hide();
+			santorini.Hide();
+			skyscraper.Hide();
+			torn.Hide();
+			darksnow.Hide();
+
+			mapaztec.Hide();
+			mapcbble.Hide();
+			mapchateau.Hide();
+			mapprodigy.Hide();
+			maprats.Hide();
+			mapsantorini.Hide();
+			mapskyscraper.Hide();
+			maptorn.Hide();
+			mapdarksnow.Hide();
+		}
+		else if (stringmaplist == 2)
+		{
+			textmap10.SetNameAndStatus(L("BigTree"), L(""));
+			textmap11.SetNameAndStatus(L("Dust EX"), L(""));
+			textmap12.SetNameAndStatus(L("747"), L(""));
+
+			textmap13.SetNameAndStatus(L("Estate"), L(""));
+			textmap14.SetNameAndStatus(L("Havana"), L(""));
+			textmap15.SetNameAndStatus(L("Militia"), L(""));
+
+			textmap16.SetNameAndStatus(L("Office"), L(""));
+			textmap17.SetNameAndStatus(L("Siege"), L(""));
+			textmap18.SetNameAndStatus(L("Angel City"), L(""));
+
+			textmap.Hide();
+			textmap2.Hide();
+			textmap3.Hide();
+			textmap4.Hide();
+			textmap5.Hide();
+			textmap6.Hide();
+			textmap7.Hide();
+			textmap8.Hide();
+			textmap9.Hide();
+
+			textmap10.Show();
+			textmap11.Show();
+			textmap12.Show();
+			textmap13.Show();
+			textmap14.Show();
+			textmap15.Show();
+			textmap16.Show();
+			textmap17.Show();
+			textmap18.Show();
+
+			textmap19.Hide();
+			textmap20.Hide();
+			textmap21.Hide();
+			textmap22.Hide();
+			textmap23.Hide();
+			textmap24.Hide();
+			textmap25.Hide();
+			textmap26.Hide();
+			textmap27.Hide();
+
+			mapassault.Hide();
+			mapitaly.Hide();
+			mapvertigo.Hide();
+			mapinferno.Hide();
+			mapnuke.Hide();
+			mapdust.Hide();
+			mapmirage.Hide();
+			mapgressia.Hide();
+			mapruin.Hide();
+
+			assault.Hide();
+			vertigo.Hide();
+			italy.Hide();
+			nuke.Hide();
+			dust2.Hide();
+			inferno.Hide();
+			mirage.Hide();
+			gressia.Hide();
+			ruin.Hide();
+
+			bigtree.Show();
+			dustmini.Show();
+			cs747.Show();
+			estate.Show();
+			havana.Show();
+			militia.Show();
+			office.Show();
+			siege.Show();
+			angelcity.Show();
+
+			mapbigtree.Show();
+			mapdustmini.Show();
+			mapcs747.Show();
+			mapestate.Show();
+			maphavana.Show();
+			mapmilitia.Show();
+			mapoffice.Show();
+			mapsiege.Show();
+			mapangelcity.Show();
+
+			aztec.Hide();
+			cbble.Hide();
+			chateau.Hide();
+			prodigy.Hide();
+			rats.Hide();
+			santorini.Hide();
+			skyscraper.Hide();
+			torn.Hide();
+			darksnow.Hide();
+
+			mapaztec.Hide();
+			mapcbble.Hide();
+			mapchateau.Hide();
+			mapprodigy.Hide();
+			maprats.Hide();
+			mapsantorini.Hide();
+			mapskyscraper.Hide();
+			maptorn.Hide();
+			mapdarksnow.Hide();
+		}
+		else if (stringmaplist == 3)
+		{
+			textmap19.SetNameAndStatus(L("Aztec"), L(""));
+			textmap20.SetNameAndStatus(L("CobbleStone"), L(""));
+			textmap21.SetNameAndStatus(L("ChateAu"), L(""));
+
+			textmap22.SetNameAndStatus(L("Prodigy"), L(""));
+			textmap23.SetNameAndStatus(L("Rats"), L(""));
+			textmap24.SetNameAndStatus(L("Santorini"), L(""));
+
+			textmap25.SetNameAndStatus(L("SkyScraper"), L(""));
+			textmap26.SetNameAndStatus(L("Torn"), L(""));
+			textmap27.SetNameAndStatus(L("DarkSnow"), L(""));
+
+			textmap.Hide();
+			textmap2.Hide();
+			textmap3.Hide();
+			textmap4.Hide();
+			textmap5.Hide();
+			textmap6.Hide();
+			textmap7.Hide();
+			textmap8.Hide();
+			textmap9.Hide();
+
+			textmap10.Hide();
+			textmap11.Hide();
+			textmap12.Hide();
+			textmap13.Hide();
+			textmap14.Hide();
+			textmap15.Hide();
+			textmap16.Hide();
+			textmap17.Hide();
+			textmap18.Hide();
+
+			textmap19.Show();
+			textmap20.Show();
+			textmap21.Show();
+			textmap22.Show();
+			textmap23.Show();
+			textmap24.Show();
+			textmap25.Show();
+			textmap26.Show();
+			textmap27.Show();
+
+			mapassault.Hide();
+			mapitaly.Hide();
+			mapvertigo.Hide();
+			mapinferno.Hide();
+			mapnuke.Hide();
+			mapdust.Hide();
+			mapmirage.Hide();
+			mapgressia.Hide();
+			mapruin.Hide();
+
+			assault.Hide();
+			vertigo.Hide();
+			italy.Hide();
+			nuke.Hide();
+			dust2.Hide();
+			inferno.Hide();
+			mirage.Hide();
+			gressia.Hide();
+			ruin.Hide();
+
+
+
+			bigtree.Hide();
+			dustmini.Hide();
+			cs747.Hide();
+			estate.Hide();
+			havana.Hide();
+			militia.Hide();
+			office.Hide();
+			siege.Hide();
+			angelcity.Hide();
+
+			mapbigtree.Hide();
+			mapdustmini.Hide();
+			mapcs747.Hide();
+			mapestate.Hide();
+			maphavana.Hide();
+			mapmilitia.Hide();
+			mapoffice.Hide();
+			mapsiege.Hide();
+			mapangelcity.Hide();
+
+			aztec.Show();
+			cbble.Show();
+			chateau.Show();
+			prodigy.Show();
+			rats.Show();
+			santorini.Show();
+			skyscraper.Show();
+			torn.Show();
+			darksnow.Show();
+
+			mapaztec.Show();
+			mapcbble.Show();
+			mapchateau.Show();
+			mapprodigy.Show();
+			maprats.Show();
+			mapsantorini.Show();
+			mapskyscraper.Show();
+			maptorn.Show();
+			mapdarksnow.Show();
+		}
 	}
 	else if (value == "tdm")
 	{
 		tdm.LinkCvar("mp_gamemode");
 		EngFuncs::CvarSetString("mp_gamemode", value);
 		ischecksetmode = true;
+
+		modenone = false;
+		modedm = false;
+		modetdm = true;
+		modegd = false;
+		modezb1 = false;
+		modezb3 = false;
+		modezbs = false;
+		modezsh = false;
 
 		classic.bChecked = false;
 		dm.bChecked = false;
@@ -621,6 +1335,15 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetTorn.Hide();
 		MapSetDarkSnow.Hide();
 
+		uparrow.Show();
+		downarrow.Show();
+
+		mapnightmare.Hide();
+		MapSetNightMare.Hide();
+		nightmare.Hide();
+		textmap28.Hide();
+		nightmare.bChecked = false;
+
 		MapSetBigTree.Hide();
 		MapSetDustMini.Hide();
 		MapSet747.Hide();
@@ -639,12 +1362,336 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetMirage.Hide();
 		MapSetGressia.Hide();
 		MapSetRuin.Hide();
+
+		if (stringmaplist == 1)
+		{
+			textmap.SetNameAndStatus(L("Assault"), L(""));
+			textmap2.SetNameAndStatus(L("Italy"), L(""));
+			textmap3.SetNameAndStatus(L("Vertigo"), L(""));
+
+			textmap4.SetNameAndStatus(L("Inferno"), L(""));
+			textmap5.SetNameAndStatus(L("Nuke"), L(""));
+			textmap6.SetNameAndStatus(L("Dust II"), L(""));
+
+			textmap7.SetNameAndStatus(L("Mirage"), L(""));
+			textmap8.SetNameAndStatus(L("Greesia"), L(""));
+			textmap9.SetNameAndStatus(L("Ruin"), L(""));
+
+			textmap.Show();
+			textmap2.Show();
+			textmap3.Show();
+			textmap4.Show();
+			textmap5.Show();
+			textmap6.Show();
+			textmap7.Show();
+			textmap8.Show();
+			textmap9.Show();
+
+			textmap10.Hide();
+			textmap11.Hide();
+			textmap12.Hide();
+			textmap13.Hide();
+			textmap14.Hide();
+			textmap15.Hide();
+			textmap16.Hide();
+			textmap17.Hide();
+			textmap18.Hide();
+
+			textmap19.Hide();
+			textmap20.Hide();
+			textmap21.Hide();
+			textmap22.Hide();
+			textmap23.Hide();
+			textmap24.Hide();
+			textmap25.Hide();
+			textmap26.Hide();
+			textmap27.Hide();
+
+			mapassault.Show();
+			mapitaly.Show();
+			mapvertigo.Show();
+			mapinferno.Show();
+			mapnuke.Show();
+			mapdust.Show();
+			mapmirage.Show();
+			mapgressia.Show();
+			mapruin.Show();
+
+			assault.Show();
+			vertigo.Show();
+			italy.Show();
+			nuke.Show();
+			dust2.Show();
+			inferno.Show();
+			mirage.Show();
+			gressia.Show();
+			ruin.Show();
+
+			bigtree.Hide();
+			dustmini.Hide();
+			cs747.Hide();
+			estate.Hide();
+			havana.Hide();
+			militia.Hide();
+			office.Hide();
+			siege.Hide();
+			angelcity.Hide();
+
+			mapbigtree.Hide();
+			mapdustmini.Hide();
+			mapcs747.Hide();
+			mapestate.Hide();
+			maphavana.Hide();
+			mapmilitia.Hide();
+			mapoffice.Hide();
+			mapsiege.Hide();
+			mapangelcity.Hide();
+
+			aztec.Hide();
+			cbble.Hide();
+			chateau.Hide();
+			prodigy.Hide();
+			rats.Hide();
+			santorini.Hide();
+			skyscraper.Hide();
+			torn.Hide();
+			darksnow.Hide();
+
+			mapaztec.Hide();
+			mapcbble.Hide();
+			mapchateau.Hide();
+			mapprodigy.Hide();
+			maprats.Hide();
+			mapsantorini.Hide();
+			mapskyscraper.Hide();
+			maptorn.Hide();
+			mapdarksnow.Hide();
+		}
+		else if (stringmaplist == 2)
+		{
+			textmap10.SetNameAndStatus(L("BigTree"), L(""));
+			textmap11.SetNameAndStatus(L("Dust EX"), L(""));
+			textmap12.SetNameAndStatus(L("747"), L(""));
+
+			textmap13.SetNameAndStatus(L("Estate"), L(""));
+			textmap14.SetNameAndStatus(L("Havana"), L(""));
+			textmap15.SetNameAndStatus(L("Militia"), L(""));
+
+			textmap16.SetNameAndStatus(L("Office"), L(""));
+			textmap17.SetNameAndStatus(L("Siege"), L(""));
+			textmap18.SetNameAndStatus(L("Angel City"), L(""));
+
+			textmap.Hide();
+			textmap2.Hide();
+			textmap3.Hide();
+			textmap4.Hide();
+			textmap5.Hide();
+			textmap6.Hide();
+			textmap7.Hide();
+			textmap8.Hide();
+			textmap9.Hide();
+
+			textmap10.Show();
+			textmap11.Show();
+			textmap12.Show();
+			textmap13.Show();
+			textmap14.Show();
+			textmap15.Show();
+			textmap16.Show();
+			textmap17.Show();
+			textmap18.Show();
+
+			textmap19.Hide();
+			textmap20.Hide();
+			textmap21.Hide();
+			textmap22.Hide();
+			textmap23.Hide();
+			textmap24.Hide();
+			textmap25.Hide();
+			textmap26.Hide();
+			textmap27.Hide();
+
+			mapassault.Hide();
+			mapitaly.Hide();
+			mapvertigo.Hide();
+			mapinferno.Hide();
+			mapnuke.Hide();
+			mapdust.Hide();
+			mapmirage.Hide();
+			mapgressia.Hide();
+			mapruin.Hide();
+
+			assault.Hide();
+			vertigo.Hide();
+			italy.Hide();
+			nuke.Hide();
+			dust2.Hide();
+			inferno.Hide();
+			mirage.Hide();
+			gressia.Hide();
+			ruin.Hide();
+
+			bigtree.Show();
+			dustmini.Show();
+			cs747.Show();
+			estate.Show();
+			havana.Show();
+			militia.Show();
+			office.Show();
+			siege.Show();
+			angelcity.Show();
+
+			mapbigtree.Show();
+			mapdustmini.Show();
+			mapcs747.Show();
+			mapestate.Show();
+			maphavana.Show();
+			mapmilitia.Show();
+			mapoffice.Show();
+			mapsiege.Show();
+			mapangelcity.Show();
+
+			aztec.Hide();
+			cbble.Hide();
+			chateau.Hide();
+			prodigy.Hide();
+			rats.Hide();
+			santorini.Hide();
+			skyscraper.Hide();
+			torn.Hide();
+			darksnow.Hide();
+
+			mapaztec.Hide();
+			mapcbble.Hide();
+			mapchateau.Hide();
+			mapprodigy.Hide();
+			maprats.Hide();
+			mapsantorini.Hide();
+			mapskyscraper.Hide();
+			maptorn.Hide();
+			mapdarksnow.Hide();
+		}
+		else if (stringmaplist == 3)
+		{
+			textmap19.SetNameAndStatus(L("Aztec"), L(""));
+			textmap20.SetNameAndStatus(L("CobbleStone"), L(""));
+			textmap21.SetNameAndStatus(L("ChateAu"), L(""));
+
+			textmap22.SetNameAndStatus(L("Prodigy"), L(""));
+			textmap23.SetNameAndStatus(L("Rats"), L(""));
+			textmap24.SetNameAndStatus(L("Santorini"), L(""));
+
+			textmap25.SetNameAndStatus(L("SkyScraper"), L(""));
+			textmap26.SetNameAndStatus(L("Torn"), L(""));
+			textmap27.SetNameAndStatus(L("DarkSnow"), L(""));
+
+			textmap.Hide();
+			textmap2.Hide();
+			textmap3.Hide();
+			textmap4.Hide();
+			textmap5.Hide();
+			textmap6.Hide();
+			textmap7.Hide();
+			textmap8.Hide();
+			textmap9.Hide();
+
+			textmap10.Hide();
+			textmap11.Hide();
+			textmap12.Hide();
+			textmap13.Hide();
+			textmap14.Hide();
+			textmap15.Hide();
+			textmap16.Hide();
+			textmap17.Hide();
+			textmap18.Hide();
+
+			textmap19.Show();
+			textmap20.Show();
+			textmap21.Show();
+			textmap22.Show();
+			textmap23.Show();
+			textmap24.Show();
+			textmap25.Show();
+			textmap26.Show();
+			textmap27.Show();
+
+			mapassault.Hide();
+			mapitaly.Hide();
+			mapvertigo.Hide();
+			mapinferno.Hide();
+			mapnuke.Hide();
+			mapdust.Hide();
+			mapmirage.Hide();
+			mapgressia.Hide();
+			mapruin.Hide();
+
+			assault.Hide();
+			vertigo.Hide();
+			italy.Hide();
+			nuke.Hide();
+			dust2.Hide();
+			inferno.Hide();
+			mirage.Hide();
+			gressia.Hide();
+			ruin.Hide();
+
+
+
+			bigtree.Hide();
+			dustmini.Hide();
+			cs747.Hide();
+			estate.Hide();
+			havana.Hide();
+			militia.Hide();
+			office.Hide();
+			siege.Hide();
+			angelcity.Hide();
+
+			mapbigtree.Hide();
+			mapdustmini.Hide();
+			mapcs747.Hide();
+			mapestate.Hide();
+			maphavana.Hide();
+			mapmilitia.Hide();
+			mapoffice.Hide();
+			mapsiege.Hide();
+			mapangelcity.Hide();
+
+			aztec.Show();
+			cbble.Show();
+			chateau.Show();
+			prodigy.Show();
+			rats.Show();
+			santorini.Show();
+			skyscraper.Show();
+			torn.Show();
+			darksnow.Show();
+
+			mapaztec.Show();
+			mapcbble.Show();
+			mapchateau.Show();
+			mapprodigy.Show();
+			maprats.Show();
+			mapsantorini.Show();
+			mapskyscraper.Show();
+			maptorn.Show();
+			mapdarksnow.Show();
+		}
 	}
 	else if (value == "gd")
 	{
 		gd.LinkCvar("mp_gamemode");
 		EngFuncs::CvarSetString("mp_gamemode", value);
 		ischecksetmode = true;
+
+		modenone = false;
+		modedm = false;
+		modetdm = false;
+		modegd = true;
+		modezb1 = false;
+		modezb3 = false;
+		modezbs = false;
+		modezsh = false;
 
 		classic.bChecked = false;
 		dm.bChecked = false;
@@ -694,6 +1741,15 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetTorn.Hide();
 		MapSetDarkSnow.Hide();
 
+		uparrow.Show();
+		downarrow.Show();
+
+		mapnightmare.Hide();
+		MapSetNightMare.Hide();
+		nightmare.Hide();
+		textmap28.Hide();
+		nightmare.bChecked = false;
+
 		MapSetBigTree.Hide();
 		MapSetDustMini.Hide();
 		MapSet747.Hide();
@@ -718,6 +1774,15 @@ void CMenuCreateGame::ResetMode(const char *value)
 		zc.LinkCvar("mp_gamemode");
 		EngFuncs::CvarSetString("mp_gamemode", value);
 		ischecksetmode = true;
+
+		modenone = false;
+		modedm = false;
+		modetdm = false;
+		modegd = false;
+		modezb1 = true;
+		modezb3 = false;
+		modezbs = false;
+		modezsh = false;
 
 		classic.bChecked = false;
 		dm.bChecked = false;
@@ -767,6 +1832,15 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetTorn.Hide();
 		MapSetDarkSnow.Hide();
 
+		uparrow.Show();
+		downarrow.Show();
+
+		mapnightmare.Hide();
+		MapSetNightMare.Hide();
+		nightmare.Hide();
+		textmap28.Hide();
+		nightmare.bChecked = false;
+
 		MapSetBigTree.Hide();
 		MapSetDustMini.Hide();
 		MapSet747.Hide();
@@ -785,12 +1859,338 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetMirage.Hide();
 		MapSetGressia.Hide();
 		MapSetRuin.Hide();
+
+		if (stringmaplist == 1)
+		{
+			textmap.SetNameAndStatus(L("Assault"), L(""));
+			textmap2.SetNameAndStatus(L("Italy"), L(""));
+			textmap3.SetNameAndStatus(L("Vertigo"), L(""));
+
+			textmap4.SetNameAndStatus(L("Inferno"), L(""));
+			textmap5.SetNameAndStatus(L("Nuke"), L(""));
+			textmap6.SetNameAndStatus(L("Dust II"), L(""));
+
+			textmap7.SetNameAndStatus(L("Mirage"), L(""));
+			textmap8.SetNameAndStatus(L("Greesia"), L(""));
+			textmap9.SetNameAndStatus(L("Ruin"), L(""));
+
+			textmap.Show();
+			textmap2.Show();
+			textmap3.Show();
+			textmap4.Show();
+			textmap5.Show();
+			textmap6.Show();
+			textmap7.Show();
+			textmap8.Show();
+			textmap9.Show();
+
+			textmap10.Hide();
+			textmap11.Hide();
+			textmap12.Hide();
+			textmap13.Hide();
+			textmap14.Hide();
+			textmap15.Hide();
+			textmap16.Hide();
+			textmap17.Hide();
+			textmap18.Hide();
+
+			textmap19.Hide();
+			textmap20.Hide();
+			textmap21.Hide();
+			textmap22.Hide();
+			textmap23.Hide();
+			textmap24.Hide();
+			textmap25.Hide();
+			textmap26.Hide();
+			textmap27.Hide();
+
+			mapassault.Show();
+			mapitaly.Show();
+			mapvertigo.Show();
+			mapinferno.Show();
+			mapnuke.Show();
+			mapdust.Show();
+			mapmirage.Show();
+			mapgressia.Show();
+			mapruin.Show();
+
+			assault.Show();
+			vertigo.Show();
+			italy.Show();
+			nuke.Show();
+			dust2.Show();
+			inferno.Show();
+			mirage.Show();
+			gressia.Show();
+			ruin.Show();
+
+			bigtree.Hide();
+			dustmini.Hide();
+			cs747.Hide();
+			estate.Hide();
+			havana.Hide();
+			militia.Hide();
+			office.Hide();
+			siege.Hide();
+			angelcity.Hide();
+
+			mapbigtree.Hide();
+			mapdustmini.Hide();
+			mapcs747.Hide();
+			mapestate.Hide();
+			maphavana.Hide();
+			mapmilitia.Hide();
+			mapoffice.Hide();
+			mapsiege.Hide();
+			mapangelcity.Hide();
+
+			aztec.Hide();
+			cbble.Hide();
+			chateau.Hide();
+			prodigy.Hide();
+			rats.Hide();
+			santorini.Hide();
+			skyscraper.Hide();
+			torn.Hide();
+			darksnow.Hide();
+
+			mapaztec.Hide();
+			mapcbble.Hide();
+			mapchateau.Hide();
+			mapprodigy.Hide();
+			maprats.Hide();
+			mapsantorini.Hide();
+			mapskyscraper.Hide();
+			maptorn.Hide();
+			mapdarksnow.Hide();
+		}
+		else if (stringmaplist == 2)
+		{
+			textmap10.SetNameAndStatus(L("BigTree"), L(""));
+			textmap11.SetNameAndStatus(L("Dust EX"), L(""));
+			textmap12.SetNameAndStatus(L("747"), L(""));
+
+			textmap13.SetNameAndStatus(L("Estate"), L(""));
+			textmap14.SetNameAndStatus(L("Havana"), L(""));
+			textmap15.SetNameAndStatus(L("Militia"), L(""));
+
+			textmap16.SetNameAndStatus(L("Office"), L(""));
+			textmap17.SetNameAndStatus(L("Siege"), L(""));
+			textmap18.SetNameAndStatus(L("Angel City"), L(""));
+
+			textmap.Hide();
+			textmap2.Hide();
+			textmap3.Hide();
+			textmap4.Hide();
+			textmap5.Hide();
+			textmap6.Hide();
+			textmap7.Hide();
+			textmap8.Hide();
+			textmap9.Hide();
+
+			textmap10.Show();
+			textmap11.Show();
+			textmap12.Show();
+			textmap13.Show();
+			textmap14.Show();
+			textmap15.Show();
+			textmap16.Show();
+			textmap17.Show();
+			textmap18.Show();
+
+			textmap19.Hide();
+			textmap20.Hide();
+			textmap21.Hide();
+			textmap22.Hide();
+			textmap23.Hide();
+			textmap24.Hide();
+			textmap25.Hide();
+			textmap26.Hide();
+			textmap27.Hide();
+
+			mapassault.Hide();
+			mapitaly.Hide();
+			mapvertigo.Hide();
+			mapinferno.Hide();
+			mapnuke.Hide();
+			mapdust.Hide();
+			mapmirage.Hide();
+			mapgressia.Hide();
+			mapruin.Hide();
+
+			assault.Hide();
+			vertigo.Hide();
+			italy.Hide();
+			nuke.Hide();
+			dust2.Hide();
+			inferno.Hide();
+			mirage.Hide();
+			gressia.Hide();
+			ruin.Hide();
+
+			bigtree.Show();
+			dustmini.Show();
+			cs747.Show();
+			estate.Show();
+			havana.Show();
+			militia.Show();
+			office.Show();
+			siege.Show();
+			angelcity.Show();
+
+			mapbigtree.Show();
+			mapdustmini.Show();
+			mapcs747.Show();
+			mapestate.Show();
+			maphavana.Show();
+			mapmilitia.Show();
+			mapoffice.Show();
+			mapsiege.Show();
+			mapangelcity.Show();
+
+			aztec.Hide();
+			cbble.Hide();
+			chateau.Hide();
+			prodigy.Hide();
+			rats.Hide();
+			santorini.Hide();
+			skyscraper.Hide();
+			torn.Hide();
+			darksnow.Hide();
+
+			mapaztec.Hide();
+			mapcbble.Hide();
+			mapchateau.Hide();
+			mapprodigy.Hide();
+			maprats.Hide();
+			mapsantorini.Hide();
+			mapskyscraper.Hide();
+			maptorn.Hide();
+			mapdarksnow.Hide();
+		}
+		else if (stringmaplist == 3)
+		{
+			textmap19.SetNameAndStatus(L("Aztec"), L(""));
+			textmap20.SetNameAndStatus(L("CobbleStone"), L(""));
+			textmap21.SetNameAndStatus(L("ChateAu"), L(""));
+
+			textmap22.SetNameAndStatus(L("Prodigy"), L(""));
+			textmap23.SetNameAndStatus(L("Rats"), L(""));
+			textmap24.SetNameAndStatus(L("Santorini"), L(""));
+
+			textmap25.SetNameAndStatus(L("SkyScraper"), L(""));
+			textmap26.SetNameAndStatus(L("Torn"), L(""));
+			textmap27.SetNameAndStatus(L("DarkSnow"), L(""));
+
+			textmap.Hide();
+			textmap2.Hide();
+			textmap3.Hide();
+			textmap4.Hide();
+			textmap5.Hide();
+			textmap6.Hide();
+			textmap7.Hide();
+			textmap8.Hide();
+			textmap9.Hide();
+
+			textmap10.Hide();
+			textmap11.Hide();
+			textmap12.Hide();
+			textmap13.Hide();
+			textmap14.Hide();
+			textmap15.Hide();
+			textmap16.Hide();
+			textmap17.Hide();
+			textmap18.Hide();
+
+			textmap19.Show();
+			textmap20.Show();
+			textmap21.Show();
+			textmap22.Show();
+			textmap23.Show();
+			textmap24.Show();
+			textmap25.Show();
+			textmap26.Show();
+			textmap27.Show();
+
+			mapassault.Hide();
+			mapitaly.Hide();
+			mapvertigo.Hide();
+			mapinferno.Hide();
+			mapnuke.Hide();
+			mapdust.Hide();
+			mapmirage.Hide();
+			mapgressia.Hide();
+			mapruin.Hide();
+
+			assault.Hide();
+			vertigo.Hide();
+			italy.Hide();
+			nuke.Hide();
+			dust2.Hide();
+			inferno.Hide();
+			mirage.Hide();
+			gressia.Hide();
+			ruin.Hide();
+
+			mapnightmare.Hide();
+			MapSetNightMare.Hide();
+			nightmare.Hide();
+
+			bigtree.Hide();
+			dustmini.Hide();
+			cs747.Hide();
+			estate.Hide();
+			havana.Hide();
+			militia.Hide();
+			office.Hide();
+			siege.Hide();
+			angelcity.Hide();
+
+			mapbigtree.Hide();
+			mapdustmini.Hide();
+			mapcs747.Hide();
+			mapestate.Hide();
+			maphavana.Hide();
+			mapmilitia.Hide();
+			mapoffice.Hide();
+			mapsiege.Hide();
+			mapangelcity.Hide();
+
+			aztec.Show();
+			cbble.Show();
+			chateau.Show();
+			prodigy.Show();
+			rats.Show();
+			santorini.Show();
+			skyscraper.Show();
+			torn.Show();
+			darksnow.Show();
+
+			mapaztec.Show();
+			mapcbble.Show();
+			mapchateau.Show();
+			mapprodigy.Show();
+			maprats.Show();
+			mapsantorini.Show();
+			mapskyscraper.Show();
+			maptorn.Show();
+			mapdarksnow.Show();
+		}
 	}
 	else if (value == "zb3")
 	{
 		zh.LinkCvar("mp_gamemode");
 		EngFuncs::CvarSetString("mp_gamemode", value);
 		ischecksetmode = true;
+
+		modenone = false;
+		modedm = false;
+		modetdm = false;
+		modegd = false;
+		modezb1 = false;
+		modezb3 = true;
+		modezbs = false;
+		modezsh = false;
 
 		classic.bChecked = false;
 		dm.bChecked = false;
@@ -830,6 +2230,14 @@ void CMenuCreateGame::ResetMode(const char *value)
 		torn.bChecked = false;
 		darksnow.bChecked = false;
 
+		uparrow.Show();
+		downarrow.Show();
+
+		mapnightmare.Hide();
+		MapSetNightMare.Hide();
+		nightmare.Hide();
+		nightmare.bChecked = false;
+
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
 		MapSetChateau.Hide();
@@ -858,12 +2266,347 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetMirage.Hide();
 		MapSetGressia.Hide();
 		MapSetRuin.Hide();
+
+		if (stringmaplist == 1)
+		{
+			textmap.SetNameAndStatus(L("Assault"), L(""));
+			textmap2.SetNameAndStatus(L("Italy"), L(""));
+			textmap3.SetNameAndStatus(L("Vertigo"), L(""));
+
+			textmap4.SetNameAndStatus(L("Inferno"), L(""));
+			textmap5.SetNameAndStatus(L("Nuke"), L(""));
+			textmap6.SetNameAndStatus(L("Dust II"), L(""));
+
+			textmap7.SetNameAndStatus(L("Mirage"), L(""));
+			textmap8.SetNameAndStatus(L("Greesia"), L(""));
+			textmap9.SetNameAndStatus(L("Ruin"), L(""));
+
+			textmap.Show();
+			textmap2.Show();
+			textmap3.Show();
+			textmap4.Show();
+			textmap5.Show();
+			textmap6.Show();
+			textmap7.Show();
+			textmap8.Show();
+			textmap9.Show();
+
+			textmap10.Hide();
+			textmap11.Hide();
+			textmap12.Hide();
+			textmap13.Hide();
+			textmap14.Hide();
+			textmap15.Hide();
+			textmap16.Hide();
+			textmap17.Hide();
+			textmap18.Hide();
+
+			textmap19.Hide();
+			textmap20.Hide();
+			textmap21.Hide();
+			textmap22.Hide();
+			textmap23.Hide();
+			textmap24.Hide();
+			textmap25.Hide();
+			textmap26.Hide();
+			textmap27.Hide();
+
+			mapassault.Show();
+			mapitaly.Show();
+			mapvertigo.Show();
+			mapinferno.Show();
+			mapnuke.Show();
+			mapdust.Show();
+			mapmirage.Show();
+			mapgressia.Show();
+			mapruin.Show();
+
+			mapnightmare.Hide();
+			MapSetNightMare.Hide();
+			nightmare.Hide();
+			textmap28.Hide();
+
+			assault.Show();
+			vertigo.Show();
+			italy.Show();
+			nuke.Show();
+			dust2.Show();
+			inferno.Show();
+			mirage.Show();
+			gressia.Show();
+			ruin.Show();
+
+			bigtree.Hide();
+			dustmini.Hide();
+			cs747.Hide();
+			estate.Hide();
+			havana.Hide();
+			militia.Hide();
+			office.Hide();
+			siege.Hide();
+			angelcity.Hide();
+
+			mapbigtree.Hide();
+			mapdustmini.Hide();
+			mapcs747.Hide();
+			mapestate.Hide();
+			maphavana.Hide();
+			mapmilitia.Hide();
+			mapoffice.Hide();
+			mapsiege.Hide();
+			mapangelcity.Hide();
+
+			aztec.Hide();
+			cbble.Hide();
+			chateau.Hide();
+			prodigy.Hide();
+			rats.Hide();
+			santorini.Hide();
+			skyscraper.Hide();
+			torn.Hide();
+			darksnow.Hide();
+
+			mapaztec.Hide();
+			mapcbble.Hide();
+			mapchateau.Hide();
+			mapprodigy.Hide();
+			maprats.Hide();
+			mapsantorini.Hide();
+			mapskyscraper.Hide();
+			maptorn.Hide();
+			mapdarksnow.Hide();
+		}
+		else if (stringmaplist == 2)
+		{
+			textmap10.SetNameAndStatus(L("BigTree"), L(""));
+			textmap11.SetNameAndStatus(L("Dust EX"), L(""));
+			textmap12.SetNameAndStatus(L("747"), L(""));
+
+			textmap13.SetNameAndStatus(L("Estate"), L(""));
+			textmap14.SetNameAndStatus(L("Havana"), L(""));
+			textmap15.SetNameAndStatus(L("Militia"), L(""));
+
+			textmap16.SetNameAndStatus(L("Office"), L(""));
+			textmap17.SetNameAndStatus(L("Siege"), L(""));
+			textmap18.SetNameAndStatus(L("Angel City"), L(""));
+
+			textmap.Hide();
+			textmap2.Hide();
+			textmap3.Hide();
+			textmap4.Hide();
+			textmap5.Hide();
+			textmap6.Hide();
+			textmap7.Hide();
+			textmap8.Hide();
+			textmap9.Hide();
+
+			textmap10.Show();
+			textmap11.Show();
+			textmap12.Show();
+			textmap13.Show();
+			textmap14.Show();
+			textmap15.Show();
+			textmap16.Show();
+			textmap17.Show();
+			textmap18.Show();
+
+			textmap19.Hide();
+			textmap20.Hide();
+			textmap21.Hide();
+			textmap22.Hide();
+			textmap23.Hide();
+			textmap24.Hide();
+			textmap25.Hide();
+			textmap26.Hide();
+			textmap27.Hide();
+
+			mapassault.Hide();
+			mapitaly.Hide();
+			mapvertigo.Hide();
+			mapinferno.Hide();
+			mapnuke.Hide();
+			mapdust.Hide();
+			mapmirage.Hide();
+			mapgressia.Hide();
+			mapruin.Hide();
+
+			mapnightmare.Hide();
+			MapSetNightMare.Hide();
+			nightmare.Hide();
+
+			assault.Hide();
+			vertigo.Hide();
+			italy.Hide();
+			nuke.Hide();
+			dust2.Hide();
+			inferno.Hide();
+			mirage.Hide();
+			gressia.Hide();
+			ruin.Hide();
+
+			bigtree.Show();
+			dustmini.Show();
+			cs747.Show();
+			estate.Show();
+			havana.Show();
+			militia.Show();
+			office.Show();
+			siege.Show();
+			angelcity.Show();
+
+			mapbigtree.Show();
+			mapdustmini.Show();
+			mapcs747.Show();
+			mapestate.Show();
+			maphavana.Show();
+			mapmilitia.Show();
+			mapoffice.Show();
+			mapsiege.Show();
+			mapangelcity.Show();
+
+			aztec.Hide();
+			cbble.Hide();
+			chateau.Hide();
+			prodigy.Hide();
+			rats.Hide();
+			santorini.Hide();
+			skyscraper.Hide();
+			torn.Hide();
+			darksnow.Hide();
+
+			mapaztec.Hide();
+			mapcbble.Hide();
+			mapchateau.Hide();
+			mapprodigy.Hide();
+			maprats.Hide();
+			mapsantorini.Hide();
+			mapskyscraper.Hide();
+			maptorn.Hide();
+			mapdarksnow.Hide();
+		}
+		else if (stringmaplist == 3)
+		{
+			textmap19.SetNameAndStatus(L("Aztec"), L(""));
+			textmap20.SetNameAndStatus(L("CobbleStone"), L(""));
+			textmap21.SetNameAndStatus(L("ChateAu"), L(""));
+
+			textmap22.SetNameAndStatus(L("Prodigy"), L(""));
+			textmap23.SetNameAndStatus(L("Rats"), L(""));
+			textmap24.SetNameAndStatus(L("Santorini"), L(""));
+
+			textmap25.SetNameAndStatus(L("SkyScraper"), L(""));
+			textmap26.SetNameAndStatus(L("Torn"), L(""));
+			textmap27.SetNameAndStatus(L("DarkSnow"), L(""));
+
+			textmap.Hide();
+			textmap2.Hide();
+			textmap3.Hide();
+			textmap4.Hide();
+			textmap5.Hide();
+			textmap6.Hide();
+			textmap7.Hide();
+			textmap8.Hide();
+			textmap9.Hide();
+
+			textmap10.Hide();
+			textmap11.Hide();
+			textmap12.Hide();
+			textmap13.Hide();
+			textmap14.Hide();
+			textmap15.Hide();
+			textmap16.Hide();
+			textmap17.Hide();
+			textmap18.Hide();
+
+			textmap19.Show();
+			textmap20.Show();
+			textmap21.Show();
+			textmap22.Show();
+			textmap23.Show();
+			textmap24.Show();
+			textmap25.Show();
+			textmap26.Show();
+			textmap27.Show();
+
+			mapassault.Hide();
+			mapitaly.Hide();
+			mapvertigo.Hide();
+			mapinferno.Hide();
+			mapnuke.Hide();
+			mapdust.Hide();
+			mapmirage.Hide();
+			mapgressia.Hide();
+			mapruin.Hide();
+
+			assault.Hide();
+			vertigo.Hide();
+			italy.Hide();
+			nuke.Hide();
+			dust2.Hide();
+			inferno.Hide();
+			mirage.Hide();
+			gressia.Hide();
+			ruin.Hide();
+
+			mapnightmare.Hide();
+			MapSetNightMare.Hide();
+			nightmare.Hide();
+
+			bigtree.Hide();
+			dustmini.Hide();
+			cs747.Hide();
+			estate.Hide();
+			havana.Hide();
+			militia.Hide();
+			office.Hide();
+			siege.Hide();
+			angelcity.Hide();
+
+			mapbigtree.Hide();
+			mapdustmini.Hide();
+			mapcs747.Hide();
+			mapestate.Hide();
+			maphavana.Hide();
+			mapmilitia.Hide();
+			mapoffice.Hide();
+			mapsiege.Hide();
+			mapangelcity.Hide();
+
+			aztec.Show();
+			cbble.Show();
+			chateau.Show();
+			prodigy.Show();
+			rats.Show();
+			santorini.Show();
+			skyscraper.Show();
+			torn.Show();
+			darksnow.Show();
+
+			mapaztec.Show();
+			mapcbble.Show();
+			mapchateau.Show();
+			mapprodigy.Show();
+			maprats.Show();
+			mapsantorini.Show();
+			mapskyscraper.Show();
+			maptorn.Show();
+			mapdarksnow.Show();
+		}
 	}
 	else if (value == "zbs")
 	{
 		sz.LinkCvar("mp_gamemode");
 		EngFuncs::CvarSetString("mp_gamemode", value);
 		ischecksetmode = true;
+
+		modenone = false;
+		modedm = false;
+		modetdm = false;
+		modegd = false;
+		modezb1 = false;
+		modezb3 = false;
+		modezbs = true;
+		modezsh = false;
 
 		classic.bChecked = false;
 		dm.bChecked = false;
@@ -873,6 +2616,12 @@ void CMenuCreateGame::ResetMode(const char *value)
 		zh.bChecked = false;
 		sz.bChecked = true;
 		zsh.bChecked = false;
+
+		mapnightmare.Show();
+		//MapSetNightMare.Show();
+		nightmare.Show();
+		textmap28.Show();
+		textmap28.SetNameAndStatus(L("NightMare"), L(""));
 
 		assault.bChecked = false;
 		vertigo.bChecked = false;
@@ -931,12 +2680,114 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetMirage.Hide();
 		MapSetGressia.Hide();
 		MapSetRuin.Hide();
+
+		textmap.Hide();
+		textmap2.Hide();
+		textmap3.Hide();
+		textmap4.Hide();
+		textmap5.Hide();
+		textmap6.Hide();
+		textmap7.Hide();
+		textmap8.Hide();
+		textmap9.Hide();
+
+		textmap10.Hide();
+		textmap11.Hide();
+		textmap12.Hide();
+		textmap13.Hide();
+		textmap14.Hide();
+		textmap15.Hide();
+		textmap16.Hide();
+		textmap17.Hide();
+		textmap18.Hide();
+
+		textmap19.Hide();
+		textmap20.Hide();
+		textmap21.Hide();
+		textmap22.Hide();
+		textmap23.Hide();
+		textmap24.Hide();
+		textmap25.Hide();
+		textmap26.Hide();
+		textmap27.Hide();
+
+		mapassault.Hide();
+		mapitaly.Hide();
+		mapvertigo.Hide();
+		mapinferno.Hide();
+		mapnuke.Hide();
+		mapdust.Hide();
+		mapmirage.Hide();
+		mapgressia.Hide();
+		mapruin.Hide();
+
+		assault.Hide();
+		vertigo.Hide();
+		italy.Hide();
+		nuke.Hide();
+		dust2.Hide();
+		inferno.Hide();
+		mirage.Hide();
+		gressia.Hide();
+		ruin.Hide();
+
+		bigtree.Hide();
+		dustmini.Hide();
+		cs747.Hide();
+		estate.Hide();
+		havana.Hide();
+		militia.Hide();
+		office.Hide();
+		siege.Hide();
+		angelcity.Hide();
+
+		mapbigtree.Hide();
+		mapdustmini.Hide();
+		mapcs747.Hide();
+		mapestate.Hide();
+		maphavana.Hide();
+		mapmilitia.Hide();
+		mapoffice.Hide();
+		mapsiege.Hide();
+		mapangelcity.Hide();
+
+		aztec.Hide();
+		cbble.Hide();
+		chateau.Hide();
+		prodigy.Hide();
+		rats.Hide();
+		santorini.Hide();
+		skyscraper.Hide();
+		torn.Hide();
+		darksnow.Hide();
+
+		uparrow.Hide();
+		downarrow.Hide();
+
+		mapaztec.Hide();
+		mapcbble.Hide();
+		mapchateau.Hide();
+		mapprodigy.Hide();
+		maprats.Hide();
+		mapsantorini.Hide();
+		mapskyscraper.Hide();
+		maptorn.Hide();
+		mapdarksnow.Hide();
 	}
 	else if (value == "zsh_pve")
 	{
 		zsh.LinkCvar("mp_gamemode");
 		EngFuncs::CvarSetString("mp_gamemode", value);
 		ischecksetmode = true;
+
+		modenone = false;
+		modedm = false;
+		modetdm = false;
+		modegd = false;
+		modezb1 = false;
+		modezb3 = false;
+		modezbs = false;
+		modezsh = true;
 
 		classic.bChecked = false;
 		dm.bChecked = false;
@@ -1004,10 +2855,433 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetMirage.Hide();
 		MapSetGressia.Hide();
 		MapSetRuin.Hide();
+
+		textmap.Hide();
+		textmap2.Hide();
+		textmap3.Hide();
+		textmap4.Hide();
+		textmap5.Hide();
+		textmap6.Hide();
+		textmap7.Hide();
+		textmap8.Hide();
+		textmap9.Hide();
+
+		textmap10.Hide();
+		textmap11.Hide();
+		textmap12.Hide();
+		textmap13.Hide();
+		textmap14.Hide();
+		textmap15.Hide();
+		textmap16.Hide();
+		textmap17.Hide();
+		textmap18.Hide();
+
+		textmap19.Hide();
+		textmap20.Hide();
+		textmap21.Hide();
+		textmap22.Hide();
+		textmap23.Hide();
+		textmap24.Hide();
+		textmap25.Hide();
+		textmap26.Hide();
+		textmap27.Hide();
+
+		mapassault.Hide();
+		mapitaly.Hide();
+		mapvertigo.Hide();
+		mapinferno.Hide();
+		mapnuke.Hide();
+		mapdust.Hide();
+		mapmirage.Hide();
+		mapgressia.Hide();
+		mapruin.Hide();
+
+		assault.Hide();
+		vertigo.Hide();
+		italy.Hide();
+		nuke.Hide();
+		dust2.Hide();
+		inferno.Hide();
+		mirage.Hide();
+		gressia.Hide();
+		ruin.Hide();
+
+		bigtree.Hide();
+		dustmini.Hide();
+		cs747.Hide();
+		estate.Hide();
+		havana.Hide();
+		militia.Hide();
+		office.Hide();
+		siege.Hide();
+		angelcity.Hide();
+
+		mapbigtree.Hide();
+		mapdustmini.Hide();
+		mapcs747.Hide();
+		mapestate.Hide();
+		maphavana.Hide();
+		mapmilitia.Hide();
+		mapoffice.Hide();
+		mapsiege.Hide();
+		mapangelcity.Hide();
+
+		aztec.Hide();
+		cbble.Hide();
+		chateau.Hide();
+		prodigy.Hide();
+		rats.Hide();
+		santorini.Hide();
+		skyscraper.Hide();
+		torn.Hide();
+		darksnow.Hide();
+
+		uparrow.Hide();
+		downarrow.Hide();
+
+		mapnightmare.Hide();
+		MapSetNightMare.Hide();
+		nightmare.Hide();
+		textmap28.Hide();
+		nightmare.bChecked = false;
+		
+		mapaztec.Hide();
+		mapcbble.Hide();
+		mapchateau.Hide();
+		mapprodigy.Hide();
+		maprats.Hide();
+		mapsantorini.Hide();
+		mapskyscraper.Hide();
+		maptorn.Hide();
+		mapdarksnow.Hide();
 	}
 	else
 	{
+		if (stringmaplist == 1)
+		{
+			textmap.SetNameAndStatus(L("Assault"), L(""));
+			textmap2.SetNameAndStatus(L("Italy"), L(""));
+			textmap3.SetNameAndStatus(L("Vertigo"), L(""));
+
+			textmap4.SetNameAndStatus(L("Inferno"), L(""));
+			textmap5.SetNameAndStatus(L("Nuke"), L(""));
+			textmap6.SetNameAndStatus(L("Dust II"), L(""));
+
+			textmap7.SetNameAndStatus(L("Mirage"), L(""));
+			textmap8.SetNameAndStatus(L("Greesia"), L(""));
+			textmap9.SetNameAndStatus(L("Ruin"), L(""));
+
+			textmap.Show();
+			textmap2.Show();
+			textmap3.Show();
+			textmap4.Show();
+			textmap5.Show();
+			textmap6.Show();
+			textmap7.Show();
+			textmap8.Show();
+			textmap9.Show();
+
+			textmap10.Hide();
+			textmap11.Hide();
+			textmap12.Hide();
+			textmap13.Hide();
+			textmap14.Hide();
+			textmap15.Hide();
+			textmap16.Hide();
+			textmap17.Hide();
+			textmap18.Hide();
+
+			textmap19.Hide();
+			textmap20.Hide();
+			textmap21.Hide();
+			textmap22.Hide();
+			textmap23.Hide();
+			textmap24.Hide();
+			textmap25.Hide();
+			textmap26.Hide();
+			textmap27.Hide();
+
+			mapassault.Show();
+			mapitaly.Show();
+			mapvertigo.Show();
+			mapinferno.Show();
+			mapnuke.Show();
+			mapdust.Show();
+			mapmirage.Show();
+			mapgressia.Show();
+			mapruin.Show();
+
+			assault.Show();
+			vertigo.Show();
+			italy.Show();
+			nuke.Show();
+			dust2.Show();
+			inferno.Show();
+			mirage.Show();
+			gressia.Show();
+			ruin.Show();
+
+			bigtree.Hide();
+			dustmini.Hide();
+			cs747.Hide();
+			estate.Hide();
+			havana.Hide();
+			militia.Hide();
+			office.Hide();
+			siege.Hide();
+			angelcity.Hide();
+
+			mapbigtree.Hide();
+			mapdustmini.Hide();
+			mapcs747.Hide();
+			mapestate.Hide();
+			maphavana.Hide();
+			mapmilitia.Hide();
+			mapoffice.Hide();
+			mapsiege.Hide();
+			mapangelcity.Hide();
+
+			aztec.Hide();
+			cbble.Hide();
+			chateau.Hide();
+			prodigy.Hide();
+			rats.Hide();
+			santorini.Hide();
+			skyscraper.Hide();
+			torn.Hide();
+			darksnow.Hide();
+
+			mapaztec.Hide();
+			mapcbble.Hide();
+			mapchateau.Hide();
+			mapprodigy.Hide();
+			maprats.Hide();
+			mapsantorini.Hide();
+			mapskyscraper.Hide();
+			maptorn.Hide();
+			mapdarksnow.Hide();
+		}
+		else if (stringmaplist == 2)
+		{
+			textmap10.SetNameAndStatus(L("BigTree"), L(""));
+			textmap11.SetNameAndStatus(L("Dust EX"), L(""));
+			textmap12.SetNameAndStatus(L("747"), L(""));
+
+			textmap13.SetNameAndStatus(L("Estate"), L(""));
+			textmap14.SetNameAndStatus(L("Havana"), L(""));
+			textmap15.SetNameAndStatus(L("Militia"), L(""));
+
+			textmap16.SetNameAndStatus(L("Office"), L(""));
+			textmap17.SetNameAndStatus(L("Siege"), L(""));
+			textmap18.SetNameAndStatus(L("Angel City"), L(""));
+
+			textmap.Hide();
+			textmap2.Hide();
+			textmap3.Hide();
+			textmap4.Hide();
+			textmap5.Hide();
+			textmap6.Hide();
+			textmap7.Hide();
+			textmap8.Hide();
+			textmap9.Hide();
+
+			textmap10.Show();
+			textmap11.Show();
+			textmap12.Show();
+			textmap13.Show();
+			textmap14.Show();
+			textmap15.Show();
+			textmap16.Show();
+			textmap17.Show();
+			textmap18.Show();
+
+			textmap19.Hide();
+			textmap20.Hide();
+			textmap21.Hide();
+			textmap22.Hide();
+			textmap23.Hide();
+			textmap24.Hide();
+			textmap25.Hide();
+			textmap26.Hide();
+			textmap27.Hide();
+
+			mapassault.Hide();
+			mapitaly.Hide();
+			mapvertigo.Hide();
+			mapinferno.Hide();
+			mapnuke.Hide();
+			mapdust.Hide();
+			mapmirage.Hide();
+			mapgressia.Hide();
+			mapruin.Hide();
+
+			assault.Hide();
+			vertigo.Hide();
+			italy.Hide();
+			nuke.Hide();
+			dust2.Hide();
+			inferno.Hide();
+			mirage.Hide();
+			gressia.Hide();
+			ruin.Hide();
+
+			bigtree.Show();
+			dustmini.Show();
+			cs747.Show();
+			estate.Show();
+			havana.Show();
+			militia.Show();
+			office.Show();
+			siege.Show();
+			angelcity.Show();
+
+			mapbigtree.Show();
+			mapdustmini.Show();
+			mapcs747.Show();
+			mapestate.Show();
+			maphavana.Show();
+			mapmilitia.Show();
+			mapoffice.Show();
+			mapsiege.Show();
+			mapangelcity.Show();
+
+			aztec.Hide();
+			cbble.Hide();
+			chateau.Hide();
+			prodigy.Hide();
+			rats.Hide();
+			santorini.Hide();
+			skyscraper.Hide();
+			torn.Hide();
+			darksnow.Hide();
+
+			mapaztec.Hide();
+			mapcbble.Hide();
+			mapchateau.Hide();
+			mapprodigy.Hide();
+			maprats.Hide();
+			mapsantorini.Hide();
+			mapskyscraper.Hide();
+			maptorn.Hide();
+			mapdarksnow.Hide();
+		}
+		else if (stringmaplist == 3)
+		{
+			textmap19.SetNameAndStatus(L("Aztec"), L(""));
+			textmap20.SetNameAndStatus(L("CobbleStone"), L(""));
+			textmap21.SetNameAndStatus(L("ChateAu"), L(""));
+
+			textmap22.SetNameAndStatus(L("Prodigy"), L(""));
+			textmap23.SetNameAndStatus(L("Rats"), L(""));
+			textmap24.SetNameAndStatus(L("Santorini"), L(""));
+
+			textmap25.SetNameAndStatus(L("SkyScraper"), L(""));
+			textmap26.SetNameAndStatus(L("Torn"), L(""));
+			textmap27.SetNameAndStatus(L("DarkSnow"), L(""));
+
+			textmap.Hide();
+			textmap2.Hide();
+			textmap3.Hide();
+			textmap4.Hide();
+			textmap5.Hide();
+			textmap6.Hide();
+			textmap7.Hide();
+			textmap8.Hide();
+			textmap9.Hide();
+
+			textmap10.Hide();
+			textmap11.Hide();
+			textmap12.Hide();
+			textmap13.Hide();
+			textmap14.Hide();
+			textmap15.Hide();
+			textmap16.Hide();
+			textmap17.Hide();
+			textmap18.Hide();
+
+			textmap19.Show();
+			textmap20.Show();
+			textmap21.Show();
+			textmap22.Show();
+			textmap23.Show();
+			textmap24.Show();
+			textmap25.Show();
+			textmap26.Show();
+			textmap27.Show();
+
+			mapassault.Hide();
+			mapitaly.Hide();
+			mapvertigo.Hide();
+			mapinferno.Hide();
+			mapnuke.Hide();
+			mapdust.Hide();
+			mapmirage.Hide();
+			mapgressia.Hide();
+			mapruin.Hide();
+
+			assault.Hide();
+			vertigo.Hide();
+			italy.Hide();
+			nuke.Hide();
+			dust2.Hide();
+			inferno.Hide();
+			mirage.Hide();
+			gressia.Hide();
+			ruin.Hide();
+
+
+
+			bigtree.Hide();
+			dustmini.Hide();
+			cs747.Hide();
+			estate.Hide();
+			havana.Hide();
+			militia.Hide();
+			office.Hide();
+			siege.Hide();
+			angelcity.Hide();
+
+			mapbigtree.Hide();
+			mapdustmini.Hide();
+			mapcs747.Hide();
+			mapestate.Hide();
+			maphavana.Hide();
+			mapmilitia.Hide();
+			mapoffice.Hide();
+			mapsiege.Hide();
+			mapangelcity.Hide();
+
+			aztec.Show();
+			cbble.Show();
+			chateau.Show();
+			prodigy.Show();
+			rats.Show();
+			santorini.Show();
+			skyscraper.Show();
+			torn.Show();
+			darksnow.Show();
+
+			mapaztec.Show();
+			mapcbble.Show();
+			mapchateau.Show();
+			mapprodigy.Show();
+			maprats.Show();
+			mapsantorini.Show();
+			mapskyscraper.Show();
+			maptorn.Show();
+			mapdarksnow.Show();
+		}
+
 		ischecksetmode = false;
+
+		modenone = false;
+		modedm = false;
+		modetdm = false;
+		modegd = false;
+		modezb1 = false;
+		modezb3 = false;
+		modezbs = false;
+		modezsh = false;
 
 		classic.bChecked = false;
 		dm.bChecked = false;
@@ -1574,6 +3848,7 @@ void CMenuCreateGame::ResetMap( int value)
 		MapSetSkyScraper.Hide();
 		MapSetTorn.Hide();
 		MapSetDarkSnow.Hide();	
+		MapSetNightMare.Hide();
 	}
 	else if (value == 22)//prodigy
 	{
@@ -1598,6 +3873,7 @@ void CMenuCreateGame::ResetMap( int value)
 		MapSetSkyScraper.Hide();
 		MapSetTorn.Hide();
 		MapSetDarkSnow.Hide();	
+		MapSetNightMare.Hide();
 	}
 	else if (value == 23)//rats
 	{
@@ -1622,6 +3898,7 @@ void CMenuCreateGame::ResetMap( int value)
 		MapSetSkyScraper.Hide();
 		MapSetTorn.Hide();
 		MapSetDarkSnow.Hide();
+		MapSetNightMare.Hide();
 	}
 	else if (value == 24)//santorini
 	{
@@ -1646,6 +3923,7 @@ void CMenuCreateGame::ResetMap( int value)
 		MapSetSkyScraper.Hide();
 		MapSetTorn.Hide();
 		MapSetDarkSnow.Hide();	
+		MapSetNightMare.Hide();
 	}
 	else if (value == 25)//skyscraper
 	{
@@ -1670,6 +3948,7 @@ void CMenuCreateGame::ResetMap( int value)
 		MapSetSkyScraper.Show();
 		MapSetTorn.Hide();
 		MapSetDarkSnow.Hide();	
+		MapSetNightMare.Hide();
 	}
 	else if (value == 26)//torn
 	{
@@ -1694,6 +3973,7 @@ void CMenuCreateGame::ResetMap( int value)
 		MapSetSkyScraper.Hide();
 		MapSetTorn.Show();
 		MapSetDarkSnow.Hide();		
+		MapSetNightMare.Hide();
 	}
 	else if (value == 27)//darksnow
 	{
@@ -1718,11 +3998,80 @@ void CMenuCreateGame::ResetMap( int value)
 		MapSetSkyScraper.Hide();
 		MapSetTorn.Hide();
 		MapSetDarkSnow.Show();
+		MapSetNightMare.Hide();
+	}
+	else if (value == 28)//darksnow
+	{
+		ischecksetmap = true;
+
+		aztec.bChecked = false;
+		cbble.bChecked = false;
+		chateau.bChecked = false;
+		prodigy.bChecked = false;
+		rats.bChecked = false;
+		santorini.bChecked = false;
+		skyscraper.bChecked = false;
+		torn.bChecked = false;
+		darksnow.bChecked = false;
+		nightmare.bChecked = true;
+
+		MapSetAztec.Hide();
+		MapSetCbble.Hide();
+		MapSetChateau.Hide();
+		MapSetProdigy.Hide();
+		MapSetRats.Hide();
+		MapSetSantorini.Hide();
+		MapSetSkyScraper.Hide();
+		MapSetTorn.Hide();
+		MapSetDarkSnow.Hide();
+		MapSetNightMare.Show();
 	}
 	else
 	{
 		if (stringmaplist == 1)
 		{
+			textmap.SetNameAndStatus(L("Assault"), L(""));
+			textmap2.SetNameAndStatus(L("Italy"), L(""));
+			textmap3.SetNameAndStatus(L("Vertigo"), L(""));
+
+			textmap4.SetNameAndStatus(L("Inferno"), L(""));
+			textmap5.SetNameAndStatus(L("Nuke"), L(""));
+			textmap6.SetNameAndStatus(L("Dust II"), L(""));
+
+			textmap7.SetNameAndStatus(L("Mirage"), L(""));
+			textmap8.SetNameAndStatus(L("Greesia"), L(""));
+			textmap9.SetNameAndStatus(L("Ruin"), L(""));
+
+			textmap.Show();
+			textmap2.Show();
+			textmap3.Show();
+			textmap4.Show();
+			textmap5.Show();
+			textmap6.Show();
+			textmap7.Show();
+			textmap8.Show();
+			textmap9.Show();
+
+			textmap10.Hide();
+			textmap11.Hide();
+			textmap12.Hide();
+			textmap13.Hide();
+			textmap14.Hide();
+			textmap15.Hide();
+			textmap16.Hide();
+			textmap17.Hide();
+			textmap18.Hide();
+
+			textmap19.Hide();
+			textmap20.Hide();
+			textmap21.Hide();
+			textmap22.Hide();
+			textmap23.Hide();
+			textmap24.Hide();
+			textmap25.Hide();
+			textmap26.Hide();
+			textmap27.Hide();
+
 			mapassault.Show();
 			mapitaly.Show();
 			mapvertigo.Show();
@@ -1782,9 +4131,55 @@ void CMenuCreateGame::ResetMap( int value)
 			mapskyscraper.Hide();
 			maptorn.Hide();
 			mapdarksnow.Hide();
+
+			mapnightmare.Hide();
+			MapSetNightMare.Hide();
+			nightmare.Hide();
 		}
 		else if (stringmaplist == 2)
 		{
+			textmap10.SetNameAndStatus(L("BigTree"), L(""));
+			textmap11.SetNameAndStatus(L("Dust EX"), L(""));
+			textmap12.SetNameAndStatus(L("747"), L(""));
+
+			textmap13.SetNameAndStatus(L("Estate"), L(""));
+			textmap14.SetNameAndStatus(L("Havana"), L(""));
+			textmap15.SetNameAndStatus(L("Militia"), L(""));
+
+			textmap16.SetNameAndStatus(L("Office"), L(""));
+			textmap17.SetNameAndStatus(L("Siege"), L(""));
+			textmap18.SetNameAndStatus(L("Angel City"), L(""));
+
+			textmap.Hide();
+			textmap2.Hide();
+			textmap3.Hide();
+			textmap4.Hide();
+			textmap5.Hide();
+			textmap6.Hide();
+			textmap7.Hide();
+			textmap8.Hide();
+			textmap9.Hide();
+
+			textmap10.Show();
+			textmap11.Show();
+			textmap12.Show();
+			textmap13.Show();
+			textmap14.Show();
+			textmap15.Show();
+			textmap16.Show();
+			textmap17.Show();
+			textmap18.Show();
+
+			textmap19.Hide();
+			textmap20.Hide();
+			textmap21.Hide();
+			textmap22.Hide();
+			textmap23.Hide();
+			textmap24.Hide();
+			textmap25.Hide();
+			textmap26.Hide();
+			textmap27.Hide();
+
 			mapassault.Hide();
 			mapitaly.Hide();
 			mapvertigo.Hide();
@@ -1844,9 +4239,55 @@ void CMenuCreateGame::ResetMap( int value)
 			mapskyscraper.Hide();
 			maptorn.Hide();
 			mapdarksnow.Hide();
+
+			mapnightmare.Hide();
+			MapSetNightMare.Hide();
+			nightmare.Hide();
 		}
 		else if (stringmaplist == 3)
 		{
+			textmap19.SetNameAndStatus(L("Aztec"), L(""));
+			textmap20.SetNameAndStatus(L("CobbleStone"), L(""));
+			textmap21.SetNameAndStatus(L("ChateAu"), L(""));
+
+			textmap22.SetNameAndStatus(L("Prodigy"), L(""));
+			textmap23.SetNameAndStatus(L("Rats"), L(""));
+			textmap24.SetNameAndStatus(L("Santorini"), L(""));
+
+			textmap25.SetNameAndStatus(L("SkyScraper"), L(""));
+			textmap26.SetNameAndStatus(L("Torn"), L(""));
+			textmap27.SetNameAndStatus(L("DarkSnow"), L(""));
+
+			textmap.Hide();
+			textmap2.Hide();
+			textmap3.Hide();
+			textmap4.Hide();
+			textmap5.Hide();
+			textmap6.Hide();
+			textmap7.Hide();
+			textmap8.Hide();
+			textmap9.Hide();
+
+			textmap10.Hide();
+			textmap11.Hide();
+			textmap12.Hide();
+			textmap13.Hide();
+			textmap14.Hide();
+			textmap15.Hide();
+			textmap16.Hide();
+			textmap17.Hide();
+			textmap18.Hide();
+
+			textmap19.Show();
+			textmap20.Show();
+			textmap21.Show();
+			textmap22.Show();
+			textmap23.Show();
+			textmap24.Show();
+			textmap25.Show();
+			textmap26.Show();
+			textmap27.Show();
+
 			mapassault.Hide();
 			mapitaly.Hide();
 			mapvertigo.Hide();
@@ -1908,6 +4349,10 @@ void CMenuCreateGame::ResetMap( int value)
 			mapskyscraper.Show();
 			maptorn.Show();
 			mapdarksnow.Show();
+
+			mapnightmare.Hide();
+			MapSetNightMare.Hide();
+			nightmare.Hide();
 		}
 
 		ischecksetmap = false;
@@ -1980,7 +4425,9 @@ CMenuCreateGame::Init
 void CMenuCreateGame::_Init( void )
 {
 	ResetMap(0);
+	ResetMode(0);
 	stringmaplist = 1;
+
 	static const char* g_szGameModeNames[MAX_GAMEMODES] =
 	{
 		L("CstzUI_Mod_classic"),
@@ -2425,23 +4872,6 @@ void CMenuCreateGame::_Init( void )
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	mapaztec.iFlags = QMF_NOTIFY;
 	mapaztec.SetRect(160, 225, 256, 124);
 	mapaztec.SetPicture(ART_AZTEC);
@@ -2649,22 +5079,29 @@ void CMenuCreateGame::_Init( void )
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
 
+	mapnightmare.iFlags |= QMF_NOTIFY;
+	mapnightmare.SetRect(160, 225, 256, 124);
+	mapnightmare.SetPicture(ART_NIGHTMARE);
+	mapnightmare.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	SET_EVENT_MULTI(mapnightmare.onActivated,
+		{
+			uiCreateGame.ResetMap(28);
+			((CMenuCheckBox*)pSelf)->bChecked = true;
+		});
 
+	MapSetNightMare.iFlags |= QMF_INACTIVE;
+	MapSetNightMare.SetCharSize(QM_SMALLFONT);
+	MapSetNightMare.SetModel(&mapsListModel);
+	MapSetNightMare.SetRect(160, 193, 252, 154);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	nightmare.SetNameAndStatus(L(""), L(""));
+	nightmare.iFlags |= QMF_INACTIVE;
+	nightmare.SetCoord(380, 230);
+	SET_EVENT_MULTI(nightmare.onChanged,
+		{
+			uiCreateGame.ResetMap(28);
+			((CMenuCheckBox*)pSelf)->bChecked = true;
+		});
 
 
 
@@ -2745,6 +5182,11 @@ void CMenuCreateGame::_Init( void )
 	Adv.onActivated = UI_AdvServerOptions_Menu;
 	Adv.iFlags |= QMF_NOTIFY;
 	Adv.SetCoord(160, 660);
+
+	Inventory.SetNameAndStatus(L("CstzUI_Inventory"), L(""));
+	Inventory.onActivated = UI_Inventory_Menu;
+	Inventory.iFlags |= QMF_NOTIFY;
+	Inventory.SetCoord(460, 660);
 
 	playbutton.iFlags = QMF_NOTIFY;
 	playbutton.SetRect(1025, 555, 256, 124);
@@ -2878,6 +5320,7 @@ void CMenuCreateGame::_Init( void )
 	AddItem( mapskyscraper );
 	AddItem( maptorn );
 	AddItem( mapdarksnow );
+	AddItem( mapnightmare );
 
 	AddItem(MapSetAztec);
 	AddItem(MapSetCbble);
@@ -2888,6 +5331,8 @@ void CMenuCreateGame::_Init( void )
 	AddItem(MapSetSkyScraper);
 	AddItem(MapSetTorn);
 	AddItem(MapSetDarkSnow);
+
+	AddItem(MapSetNightMare);
 
 	AddItem( MapSetVertigo );
 	AddItem( MapSetAssault );
@@ -2929,6 +5374,8 @@ void CMenuCreateGame::_Init( void )
 	AddItem( torn );
 	AddItem( darksnow );
 
+	AddItem( nightmare );
+
 	AddItem( bigtree );
 	AddItem( dustmini );
 	AddItem( cs747 );
@@ -2947,6 +5394,40 @@ void CMenuCreateGame::_Init( void )
 	AddItem( zh );
 	AddItem( sz );
 	AddItem( zsh );
+
+	AddItem( textmap );
+	AddItem(textmap2);
+	AddItem(textmap3);
+	AddItem(textmap4);
+	AddItem(textmap5);
+	AddItem(textmap6);
+	AddItem(textmap7);
+	AddItem(textmap8);
+	AddItem(textmap9);
+
+	AddItem(textmap10);
+	AddItem(textmap11);
+	AddItem(textmap12);
+	AddItem(textmap13);
+	AddItem(textmap14);
+	AddItem(textmap15);
+	AddItem(textmap16);
+	AddItem(textmap17);
+	AddItem(textmap18);
+
+	AddItem(textmap19);
+	AddItem(textmap20);
+	AddItem(textmap21);
+	AddItem(textmap22);
+	AddItem(textmap23);
+	AddItem(textmap24);
+	AddItem(textmap25);
+	AddItem(textmap26);
+	AddItem(textmap27);
+
+	AddItem(textmap28);
+
+	AddItem(Inventory);
 
 	AddItem( playbutton );
 	AddItem( uparrow );
@@ -2979,6 +5460,106 @@ void CMenuCreateGame::_VidInit()
 
 	if (stringmaplist == 1)
 	{
+		textmap.SetNameAndStatus(L("Assault"), L(""));
+		textmap2.SetNameAndStatus(L("Italy"), L(""));
+		textmap3.SetNameAndStatus(L("Vertigo"), L(""));
+
+		textmap4.SetNameAndStatus(L("Inferno"), L(""));
+		textmap5.SetNameAndStatus(L("Nuke"), L(""));
+		textmap6.SetNameAndStatus(L("Dust II"), L(""));
+
+		textmap7.SetNameAndStatus(L("Mirage"), L(""));
+		textmap8.SetNameAndStatus(L("Greesia"), L(""));
+		textmap9.SetNameAndStatus(L("Ruin"), L(""));
+
+		uiCreateGame.textmap.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap.SetCoord(248, 310);
+		uiCreateGame.textmap2.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap2.SetCoord(565, 310);
+		uiCreateGame.textmap3.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap3.SetCoord(845, 310);
+		uiCreateGame.textmap4.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap4.SetCoord(248, 450);
+		uiCreateGame.textmap5.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap5.SetCoord(560, 450);
+		uiCreateGame.textmap6.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap6.SetCoord(855, 450);
+		uiCreateGame.textmap7.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap7.SetCoord(248, 592);
+		uiCreateGame.textmap8.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap8.SetCoord(550, 592);
+		uiCreateGame.textmap9.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap9.SetCoord(865, 592);
+		uiCreateGame.textmap10.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap10.SetCoord(248, 310);
+		uiCreateGame.textmap11.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap11.SetCoord(552, 310);
+		uiCreateGame.textmap12.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap12.SetCoord(865, 310);
+		uiCreateGame.textmap13.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap13.SetCoord(248, 450);
+		uiCreateGame.textmap14.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap14.SetCoord(550, 450);
+		uiCreateGame.textmap15.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap15.SetCoord(855, 450);
+		uiCreateGame.textmap16.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap16.SetCoord(248, 592);
+		uiCreateGame.textmap17.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap17.SetCoord(560, 592);
+		uiCreateGame.textmap18.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap18.SetCoord(835, 592);
+		uiCreateGame.textmap19.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap19.SetCoord(251, 310);
+		uiCreateGame.textmap20.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap20.SetCoord(525, 310);
+		uiCreateGame.textmap21.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap21.SetCoord(842, 310);
+		uiCreateGame.textmap22.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap22.SetCoord(248, 450);
+		uiCreateGame.textmap23.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap23.SetCoord(565, 450);
+		uiCreateGame.textmap24.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap24.SetCoord(845, 450);
+		uiCreateGame.textmap25.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap25.SetCoord(228, 592);
+		uiCreateGame.textmap26.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap26.SetCoord(565, 592);
+		uiCreateGame.textmap27.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap27.SetCoord(840, 592);
+		uiCreateGame.textmap28.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap28.SetCoord(241, 310);
+
+		textmap.Show();
+		textmap2.Show();
+		textmap3.Show();
+		textmap4.Show();
+		textmap5.Show();
+		textmap6.Show();
+		textmap7.Show();
+		textmap8.Show();
+		textmap9.Show();
+
+		textmap10.Hide();
+		textmap11.Hide();
+		textmap12.Hide();
+		textmap13.Hide();
+		textmap14.Hide();
+		textmap15.Hide();
+		textmap16.Hide();
+		textmap17.Hide();
+		textmap18.Hide();
+
+		textmap19.Hide();
+		textmap20.Hide();
+		textmap21.Hide();
+		textmap22.Hide();
+		textmap23.Hide();
+		textmap24.Hide();
+		textmap25.Hide();
+		textmap26.Hide();
+		textmap27.Hide();
+		textmap28.Hide();
+
 		mapassault.Show();
 		mapitaly.Show();
 		mapvertigo.Show();
@@ -3038,9 +5619,16 @@ void CMenuCreateGame::_VidInit()
 		mapskyscraper.Hide();
 		maptorn.Hide();
 		mapdarksnow.Hide();
+		mapnightmare.Hide();
+		MapSetNightMare.Hide();
+		nightmare.Hide();
 	}
 	else if (stringmaplist == 2)
 	{
+		textmap.SetNameAndStatus(L("BigTree"), L(""));
+
+		
+
 		mapassault.Hide();
 		mapitaly.Hide();
 		mapvertigo.Hide();
@@ -3100,9 +5688,14 @@ void CMenuCreateGame::_VidInit()
 		mapskyscraper.Hide();
 		maptorn.Hide();
 		mapdarksnow.Hide();
+		mapnightmare.Hide();
+		MapSetNightMare.Hide();
+		nightmare.Hide();
 	}
 	else if (stringmaplist == 3)
 	{
+	
+
 		mapassault.Hide();
 		mapitaly.Hide();
 		mapvertigo.Hide();
@@ -3164,6 +5757,9 @@ void CMenuCreateGame::_VidInit()
 		mapskyscraper.Show();
 		maptorn.Show();
 		mapdarksnow.Show();
+		mapnightmare.Hide();
+		MapSetNightMare.Hide();
+		nightmare.Hide();
 	}
 
 }
@@ -3219,5 +5815,6 @@ void UI_CreateGame_Menu( void )
 		return;
 
 	uiCreateGame.Show();
+	uiCreateGame.ResetMode(0);
 }
 ADD_MENU( menu_creategame, UI_CreateGame_Precache, UI_CreateGame_Menu );

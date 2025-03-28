@@ -276,6 +276,10 @@ int CBow::GetItemInfo(ItemInfo *p)
 	p->iMaxAmmo1 = 60;
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
+	p->pszAmmo3 = NULL;
+	p->iMaxAmmo3 = -1;
+	p->pszAmmoGrenade = NULL;
+	p->iMaxAmmoGrenade = -1;
 	p->iMaxClip = -1;
 	p->iSlot = 0;
 	p->iPosition = 4;

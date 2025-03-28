@@ -21,6 +21,7 @@ GNU General Public License for more details.
 #include "player.h"
 
 // global vars
+int gmsgMPToCL = 0;
 int giPrecacheGrunt = 0;
 int gmsgWeapPickup = 0;
 int gmsgHudText = 0;
@@ -138,6 +139,7 @@ int gmsgQuantumMsg = 0;
 int gmsgArbalestMsg = 0;
 int gmsgZB3UsedMsg = 0;
 int gmsgZB3UsedMsg2 = 0;
+int gmsgZB3InventorySet = 0;
 int gmsgZSHMsg = 0;
 int gmsgZSHMsgText = 0;
 int gmsgZSHMsgTextNextDay = 0;
@@ -294,8 +296,10 @@ void LinkUserMessages()
 
 	gmsgZB3UsedMsg = REG_USER_MSG("ZB3SkillUsed", -1);
 	gmsgZB3UsedMsg2 = REG_USER_MSG("ZB3SkillUsed2", -1);
+	gmsgZB3InventorySet = REG_USER_MSG("ZB3Inventory", -1);
 	gmsgResetRound = REG_USER_MSG("ResetRound", -1);
 	gmsgGunDeath = REG_USER_MSG("GunDeath", -1);
+	gmsgMPToCL = REG_USER_MSG("MPToCL", -1);
 }
 
 void WriteWeaponInfo2(CBasePlayer* pPlayer, const ItemInfo& II)
@@ -312,6 +316,10 @@ void WriteWeaponInfo2(CBasePlayer* pPlayer, const ItemInfo& II)
 	WRITE_BYTE(II.iMaxAmmo1);
 	WRITE_SHORT(CBasePlayer::GetAmmoIndex(II.pszAmmo2));
 	WRITE_BYTE(II.iMaxAmmo2);
+	WRITE_SHORT(CBasePlayer::GetAmmoIndex(II.pszAmmo3));
+	WRITE_BYTE(II.iMaxAmmo3);
+	WRITE_SHORT(CBasePlayer::GetAmmoIndex(II.pszAmmoGrenade));
+	WRITE_BYTE(II.iMaxAmmoGrenade);
 	WRITE_BYTE(II.iSlot);
 	WRITE_BYTE(II.iPosition);
 	WRITE_SHORT(II.iId);
@@ -333,6 +341,10 @@ void WriteWeaponInfo(CBasePlayer *pPlayer, const ItemInfo &II)
 	WRITE_BYTE(II.iMaxAmmo1);
 	WRITE_BYTE(CBasePlayer::GetAmmoIndex(II.pszAmmo2));
 	WRITE_BYTE(II.iMaxAmmo2);
+	WRITE_BYTE(CBasePlayer::GetAmmoIndex(II.pszAmmo3));
+	WRITE_BYTE(II.iMaxAmmo3);
+	WRITE_BYTE(CBasePlayer::GetAmmoIndex(II.pszAmmoGrenade));
+	WRITE_BYTE(II.iMaxAmmoGrenade);
 	WRITE_BYTE(II.iSlot);
 	WRITE_BYTE(II.iPosition);
 	WRITE_BYTE(II.iId);

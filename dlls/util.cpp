@@ -907,6 +907,46 @@ void UTIL_TraceLine(const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTER
 	TRACE_LINE(vecStart, vecEnd, (igmon == ignore_monsters), pentIgnore, ptr);
 }
 
+void UTIL_TempModel(const Vector& vecOrigin, const Vector& vecAngles, const Vector& vecVelocity, int iModelIndex, int life, int sequence, int framerate, bool fadeOut, int fadeSpeed, int brightness, int rendermode, CBaseEntity* pEntity, bool fadeIn, int fadeInSpeed, int scale, int frameMax, int flags, bool excludeSource)
+{
+	if (excludeSource)
+		MESSAGE_BEGIN(MSG_EXCLUDESOURCE, SVC_TEMPENTITY, g_vecZero, pEntity->edict());
+	else
+		MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
+	WRITE_BYTE(TE_TEMPMODEL);
+	WRITE_COORD(vecOrigin.x);
+	WRITE_COORD(vecOrigin.y);
+	WRITE_COORD(vecOrigin.z);
+	WRITE_COORD(vecAngles.x);
+	WRITE_COORD(vecAngles.y);
+	WRITE_COORD(vecAngles.z);
+	WRITE_COORD(vecVelocity.x);
+	WRITE_COORD(vecVelocity.y);
+	WRITE_COORD(vecVelocity.z);
+	WRITE_SHORT(iModelIndex);
+	WRITE_BYTE(life);
+	WRITE_SHORT(sequence);
+	WRITE_BYTE(framerate);
+	WRITE_BYTE(fadeOut != false);
+	WRITE_BYTE(brightness);
+	WRITE_BYTE(rendermode);
+	if (pEntity)
+	{
+		WRITE_SHORT(pEntity->entindex());
+	}
+	else
+	{
+		WRITE_SHORT(-1);
+	}
+	WRITE_BYTE(fadeSpeed);
+	WRITE_BYTE(fadeIn != false);
+	WRITE_BYTE(fadeInSpeed);
+	WRITE_BYTE(scale);
+	WRITE_SHORT(frameMax);
+	WRITE_LONG(flags);
+	MESSAGE_END();
+}
+
 // OVERLOAD
 void UTIL_TraceLine(const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, IGNORE_GLASS ignoreGlass, edict_t *pentIgnore, TraceResult *ptr)
 {

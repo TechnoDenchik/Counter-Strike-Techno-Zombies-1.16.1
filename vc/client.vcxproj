@@ -37,6 +37,7 @@
     <ClCompile Include="..\cl_dll\events\event_aug.cpp" />
     <ClCompile Include="..\cl_dll\events\event_awp.cpp" />
     <ClCompile Include="..\cl_dll\events\event_bow.cpp" />
+    <ClCompile Include="..\cl_dll\events\event_buffm4a1.cpp" />
     <ClCompile Include="..\cl_dll\events\event_cannon.cpp" />
     <ClCompile Include="..\cl_dll\events\event_chainsaw.cpp" />
     <ClCompile Include="..\cl_dll\events\event_createexplo.cpp" />
@@ -73,6 +74,7 @@
     <ClCompile Include="..\cl_dll\events\event_mp7a1p.cpp" />
     <ClCompile Include="..\cl_dll\events\event_p228.cpp" />
     <ClCompile Include="..\cl_dll\events\event_p90.cpp" />
+    <ClCompile Include="..\cl_dll\events\event_paladin.cpp" />
     <ClCompile Include="..\cl_dll\events\event_quant.cpp" />
     <ClCompile Include="..\cl_dll\events\event_scarh.cpp" />
     <ClCompile Include="..\cl_dll\events\event_scarl.cpp" />
@@ -91,7 +93,10 @@
     <ClCompile Include="..\cl_dll\events\event_usp.cpp" />
     <ClCompile Include="..\cl_dll\events\event_vehicle.cpp" />
     <ClCompile Include="..\cl_dll\events\event_voidpistol.cpp" />
+    <ClCompile Include="..\cl_dll\events\event_voidpistolex.cpp" />
     <ClCompile Include="..\cl_dll\events\event_wa2000.cpp" />
+    <ClCompile Include="..\cl_dll\events\event_wondercannon.cpp" />
+    <ClCompile Include="..\cl_dll\events\event_wondercannonex.cpp" />
     <ClCompile Include="..\cl_dll\events\event_xm1014.cpp" />
     <ClCompile Include="..\cl_dll\events\event_xm8c.cpp" />
     <ClCompile Include="..\cl_dll\events\event_xm8s.cpp" />
@@ -162,6 +167,7 @@
     <ClCompile Include="..\cl_dll\hud\zb2\Winhud.cpp" />
     <ClCompile Include="..\cl_dll\hud\zb2\zb2.cpp" />
     <ClCompile Include="..\cl_dll\hud\zb2\zb2_skill.cpp" />
+    <ClCompile Include="..\cl_dll\hud\zb3\InventorySet.cpp" />
     <ClCompile Include="..\cl_dll\hud\zb3\NewScoreboard.cpp" />
     <ClCompile Include="..\cl_dll\hud\zb3\TextSet.cpp" />
     <ClCompile Include="..\cl_dll\hud\zb3\zb3.cpp" />
@@ -211,6 +217,7 @@
     <ClCompile Include="..\dlls\wpn_shared\knife_shelter_axe.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_skullaxe.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_twin_axes.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_twin_axesex.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_banchee.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_deimos.cpp" />
@@ -220,6 +227,8 @@
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_heavy.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_pc.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_stamper.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wondercannon.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wondercannonex.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_ak47.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_ak47l.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_arbalest.cpp" />
@@ -227,6 +236,7 @@
     <ClCompile Include="..\dlls\wpn_shared\wpn_aug.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_awp.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_bow.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_buffm4a1.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_c4.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_cannon.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_chainsaw.cpp" />
@@ -263,8 +273,8 @@
     <ClCompile Include="..\dlls\wpn_shared\wpn_mp7a1p.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_p228.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_p90.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_paladin.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_quant.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_quantumhorizon.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_sbmine.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_scarh.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_scarl.cpp" />
@@ -282,10 +292,12 @@
     <ClCompile Include="..\dlls\wpn_shared\wpn_ump45.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_usp.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_voidpistol.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_voidpistolex.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_wa2000.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_xm1014.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_xm8c.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_xm8s.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_zombiebomb.cpp" />
     <ClCompile Include="..\pm_shared2\pm_debug.c" />
     <ClCompile Include="..\pm_shared2\pm_math.c" />
     <ClCompile Include="..\pm_shared2\pm_shared.c" />
@@ -365,6 +377,7 @@
     <ClInclude Include="..\cl_dll\calcscreen.h" />
     <ClInclude Include="..\cl_dll\cs_wpn\bte_weapons.h" />
     <ClInclude Include="..\cl_dll\cs_wpn\wpn_shared.h" />
+    <ClInclude Include="..\cl_dll\enginecallback.h" />
     <ClInclude Include="..\cl_dll\hud\classes\Militia.h" />
     <ClInclude Include="..\cl_dll\hud\followicon.h" />
     <ClInclude Include="..\cl_dll\hud\gd\gd.h" />
@@ -400,6 +413,7 @@
     <ClInclude Include="..\cl_dll\hud\zb2\Winhud.h" />
     <ClInclude Include="..\cl_dll\hud\zb2\zb2.h" />
     <ClInclude Include="..\cl_dll\hud\zb2\zb2_skill.h" />
+    <ClInclude Include="..\cl_dll\hud\zb3\InventorySet.h" />
     <ClInclude Include="..\cl_dll\hud\zb3\NewScoreboard.h" />
     <ClInclude Include="..\cl_dll\hud\zb3\TextSet.h" />
     <ClInclude Include="..\cl_dll\hud\zb3\zb3.h" />
@@ -451,6 +465,9 @@
     <ClInclude Include="..\dlls\gamemode\zsh\zsh_const.h" />
     <ClInclude Include="..\dlls\wpn_shared\knife_shelter_axe.h" />
     <ClInclude Include="..\dlls\wpn_shared\knife_twin_axes.h" />
+    <ClInclude Include="..\dlls\wpn_shared\knife_twin_axesex.h" />
+    <ClInclude Include="..\dlls\wpn_shared\wondercannon.h" />
+    <ClInclude Include="..\dlls\wpn_shared\wondercannonex.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_ak47.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_ak47l.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_arbalest.h" />
@@ -458,6 +475,7 @@
     <ClInclude Include="..\dlls\wpn_shared\wpn_aug.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_awp.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_bow.h" />
+    <ClInclude Include="..\dlls\wpn_shared\wpn_buffm4a1.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_c4.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_cannon.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_chainsaw.h" />
@@ -489,8 +507,8 @@
     <ClInclude Include="..\dlls\wpn_shared\wpn_mp7a1d.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_p228.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_p90.h" />
+    <ClInclude Include="..\dlls\wpn_shared\wpn_paladin.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_quant.h" />
-    <ClInclude Include="..\dlls\wpn_shared\wpn_quantumhorizon.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_sbmine.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_scarh.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_scarl.h" />
@@ -507,10 +525,12 @@
     <ClInclude Include="..\dlls\wpn_shared\wpn_ump45.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_usp.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_voidpistol.h" />
+    <ClInclude Include="..\dlls\wpn_shared\wpn_voidpistolex.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_wa2000.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_xm1014.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_xm8c.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_xm8s.h" />
+    <ClInclude Include="..\dlls\wpn_shared\wpn_zombiebomb.h" />
     <ClInclude Include="..\engine2\cdll_int.h" />
     <ClInclude Include="..\engine2\custom.h" />
     <ClInclude Include="..\engine2\edict.h" />
@@ -580,6 +600,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>NotSet</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
+    <VCToolsVersion>14.41.34120</VCToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -619,7 +640,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>F:\Release 2\Counter-Strike-TZ\cl_dlls</OutDir>
+    <OutDir>G:\Release 2\Counter-Strike-TZ\cl_dlls</OutDir>
     <TargetName>client</TargetName>
     <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>..\vgui2_support\SourceSDK\lib\public;$(VC_LibraryPath_x86);$(WindowsSdk_71A_LibraryPath_x86);</LibraryPath>
@@ -657,6 +678,15 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <OpenMPSupport>true</OpenMPSupport>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <IntelJCCErratum>true</IntelJCCErratum>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <BuildStlModules>true</BuildStlModules>
+      <CompileAs>Default</CompileAs>
+      <OmitFramePointers>true</OmitFramePointers>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -664,6 +694,7 @@
       <BaseAddress>
       </BaseAddress>
       <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent />
     <PostBuildEvent>
@@ -677,13 +708,14 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;CLIENT_DLL;CLIENT_WEAPONS;HL_DLL;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;CLIENT_DLL;CLIENT_WEAPONS;HL_DLL;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <AdditionalIncludeDirectories>..\dlls;..\cl_dll\studio;..\cl_dll\hud;..\cl_dll;..\public2;..\public2\tier1;..\vgui2_support;..\vgui2_support\interfaces;..\vgui2_support\SourceSDK;..\vgui2_support\SourceSDK\public2;..\common;..\pm_shared;..\engine;..\utils\vgui\include;..\game_shared;..\external;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <LanguageStandard>Default</LanguageStandard>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

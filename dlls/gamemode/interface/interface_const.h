@@ -30,6 +30,7 @@ enum INTWeaponMsg : byte
 	QUANTUMMSG,
 	TWINAXESMSG,
 	WPN_ARBALEST,
+	WPN_INVENTORY,
 };
 
 #endif

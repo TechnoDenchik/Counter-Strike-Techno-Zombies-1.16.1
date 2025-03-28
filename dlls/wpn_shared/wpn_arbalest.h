@@ -47,7 +47,7 @@ public:
 
 public:
 	void ArbalestFire(float flSpread, duration_t flCycleTime, BOOL fUseAutoAim);
-	void ArbalestFire2(float flSpread, duration_t flCycleTime, BOOL fUseAutoAim);
+	void ArbalestFire2();
 	void RadiusDamage(Vector vecAiming, float flDamage);
 	void RadiusDamage2();
 	void RadiusDamage3(Vector vecAiming, float flDamage);
@@ -55,6 +55,7 @@ public:
 	Vector Get_ShootPosition(CBaseEntity *pevAttacker, Vector vecSrc);
 	Vector Get_ShootPosition2(CBaseEntity* pevAttacker, Vector vecSrc);
 	bool PrimaryAttack_CheckTargetAvailable(CBaseEntity* a2, Vector vecDirection);
+	int ExtractAmmo(CBasePlayerWeapon* pWeapon) override;
 	float GetDamage() const;
 	void DestroyEffect();
 	void PrimaryAttack_FindTargets();
@@ -75,6 +76,11 @@ private:
 	duration_t tNextAttack4;
 	time_point_t tWorldTime4;
 	duration_t tDelta4;
+
+
+	duration_t tNextAttack5;
+	time_point_t tWorldTime5;
+	duration_t tDelta5;
 
 	float phs2;	// secondary attack start time
 	float phs3; // primary attack start time

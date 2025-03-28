@@ -32,14 +32,17 @@ public:
 	void PrimaryAttack() override;
 	bool PrimaryAttack_CheckTargetAvailable(CBaseEntity* a2, Vector vecDirection);
 	void SecondaryAttack() override;
+	void CreateEffect();
 	void DestroyEffect();
 	void Holster(int skiplocal) override;
+	
 	void PrimaryAttack_FindTargets();
 	//void ItemPostFrame() override;
 	void Reload() override;
 	void WeaponIdle() override;
 	void ClearEffect();
 	void Getsprite();
+	void ItemPostFrame() override;
 	bool fireon;
 	BOOL UseDecrement() override {
 #ifdef CLIENT_WEAPONS
@@ -57,19 +60,43 @@ public:
 	void RadiusDamage3(Vector vecAiming, float flDamage);
 	void RadiusDamage2();
 	const char *GetCSModelName() override { return "models/w_revivegun.mdl"; }
+	static constexpr const char* Beam_SPR = "sprites/ef_revivegun_laser.spr"; //
 	Vector Get_ShootPosition(CBaseEntity *pevAttacker, Vector vecSrc);
 	Vector Get_ShootPosition2(CBaseEntity* pevAttacker, Vector vecSrc);
+	int ExtractAmmo(CBasePlayerWeapon* pWeapon) override;
 	float GetDamage() const;
 	int m_iShell;
 	int iShellOn;
-	float phs3;
+	int QuantAmmo;
 	
+	bool m_fireuse2;
+
 private:
 	unsigned short m_usFire;
 	duration_t tNextAttack;
 	time_point_t tWorldTime;
 	duration_t tDelta;
+
+	duration_t tNextAttack3;
+	time_point_t tWorldTime3;
+	duration_t tDelta3;
+
+	duration_t tNextAttack4;
+	time_point_t tWorldTime4;
+	duration_t tDelta4;
+
+	duration_t tNextAttack5;
+	time_point_t tWorldTime5;
+	duration_t tDelta5;
+
+	float phs2;	// secondary attack start time
+	float phs3;
+	float phs4;
+	float phs5;// spear attack end time... cannot switch weapon?
+	float phs12;
+
 	std::vector<EHANDLE> phs9_10_11;
 	std::array<CBeam*, 5> phs5_6_7;
+	std::array<CBeam*, 3> phs12_13_14;
 };
 #endif

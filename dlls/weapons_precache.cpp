@@ -113,15 +113,16 @@ void W_Precache()
 	UTIL_PrecacheOtherWeapon("knife_skullaxe");
 	UTIL_PrecacheOtherWeapon("weapon_shelteraxe");
 	UTIL_PrecacheOtherWeapon("weapon_twinaxes");
+	UTIL_PrecacheOtherWeapon("weapon_twinaxesex");
 	UTIL_PrecacheOtherWeapon("weapon_infinityss");
 	UTIL_PrecacheOtherWeapon("weapon_infinitysb");
-	UTIL_PrecacheOtherWeapon("weapon_zombibomb");
+	UTIL_PrecacheOtherWeapon("weapon_zombibombz");
 	UTIL_PrecacheOtherWeapon("weapon_infinitysr");
 	UTIL_PrecacheOtherWeapon("weapon_mp7a1c");
 	UTIL_PrecacheOtherWeapon("weapon_mp7a1p");
 	UTIL_PrecacheOtherWeapon("knife_zombi");
 	UTIL_PrecacheOtherWeapon("knife_zombi_female");
-	UTIL_PrecacheOtherWeapon("Knife_Zombi_heavy");
+	UTIL_PrecacheOtherWeapon("knife_zombi_heavy");
 	UTIL_PrecacheOtherWeapon("Knife_Zombi_heal");
 	UTIL_PrecacheOtherWeapon("Knife_Zombi_psycho");
 	UTIL_PrecacheOtherWeapon("Knife_Zombi_deimos");
@@ -139,9 +140,18 @@ void W_Precache()
 	UTIL_PrecacheOther("ammo_bow");
 	UTIL_PrecacheOtherWeapon("weapon_bow");
 	UTIL_PrecacheOtherWeapon("weapon_voidpistol");
+	UTIL_PrecacheOtherWeapon("weapon_voidpistolex");
 	UTIL_PrecacheOtherWeapon("weapon_starchaserar");
 	UTIL_PrecacheOtherWeapon("weapon_quantum");
 	UTIL_PrecacheOtherWeapon("weapon_arbalest");
+	UTIL_PrecacheOtherWeapon("weapon_wondercannon");
+	UTIL_PrecacheOtherWeapon("weapon_wondercannonex");
+	UTIL_PrecacheOtherWeapon("weapon_buffm4a1");
+	UTIL_PrecacheOtherWeapon("weapon_paladin");
+	UTIL_PrecacheOther("ammo_VoidExAmmo");
+	UTIL_PrecacheOther("ammo_VoidAmmo");
+	UTIL_PrecacheOther("ammo_WonderCannonAmmo");
+	UTIL_PrecacheOther("ammo_WonderCannonExAmmo");
 
 	if (g_pGameRules->IsDeathmatch())
 	{

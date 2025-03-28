@@ -28,6 +28,7 @@ public:
 	CHudMsgFunc(ZB3Msg);
 	CHudMsgFunc(ZB3SkillUsed);
 	CHudMsgFunc(ZB3SkillUsed2);
+	CHudMsgFunc(ZB3Inventory);
 protected:
 	class impl_t;
 	impl_t *pimpl;

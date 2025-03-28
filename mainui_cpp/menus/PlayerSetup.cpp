@@ -31,6 +31,26 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define ART_BANNER		"gfx/shell/head_customize"
 
+#define ART_HIT0		"gfx/shell/Item/floatingdamage/option_none"
+#define ART_HITORIG		"gfx/shell/Item/floatingdamage/option_default"
+#define ART_HIT1		"gfx/shell/Item/floatingdamage/option_skin01"
+#define ART_HIT2		"gfx/shell/Item/floatingdamage/option_skin02"
+#define ART_HIT3		"gfx/shell/Item/floatingdamage/option_skin03"
+#define ART_HIT4		"gfx/shell/Item/floatingdamage/option_skin04"
+#define ART_HIT5		"gfx/shell/Item/floatingdamage/option_skin05"
+#define ART_HIT6		"gfx/shell/Item/floatingdamage/option_skin06"
+#define ART_HIT7		"gfx/shell/Item/floatingdamage/option_skin07"
+#define ART_HIT8		"gfx/shell/Item/floatingdamage/option_skin08"
+#define ART_HIT9		"gfx/shell/Item/floatingdamage/option_skin09"
+#define ART_HIT10		"gfx/shell/Item/floatingdamage/option_skin10"
+#define ART_HIT11		"gfx/shell/Item/floatingdamage/option_skin11"
+#define ART_HIT12		"gfx/shell/Item/floatingdamage/option_skin12"
+#define ART_HIT13		"gfx/shell/Item/floatingdamage/option_skin13"
+#define ART_HIT14		"gfx/shell/Item/floatingdamage/option_skin14"
+#define ART_HIT15		"gfx/shell/Item/floatingdamage/option_skin15"
+#define ART_HIT16		"gfx/shell/Item/floatingdamage/option_skin16"
+#define ART_HIT17		"gfx/shell/Item/floatingdamage/option_skin18"
+#define ART_SYSTEM		"gfx/shell/Item/floatingdamage/option_system"
 #define MAX_PLAYERMODELS	100
 
 static struct
@@ -82,6 +102,7 @@ static class CMenuPlayerSetup : public CMenuFramework
 {
 private:
 	void _Init() override;
+	void _VidInit() override;
 public:
 	CMenuPlayerSetup() : CMenuFramework( "CMenuPlayerSetup" ), msgBox( true ) { }
 
@@ -91,6 +112,8 @@ public:
 	void ApplyColorToLogoPreview();
 	void WriteNewLogo();
 	void SaveAndPopMenu() override;
+	void SetSkinHitIndicator();
+	class CMenuVidPreview : public CMenuBitmap {} hitindicatorid;
 
 	class CLogosListModel : public CStringArrayModel
 	{
@@ -126,9 +149,10 @@ public:
 	CMenuSpinControl	crosshairColor;
 	CMenuSpinControl	crosshairType;
 	CMenuSpinControl	playerinfo;
+	CMenuSpinControl	hitindicator;
 	CMenuCheckBox	crosshairTranslucent;
 	CMenuCheckBox	uirenderworld;
-	CMenuPicButton Exit, Exit1;
+	CMenuPicButton Exit;
 	CMenuYesNoMessageBox msgBox;
 
 } uiPlayerSetup;
@@ -367,7 +391,6 @@ void CMenuPlayerSetup::CMenuCrosshairPreview::Draw()
 	}
 }
 
-
 /*
 =================
 CMenuPlayerSetup::FindLogos
@@ -426,9 +449,131 @@ void CMenuPlayerSetup::SetConfig( void )
 	crosshairTranslucent.WriteCvar();
 	uirenderworld.WriteCvar();
 	playerinfo.WriteCvar();
-
+	hitindicator.LinkCvar("hud_hitstyle", CMenuEditable::CVAR_VALUE);
 	//WriteNewLogo();
 }
+
+void CMenuPlayerSetup::SetSkinHitIndicator()
+{
+	hitindicator.WriteCvar();
+	int musicset = (int)EngFuncs::GetCvarFloat("hud_hitstyle");
+
+
+	if (musicset == 0)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT0);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 1)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_SYSTEM);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 2)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT1);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 3)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT2);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 4)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT3);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 5)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT4);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 6)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT5);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 7)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT6);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 8)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT7);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 9)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT8);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 10)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT9);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 11)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT10);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 12)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT11);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 13)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT12);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 14)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT13);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 15)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT14);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset ==16)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT15);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset== 17)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT16);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 18)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT17);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+} 
 
 void CMenuPlayerSetup::SaveAndPopMenu()
 {
@@ -509,6 +654,7 @@ UI_PlayerSetup_Init
 */
 void CMenuPlayerSetup::_Init( void )
 {
+	SetSkinHitIndicator();
 	bool hideModels = false;
 	bool hideLogos = false;
 	int addFlags = 0;
@@ -516,6 +662,15 @@ void CMenuPlayerSetup::_Init( void )
 	static const char* playerinfor[] =
 	{
 		L("CstzUI_PlayerInfOff"), L("CstzUI_PlayerInfText"), L("CstzUI_PlayerInfTga")
+	};
+
+	static const char* hitstyle[] =
+	{
+		L("CstzUI_PlayerInfOff"),L("System"), L("Original"), L("Paint Brush"), L("Halloween"), L("Steel Wall (12th)")
+		, L("Christmas"), L("New Year"), L("Spring Flower"), L("CSO22 New Year")
+		, L("2022 Season 12"), L("2022 Season 13"), L("2022 Season 14"), L("Frosty")
+		, L("Black Neon"), L("2023 Season 15"), L("2023 Season 16"), L("2023 Season 17")
+		, L("2024 Season 18")
 	};
 
 	// disable playermodel preview for HLRally to prevent crash
@@ -584,10 +739,20 @@ void CMenuPlayerSetup::_Init( void )
 	playerinfo.LinkCvar("cl_headname", CMenuEditable::CVAR_VALUE);
 	playerinfo.SetRect(780, 345, 256, 26);
 
-	AddItem( background );
-	AddItem( banner );
-	//AddButton("Done", 0, PC_DONE, VoidCb(&CMenuPlayerSetup::SaveAndPopMenu), QMF_NOTIFY);
+	static CStringArrayModel modelhit(hitstyle, ARRAYSIZE(hitstyle));
+	hitindicator.SetNameAndStatus(L("CstzUI_HitIndicator"), L("CstzUI_HitIndicator2"));
+	hitindicator.Setup(&modelhit);
+	hitindicator.font = QM_SMALLFONT;
+	hitindicator.LinkCvar("hud_hitstyle", CMenuEditable::CVAR_VALUE);
+	hitindicator.SetRect(780, 485, 256, 26);
+	SET_EVENT_MULTI(hitindicator.onChanged,
+		{
+			CMenuEditable::WriteCvarCb;
+			uiPlayerSetup.SetSkinHitIndicator();
+		});
 
+	AddItem( background );
+	
 	Exit.SetNameAndStatus(L("GameUI_Apply"), L(""));
 	Exit.onActivated = VoidCb(&CMenuPlayerSetup::SaveAndPopMenu);
 	Exit.iFlags |= QMF_NOTIFY;
@@ -630,6 +795,8 @@ void CMenuPlayerSetup::_Init( void )
 	AddItem( crosshairView );
 	AddItem( uirenderworld );
 	AddItem( playerinfo );
+	AddItem(hitindicator);
+	AddItem(hitindicatorid);
 	AddItem(Exit);
 	if( !hideLogos )
 	{
@@ -637,6 +804,127 @@ void CMenuPlayerSetup::_Init( void )
 		AddItem( logoColor );
 		AddItem( logoImage );
 		UpdateLogo();
+	}
+}
+
+void CMenuPlayerSetup::_VidInit(void)
+{
+	int musicset = (int)EngFuncs::GetCvarFloat("hud_hitstyle");
+	hitindicatorid.SetRect(830, 385, 64, 64);
+
+	if (musicset == 0)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT0);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 1)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_SYSTEM);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 2)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT1);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 3)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT2);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 4)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT3);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 5)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT4);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 6)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT5);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 7)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT6);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 8)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT7);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 9)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT8);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 10)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT9);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 11)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT10);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 12)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT11);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 13)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT12);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 14)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT13);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 15)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT14);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 16)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT15);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 17)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT16);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (musicset == 18)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT17);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	}
 }
 

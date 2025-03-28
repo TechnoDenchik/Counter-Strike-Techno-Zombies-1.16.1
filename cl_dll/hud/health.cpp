@@ -304,13 +304,13 @@ int CHudHealth::Draw(float flTime)
 		int a = 0;
 		int a2 = 0;
 
-		int x2 = ScreenWidth / 75;
+		int x2 = ScreenWidth / 95;
 		int y2 = ScreenHeight / 1.0215;
 
 		int x3 = ScreenWidth / 9.0;
 		int y3 = ScreenHeight / 1.0215;
 
-		int x8 = ScreenWidth / 10.4;
+		int x8 = ScreenWidth / 10.6;
 		int y8 = ScreenHeight / 1.1014;
 
 		int x9 = ScreenWidth / 50.5;
@@ -325,7 +325,7 @@ int CHudHealth::Draw(float flTime)
 		int x12 = ScreenWidth / 9.8;
 		int y12 = ScreenHeight / 1.0485;
 
-		int x13 = ScreenWidth / 215.5;
+		int x13 = ScreenWidth / 555.5;
 		int y13 = ScreenHeight / 1.0485;
 
 		int x14 = ScreenWidth / 10.0;
@@ -686,13 +686,7 @@ int CHudHealth::Draw(float flTime)
 						gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
 						(m_hEmpty[m_enArmorType].rect.right - m_hEmpty[m_enArmorType].rect.left);
 						DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 106, y14 + 14, 1);
-					}
-					
-
-
-
-
-					
+					}		
 					break;
 
 				}

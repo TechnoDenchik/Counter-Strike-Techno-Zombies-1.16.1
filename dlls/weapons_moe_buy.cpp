@@ -52,31 +52,34 @@ static MoEWeaponBuyInfo_s g_MoEWeaponBuyInfo[] = {
 	{ "weapon_xm8c", "XM8", 3250, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_scarl", "Scar", 3250, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_tar21", "TAR-21", 3600, PRIMARY_WEAPON_SLOT, UNASSIGNED },
-
+	{ "weapon_sgdrill",         "Magnum Drill",                 0, PRIMARY_WEAPON_SLOT, UNASSIGNED},
+	{ "weapon_buffm4a1",         "M4A1 Buff",                 0, PRIMARY_WEAPON_SLOT, UNASSIGNED},
+	{ "weapon_paladin", "AK-47 Paladin", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_m95", "Barrett M95", 5000, PRIMARY_WEAPON_SLOT, UNASSIGNED },
-
+	{ "weapon_chainsaw",         "Ripper",                  0, PRIMARY_WEAPON_SLOT, UNASSIGNED},
 	{ "weapon_wa2000", "WA2000", 4600, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_as50", "AS50", 5000, PRIMARY_WEAPON_SLOT, UNASSIGNED },
-
+	{ "weapon_starchaserar",      "Star Chaser AR",               5000, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_mg3", "MG-3", 5750, PRIMARY_WEAPON_SLOT, UNASSIGNED },
-	
+	{ "weapon_bow",      "BOW",               6200, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_cannon", "Blackdragon Cannon", 3800, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_gungnir", "Gungnir", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_quantum", "QuantumHorizon", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
-	{ "weapon_twinaxes", "Twin Shadow Axes", 0, KNIFE_SLOT, UNASSIGNED },
 	{ "weapon_arbalest", "Arbalest", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
-	
+	{ "weapon_wondercannon", "Heaven Splitter", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_wondercannonex", "Asura Hell Splitter", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+
+	{ "weapon_shelteraxe", "ShelterAxe", 0, KNIFE_SLOT, UNASSIGNED },
+	{ "weapon_voidpistol", "VoidPistol", 0, PISTOL_SLOT, UNASSIGNED },
+	{ "weapon_voidpistolex", "VoidPistolEx", 0, PISTOL_SLOT, UNASSIGNED },
+	{ "weapon_gunkata",	 "Dual Beretta Gunslinger", 1500,  PISTOL_SLOT, UNASSIGNED},
+
 	{ "weapon_knife", "Seal Knife", 0, KNIFE_SLOT, UNASSIGNED },
 	{ "knife_skullaxe", "Skull-9", 0, KNIFE_SLOT, UNASSIGNED },
-	{ "weapon_shelteraxe", "ShelterAxe", 0, KNIFE_SLOT, UNASSIGNED },
-	{ "weapon_voidpistol",         "Voidpistol",                  0, PISTOL_SLOT, UNASSIGNED },
-	{ "weapon_bow",      "BOW",               6200, PRIMARY_WEAPON_SLOT, UNASSIGNED },
-	{ "weapon_chainsaw",         "Ripper",                  5750, PRIMARY_WEAPON_SLOT, UNASSIGNED},
-	{ "knife_dragonsword",     "Green Dragon Crescent Blade",               0,    KNIFE_SLOT,          UNASSIGNED },
-	{ "knife_dualsword",    "Dual Sword Phantom Slayer",0, KNIFE_SLOT,          UNASSIGNED},
-	{ "weapon_starchaserar",      "Star Chaser AR",               5000, PRIMARY_WEAPON_SLOT, UNASSIGNED },
-	{ "weapon_gunkata",	 "Dual Beretta Gunslinger",			  1500,  PISTOL_SLOT,         UNASSIGNED},
-	{ "weapon_sgdrill",         "Magnum Drill",                 0, PRIMARY_WEAPON_SLOT, UNASSIGNED},
+	{ "knife_dragonsword", "Green Dragon Crescent Blade", 0, KNIFE_SLOT, UNASSIGNED },
+	{ "knife_dualsword", "Dual Sword Phantom Slayer",0, KNIFE_SLOT, UNASSIGNED},
+	{ "weapon_twinaxes", "Twin Shadow Axes", 0, KNIFE_SLOT, UNASSIGNED },
+	{ "weapon_twinaxesex", "Twin Shadow AxesEx", 0, KNIFE_SLOT, UNASSIGNED },
 };
 
 bool HasPlayerItem(CBasePlayer *pPlayer, const char *pszCheckItem)

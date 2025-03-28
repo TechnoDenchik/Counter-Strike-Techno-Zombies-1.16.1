@@ -632,7 +632,7 @@ void ID_Init( void )
 #elif defined(_WIN32) && !defined(XASH_WINRT)
 	{
 		CHAR szBuf[MAX_PATH];
-		ID_GetKeyData( HKEY_CURRENT_USER, "Software\\Xash3D\\", "xash_id", szBuf, MAX_PATH );
+		ID_GetKeyData( HKEY_CURRENT_USER, "Software\\TechnoEngine\\", "te_id", szBuf, MAX_PATH );
 		
 		sscanf(szBuf, "%016llX", &id);
 		id ^= SYSTEM_XOR_MASK;
@@ -648,11 +648,11 @@ void ID_Init( void )
 #endif
 		if( home )
 		{
-			FILE *cfg = fopen( va( "%s/.config/.xash_id", home ), "r" );
+			FILE *cfg = fopen( va( "%s/.config/.te_id", home ), "r" );
 			if( !cfg )
-				cfg = fopen( va( "%s/.local/.xash_id", home ), "r" );
+				cfg = fopen( va( "%s/.local/.te_id", home ), "r" );
 			if( !cfg )
-				cfg = fopen( va( "%s/.xash_id", home ), "r" );
+				cfg = fopen( va( "%s/.te_id", home ), "r" );
 			if( cfg )
 			{
 				if( fscanf( cfg, "%016llX", &id ) > 0 )
@@ -667,7 +667,7 @@ void ID_Init( void )
 #endif
 	if( !id )
 	{
-		const char *buf = (const char*) FS_LoadFile( ".xash_id", NULL, false );
+		const char *buf = (const char*) FS_LoadFile( ".te_id", NULL, false );
 		if( buf )
 		{
 			sscanf( buf, "%016llX", &id );
@@ -691,7 +691,7 @@ void ID_Init( void )
 	{
 		CHAR Buf[MAX_PATH];
 		sprintf( Buf, "%016llX", id^SYSTEM_XOR_MASK );
-		ID_SetKeyData( HKEY_CURRENT_USER, "Software\\Xash3D\\", REG_SZ, "xash_id", Buf, Q_strlen(Buf) );
+		ID_SetKeyData( HKEY_CURRENT_USER, "Software\\TechnoEngine\\", REG_SZ, "te_id", Buf, Q_strlen(Buf) );
 	}
 #else
 	{
@@ -703,11 +703,11 @@ void ID_Init( void )
 #endif
 		if( home )
 		{
-			FILE *cfg = fopen( va( "%s/.config/.xash_id", home ), "w" );
+			FILE *cfg = fopen( va( "%s/.config/.te_id", home ), "w" );
 			if( !cfg )
-				cfg = fopen( va( "%s/.local/.xash_id", home ), "w" );
+				cfg = fopen( va( "%s/.local/.te_id", home ), "w" );
 			if( !cfg )
-				cfg = fopen( va( "%s/.xash_id", home ), "w" );
+				cfg = fopen( va( "%s/.te_id", home ), "w" );
 			if( cfg )
 			{
 				fprintf( cfg, "%016llX", id^SYSTEM_XOR_MASK );
@@ -716,7 +716,7 @@ void ID_Init( void )
 		}
 	}
 #endif
-	FS_WriteFile( ".xash_id", va("%016llX", id^GAME_XOR_MASK), 16 );
+	FS_WriteFile( ".te_id", va("%016llX", id^GAME_XOR_MASK), 16 );
 #if 0
 	Msg("MD5 id: %s\nRAW id:%016llX\n", id_md5, id );
 #endif

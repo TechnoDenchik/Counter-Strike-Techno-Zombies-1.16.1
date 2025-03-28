@@ -49,6 +49,7 @@ void CArbalest::Spawn(void)
 	m_iDefaultAmmo = ARBALEST_DEFAULT_GIVE;
 	m_flAccuracy = 0.0;
 	m_iShotsFired = 0;
+	m_iClip_c = 0;
 	phs2 = -1;
 	phs3 = -1;
 	phs4 = -1;
@@ -96,8 +97,12 @@ int CArbalest::GetItemInfo(ItemInfo *p)
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "556Nato";
 	p->iMaxAmmo1 = 100;
-	p->pszAmmo2 = NULL;
-	p->iMaxAmmo2 = -1;
+	p->pszAmmo2 = "arbalestammo";
+	p->iMaxAmmo2 = 50;
+	p->pszAmmo3 = NULL;
+	p->iMaxAmmo3 = -1;
+	p->pszAmmoGrenade = NULL;
+	p->iMaxAmmoGrenade = -1;
 	p->iMaxClip = ARBALEST_MAX_CLIP;
 	p->iSlot = 0;
 	p->iPosition = 14;
@@ -127,7 +132,7 @@ BOOL CArbalest::Deploy(void)
 	phs3 = -1;
 	phs4 = -1;
 	phs12 = -1; // 0xBF800000
-	return DefaultDeploy("models/v_halogun.mdl", "models/p_halogun.mdl", ARBALEST_DRAW, "carbine", UseDecrement() != FALSE);
+	return DefaultDeploy("models/v_halogun.mdl", "models/p_halogun.mdl", ARBALEST_DRAW, "ak47", UseDecrement() != FALSE);
 	UpdateHUD();
 }
 
@@ -137,6 +142,9 @@ void CArbalest::Holster(int skiplocal)
 	phs3 = -1;
 	phs4 = -1;
 	phs12 = -1;
+
+	ClearEffect();
+	DestroyEffect();
 
 	// clear target list ?
 	return CBasePlayerWeapon::Holster(skiplocal);
@@ -151,24 +159,14 @@ void CArbalest::UndoHUD() const
 
 void CArbalest::Drop()
 {
-	m_iClip_c = 0;
-	UpdateHUD();
+
 }
 
-void CArbalest::DestroyEffect()
-{
-#ifndef CLIENT_DLL
-	for (CBeam* p : phs5_6_7)
-	{
-		if (p)
-			p->SUB_Remove();
-	}
-#endif
-}
+
 
 void CArbalest::PrimaryAttack_FindTargets()
 {
-	const float flRadius = 320;
+	const float flRadius = 500;
 
 	phs9_10_11.clear();
 #ifndef CLIENT_DLL
@@ -187,7 +185,7 @@ void CArbalest::PrimaryAttack_FindTargets()
 
 bool CArbalest::PrimaryAttack_CheckTargetAvailable(CBaseEntity* a2, Vector vecAngleDirection)
 {
-	const float flRadius = 400;
+	const float flRadius = 500;
 
 	if (!a2->IsAlive())
 		return false;
@@ -213,8 +211,10 @@ bool CArbalest::PrimaryAttack_CheckTargetAvailable(CBaseEntity* a2, Vector vecAn
 
 void CArbalest::SecondaryAttack(void)
 {
-	if (m_iClip_c != 0)
+	if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] != 0)
 	{
+		
+		
 	Getsprite();
 	++m_iShotsFired;
 	m_bDelayFire = 1;
@@ -260,10 +260,6 @@ void CArbalest::SecondaryAttack(void)
 		phs12 = v6 = gpGlobals->time;
 	m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.12f;
 
-#ifndef CLIENT_DLL
-	if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
-		m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
-#endif
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.9f;
 	}
 	PrimaryAttack_FindTargets();
@@ -286,12 +282,12 @@ void CArbalest::PrimaryAttack(void)
 #ifndef CLIENT_DLL
 void CArbalest::RadiusDamage3(Vector vecAiming, float flDamage)
 {
-	float flRadius = 85.0f;
+	float flRadius = 500.0f;
 
 	if (g_pModRunning->DamageTrack() == DT_ZBS)
-		flRadius = 140.0f;
+		flRadius = 500.0f;
 	if (g_pModRunning->DamageTrack() == DT_ZB)
-		flRadius = 125.0f;
+		flRadius = 600.0f;
 	
 	const Vector vecSrc = vecAiming;
 	entvars_t * const pevAttacker = VARS(pev->owner);
@@ -373,12 +369,12 @@ void CArbalest::RadiusDamage3(Vector vecAiming, float flDamage)
 
 void CArbalest::RadiusDamage(Vector vecAiming, float flDamage)
 {
-	float flRadius = 85.0f;
+	float flRadius = 500.0f;
 
 	if (g_pModRunning->DamageTrack() == DT_ZBS)
-		flRadius = 140.0f;
+		flRadius = 500.0f;
 	if (g_pModRunning->DamageTrack() == DT_ZB)
-		flRadius = 125.0f;
+		flRadius = 600.0f;
 
 	const Vector vecSrc = vecAiming;
 	entvars_t* const pevAttacker = VARS(pev->owner);
@@ -510,7 +506,7 @@ void CArbalest::RadiusDamage2()
 			WRITE_COORD(pEntity->pev->origin.y);
 			WRITE_COORD(pEntity->pev->origin.z);
 			WRITE_SHORT(MODEL_INDEX("sprites/ef_halogun_shootB_hit.spr"));
-			WRITE_BYTE(3);
+			WRITE_BYTE(6);
 			WRITE_BYTE(40);
 			WRITE_BYTE(TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NOSOUND);
 			MESSAGE_END();
@@ -521,7 +517,7 @@ void CArbalest::RadiusDamage2()
 			WRITE_COORD(pEntity->pev->origin.y);
 			WRITE_COORD(pEntity->pev->origin.z);
 			WRITE_SHORT(MODEL_INDEX("sprites/ef_halogun_shootB_hit.spr"));
-			WRITE_BYTE(3);
+			WRITE_BYTE(6);
 			WRITE_BYTE(40);
 			WRITE_BYTE(TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NOSOUND);
 			MESSAGE_END();
@@ -532,6 +528,17 @@ void CArbalest::RadiusDamage2()
 
 }
 #endif	
+
+void CArbalest::DestroyEffect()
+{
+#ifndef CLIENT_DLL
+	for (CBeam* p : phs5_6_7)
+	{
+		if (p)
+			p->SUB_Remove();
+	}
+#endif
+}
 
 void CArbalest::ClearEffect()
 {
@@ -550,7 +557,7 @@ void CArbalest::ClearEffect()
 
 void CArbalest::Getsprite()
 {
-	const float flRadius = 400;
+	const float flRadius = 500;
 
 	phs9_10_11.clear();
 #ifndef CLIENT_DLL
@@ -747,12 +754,12 @@ void CArbalest::ArbalestFire(float flSpread, duration_t flCycleTime, BOOL fUseAu
 
 }
 
-void CArbalest::ArbalestFire2(float flSpread, duration_t flCycleTime, BOOL fUseAutoAim)
+void CArbalest::ArbalestFire2()
 {
 	m_bDelayFire = true;
 	m_iShotsFired++;
 
-	if (m_iClip_c <= 0)
+	if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] <= 0)
 	{
 		if (m_fFireOnEmpty)
 		{
@@ -774,27 +781,9 @@ void CArbalest::ArbalestFire2(float flSpread, duration_t flCycleTime, BOOL fUseA
 
 	UTIL_MakeVectors(m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle);
 	Vector vecSrc = m_pPlayer->GetGunPosition();
-	Vector vecDir = m_pPlayer->FireBullets3(vecSrc, gpGlobals->v_forward, flSpread, 8192, 2, BULLET_PLAYER_556MM, GetDamage(), 0.96, m_pPlayer->pev, FALSE, m_pPlayer->random_seed);
-
-	if (gpGlobals->time - tWorldTime4 < 1.0f)
-	{
-		tDelta4 += gpGlobals->time - tWorldTime4;
-	}
-	if (tNextAttack4 > 0.3f || (gpGlobals->time - tWorldTime4 > 0.3f) || tDelta4 > 0.3f)	//可以多射一次
-	{
-		tNextAttack4 = 0.0f;
-		tDelta4 = 0.0f;
-		m_iClip_c--;
-		UpdateHUD();
-	}
-
-	
 
 	CBaseEntity* pevAttacker = this->m_pPlayer;
 	auto vecShootPosition = Get_ShootPosition2(pevAttacker, vecSrc);
-#ifndef CLIENT_DLL
-	RadiusDamage2();
-#endif
 
 	tWorldTime4 = gpGlobals->time;
 
@@ -805,7 +794,7 @@ void CArbalest::ArbalestFire2(float flSpread, duration_t flCycleTime, BOOL fUseA
 	flags = 0;
 #endif
 
-	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usFireArbalestar, 0, (float*)&g_vecZero, (float*)&g_vecZero, vecDir.x, vecDir.y, (int)(m_pPlayer->pev->punchangle.x * 100), (int)(m_pPlayer->pev->punchangle.y * 100), FALSE, FALSE);
+	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usFireArbalestar, 0, (float*)&g_vecZero, (float*)&g_vecZero, vecSrc.x, vecSrc.y, (int)(m_pPlayer->pev->punchangle.x * 100), (int)(m_pPlayer->pev->punchangle.y * 100), FALSE, FALSE);
 	
 	m_flNextPrimaryAttack = m_flNextSecondaryAttack = m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.58;
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.9f;
@@ -833,12 +822,12 @@ void CArbalest::ItemPostFrame()
 		tDelta3 = 0.0f;
 		if (m_fireuse2 == false)
 		{
-			if (m_iClip_c < 50)
+			if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] < 50)
 			{
-				m_iClip_c++;
-				UpdateHUD();
+				m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType]++;
+				//UpdateHUD();
 			}
-			if (m_iClip_c > 40)
+			if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] > 40)
 			{
 				pev->skin = 1;
 			}
@@ -857,7 +846,7 @@ void CArbalest::ItemPostFrame()
 	{
 		if (phs3 > 0.0f)
 		{
-			if (this->m_pPlayer->pev->button & IN_ATTACK2 && this->m_iClip_c > 0)
+			if (this->m_pPlayer->pev->button & IN_ATTACK2 && this->m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] > 0)
 			{
 				if (gpGlobals->time > phs3)
 				{
@@ -865,17 +854,35 @@ void CArbalest::ItemPostFrame()
 					phs3 = gpGlobals->time + 9.0f;
 					
 					EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/halogun-2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+				
 					return CBasePlayerWeapon::ItemPostFrame();
 				}
-				if (m_iClip_c > 0)
+				if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] != 0)
 				{
+
 					if (!FBitSet(m_pPlayer->pev->flags, FL_ONGROUND))
-						ArbalestFire2(0, 0.0f - 0.01f, FALSE);
+						ArbalestFire2();
 					else if (m_pPlayer->pev->velocity.Length2D() > 140)
-						ArbalestFire2(0, 0.0f - 0.01f, FALSE);
+						ArbalestFire2();
 					else
-						ArbalestFire2(0, 0.0f - 0.01f, FALSE);
-					return CBasePlayerWeapon::ItemPostFrame();
+						ArbalestFire2();
+
+
+					if (gpGlobals->time - tWorldTime5 < 1.0f)
+					{
+						tDelta5 += gpGlobals->time - tWorldTime5;
+					}
+					if (tNextAttack5 > 0.5f || (gpGlobals->time - tWorldTime5 > 0.5f) || tDelta5 > 0.5f)	//可以多射一次
+					{
+						tNextAttack5 = 0.0f;
+						tDelta5 = 0.0f;
+
+#ifndef CLIENT_DLL
+						RadiusDamage2();
+#endif
+						m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType]--;
+					}
+					tWorldTime5 = gpGlobals->time;
 				}
 
 			}
@@ -936,4 +943,14 @@ float CArbalest::GetDamage() const
 		flDamage = 140.0f;
 #endif
 	return flDamage;
+}
+
+int CArbalest::ExtractAmmo(CBasePlayerWeapon* pWeapon)
+{
+	if (m_iClip_c)
+	{
+		m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] = m_iClip_c;
+		m_iClip_c = 0;
+	}
+	return CBasePlayerWeapon::ExtractAmmo(pWeapon);
 }

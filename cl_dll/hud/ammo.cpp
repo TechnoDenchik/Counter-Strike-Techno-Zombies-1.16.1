@@ -70,11 +70,7 @@ enum WeaponIdType
 	WEAPON_DEAGLE,
 	WEAPON_SG552,
 	WEAPON_AK47,
-	//WEAPON_QUANTUM,
-	//WEAPON_TWINAXES,
-	WEAPON_KRISS,
 	WEAPON_KNIFE,
-	WEAPON_SHELTERAXE,
 	WEAPON_P90,
 	WEAPON_SHIELDGUN = 99
 };
@@ -131,8 +127,8 @@ int WeaponsResource :: HasAmmo( WEAPON *p )
 	if ( p->iMax1 == -1 )
 		return TRUE;
 
-	return (p->iAmmoType == -1) | p->iClip > 0 | CountAmmo(p->iAmmoType)
-		| CountAmmo(p->iAmmo2Type) | (p->iFlags & WEAPON_FLAGS_SELECTONEMPTY);
+	return (p->iAmmoType == -1) | p->iClip > 0 | CountAmmo(p->iAmmoType) | CountAmmo(p->iAmmo2Type) 
+		| CountAmmo(p->iAmmo3Type) | CountAmmo(p->iAmmoGrenadeType) | (p->iFlags & WEAPON_FLAGS_SELECTONEMPTY);
 }
 
 
@@ -149,10 +145,14 @@ void WeaponsResource :: LoadWeaponSprites( WEAPON *pWeapon )
 	memset( &pWeapon->rcInactive, 0, sizeof(wrect_t) );
 	memset( &pWeapon->rcAmmo, 0, sizeof(wrect_t) );
 	memset( &pWeapon->rcAmmo2, 0, sizeof(wrect_t) );
+	memset(&pWeapon->rcAmmo3, 0, sizeof(wrect_t));
+	memset(&pWeapon->rcAmmoGrenade, 0, sizeof(wrect_t));
 	pWeapon->hInactive = 0;
 	pWeapon->hActive = 0;
 	pWeapon->hAmmo = 0;
 	pWeapon->hAmmo2 = 0;
+	pWeapon->hAmmo3 = 0;
+	pWeapon->hAmmoGrenade = 0;
 
 	sprintf(sz, "sprites/%s.txt", pWeapon->szName);
 
@@ -273,6 +273,29 @@ void WeaponsResource :: LoadWeaponSprites( WEAPON *pWeapon )
 	else
 		pWeapon->hAmmo2 = 0;
 
+	p = GetSpriteList(pList, "ammo3", iRes, i);
+	if (p)
+	{
+		sprintf(sz, "sprites/%s.spr", p->szSprite);
+		pWeapon->hAmmo3 = SPR_Load(sz);
+		pWeapon->rcAmmo3 = p->rc;
+
+		gHR.iHistoryGap = max(gHR.iHistoryGap, pWeapon->rcActive.bottom - pWeapon->rcActive.top);
+	}
+	else
+		pWeapon->hAmmo3 = 0;
+
+	p = GetSpriteList(pList, "ammoGrenade", iRes, i);
+	if (p)
+	{
+		sprintf(sz, "sprites/%s.spr", p->szSprite);
+		pWeapon->hAmmoGrenade = SPR_Load(sz);
+		pWeapon->rcAmmoGrenade = p->rc;
+
+		gHR.iHistoryGap = max(gHR.iHistoryGap, pWeapon->rcActive.bottom - pWeapon->rcActive.top);
+	}
+	else
+		pWeapon->hAmmoGrenade = 0;
 }
 
 // Returns the first weapon for a given slot.
@@ -600,6 +623,16 @@ HSPRITE* WeaponsResource :: GetAmmoPicFromWeapon( int iAmmoId, wrect_t& rect )
 			rect = rgWeapons[i].rcAmmo2;
 			return &rgWeapons[i].hAmmo2;
 		}
+		else if (rgWeapons[i].iAmmo3Type == iAmmoId)
+		{
+			rect = rgWeapons[i].rcAmmo3;
+			return &rgWeapons[i].hAmmo3;
+		}
+		else if (rgWeapons[i].iAmmoGrenadeType == iAmmoId)
+		{
+			rect = rgWeapons[i].rcAmmoGrenade;
+			return &rgWeapons[i].hAmmoGrenade;
+		}
 	}
 
 	return NULL;
@@ -851,7 +884,6 @@ int CHudAmmo::MsgFunc_WeaponList(const char *pszName, int iSize, void *pbuf )
 
 	strncpy( Weapon.szName, reader.ReadString(), MAX_WEAPON_NAME );
 	Weapon.iAmmoType = (int)reader.ReadChar();
-	
 	Weapon.iMax1 = reader.ReadByte();
 	if (Weapon.iMax1 == 255)
 		Weapon.iMax1 = -1;
@@ -860,6 +892,16 @@ int CHudAmmo::MsgFunc_WeaponList(const char *pszName, int iSize, void *pbuf )
 	Weapon.iMax2 = reader.ReadByte();
 	if (Weapon.iMax2 == 255)
 		Weapon.iMax2 = -1;
+
+	Weapon.iAmmo3Type = reader.ReadChar();
+	Weapon.iMax3 = reader.ReadByte();
+	if (Weapon.iMax3 == 255)
+		Weapon.iMax3 = -1;
+
+	Weapon.iAmmoGrenadeType = reader.ReadChar();
+	Weapon.iMaxGrenade = reader.ReadByte();
+	if (Weapon.iMaxGrenade == 255)
+		Weapon.iMaxGrenade = -1;
 
 	Weapon.iSlot = reader.ReadChar();
 	Weapon.iSlotPos = reader.ReadChar();
@@ -1278,7 +1320,7 @@ int CHudAmmo::Draw(float flTime)
 
 	WEAPON *pw = m_pWeapon;
        
-	if ((pw->iAmmoType < 0) && (pw->iAmmo2Type < 0))
+	if ((pw->iAmmoType < 0) && (pw->iAmmo2Type < 0) && (pw->iAmmo3Type < 0) && (pw->iAmmoGrenadeType < 0))
 		return 0;
 
 	int iFlags = true; // draw 0 values
@@ -1374,23 +1416,160 @@ int CHudAmmo::Draw(float flTime)
 	}
 	if (pw->iAmmo2Type > 0)
 	{
-		// No clip weapon, draws blue special ammo
-		DrawUtils::UnpackRGB(r, g, b, RGB_LIGHTBLUE);
-		//DrawUtils::ScaleColors(r, g, b, a);
-
-		int iIconWidth = m_pWeapon->rcAmmo2.right - m_pWeapon->rcAmmo2.left;
+		
 
 		// Do we have secondary ammo?
 		if ((pw->iAmmo2Type != 0) && (gWR.CountAmmo(pw->iAmmo2Type) > 0))
 		{
+			// No clip weapon, draws blue special ammo
+			DrawUtils::UnpackRGB(r, g, b, RGB_LIGHTBLUE);
+			//DrawUtils::ScaleColors(r, g, b, a);
+			gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
+			int iIconWidth = m_pWeapon->rcAmmo2.right - m_pWeapon->rcAmmo2.left;
+
 			y -= gHUD.m_iFontHeight + gHUD.m_iFontHeight / 4;
 			x = ScreenWidth - 4 * AmmoWidth - iIconWidth;
-			x = DrawUtils::DrawHudNumber(x, y, iFlags | DHN_3DIGITS, gWR.CountAmmo(pw->iAmmo2Type), r, g, b);
+			//x = DrawUtils::DrawHudNumber(x, y, iFlags | DHN_3DIGITS, gWR.CountAmmo(pw->iAmmo2Type), r, g, b);
+
+			int x4 = ScreenWidth / 1.1;
+			int y4 = ScreenHeight / 1.0820;
+
+			int x7 = ScreenWidth / 1.1;
+			int y7 = ScreenHeight / 1.0840;
+
+			gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
+			gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
+
+			//ammoboard->Bind();
+			//DrawUtils::Draw2DQuadScaled(x7 - 420 / 3.0, y7 + 4.5, x7 + 522 / 3.0, y7 + 80);
+
+			gEngfuncs.pTriAPI->Color4ub(r, g, b, 255);
+
+			if (gWR.CountAmmo(pw->iAmmo2Type) < 10)
+			{
+				DrawTexturedNumbersTopRightAligned(*ammoclips, m_rcAmmoclip, gWR.CountAmmo(pw->iAmmo2Type), x4 - 95, y4 + 45, 1.0f);
+			}
+			else if (gWR.CountAmmo(pw->iAmmo2Type) < 1000)
+			{
+				DrawTexturedNumbersTopRightAligned(*ammoclips, m_rcAmmoclip, gWR.CountAmmo(pw->iAmmo2Type), x4 - 95, y4 + 45, 1.0f);
+			}
+			else if (gWR.CountAmmo(pw->iAmmo2Type) < 10000)
+			{
+				DrawTexturedNumbersTopRightAligned(*ammoclips, m_rcAmmoclip, gWR.CountAmmo(pw->iAmmo2Type), x4 - 95, y4 + 45, 1.0f);
+			}
+			else
+			{
+				DrawTexturedNumbersTopRightAligned(*ammoclips, m_rcAmmoclip, gWR.CountAmmo(pw->iAmmo2Type), x4 - 95, y4 + 45, 1.0f);
+			}
 
 			// Draw the ammo Icon
 			int iOffset = (m_pWeapon->rcAmmo2.bottom - m_pWeapon->rcAmmo2.top) / 8;
 			SPR_Set(m_pWeapon->hAmmo2, r, g, b);
-			SPR_DrawAdditive(0, x, y - iOffset, &m_pWeapon->rcAmmo2);
+			SPR_DrawAdditive(0, x4 - 75, y4 + 45, &m_pWeapon->rcAmmo2);
+		}
+	}
+	if (pw->iAmmo3Type > 0)
+	{
+		// No clip weapon, draws blue special ammo
+		DrawUtils::UnpackRGB(r, g, b, RGB_WHITE);
+		//DrawUtils::ScaleColors(r, g, b, a);
+		gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
+		int iIconWidth = m_pWeapon->rcAmmo3.right - m_pWeapon->rcAmmo3.left;
+
+		// Do we have secondary ammo?
+		if ((pw->iAmmo3Type != 0) && (gWR.CountAmmo(pw->iAmmo3Type) > 0))
+		{
+			y -= gHUD.m_iFontHeight + gHUD.m_iFontHeight / 4;
+			x = ScreenWidth - 4 * AmmoWidth - iIconWidth;
+			//x = DrawUtils::DrawHudNumber(x, y, iFlags | DHN_3DIGITS, gWR.CountAmmo(pw->iAmmo2Type), r, g, b);
+
+			int x4 = ScreenWidth / 1.1;
+			int y4 = ScreenHeight / 1.0820;
+
+			int x7 = ScreenWidth / 1.1;
+			int y7 = ScreenHeight / 1.0840;
+
+			gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
+			gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
+
+			ammoboard->Bind();
+			DrawUtils::Draw2DQuadScaled(x7 - 420 / 3.0, y7 + 4.5, x7 + 524 / 3.0, y7 + 80);
+
+			gEngfuncs.pTriAPI->Color4ub(r, g, b, 255);
+
+			if (gWR.CountAmmo(pw->iAmmo3Type) < 10)
+			{
+				DrawTexturedNumbersTopRightAligned(*ammoclips, m_rcAmmoclip, gWR.CountAmmo(pw->iAmmo3Type), x4 + 115, y4 + 45, 1.0f);
+			}
+			else if (gWR.CountAmmo(pw->iAmmo3Type) < 1000)
+			{
+				DrawTexturedNumbersTopRightAligned(*ammoclips, m_rcAmmoclip, gWR.CountAmmo(pw->iAmmo3Type), x4 + 115, y4 + 45, 1.0f);
+			}
+			else if (gWR.CountAmmo(pw->iAmmo3Type) < 10000)
+			{
+				DrawTexturedNumbersTopRightAligned(*ammoclips, m_rcAmmoclip, gWR.CountAmmo(pw->iAmmo3Type), x4 + 115, y4 + 45, 1.0f);
+			}
+			else
+			{
+				DrawTexturedNumbersTopRightAligned(*ammoclips, m_rcAmmoclip, gWR.CountAmmo(pw->iAmmo3Type), x4 + 115, y4 + 45, 1.0f);
+			}
+
+			// Draw the ammo Icon
+			int iOffset = (m_pWeapon->rcAmmo3.bottom - m_pWeapon->rcAmmo3.top) / 8;
+			SPR_Set(m_pWeapon->hAmmo3, r, g, b);
+			SPR_DrawAdditive(0, x4 + 135, y4 + 45, &m_pWeapon->rcAmmo3);
+		}
+	}
+	if (pw->iAmmoGrenadeType > 0)
+	{
+		// No clip weapon, draws blue special ammo
+		DrawUtils::UnpackRGB(r, g, b, RGB_WHITE);
+		//DrawUtils::ScaleColors(r, g, b, a);
+		gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
+		int iIconWidth = m_pWeapon->rcAmmoGrenade.right - m_pWeapon->rcAmmoGrenade.left;
+
+		// Do we have secondary ammo?
+		if ((pw->iAmmoGrenadeType != 0) && (gWR.CountAmmo(pw->iAmmoGrenadeType) > 0))
+		{
+			y -= gHUD.m_iFontHeight + gHUD.m_iFontHeight / 4;
+			x = ScreenWidth - 4 * AmmoWidth - iIconWidth;
+			//x = DrawUtils::DrawHudNumber(x, y, iFlags | DHN_3DIGITS, gWR.CountAmmo(pw->iAmmo2Type), r, g, b);
+
+			int x4 = ScreenWidth / 1.1;
+			int y4 = ScreenHeight / 1.0820;
+
+			int x7 = ScreenWidth / 1.1;
+			int y7 = ScreenHeight / 1.0840;
+
+			gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
+			gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
+
+			ammoboard->Bind();
+			DrawUtils::Draw2DQuadScaled(x7 - 420 / 3.0, y7 + 4.5, x7 + 522 / 3.0, y7 + 80);
+
+			gEngfuncs.pTriAPI->Color4ub(r, g, b, 255);
+
+			if (gWR.CountAmmo(pw->iAmmoGrenadeType) < 10)
+			{
+				DrawTexturedNumbersTopRightAligned(*ammoclips, m_rcAmmoclip, gWR.CountAmmo(pw->iAmmoGrenadeType), x4 - 95, y4 + 45, 1.0f);
+			}
+			else if (gWR.CountAmmo(pw->iAmmoGrenadeType) < 1000)
+			{
+				DrawTexturedNumbersTopRightAligned(*ammoclips, m_rcAmmoclip, gWR.CountAmmo(pw->iAmmoGrenadeType), x4 - 95, y4 + 45, 1.0f);
+			}
+			else if (gWR.CountAmmo(pw->iAmmoGrenadeType) < 10000)
+			{
+				DrawTexturedNumbersTopRightAligned(*ammoclips, m_rcAmmoclip, gWR.CountAmmo(pw->iAmmoGrenadeType), x4 - 95, y4 + 45, 1.0f);
+			}
+			else
+			{
+				DrawTexturedNumbersTopRightAligned(*ammoclips, m_rcAmmoclip, gWR.CountAmmo(pw->iAmmoGrenadeType), x4 - 95, y4 + 45, 1.0f);
+			}
+
+			// Draw the ammo Icon
+			int iOffset = (m_pWeapon->rcAmmoGrenade.bottom - m_pWeapon->rcAmmoGrenade.top) / 8;
+			SPR_Set(m_pWeapon->hAmmoGrenade, r, g, b);
+			SPR_DrawAdditive(0, x4 - 75, y4 + 45, &m_pWeapon->rcAmmoGrenade);
 		}
 	}
 
@@ -1494,7 +1673,6 @@ void CHudAmmo::DrawCrosshair( float flTime )
 				case WEAPON_M4A1: // m4a1
 				case WEAPON_SG552: // sg552
 				case WEAPON_AK47: // ak47
-				case WEAPON_KRISS:
 					iWeaponSpeed = 140;
 					break;
 				}
@@ -1780,8 +1958,6 @@ int DrawBar(int x, int y, int width, int height, float f)
 	return (x + width);
 }
 
-
-
 void DrawAmmoBar(WEAPON *p, int x, int y, int width, int height)
 {
 	if ( !p )
@@ -1802,6 +1978,22 @@ void DrawAmmoBar(WEAPON *p, int x, int y, int width, int height)
 		if (p->iAmmo2Type != -1)
 		{
 			f = (float)gWR.CountAmmo(p->iAmmo2Type)/(float)p->iMax2;
+
+			x += 5; //!!!
+
+			DrawBar(x, y, width, height, f);
+		}
+		if (p->iAmmo3Type != -1)
+		{
+			f = (float)gWR.CountAmmo(p->iAmmo3Type) / (float)p->iMax3;
+
+			x += 5; //!!!
+
+			DrawBar(x, y, width, height, f);
+		}
+		if (p->iAmmoGrenadeType != -1)
+		{
+			f = (float)gWR.CountAmmo(p->iAmmoGrenadeType) / (float)p->iMaxGrenade;
 
 			x += 5; //!!!
 

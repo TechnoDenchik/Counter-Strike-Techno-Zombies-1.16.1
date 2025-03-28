@@ -21,6 +21,7 @@ GNU General Public License for more details.
 
 #include "mod_zb3.h"
 #include "util/u_range.hpp"
+#include "gamemode/interface/interface_const.h"
 
 #include <vector>
 #include <algorithm>
@@ -39,6 +40,9 @@ CPlayerModStrategy_ZB3::CPlayerModStrategy_ZB3(CBasePlayer *player, CMod_ZombieH
 
 void CPlayerModStrategy_ZB3::OnSpawn()
 {
+	MESSAGE_BEGIN(MSG_ONE, gmsgZB3InventorySet, nullptr, m_pPlayer->edict());
+	WRITE_BYTE(WPN_INVENTORY);
+	MESSAGE_END();
 	m_pPlayer->m_bIsVIP = false;
 	m_pModZB3->HumanMorale().UpdateHUD(m_pPlayer, MORALE_TYPE_GLOBAL);
 	return CPlayerModStrategy_ZB2::OnSpawn();
@@ -273,7 +277,11 @@ void CPlayerModStrategy_ZB3::Event_OnBecomeHero(CBasePlayer * who)
 	if (m_pPlayer != who)
 		return;
 	BecomeHero();
-	// TODO : hero weapons & model
+
+	MESSAGE_BEGIN(MSG_ONE, gmsgZB3InventorySet, nullptr, m_pPlayer->edict());
+	WRITE_BYTE(WPN_INVENTORY);
+	MESSAGE_END();
+
 	m_pPlayer->m_bIsVIP = true;
 }
 

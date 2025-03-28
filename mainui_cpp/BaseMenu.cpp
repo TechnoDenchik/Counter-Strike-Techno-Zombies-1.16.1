@@ -45,6 +45,10 @@ cvar_t		*ui_borderclip;
 cvar_t		*ui_musicpack;
 cvar_t		*ui_getconsole;
 
+cvar_t* ui_wpn_getgun;
+cvar_t* ui_wpn_getpistol;
+cvar_t* ui_wpn_getknife;
+cvar_t* ui_wpn_getgrenade;
 
 uiStatic_t	uiStatic;
 static CMenuEntry	*s_pEntries = NULL;
@@ -1419,6 +1423,11 @@ void UI_Init( void )
 
 	ui_getconsole = EngFuncs::CvarRegister("menu_getconsole", "0", FCVAR_ARCHIVE);
 	ui_musicpack = EngFuncs::CvarRegister("menu_musicpack", "12", FCVAR_ARCHIVE);
+
+	ui_wpn_getgun = EngFuncs::CvarRegister("wpn_getgun", "weapon_arbalest", FCVAR_ARCHIVE);
+	ui_wpn_getpistol = EngFuncs::CvarRegister("wpn_getpistol", "weapon_voidpistol", FCVAR_ARCHIVE);
+	ui_wpn_getknife = EngFuncs::CvarRegister("wpn_getknife", "weapon_twinaxes", FCVAR_ARCHIVE);
+	ui_wpn_getgrenade = EngFuncs::CvarRegister("wpn_getgrenade", "none", FCVAR_ARCHIVE);
 
 	EngFuncs::CvarRegister( "ui_cs_autofill", "0", FCVAR_ARCHIVE );
 

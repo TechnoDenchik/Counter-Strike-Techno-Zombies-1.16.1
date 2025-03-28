@@ -23,7 +23,8 @@ extern engine_studio_api_t IEngineStudio;
 
 enum
 {
-	ANIM_IDLE = 0, //6.0
+	ANIM_IDLE = 0,//6.0
+	ANIM_IDLE1,
 	ANIM_IDLE2, //6.0
 	ANIM_SHOOT1, //0.5
 	ANIM_SHOOT1_EMPTY, //0.5
@@ -41,7 +42,7 @@ enum
 	ANIM_SKILL_LAST //1.0
 };
 
-void EV_FireGunkata(struct event_args_s *args)
+void EV_FireGunKata(struct event_args_s *args)
 {
 	int idx;
 	vec3_t origin;

@@ -210,8 +210,6 @@ int CHudZB3ScoreBoard::Draw(float time)
 	int iW = m_iCharacterBG_New_Bottom->w();
 	int iH = m_iCharacterBG_New_Bottom->h();
 
-	m_iCharacterBG_New_Bottom->Draw2DQuadScaled(iX, iY - iH, iX + iW, iY - iH + iH);
-
 	iW = m_iCharacterBG_New_Bottom->w();
 	iH = m_iCharacterBG_New_Bottom->h();
 
@@ -231,16 +229,6 @@ int CHudZB3ScoreBoard::Draw(float time)
 
 		std::string tmp = "resource/hud/portrait/hud_" + m_szLastModel;
 		m_iCharacter = R_LoadTextureUnique(tmp.c_str());
-	}
-
-	if (m_iCharacter) 
-	{
-		iW = m_iCharacter->w();
-		iH = m_iCharacter->h();
-		iX = 0;
-		iY = ScreenHeight - 44;
-
-		m_iCharacter->Draw2DQuadScaled(iX, iY - iH, iX + iW, iY - iH + iH);
 	}
 
 	switch (gHUD.m_iModRunning)
@@ -475,6 +463,33 @@ int CHudZB3ScoreBoard::Draw(float time)
 		 DrawTexturedNumbersTopRightAligned(*countplayer2, m_rcToprecord2, countZB, x6 - 87, y5, 1.0f);
 
 		 break;
+	}
+	
+	if ((gHUD.m_iHideHUDDisplay & HIDEHUD_HEALTH))
+		return 1;
+
+	if (!(gHUD.m_iWeaponBits & (1 << (WEAPON_SUIT))))
+		return 1;
+
+	if ((gHUD.m_iHideHUDDisplay & (HIDEHUD_WEAPONS | HIDEHUD_ALL)))
+		return 1;
+
+	if (g_PlayerExtraInfo[idx].teamname != "SPECTATOR")
+	{
+		if (m_iCharacter)
+		{
+			if (gHUD.m_Health.m_iHealth != 0)
+			{
+
+				iW = m_iCharacter->w();
+				iH = m_iCharacter->h();
+				iX = 2.47;
+				iY = ScreenHeight - 44;
+
+				m_iCharacter->Draw2DQuadScaled(iX, iY - iH, iX + iW, iY - iH + iH);
+
+			}
+		}
 	}
 	return 1;
 }

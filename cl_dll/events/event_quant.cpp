@@ -1,15 +1,14 @@
 #include "events.h"
 
-enum quant_e
+enum quantum_e
 {
 	QUANT_IDLE1,
 	QUANT_RELOAD,
-
 	QUANT_DRAW,
+
 	QUANT_SHOOT1,
 	QUANT_SHOOT2,
 	QUANT_SHOOT3,
-	QUANT_SHOOT4,
 
 	QUANT_REV_IDLE,
 	QUANT_REV_RELOAD,
@@ -18,7 +17,6 @@ enum quant_e
 	QUANT_REV_SHOOT1,
 	QUANT_REV_SHOOT2,
 	QUANT_REV_SHOOT3,
-	QUANT_REV_SHOOT4,
 
 	QUANT_REV
 };
@@ -29,7 +27,7 @@ static const char *SOUNDS_NAME[] =
 	"weapons/revivegun-2.wav"
 };
 
-void EV_FireQuant( event_args_t *args )
+void EV_Fire3Quantum( event_args_t *args )
 {
 	vec3_t ShellVelocity, ShellOrigin;
 	vec3_t vecSrc, vecAiming;
@@ -74,7 +72,7 @@ void EV_FireQuant( event_args_t *args )
 	}
 
 
-	EV_EjectBrass(ShellOrigin, ShellVelocity, angles[ YAW ], g_iRShell, TE_BOUNCE_SHELL);
+	EV_EjectBrass(ShellOrigin, ShellVelocity, angles[YAW], g_iRShell, TE_BOUNCE_SHELL);
 
 	PLAY_EVENT_SOUND( SOUNDS_NAME[Com_RandomLong(0, 1)] );
 
@@ -82,9 +80,5 @@ void EV_FireQuant( event_args_t *args )
 	VectorCopy( forward, vecAiming );
 
 	Vector vSpread( args->fparam1, args->fparam2, 0.0f );
-	EV_HLDM_FireBullets( idx,
-		forward, right,	up,
-		1, vecSrc, vecAiming,
-		vSpread, 8192.0, BULLET_PLAYER_762MM,
-		2 );
+	EV_HLDM_FireBullets( idx, forward, right,	up, 1, vecSrc, vecAiming, vSpread, 8192.0, BULLET_PLAYER_762MM, 2 );
 }

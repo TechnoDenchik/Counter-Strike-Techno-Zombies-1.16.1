@@ -395,6 +395,9 @@
     <ClCompile Include="..\mainui_cpp\menus\Music.cpp">
       <Filter>Source Files\menus</Filter>
     </ClCompile>
+    <ClCompile Include="..\mainui_cpp\menus\Inventory.cpp">
+      <Filter>Source Files\menus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Interface.rc">

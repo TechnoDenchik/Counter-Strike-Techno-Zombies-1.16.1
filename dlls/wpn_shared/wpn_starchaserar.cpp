@@ -83,6 +83,10 @@ int CStarchaserar::GetItemInfo(ItemInfo *p)
 	p->iMaxAmmo1 = 105;
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
+	p->pszAmmo3 = NULL;
+	p->iMaxAmmo3 = -1;
+	p->pszAmmoGrenade = NULL;
+	p->iMaxAmmoGrenade = -1;
 	p->iMaxClip = GALIL_MAX_CLIP;
 	p->iSlot = 0;
 	p->iPosition = 14;

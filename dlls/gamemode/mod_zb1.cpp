@@ -29,7 +29,6 @@ GNU General Public License for more details.
 #include "gamemode/zb2/zb2_const.h"
 #include "gamemode/interface/interface_const.h"
 #include "bot_include.h"
-
 #include "util/u_range.hpp"
 
 CMod_Zombi::CMod_Zombi() // precache
@@ -266,7 +265,7 @@ void CMod_Zombi::RoundEndScore(int iWinStatus)
 		{
 			if (player->IsAlive() && !player->m_bIsZombie)
 			{
-				player->pev->frags += 3;
+				player->pev->frags += 1;
 
 				MESSAGE_BEGIN(MSG_BROADCAST, gmsgScoreInfo);
 				WRITE_BYTE(ENTINDEX(player->edict()));
@@ -362,6 +361,7 @@ void CPlayerModStrategy_ZB1::BecomeZombie(ZombieLevel iEvolutionLevel)
 void CPlayerModStrategy_ZB1::BecomeHuman()
 {
 	m_pCharacter = std::make_shared<CHuman_ZB1>(m_pPlayer);
+	
 }
 
 CPlayerModStrategy_ZB1::CPlayerModStrategy_ZB1(CBasePlayer *player, CMod_Zombi *mp)
@@ -424,6 +424,7 @@ void CMod_Zombi::PickZombieOrigin()
 void CMod_Zombi::HumanInfectionByZombie(CBasePlayer *player, CBasePlayer *attacker)
 {
 	MakeZombie(player, ZOMBIE_LEVEL_HOST);
+	player->GiveNamedItem("knife_zombi");
 	player->pev->health = player->pev->max_health = std::max(1000, static_cast<int>(attacker->pev->health * 0.5f));
 	player->pev->armorvalue = std::max(100, static_cast<int>(attacker->pev->armorvalue * 0.5f));
 
@@ -495,14 +496,15 @@ void CMod_Zombi::PlayerSpawn(CBasePlayer *pPlayer)
 	pPlayer->m_bNotKilled = false;
 	IBaseMod::PlayerSpawn(pPlayer);
 	pPlayer->AddAccount(32000);
-
+	MESSAGE_BEGIN(MSG_ONE, gmsgZB3InventorySet, nullptr, pPlayer->edict());
+	WRITE_BYTE(WPN_INVENTORY);
+	MESSAGE_END();
 	// Open buy menu on spawn
-	if (pPlayer->m_bIsZombie == false)
+	if (!pPlayer->m_bIsZombie)
 	{
 		ShowVGUIMenu(pPlayer, VGUI_Menu_Buy, (MENU_KEY_1 | MENU_KEY_2 | MENU_KEY_3 | MENU_KEY_4 | MENU_KEY_5 | MENU_KEY_6 | MENU_KEY_7 | MENU_KEY_8 | MENU_KEY_0), "#Buy");
 		pPlayer->m_iMenu = Menu_Buy;
 	}
-	else { 0; }
 }
 
 BOOL CMod_Zombi::FPlayerCanTakeDamage(CBasePlayer *pPlayer, CBaseEntity *pAttacker)

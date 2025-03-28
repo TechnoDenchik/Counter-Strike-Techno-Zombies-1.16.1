@@ -89,7 +89,7 @@ public:
 			}
 			else
 			{
-				m_pPlayer->pev->maxspeed = 350;
+				m_pPlayer->pev->maxspeed = 450;
 			}
 		}
 	}
@@ -212,9 +212,7 @@ public:
 };
 
 CHuman_ZB2::CHuman_ZB2(CBasePlayer * player) : CHuman_ZB1(player), pimpl(std::unique_ptr<impl_t>(new impl_t(player)))
-{
-
-}
+{}
 
 void CHuman_ZB2::ActivateSkill(ZombieSkillSlot which)
 {

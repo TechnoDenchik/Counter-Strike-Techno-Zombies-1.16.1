@@ -68,6 +68,10 @@ int CMAC10::GetItemInfo(ItemInfo *p)
 	p->iMaxAmmo1 = MAX_AMMO_45ACP;
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
+	p->pszAmmo3 = NULL;
+	p->iMaxAmmo3 = -1;
+	p->pszAmmoGrenade = NULL;
+	p->iMaxAmmoGrenade = -1;
 	p->iMaxClip = MAC10_MAX_CLIP;
 	p->iSlot = 0;
 	p->iPosition = 13;

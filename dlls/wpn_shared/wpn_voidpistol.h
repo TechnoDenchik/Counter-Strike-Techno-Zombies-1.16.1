@@ -1,3 +1,7 @@
+/* =================================================================================== *
+			 * =================== TechnoSoftware =================== *
+ * =================================================================================== */
+
 #ifndef WPN_VOIDPISTOL_H
 #define WPN_VOIDPISTOL_H
 #ifdef _WIN32
@@ -27,9 +31,11 @@ public:
 	bool IsTargetAvailable;
 	bool HasSecondaryAttack() override { return true; }
 	void SecondaryAttack() override;
+	void RadiusDamage(Vector vecAiming, float flDamage);
 	void Reload() override;
 	void ItemPostFrame() override;
 	void WeaponIdle() override;
+	Vector Get_ShootPosition(CBaseEntity* pevAttacker, Vector vecSrc);
 	BOOL UseDecrement() override {
 #ifdef CLIENT_WEAPONS
 		return TRUE;
@@ -46,7 +52,7 @@ public:
 	void VoidpistolFireC(void);
 	bool IsModeCEnabled(int);
 #ifndef CLIENT_DLL
-	WeaponBuyAmmoConfig GetBuyAmmoConfig() override { return { "ammo_voidpistol" , 200 }; }
+	WeaponBuyAmmoConfig GetBuyAmmoConfig() override { return { "ammo_VoidAmmo" , 350 }; }
 #endif
 	const char* GetCSModelName() override { return "models/w_voidpistol.mdl"; }
 	float GetDamage() const;
@@ -54,6 +60,7 @@ public:
 	float BlackholeDamage() const;
 	int m_iShell;
 	int m_iMode;
+	int m_iMaxClip;
 	int m_iCharging;
 	int m_iDefaultAmmo2;
 	int m_iCountPlayer;

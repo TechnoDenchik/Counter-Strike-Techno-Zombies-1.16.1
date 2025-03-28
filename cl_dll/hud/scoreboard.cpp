@@ -333,7 +333,7 @@
 				{
 					if (g_PlayerExtraInfo[id].dead)
 					{
-						sprintf(szBuf, "Мёртв");
+						sprintf(szBuf, "Убит");
 						DrawUtils::DrawHudStringReverse(x + (iStartW / 2) - 5 - 220, y + offsetY, 0, szBuf, r, g, b, flScale);
 					}
 					else if(g_PlayerExtraInfo[id].zombie)
@@ -357,7 +357,7 @@
 				{ 
 					if (g_PlayerExtraInfo[id].dead)
 					{
-						sprintf(szBuf, "Мёртв");
+						sprintf(szBuf, "Убит");
 						DrawUtils::DrawHudStringReverse(x + (iStartW / 2) - 5 - 220, y + offsetY, 0, szBuf, r, g, b, flScale);
 					}
 				}

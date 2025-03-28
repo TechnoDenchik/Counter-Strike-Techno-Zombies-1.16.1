@@ -18,7 +18,7 @@
 #include "gamemode/mods.h"
 #endif
 
-enum starchaserar_e
+enum quantum_e
 {
 	QUANT_IDLE1,
 	QUANT_RELOAD,
@@ -27,7 +27,6 @@ enum starchaserar_e
 	QUANT_SHOOT1,
 	QUANT_SHOOT2,
 	QUANT_SHOOT3,
-	QUANT_SHOOT4,
 
 	QUANT_REV_IDLE,
 	QUANT_REV_RELOAD,
@@ -36,7 +35,6 @@ enum starchaserar_e
 	QUANT_REV_SHOOT1,
 	QUANT_REV_SHOOT2,
 	QUANT_REV_SHOOT3,
-	QUANT_REV_SHOOT4,
 
 	QUANT_REV
 };
@@ -54,14 +52,18 @@ void CQuantum::Spawn(void)
 	m_iDefaultAmmo = QUANT_DEFAULT_GIVE;
 	m_flAccuracy = 0.2;
 	m_iShotsFired = 0;
+	QuantAmmo = 0;
+	phs2 = -1;
+	phs3 = -1;
+	phs4 = -1;
+	phs12 = -1;
 
 	FallInit();
 }
 
 void CQuantum::Precache(void)
 {
-	PRECACHE_MODEL("models/v_revivegun_a_fix.mdl");
-	PRECACHE_MODEL("models/v_revivegun_b_fix.mdl");
+	PRECACHE_MODEL("models/v_revivegun.mdl");
 
 	PRECACHE_MODEL("models/w_revivegun.mdl");
 
@@ -89,7 +91,7 @@ void CQuantum::Precache(void)
 	PRECACHE_MODEL("sprites/ef_revivegun_idle1_left.spr");
 	PRECACHE_MODEL("sprites/ef_revivegun_idle2.spr");
 	PRECACHE_MODEL("sprites/ef_revivegun_idle2_left.spr");
-	PRECACHE_MODEL("sprites/ef_revivegun_laser.spr");
+	PRECACHE_MODEL(Beam_SPR);
 
 	PRECACHE_MODEL("sprites/muzzleflash223.spr");
 	PRECACHE_MODEL("sprites/muzzleflash224.spr");
@@ -104,8 +106,12 @@ int CQuantum::GetItemInfo(ItemInfo *p)
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "762Nato";
 	p->iMaxAmmo1 = MAX_AMMO_762NATO;
-	p->pszAmmo2 = NULL;
-	p->iMaxAmmo2 = -1;
+	p->pszAmmo2 = "QuantAmmo";
+	p->iMaxAmmo2 = 7;
+	p->pszAmmo3 = NULL;
+	p->iMaxAmmo3 = -1;
+	p->pszAmmoGrenade = NULL;
+	p->iMaxAmmoGrenade = -1;
 	p->iMaxClip = QUANT_MAX_CLIP;
 	p->iSlot = 0;
 	p->iPosition = 14;
@@ -121,28 +127,72 @@ BOOL CQuantum::Deploy(void)
 	m_flAccuracy = 0.2;
 	m_iShotsFired = 0;
 	iShellOn = 1;
-
-	return DefaultDeploy("models/v_revivegun_a_fix.mdl", "models/p_revivegun.mdl", QUANT_DRAW, "ak47", UseDecrement() != FALSE);
+	phs2 = -1;
+	phs3 = -1;
+	phs4 = -1;
+	phs12 = -1;
+	CreateEffect();
+	return DefaultDeploy("models/v_revivegun.mdl", "models/p_revivegun.mdl", QUANT_DRAW, "ak47", UseDecrement() != FALSE);
 }
 
 void CQuantum::Holster(int skiplocal)
 {
-	
+	phs2 = -1;
+	phs3 = -1;
+	phs4 = -1;
+	phs12 = -1;
 	ClearEffect();
 	DestroyEffect();
 	// clear target list ?
 	return CBasePlayerWeapon::Holster(skiplocal);
 }
 
+void CQuantum::CreateEffect()
+{
+#ifndef CLIENT_DLL
+	for (size_t i = 0; i < 3; ++i)
+	{
+		CBeam* pBeam = CBeam::BeamCreate(Beam_SPR, 300);
+		pBeam->SetColor(255, 255, 255);
+		pBeam->SetScrollRate(40);
+		pBeam->SetBrightness(255);
+		pBeam->SetNoise(10);
+		pBeam->SetWidth(200);
+		pev->effects |= EF_NODRAW;
+
+		phs12_13_14[i] = pBeam;
+	}
+#endif
+}
+
 void CQuantum::SecondaryAttack(void)
 {
-	if (m_iClip > 0)
+	
+	if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] > 0)
 	{
-		m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME; // 600
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.9f;
-		Getsprite();
-		RadiusDamage2();
-		PrimaryAttack_FindTargets();
+		if (phs2 > 0.0f)
+			phs2 = -1.0f; // 0xBF800000
+
+		if (phs3 == -1.0f)
+		{
+			SendWeaponAnim(QUANT_SHOOT2, UseDecrement() != FALSE); // 3
+			phs3 = gpGlobals->time + 0.23;
+
+			m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME; // 600
+		
+			m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType]--;
+			Getsprite();
+			RadiusDamage2();	
+			m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1.0;
+			//m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 99999.0;
+			//m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 99999.0;
+			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0;
+		}
+		bool v6 = gpGlobals->time > phs12 + 1.0f;
+
+		if (v6)
+			phs12 = v6 = gpGlobals->time;
+		
 	}
 	else
 	{
@@ -154,7 +204,7 @@ void CQuantum::SecondaryAttack(void)
 
 void CQuantum::PrimaryAttack_FindTargets()
 {
-	const float flRadius = 320;
+	const float flRadius = 450;
 
 	phs9_10_11.clear();
 #ifndef CLIENT_DLL
@@ -173,7 +223,7 @@ void CQuantum::PrimaryAttack_FindTargets()
 
 bool CQuantum::PrimaryAttack_CheckTargetAvailable(CBaseEntity* a2, Vector vecAngleDirection)
 {
-	const float flRadius = 600;
+	const float flRadius = 450;
 
 	if (!a2->IsAlive())
 		return false;
@@ -210,6 +260,9 @@ void CQuantum::PrimaryAttack(void)
 			QuantFire((0.02) * m_flAccuracy, 0.2f, FALSE);
 		else
 			QuantFire((0.02) * m_flAccuracy, 0.2f, FALSE);
+		if (phs2 > 0.0f)
+			phs2 = -1.0f; // 0xBF800000
+		bool v6 = gpGlobals->time > phs12 + 1.0f;
 	}
 	else
 	{
@@ -412,17 +465,119 @@ void CQuantum::RadiusDamage3(Vector vecAiming, float flDamage)
 }
 #endif	
 
+void CQuantum::ItemPostFrame()
+{
+	int usableButtons = m_pPlayer->pev->button;
+	if ((usableButtons & (IN_ATTACK2)))
+	{
+
+		if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] > 0)
+		{
+			//m_fireuse2 = true;
+		}
+		
+	}
+	
+
+
+	if (phs4 > 0.0f && gpGlobals->time > phs4)
+	{
+		phs4 = -1;
+
+		return;
+	}
+
+	if (phs2 <= 0.0f)
+	{
+		if (phs3 > 0.0f)
+		{
+			if (this->m_pPlayer->pev->button & IN_ATTACK2 && this->m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] > 0)
+			{
+				
+				if (gpGlobals->time > phs3)
+				{
+					this->SendWeaponAnim(QUANT_SHOOT3, UseDecrement() != FALSE); // 4
+					phs3 = gpGlobals->time + 4.0f;
+
+					return CBasePlayerWeapon::ItemPostFrame();
+				}
+				if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] != 0)
+				{
+					m_fireuse2 = true;
+				}
+			}
+			else
+			{
+				phs3 = -1;			
+				phs12 = -1;
+			}
+		}
+	}
+	if (m_fireuse2 == true)
+	{
+		if (gpGlobals->time - tWorldTime3 < 99.0f)
+		{
+			tDelta3 += gpGlobals->time - tWorldTime3;
+		}
+
+		if (tNextAttack3 > 0.3f || (gpGlobals->time - tWorldTime3 > 0.3f) || tDelta3 > 0.3f)
+		{
+			tNextAttack3 = 0.0f;
+			tDelta3 = 0.0f;
+
+			PrimaryAttack_FindTargets();
+		}
+		tWorldTime3 = gpGlobals->time;
+
+		if (gpGlobals->time - tWorldTime4 < 99.0f)
+		{
+			tDelta4 += gpGlobals->time - tWorldTime4;
+		}
+
+		if (tNextAttack4 > 1.0f || (gpGlobals->time - tWorldTime4 > 1.0f) || tDelta4 > 1.0f)
+		{
+			tNextAttack4 = 0.0f;
+			tDelta4 = 0.0f;
+			ClearEffect();
+			m_fireuse2 = false;
+		}
+		tWorldTime4 = gpGlobals->time;
+	}
+	else
+	{
+		if (gpGlobals->time - tWorldTime5 < 99.0f)
+		{
+			tDelta5 += gpGlobals->time - tWorldTime5;
+		}
+
+		if (tNextAttack5 > 1.8f || (gpGlobals->time - tWorldTime5 > 1.8f) || tDelta5 > 1.8f)
+		{
+			tNextAttack5 = 0.0f;
+			tDelta5 = 0.0f;
+			if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] != 7)
+			{
+				m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType]++;
+			}
+		}
+		tWorldTime5 = gpGlobals->time;
+	}
+	return CBasePlayerWeapon::ItemPostFrame();
+}
+
 void CQuantum::RadiusDamage2()
 {
 	BOOL fDidHit = FALSE;
 	UTIL_MakeVectors(m_pPlayer->pev->v_angle);
 	Vector vecSrc = m_pPlayer->GetGunPosition();
 
-
 	if (phs9_10_11.empty())
 	{
-		ClearEffect();
+		//ClearEffect();
 		if (!phs5_6_7.empty())
+		{
+			// ???
+		}
+		if (!phs12_13_14.empty())
 		{
 			// ???
 		}
@@ -449,6 +604,22 @@ void CQuantum::RadiusDamage2()
 		if (v8 < 6)
 		{
 #ifndef CLIENT_DLL
+			CBeam* pBeam = phs12_13_14[v8];
+			if (pBeam)
+			{
+				//pBeam->EntsInit(ENTINDEX(m_pPlayer->edict()), ENTINDEX(pEntity->edict()));
+				pBeam->SetType(BEAM_ENTS);
+				pBeam->SetStartEntity(ENTINDEX(m_pPlayer->edict()));
+				pBeam->SetEndEntity(ENTINDEX(pEntity->edict()));
+				pBeam->SetStartAttachment(1);
+				pBeam->SetEndAttachment(0);
+				pBeam->SetWidth(200);
+				pBeam->RelinkBeam();
+				pBeam->SetBrightness(255);
+				pBeam->pev->effects &= ~EF_NODRAW;
+
+			}
+
 
 			MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pEntity->pev->origin);
 			WRITE_BYTE(TE_EXPLOSION);
@@ -485,6 +656,11 @@ void CQuantum::DestroyEffect()
 		if (p)
 			p->SUB_Remove();
 	}
+	for (CBeam* p : phs12_13_14)
+	{
+		if (p)
+			p->SUB_Remove();
+	}
 #endif
 }
 
@@ -499,13 +675,22 @@ void CQuantum::ClearEffect()
 			pev->effects |= EF_NODRAW; // 0x80
 		}
 	}
+	for (CBeam* pBeam : phs12_13_14)
+	{
+		if (pBeam)
+		{
+			pBeam->SetBrightness(0);
+			pev->effects |= EF_NODRAW; // 0x80
+		}
+	}
+
 #endif
 	phs9_10_11.clear();
 }
 
 void CQuantum::Getsprite()
 {
-	const float flRadius = 500;
+	const float flRadius = 450;
 
 	phs9_10_11.clear();
 #ifndef CLIENT_DLL
@@ -733,7 +918,7 @@ void CQuantum::QuantFire2(float flSpread, duration_t flCycleTime, BOOL fUseAutoA
 	}
 
 
-	SendWeaponAnim(QUANT_SHOOT4, UseDecrement() != FALSE);
+	SendWeaponAnim(QUANT_SHOOT3, UseDecrement() != FALSE);
 	EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/revivegun-2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 
 	if (tNextAttack > 1.0f || (gpGlobals->time - tWorldTime > 1.0f) || tDelta > 1.0f)
@@ -838,4 +1023,14 @@ float CQuantum::GetDamage() const
 		flDamage = 1300.0f;
 #endif
 	return flDamage;
+}
+
+int CQuantum::ExtractAmmo(CBasePlayerWeapon* pWeapon)
+{
+	if (QuantAmmo)
+	{
+		m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] = QuantAmmo;
+		QuantAmmo = 0;
+	}
+	return CBasePlayerWeapon::ExtractAmmo(pWeapon);
 }

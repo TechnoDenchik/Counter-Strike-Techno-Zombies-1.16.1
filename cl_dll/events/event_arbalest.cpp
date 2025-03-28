@@ -15,7 +15,7 @@ GNU General Public License for more details.
 
 #include "events.h"
 
-enum
+enum arbalest
 {
 	ARBALEST_IDLE,
 	ARBALEST_RELOAD,

@@ -3438,7 +3438,7 @@ static int GAME_EXPORT R_StudioDrawPlayer( int flags, entity_state_t *pplayer )
 		if( RI.currententity->index > 0 )
 		{
 			cl_entity_t *ent = CL_GetEntityByIndex( RI.currententity->index );
-			Q_memcpy( ent->attachment, RI.currententity->attachment, sizeof( vec3_t ) * 4 );
+			Q_memcpy( ent->attachment, RI.currententity->attachment, sizeof( vec3_t ) * 1024 );
 		}
 	}
 
@@ -3581,7 +3581,7 @@ static int GAME_EXPORT R_StudioDrawModel( int flags )
 		if( RI.currententity->index > 0 )
 		{
 			cl_entity_t *ent = CL_GetEntityByIndex( RI.currententity->index );
-			Q_memcpy( ent->attachment, RI.currententity->attachment, sizeof( vec3_t ) * 4 );
+			Q_memcpy( ent->attachment, RI.currententity->attachment, sizeof( vec3_t ) * 1024 );
 		}
 	}
 
@@ -3735,11 +3735,11 @@ void R_DrawViewModel( void )
 
 	if( !Mod_Extradata( clgame.viewent.model ))
 		return;
-/*#ifndef _MSC_VER
+#ifndef _MSC_VER
 #warning "check this"
 #endif
 	if( cl_lw->value && cl.frame.client.viewmodel != cl.predicted.viewmodel )
-		return;*/
+		return;
 
 	RI.currententity = &clgame.viewent;
 	RI.currentmodel = RI.currententity->model;

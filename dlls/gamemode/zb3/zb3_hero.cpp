@@ -15,7 +15,7 @@ CHero_ZB1::CHero_ZB1(CBasePlayer* player) : BasePlayerExtra(player)
 {
 	m_pPlayer->m_bIsZombie = false;
 	m_pPlayer->m_bNotKilled = false;
-
+	m_pPlayer->m_bIsVIP = true;
 	m_pPlayer->pev->body = 0;
 
 	const char* szModel = "hero";

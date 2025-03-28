@@ -50,7 +50,7 @@ enum twinaxes
 
 static const char *SOUNDS_NAME = "weapons/dgaxe_slash1.wav";
 
-void EV_knife_twinaxes( struct event_args_s *args )
+void EV_FireTwinAxes( struct event_args_s *args )
 {
 	int    idx = args->entindex;
 	Vector origin( args->origin );

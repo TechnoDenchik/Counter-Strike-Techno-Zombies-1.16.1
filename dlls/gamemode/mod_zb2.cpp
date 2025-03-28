@@ -256,59 +256,55 @@ bool CPlayerModStrategy_ZB2::ClientCommand(const char *pcmd)
 			m_pCharacter_ZB2->ActivateSkill(SKILL_SLOT_1);
 		return true;
 	}
+	if (!Q_stricmp(pcmd, "CST_ClassHuman"))
+	{
+		BecomeHuman();
+		return true;
+	}
 
 	if (!Q_stricmp(pcmd, "CST_ClassTank") && m_pPlayer->m_bIsZombie)
 	{
-		BecomeTank(ZOMBIE_LEVEL_ORIGIN);
-		
+		BecomeTank(ZOMBIE_LEVEL_ORIGIN);	
 		return true;
 	}
 	else if (!Q_stricmp(pcmd, "CST_ClassSpeed") && m_pPlayer->m_bIsZombie)
 	{
-		BecomeSpeed(ZOMBIE_LEVEL_ORIGIN);
-	
+		BecomeSpeed(ZOMBIE_LEVEL_ORIGIN);	
 		return true;
 	}
 	else if (!Q_stricmp(pcmd, "CST_ClassHeavy") && m_pPlayer->m_bIsZombie)
 	{
-		BecomeHeavy(ZOMBIE_LEVEL_ORIGIN);
-		
+		BecomeHeavy(ZOMBIE_LEVEL_ORIGIN);		
 		return true;
 	}
 	else if (!Q_stricmp(pcmd, "CST_ClassHeal") && m_pPlayer->m_bIsZombie)
 	{
-		BecomeHeal(ZOMBIE_LEVEL_ORIGIN);
-	
+		BecomeHeal(ZOMBIE_LEVEL_ORIGIN);	
 		return true;
 	}
 	else if (!Q_stricmp(pcmd, "CST_ClassPsycho") && m_pPlayer->m_bIsZombie)
 	{
-		BecomePsycho(ZOMBIE_LEVEL_ORIGIN);
-		
+		BecomePsycho(ZOMBIE_LEVEL_ORIGIN);		
 		return true;
 	}
 	else if (!Q_stricmp(pcmd, "CST_ClassDeimos") && m_pPlayer->m_bIsZombie)
 	{
 		BecomeDeimos(ZOMBIE_LEVEL_ORIGIN);
-		
 		return true;
 	}
 	else if (!Q_stricmp(pcmd, "CST_ClassGanimed") && m_pPlayer->m_bIsZombie)
 	{
-		BecomeGanimed(ZOMBIE_LEVEL_ORIGIN);
-		
+		BecomeGanimed(ZOMBIE_LEVEL_ORIGIN);	
 		return true;
 	}
 	else if (!Q_stricmp(pcmd, "CST_ClassBanchee") && m_pPlayer->m_bIsZombie)
 	{
-		BecomeBanchee(ZOMBIE_LEVEL_ORIGIN);
-		
+		BecomeBanchee(ZOMBIE_LEVEL_ORIGIN);	
 		return true;
 	}
 	else if (!Q_stricmp(pcmd, "CST_ClassStamper") && m_pPlayer->m_bIsZombie)
 	{
-		BecomeStamper(ZOMBIE_LEVEL_ORIGIN);
-		
+		BecomeStamper(ZOMBIE_LEVEL_ORIGIN);		
 		return true;
 	}
 
@@ -427,26 +423,62 @@ void CPlayerModStrategy_ZB2::Zombie_HealthRecoveryThink()
 
 void CPlayerModStrategy_ZB2::BecomeZombie(ZombieLevel iEvolutionLevel)
 {
-	auto sp = ZombieClassFactory(m_pPlayer, iEvolutionLevel, "tank");
-	
-	m_pPlayer->m_bIsZombieTank = true;
-	m_pPlayer->m_bIsZombieFemale = false;
-	m_pPlayer->m_bIsZombieHeavy = false;
-	m_pPlayer->m_bIsZombieHeal = false;
-	m_pPlayer->m_bIsZombiePc = false;
-	m_pPlayer->m_bIsZombieDeimos = false;
-	m_pPlayer->m_bIsZombieGanimed = false;
-	m_pPlayer->m_bIsZombieBanchee = false;
-	m_pPlayer->m_bIsZombieStamp = false;
+	if (!FL_FAKECLIENT)
+	{
+		auto sp = ZombieClassFactory(m_pPlayer, iEvolutionLevel, "tank");
 
-	m_pCharacter_ZB2 = sp;
-	m_pCharacter = sp;
+		m_pPlayer->m_bIsZombieTank = true;
+		m_pPlayer->m_bIsZombieFemale = false;
+		m_pPlayer->m_bIsZombieHeavy = false;
+		m_pPlayer->m_bIsZombieHeal = false;
+		m_pPlayer->m_bIsZombiePc = false;
+		m_pPlayer->m_bIsZombieDeimos = false;
+		m_pPlayer->m_bIsZombieGanimed = false;
+		m_pPlayer->m_bIsZombieBanchee = false;
+		m_pPlayer->m_bIsZombieStamp = false;
 
-	sp->InitHUD();
-	sp->ResetMaxSpeed();
+		m_pCharacter_ZB2 = sp;
+		m_pCharacter = sp;
 
-	m_iZombieInfections = 0;
-	UpdatePlayerEvolutionHUD();
+		sp->InitHUD();
+		sp->ResetMaxSpeed();
+
+		m_iZombieInfections = 0;
+		UpdatePlayerEvolutionHUD();
+	}
+	else
+	{
+		switch (RANDOM_LONG(1, 9))
+		{
+		case 1:
+			BecomeTank(ZOMBIE_LEVEL_ORIGIN);
+			break;
+		case 2:
+			BecomeSpeed(ZOMBIE_LEVEL_ORIGIN);
+			break;
+		case 3:
+			BecomeHeavy(ZOMBIE_LEVEL_ORIGIN);
+			break;
+		case 4:
+			BecomeHeal(ZOMBIE_LEVEL_ORIGIN);
+			break;
+		case 5:
+			BecomePsycho(ZOMBIE_LEVEL_ORIGIN);
+			break;
+		case 6:
+			BecomeDeimos(ZOMBIE_LEVEL_ORIGIN);
+			break;
+		case 7:
+			BecomeGanimed(ZOMBIE_LEVEL_ORIGIN);
+			break;
+		case 8:
+			BecomeBanchee(ZOMBIE_LEVEL_ORIGIN);
+			break;
+		case 9:
+			BecomeStamper(ZOMBIE_LEVEL_ORIGIN);
+			break;
+		}
+	}
 }
 
 void CPlayerModStrategy_ZB2::BecomeTank(ZombieLevel iEvolutionLevel)
@@ -668,6 +700,16 @@ void CPlayerModStrategy_ZB2::BecomeStamper(ZombieLevel iEvolutionLevel)
 void CPlayerModStrategy_ZB2::BecomeHuman()
 {
 	auto sp = std::make_shared<CHuman_ZB2>(m_pPlayer);
+
+	m_pPlayer->m_bIsZombieTank = false;
+	m_pPlayer->m_bIsZombieFemale = false;
+	m_pPlayer->m_bIsZombieHeavy = false;
+	m_pPlayer->m_bIsZombieHeal = false;
+	m_pPlayer->m_bIsZombiePc = false;
+	m_pPlayer->m_bIsZombieDeimos = false;
+	m_pPlayer->m_bIsZombieGanimed = false;
+	m_pPlayer->m_bIsZombieBanchee = false;
+	m_pPlayer->m_bIsZombieStamp = false;
 
 	m_pCharacter_ZB2 = sp;
 	m_pCharacter = sp;

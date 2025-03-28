@@ -23,6 +23,8 @@
     <Image Include="..\game_launch\game.ico">
       <Filter>Resource</Filter>
     </Image>
+    <Image Include="C:\Users\SnailKick-PC\Desktop\cstz.ico" />
+    <Image Include="game.ico" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\game_launch\cstzlauncher.rc">

@@ -84,25 +84,25 @@ void Sys_CloseLog( void )
 	switch( host.state )
 	{
 	case HOST_CRASHED:
-		Q_strncpy( event_name, "crashed", sizeof( event_name ));
+		Q_strncpy( event_name, "Ошибка", sizeof( event_name ));
 		break;
 	case HOST_ERR_FATAL:
-		Q_strncpy( event_name, "stopped with error", sizeof( event_name ));
+		Q_strncpy( event_name, "Завершение сеанса по причине ошибки", sizeof( event_name ));
 		break;
 	default:
-		if( !host.change_game ) Q_strncpy( event_name, "stopped", sizeof( event_name ));
+		if( !host.change_game ) Q_strncpy( event_name, "Остановка", sizeof( event_name ));
 		else Q_strncpy( event_name, host.finalmsg, sizeof( event_name ));
 		break;
 	}
 
 	printf( "\n================================================================================\n");
-	printf( "\t%s (build %i) %s at %s\n", s_ld.title, Q_buildnum(), event_name, Q_timestamp( TIME_FULL ));
+	printf( "\t%s (build %i) %s от %s\n", s_ld.title, Q_buildnum(), event_name, Q_timestamp( TIME_FULL ));
 	printf( "================================================================================\n");
 
 	if( s_ld.logfile )
 	{
 		fprintf( s_ld.logfile, "\n================================================================================\n");
-		fprintf( s_ld.logfile, "\t%s (build %i) %s at %s\n", s_ld.title, Q_buildnum(), event_name, Q_timestamp( TIME_FULL ));
+		fprintf( s_ld.logfile, "\t%s (build %i) %s от %s\n", s_ld.title, Q_buildnum(), event_name, Q_timestamp( TIME_FULL ));
 		fprintf( s_ld.logfile, "================================================================================\n");
 
 		fclose( s_ld.logfile );
@@ -122,11 +122,8 @@ void Sys_InitLog( void )
 {
 	const char	*mode;
 
-	if( Sys_CheckParm( "-log" ) && host.developer != 0 )
-	{
-		s_ld.log_active = true;
-		Q_strncpy( s_ld.log_path, "engine.log", sizeof( s_ld.log_path ));
-	}
+	s_ld.log_active = true;
+	Q_strncpy( s_ld.log_path, "technoengine.cstlog", sizeof( s_ld.log_path ));
 
 	if( host.change_game )
 		mode = "a";
@@ -135,7 +132,7 @@ void Sys_InitLog( void )
 
 	// print log to stdout
 	printf( "================================================================================\n" );
-	printf( "\t%s (build %i, %s-%s) started at %s\n", s_ld.title, Q_buildnum(), Q_buildos(), Q_buildarch(), Q_timestamp( TIME_FULL ));
+	printf( "\t%s (build %i, %s-%s) Запуск от %s\n", s_ld.title, Q_buildnum(), Q_buildos(), Q_buildarch(), Q_timestamp( TIME_FULL ));
 	printf( "================================================================================\n" );
 
 	s_ld.logfileno = -1;
@@ -153,7 +150,7 @@ void Sys_InitLog( void )
 		else s_ld.logfileno = fileno( s_ld.logfile );
 
 		fprintf( s_ld.logfile, "================================================================================\n" );
-		fprintf( s_ld.logfile, "\t%s (build %i, %s-%s) started at %s\n", s_ld.title, Q_buildnum(), Q_buildos(), Q_buildarch(), Q_timestamp( TIME_FULL ));
+		fprintf( s_ld.logfile, "\t%s (build %i, %s-%s) Запуск от %s\n", s_ld.title, Q_buildnum(), Q_buildos(), Q_buildarch(), Q_timestamp( TIME_FULL ));
 		fprintf( s_ld.logfile, "================================================================================\n" );
 	}
 }

@@ -104,13 +104,15 @@
 // entity effects
 #define EF_BRIGHTFIELD		1	// swirling cloud of particles
 #define EF_MUZZLEFLASH		2	// single frame ELIGHT on entity attachment 0
+
 #define EF_BRIGHTLIGHT		4	// DLIGHT centered at entity origin
 #define EF_DIMLIGHT			8	// player flashlight
 #define EF_INVLIGHT			16	// get lighting from ceiling
 #define EF_NOINTERP			32	// don't interpolate the next frame
 #define EF_LIGHT			64	// rocket flare glow sprite
 #define EF_NODRAW			128	// don't draw entity
-
+#define EF_MUZZLEFLASH2		256	// single frame ELIGHT on entity attachment 0
+#define EF_MUZZLEFLASH3		512	// single frame ELIGHT on entity attachment 0
 
 
 #define EF_NOREFLECT		(1<<24)	// Entity won't reflecting in mirrors

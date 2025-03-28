@@ -132,10 +132,17 @@ int MaxAmmoCarry(int iszName)
 		{
 			return info->iMaxAmmo1;
 		}
-
 		if (info->pszAmmo2 && !Q_strcmp(STRING(iszName), info->pszAmmo2))
 		{
 			return info->iMaxAmmo2;
+		}
+		if (info->pszAmmo3 && !Q_strcmp(STRING(iszName), info->pszAmmo3))
+		{
+			return info->iMaxAmmo3;
+		}
+		if (info->pszAmmoGrenade && !Q_strcmp(STRING(iszName), info->pszAmmoGrenade))
+		{
+			return info->iMaxAmmoGrenade;
 		}
 	}
 
@@ -325,6 +332,14 @@ void UTIL_PrecacheOtherWeapon(const char *szClassname)
 			{
 				AddAmmoNameToAmmoRegistry(II.pszAmmo2);
 			}
+			if (II.pszAmmo3 != NULL && *II.pszAmmo3 != '\0')
+			{
+				AddAmmoNameToAmmoRegistry(II.pszAmmo3);
+			}
+			if (II.pszAmmoGrenade != NULL && *II.pszAmmoGrenade != '\0')
+			{
+				AddAmmoNameToAmmoRegistry(II.pszAmmoGrenade);
+			}
 		}
 	}
 
@@ -362,6 +377,14 @@ NOXREF void UTIL_PrecacheOtherWeapon2(const char *szClassname)
 			if (II.pszAmmo2 != NULL && *II.pszAmmo2 != '\0')
 			{
 				AddAmmoNameToAmmoRegistry(II.pszAmmo2);
+			}
+			if (II.pszAmmo3 != NULL && *II.pszAmmo3 != '\0')
+			{
+				AddAmmoNameToAmmoRegistry(II.pszAmmo3);
+			}
+			if (II.pszAmmoGrenade != NULL && *II.pszAmmoGrenade != '\0')
+			{
+				AddAmmoNameToAmmoRegistry(II.pszAmmoGrenade);
 			}
 		}
 	}
@@ -552,7 +575,7 @@ void CBasePlayerItem::DefaultTouch(CBaseEntity *pOther)
 		return;
 	}
 
-	if (pPlayer->m_bIsZombie && m_iId != WEAPON_KNIFE && Q_strcmp(STRING(pev->classname), "weapon_zombibomb"))
+	if (pPlayer->m_bIsZombie && m_iId != WEAPON_KNIFE && Q_strcmp(STRING(pev->classname), "weapon_zombibombz"))
 	{
 		return;
 	}
@@ -1069,6 +1092,8 @@ int CBasePlayerWeapon::AddToPlayer(CBasePlayer *pPlayer)
 	{
 		m_iPrimaryAmmoType = pPlayer->GetAmmoIndex(pszAmmo1());
 		m_iSecondaryAmmoType = pPlayer->GetAmmoIndex(pszAmmo2());
+		m_iKnifeAmmoType = pPlayer->GetAmmoIndex(pszAmmo3());
+		m_iGrenadeAmmoType = pPlayer->GetAmmoIndex(pszAmmoGrenade());
 	}
 
 	if (AddWeapon())
@@ -1444,6 +1469,14 @@ int CBasePlayerWeapon::ExtractAmmo(CBasePlayerWeapon *pWeapon)
 	if (pszAmmo2() != NULL)
 	{
 		iReturn = AddSecondaryAmmo(0, (char *)pszAmmo2(), iMaxAmmo2());
+	}
+	if (pszAmmo3() != NULL)
+	{
+		iReturn = AddSecondaryAmmo(0, (char*)pszAmmo3(), iMaxAmmo3());
+	}
+	if (pszAmmoGrenade() != NULL)
+	{
+		iReturn = AddSecondaryAmmo(0, (char*)pszAmmoGrenade(), iMaxAmmoGrenade());
 	}
 
 	return iReturn;

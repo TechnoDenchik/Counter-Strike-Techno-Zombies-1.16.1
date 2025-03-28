@@ -15,13 +15,14 @@
 #include "zb3_rage.h"
 #include "player/player_const.h"
 #include "zb3/TextSet.h"
+#include "InventorySet.h"
 #include "gamemode/zb3/zb3_const.h"
 #include "gamemode/interface/interface_const.h"
 
 #include <vector>
 
 class CHudZB3::impl_t
-	: public THudSubDispatcher<CHudZB3Morale, CHudZB3Rage, CHudTextZB3, CHudText2ZB3>
+	: public THudSubDispatcher<CHudZB3Morale, CHudZB3Rage, CHudTextZB3, CHudText2ZB3, CInventorySet>
 {
 public:
 };
@@ -29,6 +30,7 @@ public:
 DECLARE_MESSAGE(m_ZB3, ZB3Msg)
 DECLARE_MESSAGE(m_ZB3, ZB3SkillUsed)
 DECLARE_MESSAGE(m_ZB3, ZB3SkillUsed2)
+DECLARE_MESSAGE(m_ZB3, ZB3Inventory)
 
 int CHudZB3::MsgFunc_ZB3Msg(const char *pszName, int iSize, void *pbuf)
 {
@@ -94,6 +96,21 @@ int CHudZB3::MsgFunc_ZB3SkillUsed2(const char* pszName, int iSize, void* pbuf)
 	return 1;
 }
 
+int CHudZB3::MsgFunc_ZB3Inventory(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+	auto type = static_cast<INTWeaponMsg>(buf.ReadByte());
+	
+	char* Gun = CVAR_GET_STRING("wpn_getgun");
+	char* Pistol = CVAR_GET_STRING("wpn_getpistol");
+	char* Knife = CVAR_GET_STRING("wpn_getknife");
+	char* Grenade = CVAR_GET_STRING("wpn_getgrenade");
+
+	pimpl->get<CInventorySet>().GetWeapon(Gun, Pistol, Knife, Grenade);
+
+	return 1;
+}
+
 int CHudZB3::Init(void)
 {
 	pimpl = new CHudZB3::impl_t;
@@ -103,6 +120,7 @@ int CHudZB3::Init(void)
 	HOOK_MESSAGE(ZB3Msg);
 	HOOK_MESSAGE(ZB3SkillUsed);
 	HOOK_MESSAGE(ZB3SkillUsed2);
+	HOOK_MESSAGE(ZB3Inventory);
 
 	return 1;
 }

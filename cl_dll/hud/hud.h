@@ -206,7 +206,8 @@ public:
 	CHudUserCmd(Autobuy);
 
 	bool FHasSecondaryAmmo() { return m_pWeapon && m_pWeapon->iAmmo2Type > 0; }
-
+	bool FHasType3Ammo() { return m_pWeapon && m_pWeapon->iAmmo3Type > 0; }
+	bool FHasTypeGrenadeAmmo() { return m_pWeapon && m_pWeapon->iAmmoGrenadeType > 0; }
 	void renaining(int iCountDown)
 	{
 		m_iClip_c = iCountDown;
@@ -272,10 +273,14 @@ private:
 		MAX_SEC_AMMO_VALUES = 4
 	};
 
-	SharedTexture winhm;
-	SharedTexture winzb;
-	wrect_t m_rcTeamnumber[10];
-	wrect_t m_rcSelfnumber[10];
+	SharedTexture ammoclips;
+	SharedTexture ammofloat;
+	UniqueTexture ammoboard;
+	UniqueTexture ammoboard2;
+	UniqueTexture weaponboard;
+
+	wrect_t m_rcAmmoclip[10];
+	wrect_t m_rcAmmofloat[10];
 
 	int m_HUD_ammoicon; // sprite indices
 	int m_iAmmoAmounts[MAX_SEC_AMMO_VALUES];

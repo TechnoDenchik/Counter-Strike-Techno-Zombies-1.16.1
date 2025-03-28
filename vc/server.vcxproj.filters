@@ -167,6 +167,12 @@
     <Filter Include="Resources">
       <UniqueIdentifier>{a9e53952-f8e0-4452-a08c-9de9ff3639b9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="dlls\util">
+      <UniqueIdentifier>{bef49b9c-0517-449f-b13b-011122f20842}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\gamemode\zb1">
+      <UniqueIdentifier>{e9df5c97-a2cf-4f4c-ad66-cffd59983b37}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\dlls\h_export.cpp">
@@ -970,9 +976,6 @@
     <ClCompile Include="..\dlls\wpn_shared\wpn_arbalest.cpp">
       <Filter>dlls\wpn_shared</Filter>
     </ClCompile>
-    <ClCompile Include="..\dlls\gamemode\zsh\NPC\npc_group.cpp">
-      <Filter>dlls\gamemode\zsh\NPC</Filter>
-    </ClCompile>
     <ClCompile Include="..\dlls\gamemode\zsh\NPC\zsh_zm.cpp">
       <Filter>dlls\gamemode\zsh\NPC</Filter>
     </ClCompile>
@@ -1056,6 +1059,24 @@
     </ClCompile>
     <ClCompile Include="..\dlls\gamemode\zb3\zb3_hero.cpp">
       <Filter>dlls\gamemode\zb3\Human</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wondercannon.cpp">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_buffm4a1.cpp">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wondercannonex.cpp">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_voidpistolex.cpp">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_paladin.cpp">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_twin_axesex.cpp">
+      <Filter>dlls\wpn_shared</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1930,9 +1951,6 @@
     <ClInclude Include="..\dlls\wpn_shared\wpn_arbalest.h">
       <Filter>dlls\wpn_shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\dlls\gamemode\zsh\NPC\npc_group.h">
-      <Filter>dlls\gamemode\zsh\NPC</Filter>
-    </ClInclude>
     <ClInclude Include="..\dlls\gamemode\zsh\NPC\zsh_zm.h">
       <Filter>dlls\gamemode\zsh\NPC</Filter>
     </ClInclude>
@@ -1998,6 +2016,30 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wondercannon.h">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb1\zb1_const.h">
+      <Filter>dlls\gamemode\zb1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb1\zb1_zclass.h">
+      <Filter>dlls\gamemode\zb1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_buffm4a1.h">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wondercannonex.h">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_voidpistolex.h">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_paladin.h">
+      <Filter>dlls\wpn_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\knife_twin_axesex.h">
+      <Filter>dlls\wpn_shared</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

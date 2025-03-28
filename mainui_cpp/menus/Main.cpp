@@ -399,11 +399,8 @@ void CMenuMain::_Init( void )
 	AddItem( background );
 	AddItem( banner );
 
-	
 	AddItem( console );
 	AddItem( iconconsole );
-	
-	
 
 	AddItem( disconnect );
 	AddItem( iconplay );

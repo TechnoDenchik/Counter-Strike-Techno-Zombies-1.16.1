@@ -176,13 +176,12 @@ void CHud :: Init( void )
 	HOOK_MESSAGE( Spectator ); // ignored due to touch menus
 	HOOK_MESSAGE( ServerName );
 
-
 	HOOK_MESSAGE( ShadowIdx );
 
 	CVAR_CREATE( "_vgui_menus", "1", FCVAR_ARCHIVE | FCVAR_USERINFO );
 	CVAR_CREATE( "_cl_autowepswitch", "1", FCVAR_ARCHIVE | FCVAR_USERINFO );
 	CVAR_CREATE( "_ah", "0", FCVAR_ARCHIVE | FCVAR_USERINFO );
-
+	CVAR_CREATE("wonderfire", "1", FCVAR_ARCHIVE | FCVAR_USERINFO);
 	hud_textmode = CVAR_CREATE( "hud_textmode", "0", FCVAR_ARCHIVE );
 	hud_colored  = CVAR_CREATE( "hud_colored", "0", FCVAR_ARCHIVE );
 	cl_righthand = CVAR_CREATE( "hand", "1", FCVAR_ARCHIVE );

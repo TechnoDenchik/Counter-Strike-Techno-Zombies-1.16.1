@@ -66,6 +66,10 @@ int CFlashbang::GetItemInfo(ItemInfo *p)
 	p->iMaxAmmo1 = MAX_AMMO_FLASHBANG;
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
+	p->pszAmmo3 = NULL;
+	p->iMaxAmmo3 = -1;
+	p->pszAmmoGrenade = NULL;
+	p->iMaxAmmoGrenade = -1;
 	p->iMaxClip = WEAPON_NOCLIP;
 	p->iSlot = 3;
 	p->iPosition = 2;
