@@ -123,7 +123,6 @@
     <ClCompile Include="..\cl_dll\hud\hud2\NewAlarm.cpp" />
     <ClCompile Include="..\cl_dll\hud\hud2\NewDeathInfo.cpp" />
     <ClCompile Include="..\cl_dll\hud\hud2\NewFontManager.cpp" />
-    <ClCompile Include="..\cl_dll\hud\hud2\NewHud.cpp" />
     <ClCompile Include="..\cl_dll\hud\hud_msg.cpp" />
     <ClCompile Include="..\cl_dll\hud\hud_redraw.cpp" />
     <ClCompile Include="..\cl_dll\hud\hud_sifiammo.cpp" />
@@ -387,7 +386,6 @@
     <ClInclude Include="..\cl_dll\hud\gd\Winhud.h" />
     <ClInclude Include="..\cl_dll\hud\hud2\NewAlarm.h" />
     <ClInclude Include="..\cl_dll\hud\hud2\NewFontManager.h" />
-    <ClInclude Include="..\cl_dll\hud\hud2\NewHud.h" />
     <ClInclude Include="..\cl_dll\hud\hud_sub.h" />
     <ClInclude Include="..\cl_dll\hud\interface\interface.h" />
     <ClInclude Include="..\cl_dll\hud\interface\interface_used.h" />
@@ -640,7 +638,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>G:\Release 2\Counter-Strike-TZ\cl_dlls</OutDir>
+    <OutDir>G:\CSTZ\</OutDir>
     <TargetName>client</TargetName>
     <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>..\vgui2_support\SourceSDK\lib\public;$(VC_LibraryPath_x86);$(WindowsSdk_71A_LibraryPath_x86);</LibraryPath>

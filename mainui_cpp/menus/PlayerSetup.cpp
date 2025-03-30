@@ -450,124 +450,123 @@ void CMenuPlayerSetup::SetConfig( void )
 	uirenderworld.WriteCvar();
 	playerinfo.WriteCvar();
 	hitindicator.LinkCvar("hud_hitstyle", CMenuEditable::CVAR_VALUE);
-	//WriteNewLogo();
 }
 
 void CMenuPlayerSetup::SetSkinHitIndicator()
 {
 	hitindicator.WriteCvar();
-	int musicset = (int)EngFuncs::GetCvarFloat("hud_hitstyle");
+	int hitset = (int)EngFuncs::GetCvarFloat("hud_hitstyle");
 
 
-	if (musicset == 0)
+	if (hitset == 0)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT0);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	}
-	else if (musicset == 1)
+	else if (hitset == 1)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_SYSTEM);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	}
-	else if (musicset == 2)
+	else if (hitset == 2)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT1);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	}
-	else if (musicset == 3)
+	else if (hitset == 3)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT2);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	}
-	else if (musicset == 4)
+	else if (hitset == 4)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT3);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	}
-	else if (musicset == 5)
+	else if (hitset == 5)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT4);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	}
-	else if (musicset == 6)
+	else if (hitset == 6)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT5);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	}
-	else if (musicset == 7)
+	else if (hitset == 7)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT6);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	}
-	else if (musicset == 8)
+	else if (hitset == 8)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT7);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	}
-	else if (musicset == 9)
+	else if (hitset == 9)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT8);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	}
-	else if (musicset == 10)
+	else if (hitset == 10)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT9);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	}
-	else if (musicset == 11)
+	else if (hitset == 11)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT10);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	}
-	else if (musicset == 12)
+	else if (hitset == 12)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT11);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	}
-	else if (musicset == 13)
+	else if (hitset == 13)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT12);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	}
-	else if (musicset == 14)
+	else if (hitset == 14)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT13);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	}
-	else if (musicset == 15)
+	else if (hitset == 15)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT14);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	}
-	else if (musicset ==16)
+	else if (hitset ==16)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT15);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	}
-	else if (musicset== 17)
+	else if (hitset == 17)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT16);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	}
-	else if (musicset == 18)
+	else if (hitset == 18)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT17);

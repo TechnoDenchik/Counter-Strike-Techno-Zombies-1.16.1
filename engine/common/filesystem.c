@@ -1385,10 +1385,10 @@ void FS_InitGameInfo( gameinfo_t *GameInfo, const char *gamedir )
 	GameInfo->version = 1.0f;
 
 	// .dll pathes
-	Q_strncpy( GameInfo->dll_path, "cl_dlls", sizeof( GameInfo->dll_path ));
-	Q_strncpy( GameInfo->game_dll, "dlls/mp.dll", sizeof( GameInfo->game_dll ));
-	Q_strncpy( GameInfo->game_dll_linux, "dlls/mp.so", sizeof( GameInfo->game_dll_linux ));
-	Q_strncpy( GameInfo->game_dll_osx, "dlls/mp.dylib", sizeof( GameInfo->game_dll_osx ));
+	Q_strncpy( GameInfo->dll_path, "../", sizeof( GameInfo->dll_path ));
+	Q_strncpy( GameInfo->game_dll, MPDLL, sizeof( GameInfo->game_dll ));
+	Q_strncpy( GameInfo->game_dll_linux, "../mp.so", sizeof( GameInfo->game_dll_linux ));
+	Q_strncpy( GameInfo->game_dll_osx, "../mp.dylib", sizeof( GameInfo->game_dll_osx ));
 	Q_strncpy( GameInfo->client_lib, CLIENTDLL, sizeof( GameInfo->client_lib ));
 
 	// .ico path
@@ -1546,6 +1546,10 @@ void FS_ParseGenericGameInfo( gameinfo_t *GameInfo, const char *buf, const qbool
 			{
 				pfile = COM_ParseFile( pfile, GameInfo->sp_entity );
 			}
+			else if (!Q_stricmp(token, "dll"))
+			{
+				pfile = COM_ParseFile(pfile, GameInfo->game_dll);
+			}
 			else if( !Q_stricmp( token, "clientlib" ))
 			{
 				pfile = COM_ParseFile( pfile, GameInfo->client_lib );
@@ -1620,7 +1624,7 @@ void FS_ParseGenericGameInfo( gameinfo_t *GameInfo, const char *buf, const qbool
 		}
 	}
 
-	if( !found_linux || !found_osx )
+	/*if (!found_linux || !found_osx)
 	{
 		// just replace extension from dll to so/dylib
 		char gamedll[64];
@@ -1632,7 +1636,7 @@ void FS_ParseGenericGameInfo( gameinfo_t *GameInfo, const char *buf, const qbool
 
 		if( !found_osx )
 			Q_snprintf( GameInfo->game_dll_osx, sizeof( GameInfo->game_dll_osx ), "%s.dylib", gamedll );
-	}
+	}*/
 
 	// make sure what gamedir is really exist
 	do {

@@ -508,6 +508,7 @@ public:
 	int m_iKevlar;
 	bool m_bNotKilled;
 	TeamName m_iTeam;
+	TeamName m_iModelTeam;
 	CPlayerAccount m_iAccount;
 	bool m_bHasPrimary;
 	float m_flDeathThrowTime;
@@ -696,7 +697,7 @@ public:
 	void SpawnProtection_Check();
 	void SpawnProtection_Start(float flTime);
 	void SpawnProtection_End();
-
+bool m_bIsFemale;
 public:
 	bool m_bIsZombie;
 	bool m_bIsZombieTank;
@@ -711,6 +712,7 @@ public:
 	bool m_bIsZombieRecovery;
 	bool m_bIsZombieFlying;
 	bool m_bSpawnProtection; // pack bools
+	
 	ZombieLevel m_iZombieLevel;
 	float m_flTimeSpawnProctionExpires;
 

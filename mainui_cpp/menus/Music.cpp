@@ -69,7 +69,7 @@ void CMenuMusic::exits()
 		if (musicset == 0)
 		{
 			testImage.iFlags = QMF_INACTIVE;
-			testImage.SetRect(540, 425, 240, 240);
+			testImage.SetRect(560, 425, 240, 240);
 			testImage.SetPicture(ART_CSGO);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
@@ -78,7 +78,7 @@ void CMenuMusic::exits()
 		else if (musicset == 1)
 		{
 			testImage.iFlags = QMF_INACTIVE;
-			testImage.SetRect(540, 425, 240, 240);
+			testImage.SetRect(560, 425, 240, 240);
 			testImage.SetPicture(ART_CS2);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
@@ -87,7 +87,7 @@ void CMenuMusic::exits()
 		else if (musicset == 2)
 		{
 			testImage.iFlags = QMF_INACTIVE;
-			testImage.SetRect(540, 425, 240, 240);
+			testImage.SetRect(560, 425, 240, 240);
 			testImage.SetPicture(ART_RADCAT);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
@@ -96,7 +96,7 @@ void CMenuMusic::exits()
 		else if (musicset == 3)
 		{
 			testImage.iFlags = QMF_INACTIVE;
-			testImage.SetRect(540, 425, 240, 240);
+			testImage.SetRect(560, 425, 240, 240);
 			testImage.SetPicture(ART_KLIKSPHILIP);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
@@ -105,7 +105,7 @@ void CMenuMusic::exits()
 		else if (musicset == 4)
 		{
 			testImage.iFlags = QMF_INACTIVE;
-			testImage.SetRect(540, 425, 240, 240);
+			testImage.SetRect(560, 425, 240, 240);
 			testImage.SetPicture(ART_BBNO);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
@@ -114,7 +114,7 @@ void CMenuMusic::exits()
 		else if (musicset == 5)
 		{
 			testImage.iFlags = QMF_INACTIVE;
-			testImage.SetRect(540, 425, 240, 240);
+			testImage.SetRect(560, 425, 240, 240);
 			testImage.SetPicture(ART_Chipzel);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
@@ -123,7 +123,7 @@ void CMenuMusic::exits()
 		else if (musicset == 6)
 		{
 			testImage.iFlags = QMF_INACTIVE;
-			testImage.SetRect(540, 425, 240, 240);
+			testImage.SetRect(560, 425, 240, 240);
 			testImage.SetPicture(ART_DRYDEN);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
@@ -132,7 +132,7 @@ void CMenuMusic::exits()
 		else if (musicset == 7)
 		{
 			testImage.iFlags = QMF_INACTIVE;
-			testImage.SetRect(540, 425, 240, 240);
+			testImage.SetRect(560, 425, 240, 240);
 			testImage.SetPicture(ART_Freaky);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
@@ -141,7 +141,7 @@ void CMenuMusic::exits()
 		else if (musicset == 8)
 		{
 			testImage.iFlags = QMF_INACTIVE;
-			testImage.SetRect(540, 425, 240, 240);
+			testImage.SetRect(560, 425, 240, 240);
 			testImage.SetPicture(ART_ISOxo);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
@@ -150,7 +150,7 @@ void CMenuMusic::exits()
 		else if (musicset == 9)
 		{
 			testImage.iFlags = QMF_INACTIVE;
-			testImage.SetRect(540, 425, 240, 240);
+			testImage.SetRect(560, 425, 240, 240);
 			testImage.SetPicture(ART_Knock2);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
@@ -159,7 +159,7 @@ void CMenuMusic::exits()
 		else if (musicset == 10)
 		{
 			testImage.iFlags = QMF_INACTIVE;
-			testImage.SetRect(540, 425, 240, 240);
+			testImage.SetRect(560, 425, 240, 240);
 			testImage.SetPicture(ART_Matt);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
@@ -168,7 +168,7 @@ void CMenuMusic::exits()
 		else if (musicset == 11)
 		{
 			testImage.iFlags = QMF_INACTIVE;
-			testImage.SetRect(540, 425, 240, 240);
+			testImage.SetRect(560, 425, 240, 240);
 			testImage.SetPicture(ART_Meechy);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
@@ -177,7 +177,7 @@ void CMenuMusic::exits()
 		else if (musicset == 12)
 		{
 			testImage.iFlags = QMF_INACTIVE;
-			testImage.SetRect(540, 425, 240, 240);
+			testImage.SetRect(560, 425, 240, 240);
 			testImage.SetPicture(ART_Mord);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
@@ -204,14 +204,17 @@ void CMenuMusic::_Init( void )
 		"Mord Fustang"
 	};
 
-	banner.SetPicture(ART_BANNER);
-
 	static CStringArrayModel music(MusicStr, ARRAYSIZE(MusicStr));
 	musicpack.SetNameAndStatus(L("CstzUI_musicpack"), L("CstzUI_musicpacktext"));
 	musicpack.Setup(&music);
-	musicpack.onChanged = CMenuEditable::WriteCvarCb;
 	musicpack.font = QM_SMALLFONT;
-	musicpack.SetRect(510, 340, 300, 32);
+	musicpack.LinkCvar("menu_musicpack", CMenuEditable::CVAR_VALUE);
+	musicpack.SetRect(520, 350, 300, 32);
+	SET_EVENT_MULTI(musicpack.onChanged,
+		{
+			CMenuEditable::WriteCvarCb;
+			uiMusic.exits();
+		});
 
 	int musicset = (int)EngFuncs::GetCvarFloat("menu_musicpack");
 
@@ -219,97 +222,90 @@ void CMenuMusic::_Init( void )
 	{
 	case 0:
 		testImage.iFlags = QMF_INACTIVE;
-		testImage.SetRect(540, 425, 240, 240);
+		testImage.SetRect(560, 425, 240, 240);
 		testImage.SetPicture(ART_CSGO);
 		testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 		break;
 	case 1:
 		testImage.iFlags = QMF_INACTIVE;
-		testImage.SetRect(540, 425, 240, 240);
+		testImage.SetRect(560, 425, 240, 240);
 		testImage.SetPicture(ART_CS2);
 		testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 		break;
 	case 2:
 		testImage.iFlags = QMF_INACTIVE;
-		testImage.SetRect(540, 425, 240, 240);
+		testImage.SetRect(560, 425, 240, 240);
 		testImage.SetPicture(ART_RADCAT);
 		testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 		break;
 	case 3:
 		testImage.iFlags = QMF_INACTIVE;
-		testImage.SetRect(540, 425, 240, 240);
+		testImage.SetRect(560, 425, 240, 240);
 		testImage.SetPicture(ART_KLIKSPHILIP);
 		testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 		break;
 	case 4:
 		testImage.iFlags = QMF_INACTIVE;
-		testImage.SetRect(540, 425, 240, 240);
+		testImage.SetRect(560, 425, 240, 240);
 		testImage.SetPicture(ART_BBNO);
 		testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 		break;
 	case 5:
 		testImage.iFlags = QMF_INACTIVE;
-		testImage.SetRect(540, 425, 240, 240);
+		testImage.SetRect(560, 425, 240, 240);
 		testImage.SetPicture(ART_Chipzel);
 		testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 		break;
 	case 6:
 		testImage.iFlags = QMF_INACTIVE;
-		testImage.SetRect(540, 425, 240, 240);
+		testImage.SetRect(560, 425, 240, 240);
 		testImage.SetPicture(ART_DRYDEN);
 		testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 		break;
 	case 7:
 		testImage.iFlags = QMF_INACTIVE;
-		testImage.SetRect(540, 425, 240, 240);
+		testImage.SetRect(560, 425, 240, 240);
 		testImage.SetPicture(ART_Freaky);
 		testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 		break;
 	case 8:
 		testImage.iFlags = QMF_INACTIVE;
-		testImage.SetRect(540, 425, 240, 240);
+		testImage.SetRect(560, 425, 240, 240);
 		testImage.SetPicture(ART_ISOxo);
 		testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 		break;
 	case 9:
 		testImage.iFlags = QMF_INACTIVE;
-		testImage.SetRect(540, 425, 240, 240);
+		testImage.SetRect(560, 425, 240, 240);
 		testImage.SetPicture(ART_Knock2);
 		testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 		break;
 	case 10:
 		testImage.iFlags = QMF_INACTIVE;
-		testImage.SetRect(540, 425, 240, 240);
+		testImage.SetRect(560, 425, 240, 240);
 		testImage.SetPicture(ART_Matt);
 		testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 		break;
 	case 11:
 		testImage.iFlags = QMF_INACTIVE;
-		testImage.SetRect(540, 425, 240, 240);
+		testImage.SetRect(560, 425, 240, 240);
 		testImage.SetPicture(ART_Meechy);
 		testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 		break;
 	case 12:
 		testImage.iFlags = QMF_INACTIVE;
-		testImage.SetRect(540, 425, 240, 240);
+		testImage.SetRect(560, 425, 240, 240);
 		testImage.SetPicture(ART_Mord);
 		testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 		break;
 	}
 
-	apply.SetNameAndStatus(L("GameUI_Apply"), L(""));
-	apply.onActivated = VoidCb(&CMenuMusic::exits);
-	apply.iFlags |= QMF_NOTIFY;
-	apply.SetCoord(80, 250);
-
 	exit.SetNameAndStatus(L("GameUI_Close"), L(""));
 	exit.onActivated = VoidCb(&CMenuMusic::Hide);
 	exit.iFlags |= QMF_NOTIFY;
-	exit.SetCoord(80, 300);
+	exit.SetCoord(620, 675);
 	
 	AddItem( background );
-	AddItem( banner );
-	AddItem( apply );
 	AddItem( exit );
 	AddItem( testImage );
 	AddItem( musicpack );
@@ -327,6 +323,15 @@ void UI_Music_Precache( void )
 	EngFuncs::PIC_Load( ART_CS2);
 	EngFuncs::PIC_Load( ART_RADCAT);
 	EngFuncs::PIC_Load( ART_KLIKSPHILIP);
+	EngFuncs::PIC_Load( ART_BBNO );
+	EngFuncs::PIC_Load( ART_Chipzel );
+	EngFuncs::PIC_Load( ART_DRYDEN );
+	EngFuncs::PIC_Load( ART_Freaky );
+	EngFuncs::PIC_Load( ART_ISOxo );
+	EngFuncs::PIC_Load( ART_Knock2 );
+	EngFuncs::PIC_Load( ART_Matt );
+	EngFuncs::PIC_Load( ART_Meechy );
+	EngFuncs::PIC_Load( ART_Mord );
 }
 
 void UI_Music_Menu( void )

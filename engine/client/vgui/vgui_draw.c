@@ -254,7 +254,7 @@ void VGui_Startup( int width, int height )
 		if( Sys_GetParmFromCmdLine( "-vguilib", vguilib ) )
 		{
 			if( Q_strstr( vguilib, ".dll") )
-				Q_strncpy( vguiloader, "vgui_support.dll", 256 );
+				Q_strncpy( vguiloader, "../vgui_support.dll", 256 );
 			else
 				Q_strncpy( vguiloader, VGUI_SUPPORT_DLL, 256 );
 
@@ -263,7 +263,7 @@ void VGui_Startup( int width, int height )
 		}
 
 		if( Q_strstr( GI->client_lib, ".dll" ) )
-			Q_strncpy( vguiloader, "vgui_support.dll", 256 );
+			Q_strncpy( vguiloader, "../vgui_support.dll", 256 );
 
 		if( !vguiloader[0] && !Sys_GetParmFromCmdLine( "-vguiloader", vguiloader ) )
 			Q_strncpy( vguiloader, VGUI_SUPPORT_DLL, 256 );
@@ -272,7 +272,7 @@ void VGui_Startup( int width, int height )
 
 		if( !s_pVGuiSupport )
 		{
-			s_pVGuiSupport = Com_LoadLibrary( va( "../%s", vguiloader ), false );
+			s_pVGuiSupport = Com_LoadLibrary( va( "%s", vguiloader ), false );
 		}
 
 		if( !s_pVGuiSupport )
@@ -443,7 +443,7 @@ void VGUI_InitKeyTranslationTable( void )
 	//s_pVirtualKeyTrans[SDLK_RALT] = KEY_RALT;
 	s_pVirtualKeyTrans[K_ALT] = KEY_LALT;		// ALT -> left ALT
 	//s_pVirtualKeyTrans[SDLK_RCTRL] = KEY_RCONTROL;
-	//s_pVirtualKeyTrans[K_CTRL] = KEY_LCONTROL;	// CTRL -> left CTRL
+//	s_pVirtualKeyTrans[K_CTRL] = KEY_LCONTROL;	// CTRL -> left CTRL
 	s_pVirtualKeyTrans[K_WIN] = KEY_LWIN;
 	//s_pVirtualKeyTrans[SDLK_APPLICATION] = KEY_RWIN;
 	//s_pVirtualKeyTrans[K_WIN] = KEY_APP;

@@ -179,7 +179,7 @@ qboolean CL_ChangeGame( const char *gamefolder, qboolean bReset )
 		Q_strncpy( maptitle, clgame.maptitle, MAX_STRING );
 
 		Com_ResetLibraryError();
-		if( !CL_LoadProgs( va( "%s/%s", GI->dll_path, GI->client_lib)))
+		if( !CL_LoadProgs( va( "%s", GI->client_lib)))
 			Sys_Warn( "Can't initialize client library\n%s", Com_GetLibraryError() );
 
 		// restore parms
@@ -2372,9 +2372,9 @@ void CL_Init( void )
 			loaded = CL_LoadProgs(VGUI_SUPPORT_DLL);
 		else
 #ifdef XASH_INTERNAL_GAMELIBS
-			loaded = CL_LoadProgs( "client" );
+			loaded = CL_LoadProgs( "../client" );
 #else
-			loaded = CL_LoadProgs( va( "%s/%s" , GI->dll_path, SI.clientlib ));
+			loaded = CL_LoadProgs(CLIENTDLL);
 #endif
 		if( !loaded )
 		{

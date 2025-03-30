@@ -16,17 +16,17 @@
     <Filter Include="Source Files\controls">
       <UniqueIdentifier>{f8570da3-2737-4b6d-8ae2-ff7c3fabe4b3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\menus">
-      <UniqueIdentifier>{c3b5ae88-b49d-4aaa-8bbe-fdddef14924d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\menus\dynamic">
-      <UniqueIdentifier>{e7095df3-a1ea-4ed0-9b32-2c63905af416}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\font">
       <UniqueIdentifier>{9655e1fc-e12d-4abf-b791-6c9dcde0c16d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Utl">
       <UniqueIdentifier>{28895f00-bee6-4194-bc04-a9c26bce09ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\controls\menus">
+      <UniqueIdentifier>{c3b5ae88-b49d-4aaa-8bbe-fdddef14924d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\controls\menus\dynamic">
+      <UniqueIdentifier>{e7095df3-a1ea-4ed0-9b32-2c63905af416}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -139,13 +139,13 @@
       <Filter>Source Files\controls</Filter>
     </ClInclude>
     <ClInclude Include="..\mainui_cpp\menus\ConnectionProgress.h">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClInclude>
     <ClInclude Include="..\mainui_cpp\menus\ConnectionWarning.h">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClInclude>
     <ClInclude Include="..\mainui_cpp\menus\PlayerIntroduceDialog.h">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClInclude>
     <ClInclude Include="..\mainui_cpp\font\FreeTypeFont.h">
       <Filter>Source Files\font</Filter>
@@ -285,91 +285,91 @@
       <Filter>Source Files\controls</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\PlayerSetup.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\SaveLoad.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\ServerBrowser.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\Touch.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\TouchButtons.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\TouchEdit.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\TouchOptions.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\Video.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\VideoModes.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\VideoOptions.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\Zoo.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\Mouse.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\Audio.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\Configuration.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\ConnectionProgress.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\ConnectionWarning.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\Controls.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\CreateGame.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\Credits.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\CustomGame.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\FileDialog.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\GameOptions.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\Gamepad.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\InputDevices.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\LoadGame.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\Main.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\NewGame.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\PlayerIntroduceDialog.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\dynamic\ScriptMenu.cpp">
-      <Filter>Source Files\menus\dynamic</Filter>
+      <Filter>Source Files\controls\menus\dynamic</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\font\StbFont.cpp">
       <Filter>Source Files\font</Filter>
@@ -393,10 +393,10 @@
       <Filter>Source Files\Utl</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\Music.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\Inventory.cpp">
-      <Filter>Source Files\menus</Filter>
+      <Filter>Source Files\controls\menus</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

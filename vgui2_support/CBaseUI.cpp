@@ -94,10 +94,10 @@ void CBaseUI::Initialize(CreateInterfaceFn* factories, int count) {
 	vgui2::filesystem()->AddSearchPath("platform", "PLATFORM");
 	vgui2::filesystem()->AddSearchPath(gEngfuncs.pfnGetGameDirectory(), "GAME");
 	vgui2::filesystem()->AddSearchPath(gEngfuncs.pfnGetGameDirectory(), "GAMECONFIG");
-	vgui2::filesystem()->AddSearchPath("valve", "GAME_FALLBACK");
+	vgui2::filesystem()->AddSearchPath("Counter-Strike-TZ", "GAME_FALLBACK");
 
 	char szClientDLLPath[_MAX_PATH];
-	vgui2::filesystem()->GetLocalPath("cl_dlls/client.dll", szClientDLLPath, sizeof(szClientDLLPath));
+	vgui2::filesystem()->GetLocalPath("../client.dll", szClientDLLPath, sizeof(szClientDLLPath));
 	m_hClientModule = Sys_LoadModule(szClientDLLPath);
 	m_FactoryList[4] = Sys_GetFactory(m_hClientModule);
 	m_iNumFactories = 5;
@@ -124,7 +124,7 @@ void CBaseUI::Start(struct cl_enginefuncs_s *engineFuncs, int interfaceVersion) 
 
 	const char *szGameDir = gEngfuncs.pfnGetGameDirectory();
 
-	if (strcmp(szGameDir, "cstz")) {
+	if (strcmp(szGameDir, "Counter-Strike-TZ")) {
 		char szModLocalizeFile[_MAX_PATH];
 		snprintf(szModLocalizeFile, _MAX_PATH, "resource/%s_%%language%%.txt", szGameDir);
 		vgui2::localize()->AddFile(vgui2::filesystem(), szModLocalizeFile);

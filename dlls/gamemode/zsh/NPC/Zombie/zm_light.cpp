@@ -547,6 +547,20 @@ int CZMLight::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float 
 
 	pev->health -= flActualDamage;
 
+	if (CBaseEntity::Instance(pevAttacker)->IsPlayer()) {
+		int hitBits = 0;
+		if (m_LastHitGroup == HITGROUP_HEAD) hitBits |= (1 << 0);
+		if (bitsDamageType & DMG_CRITICAL) hitBits |= (1 << 1);
+		if (bitsDamageType & DMG_BACKATK) hitBits |= (1 << 2);
+		if (bitsDamageType & DMG_BURN) hitBits |= (1 << 3);
+		MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, pevAttacker);
+		WRITE_LONG((long)flDamage);
+		WRITE_SHORT(ENTINDEX(edict()));
+		WRITE_BYTE(hitBits);
+		WRITE_BYTE(0);
+		MESSAGE_END();
+	}
+
 	if (m_improv != NULL)
 	{
 		m_improv->OnInjury(flActualDamage);

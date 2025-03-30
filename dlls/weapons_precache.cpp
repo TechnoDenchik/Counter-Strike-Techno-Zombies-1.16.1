@@ -46,7 +46,6 @@ void W_Precache()
 	UTIL_PrecacheOtherWeapon("weapon_aug");
 	UTIL_PrecacheOtherWeapon("weapon_sg550");
 	UTIL_PrecacheOther("ammo_556nato");
-
 	// shotgun
 	UTIL_PrecacheOtherWeapon("weapon_m3");
 	UTIL_PrecacheOtherWeapon("weapon_xm1014");

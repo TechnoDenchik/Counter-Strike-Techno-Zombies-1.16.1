@@ -164,8 +164,6 @@ static void Sys_LoadEngine( void )
 
 	if (DirIsExist("Counter-Strike-TZ"))
 	{
-		if (DirIsExist("Counter-Strike-TZ/cl_dlls"))
-		{
 			if (DirIsExist("Counter-Strike-TZ/dlls"))
 			{
 				if (DirIsExist("Counter-Strike-TZ/media"))
@@ -204,11 +202,6 @@ static void Sys_LoadEngine( void )
 			{
 				TechnoEngine_Warning2("Папка сервера Counter-Strike-TZ/dlls не найдена Error:0x000327g", dlerror());
 			}
-		}
-		else
-		{
-			TechnoEngine_Warning2("Папка клиента Counter-Strike-TZ/cl_dlls не найдена Error:0x000127g", dlerror());
-		}
 	}
 	else
 	{

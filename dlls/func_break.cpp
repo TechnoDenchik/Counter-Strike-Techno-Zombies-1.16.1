@@ -645,11 +645,6 @@ int CBreakable::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, floa
 		if ((pevAttacker->flags & FL_CLIENT) && (pev->spawnflags & SF_BREAK_CROWBAR) && (bitsDamageType & DMG_CLUB))
 		{
 			flDamage = pev->health;
-			MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, pevAttacker);
-			WRITE_LONG(bitsDamageType);
-			WRITE_SHORT(ENTINDEX(edict()));
-			WRITE_BYTE(0);
-			MESSAGE_END();
 		}
 	}
 	else
@@ -665,12 +660,6 @@ int CBreakable::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, floa
 	if (bitsDamageType & DMG_CLUB)
 	{
 		flDamage *= 2.0f;
-		
-	MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, pevAttacker);
-	WRITE_LONG(flDamage);
-	WRITE_SHORT(ENTINDEX(edict()));
-	WRITE_BYTE(0);
-	MESSAGE_END();
 	}
 
 	// Boxes / glass / etc. don't take much poison damage, just the impact of the dart - consider that 10%
@@ -685,7 +674,7 @@ int CBreakable::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, floa
 	// do the damage
 	pev->health -= flDamage;
 
-#ifdef XASH_DEDICATED
+
 	//gr
 	//ClientPrint(pevAttacker, HUD_PRINTTALK, "Hit Breakable Msg Sending \n");
 	if (CBaseEntity::Instance(pevAttacker)->IsPlayer() && flDamage > 0.0f) {
@@ -696,7 +685,6 @@ int CBreakable::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, floa
 		MESSAGE_END();
 		//ClientPrint(pevAttacker, HUD_PRINTTALK, "Hit Breakable Msg Sent \n");
 	}
-#endif
 	
 	
 	if (pev->health <= 0)

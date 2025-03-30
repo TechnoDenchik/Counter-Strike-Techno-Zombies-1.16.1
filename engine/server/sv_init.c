@@ -647,7 +647,7 @@ void SV_InitGame( void )
 		if( !svgame.hInstance )
 		{
 			Com_ResetLibraryError();
-			if( !SV_LoadProgs( SI.gamedll ))
+			if( !SV_LoadProgs(SI.gamedll))
 			{
 				if( CL_IsInMenu() )
 					Sys_Warn( "SV_InitGame: can't initialize \"%s\":\n%s", SI.gamedll, Com_GetLibraryError() );
@@ -759,7 +759,7 @@ void SV_InitGameProgs( void )
 	if( svgame.hInstance ) return; // already loaded
 
 	// just try to initialize
-	SV_LoadProgs( SI.gamedll );
+	SV_LoadProgs(SI.gamedll);
 	Com_ResetLibraryError();
 }
 

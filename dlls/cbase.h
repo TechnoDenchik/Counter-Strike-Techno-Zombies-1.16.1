@@ -624,6 +624,7 @@ public:
 #define DMG_BACKATK (1 << 25)			// Knife back atk
 #define DMG_CRITICAL (1 << 26)
 
+
 #define DMG_GENERIC 0
 #define DMG_CRUSH (1<<0)
 #define DMG_BULLET (1<<1)

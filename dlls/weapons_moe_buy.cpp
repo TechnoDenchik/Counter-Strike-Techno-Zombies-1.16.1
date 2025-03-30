@@ -72,7 +72,6 @@ static MoEWeaponBuyInfo_s g_MoEWeaponBuyInfo[] = {
 	{ "weapon_shelteraxe", "ShelterAxe", 0, KNIFE_SLOT, UNASSIGNED },
 	{ "weapon_voidpistol", "VoidPistol", 0, PISTOL_SLOT, UNASSIGNED },
 	{ "weapon_voidpistolex", "VoidPistolEx", 0, PISTOL_SLOT, UNASSIGNED },
-	{ "weapon_gunkata",	 "Dual Beretta Gunslinger", 1500,  PISTOL_SLOT, UNASSIGNED},
 
 	{ "weapon_knife", "Seal Knife", 0, KNIFE_SLOT, UNASSIGNED },
 	{ "knife_skullaxe", "Skull-9", 0, KNIFE_SLOT, UNASSIGNED },

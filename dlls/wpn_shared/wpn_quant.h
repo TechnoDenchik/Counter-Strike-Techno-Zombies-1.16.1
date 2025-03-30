@@ -44,6 +44,8 @@ public:
 	void Getsprite();
 	void ItemPostFrame() override;
 	bool fireon;
+	bool fireon2;
+	bool fireon3;
 	BOOL UseDecrement() override {
 #ifdef CLIENT_WEAPONS
 		return TRUE;

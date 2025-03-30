@@ -43,6 +43,7 @@ cl_enginefunc_t gEngfuncs = { };
 render_api_t gRenderAPI = { };
 mobile_engfuncs_t gMobileAPI = { };
 CHud gHUD;
+
 int g_iXash = 0; // indicates a buildnum
 int g_iMobileAPIVersion = 0;
 long g_iDamage[MAX_CLIENTS + 1];

@@ -46,7 +46,7 @@ extern client_sprite_t *GetSpriteList(client_sprite_t *pList, const char *psz, i
 
 wrect_t nullrc = { 0, 0, 0, 0 };
 float g_lastFOV = 0.0;
-const char *sPlayerModelFiles[12] =
+const char* sPlayerModelFiles[12] =
 {
 	"models/player.mdl",
 	"models/player/leet/leet.mdl", // t
@@ -61,7 +61,6 @@ const char *sPlayerModelFiles[12] =
 	"models/player/spetsnaz/spetsnaz.mdl", // ct
 	"models/player/militia/militia.mdl" // t
 };
-
 #define GHUD_DECLARE_MESSAGE(x) int __MsgFunc_##x(const char *pszName, int iSize, void *pbuf ) { return gHUD.MsgFunc_##x(pszName, iSize, pbuf); }
 
 GHUD_DECLARE_MESSAGE(Logo)
@@ -204,6 +203,7 @@ void CHud :: Init( void )
 	zoom_sens_ratio = CVAR_CREATE( "zoom_sensitivity_ratio", "1.2", 0 );
 	sv_skipshield = gEngfuncs.pfnGetCvarPointer( "sv_skipshield" );
 	m_alarmstyle = CVAR_CREATE("alarm_style", "0", FCVAR_ARCHIVE);
+	m_hudstyle = CVAR_CREATE("hud_style", "0", FCVAR_ARCHIVE);
 
 	cl_headname = CVAR_CREATE("cl_headname", "2", FCVAR_ARCHIVE); 
 	zsh_mentality = CVAR_CREATE("zsh_mentality", "1", FCVAR_ARCHIVE); 
@@ -225,21 +225,17 @@ void CHud :: Init( void )
 	}
 	m_pHudList = NULL;
 
-	// In case we get messages before the first update -- time will be valid
 	m_flTime = 1.0;
 	m_iNoConsolePrint = 0;
 	m_szServerName[0] = 0;
 
 	Localize_Init();
 
-	// fullscreen overlays
 	m_SniperScope.Init();
 	m_NVG.Init();
 	m_Retina.Init();
 	m_SpectatorGui.Init();
 
-
-	// Game HUD things
 	m_Ammo.Init();
 	m_Health.Init();
 	m_Radio.Init();
@@ -256,11 +252,11 @@ void CHud :: Init( void )
 	m_CLS.Init();
 	m_WPI.Init();
 	m_gd.Init();
-	//m_GDScoreboard.Init();
 	m_MoeTouch.Init();
 	m_HitIndicator.Init();
  	m_HudSiFiammo.Init();
-	// chat, death notice, status bars and other
+
+	m_DrawFontText.Init();
 	m_SayText.Init();
 	m_Spectator.Init();
 	m_Geiger.Init();
@@ -271,15 +267,12 @@ void CHud :: Init( void )
 	m_TextMessage.Init();
 	m_FollowIcon.Init();
 	infogetitem.Init();
-	//infogetres.Init();
-	//infogetres2.Init();
-	//infogetzm.Init();
 	m_MOTD.Init();
 	m_scenarioStatus.Init();
 	m_DrawFontText.VidInit();
 	m_HeadName.Init();
+	m_NewAlarm.Init();
 	m_TwinAxes.Init();
-	
 
 	// all things that have own background and must be drawn last
 	m_ProgressBar.Init();

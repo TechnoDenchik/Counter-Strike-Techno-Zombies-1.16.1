@@ -59,6 +59,7 @@ private:
 	void _VidInit( ) override;
 
 	void QuitDialog( void *pExtra = NULL );
+	void EndGame();
 	void DisconnectDialogCb();
 	void HazardCourseDialogCb();
 	void HazardCourseCb();
@@ -124,10 +125,15 @@ void CMenuMain::QuitDialog(void *pExtra)
 	else
 		dialog.SetMessage(L("CstzUI_Exit"));
 
-	dialog.onPositive.SetCommand( FALSE, "quit\n" );
+	dialog.onPositive.SetCommand(FALSE, "quit\n");
+
 	dialog.Show();
 }
 
+void CMenuMain::EndGame()
+{
+	dialog.onPositive.SetCommand(FALSE, "quit\n");
+}
 void CMenuMain::DisconnectDialogCb()
 {
 	dialog.onPositive.SetCommand( FALSE, "cmd disconnect;endgame disconnect;wait;wait;wait;menu_options;menu_main\n" );

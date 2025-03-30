@@ -82,7 +82,7 @@ int CHudFlashlight::Draw(float flTime)
 
 	DrawUtils::ScaleColors(r, g, b, a);
 
-	int iY = ScreenHeight - 79;	//y1
+	int iY = ScreenHeight - 85;	//y1
 	int iX = ScreenWidth - 24 - m_iWidth; //x1
 
 	// Draw the flashlight casing

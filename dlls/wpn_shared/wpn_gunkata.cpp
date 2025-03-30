@@ -62,7 +62,7 @@ public:
 	static constexpr const auto & SpreadCalcWalking = 0.12 * (1 - A);
 	static constexpr const auto & SpreadCalcDucking = 0.1 * (1 - A);
 	static constexpr const auto & SpreadCalcDefault = 0.11 * (1 - A);
-	static constexpr const auto &CycleTime = 0.0825f;
+	static constexpr const auto &CycleTime = 0.2f;
 
 	static constexpr const auto &WeaponIdleTime = 6.03f;
 	static constexpr float RangeModifier = 0.95;
@@ -147,10 +147,10 @@ public:
 
 #ifndef CLIENT_DLL
 		m_iMode_pev_iuser1 = 0; // (this + 292) = 0
-		m_flNextSpecialAttack1_pev_fuser1 = 320; // 0x7F7FFFFF; // 320
-		m_flNextSpecialAttack5_pev_teleport_time = 336; // 0x7F7FFFFF; // 336
-		m_flNextSpecialAttack9_pev_dmg_save = 352; // 0x7F7FFFFF; // 352
-		m_flNextSpecialAttack11_pev_speed = 360; // 0x7F7FFFFF; // 360
+		m_flNextSpecialAttack1_pev_fuser1 = 320.0f; // 0x7F7FFFFF; // 320
+		m_flNextSpecialAttack5_pev_teleport_time = 336.0f; // 0x7F7FFFFF; // 336
+		m_flNextSpecialAttack9_pev_dmg_save = 352.0f; // 0x7F7FFFFF; // 352
+		m_flNextSpecialAttack11_pev_speed = 360.0f; // 0x7F7FFFFF; // 360
 #endif
 
 		m_iWeaponState &= ~WPNSTATE_SHIELD_DRAWN;
@@ -182,7 +182,7 @@ public:
 			if(m_iClip > 0)
 			{
 				m_iMode_pev_iuser1 = 1;
-				m_flNextPrimaryAttack = m_flNextSecondaryAttack = 0x7F7FFFFF; // 0x7F7FFFFF;
+				m_flNextPrimaryAttack = m_flNextSecondaryAttack = 1.0f; // 0x7F7FFFFF;
 			}
 
 		}
@@ -228,7 +228,7 @@ public:
 
 	
 		
-		//m_flLastFire = get_gametime();
+		m_flLastFire = 1.0f;
 
 		--m_iClip;
 
@@ -249,7 +249,7 @@ public:
 		m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
 
 		Vector vecSrc = m_pPlayer->GetGunPosition();
-		//Vector vecDir = m_pPlayer->FireBullets3(vecSrc, gpGlobals->v_forward, flSpread, df::Distance::Get(*this), df::Penetration::Get(*this), df::BulletType::Get(*this), GetDamage(), df::RangeModifier::Get(*this), m_pPlayer->pev, df::ItemSlot::Get(*this) == PISTOL_SLOT, m_pPlayer->random_seed);
+		//Vector vecDir = m_pPlayer->FireBullets3(vecSrc, gpGlobals->v_forward, flSpread, Distance::Get(*this), df::Penetration::Get(*this), df::BulletType::Get(*this), GetDamage(), df::RangeModifier::Get(*this), m_pPlayer->pev, df::ItemSlot::Get(*this) == PISTOL_SLOT, m_pPlayer->random_seed);
 
 		int flags = 0;
 #ifdef CLIENT_WEAPONS
@@ -299,20 +299,20 @@ public:
 		{
 			case GUNKATA_MODE_B:
 			{
-				/*m_flNextSpecialAttack1_pev_fuser1 = get_gametime();
-				m_flNextSpecialAttack2_pev_fuser2 = get_gametime();
-				m_flNextSpecialAttack3_pev_fuser3 = get_gametime();
-				m_flNextSpecialAttack4_pev_fuser4 = get_gametime();
-				m_flNextSpecialAttack5_pev_teleport_time = get_gametime();
-				m_flNextSpecialAttack6_pev_air_finished = get_gametime();
-				m_flNextSpecialAttack7_pev_pain_finished = get_gametime();
-				m_flNextSpecialAttack8_pev_dmg_take = get_gametime();
-				m_flNextSpecialAttack9_pev_dmg_save = get_gametime();
-				m_flNextSpecialAttack10_pev_dmgtime = get_gametime();
-				m_flNextSpecialAttack11_pev_speed = get_gametime();
+				m_flNextSpecialAttack1_pev_fuser1 = 1.0f;
+				m_flNextSpecialAttack2_pev_fuser2 = 1.0f;
+				m_flNextSpecialAttack3_pev_fuser3 = 1.0f;
+				m_flNextSpecialAttack4_pev_fuser4 = 1.0f;
+				m_flNextSpecialAttack5_pev_teleport_time = 1.0f;
+				m_flNextSpecialAttack6_pev_air_finished = 1.0f;
+				m_flNextSpecialAttack7_pev_pain_finished = 1.0f;
+				m_flNextSpecialAttack8_pev_dmg_take = 1.0f;
+				m_flNextSpecialAttack9_pev_dmg_save = 1.0f;
+				m_flNextSpecialAttack10_pev_dmgtime = 1.0f;
+				m_flNextSpecialAttack11_pev_speed = 1.0f;
 
-				m_flNextSpecialAttack4_pev_fuser4 = get_gametime() + 0.2f;
-				m_flNextSpecialAttack2_pev_fuser2 = get_gametime() + 0.2f;*/
+				m_flNextSpecialAttack4_pev_fuser4 = 1.0f + 0.2f;
+				m_flNextSpecialAttack2_pev_fuser2 = 1.0f + 0.2f;
 
 				m_iMode_pev_iuser1 = GUNKATA_MODE_B2;
 				m_iAnim1_pev_iuser3 = 13;
@@ -325,7 +325,7 @@ public:
 				{
 					if(m_pPlayer->pev->button & IN_ATTACK2)
 					{
-						//if(get_gametime() > m_flNextSpecialAttack2_pev_fuser2)
+						if(1.0f > m_flNextSpecialAttack2_pev_fuser2)
 						{
 							float v14 = 1.0f;
 							if(m_iAnim1_pev_iuser3 == 10 || m_iAnim1_pev_iuser3 == 11 || m_iAnim1_pev_iuser3 == 4)
@@ -356,10 +356,10 @@ public:
 							{
 								m_iAnim2_pev_iuser4 -= 4; // ???
 							}
-							//m_flNextSpecialAttack2_pev_fuser2 = get_gametime() + 0.4f;
+							m_flNextSpecialAttack2_pev_fuser2 = 1.0f + 0.4f;
 						}
 
-						//if(get_gametime() > m_flNextSpecialAttack3_pev_fuser3)
+						if(1.0f > m_flNextSpecialAttack3_pev_fuser3)
 						{
 							float v22 = 1.0f;
 							if(m_iAnim1_pev_iuser3 == 10 || m_iAnim1_pev_iuser3 == 11 || m_iAnim1_pev_iuser3 == 4)
@@ -393,7 +393,7 @@ public:
 							//m_flNextSpecialAttack3_pev_fuser3 = get_gametime() + v22 * 1.0f;
 						}
 
-						//if(get_gametime() > m_flNextSpecialAttack1_pev_fuser1)
+						if(1.0f > m_flNextSpecialAttack1_pev_fuser1)
 						{
 							//v26 = id;
 							// CGunkata_sub_10114650(id, 2.03, pEntity); // reload ?
@@ -404,34 +404,34 @@ public:
 							m_flNextSpecialAttack1_pev_fuser1 = 2.03f;
 						}
 
-						//if(get_gametime() > m_flNextSpecialAttack5_pev_teleport_time)
+						if(1.0f > m_flNextSpecialAttack5_pev_teleport_time)
 						{
 							// dword_108F7A0C(32,*(_DWORD *)(pPlayer + 540),*(_WORD *)(this + 286),0,pPlayer + 8,&qword_108F77EC,
 							//	0.87, 0,0,0,0,2);
 							PLAYBACK_EVENT_FULL(FEV_GLOBAL, m_pPlayer->edict(), m_usFire, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, 0.87, 0.0, 0, 0, 0, 2);
-						//	m_flNextSpecialAttack5_pev_teleport_time = get_gametime() + 0.87f;
+							m_flNextSpecialAttack5_pev_teleport_time = 1.0f + 0.87f;
 						}
 
-						//if(get_gametime() > m_flNextSpecialAttack4_pev_fuser4)
+						if(1.0f > m_flNextSpecialAttack4_pev_fuser4)
 						{
 							int v26 = 0;
 							if(m_pPlayer->pev->flags & FL_DUCKING)
 								v26 = 6;
                             m_iStatus2_pev_watertype = m_iAnim2_pev_iuser4 - 10;
 							PLAYBACK_EVENT_FULL(FEV_GLOBAL, m_pPlayer->edict(), m_usFire, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, 10.0, 2.0, v26+m_iStatus2_pev_watertype, 4, 0, 4);
-							//m_flNextSpecialAttack4_pev_fuser4 = get_gametime() + 0.2f;
+							m_flNextSpecialAttack4_pev_fuser4 = 1.0f + 0.2f;
 						}
 
-						//if(get_gametime() > m_flNextSpecialAttack6_pev_air_finished)
+						if(1.0f > m_flNextSpecialAttack6_pev_air_finished)
 						{
 							RadiusAttack1();
-						//	m_flNextSpecialAttack6_pev_air_finished = get_gametime() + 0.082500003f;
+							m_flNextSpecialAttack6_pev_air_finished = 1.0f + 0.082500003f;
 						}
 
-						//if(get_gametime() > m_flNextSpecialAttack7_pev_pain_finished)
+						if(1.0f > m_flNextSpecialAttack7_pev_pain_finished)
 						{
 							--m_iClip;
-							//m_flNextSpecialAttack7_pev_pain_finished = get_gametime() + 0.082500003f;
+							m_flNextSpecialAttack7_pev_pain_finished = 1.0f + 0.082500003f;
 						}
 
 						// break;
@@ -473,7 +473,7 @@ public:
 			}
 			case GUNKATA_MODE_B3:
 			{
-				//if(get_gametime() > m_flNextSpecialAttack8_pev_dmg_take)
+				if(1.0f > m_flNextSpecialAttack8_pev_dmg_take)
 				{
 					// dword_108F7A0C(32,*(_DWORD *)(pPlayer + 540),*(_WORD *)(this + 286),0,pPlayer + 8,&qword_108F77EC,
 					//	1.0 ,0.22, 0, 0, 0, 3);
@@ -482,7 +482,7 @@ public:
 
 				}
 
-				//if(get_gametime() > m_flNextSpecialAttack9_pev_dmg_save)
+				if(1.0f > m_flNextSpecialAttack9_pev_dmg_save)
 				{
 					RadiusAttack2();
 					if(g_pModRunning->DamageTrack() == DT_NONE)
@@ -491,7 +491,7 @@ public:
 					}
 				}
 
-				//if(get_gametime() > m_flNextSpecialAttack10_pev_dmgtime)
+				if(1.0f > m_flNextSpecialAttack10_pev_dmgtime)
 				{
 					// complete the reload.
 					int delta = Q_min(MaxClip - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);
@@ -505,7 +505,7 @@ public:
 					m_flNextSpecialAttack10_pev_dmgtime = 0x7F7FFFFF; // 0x7F7FFFFF
 				}
 
-				//if(get_gametime() > m_flNextSpecialAttack11_pev_speed)
+				if(1.0f > m_flNextSpecialAttack11_pev_speed)
 				{
 					m_iMode_pev_iuser1 = GUNKATA_MODE_B4;
 					return CBasePlayerWeapon::ItemPostFrame();

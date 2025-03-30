@@ -46,7 +46,7 @@ int Initialize(cl_enginefunc_t *pEnginefuncs, int iVersion) {
 	gEngfuncs = *pEnginefuncs;
 
 	char szPath[_MAX_PATH];
-	gEngfuncs.COM_ExpandFilename("cl_dlls/client.dll", szPath, sizeof(szPath));
+	gEngfuncs.COM_ExpandFilename("../client.dll", szPath, sizeof(szPath));
 	CSysModule *pClDllModule = Sys_LoadModule(szPath);
 
 	if (!pClDllModule) {

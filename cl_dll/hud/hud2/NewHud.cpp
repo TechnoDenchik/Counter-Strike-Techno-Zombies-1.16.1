@@ -64,7 +64,7 @@ int CHudNewHud::VidInit(void)
 		m_iIcon_Damage = R_LoadTextureUnique("resource/hud/hud_icon_damage");
 
 	if(!m_iWeaponBG)
-		m_iWeaponBG = R_LoadTextureUnique("resource/hud/hud_weapon_bg");
+		m_iWeaponBG = R_LoadTextureUnique("resource/hud/hud_weapon_bg_bottom");
 
 	return 1;
 }

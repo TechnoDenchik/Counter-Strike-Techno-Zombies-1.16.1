@@ -347,7 +347,7 @@ void CArbalest::RadiusDamage3(Vector vecAiming, float flDamage)
 	WRITE_COORD(vecAiming[1]);
 	WRITE_COORD(vecAiming[2]);
 	WRITE_SHORT(MODEL_INDEX("sprites/ef_halogun_shootA_hit.spr"));
-	WRITE_BYTE(3);
+	WRITE_BYTE(2);
 	WRITE_BYTE(30);
 	WRITE_BYTE(TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOSOUND);
 	MESSAGE_END();
@@ -358,7 +358,7 @@ void CArbalest::RadiusDamage3(Vector vecAiming, float flDamage)
 	WRITE_COORD(vecAiming[1]);
 	WRITE_COORD(vecAiming[2]);
 	WRITE_SHORT(MODEL_INDEX("sprites/ef_halogun_shootA_hit.spr"));
-	WRITE_BYTE(3);
+	WRITE_BYTE(2);
 	WRITE_BYTE(30);
 	WRITE_BYTE(TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOSOUND);
 	MESSAGE_END();
@@ -442,7 +442,7 @@ void CArbalest::RadiusDamage(Vector vecAiming, float flDamage)
 	WRITE_COORD(vecAiming[1]);
 	WRITE_COORD(vecAiming[2]);
 	WRITE_SHORT(MODEL_INDEX("sprites/ef_halogun_expA.spr"));
-	WRITE_BYTE(7);
+	WRITE_BYTE(5);
 	WRITE_BYTE(30);
 	WRITE_BYTE(TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOSOUND);
 	MESSAGE_END();
@@ -453,7 +453,7 @@ void CArbalest::RadiusDamage(Vector vecAiming, float flDamage)
 	WRITE_COORD(vecAiming[1]);
 	WRITE_COORD(vecAiming[2]);
 	WRITE_SHORT(MODEL_INDEX("sprites/ef_halogun_expA.spr"));
-	WRITE_BYTE(7);
+	WRITE_BYTE(5);
 	WRITE_BYTE(30);
 	WRITE_BYTE(TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOSOUND);
 	MESSAGE_END();

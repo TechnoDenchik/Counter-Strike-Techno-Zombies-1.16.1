@@ -536,6 +536,14 @@ int CHudAmmo::VidInit(void)
 
 	gHR.iHistoryGap = max( gHR.iHistoryGap, gHUD.GetSpriteRect(m_HUD_bucket0).bottom - gHUD.GetSpriteRect(m_HUD_bucket0).top);
 
+	if (!m_iCharacterBG_New_Bottom)
+		m_iCharacterBG_New_Bottom = R_LoadTextureUnique("resource/hud/hud_character_bg_new_bottom");
+
+	if (!m_iWeaponBG)
+		m_iWeaponBG = R_LoadTextureUnique("resource/hud/hud_weapon_bg_bottom");
+
+
+
 	// If we've already loaded weapons, let's get new sprites
 	gWR.LoadAllWeaponSprites();
 
@@ -1276,7 +1284,7 @@ int CHudAmmo::Draw(float flTime)
 	static bool switchCrosshairType = false;
  
 	int x9 = ScreenWidth / 1.1;
-	int y9 = ScreenHeight / 1.0785;
+	int y9 = ScreenHeight / 1.0850;
 
 	if ((gHUD.m_iHideHUDDisplay & HIDEHUD_HEALTH))
 		return 1;
@@ -1314,6 +1322,18 @@ int CHudAmmo::Draw(float flTime)
 	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
 	ammoboard2->Bind();
 	DrawUtils::Draw2DQuadScaled(x9 - 180, y9 - 4.5, x9 + 180, y9 + 78);
+
+	int iX = 0;
+	int iY = ScreenHeight - 5;
+
+	int iW = m_iCharacterBG_New_Bottom->w();
+	int iH = m_iCharacterBG_New_Bottom->h();
+
+	iX = ScreenWidth;
+	iY = ScreenHeight - 5;
+
+	iW = m_iCharacterBG_New_Bottom->w();
+	iH = m_iCharacterBG_New_Bottom->h();
 
 	if (!m_pWeapon)
 		return 0;
@@ -1355,20 +1375,19 @@ int CHudAmmo::Draw(float flTime)
 			int ammos2 = gWR.CountAmmo(gHUD.m_Ammo.m_pWeapon->iAmmoType);
 			int ammos3 = gWR.CountAmmo(gHUD.m_Ammo.m_pWeapon->iAmmo2Type);
 
-		    int x3 = ScreenWidth / 1.1;
-		    int y3 = ScreenHeight / 1.0820;
+		    int x3 = ScreenWidth / 1.0905;
+		    int y3 = ScreenHeight / 1.0840;
 
 		    int x4 = ScreenWidth / 1.1;
-		    int y4 = ScreenHeight / 1.0820;
+		    int y4 = ScreenHeight / 1.0840;
 
 			int x7 = ScreenWidth / 1.1;
-			int y7 = ScreenHeight / 1.0840;
+			int y7 = ScreenHeight / 1.0860;
 
             gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
 	        gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
 
-			ammoboard->Bind();
-			DrawUtils::Draw2DQuadScaled(x7 - 420 / 3.0, y7 + 4.5, x7 + 522 / 3.0, y7 + 80);
+			m_iWeaponBG->Draw2DQuadScaled(iX - iW, iY - iH, iX, iY);
 
 			gEngfuncs.pTriAPI->Color4ub(r, g, b, 255);
 
@@ -1431,17 +1450,14 @@ int CHudAmmo::Draw(float flTime)
 			x = ScreenWidth - 4 * AmmoWidth - iIconWidth;
 			//x = DrawUtils::DrawHudNumber(x, y, iFlags | DHN_3DIGITS, gWR.CountAmmo(pw->iAmmo2Type), r, g, b);
 
-			int x4 = ScreenWidth / 1.1;
-			int y4 = ScreenHeight / 1.0820;
+			int x4 = ScreenWidth / 1.0900;
+			int y4 = ScreenHeight / 1.0840;
 
-			int x7 = ScreenWidth / 1.1;
-			int y7 = ScreenHeight / 1.0840;
+			int x7 = ScreenWidth / 1.0840;
+			int y7 = ScreenHeight / 1.0860;
 
 			gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
 			gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
-
-			//ammoboard->Bind();
-			//DrawUtils::Draw2DQuadScaled(x7 - 420 / 3.0, y7 + 4.5, x7 + 522 / 3.0, y7 + 80);
 
 			gEngfuncs.pTriAPI->Color4ub(r, g, b, 255);
 
@@ -1483,17 +1499,16 @@ int CHudAmmo::Draw(float flTime)
 			x = ScreenWidth - 4 * AmmoWidth - iIconWidth;
 			//x = DrawUtils::DrawHudNumber(x, y, iFlags | DHN_3DIGITS, gWR.CountAmmo(pw->iAmmo2Type), r, g, b);
 
-			int x4 = ScreenWidth / 1.1;
-			int y4 = ScreenHeight / 1.0820;
+			m_iWeaponBG->Draw2DQuadScaled(iX - iW, iY - iH, iX, iY);
 
-			int x7 = ScreenWidth / 1.1;
-			int y7 = ScreenHeight / 1.0840;
+			int x4 = ScreenWidth / 1.0920;
+			int y4 = ScreenHeight / 1.0840;
+
+			int x7 = ScreenWidth / 1.0840;
+			int y7 = ScreenHeight / 1.0860;
 
 			gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
 			gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
-
-			ammoboard->Bind();
-			DrawUtils::Draw2DQuadScaled(x7 - 420 / 3.0, y7 + 4.5, x7 + 524 / 3.0, y7 + 80);
 
 			gEngfuncs.pTriAPI->Color4ub(r, g, b, 255);
 
@@ -1535,17 +1550,16 @@ int CHudAmmo::Draw(float flTime)
 			x = ScreenWidth - 4 * AmmoWidth - iIconWidth;
 			//x = DrawUtils::DrawHudNumber(x, y, iFlags | DHN_3DIGITS, gWR.CountAmmo(pw->iAmmo2Type), r, g, b);
 
-			int x4 = ScreenWidth / 1.1;
-			int y4 = ScreenHeight / 1.0820;
+			m_iWeaponBG->Draw2DQuadScaled(iX - iW, iY - iH, iX, iY);
 
-			int x7 = ScreenWidth / 1.1;
-			int y7 = ScreenHeight / 1.0840;
+			int x4 = ScreenWidth / 1.0900;
+			int y4 = ScreenHeight / 1.0840;
+
+			int x7 = ScreenWidth / 1.0840;
+			int y7 = ScreenHeight / 1.0860;
 
 			gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
 			gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
-
-			ammoboard->Bind();
-			DrawUtils::Draw2DQuadScaled(x7 - 420 / 3.0, y7 + 4.5, x7 + 522 / 3.0, y7 + 80);
 
 			gEngfuncs.pTriAPI->Color4ub(r, g, b, 255);
 

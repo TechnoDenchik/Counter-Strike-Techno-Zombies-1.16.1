@@ -868,7 +868,7 @@ int pfnCheckGameDll( void )
 		return true;
 
 	Com_ResetLibraryError();
-	if(( hInst = Com_LoadLibrary( SI.gamedll, true )) != NULL )
+	if(( hInst = Com_LoadLibrary(SI.gamedll, true )) != NULL )
 	{
 		return true;
 	}
@@ -1092,10 +1092,10 @@ qboolean UI_LoadProgs( void )
 	// setup globals
 	menu.globals = &gpGlobals;
 #ifdef XASH_INTERNAL_GAMELIBS
-	if(!( menu.hInstance = Com_LoadLibrary( "interface", false )))
+	if(!( menu.hInstance = Com_LoadLibrary( "../interface", false )))
 		return false;
 #else
-	if(!( menu.hInstance = Com_LoadLibrary( va( "%s/" MENUDLL, GI->dll_path ), false )))
+	if(!( menu.hInstance = Com_LoadLibrary( va( "../" MENUDLL), false )))
 	{
 		FS_AllowDirectPaths( true );
 

@@ -145,7 +145,6 @@ struct HUDLIST {
 #include "moe/moe_touch.h"
 #include "hud_sub.h"
 #include "r_texture.h"
-#include "hud2/NewHud.h"
 #include "hud2/NewAlarm.h"
 #include "hud2/NewFontManager.h"
 #include "Original/Classic.h"
@@ -221,6 +220,9 @@ public:
 	UniqueTexture ammoboard;
 	UniqueTexture ammoboard2;
 	UniqueTexture weaponboard;
+
+	UniqueTexture m_iCharacterBG_New_Bottom;
+	UniqueTexture m_iWeaponBG;
 
 	wrect_t m_rcAmmoclip[10];
 	wrect_t m_rcAmmofloat[10];
@@ -899,6 +901,17 @@ enum armortype_t {
 	UniqueTexture m_armors;
 	wrect_t ihealth[10];
 	wrect_t iarmors[10];
+
+
+	UniqueTexture m_iCharacterBG;
+	UniqueTexture m_iCharacterBG_New_Bottom;
+	UniqueTexture m_iCharacterBG_New_Top;
+
+
+
+
+
+
 	HSPRITE m_hDamage;
 	Vector2D m_vAttackPos[4];
 	DAMAGE_IMAGE m_dmg[NUM_DMG_TYPES];
@@ -1498,13 +1511,11 @@ public:
 	CHudRadar       m_Radar;
 	CHudSpectatorGui m_SpectatorGui;
 	CHudDeathInfo m_DeathInfo;
-	CHudNewHud m_NewHud;
 	CHudInfoShelterIcon infogetitem;
 	CHudInfoWoodIcon infogetres;
 	CHudInfoMetalIcon infogetres2;
 	CHudInfoZombieIcon infogetzm;
 	CHudNewAlarm  m_NewAlarm;
-	//CHudDrawFontText m_DrawFontText;
 	CHudFollowIcon	m_FollowIcon;
 	CHudScenarioStatus m_scenarioStatus;
 	CHudSiFiammo m_HudSiFiammo;

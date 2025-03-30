@@ -1834,131 +1834,227 @@ void BuyItem(CBasePlayer *pPlayer, int iSlot)
 void HandleMenu_ChooseAppearance(CBasePlayer *player, int slot)
 {
 	CCstrikeTechnoZombies *mp = g_pGameRules;
-	int numSkins = g_bIsCzeroGame ? CZ_NUM_SKIN : CS_NUM_SKIN;
+#if PLAYER_CLASS_SYSTEM
+	int numSkins = PlayerClassManager().PlayerClass_GetNumClass() - 1;
+#else
+	int numSkins = PlayerModel_GetNumSkins() - 1;
+#endif
 
 	struct
 	{
 		ModelName model_id;
-		const char *model_name;
-		int model_name_index;
+		const char* model_name;
 
 	} appearance;
 
 	Q_memset(&appearance, 0, sizeof(appearance));
 
+
+
+#if PLAYER_CLASS_SYSTEM
 	if (player->m_iTeam == TERRORIST)
 	{
-		if ((slot > numSkins || slot < 1) && (!TheBotProfiles->GetCustomSkin(slot) || !player->IsBot()))
-		{
-			slot = RANDOM_LONG(1, numSkins);
+		int numTR = PlayerClassManager().PlayerClass_GetNumTR();
+		if ((slot > numTR || slot < 1) && (!TheBotProfiles->GetCustomSkin(slot) || !player->IsBot())) {
+			slot = RANDOM_LONG(1, numTR);
 		}
 
 		switch (slot)
 		{
 		case 1:
-			appearance.model_id = MODEL_TERROR;
-			appearance.model_name = "terror";
-			break;
-		case 2:
-			appearance.model_id = MODEL_LEET;
-			appearance.model_name = "leet";
-			break;
-		case 3:
-			appearance.model_id = MODEL_ARCTIC;
-			appearance.model_name = "arctic";
-			break;
-		case 4:
-			appearance.model_id = MODEL_GUERILLA;
-			appearance.model_name = "guerilla";
-			break;
-		case 5:
-			if (g_bIsCzeroGame)
-			{
-				appearance.model_id = MODEL_MILITIA;
-				appearance.model_name = "militia";
-				break;
-			}
-		default:
-			if (TheBotProfiles->GetCustomSkinModelname(slot) && player->IsBot())
-			{
-				appearance.model_name = (char *)TheBotProfiles->GetCustomSkinModelname(slot);
-			}
-			else
-			{
-				appearance.model_id = MODEL_TERROR;
-				appearance.model_name = "terror";
-			}
+		{
+			appearance.model_id = MODEL_YURI;
 			break;
 		}
-
-		// default T model models/player/terror/terror.mdl
-		appearance.model_name_index = 8;
-
+		case 2:
+		{
+			appearance.model_id = MODEL_PIRATEBOY;
+			break;
+		}
+		case 3:
+		{
+			appearance.model_id = MODEL_MARINEBOY;
+			break;
+		}
+		case 4:
+		{
+			appearance.model_id = MODEL_PIRATEGIRL;
+			break;
+		}
+		case 5:
+		{
+			appearance.model_id = MODEL_RB;
+			break;
+		}
+		case 6:
+		{
+			appearance.model_id = MODEL_JPNGIRL01;
+			break;
+		}
+		case 7:
+		{
+			appearance.model_id = MODEL_RITSUKA;
+			break;
+		}
+		case 8:
+		{
+			appearance.model_id = MODEL_TERROR;
+			break;
+		}
+		case 9:
+		{
+			appearance.model_id = MODEL_LEET;
+			break;
+		}
+		case 10:
+		{
+			appearance.model_id = MODEL_ARCTIC;
+			break;
+		}
+		case 11:
+		{
+			appearance.model_id = MODEL_GUERILLA;
+			break;
+		}
+		case 12:
+		{
+			appearance.model_id = MODEL_MILITIA;
+			break;
+		}
+		case 13:
+		{
+			appearance.model_id = MODEL_BUFFCLASSB;
+			break;
+		}
+		case 14:
+		{
+			appearance.model_id = MODEL_BUFFCLASSHUNTER;
+			break;
+		}
+		case 15:
+		{
+			appearance.model_id = MODEL_BUFFCLASSBLAIR;
+			break;
+		}
+		default:
+		{
+			appearance.model_id = MODEL_YURI;
+			break;
+		}
+		}
 	}
 	else if (player->m_iTeam == CT)
 	{
-		if ((slot > numSkins || slot < 1) && (!TheBotProfiles->GetCustomSkin(slot) || !player->IsBot()))
-		{
-			slot = RANDOM_LONG(1, numSkins);
+		int numCT = PlayerClassManager().PlayerClass_GetNumCT();
+		if ((slot > numCT || slot < 1) && (!TheBotProfiles->GetCustomSkin(slot) || !player->IsBot())) {
+			slot = RANDOM_LONG(1, numCT);
 		}
 
 		switch (slot)
 		{
 		case 1:
-			appearance.model_id = MODEL_URBAN;
-			appearance.model_name = "urban";
-			break;
-		case 2:
-			appearance.model_id = MODEL_GSG9;
-			appearance.model_name = "gsg9";
-			break;
-		case 3:
-			appearance.model_id = MODEL_SAS;
-			appearance.model_name = "sas";
-			break;
-		case 4:
-			appearance.model_id = MODEL_GIGN;
-			appearance.model_name = "gign";
-			break;
-		case 5:
-			if (g_bIsCzeroGame)
-			{
-				appearance.model_id = MODEL_SPETSNAZ;
-				appearance.model_name = "spetsnaz";
-				break;
-			}
-		default:
-			if (TheBotProfiles->GetCustomSkinModelname(slot) && player->IsBot())
-			{
-				appearance.model_name = (char *)TheBotProfiles->GetCustomSkinModelname(slot);
-			}
-			else
-			{
-				appearance.model_id = MODEL_URBAN;
-				appearance.model_name = "urban";
-			}
+		{
+			appearance.model_id = MODEL_SAF;
 			break;
 		}
-
-		// default CT model models/player/urban/urban.mdl
-		appearance.model_name_index = 9;
+		case 2:
+		{
+			appearance.model_id = MODEL_CHOIJIYOON;
+			break;
+		}
+		case 3:
+		{
+			appearance.model_id = MODEL_FERNANDO;
+			break;
+		}
+		case 4:
+		{
+			appearance.model_id = MODEL_707;
+			break;
+		}
+		case 5:
+		{
+			appearance.model_id = MODEL_SOZO;
+			break;
+		}
+		case 6:
+		{
+			appearance.model_id = MODEL_MAGUI;
+			break;
+		}
+		case 7:
+		{
+			appearance.model_id = MODEL_NATASHA;
+			break;
+		}
+		case 8:
+		{
+			appearance.model_id = MODEL_URBAN;
+			break;
+		}
+		case 9:
+		{
+			appearance.model_id = MODEL_GSG9;
+			break;
+		}
+		case 10:
+		{
+			appearance.model_id = MODEL_SAS;
+			break;
+		}
+		case 11:
+		{
+			appearance.model_id = MODEL_GIGN;
+			break;
+		}
+		case 12:
+		{
+			appearance.model_id = MODEL_SPETSNAZ;
+			break;
+		}
+		case 13:
+		{
+			appearance.model_id = MODEL_BUFFCLASSA;
+			break;
+		}
+		case 14:
+		{
+			appearance.model_id = MODEL_BUFFCLASSLYCAN;
+			break;
+		}
+		case 15:
+		{
+			appearance.model_id = MODEL_BUFFCLASSFERNADO;
+			break;
+		}
+		default:
+		{
+			appearance.model_id = MODEL_SAF;
+			break;
+		}
+		}
 	}
 
+	appearance.model_name = PlayerClassManager().PlayerClass_GetModelName(appearance.model_id);
+#else
+	if ((slot > numSkins || slot < 1) && (!TheBotProfiles->GetCustomSkin(slot) || !player->IsBot())) {
+		slot = RANDOM_LONG(1, numSkins);
+	}
+
+	appearance.model_id = (ModelName)slot;
+	appearance.model_name = PlayerModel_GetApperance(slot, player->m_iTeam);
+#endif
 	player->ResetMenu();
 
 	// Reset the player's state
-	if (player->m_iJoiningState == JOINED)
-	{
+	if (player->m_iJoiningState == JOINED) {
 		mp->CheckWinConditions();
 	}
-	else if (player->m_iJoiningState == PICKINGTEAM)
-	{
+	else if (player->m_iJoiningState == PICKINGTEAM) {
 		player->m_iJoiningState = GETINTOGAME;
 
-		if (mp->IsCareer())
-		{
-			if (!player->IsBot())
-			{
+		if (mp->IsCareer()) {
+			if (!player->IsBot()) {
 				mp->CheckWinConditions();
 			}
 		}
@@ -1967,21 +2063,32 @@ void HandleMenu_ChooseAppearance(CBasePlayer *player, int slot)
 	player->pev->body = 0;
 	player->m_iModelName = appearance.model_id;
 
-	SET_CLIENT_KEY_VALUE(player->entindex(), GET_INFO_BUFFER(player->edict()), "model", appearance.model_name);
-	player->SetNewPlayerModel(Client_ApperanceToModel(appearance.model_name_index));
+#if PLAYER_CLASS_SYSTEM
+	player->m_bIsFemale = PlayerClassManager().PlayerClass_IsFemale(slot);
+#else
+ 	player->m_bIsFemale = PlayerModel_IsFemale(slot, player->m_iModelTeam);
+#endif
 
-	if (mp->m_iMapHasVIPSafetyZone == MAP_VIP_SAFETYZONE_UNINITIALIZED)
-	{
+	SET_CLIENT_KEY_VALUE(player->entindex(), GET_INFO_BUFFER(player->edict()), "model", appearance.model_name);
+	char path[128];
+
+#if PLAYER_CLASS_SYSTEM
+	PlayerClassManager().Client_ApperanceToModel(path, slot);
+#else
+	Client_ApperanceToModel(path, slot, player->m_iTeam);
+#endif
+
+	player->SetNewPlayerModel(path);
+
+	if (mp->m_iMapHasVIPSafetyZone == MAP_VIP_SAFETYZONE_UNINITIALIZED) {
 		if ((UTIL_FindEntityByClassname(NULL, "func_vip_safetyzone")) != NULL)
 			mp->m_iMapHasVIPSafetyZone = MAP_HAVE_VIP_SAFETYZONE_YES;
 		else
 			mp->m_iMapHasVIPSafetyZone = MAP_HAVE_VIP_SAFETYZONE_NO;
 	}
 
-	if (mp->m_iMapHasVIPSafetyZone == MAP_HAVE_VIP_SAFETYZONE_YES)
-	{
-		if (!mp->m_pVIP && player->m_iTeam == CT)
-		{
+	if (mp->m_iMapHasVIPSafetyZone == MAP_HAVE_VIP_SAFETYZONE_YES) {
+		if (!mp->m_pVIP && player->m_iTeam == CT) {
 			player->MakeVIP();
 		}
 	}

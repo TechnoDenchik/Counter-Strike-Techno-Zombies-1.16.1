@@ -167,9 +167,11 @@ void CQuantum::CreateEffect()
 
 void CQuantum::SecondaryAttack(void)
 {
-	
-	if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] > 0)
+Getsprite();
+	/*if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] > 0)
 	{
+		
+
 		if (phs2 > 0.0f)
 			phs2 = -1.0f; // 0xBF800000
 
@@ -179,27 +181,39 @@ void CQuantum::SecondaryAttack(void)
 			phs3 = gpGlobals->time + 0.23;
 
 			m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME; // 600
-		
-			m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType]--;
-			Getsprite();
-			RadiusDamage2();	
-			m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1.0;
-			//m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 99999.0;
-			//m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 99999.0;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0;
+
+
+
+			m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 99999.0;
+			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 99999.0;
 		}
+
+#ifndef CLIENT_DLL
+		m_pPlayer->SetAnimation(PLAYER_ATTACK1); // 5
+#endif
+
 		bool v6 = gpGlobals->time > phs12 + 1.0f;
+		int flags;
+#ifdef CLIENT_WEAPONS
+		flags = FEV_NOTHOST;
+#else
+		flags = 0;
+#endif
 
 		if (v6)
 			phs12 = v6 = gpGlobals->time;
-		
+		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.12f;
+
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.9f;
 	}
 	else
 	{
 		for (CBasePlayer* player : moe::range::PlayersList())
 			CLIENT_COMMAND(player->edict(), "spk weapons/revivegun_clipoutB_1\n");
 		m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.5;
-	}
+	}*/
+
+	
 }
 
 void CQuantum::PrimaryAttack_FindTargets()
@@ -477,9 +491,72 @@ void CQuantum::ItemPostFrame()
 		}
 		
 	}
+
+
+
+
+
+
+
+	if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] > 0)
+	{
+
+		if (phs2 > 0.0f)
+			phs2 = -1.0f; // 0xBF800000
+
+		if (phs3 == -1.0f)
+		{
+			SendWeaponAnim(QUANT_SHOOT2, UseDecrement() != FALSE); // 3
+			phs3 = gpGlobals->time + 0.23;
+
+			m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME; // 600
+
+
+
+			m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 99999.0;
+			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 99999.0;
+		}
+
+#ifndef CLIENT_DLL
+		m_pPlayer->SetAnimation(PLAYER_ATTACK1); // 5
+#endif
+
+		bool v6 = gpGlobals->time > phs12 + 1.0f;
+		int flags;
+#ifdef CLIENT_WEAPONS
+		flags = FEV_NOTHOST;
+#else
+		flags = 0;
+#endif
+
+		if (v6)
+			phs12 = v6 = gpGlobals->time;
+		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.12f;
+
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.9f;
+	}
+	else
+	{
+		for (CBasePlayer* player : moe::range::PlayersList())
+			CLIENT_COMMAND(player->edict(), "spk weapons/revivegun_clipoutB_1\n");
+		m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.5;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	
-
-
 	if (phs4 > 0.0f && gpGlobals->time > phs4)
 	{
 		phs4 = -1;
@@ -492,13 +569,17 @@ void CQuantum::ItemPostFrame()
 		if (phs3 > 0.0f)
 		{
 			if (this->m_pPlayer->pev->button & IN_ATTACK2 && this->m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] > 0)
-			{
-				
+			{	
+				fireon3 == false;
 				if (gpGlobals->time > phs3)
 				{
 					this->SendWeaponAnim(QUANT_SHOOT3, UseDecrement() != FALSE); // 4
-					phs3 = gpGlobals->time + 4.0f;
+					phs3 = gpGlobals->time + 1.0f;
 
+					#ifndef CLIENT_DLL
+						RadiusDamage2();
+						m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType]--;
+					#endif 
 					return CBasePlayerWeapon::ItemPostFrame();
 				}
 				if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] != 0)
@@ -508,7 +589,11 @@ void CQuantum::ItemPostFrame()
 			}
 			else
 			{
-				phs3 = -1;			
+				
+				phs3 = -1;
+				m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.6f;
+				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.5f;
+				PLAYBACK_EVENT_FULL(1, m_pPlayer->edict(), m_usFire, 0, (float*)&g_vecZero, (float*)&g_vecZero, 2 /*0*/, 0, 2, 0, FALSE, FALSE);
 				phs12 = -1;
 			}
 		}
@@ -556,6 +641,8 @@ void CQuantum::ItemPostFrame()
 			tDelta5 = 0.0f;
 			if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] != 7)
 			{
+				fireon2 = false;
+				fireon3 = true;
 				m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType]++;
 			}
 		}
@@ -569,6 +656,8 @@ void CQuantum::RadiusDamage2()
 	BOOL fDidHit = FALSE;
 	UTIL_MakeVectors(m_pPlayer->pev->v_angle);
 	Vector vecSrc = m_pPlayer->GetGunPosition();
+
+	EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/revivegun-2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 
 	if (phs9_10_11.empty())
 	{
@@ -611,7 +700,7 @@ void CQuantum::RadiusDamage2()
 				pBeam->SetType(BEAM_ENTS);
 				pBeam->SetStartEntity(ENTINDEX(m_pPlayer->edict()));
 				pBeam->SetEndEntity(ENTINDEX(pEntity->edict()));
-				pBeam->SetStartAttachment(1);
+				pBeam->SetStartAttachment(0);
 				pBeam->SetEndAttachment(0);
 				pBeam->SetWidth(200);
 				pBeam->RelinkBeam();
@@ -706,14 +795,14 @@ void CQuantum::Getsprite()
 	}
 #endif
 
-	if (!FBitSet(m_pPlayer->pev->flags, FL_ONGROUND))
+	/*if (!FBitSet(m_pPlayer->pev->flags, FL_ONGROUND))
 		QuantFire2(0.01 + (0.3) * m_flAccuracy, 0.9f, TRUE);
 	else if (m_pPlayer->pev->velocity.Length2D() > 140)
 		QuantFire2(0.01 + (0.3) * m_flAccuracy, 0.9f, TRUE);
 	else if (m_pPlayer->pev->fov == 90)
 		QuantFire2((0.03) * m_flAccuracy, 0.9f, TRUE);
 	else
-		QuantFire2((0.03) * m_flAccuracy, 0.9f, TRUE);
+		QuantFire2((0.03) * m_flAccuracy, 0.9f, TRUE);*/
 }
 
 Vector CQuantum::Get_ShootPosition(CBaseEntity *pevAttacker, Vector Start)
@@ -900,8 +989,7 @@ void CQuantum::QuantFire2(float flSpread, duration_t flCycleTime, BOOL fUseAutoA
 
 	m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.2f;
 
-	m_iClip--;
-	m_pPlayer->pev->effects |= EF_MUZZLEFLASH;
+	//m_pPlayer->pev->effects |= EF_MUZZLEFLASH;
 #ifndef CLIENT_DLL
 	m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 #endif
@@ -917,8 +1005,6 @@ void CQuantum::QuantFire2(float flSpread, duration_t flCycleTime, BOOL fUseAutoA
 		tDelta += gpGlobals->time - tWorldTime;
 	}
 
-
-	SendWeaponAnim(QUANT_SHOOT3, UseDecrement() != FALSE);
 	EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/revivegun-2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 
 	if (tNextAttack > 1.0f || (gpGlobals->time - tWorldTime > 1.0f) || tDelta > 1.0f)
@@ -992,8 +1078,6 @@ void CQuantum::Reload(void)
 				{
 					for (CBasePlayer* player : moe::range::PlayersList())
 						CLIENT_COMMAND(player->edict(), "spk weapons/revivegun_clipin1\n");
-
-					//EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/revivegun_clipin1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 				}
 			}
 		}
@@ -1018,7 +1102,7 @@ float CQuantum::GetDamage() const
 	float flDamage = 32.0f;
 #ifndef CLIENT_DLL
 	if (g_pModRunning->DamageTrack() == DT_ZB)
-		flDamage = 700.0f;
+		flDamage = 500.0f;
 	else if (g_pModRunning->DamageTrack() == DT_ZBS)
 		flDamage = 1300.0f;
 #endif
