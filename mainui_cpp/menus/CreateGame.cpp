@@ -85,6 +85,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define ART_ORIGIN		"gfx/maps/zm_origin_cso"
 #define ART_NIGHTMARE	"gfx/maps/zs_nightmare_cso"
+
+#define ART_NIGHTMARE2	"gfx/maps/zs_nightmare2_cso"
+#define ART_NIGHTMARE3	"gfx/maps/zs_nightmare3_cso"
+#define ART_LOSTCITY	"gfx/maps/zs_lostcity_cso"
+#define ART_LASTCLUE	"gfx/maps/zs_lastclue_cso"
+#define ART_PANIC	"gfx/maps/zs_panic_cso"
+#define ART_TRAP	"gfx/maps/zs_trap_cso"
+
 #define ART_SNAILCITY	"gfx/maps/awp_greesia2_cso"
 
 /*=================== End Gamemodes Map ===================*/
@@ -208,7 +216,7 @@ class CMenuVidPreview : public
 					mapgressia, mapruin,mapbigtree, mapdustmini, mapcs747, mapestate, maphavana, mapmilitia,
 				 mapoffice, mapsiege, mapangelcity, mapaztec, mapcbble, mapchateau, mapprodigy, maprats, mapsantorini,
 					 mapskyscraper, maptorn, mapdarksnow, mapgalery, mapindustry, mapindustry2, mapmoonlight, mapport, mapabyss,
-						 mapabyss2, mapabyss3, maporigin, mapnightmare, mapsnailcity;
+						 mapabyss2, mapabyss3, maporigin, mapnightmare, mapnightmare2, mapnightmare3, maplastclue, mappanic, maplostcity, maptrap, mapsnailcity;
 		
 	
 	CMenuCheckBox	
@@ -217,7 +225,7 @@ class CMenuVidPreview : public
 			militia, office, siege, angelcity, aztec, cbble, chateau,
 		prodigy, rats, santorini, skyscraper, torn, darksnow, galery,
 			industry, industry2, moonlight, port, abyss, abyss2, abyss3,
-				origin, nightmare, snailcity;
+				origin, nightmare, nightmare2, nightmare3, lastclue, panic, lostcity, trap, snailcity;
 
 	CMapSet
 				MapSetAssault, MapSetItaly, MapSetVertigo, MapSetInferno,MapSetNuke,MapSetDust,MapSetMirage,
@@ -225,7 +233,7 @@ class CMenuVidPreview : public
 		MapSetMilitia, MapSetOffice, MapSetSiege, MapSetAngelCity, MapSetAztec, MapSetCbble, MapSetChateau, 
 			MapSetProdigy, MapSetRats, MapSetSantorini, MapSetSkyScraper, MapSetTorn, MapSetDarkSnow, MapSetGalery, 
 				MapSetIndustry, MapSetIndustry2, MapSetMoonLight, MapSetPort, MapSetAbyss, MapSetAbyss2, MapSetAbyss3, 
-					MapSetOrigin, MapSetNightMare, MapSetSnailCity;
+					MapSetOrigin, MapSetNightMare, MapSetNightMare2, MapSetNightMare3, MapSetLastClue, MapSetPanic, MapSetLostCity, MapSetTrap, MapSetSnailCity;
 
 	CMenuYesNoMessageBox msgBox;
 	CMenuYesNoMessageBox nomap;
@@ -267,7 +275,13 @@ class CMenuVidPreview : public
 		textmap25,
 		textmap26,
 		textmap27,
-		textmap28;
+		textmap28,
+		textmap29, 
+		textmap30, 
+		textmap31, 
+		textmap32, 
+		textmap33, 
+		textmap34;
 	CMenuPicButton Exit, Exit1;
 private:
 	void _Init() override;
@@ -393,6 +407,18 @@ void CMenuCreateGame::Begin( )
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zm_origin", atoi(maxClients.GetBuffer()));
 			else if (nightmare.bChecked == true)
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zs_nightmare", atoi(maxClients.GetBuffer()));
+			else if (nightmare2.bChecked == true)
+				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zs_nightmare2", atoi(maxClients.GetBuffer()));
+			else if (nightmare3.bChecked == true)
+				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zs_nightmare3", atoi(maxClients.GetBuffer()));
+			else if (lastclue.bChecked == true)
+				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zs_lastclue", atoi(maxClients.GetBuffer()));
+			else if (lostcity.bChecked == true)
+				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zs_lostcity", atoi(maxClients.GetBuffer()));
+			else if (panic.bChecked == true)
+				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zs_panic", atoi(maxClients.GetBuffer()));
+			else if (trap.bChecked == true)
+				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zs_trap", atoi(maxClients.GetBuffer()));
 			else if (snailcity.bChecked == true)
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zsh_snailcity", atoi(maxClients.GetBuffer()));
 			else
@@ -528,9 +554,49 @@ void CMenuCreateGame::ResetMode(const char *value)
 
 		mapnightmare.Hide();
 		MapSetNightMare.Hide();
+
 		nightmare.Hide();
 		textmap28.Hide();
-		nightmare.bChecked = false;
+
+		mapnightmare2.Hide();
+		MapSetNightMare2.Hide();
+		mapnightmare3.Hide();
+		MapSetNightMare3.Hide();
+		maplastclue.Hide();
+		MapSetLastClue.Hide();
+		maplostcity.Hide();
+		MapSetLostCity.Hide();
+		mappanic.Hide();
+		MapSetPanic.Hide();
+		maptrap.Hide();
+		MapSetTrap.Hide();
+
+		
+
+		nightmare2.Hide();
+		textmap29.Hide();
+
+		nightmare3.Hide();
+		textmap30.Hide();
+
+		lastclue.Hide();
+		textmap31.Hide();
+
+		lostcity.Hide();
+		textmap32.Hide();
+
+		panic.Hide();
+		textmap33.Hide();
+
+		trap.Hide();
+		textmap34.Hide();
+
+		nightmare2.bChecked = false;
+		nightmare3.bChecked = false;
+		lastclue.bChecked = false;
+		lostcity.bChecked = false;
+		panic.bChecked = false;
+		trap.bChecked = false;
 
 		MapSetBigTree.Hide();
 		MapSetDustMini.Hide();
@@ -938,6 +1004,46 @@ void CMenuCreateGame::ResetMode(const char *value)
 		textmap28.Hide();
 		nightmare.bChecked = false;
 
+		mapnightmare2.Hide();
+		MapSetNightMare2.Hide();
+		mapnightmare3.Hide();
+		MapSetNightMare3.Hide();
+		maplastclue.Hide();
+		MapSetLastClue.Hide();
+		maplostcity.Hide();
+		MapSetLostCity.Hide();
+		mappanic.Hide();
+		MapSetPanic.Hide();
+		maptrap.Hide();
+		MapSetTrap.Hide();
+
+
+
+		nightmare2.Hide();
+		textmap29.Hide();
+
+		nightmare3.Hide();
+		textmap30.Hide();
+
+		lastclue.Hide();
+		textmap31.Hide();
+
+		lostcity.Hide();
+		textmap32.Hide();
+
+		panic.Hide();
+		textmap33.Hide();
+
+		trap.Hide();
+		textmap34.Hide();
+
+		nightmare2.bChecked = false;
+		nightmare3.bChecked = false;
+		lastclue.bChecked = false;
+		lostcity.bChecked = false;
+		panic.bChecked = false;
+		trap.bChecked = false;
+
 		MapSetBigTree.Hide();
 		MapSetDustMini.Hide();
 		MapSet747.Hide();
@@ -1343,6 +1449,46 @@ void CMenuCreateGame::ResetMode(const char *value)
 		nightmare.Hide();
 		textmap28.Hide();
 		nightmare.bChecked = false;
+
+		mapnightmare2.Hide();
+		MapSetNightMare2.Hide();
+		mapnightmare3.Hide();
+		MapSetNightMare3.Hide();
+		maplastclue.Hide();
+		MapSetLastClue.Hide();
+		maplostcity.Hide();
+		MapSetLostCity.Hide();
+		mappanic.Hide();
+		MapSetPanic.Hide();
+		maptrap.Hide();
+		MapSetTrap.Hide();
+
+
+
+		nightmare2.Hide();
+		textmap29.Hide();
+
+		nightmare3.Hide();
+		textmap30.Hide();
+
+		lastclue.Hide();
+		textmap31.Hide();
+
+		lostcity.Hide();
+		textmap32.Hide();
+
+		panic.Hide();
+		textmap33.Hide();
+
+		trap.Hide();
+		textmap34.Hide();
+
+		nightmare2.bChecked = false;
+		nightmare3.bChecked = false;
+		lastclue.bChecked = false;
+		lostcity.bChecked = false;
+		panic.bChecked = false;
+		trap.bChecked = false;
 
 		MapSetBigTree.Hide();
 		MapSetDustMini.Hide();
@@ -1750,6 +1896,46 @@ void CMenuCreateGame::ResetMode(const char *value)
 		textmap28.Hide();
 		nightmare.bChecked = false;
 
+		mapnightmare2.Hide();
+		MapSetNightMare2.Hide();
+		mapnightmare3.Hide();
+		MapSetNightMare3.Hide();
+		maplastclue.Hide();
+		MapSetLastClue.Hide();
+		maplostcity.Hide();
+		MapSetLostCity.Hide();
+		mappanic.Hide();
+		MapSetPanic.Hide();
+		maptrap.Hide();
+		MapSetTrap.Hide();
+
+
+
+		nightmare2.Hide();
+		textmap29.Hide();
+
+		nightmare3.Hide();
+		textmap30.Hide();
+
+		lastclue.Hide();
+		textmap31.Hide();
+
+		lostcity.Hide();
+		textmap32.Hide();
+
+		panic.Hide();
+		textmap33.Hide();
+
+		trap.Hide();
+		textmap34.Hide();
+
+		nightmare2.bChecked = false;
+		nightmare3.bChecked = false;
+		lastclue.bChecked = false;
+		lostcity.bChecked = false;
+		panic.bChecked = false;
+		trap.bChecked = false;
+
 		MapSetBigTree.Hide();
 		MapSetDustMini.Hide();
 		MapSet747.Hide();
@@ -1840,6 +2026,46 @@ void CMenuCreateGame::ResetMode(const char *value)
 		nightmare.Hide();
 		textmap28.Hide();
 		nightmare.bChecked = false;
+
+		mapnightmare2.Hide();
+		MapSetNightMare2.Hide();
+		mapnightmare3.Hide();
+		MapSetNightMare3.Hide();
+		maplastclue.Hide();
+		MapSetLastClue.Hide();
+		maplostcity.Hide();
+		MapSetLostCity.Hide();
+		mappanic.Hide();
+		MapSetPanic.Hide();
+		maptrap.Hide();
+		MapSetTrap.Hide();
+
+
+
+		nightmare2.Hide();
+		textmap29.Hide();
+
+		nightmare3.Hide();
+		textmap30.Hide();
+
+		lastclue.Hide();
+		textmap31.Hide();
+
+		lostcity.Hide();
+		textmap32.Hide();
+
+		panic.Hide();
+		textmap33.Hide();
+
+		trap.Hide();
+		textmap34.Hide();
+
+		nightmare2.bChecked = false;
+		nightmare3.bChecked = false;
+		lastclue.bChecked = false;
+		lostcity.bChecked = false;
+		panic.bChecked = false;
+		trap.bChecked = false;
 
 		MapSetBigTree.Hide();
 		MapSetDustMini.Hide();
@@ -2238,6 +2464,46 @@ void CMenuCreateGame::ResetMode(const char *value)
 		nightmare.Hide();
 		nightmare.bChecked = false;
 
+		mapnightmare2.Hide();
+		MapSetNightMare2.Hide();
+		mapnightmare3.Hide();
+		MapSetNightMare3.Hide();
+		maplastclue.Hide();
+		MapSetLastClue.Hide();
+		maplostcity.Hide();
+		MapSetLostCity.Hide();
+		mappanic.Hide();
+		MapSetPanic.Hide();
+		maptrap.Hide();
+		MapSetTrap.Hide();
+
+
+
+		nightmare2.Hide();
+		textmap29.Hide();
+
+		nightmare3.Hide();
+		textmap30.Hide();
+
+		lastclue.Hide();
+		textmap31.Hide();
+
+		lostcity.Hide();
+		textmap32.Hide();
+
+		panic.Hide();
+		textmap33.Hide();
+
+		trap.Hide();
+		textmap34.Hide();
+
+		nightmare2.bChecked = false;
+		nightmare3.bChecked = false;
+		lastclue.bChecked = false;
+		lostcity.bChecked = false;
+		panic.bChecked = false;
+		trap.bChecked = false;
+
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
 		MapSetChateau.Hide();
@@ -2621,7 +2887,54 @@ void CMenuCreateGame::ResetMode(const char *value)
 		//MapSetNightMare.Show();
 		nightmare.Show();
 		textmap28.Show();
+
 		textmap28.SetNameAndStatus(L("NightMare"), L(""));
+		textmap29.SetNameAndStatus(L("NightMare2"), L(""));
+		textmap30.SetNameAndStatus(L("NightMare3"), L(""));
+		textmap31.SetNameAndStatus(L("Last Clue"), L(""));
+		textmap32.SetNameAndStatus(L("Lost City"), L(""));
+		textmap33.SetNameAndStatus(L("Panic"), L(""));
+		textmap34.SetNameAndStatus(L("Trap"), L(""));
+
+		mapnightmare2.Show();
+		//MapSetNightMare2.Show();
+		mapnightmare3.Show();
+		//MapSetNightMare3.Show();
+		maplastclue.Show();
+		//MapSetLastClue.Show();
+		maplostcity.Show();
+		//MapSetLostCity.Show();
+		mappanic.Show();
+		//MapSetPanic.Show();
+		maptrap.Show();
+		//MapSetTrap.Show();
+
+
+
+		nightmare2.Show();
+		textmap29.Show();
+
+		nightmare3.Show();
+		textmap30.Show();
+
+		lastclue.Show();
+		textmap31.Show();
+
+		lostcity.Show();
+		textmap32.Show();
+
+		panic.Show();
+		textmap33.Show();
+
+		trap.Show();
+		textmap34.Show();
+
+		nightmare2.bChecked = false;
+		nightmare3.bChecked = false;
+		lastclue.bChecked = false;
+		lostcity.bChecked = false;
+		panic.bChecked = false;
+		trap.bChecked = false;
 
 		assault.bChecked = false;
 		vertigo.bChecked = false;
@@ -2944,7 +3257,45 @@ void CMenuCreateGame::ResetMode(const char *value)
 		nightmare.Hide();
 		textmap28.Hide();
 		nightmare.bChecked = false;
-		
+
+		mapnightmare2.Hide();
+		MapSetNightMare2.Hide();
+		mapnightmare3.Hide();
+		MapSetNightMare3.Hide();
+		maplastclue.Hide();
+		MapSetLastClue.Hide();
+		maplostcity.Hide();
+		MapSetLostCity.Hide();
+		mappanic.Hide();
+		MapSetPanic.Hide();
+		maptrap.Hide();
+		MapSetTrap.Hide();
+
+		nightmare2.Hide();
+		textmap29.Hide();
+
+		nightmare3.Hide();
+		textmap30.Hide();
+
+		lastclue.Hide();
+		textmap31.Hide();
+
+		lostcity.Hide();
+		textmap32.Hide();
+
+		panic.Hide();
+		textmap33.Hide();
+
+		trap.Hide();
+		textmap34.Hide();
+
+		nightmare2.bChecked = false;
+		nightmare3.bChecked = false;
+		lastclue.bChecked = false;
+		lostcity.bChecked = false;
+		panic.bChecked = false;
+		trap.bChecked = false;
+
 		mapaztec.Hide();
 		mapcbble.Hide();
 		mapchateau.Hide();
@@ -4000,7 +4351,7 @@ void CMenuCreateGame::ResetMap( int value)
 		MapSetDarkSnow.Show();
 		MapSetNightMare.Hide();
 	}
-	else if (value == 28)//darksnow
+	else if (value == 28)//nightmare
 	{
 		ischecksetmap = true;
 
@@ -4015,6 +4366,13 @@ void CMenuCreateGame::ResetMap( int value)
 		darksnow.bChecked = false;
 		nightmare.bChecked = true;
 
+		nightmare2.bChecked = false;
+		nightmare3.bChecked = false;
+		lastclue.bChecked = false;
+		lostcity.bChecked = false;
+		panic.bChecked = false;
+		trap.bChecked = false;
+
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
 		MapSetChateau.Hide();
@@ -4025,7 +4383,258 @@ void CMenuCreateGame::ResetMap( int value)
 		MapSetTorn.Hide();
 		MapSetDarkSnow.Hide();
 		MapSetNightMare.Show();
+
+		MapSetNightMare2.Hide();
+		MapSetNightMare3.Hide();
+		MapSetLastClue.Hide();
+		MapSetLostCity.Hide();
+		MapSetPanic.Hide();
+		MapSetTrap.Hide();
 	}
+
+	else if (value == 29)//nightmare2
+	{
+		ischecksetmap = true;
+
+		aztec.bChecked = false;
+		cbble.bChecked = false;
+		chateau.bChecked = false;
+		prodigy.bChecked = false;
+		rats.bChecked = false;
+		santorini.bChecked = false;
+		skyscraper.bChecked = false;
+		torn.bChecked = false;
+		darksnow.bChecked = false;
+		nightmare.bChecked = false;
+
+		nightmare2.bChecked = true;
+		nightmare3.bChecked = false;
+		lastclue.bChecked = false;
+		lostcity.bChecked = false;
+		panic.bChecked = false;
+		trap.bChecked = false;
+
+		MapSetAztec.Hide();
+		MapSetCbble.Hide();
+		MapSetChateau.Hide();
+		MapSetProdigy.Hide();
+		MapSetRats.Hide();
+		MapSetSantorini.Hide();
+		MapSetSkyScraper.Hide();
+		MapSetTorn.Hide();
+		MapSetDarkSnow.Hide();
+		MapSetNightMare.Hide();
+
+		MapSetNightMare2.Show();
+		MapSetNightMare3.Hide();
+		MapSetLastClue.Hide();
+		MapSetLostCity.Hide();
+		MapSetPanic.Hide();
+		MapSetTrap.Hide();
+
+	}
+	else if (value == 30)//nightmare3
+	{
+		ischecksetmap = true;
+
+		aztec.bChecked = false;
+		cbble.bChecked = false;
+		chateau.bChecked = false;
+		prodigy.bChecked = false;
+		rats.bChecked = false;
+		santorini.bChecked = false;
+		skyscraper.bChecked = false;
+		torn.bChecked = false;
+		darksnow.bChecked = false;
+		nightmare.bChecked = false;
+
+		nightmare2.bChecked = false;
+		nightmare3.bChecked = true;
+		lastclue.bChecked = false;
+		lostcity.bChecked = false;
+		panic.bChecked = false;
+		trap.bChecked = false;
+
+		MapSetAztec.Hide();
+		MapSetCbble.Hide();
+		MapSetChateau.Hide();
+		MapSetProdigy.Hide();
+		MapSetRats.Hide();
+		MapSetSantorini.Hide();
+		MapSetSkyScraper.Hide();
+		MapSetTorn.Hide();
+		MapSetDarkSnow.Hide();
+		MapSetNightMare.Hide();
+
+		MapSetNightMare2.Hide();
+		MapSetNightMare3.Show();
+		MapSetLastClue.Hide();
+		MapSetLostCity.Hide();
+		MapSetPanic.Hide();
+		MapSetTrap.Hide();
+
+	}
+	else if (value == 31)//lastclue
+	{
+		ischecksetmap = true;
+
+		aztec.bChecked = false;
+		cbble.bChecked = false;
+		chateau.bChecked = false;
+		prodigy.bChecked = false;
+		rats.bChecked = false;
+		santorini.bChecked = false;
+		skyscraper.bChecked = false;
+		torn.bChecked = false;
+		darksnow.bChecked = false;
+		nightmare.bChecked = false;
+
+		nightmare2.bChecked = false;
+		nightmare3.bChecked = false;
+		lastclue.bChecked = true;
+		lostcity.bChecked = false;
+		panic.bChecked = false;
+		trap.bChecked = false;
+
+		MapSetAztec.Hide();
+		MapSetCbble.Hide();
+		MapSetChateau.Hide();
+		MapSetProdigy.Hide();
+		MapSetRats.Hide();
+		MapSetSantorini.Hide();
+		MapSetSkyScraper.Hide();
+		MapSetTorn.Hide();
+		MapSetDarkSnow.Hide();
+		MapSetNightMare.Hide();
+
+		MapSetNightMare2.Hide();
+		MapSetNightMare3.Hide();
+		MapSetLastClue.Show();
+		MapSetLostCity.Hide();
+		MapSetPanic.Hide();
+		MapSetTrap.Hide();
+	}
+	else if (value == 32)//lostcity
+	{
+		ischecksetmap = true;
+
+		aztec.bChecked = false;
+		cbble.bChecked = false;
+		chateau.bChecked = false;
+		prodigy.bChecked = false;
+		rats.bChecked = false;
+		santorini.bChecked = false;
+		skyscraper.bChecked = false;
+		torn.bChecked = false;
+		darksnow.bChecked = false;
+		nightmare.bChecked = false;
+
+		nightmare2.bChecked = false;
+		nightmare3.bChecked = false;
+		lastclue.bChecked = false;
+		lostcity.bChecked = true;
+		panic.bChecked = false;
+		trap.bChecked = false;
+
+		MapSetAztec.Hide();
+		MapSetCbble.Hide();
+		MapSetChateau.Hide();
+		MapSetProdigy.Hide();
+		MapSetRats.Hide();
+		MapSetSantorini.Hide();
+		MapSetSkyScraper.Hide();
+		MapSetTorn.Hide();
+		MapSetDarkSnow.Hide();
+		MapSetNightMare.Hide();
+
+		MapSetNightMare2.Hide();
+		MapSetNightMare3.Hide();
+		MapSetLastClue.Hide();
+		MapSetLostCity.Show();
+		MapSetPanic.Hide();
+		MapSetTrap.Hide();
+	}
+	else if (value == 33)//panic
+	{
+		ischecksetmap = true;
+
+		aztec.bChecked = false;
+		cbble.bChecked = false;
+		chateau.bChecked = false;
+		prodigy.bChecked = false;
+		rats.bChecked = false;
+		santorini.bChecked = false;
+		skyscraper.bChecked = false;
+		torn.bChecked = false;
+		darksnow.bChecked = false;
+		nightmare.bChecked = false;
+
+		nightmare2.bChecked = false;
+		nightmare3.bChecked = false;
+		lastclue.bChecked = false;
+		lostcity.bChecked = false;
+		panic.bChecked = true;
+		trap.bChecked = false;
+
+		MapSetAztec.Hide();
+		MapSetCbble.Hide();
+		MapSetChateau.Hide();
+		MapSetProdigy.Hide();
+		MapSetRats.Hide();
+		MapSetSantorini.Hide();
+		MapSetSkyScraper.Hide();
+		MapSetTorn.Hide();
+		MapSetDarkSnow.Hide();
+		MapSetNightMare.Hide();
+
+		MapSetNightMare2.Hide();
+		MapSetNightMare3.Hide();
+		MapSetLastClue.Hide();
+		MapSetLostCity.Hide();
+		MapSetPanic.Show();
+		MapSetTrap.Hide();
+	}
+	else if (value == 34)//trap
+	{
+		ischecksetmap = true;
+
+		aztec.bChecked = false;
+		cbble.bChecked = false;
+		chateau.bChecked = false;
+		prodigy.bChecked = false;
+		rats.bChecked = false;
+		santorini.bChecked = false;
+		skyscraper.bChecked = false;
+		torn.bChecked = false;
+		darksnow.bChecked = false;
+		nightmare.bChecked = false;
+
+		nightmare2.bChecked = false;
+		nightmare3.bChecked = false;
+		lastclue.bChecked = false;
+		lostcity.bChecked = false;
+		panic.bChecked = false;
+		trap.bChecked = true;
+
+		MapSetAztec.Hide();
+		MapSetCbble.Hide();
+		MapSetChateau.Hide();
+		MapSetProdigy.Hide();
+		MapSetRats.Hide();
+		MapSetSantorini.Hide();
+		MapSetSkyScraper.Hide();
+		MapSetTorn.Hide();
+		MapSetDarkSnow.Hide();
+		MapSetNightMare.Hide();
+
+		MapSetNightMare2.Hide();
+		MapSetNightMare3.Hide();
+		MapSetLastClue.Hide();
+		MapSetLostCity.Hide();
+		MapSetPanic.Hide();
+		MapSetTrap.Show();
+	}
+
 	else
 	{
 		if (stringmaplist == 1)
@@ -4353,7 +4962,33 @@ void CMenuCreateGame::ResetMap( int value)
 			mapnightmare.Hide();
 			MapSetNightMare.Hide();
 			nightmare.Hide();
+
+			mapnightmare2.Hide();
+			MapSetNightMare2.Hide();
+			nightmare2.Hide();
+
+			mapnightmare3.Hide();
+			MapSetNightMare3.Hide();
+			nightmare3.Hide();
+
+			maplastclue.Hide();
+			MapSetLastClue.Hide();
+			lastclue.Hide();
+
+			maplostcity.Hide();
+			MapSetLostCity.Hide();
+			lostcity.Hide();
+
+			mappanic.Hide();
+			MapSetPanic.Hide();
+			panic.Hide();
+
+			maptrap.Hide();
+			MapSetTrap.Hide();
+			trap.Hide();
 		}
+
+		botNum.Show();
 
 		ischecksetmap = false;
 		assault.bChecked = false;
@@ -5103,6 +5738,143 @@ void CMenuCreateGame::_Init( void )
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
 
+	mapnightmare2.iFlags = QMF_NOTIFY;
+	mapnightmare2.SetRect(460, 225, 256, 124);
+	mapnightmare2.SetPicture(ART_NIGHTMARE2);
+	mapnightmare2.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	SET_EVENT_MULTI(mapnightmare2.onActivated,
+		{
+			uiCreateGame.ResetMap(29);
+			((CMenuCheckBox*)pSelf)->bChecked = true;
+		});
+
+	MapSetNightMare2.SetCharSize(QM_SMALLFONT);
+	MapSetNightMare2.SetModel(&mapsListModel);
+	MapSetNightMare2.SetRect(460, 193, 252, 154);
+
+	nightmare2.SetNameAndStatus(L(""), L(""));
+	nightmare2.iFlags |= QMF_NOTIFY;
+	nightmare2.SetCoord(680, 230);
+	SET_EVENT_MULTI(nightmare3.onChanged,
+		{
+			uiCreateGame.ResetMap(29);
+			((CMenuCheckBox*)pSelf)->bChecked = true;
+		});
+
+	mapnightmare3.iFlags = QMF_NOTIFY;
+	mapnightmare3.SetRect(760, 225, 256, 124);
+	mapnightmare3.SetPicture(ART_NIGHTMARE3);
+	mapnightmare3.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	SET_EVENT_MULTI(mapnightmare3.onActivated,
+		{
+			uiCreateGame.ResetMap(30);
+			((CMenuCheckBox*)pSelf)->bChecked = true;
+		});
+
+	MapSetNightMare3.SetCharSize(QM_SMALLFONT);
+	MapSetNightMare3.SetModel(&mapsListModel);
+	MapSetNightMare3.SetRect(760, 193, 252, 154);
+
+	nightmare3.SetNameAndStatus(L(""), L(""));
+	nightmare3.iFlags |= QMF_NOTIFY;
+	nightmare3.SetCoord(980, 230);
+	SET_EVENT_MULTI(nightmare3.onChanged,
+		{
+			uiCreateGame.ResetMap(30);
+			((CMenuCheckBox*)pSelf)->bChecked = true;
+		});
+
+	maplastclue.iFlags = QMF_NOTIFY;
+	maplastclue.SetRect(160, 365, 256, 124);
+	maplastclue.SetPicture(ART_LASTCLUE);
+	maplastclue.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	SET_EVENT_MULTI(maplastclue.onActivated,
+		{
+			uiCreateGame.ResetMap(31);
+			((CMenuCheckBox*)pSelf)->bChecked = true;
+		});
+
+	MapSetLastClue.SetCharSize(QM_SMALLFONT);
+	MapSetLastClue.SetModel(&mapsListModel);
+	MapSetLastClue.SetRect(160, 333, 252, 154);
+	
+	lastclue.SetNameAndStatus(L(""), L(""));
+	lastclue.iFlags |= QMF_NOTIFY;
+	lastclue.SetCoord(380, 370);
+	SET_EVENT_MULTI(lastclue.onChanged,
+		{
+			uiCreateGame.ResetMap(31);
+			((CMenuCheckBox*)pSelf)->bChecked = true;
+		});
+
+	maplostcity.iFlags = QMF_NOTIFY;
+	maplostcity.SetRect(460, 365, 256, 124);
+	maplostcity.SetPicture(ART_LOSTCITY);
+	maplostcity.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	SET_EVENT_MULTI(maplostcity.onActivated,
+		{
+			uiCreateGame.ResetMap(32);
+			((CMenuCheckBox*)pSelf)->bChecked = true;
+		});
+
+	MapSetLostCity.SetCharSize(QM_SMALLFONT);
+	MapSetLostCity.SetModel(&mapsListModel);
+	MapSetLostCity.SetRect(460, 333, 252, 154);
+
+	lostcity.SetNameAndStatus(L(""), L(""));
+	lostcity.iFlags |= QMF_NOTIFY;
+	lostcity.SetCoord(680, 370);
+	SET_EVENT_MULTI(lostcity.onChanged,
+		{
+			uiCreateGame.ResetMap(32);
+			((CMenuCheckBox*)pSelf)->bChecked = true;
+		});
+
+	mappanic.iFlags = QMF_NOTIFY;
+	mappanic.SetRect(760, 365, 256, 124);
+	mappanic.SetPicture(ART_PANIC);
+	mappanic.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	SET_EVENT_MULTI(mappanic.onActivated,
+		{
+			uiCreateGame.ResetMap(33);
+			((CMenuCheckBox*)pSelf)->bChecked = true;
+		});
+
+	MapSetPanic.SetCharSize(QM_SMALLFONT);
+	MapSetPanic.SetModel(&mapsListModel);
+	MapSetPanic.SetRect(760, 333, 252, 154);
+
+	panic.SetNameAndStatus(L(""), L(""));
+	panic.iFlags |= QMF_NOTIFY;
+	panic.SetCoord(980, 370);
+	SET_EVENT_MULTI(panic.onChanged,
+		{
+			uiCreateGame.ResetMap(33);
+			((CMenuCheckBox*)pSelf)->bChecked = true;
+		});
+
+	maptrap.iFlags = QMF_NOTIFY;
+	maptrap.SetRect(156, 504, 266, 128);//defoult 160,505
+	maptrap.SetPicture(ART_TRAP);
+	maptrap.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	SET_EVENT_MULTI(maptrap.onActivated,
+		{
+			uiCreateGame.ResetMap(34);
+			((CMenuCheckBox*)pSelf)->bChecked = true;
+		});
+
+	MapSetTrap.SetCharSize(QM_SMALLFONT);
+	MapSetTrap.SetModel(&mapsListModel);
+	MapSetTrap.SetRect(160, 473, 252, 154);
+
+	trap.SetNameAndStatus(L(""), L(""));
+	trap.iFlags |= QMF_NOTIFY;
+	trap.SetCoord(380, 510);
+	SET_EVENT_MULTI(trap.onChanged,
+		{
+			uiCreateGame.ResetMap(34);
+			((CMenuCheckBox*)pSelf)->bChecked = true;
+		});
 
 
 
@@ -5111,6 +5883,7 @@ void CMenuCreateGame::_Init( void )
 	classic.SetCoord(1025, 230);
 	SET_EVENT_MULTI(classic.onChanged,
 		{
+			uiCreateGame.botNum.Show();
 			uiCreateGame.ResetMode("none");
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
@@ -5120,6 +5893,7 @@ void CMenuCreateGame::_Init( void )
 	dm.SetCoord(1025, 270);
 	SET_EVENT_MULTI(dm.onChanged,
 		{
+			uiCreateGame.botNum.Show();
 			uiCreateGame.ResetMode("dm");
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
@@ -5129,6 +5903,7 @@ void CMenuCreateGame::_Init( void )
 	tdm.SetCoord(1025, 310);
 	SET_EVENT_MULTI(tdm.onChanged,
 		{
+			uiCreateGame.botNum.Show();
 			uiCreateGame.ResetMode("tdm");
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
@@ -5138,6 +5913,7 @@ void CMenuCreateGame::_Init( void )
 	gd.SetCoord(1025, 350);
 	SET_EVENT_MULTI(gd.onChanged,
 		{
+			uiCreateGame.botNum.Show();
 			uiCreateGame.ResetMode("gd");
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
@@ -5147,6 +5923,7 @@ void CMenuCreateGame::_Init( void )
 	zc.SetCoord(1025, 400);
 	SET_EVENT_MULTI(zc.onChanged,
 		{
+			uiCreateGame.botNum.Show();
 			uiCreateGame.ResetMode("zb1");
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
@@ -5156,6 +5933,7 @@ void CMenuCreateGame::_Init( void )
 	zh.SetCoord(1025, 440);
 	SET_EVENT_MULTI(zh.onChanged,
 		{
+			uiCreateGame.botNum.Show();
 			uiCreateGame.ResetMode("zb3");
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
@@ -5165,6 +5943,7 @@ void CMenuCreateGame::_Init( void )
 	sz.SetCoord(1025, 480);
 	SET_EVENT_MULTI(sz.onChanged,
 		{
+			uiCreateGame.botNum.Hide();
 			uiCreateGame.ResetMode("zbs");
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
@@ -5174,6 +5953,8 @@ void CMenuCreateGame::_Init( void )
 	zsh.SetCoord(1025, 520);
 	SET_EVENT_MULTI(zsh.onChanged,
 		{
+			uiCreateGame.ResetMap(0);
+			uiCreateGame.botNum.Hide();
 			uiCreateGame.ResetMode("zsh_pve");
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
@@ -5322,6 +6103,13 @@ void CMenuCreateGame::_Init( void )
 	AddItem( mapdarksnow );
 	AddItem( mapnightmare );
 
+	AddItem(mapnightmare2);
+	AddItem(mapnightmare3);
+	AddItem(maplastclue);
+	AddItem(maplostcity);
+	AddItem(mappanic);
+	AddItem(maptrap);
+
 	AddItem(MapSetAztec);
 	AddItem(MapSetCbble);
 	AddItem(MapSetChateau);
@@ -5333,6 +6121,12 @@ void CMenuCreateGame::_Init( void )
 	AddItem(MapSetDarkSnow);
 
 	AddItem(MapSetNightMare);
+	AddItem(MapSetNightMare2);
+	AddItem(MapSetNightMare3);
+	AddItem(MapSetLastClue);
+	AddItem(MapSetLostCity);
+	AddItem(MapSetPanic);
+	AddItem(MapSetTrap);
 
 	AddItem( MapSetVertigo );
 	AddItem( MapSetAssault );
@@ -5375,6 +6169,12 @@ void CMenuCreateGame::_Init( void )
 	AddItem( darksnow );
 
 	AddItem( nightmare );
+	AddItem(nightmare2);
+	AddItem(nightmare3);
+	AddItem(lastclue);
+	AddItem(lostcity);
+	AddItem(panic);
+	AddItem(trap);
 
 	AddItem( bigtree );
 	AddItem( dustmini );
@@ -5426,6 +6226,13 @@ void CMenuCreateGame::_Init( void )
 	AddItem(textmap27);
 
 	AddItem(textmap28);
+
+	AddItem(textmap29);
+	AddItem(textmap30);
+	AddItem(textmap31);
+	AddItem(textmap32);
+	AddItem(textmap33);
+	AddItem(textmap34);
 
 	AddItem(Inventory);
 
@@ -5529,6 +6336,20 @@ void CMenuCreateGame::_VidInit()
 		uiCreateGame.textmap28.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap28.SetCoord(241, 310);
 
+
+		uiCreateGame.textmap29.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap29.SetCoord(525, 310);
+		uiCreateGame.textmap30.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap30.SetCoord(842, 310);
+		uiCreateGame.textmap31.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap31.SetCoord(248, 450);
+		uiCreateGame.textmap32.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap32.SetCoord(565, 450);
+		uiCreateGame.textmap33.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap33.SetCoord(845, 450);
+		uiCreateGame.textmap34.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap34.SetCoord(228, 592);
+
 		textmap.Show();
 		textmap2.Show();
 		textmap3.Show();
@@ -5559,6 +6380,13 @@ void CMenuCreateGame::_VidInit()
 		textmap26.Hide();
 		textmap27.Hide();
 		textmap28.Hide();
+
+		textmap29.Hide();
+		textmap30.Hide();
+		textmap31.Hide();
+		textmap32.Hide();
+		textmap33.Hide();
+		textmap34.Hide();
 
 		mapassault.Show();
 		mapitaly.Show();
@@ -5622,6 +6450,30 @@ void CMenuCreateGame::_VidInit()
 		mapnightmare.Hide();
 		MapSetNightMare.Hide();
 		nightmare.Hide();
+
+		mapnightmare2.Hide();
+		MapSetNightMare2.Hide();
+		nightmare2.Hide();
+
+		mapnightmare3.Hide();
+		MapSetNightMare3.Hide();
+		nightmare3.Hide();
+
+		maplastclue.Hide();
+		MapSetLastClue.Hide();
+		lastclue.Hide();
+
+		maplostcity.Hide();
+		MapSetLostCity.Hide();
+		lostcity.Hide();
+
+		mappanic.Hide();
+		MapSetPanic.Hide();
+		panic.Hide();
+
+		maptrap.Hide();
+		MapSetTrap.Hide();
+		trap.Hide();
 	}
 	else if (stringmaplist == 2)
 	{
@@ -5691,6 +6543,30 @@ void CMenuCreateGame::_VidInit()
 		mapnightmare.Hide();
 		MapSetNightMare.Hide();
 		nightmare.Hide();
+
+		mapnightmare2.Hide();
+		MapSetNightMare2.Hide();
+		nightmare2.Hide();
+
+		mapnightmare3.Hide();
+		MapSetNightMare3.Hide();
+		nightmare3.Hide();
+
+		maplastclue.Hide();
+		MapSetLastClue.Hide();
+		lastclue.Hide();
+
+		maplostcity.Hide();
+		MapSetLostCity.Hide();
+		lostcity.Hide();
+
+		mappanic.Hide();
+		MapSetPanic.Hide();
+		panic.Hide();
+
+		maptrap.Hide();
+		MapSetTrap.Hide();
+		trap.Hide();
 	}
 	else if (stringmaplist == 3)
 	{
@@ -5760,6 +6636,30 @@ void CMenuCreateGame::_VidInit()
 		mapnightmare.Hide();
 		MapSetNightMare.Hide();
 		nightmare.Hide();
+
+		mapnightmare2.Hide();
+		MapSetNightMare2.Hide();
+		nightmare2.Hide();
+
+		mapnightmare3.Hide();
+		MapSetNightMare3.Hide();
+		nightmare3.Hide();
+
+		maplastclue.Hide();
+		MapSetLastClue.Hide();
+		lastclue.Hide();
+
+		maplostcity.Hide();
+		MapSetLostCity.Hide();
+		lostcity.Hide();
+
+		mappanic.Hide();
+		MapSetPanic.Hide();
+		panic.Hide();
+
+		maptrap.Hide();
+		MapSetTrap.Hide();
+		trap.Hide();
 	}
 
 }
@@ -5815,6 +6715,7 @@ void UI_CreateGame_Menu( void )
 		return;
 
 	uiCreateGame.Show();
+
 	uiCreateGame.ResetMode(0);
 }
 ADD_MENU( menu_creategame, UI_CreateGame_Precache, UI_CreateGame_Menu );

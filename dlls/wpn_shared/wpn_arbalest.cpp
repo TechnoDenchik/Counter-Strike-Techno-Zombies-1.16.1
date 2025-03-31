@@ -113,16 +113,6 @@ int CArbalest::GetItemInfo(ItemInfo *p)
 	return 1;
 }
 
-void CArbalest::UpdateHUD() const
-{
-#ifndef CLIENT_DLL
-	MESSAGE_BEGIN(MSG_ONE, gmsgArbalestMsg, NULL, m_pPlayer->pev);
-	WRITE_BYTE(WPN_ARBALEST);
-	WRITE_BYTE(m_iClip_c);
-	MESSAGE_END();
-#endif
-}
-
 BOOL CArbalest::Deploy(void)
 {
 	m_flAccuracy = 0.2;
@@ -133,7 +123,6 @@ BOOL CArbalest::Deploy(void)
 	phs4 = -1;
 	phs12 = -1; // 0xBF800000
 	return DefaultDeploy("models/v_halogun.mdl", "models/p_halogun.mdl", ARBALEST_DRAW, "ak47", UseDecrement() != FALSE);
-	UpdateHUD();
 }
 
 void CArbalest::Holster(int skiplocal)
@@ -149,20 +138,6 @@ void CArbalest::Holster(int skiplocal)
 	// clear target list ?
 	return CBasePlayerWeapon::Holster(skiplocal);
 }
-
-void CArbalest::UndoHUD() const
-{
-#ifndef CLIENT_DLL
-	
-#endif
-}
-
-void CArbalest::Drop()
-{
-
-}
-
-
 
 void CArbalest::PrimaryAttack_FindTargets()
 {
@@ -232,7 +207,7 @@ void CArbalest::SecondaryAttack(void)
 	
 		if (phs3 == -1.0f)
 		{
-			EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/halogun-2.wav", 0, 0, 0, PITCH_NORM);
+			EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, "weapons/halogun-2.wav", 0, 0, 0, PITCH_NORM);
 			SendWeaponAnim(ARBALEST_SHOOT_B_START, UseDecrement() != FALSE); // 3
 			phs3 = gpGlobals->time + 0.23;
 			m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 99999.0;
@@ -458,7 +433,7 @@ void CArbalest::RadiusDamage(Vector vecAiming, float flDamage)
 	WRITE_BYTE(TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOSOUND);
 	MESSAGE_END();
 
-	EMIT_SOUND_DYN(this->edict(), CHAN_WEAPON, "weapons/halogun-1_exp.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+	EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/halogun-1_exp.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 
 }
 
@@ -690,14 +665,6 @@ void CArbalest::ArbalestFire(float flSpread, duration_t flCycleTime, BOOL fUseAu
 
 	m_iClip--;
 	
-	if (CanDeploy())
-	{
-		UpdateHUD();
-	}
-	else
-	{
-		UndoHUD();
-	}
 	m_pPlayer->pev->effects |= EF_MUZZLEFLASH;
 #ifndef CLIENT_DLL
 	m_pPlayer->SetAnimation(PLAYER_ATTACK1);
@@ -714,7 +681,7 @@ void CArbalest::ArbalestFire(float flSpread, duration_t flCycleTime, BOOL fUseAu
 		tDelta4 += gpGlobals->time - tWorldTime4;
 	}
 	SendWeaponAnim(ARBALEST_SHOOT_A, UseDecrement() != FALSE);
-	EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/halogun-1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+	EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/halogun-1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 
 	CBaseEntity* pevAttacker = this->m_pPlayer;
 	auto vecShootPosition = Get_ShootPosition(pevAttacker, vecSrc);
@@ -853,7 +820,7 @@ void CArbalest::ItemPostFrame()
 					this->SendWeaponAnim(ARBALEST_SHOOT_B_LOOP, UseDecrement() != FALSE); // 4
 					phs3 = gpGlobals->time + 9.0f;
 					
-					EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/halogun-2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+					EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/halogun-2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 				
 					return CBasePlayerWeapon::ItemPostFrame();
 				}
@@ -888,7 +855,7 @@ void CArbalest::ItemPostFrame()
 			}
 			else
 			{
-				EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/halogun-2.wav", 0, 0, 0, PITCH_NORM);
+				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/halogun-2.wav", 0, 0, 0, PITCH_NORM);
 				this->SendWeaponAnim(ARBALEST_SHOOT_B_END, UseDecrement() != FALSE); // 5
 				phs3 = -1;
 				m_flNextPrimaryAttack = m_flNextSecondaryAttack = m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.4f;

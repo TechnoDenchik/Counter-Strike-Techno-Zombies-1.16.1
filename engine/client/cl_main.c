@@ -1673,7 +1673,7 @@ void CL_ConnectionlessPacket( netadr_t from, sizebuf_t *msg )
 		if( extensions & NET_EXT_SPLIT )
 		{
 			if( cl_maxpacket->integer >= 40000 || cl_maxpacket->integer < 100 )
-				Cvar_SetFloat( "cl_maxpacket", 1400 );
+				Cvar_SetFloat( "cl_maxpacket", 2400 );
 
 			cls.netchan.maxpacket = Cvar_VariableInteger( "cl_maxoutpacket" );
 			if( cls.netchan.maxpacket < 100 )

@@ -55,28 +55,6 @@ enum blackhole_anim
 			m_iState = BLACKHOLE_START;
 			PLAYBACK_EVENT_FULL(FEV_GLOBAL, ENT(pev), m_usFireVoidpistol, 0.0, pev->origin, (float*)&g_vecZero, 0.0, 0.0, 0, m_iState, FALSE, TRUE);
 
-			/*MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
-			WRITE_BYTE(TE_EXPLOSION);
-			//WRITE_COORD(this->edict());
-			//WRITE_COORD(pev->angles);
-			//WRITE_COORD(pev->owner);
-			WRITE_SHORT(MODEL_INDEX("sprites/ef_blackhole_start.spr"));
-			WRITE_BYTE(8);
-			WRITE_BYTE(40);
-			WRITE_BYTE(TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOSOUND);
-			MESSAGE_END();
-
-			MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
-			WRITE_BYTE(TE_EXPLOSION);
-			//WRITE_COORD(vecAiming[0]);
-			//WRITE_COORD(vecAiming[1]);
-			//WRITE_COORD(vecAiming[2]);
-			WRITE_SHORT(MODEL_INDEX("sprites/ef_blackhole_start.spr"));
-			WRITE_BYTE(8);
-			WRITE_BYTE(40);
-			WRITE_BYTE(TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOSOUND);
-			MESSAGE_END();*/
-
 			SetThink(&CVoidpistolBlackhole::OnLoop);
 			pev->nextthink = gpGlobals->time + 1.5f;
 		}
@@ -96,28 +74,6 @@ enum blackhole_anim
 				PLAYBACK_EVENT_FULL(FEV_GLOBAL, ENT(pev), m_usFireVoidpistol, 0.0, pev->origin, (float*)&g_vecZero, 0.0, 0.0, 0, m_iState, FALSE, TRUE);
 			}
 				RadiusDamage(pev->origin, m_BlackholeDamage, TRUE, m_freq);
-				
-				/*MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
-				WRITE_BYTE(TE_EXPLOSION);
-				//WRITE_COORD(this->edict());
-				//WRITE_COORD(pev->angles);
-				//WRITE_COORD(pev->owner);
-				WRITE_SHORT(MODEL_INDEX("sprites/ef_blackhole_loop.spr"));
-				WRITE_BYTE(8);
-				WRITE_BYTE(40);
-				WRITE_BYTE(TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOSOUND);
-				MESSAGE_END();
-
-				MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
-				WRITE_BYTE(TE_EXPLOSION);
-				//WRITE_COORD(vecAiming[0]);
-				//WRITE_COORD(vecAiming[1]);
-				//WRITE_COORD(vecAiming[2]);
-				WRITE_SHORT(MODEL_INDEX("sprites/ef_blackhole_loop.spr"));
-				WRITE_BYTE(8);
-				WRITE_BYTE(40);
-				WRITE_BYTE(TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOSOUND);
-				MESSAGE_END();*/
 
 			if (m_freq == 30)
 			{
@@ -131,7 +87,7 @@ enum blackhole_anim
 			m_SoundRepeat++;
 			m_freq++;
 			pev->nextthink = gpGlobals->time + 0.01f;
-			//RadiusDamage();
+
 			if (gpGlobals->time > m_flLoopTime)		//after 4s
 			{
 				SetThink(&CVoidpistolBlackhole::OnEnd);
@@ -153,9 +109,7 @@ enum blackhole_anim
 				PLAYBACK_EVENT_FULL(FEV_GLOBAL, ENT(pev), m_usFireVoidpistol, 0.0, pev->origin, (float*)&g_vecZero, 0.0, 0.0, 0, m_iState, FALSE, TRUE);
 			}
 
-			
-
-				RadiusDamage(pev->origin, DetonationDamage(), FALSE, m_freq);
+			RadiusDamage(pev->origin, DetonationDamage(), FALSE, m_freq);
 			if (m_freq == 72)
 			{	
 				m_freq = 73;
@@ -202,6 +156,12 @@ enum blackhole_anim
 						continue;
 
 					if (pEntity->IsBSPModel())
+						continue;
+
+					if (pEntity->pev->solid == SOLID_TRIGGER)
+						continue;
+
+					if (pEntity->pev->solid == SOLID_NOT)
 						continue;
 
 					if (!m_pPlayer->m_bIsZombie)
@@ -263,14 +223,12 @@ enum blackhole_anim
 									pEntity->TraceAttack(pevAttacker, flAdjustedDamage, (tr.vecEndPos - vecSrc).Normalize(), &tr, bitsDamageType);
 									ApplyMultiDamage(pevInflictor, pevAttacker);
 								}
-							}
-							
+							}		
 						}
 					}
 				}
 			}
 		}
-
 
 		float DetonationDamage() const
 		{
@@ -363,15 +321,13 @@ enum blackhole_anim
 				{
 					m_bCreateSpr = TRUE;
 					PLAYBACK_EVENT_FULL(FEV_GLOBAL, ENT(pev), m_usFireVoidpistol, 0.0, pev->origin, vecForward, 0.0, 0.0, 0, 4, FALSE, TRUE);
-				}
-				
+				}				
 			}
 			else
 			{
 				Explode();
 			}
 			
-
 			pev->nextthink = gpGlobals->time + 0.01f;
 		}
 		void Explode()
@@ -419,7 +375,6 @@ enum blackhole_anim
 	LINK_ENTITY_TO_CLASS(voidpistol_projectile, CVoidpistolProjectile)
 
 #endif
-
 
 enum voidpistol_e
 {
@@ -495,7 +450,6 @@ void CVoidpistol::Precache(void)
 	PRECACHE_SOUND("weapons/voidpistol-1.wav");
 	PRECACHE_SOUND("weapons/voidpistol-2.wav");
 
-
 	m_iShell = PRECACHE_MODEL("models/pshell.mdl");
 	m_usFireVoidpistol = PRECACHE_EVENT(1, "events/voidpistol.sc");
 }
@@ -567,65 +521,81 @@ void CVoidpistol::ItemPostFrame()
 			if (pEntity->IsBSPModel())
 				continue;
 
+			if (pEntity->pev->solid == SOLID_TRIGGER)
+				continue;
+
+			if (pEntity->pev->solid == SOLID_NOT)
+				continue;
+
 			if (pEntity->IsPlayer())
 			{
-				if(g_pGameRules->PlayerRelationship(m_pPlayer, pEntity) != GR_TEAMMATE)
+				if (FVisible(vecPlayerOrigin) == TRUE)
 				{
-					if (!IsModeCEnabled(m_iCharging))
-					{
-						if (m_iMode == VOIDPISTOL_MODEB)
-						{
-							return CBasePlayerWeapon::ItemPostFrame();	//already MODE B
-						}
 
-						m_iMode = VOIDPISTOL_MODEB;
-						SendWeaponAnim(VOIDPISTOL_SCANNING_ON, 0);
-						m_flNextSecondaryAttack = m_flNextPrimaryAttack = 0.7f;
-						m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.8f;
-						pev->iuser1 = 0;
-						return CBasePlayerWeapon::ItemPostFrame();
-					}
-					else
+
+
+
+
+					if (g_pGameRules->PlayerRelationship(m_pPlayer, pEntity) != GR_TEAMMATE)
 					{
-						if (pev->iuser1)
-						{				
+						if (!IsModeCEnabled(m_iCharging))
+						{
+							if (m_iMode == VOIDPISTOL_MODEB)
+							{
+								return CBasePlayerWeapon::ItemPostFrame();	//already MODE B
+							}
+
 							m_iMode = VOIDPISTOL_MODEB;
-							return CBasePlayerWeapon::ItemPostFrame();	//already MODE B
+							SendWeaponAnim(VOIDPISTOL_SCANNING_ON, 0);
+							m_flNextSecondaryAttack = m_flNextPrimaryAttack = 0.7f;
+							m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.8f;
+							pev->iuser1 = 0;
+							return CBasePlayerWeapon::ItemPostFrame();
 						}
-						pev->iuser1 = 1;
-						m_iMode = VOIDPISTOL_MODEB;
-						SendWeaponAnim(VOIDPISTOL_CHANGEBC, 0);
-						m_flNextSecondaryAttack = m_flNextPrimaryAttack = 0.5f;
-						m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.8f;
-						return CBasePlayerWeapon::ItemPostFrame();
-					}
-				}
-				else
-				{
-					if (!IsModeCEnabled(m_iCharging))
-					{
-						if (m_iMode == VOIDPISTOL_MODEA)
+						else
 						{
-							return CBasePlayerWeapon::ItemPostFrame();	//already MODE B
+							if (pev->iuser1)
+							{
+								m_iMode = VOIDPISTOL_MODEB;
+								return CBasePlayerWeapon::ItemPostFrame();	//already MODE B
+							}
+							pev->iuser1 = 1;
+							m_iMode = VOIDPISTOL_MODEB;
+							SendWeaponAnim(VOIDPISTOL_CHANGEBC, 0);
+							m_flNextSecondaryAttack = m_flNextPrimaryAttack = 0.5f;
+							m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.8f;
+							return CBasePlayerWeapon::ItemPostFrame();
 						}
-						m_iMode = VOIDPISTOL_MODEA;
-						SendWeaponAnim(VOIDPISTOL_SCANNING_OFF, 0);
-						m_flNextSecondaryAttack = m_flNextPrimaryAttack = 0.57f;
-						m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.8f;
-						pev->iuser1 = 0;
 					}
 					else
 					{
-						if (pev->iuser1)
+						if (!IsModeCEnabled(m_iCharging))
 						{
-							return CBasePlayerWeapon::ItemPostFrame();	//already MODE B
+							if (m_iMode == VOIDPISTOL_MODEA)
+							{
+								return CBasePlayerWeapon::ItemPostFrame();	//already MODE B
+							}
+							m_iMode = VOIDPISTOL_MODEA;
+							SendWeaponAnim(VOIDPISTOL_SCANNING_OFF, 0);
+							m_flNextSecondaryAttack = m_flNextPrimaryAttack = 0.57f;
+							m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.8f;
+							pev->iuser1 = 0;
 						}
-						m_iMode = VOIDPISTOL_MODEB;
-						pev->iuser1 = 1;
-						SendWeaponAnim(VOIDPISTOL_CHANGEAC, 0);
-						m_flNextSecondaryAttack = m_flNextPrimaryAttack = 0.5f;
-						m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.8f;
+						else
+						{
+							if (pev->iuser1)
+							{
+								return CBasePlayerWeapon::ItemPostFrame();	//already MODE B
+							}
+							m_iMode = VOIDPISTOL_MODEB;
+							pev->iuser1 = 1;
+							SendWeaponAnim(VOIDPISTOL_CHANGEAC, 0);
+							m_flNextSecondaryAttack = m_flNextPrimaryAttack = 0.5f;
+							m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.8f;
+						}
 					}
+
+
 				}
 			}		
 		}
@@ -798,6 +768,12 @@ void CVoidpistol::VoidpistolFireB(float flSpread, duration_t flCycleTime, BOOL f
 					continue;
 
 				if (pEntity->IsBSPModel())
+					continue;
+
+				if (pEntity->pev->solid == SOLID_TRIGGER)
+					continue;
+
+				if (pEntity->pev->solid == SOLID_NOT)
 					continue;
 
 				if (m_iCountPlayer > 10)

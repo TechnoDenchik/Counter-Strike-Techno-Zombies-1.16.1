@@ -99,14 +99,16 @@ int CHudZB3::MsgFunc_ZB3SkillUsed2(const char* pszName, int iSize, void* pbuf)
 int CHudZB3::MsgFunc_ZB3Inventory(const char* pszName, int iSize, void* pbuf)
 {
 	BufferReader buf(pszName, pbuf, iSize);
-	auto type = static_cast<INTWeaponMsg>(buf.ReadByte());
-	
-	char* Gun = CVAR_GET_STRING("wpn_getgun");
-	char* Pistol = CVAR_GET_STRING("wpn_getpistol");
-	char* Knife = CVAR_GET_STRING("wpn_getknife");
-	char* Grenade = CVAR_GET_STRING("wpn_getgrenade");
+	auto type = static_cast<INTMessage>(buf.ReadByte());
 
-	pimpl->get<CInventorySet>().GetWeapon(Gun, Pistol, Knife, Grenade);
+	switch (type)
+	{
+	case WPN_INVENTORY:
+	{
+		pimpl->get<CInventorySet>().SetWeaponKit();
+		break;
+	}
+	}
 
 	return 1;
 }

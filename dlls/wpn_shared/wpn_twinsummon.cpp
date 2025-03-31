@@ -463,6 +463,306 @@ protected:
 };
 LINK_ENTITY_TO_CLASS(twinsummlonexp, CTwinSummlonExp)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class CTwinSummlonExpEx : public CBaseAnimating
+{
+public:
+	void Spawn() override
+	{
+		Precache();
+		ph4 = 0;
+		ph5 = 0;
+		ph6 = 0;
+
+		m_fSequenceLoops = 0;
+		//ph26 = 0;
+		SetTouch(&CTwinSummlonExpEx::OnTouch);
+		SetThink(&CTwinSummlonExpEx::FlyThink);
+
+		//ph32 = ?
+		pev->solid = SOLID_CUSTOM; // 5
+		pev->movetype = MOVETYPE_FLY; // 5
+		pev->nextthink = gpGlobals->time + 0.0099999998;
+		ph7 = gpGlobals->time + 1.0f;
+		ph8 = 300.0;
+		this_1_has_disconnected = 0;
+		UTIL_SetSize(pev, { -6, -6, -6 }, { 6, 6, 6 });
+
+
+	}
+
+	void Precache() override
+	{
+		m_iModelExplo = PRECACHE_MODEL("sprites/ef_dgaxeex_explo.spr");
+		m_iModelLight1 = PRECACHE_MODEL("sprites/ef_gungnir_lightline1.spr");
+		m_iModelLight2 = PRECACHE_MODEL("sprites/ef_gungnir_lightline2.spr");
+
+		PRECACHE_SOUND("sound/dgaxe_skill1.spr");
+		PRECACHE_SOUND("sound/dgaxeex_skill1_exp.spr");
+	}
+
+	KnockbackData GetKnockBackData()
+	{
+		return { 1100.0f, 500.0f, 700.0f, 400.0f, 0.89999998f };
+	}
+
+	void EXPORT FlyThink()
+	{
+		if (gpGlobals->time < ph7)
+		{
+			this->pev->nextthink = gpGlobals->time + 0.0099999998;
+			this_1_m_iSwing = gpGlobals->time;
+
+			if (pev->solid == SOLID_NOT)
+			{
+				PenetrateEnd();
+			}
+		}
+		else
+		{
+			TouchWall();
+		}
+	}
+
+	void EXPORT OnTouch(CBaseEntity* pOther)
+	{
+		if (gpGlobals->time <= this_1_m_iSwing)
+		{
+			if (pOther && pOther->IsBSPModel())
+			{
+				TouchWall();
+			}
+			else if (pOther->pev->pContainingEntity != this->pev->owner)
+			{
+				TouchEntity(pOther);
+			}
+		}
+	}
+
+	void TouchWall()
+	{
+		pev->velocity = {};
+		RadiusDamage();
+	}
+
+	void TouchEntity(CBaseEntity* pOther)
+	{
+		if (pev->owner == pOther->edict())
+			return;
+
+		CBaseEntity* pAttacker = CBaseEntity::Instance(pev->owner);
+		CBasePlayer* pAttackePlayer = nullptr;
+		if (pAttacker && pAttacker->IsPlayer())
+			pAttackePlayer = static_cast<CBasePlayer*>(pAttacker);
+
+		if (pAttackePlayer && pOther->pev->takedamage != DAMAGE_NO && pOther->IsAlive())
+		{
+			Vector vecDirection = (pOther->pev->origin - pev->origin).Normalize();
+
+			TraceResult tr;
+			UTIL_TraceLine(pev->origin, pOther->pev->origin, missile, ENT(pAttackePlayer->pev), &tr);
+			tr.iHitgroup = HITGROUP_CHEST; // ...
+
+			ClearMultiDamage();
+			pOther->TraceAttack(pAttackePlayer->pev, m_flTouchDamage, vecDirection, &tr, DMG_BULLET);
+			ApplyMultiDamage(pAttackePlayer->pev, pAttackePlayer->pev);
+
+			PenetrateStart();
+		}
+	}
+
+	void PenetrateStart()
+	{
+		pev->origin = pev->origin + m_vecStartVelocity.Normalize() * 12;
+
+
+		pev->solid = SOLID_NOT;
+
+		pev->nextthink = gpGlobals->time + 0.05f;
+	}
+
+	void PenetrateEnd()
+	{
+		pev->velocity = m_vecStartVelocity;
+		pev->solid = SOLID_CUSTOM;
+
+		pev->nextthink = gpGlobals->time + 0.001f;
+	}
+
+	void RadiusDamage()
+	{
+		const float flRadius = m_flExplodeRadius;
+		const float flDamage = m_flExplodeDamage;
+		const Vector vecSrc = pev->origin;
+		entvars_t* const pevAttacker = VARS(pev->owner);
+		entvars_t* const pevInflictor = this->pev;
+		int bitsDamageType = DMG_BULLET;
+
+		TraceResult tr;
+		const float falloff = flRadius ? flDamage / flRadius : 1;
+		const int bInWater = (UTIL_PointContents(vecSrc) == CONTENTS_WATER);
+
+		CBaseEntity* pEntity = NULL;
+		while ((pEntity = UTIL_FindEntityInSphere(pEntity, vecSrc, flRadius)) != NULL)
+		{
+			if (pEntity->pev->takedamage != DAMAGE_NO)
+			{
+				if (bInWater && !pEntity->pev->waterlevel)
+					continue;
+
+				if (!bInWater && pEntity->pev->waterlevel == 3)
+					continue;
+
+				if (pEntity->IsBSPModel())
+					continue;
+
+				if (pEntity->pev == pevAttacker)
+					continue;
+
+				Vector vecSpot = pEntity->BodyTarget(vecSrc);
+				UTIL_TraceLine(vecSrc, vecSpot, missile, ENT(pevInflictor), &tr);
+
+				if (tr.flFraction == 1.0f || tr.pHit == pEntity->edict())
+				{
+					if (tr.fStartSolid)
+					{
+						tr.vecEndPos = vecSrc;
+						tr.flFraction = 0;
+					}
+					float flAdjustedDamage = flDamage - (vecSrc - pEntity->pev->origin).Length() * falloff;
+					flAdjustedDamage = Q_max(0, flAdjustedDamage);
+
+					if (tr.flFraction == 1.0f)
+					{
+						pEntity->TakeDamage(pevInflictor, pevAttacker, flAdjustedDamage, bitsDamageType);
+					}
+					else
+					{
+						tr.iHitgroup = HITGROUP_CHEST;
+						ClearMultiDamage();
+						pEntity->TraceAttack(pevInflictor, flAdjustedDamage, (tr.vecEndPos - vecSrc).Normalize(), &tr, bitsDamageType);
+						ApplyMultiDamage(pevInflictor, pevAttacker);
+					}
+
+				}
+			}
+		}
+
+		Vector vecAiming;
+
+		MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, 0);
+		WRITE_BYTE(TE_EXPLOSION);
+		WRITE_COORD(pev->origin.x);
+		WRITE_COORD(pev->origin.y);
+		WRITE_COORD(pev->origin.z);
+		WRITE_SHORT(m_iModelExplo);
+		WRITE_BYTE(13);
+		WRITE_BYTE(50);
+		WRITE_BYTE(TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NOSOUND);
+		MESSAGE_END();
+
+		MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, 0);
+		WRITE_BYTE(TE_EXPLOSION);
+		WRITE_COORD(pev->origin.x);
+		WRITE_COORD(pev->origin.y);
+		WRITE_COORD(pev->origin.z);
+		WRITE_SHORT(m_iModelExplo);
+		WRITE_BYTE(13);
+		WRITE_BYTE(50);
+		WRITE_BYTE(TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NOSOUND);
+		MESSAGE_END();
+
+		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/dgaxe_skill1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/dgaxeex_skill1_exp.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+
+		SetThink(&CTwinSummlonExp::AdditionalDamageThink);
+		pev->nextthink = gpGlobals->time + 1.1f;
+	}
+
+	void EXPORT AdditionalDamageThink()
+	{
+		CBaseEntity::FireBullets3(pev->origin, (m_vecStartOrigin - pev->origin).Normalize(), 0.0f, (m_vecStartOrigin - pev->origin).Length(), 9, BULLET_NONE, m_flAdditionalDamage, 1.0f, this->pev, FALSE);
+	}
+
+	void Init(Vector vecVelocity, float flTouchDamage, float flExplodeDamage, float flAdditionalDamage, float flExplodeRadius, TeamName iTeam)
+	{
+		std::tie(m_flTouchDamage, m_flExplodeDamage, m_flAdditionalDamage, m_flExplodeRadius, m_iTeam) = std::make_tuple(flTouchDamage, flExplodeDamage, flAdditionalDamage, flExplodeRadius, iTeam);
+		m_vecStartVelocity = pev->velocity = std::move(vecVelocity);
+		m_vecStartOrigin = pev->origin;
+	}
+
+	int ph4;
+	int ph5;
+	int ph6;
+	float ph7;
+	float ph8; // m_pfnThink?
+	float this_1_m_iSwing;
+	short this_1_has_disconnected;
+
+	float m_flTouchDamage;
+	float m_flExplodeDamage;
+	float m_flAdditionalDamage;
+	float m_flExplodeRadius;
+	TeamName m_iTeam;
+
+	Vector m_vecStartOrigin;
+	Vector m_vecStartVelocity;
+	int m_iModelExplo;
+	int m_iModelLight1;
+	int m_iModelLight2;
+
+protected:
+	void Remove()
+	{
+		SetThink(nullptr);
+		SetTouch(nullptr);
+		pev->effects |= EF_NODRAW; // 0x80u
+		return UTIL_Remove(this);
+	}
+};
+LINK_ENTITY_TO_CLASS(twinsummlonexpex, CTwinSummlonExpEx)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #endif
 
 class CGungnir2 : public LinkWeaponTemplate< CGungnir2,

@@ -91,7 +91,7 @@ void CMenuAudio::_Init( void )
 	banner.SetPicture(ART_BANNER);
 
 	soundVolume.SetNameAndStatus(L("GameUI_SoundEffectVolume"), "Set master volume level" );
-	soundVolume.Setup( 0.00, 2.0, 0.001 );
+	soundVolume.Setup( 0.00, 2.0, 0.0001 );
 	soundVolume.onChanged = CMenuEditable::WriteCvarCb;
 	soundVolume.SetCoord( 320, 280 );
 

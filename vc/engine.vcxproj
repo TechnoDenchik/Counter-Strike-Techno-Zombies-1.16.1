@@ -301,7 +301,7 @@
     <ClCompile>
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>XASH_BUILD_COMMIT="$(Configuration)";DBGHELP;XASH_VGUI;XASH_SDL;XASH_FORCEINLINE;XASH_FASTSTR;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>XASH_BUILD_COMMIT="Beta";DBGHELP;XASH_VGUI;XASH_SDL;XASH_FORCEINLINE;XASH_FASTSTR;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>../engine;../engine/common;../engine/common/imagelib;../engine/common/soundlib;../engine/client;../engine/client/vgui;../engine/server;../common;../pm_shared;../SDL2/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <OpenMPSupport>true</OpenMPSupport>

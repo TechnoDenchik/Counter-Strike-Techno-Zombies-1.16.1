@@ -23,6 +23,7 @@ enum INTMessage : byte
 	ORIG_WDROP_MSG,
 	MUSIC_PACK_CT,
 	MUSIC_PACK_TR,
+	WPN_INVENTORY,
 };
 
 enum INTWeaponMsg : byte
@@ -30,7 +31,6 @@ enum INTWeaponMsg : byte
 	QUANTUMMSG,
 	TWINAXESMSG,
 	WPN_ARBALEST,
-	WPN_INVENTORY,
 };
 
 #endif

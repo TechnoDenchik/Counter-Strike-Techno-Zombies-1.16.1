@@ -21,6 +21,7 @@ GNU General Public License for more details.
 #include "monsters.h"
 #include "player_mod_strategy.h"
 #include "gamemode/mods.h"
+#include "gamemode/interface/interface_const.h"
 
 void CPlayerModStrategy_Default::CheckBuyZone()
 {
@@ -174,16 +175,21 @@ void CPlayerModStrategy_Default::GiveDefaultItems()
 	switch (m_pPlayer->m_iTeam)
 	{
 	case CT:
-
-		m_pPlayer->GiveNamedItem("weapon_knife");
-		m_pPlayer->GiveNamedItem("weapon_usp");
-		m_pPlayer->GiveAmmo(m_pPlayer->m_bIsVIP ? 12 : 24, "45acp", MAX_AMMO_45ACP);
+		MESSAGE_BEGIN(MSG_ALL, gmsgZB3InventorySet);
+		WRITE_BYTE(WPN_INVENTORY);
+		MESSAGE_END();
+		//m_pPlayer->GiveNamedItem("weapon_knife");
+		//m_pPlayer->GiveNamedItem("weapon_usp");
+	//	m_pPlayer->GiveAmmo(m_pPlayer->m_bIsVIP ? 12 : 24, "45acp", MAX_AMMO_45ACP);
 
 		break;
 	case TERRORIST:
-		m_pPlayer->GiveNamedItem("weapon_knife");
-		m_pPlayer->GiveNamedItem("weapon_glock18");
-		m_pPlayer->GiveAmmo(40, "9mm", MAX_AMMO_9MM);
+		MESSAGE_BEGIN(MSG_ALL, gmsgZB3InventorySet);
+		WRITE_BYTE(WPN_INVENTORY);
+		MESSAGE_END();
+		//m_pPlayer->GiveNamedItem("weapon_knife");
+		//m_pPlayer->GiveNamedItem("weapon_glock18");
+	//	m_pPlayer->GiveAmmo(40, "9mm", MAX_AMMO_9MM);
 
 		break;
 	default:
@@ -237,7 +243,6 @@ void CPlayerModStrategy_Zombie::GiveDefaultItems()
 {
 	if (!m_pPlayer->m_bIsZombie)
 		return CPlayerModStrategy_Default::GiveDefaultItems();
-
 	m_pPlayer->RemoveAllItems(FALSE);
 	m_pPlayer->m_bHasPrimary = false;
 

@@ -142,6 +142,17 @@ void CWonderCannon::PrimaryAttack_FindTargets()
 	CBaseEntity* pEntity = NULL;
 	while ((pEntity = UTIL_FindEntityInSphere(pEntity, m_pPlayer->pev->origin, flRadius)) != nullptr)
 	{
+		if (!pEntity->IsAlive())
+			continue;
+
+		if (pEntity->IsBSPModel())
+			continue;
+
+		if (pEntity->pev->solid == SOLID_TRIGGER)
+			continue;
+
+		if (pEntity->pev->solid == SOLID_NOT)
+			continue;
 		if (PrimaryAttack_CheckTargetAvailable(pEntity, m_pPlayer->pev->v_angle))
 		{
 			EHANDLE eh;
@@ -157,6 +168,15 @@ bool CWonderCannon::PrimaryAttack_CheckTargetAvailable(CBaseEntity* a2, Vector v
 	const float flRadius = 350;
 
 	if (!a2->IsAlive())
+		return false;
+
+	if (a2->IsBSPModel())
+		return false;
+
+	if (a2->pev->solid == SOLID_TRIGGER)
+		return false;
+
+	if (a2->pev->solid == SOLID_NOT)
 		return false;
 
 #ifndef CLIENT_DLL
@@ -213,11 +233,26 @@ void CWonderCannon::Getsprite()
 	CBaseEntity* pEntity = NULL;
 	while ((pEntity = UTIL_FindEntityInSphere(pEntity, m_pPlayer->pev->origin, flRadius)) != nullptr)
 	{
-		if (PrimaryAttack_CheckTargetAvailable(pEntity, m_pPlayer->pev->v_angle))
+		if (pEntity->pev->takedamage != DAMAGE_NO)
 		{
-			EHANDLE eh;
-			eh.Set(pEntity->edict());
-			phs9_10_11.push_back(eh);
+			if (pEntity->pev == m_pPlayer->pev)
+				continue;
+
+			if (pEntity->IsBSPModel())
+				continue;
+
+			if (pEntity->pev->solid == SOLID_TRIGGER)
+				continue;
+
+			if (pEntity->pev->solid == SOLID_NOT)
+				continue;
+
+			if (PrimaryAttack_CheckTargetAvailable(pEntity, m_pPlayer->pev->v_angle))
+			{
+				EHANDLE eh;
+				eh.Set(pEntity->edict());
+				phs9_10_11.push_back(eh);
+			}
 		}
 	}
 #endif
@@ -421,12 +456,7 @@ void CWonderCannon::PrimaryAttack(void)
 
 void CWonderCannon::SecondaryAttack(void)
 {
-	if (!FBitSet(m_pPlayer->pev->flags, FL_ONGROUND))
-		WonderCannonFire2(0.04 + (0.4) * m_flAccuracy, 0.0955, FALSE);
-	else if (m_pPlayer->pev->velocity.Length2D() > 140)
-		WonderCannonFire2(0.04 + (0.07) * m_flAccuracy, 0.0955, FALSE);
-	else
-		WonderCannonFire2((0.0275), 0.0955, FALSE);
+	
 }
 
 void CWonderCannon::WonderCannonFire(float flSpread, float flCycleTime, BOOL fUseAutoAim)
@@ -472,7 +502,7 @@ void CWonderCannon::WonderCannonFire(float flSpread, float flCycleTime, BOOL fUs
 		break;
 	}
 
-//	m_pPlayer->pev->effects |= EF_MUZZLEFLASH;
+	m_pPlayer->pev->effects |= EF_MUZZLEFLASH;
 #ifndef CLIENT_DLL
 
 	m_pPlayer->SetAnimation(PLAYER_ATTACK1);
@@ -531,7 +561,7 @@ void CWonderCannon::WonderCannonFire2(float flSpread, float flCycleTime, BOOL fU
 	}
 
 	m_iClip--;
-	//m_pPlayer->pev->effects |= EF_MUZZLEFLASH;
+	m_pPlayer->pev->effects |= EF_MUZZLEFLASH;
 #ifndef CLIENT_DLL
 	m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 #endif
@@ -570,17 +600,15 @@ void CWonderCannon::WonderCannonFire2(float flSpread, float flCycleTime, BOOL fU
 
 void CWonderCannon::Reload(void)
 {
-	if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+	
+	if (DefaultReload(30, ANIM_RELOAD, 2.35))
 	{
-		if (DefaultReload(30, ANIM_RELOAD, 2.35))
-		{
 #ifndef CLIENT_DLL
-			m_pPlayer->SetAnimation(PLAYER_RELOAD);
+		m_pPlayer->SetAnimation(PLAYER_RELOAD);
 #endif
-			m_flAccuracy = 0.2;
-			m_iShotsFired = 0;
-			m_bDelayFire = false;
-		}
+		m_flAccuracy = 0.2;
+		m_iShotsFired = 0;
+		m_bDelayFire = false;
 	}
 }
 
@@ -607,59 +635,46 @@ void CWonderCannon::ItemPostFrame()
 	}
 	tWorldTime5 = gpGlobals->time;
 
-		if (m_fireuse2 == true)
+	if (m_fireuse2 == true)
+	{
+		if (gpGlobals->time - tWorldTime3 < 99.0f)
 		{
-			if (gpGlobals->time - tWorldTime3 < 99.0f)
+			tDelta3 += gpGlobals->time - tWorldTime3;
+		}
+
+		if (tNextAttack3 > 0.3f || (gpGlobals->time - tWorldTime3 > 0.3f) || tDelta3 > 0.3f)	//可以多射一次
+		{
+			tNextAttack3 = 0.0f;
+			tDelta3 = 0.0f;
+			if (m_fireuse2 == true)
 			{
-				tDelta3 += gpGlobals->time - tWorldTime3;
-			}
-		
-			if (tNextAttack3 > 0.3f || (gpGlobals->time - tWorldTime3 > 0.3f) || tDelta3 > 0.3f)	//可以多射一次
-			{
-				tNextAttack3 = 0.0f;
-				tDelta3 = 0.0f;
-				if (m_fireuse2 == true)
-				{	
-					if (gpGlobals->time - tWorldTime4 < 99.0f)
+				if (gpGlobals->time - tWorldTime4 < 99.0f)
+				{
+					tDelta4 += gpGlobals->time - tWorldTime4;
+				}
+
+				if (WonderExp < 14)
+				{
+					if (m_iClip != 0)
 					{
-						tDelta4 += gpGlobals->time - tWorldTime4;
-					}
-					if(WonderExp < 14)
-					{ 
-					PrimaryAttack_FindTargets();
+						PrimaryAttack_FindTargets();
 #ifndef CLIENT_DLL
-					WonderExp++;
-					RadiusDamage2();
+						WonderExp++;
+						RadiusDamage2();
 #endif
 					}
 					if (WonderExp == 14)
 					{
-						EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/wondercannon_bomd_exp2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+						EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, "weapons/wondercannon_bomd_exp2.wav", 0.70, ATTN_NORM, 0, PITCH_NORM);
 						WonderExp = 0;
 						m_fireuse2 = false;
 					}
-
-					/*if (tNextAttack4 > 5.0f || (gpGlobals->time - tWorldTime4 > 5.0f) || tDelta4 > 5.0f)
-					{
-						tNextAttack4 = 0.0f;
-						tDelta4 = 0.0f;
-						EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/wondercannon_bomd_exp2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
-						WonderExp = 0;
-						m_fireuse2 = false;
-					}
-					tWorldTime4 = gpGlobals->time;*/
 				}
 			}
-
-			tWorldTime3 = gpGlobals->time;
-
-			
-			
 		}
-	
 
-
-	//m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] = 1;
+		tWorldTime3 = gpGlobals->time;
+	}
 
 	return CBasePlayerWeapon::ItemPostFrame();
 }

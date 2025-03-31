@@ -46,7 +46,7 @@ public:
 	const char* GetCSModelName() override { return "models/w_wondercannonex.mdl"; }
 	KnockbackData GetKnockBackData() override { return { 350.0f, 250.0f, 200.0f, 100.0f, 0.6f }; }
 #ifndef CLIENT_DLL
-	WeaponBuyAmmoConfig GetBuyAmmoConfig() override { return { "ammo_WonderCannonExAmmo" , 400 }; }
+	WeaponBuyAmmoConfig GetBuyAmmoConfig() override { return { "ammo_WonderCannonExAmmo"}; }
 #endif
 public:
 	void DestroyEffect();

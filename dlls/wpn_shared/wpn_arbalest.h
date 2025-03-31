@@ -59,9 +59,6 @@ public:
 	float GetDamage() const;
 	void DestroyEffect();
 	void PrimaryAttack_FindTargets();
-	void Drop() override;
-	void UpdateHUD() const;
-	void UndoHUD() const;
 	int m_iShell;
 	int iShellOn;
 	int m_iClip_c;

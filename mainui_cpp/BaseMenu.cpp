@@ -45,11 +45,6 @@ cvar_t		*ui_borderclip;
 cvar_t		*ui_musicpack;
 cvar_t		*ui_getconsole;
 
-cvar_t* ui_wpn_getgun;
-cvar_t* ui_wpn_getpistol;
-cvar_t* ui_wpn_getknife;
-cvar_t* ui_wpn_getgrenade;
-
 uiStatic_t	uiStatic;
 static CMenuEntry	*s_pEntries = NULL;
 
@@ -600,7 +595,6 @@ bool UI_StartBackGroundMap( void )
 	char cmd[128];
 	sprintf( cmd, "maps/%s.bsp", uiStatic.bgmaps[bgmapid] );
 	if( !EngFuncs::FileExists( cmd, TRUE )) return FALSE;
-	EngFuncs::CvarSetValue("mp_gamemode", 1);
 
 	sprintf( cmd, "map_background %s\n", uiStatic.bgmaps[bgmapid] );
 	EngFuncs::ClientCmd( FALSE, cmd );
@@ -641,7 +635,6 @@ void UI_CloseMenu( void )
 	uiStatic.menu.Close();
 	CMenuPicButton::ClearButtonStack();
 	EngFuncs::ClientCmd(1, "firstperson");
-//	EngFuncs::KEY_ClearStates ();
 	if( !uiStatic.client.IsActive() )
 		EngFuncs::KEY_SetDest( KEY_GAME );
 }
@@ -1423,11 +1416,6 @@ void UI_Init( void )
 
 	ui_getconsole = EngFuncs::CvarRegister("menu_getconsole", "0", FCVAR_ARCHIVE);
 	ui_musicpack = EngFuncs::CvarRegister("menu_musicpack", "12", FCVAR_ARCHIVE);
-
-	ui_wpn_getgun = EngFuncs::CvarRegister("wpn_getgun", "weapon_arbalest", FCVAR_ARCHIVE);
-	ui_wpn_getpistol = EngFuncs::CvarRegister("wpn_getpistol", "weapon_voidpistol", FCVAR_ARCHIVE);
-	ui_wpn_getknife = EngFuncs::CvarRegister("wpn_getknife", "weapon_twinaxes", FCVAR_ARCHIVE);
-	ui_wpn_getgrenade = EngFuncs::CvarRegister("wpn_getgrenade", "none", FCVAR_ARCHIVE);
 
 	EngFuncs::CvarRegister( "ui_cs_autofill", "0", FCVAR_ARCHIVE );
 

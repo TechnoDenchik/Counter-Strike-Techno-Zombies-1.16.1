@@ -30,7 +30,6 @@
 	public:
 		void Spawn() override;
 		void Precache() override;
-		void Think() override;
 		int GetItemInfo(ItemInfo* p) override;
 		BOOL CanDrop() override { return FALSE; }
 		BOOL Deploy() override;

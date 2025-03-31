@@ -156,30 +156,6 @@ void CSTwinShadowAxes::Holster(int skiplocal)
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.8;
 }
 
-void CSTwinShadowAxes::Think()
-{
-	static int sun = 3.0f;
-	static int iLastCountDown = -1.0f;
-	int iCountDown = static_cast<int>(gpGlobals->time - sun);
-
-	if (iCountDown > 0.0f)
-	{
-		if (iCountDown != iLastCountDown)
-		{
-			if (iCountDown == 2)
-			{
-				
-				
-
-			}
-			if (iCountDown == 1)
-			{
-				sun + 2;
-			}
-		}
-	}
-}
-
 void CSTwinShadowAxes::WeaponAnimation(int iAnimation)
 {
 	int flags;
@@ -301,8 +277,6 @@ void CSTwinShadowAxes::Smack(void)
 
 void CSTwinShadowAxes::GetSkin()
 {
-	DefaultDeploy("models/v_dgaxe_3.mdl", "models/p_dgaxe_a.mdl", ANIM_DRAW, "", UseDecrement() != FALSE);
-	//pev->skin = 1;
 	EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/dgaxe_ready.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 	SendWeaponAnim(ANIM_DRAW, UseDecrement() != FALSE);
 }
@@ -535,13 +509,39 @@ void CSTwinShadowAxes::ItemPostFrame()
 		Vector vecSrc = m_pPlayer->GetGunPosition();
 
 #ifndef CLIENT_DLL
-		int iAnim = RANDOM_LONG(0, 1);
-		hit_result_t iCallBack = KnifeAttack1(vecSrc, gpGlobals->v_forward, 0, 2000, 100, DMG_NEVERGIB | DMG_BULLET, m_pPlayer->pev, m_pPlayer->pev, iAnim == 1);
-		m_pPlayer->SetAnimation(PLAYER_ATTACK2);
-		PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usKnife, 0.0, (float*)&g_vecZero, (float*)&g_vecZero, 2000, float(iAnim), iAnim, 2, iCallBack == HIT_PLAYER, m_iClip > 0);
+
+		Vector vecPlayerOrigin;
+		vecPlayerOrigin = m_pPlayer->pev->origin;
+
+		CBaseEntity* pEntity = NULL;
+		while ((pEntity = UTIL_FindEntityInSphere(pEntity, vecPlayerOrigin, 8192)) != NULL)
+		{
+			if (pEntity->pev->takedamage != DAMAGE_NO)
+			{
+				if (pEntity->pev == m_pPlayer->pev)
+					continue;
+
+				if (pEntity->IsBSPModel())
+					continue;
+
+				if (pEntity->pev->solid == SOLID_TRIGGER)
+					continue;
+
+				if (pEntity->pev->solid == SOLID_NOT)
+					continue;
+
+				if (pEntity->IsPlayer())
+				{
+					int iAnim = RANDOM_LONG(0, 1);
+					hit_result_t iCallBack = KnifeAttack1(vecSrc, gpGlobals->v_forward, 0, 2000, 100, DMG_NEVERGIB | DMG_BULLET, m_pPlayer->pev, m_pPlayer->pev, iAnim == 1);
+					m_pPlayer->SetAnimation(PLAYER_ATTACK2);
+					PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usKnife, 0.0, (float*)&g_vecZero, (float*)&g_vecZero, 2000, float(iAnim), iAnim, 2, iCallBack == HIT_PLAYER, m_iClip > 0);
 
 
-		pev->iuser3 = iAnim;
+					pev->iuser3 = iAnim;
+				}
+			}
+		}
 #endif
 	
 
@@ -571,11 +571,12 @@ void CSTwinShadowAxes::ItemPostFrame()
 		}
 
 		if (m_pPlayer->m_rgAmmo[m_iKnifeAmmoType] == 50)
-		{	
+		{
 			GetSkin();
-		}	
+		}
 	}
 	tWorldTime2 = gpGlobals->time;
+	
 	return CBasePlayerWeapon::ItemPostFrame();
 }
 
@@ -634,6 +635,15 @@ hit_result_t CSTwinShadowAxes::KnifeAttack1(Vector vecSrc, Vector vecDir, float 
 		}
 	}
 
+	if (m_pPlayer->m_rgAmmo[m_iKnifeAmmoType] > 50)
+	{
+		Skill1(TRUE);
+		setskill1 = true;
+		setskin2 = true;
+		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1.15f;
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.5f;
+	}
+
 	CBaseEntity* pEntity = nullptr;
 	while ((pEntity = UTIL_FindEntityInSphere(pEntity, vecSrc, flRadius)) != nullptr) {
 		if (pEntity->pev->takedamage != DAMAGE_NO) {
@@ -667,14 +677,7 @@ hit_result_t CSTwinShadowAxes::KnifeAttack1(Vector vecSrc, Vector vecDir, float 
 				ApplyMultiDamage(pevInflictor, pevAttacker);
 
 
-				if (m_pPlayer->m_rgAmmo[m_iKnifeAmmoType] > 50)
-				{
-					Skill1(TRUE);
-					setskill1 = true;
-					setskin2 = true;
-					m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1.15f;
-					m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.5f;
-				}
+				
 
 				PLAYBACK_EVENT_FULL(0, ENT(pEntity->pev), m_usKnife, 0.0, (float*)&g_vecZero, (float*)&g_vecZero, 0.0, 0.0, 0, 1, iAnim, m_iClip > 0);
 
@@ -784,9 +787,9 @@ int CSTwinShadowAxes::Stab(int fFirst)
 
 #ifndef CLIENT_DLL
 		if (g_pModRunning->DamageTrack() == DT_ZB)
-			flDamage *= 1900.5f;
+			flDamage *= 600.5f;
 		else if (g_pModRunning->DamageTrack() == DT_ZBS)
-			flDamage *= 2000.5f;
+			flDamage *= 700.5f;
 #endif
 
 		UTIL_MakeVectors(m_pPlayer->pev->v_angle);

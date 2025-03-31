@@ -181,6 +181,12 @@ void CHud :: Init( void )
 	CVAR_CREATE( "_cl_autowepswitch", "1", FCVAR_ARCHIVE | FCVAR_USERINFO );
 	CVAR_CREATE( "_ah", "0", FCVAR_ARCHIVE | FCVAR_USERINFO );
 	CVAR_CREATE("wonderfire", "1", FCVAR_ARCHIVE | FCVAR_USERINFO);
+
+	//CVAR_CREATE("wpn_getgun", "none", FCVAR_ARCHIVE);
+	//CVAR_CREATE("wpn_getpistol", "none", FCVAR_ARCHIVE);
+	//CVAR_CREATE("wpn_getknife", "none", FCVAR_ARCHIVE);
+	//CVAR_CREATE("wpn_getgrenade", "none", FCVAR_ARCHIVE);
+
 	hud_textmode = CVAR_CREATE( "hud_textmode", "0", FCVAR_ARCHIVE );
 	hud_colored  = CVAR_CREATE( "hud_colored", "0", FCVAR_ARCHIVE );
 	cl_righthand = CVAR_CREATE( "hand", "1", FCVAR_ARCHIVE );
@@ -209,6 +215,11 @@ void CHud :: Init( void )
 	zsh_mentality = CVAR_CREATE("zsh_mentality", "1", FCVAR_ARCHIVE); 
 	menu_tentime = CVAR_CREATE("menu_tentime", "1", FCVAR_ARCHIVE);
 	menu_getconsole = CVAR_CREATE("menu_getconsole", "1", FCVAR_ARCHIVE);
+
+	ui_wpn_getgun = CVAR_CREATE("wpn_getgun", "0", FCVAR_ARCHIVE);
+	ui_wpn_getpistol = CVAR_CREATE("wpn_getpistol", "0", FCVAR_ARCHIVE);
+	ui_wpn_getknife = CVAR_CREATE("wpn_getknife", "0", FCVAR_ARCHIVE);
+	ui_wpn_getgrenade = CVAR_CREATE("wpn_getgrenade", "0", FCVAR_ARCHIVE);
 
 	CVAR_CREATE( "cscl_ver", Q_buildnum(), 1<<14 | FCVAR_USERINFO ); // init and userinfo
 

@@ -30,7 +30,7 @@ GNU General Public License for more details.
 #include <dlls/gamemode/zb2/zb2_zclass.h>
 #include <dlls/gamemode/zb3/zb3_hero.h>
 #include <dlls/util/u_range.hpp>
-
+#include "gamemode/interface/interface_const.h"
 
 CMod_ZombieMod2::CMod_ZombieMod2() // precache
 {
@@ -259,6 +259,14 @@ bool CPlayerModStrategy_ZB2::ClientCommand(const char *pcmd)
 	if (!Q_stricmp(pcmd, "CST_ClassHuman"))
 	{
 		BecomeHuman();
+		return true;
+	}
+
+	if (!Q_stricmp(pcmd, "CST_GetWeapon"))
+	{
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB3InventorySet, nullptr, m_pPlayer->pev);
+		WRITE_BYTE(WPN_INVENTORY);
+		MESSAGE_END();
 		return true;
 	}
 

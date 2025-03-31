@@ -1,5 +1,6 @@
 /* =================================================================================== *
-	  * =================== TechnoSoftware & Valve Developing =================== *
+		   * =================== TechnoSoftware =================== *
+	  * ================= Weapon ID System Inventory ================== *
  * =================================================================================== */
 
 
@@ -130,159 +131,167 @@ int CInventorySet::Draw(float time)
 
 void CInventorySet::SetWeaponKit()
 {
-	m_pCurTexture = stringtext;
-	m_flDisplayTime = gHUD.m_flTime;
+	int Gun = CVAR_GET_FLOAT("wpn_getgun");
+	int Pistol = CVAR_GET_FLOAT("wpn_getpistol");
+	int Knife = CVAR_GET_FLOAT("wpn_getknife");
+	int Grenade = CVAR_GET_FLOAT("wpn_getgrenade");
 
-	//char* Gun = (char*)CVAR_GET_STRING("wpn_getgun");
-	//char* Pistol = (char*)CVAR_GET_STRING("wpn_getpistol");
-	//char* Knife = (char*)CVAR_GET_STRING("wpn_getknife");
-	//char* Grenade = (char*)CVAR_GET_STRING("wpn_getgrenade");
-
-	if(Gun == "weapon_arbalest")
+	if(Gun == 1)
 	{
 		ClientCmd("cstbuy weapon_arbalest");
 	}
-	else if(Gun == "weapon_mp7a1c")
+	else if(Gun == 2)
 	{
-		ClientCmd("cstbuy weapon_mp7a1c");
+		ClientCmd("cstbuy weapon_wondercannonex");
 	}
-	else if (Gun == "weapon_kriss")
-	{
-		ClientCmd("cstbuy weapon_kriss");
-	}
-	else if (Gun == "weapon_thompson")
-	{
-		ClientCmd("cstbuy weapon_thompson");
-	}
-	else if (Gun == "weapon_m14ebr")
-	{
-		ClientCmd("cstbuy weapon_m14ebr");
-	}
-	else if (Gun == "weapon_k1a")
-	{
-		ClientCmd("cstbuy weapon_k1a");
-	}
-	else if (Gun == "weapon_m1887")
-	{
-		ClientCmd("cstbuy weapon_m1887");
-	}
-	else if (Gun == "weapon_xm8c")
-	{
-		ClientCmd("cstbuy weapon_xm8c");
-	}
-	else if (Gun == "weapon_scarl")
-	{
-		ClientCmd("cstbuy weapon_scarl");
-	}
-	else if (Gun == "weapon_tar21")
-	{
-		ClientCmd("cstbuy weapon_tar21");
-	}
-	else if (Gun == "weapon_m95")
-	{
-		ClientCmd("cstbuy weapon_m95");
-	}
-	else if (Gun == "weapon_wa2000")
-	{
-		ClientCmd("cstbuy weapon_wa2000");
-	}
-	else if (Gun == "weapon_as50")
-	{
-		ClientCmd("cstbuy weapon_as50");
-	}
-	else if (Gun == "weapon_mg3")
-	{
-		ClientCmd("cstbuy weapon_mg3");
-	}
-	else if (Gun == "weapon_cannon")
-	{
-		ClientCmd("cstbuy weapon_cannon");
-	}
-	else if (Gun == "weapon_gungnir")
-	{
-		ClientCmd("cstbuy weapon_gungnir");
-	}
-	else if (Gun == "weapon_quantum")
-	{
-		ClientCmd("cstbuy weapon_quantum");
-	}
-	else if (Gun == "weapon_wondercannon")
+	else if (Gun == 3)
 	{
 		ClientCmd("cstbuy weapon_wondercannon");
 	}
-	else if (Gun == "weapon_bow")
+	else if (Gun == 4)
 	{
-		ClientCmd("cstbuy weapon_bow");
+		ClientCmd("cstbuy weapon_quantum");
 	}
-	else if (Gun == "weapon_chainsaw")
+	else if (Gun == 5)
 	{
-		ClientCmd("cstbuy weapon_chainsaw");
+		ClientCmd("cstbuy weapon_gungnir");
 	}
-	else if (Gun == "weapon_starchaserar")
-	{
-		ClientCmd("cstbuy weapon_starchaserar");
-	}
-	else if (Gun == "weapon_sgdrill")
+	else if (Gun == 6)
 	{
 		ClientCmd("cstbuy weapon_sgdrill");
 	}
+	else if (Gun == 7)
+	{
+		ClientCmd("cstbuy weapon_cannon");
+	}
+	else if (Gun == 8)
+	{
+		ClientCmd("cstbuy weapon_paladin");
+	}
+	else if (Gun == 9)
+	{
+		ClientCmd("cstbuy weapon_buffm4a1");
+	}
+	else if (Gun == 10)
+	{
+		ClientCmd("cstbuy weapon_chainsaw");
+	}
+	else if (Gun == 11)
+	{
+		ClientCmd("cstbuy weapon_starchaserar");
+	}
+	else if (Gun == 12)
+	{
+		ClientCmd("cstbuy weapon_bow");
+	}
+	else if (Gun == 13)
+	{
+		ClientCmd("cstbuy weapon_thompson");
+	}
+	else if (Gun == 14)
+	{
+		ClientCmd("cstbuy weapon_tar21");
+	}
+	else if (Gun == 15)
+	{
+		ClientCmd("cstbuy weapon_mp7a1c");
+	}
+	else if (Gun == 16)
+	{
+		ClientCmd("cstbuy weapon_mg3");
+	}
+	else if (Gun == 17)
+	{
+		ClientCmd("cstbuy weapon_m1887");
+	}
+	else if (Gun == 18)
+	{
+		ClientCmd("cstbuy weapon_m95");
+	}
+	else if (Gun == 19)
+	{
+		ClientCmd("cstbuy weapon_m14ebr");
+	}
+	else if (Gun == 20)
+	{
+		ClientCmd("cstbuy weapon_kriss");
+	}
+	else if (Gun == 21)
+	{
+		ClientCmd("cstbuy weapon_scarl");
+	}
+	else if (Gun == 22)
+	{
+		ClientCmd("cstbuy weapon_wa2000");
+	}
+	else if (Gun == 23)
+	{
+		ClientCmd("cstbuy weapon_xm8c");
+	}
+	else if (Gun == 24)
+	{
+		ClientCmd("cstbuy weapon_as50");
+	}
 
-	if (Pistol == "weapon_voidpistol")
+	if (Pistol == 1)
+	{
+		ClientCmd("cstbuy weapon_voidpistolex");
+	}
+	else if (Pistol == 2)
 	{
 		ClientCmd("cstbuy weapon_voidpistol");
 	}
-	else if (Pistol == "weapon_infinity")
+	else if (Pistol == 3)
 	{
 		ClientCmd("cstbuy weapon_infinity");
 	}
-	else if (Pistol == "weapon_infinityex1")
+	else if (Pistol == 4)
 	{
 		ClientCmd("cstbuy weapon_infinityex1");
 	}
-	else if (Pistol == "weapon_infinityex2")
+	else if (Pistol == 5)
 	{
 		ClientCmd("cstbuy weapon_infinityex2");
 	}
-	else if (Pistol == "weapon_infinityss")
-	{
-		ClientCmd("cstbuy weapon_infinityss");
-	}
-	else if (Pistol == "weapon_infinitysr")
-	{
-		ClientCmd("cstbuy weapon_infinitysr");
-	}
-	else if (Pistol == "weapon_infinitysb")
+	else if (Pistol == 6)
 	{
 		ClientCmd("cstbuy weapon_infinitysb");
 	}
-	else if (Pistol == "weapon_gunkata")
+	else if (Pistol == 7)
 	{
-		ClientCmd("cstbuy weapon_gunkata");
+		ClientCmd("cstbuy weapon_infinitysr");
+	}
+	else if (Pistol == 8)
+	{
+		ClientCmd("cstbuy weapon_infinityss");
 	}
 
-	if (Knife == "weapon_twinaxes")
+	if (Knife == 1)
+	{
+		ClientCmd("cstbuy weapon_twinaxesex");	
+	}
+	else if (Knife == 2)
 	{
 		ClientCmd("cstbuy weapon_twinaxes");
 	}
-	else if (Knife == "weapon_knife")
-	{
-		ClientCmd("cstbuy weapon_knife");
-	}
-	else if (Knife == "knife_skullaxe")
-	{
-		ClientCmd("cstbuy knife_skullaxe");
-	}
-	else if (Knife == "knife_dragonsword")
-	{
-		ClientCmd("cstbuy knife_dragonsword");
-	}
-	else if (Knife == "knife_dualsword")
+	else if (Knife == 3)
 	{
 		ClientCmd("cstbuy knife_dualsword");
 	}
+	else if (Knife == 4)
+	{
+		ClientCmd("cstbuy knife_dragonsword");	
+	}
+	else if (Knife == 5)
+	{
+		ClientCmd("cstbuy knife_skullaxe");
+	}
 
-	if (Grenade == "Sandalphone");
+	if (Grenade == 1);
 	{
 		ClientCmd("cstbuy weapon_sandalphone");
-	}
+	}	
+
+	m_pCurTexture = stringtext;
+	m_flDisplayTime = gHUD.m_flTime;
 }

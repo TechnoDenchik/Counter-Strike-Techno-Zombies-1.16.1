@@ -11,19 +11,8 @@ public:
 
 	void SetWeaponKit();
 
-	void GetWeapon(char* gun, char* pistol, char* knife, char* grenade)
-	{
-		Gun = gun;
-		Pistol = gun;
-		Knife = gun;
-		Grenade = gun;
-	}
 	char szbuffer[64];
 protected:
-	char* Gun;
-	char* Pistol;
-	char* Knife;
-	char* Grenade;
 	SharedTexture m_pCurTexture;
 	SharedTexture stringtext;
 	float m_flDisplayTime;

@@ -496,9 +496,11 @@ void CMod_Zombi::PlayerSpawn(CBasePlayer *pPlayer)
 	pPlayer->m_bNotKilled = false;
 	IBaseMod::PlayerSpawn(pPlayer);
 	pPlayer->AddAccount(32000);
-	MESSAGE_BEGIN(MSG_ONE, gmsgZB3InventorySet, nullptr, pPlayer->edict());
+
+	MESSAGE_BEGIN(MSG_ONE, gmsgZB3InventorySet, nullptr, pPlayer->pev);
 	WRITE_BYTE(WPN_INVENTORY);
 	MESSAGE_END();
+
 	// Open buy menu on spawn
 	if (!pPlayer->m_bIsZombie)
 	{

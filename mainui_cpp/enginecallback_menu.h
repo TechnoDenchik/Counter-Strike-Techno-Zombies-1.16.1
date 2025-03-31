@@ -97,6 +97,7 @@ public:
 
 	// cvar handlers
 	static inline cvar_t*	CvarRegister( const char *szName, const char *szValue, int flags )
+
 	{ return engfuncs.pfnRegisterVariable( szName, szValue, flags ); }
 
 	static inline float	GetCvarFloat( const char *szName )

@@ -161,11 +161,9 @@ BOOL DirIsExist(const TCHAR* dir)
 static void Sys_LoadEngine( void )
 {
 	const char* NamedMutex = "Counter-Strike T:Z";
-
+	
 	if (DirIsExist("Counter-Strike-TZ"))
 	{
-			if (DirIsExist("Counter-Strike-TZ/dlls"))
-			{
 				if (DirIsExist("Counter-Strike-TZ/media"))
 				{
 					HANDLE Mutex = CheckInstance(NamedMutex);
@@ -197,11 +195,6 @@ static void Sys_LoadEngine( void )
 				{
 					TechnoEngine_Warning2("Папка медиаплеера Counter-Strike-TZ/media не обнаружена Error:0x000427g", dlerror());
 				}
-			}
-			else
-			{
-				TechnoEngine_Warning2("Папка сервера Counter-Strike-TZ/dlls не найдена Error:0x000327g", dlerror());
-			}
 	}
 	else
 	{

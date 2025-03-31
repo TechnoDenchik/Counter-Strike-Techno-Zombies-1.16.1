@@ -20,6 +20,7 @@ public:
 protected:
 	int m_iHealth;
 	int m_iAttack;
+	int numkill;
 };
 
 #endif

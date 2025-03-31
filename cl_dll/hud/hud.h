@@ -1471,6 +1471,12 @@ public:
 	cvar_t* menu_musicpack;
 	cvar_t* menu_getconsole;
 	cvar_t* menu_tentime;
+
+	cvar_t* ui_wpn_getgun;
+	cvar_t* ui_wpn_getpistol;
+	cvar_t* ui_wpn_getknife;
+	cvar_t* ui_wpn_getgrenade;
+
 #ifdef __ANDROID__
 	cvar_t *cl_android_force_defaults;
 #endif

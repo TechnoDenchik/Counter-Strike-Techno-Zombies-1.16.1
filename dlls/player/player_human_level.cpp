@@ -29,18 +29,26 @@ float PlayerExtraHumanLevel_ZBS::GetAttackBonus() const
 
 void PlayerExtraHumanLevel_ZBS::LevelUpHealth()
 {
+	if (numkill == 5)
+	{
+		if (m_iHealth >= 100)
+			return;
 
-	if (m_iHealth >= 100)
-		return;
+		m_iHealth++;
+		CLIENT_COMMAND(m_pPlayer->edict(), "spk zbs/lvup.wav\n");
+		UpdateHUD();
 
-	m_iHealth++;
-	CLIENT_COMMAND(m_pPlayer->edict(), "spk zbs/lvup.wav\n");
-	UpdateHUD();
+		if (!m_pPlayer->IsAlive())
+			return;
+		
+		m_pPlayer->pev->health += 20.0f;
 
-	if (!m_pPlayer->IsAlive())
-		return;
-
-	m_pPlayer->pev->health += 20.0f;
+		numkill = 0;
+	}
+	else
+	{
+		numkill++;
+	}
 }
 
 void PlayerExtraHumanLevel_ZBS::LevelUpAttack()

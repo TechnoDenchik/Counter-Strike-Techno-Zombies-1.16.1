@@ -87,12 +87,6 @@ public:
 					MESSAGE_BEGIN(MSG_ONE, gmsgZBSTip, NULL, m_pPlayer->pev);
 					WRITE_BYTE(ZBS_TIP_KILL);
 					MESSAGE_END();
-					
-					Win.HumanWin();
-					Win.ClearZombieNPC();
-					Win.CheckRestartRound();
-
-					CLIENT_COMMAND(0, "mp3 stop\n");
 				}
 			}
 
@@ -531,11 +525,6 @@ void CMod_ZombieScenario::HumanWin()
 	UpdateTeamScores();
 	ClearZombieNPC();
     CLIENT_COMMAND(0, "mp3 stop\n");
-	m_iRoundTimeSecs = m_fRoundCount = 0;
-	m_iRoundTimeSecs = 0;
-	m_iRoundTime = 0;
-	m_fTeamCount = 0;
-	m_fRoundCount = 0;
 }
 
 void CMod_ZombieScenario::ZombieWin()
@@ -568,8 +557,6 @@ void CMod_ZombieScenario::TeamCheck()
 
 void CMod_ZombieScenario::RoundStart()
 {
-	
-
 	m_flNextSpawnNPC = gpGlobals->time;
 
 	for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)

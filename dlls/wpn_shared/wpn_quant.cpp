@@ -167,10 +167,9 @@ void CQuantum::CreateEffect()
 
 void CQuantum::SecondaryAttack(void)
 {
-Getsprite();
-	/*if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] > 0)
+	if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] > 0)
 	{
-		
+		Getsprite();
 
 		if (phs2 > 0.0f)
 			phs2 = -1.0f; // 0xBF800000
@@ -181,8 +180,6 @@ Getsprite();
 			phs3 = gpGlobals->time + 0.23;
 
 			m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME; // 600
-
-
 
 			m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 99999.0;
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 99999.0;
@@ -211,9 +208,7 @@ Getsprite();
 		for (CBasePlayer* player : moe::range::PlayersList())
 			CLIENT_COMMAND(player->edict(), "spk weapons/revivegun_clipoutB_1\n");
 		m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.5;
-	}*/
-
-	
+	}
 }
 
 void CQuantum::PrimaryAttack_FindTargets()
@@ -497,49 +492,44 @@ void CQuantum::ItemPostFrame()
 
 
 
-
-	if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] > 0)
+	if (m_fireuse2 == true)
 	{
-
-		if (phs2 > 0.0f)
-			phs2 = -1.0f; // 0xBF800000
-
-		if (phs3 == -1.0f)
+		if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] > 0)
 		{
-			SendWeaponAnim(QUANT_SHOOT2, UseDecrement() != FALSE); // 3
-			phs3 = gpGlobals->time + 0.23;
 
-			m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME; // 600
+			if (phs2 > 0.0f)
+				phs2 = -1.0f; // 0xBF800000
+
+			if (phs3 == -1.0f)
+			{
+				phs3 = gpGlobals->time + 0.23;
+
+				m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME; // 600
 
 
 
-			m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 99999.0;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 99999.0;
-		}
+				m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 99999.0;
+				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 99999.0;
+			}
 
 #ifndef CLIENT_DLL
-		m_pPlayer->SetAnimation(PLAYER_ATTACK1); // 5
+			m_pPlayer->SetAnimation(PLAYER_ATTACK1); // 5
 #endif
 
-		bool v6 = gpGlobals->time > phs12 + 1.0f;
-		int flags;
+			bool v6 = gpGlobals->time > phs12 + 1.0f;
+			int flags;
 #ifdef CLIENT_WEAPONS
-		flags = FEV_NOTHOST;
+			flags = FEV_NOTHOST;
 #else
-		flags = 0;
+			flags = 0;
 #endif
 
-		if (v6)
-			phs12 = v6 = gpGlobals->time;
-		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.12f;
+			if (v6)
+				phs12 = v6 = gpGlobals->time;
+			m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.12f;
 
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.9f;
-	}
-	else
-	{
-		for (CBasePlayer* player : moe::range::PlayersList())
-			CLIENT_COMMAND(player->edict(), "spk weapons/revivegun_clipoutB_1\n");
-		m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.5;
+			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.9f;
+		}
 	}
 
 

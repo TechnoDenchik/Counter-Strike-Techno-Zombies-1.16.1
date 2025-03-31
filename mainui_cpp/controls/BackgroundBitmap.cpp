@@ -301,11 +301,8 @@ bool CMenuBackgroundBitmap::CheckBackgroundSplash( bool gamedirOnly )
 		s_BackgroundImageSize = s_Backgroudns[0].size;
 		s_iBackgroundCount = 1;
 
-		if( gamedirOnly )
-		{
-			// if we doesn't have logo.avi in gamedir we don't want to draw it
-			s_bEnableLogoMovie = EngFuncs::FileExists( "media/technocorp.avi", TRUE );
-		}
+		// if we doesn't have logo.avi in gamedir we don't want to draw it
+		s_bEnableLogoMovie = EngFuncs::FileExists( "media/technocorp.avi", TRUE );
 
 		return true;
 	}
