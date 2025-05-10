@@ -137,12 +137,15 @@ int CHudStatusIcons::Draw( float flTime )
 			{
 				y -= (m_IconList[i].rc.bottom - m_IconList[i].rc.top) + 5;
 
-				gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
-				gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
-				b_iconimage->Bind();
-				DrawUtils::Draw2DQuadScaled(x4 - 30, y4 - 3.5, x4 + 30, y4 + 42);
-				sprintf(szTitle, "Магазин");
-				DrawUtils::DrawHudStringReverse(x4 + 25, y4 + 40.0, 0, szTitle, 0, 200, 0, flScale);
+				if (gHUD.m_iModRunning != MOD_ZB5)
+				{
+					gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
+					gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
+					b_iconimage->Bind();
+					DrawUtils::Draw2DQuadScaled(x4 - 30, y4 - 3.5, x4 + 30, y4 + 42);
+					sprintf(szTitle, "Магазин");
+					DrawUtils::DrawHudStringReverse(x4 + 25, y4 + 40.0, 0, szTitle, 0, 200, 0, flScale);
+				}
 			}
 		}
 	}

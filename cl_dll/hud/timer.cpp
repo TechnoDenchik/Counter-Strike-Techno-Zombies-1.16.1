@@ -182,6 +182,7 @@ int CHudTimer::Draw(float fTime)
 	{
 	case MOD_ZB1:
 	case MOD_ZB3:
+	case MOD_ZB5:
 
 		if (minutes < 10)
 		{

@@ -25,6 +25,7 @@ GNU General Public License for more details.
 
 #include "zb2/zb2_zclass.h"
 #include "zb2/zb2_skill.h"
+#include "zb3/zb3_hero.h"
 
 class CSupplyBox;
 class CSupSpawn;
@@ -42,13 +43,19 @@ public:
 	void PlayerSpawn(CBasePlayer *pPlayer) override;
 	void PlayerThink(CBasePlayer *pPlayer) override;
 	BOOL ClientCommand(CBasePlayer *pPlayer, const char *pcmd) override;
-
+	void PickZombieOrigin() override;
 public: // IBaseMod
 	void InstallPlayerModStrategy(CBasePlayer *player) override;
 	float GetAdjustedEntityDamage(CBaseEntity *victim, entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) override;
 	HitBoxGroup GetAdjustedTraceAttackHitgroup(CBaseEntity *victim, entvars_t * pevAttacker, float flDamage, const Vector & vecDir, TraceResult * ptr, int bitsDamageType) override;
 
+	EventDispatcher<void(CBasePlayer* who)> m_eventBecomeHero;
+	EventDispatcher<void()> m_eventRoundStart;
+
 protected:
+	void PickHero();
+	void MakeHero(CBasePlayer* p) { m_eventBecomeHero.dispatch(p); }
+
 	void MakeSupplyboxThink();
 	void RemoveAllSupplybox();
 	CSupplyBox *CreateSupplybox();
@@ -105,7 +112,20 @@ protected:
 	EventListener m_eventAdjustHitgroupListener;
 	const std::vector<EventListener> m_eventListeners;
 	
+
+
+
+
+	virtual void Event_OnBecomeHero(CBasePlayer* who);
+
+	void BecomeHero();
+
+	bool IsHero() const { return m_pPlayer->m_bIsVIP; }
+
 private:
+	const EventListener m_eventBecomeHeroListener;
+	std::shared_ptr<IHeroModeCharacter> m_pCharacter_ZB3;
+
 	CMod_ZombieMod2 * const m_pModZB2;
 
 	//std::unique_ptr<IZombieSkill> m_pZombieSkill;

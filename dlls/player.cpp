@@ -6472,7 +6472,7 @@ void CBasePlayer::UpdateClientData()
 	{
 		MESSAGE_BEGIN(MSG_ONE, gmsgShowGameTitle, NULL, pev);
 			WRITE_BYTE(0);
-		MESSAGE_END();
+	 	MESSAGE_END();
 
 		gDisplayTitle = FALSE;
 	}

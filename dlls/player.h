@@ -694,11 +694,16 @@ public:
 	virtual bool Knockback(CBasePlayer *attacker, const KnockbackData &data) { return m_pModStrategy->ApplyKnockback(attacker, data); }
 #endif
 
+	void SetMoraleEffect(int lv);
+
 	void SpawnProtection_Check();
 	void SpawnProtection_Start(float flTime);
 	void SpawnProtection_End();
 bool m_bIsFemale;
 public:
+	bool m_bIsHero;
+
+	bool m_bIsZombieMod1;
 	bool m_bIsZombie;
 	bool m_bIsZombieTank;
 	bool m_bIsZombieFemale;
@@ -711,8 +716,15 @@ public:
 	bool m_bIsZombieStamp;
 	bool m_bIsZombieRecovery;
 	bool m_bIsZombieFlying;
+
+	bool m_bIsZombieMeatWall;
+	bool m_bIsZombieDeathKnight;
+	bool m_bIsZombieSpider;
+
 	bool m_bSpawnProtection; // pack bools
 	
+	bool m_bEvolutionProtected;
+
 	ZombieLevel m_iZombieLevel;
 	float m_flTimeSpawnProctionExpires;
 

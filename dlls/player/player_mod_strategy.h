@@ -53,6 +53,7 @@ public:
 
 	virtual int ComputeMaxAmmo(const char *szAmmoClassName, int iOriginalMax) = 0;
 	virtual bool ClientCommand(const char *pcmd) = 0;
+	virtual bool ClientCommand2(const char* pcmd) = 0;
 	virtual float AdjustDamageTaken(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) = 0;
 	virtual float AdjustDamageTaken2(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage2, int bitsDamageType2) = 0;
 	virtual bool ApplyKnockback(CBasePlayer *attacker, const KnockbackData &data) = 0;
@@ -80,6 +81,7 @@ public:
 
 	int ComputeMaxAmmo(const char *szAmmoClassName, int iOriginalMax) override { return iOriginalMax; }
 	bool ClientCommand(const char *pcmd) override { return false; }
+	bool ClientCommand2(const char* pcmd) override { return false; }
 	float AdjustDamageTaken(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) override { return flDamage; }
 	float AdjustDamageTaken2(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage2, int bitsDamageType2) override { return flDamage2; }
 	bool ApplyKnockback(CBasePlayer *attacker, const KnockbackData &data) override { return false; }

@@ -61,6 +61,7 @@ enum
 	MAX_TEAMS = 3,
 	MAX_TEAM_NAME = 16,
 	MAX_HOSTAGES = 24,
+	MAX_BOX = 24,
 };
 
 extern const char *sPlayerModelFiles[];
@@ -136,6 +137,7 @@ struct HUDLIST {
 #include "zbs/zbs.h"
 #include "zb2/zb2.h"
 #include "zb3/zb3.h"
+#include "zb5/zb5.h"
 #include "zsh/zsh.h"
 #include "gd/gd.h"
 #include "original/mod_base.h"
@@ -401,6 +403,7 @@ struct extra_player_info_t
 	bool vip;
 	bool dead;
 	bool zombie;
+	bool mutant;
 	bool hero;
 	bool showhealth;
 	bool nextflash;
@@ -448,7 +451,15 @@ struct hostage_info_t
 	int radarflashes;
 };
 
-
+struct zombiebox_info_t
+{
+	vec3_t origin;
+	float radarflashtimedelta;
+	float radarflashtime;
+	bool dead;
+	bool nextflash;
+	int radarflashes;
+};
 
 struct zombie_info_t
 {
@@ -507,6 +518,7 @@ extern team_info_t			g_TeamInfo[MAX_TEAMS + 1];
 extern hostage_info_t		g_HostageInfo[MAX_HOSTAGES + 1];
 extern RoundPlayerInfo      g_PlayerExtraInfoEx[MAX_PLAYERS + 1];
 
+extern zombiebox_info_t		g_ZombieBoxInfo[MAX_BOX + 1];
 extern zombie_info_t		g_ZombieInfo[MAX_HOSTAGES + 1];
 extern wood_info_t		g_WoodInfo[MAX_HOSTAGES + 1];
 extern metal_info_t		g_MetalInfo[MAX_HOSTAGES + 1];
@@ -874,7 +886,7 @@ enum armortype_t {
 		VestHelm
 	} m_enArmorType;
 
- int	 m_iBat;
+	int	 m_iBat;
 	CClientSprite m_hEmpty[VestHelm + 1];
 	CClientSprite m_hFull[VestHelm + 1];
 
@@ -1535,6 +1547,7 @@ public:
 	CWeaponInt m_WPI;
 	CHudGunDeath m_gd;
 	CHudZB3 m_ZB3;
+	CHudZB5 m_ZB5;
 	CHudZSH m_ZSH;
 	CHudMoeTouch m_MoeTouch;
 	//CHudInterface m_HudInterface;

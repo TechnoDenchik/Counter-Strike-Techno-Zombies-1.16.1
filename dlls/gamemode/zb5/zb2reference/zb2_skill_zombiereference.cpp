@@ -1,0 +1,333 @@
+/*
+zb2_skill_zombie.cpp - CSMoE Gameplay server : Zombie Mod 2
+Copyright (C) 2019 Moemod Yanase
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+*/
+
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "player.h"
+
+#include "gamemode/zb2/zb2_const.h"
+#include "gamemode/interface/interface_const.h"
+#include "gamemode/zb5/zb2reference/zb2_skillreference.h"
+#include "gamemode/zb5/zb2reference/zb2_zclassreference.h"
+
+
+void ZombieSkill_PrecacheR()
+{
+	PRECACHE_SOUND("zb3/zombi_pressure.wav");
+	PRECACHE_SOUND("zb3/zombi_pre_idle_1.wav");
+	PRECACHE_SOUND("zb3/zombi_pre_idle_2.wav");
+	PRECACHE_SOUND("zb3/zombie_female_invis.wav");
+}
+
+void CZombieSkill_BaseR::Think()
+{
+	if (m_iZombieSkillStatus == SKILL_STATUS_USING && gpGlobals->time > m_flTimeZombieSkillEnd)
+	{
+		OnSkillEnd();
+	}
+
+	if (m_iZombieSkillStatus == SKILL_STATUS_FREEZING && gpGlobals->time > m_flTimeZombieSkillNext)
+	{
+		m_iZombieSkillStatus = SKILL_STATUS_READY;
+		OnSkillReady();
+	}
+}
+
+CZombieSkill_BaseR::CZombieSkill_BaseR(CBasePlayer *player) : BasePlayerExtra(player), m_iZombieSkillStatus(SKILL_STATUS_READY){}
+
+CZombieSkill_ZombieCrazyR::CZombieSkill_ZombieCrazyR(CBasePlayer *player) : CZombieSkill_BaseR(player){}
+
+void CZombieSkill_ZombieCrazyR::Think()
+{
+	CZombieSkill_BaseR::Think();
+
+	if (m_iZombieSkillStatus == SKILL_STATUS_USING && gpGlobals->time > m_flTimeZombieSkillEffect)
+	{
+		if (m_pPlayer->m_bIsZombieFemale == true)
+		{
+			OnCrazyEffect();
+		}
+	}
+}
+
+void CZombieSkill_ZombieCrazyR::Activate()
+{
+	if (m_iZombieSkillStatus != SKILL_STATUS_READY)
+	{
+		switch (m_iZombieSkillStatus)
+		{
+		case SKILL_STATUS_USING:
+		case SKILL_STATUS_FREEZING:
+
+			MESSAGE_BEGIN(MSG_ONE, gmsgZB3UsedMsg, NULL, m_pPlayer->pev);
+			WRITE_BYTE(ZB3_USED_MSG);
+			WRITE_BYTE(m_flTimeZombieSkillNext - gpGlobals->time);
+			WRITE_BYTE(0);
+			MESSAGE_END();
+			break;
+		case SKILL_STATUS_USED:
+	
+			MESSAGE_BEGIN(MSG_ONE, gmsgZB3UsedMsg2, NULL, m_pPlayer->pev);
+			WRITE_BYTE(ZB3_USED_MSG2);
+			MESSAGE_END();
+			break;
+		default:
+			break;
+		}
+
+		return;
+	}
+
+	if (m_pPlayer->pev->health <= 500.0f)
+		return;
+
+	m_iZombieSkillStatus = SKILL_STATUS_USING;
+	m_flTimeZombieSkillEnd = gpGlobals->time + GetDurationTime();
+	m_flTimeZombieSkillNext = gpGlobals->time + GetCooldownTime();
+	m_flTimeZombieSkillEffect = gpGlobals->time + 3.0f;
+
+	if (m_pPlayer->m_bIsZombieFemale == true)
+	{
+		//m_pPlayer->pev->renderfx = kRenderFxGlowShell;
+		m_pPlayer->pev->rendermode = kRenderTransAdd;
+		m_pPlayer->pev->renderamt = 50.0;
+		//m_pPlayer->pev->renderamt = 80;
+
+		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombie_female_invis.wav", VOL_NORM, ATTN_NORM);
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
+		WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);
+		WRITE_BYTE(ZOMBIE_SKILL_HIDE);
+		WRITE_SHORT(static_cast<int>(GetDurationTime()));
+		WRITE_SHORT(static_cast<int>(GetCooldownTime()));
+		MESSAGE_END();
+	}
+	else if (m_pPlayer->m_bIsZombieHeavy == true)
+	{
+		//EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombie_female_invis.wav", VOL_NORM, ATTN_NORM);
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
+		WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);
+		WRITE_BYTE(ZOMBIE_SKILL_TRAP);
+		WRITE_SHORT(static_cast<int>(GetDurationTime()));
+		WRITE_SHORT(static_cast<int>(GetCooldownTime()));
+		MESSAGE_END();
+	}
+	else if (m_pPlayer->m_bIsZombieHeal == true)
+	{
+		//EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombie_female_invis.wav", VOL_NORM, ATTN_NORM);
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
+		WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);
+		WRITE_BYTE(ZOMBIE_SKILL_HEAL);
+		WRITE_SHORT(static_cast<int>(GetDurationTime()));
+		WRITE_SHORT(static_cast<int>(GetCooldownTime()));
+		MESSAGE_END();
+	}
+	else if (m_pPlayer->m_bIsZombiePc == true)
+	{
+		//EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombie_female_invis.wav", VOL_NORM, ATTN_NORM);
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
+		WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);
+		WRITE_BYTE(ZOMBIE_SKILL_SMOKE);
+		WRITE_SHORT(static_cast<int>(GetDurationTime()));
+		WRITE_SHORT(static_cast<int>(GetCooldownTime()));
+		MESSAGE_END();
+	}
+	else if (m_pPlayer->m_bIsZombieDeimos == true)
+	{
+		//EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombie_female_invis.wav", VOL_NORM, ATTN_NORM);
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
+		WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);
+		WRITE_BYTE(ZOMBIE_SKILL_SHOCK);
+		WRITE_SHORT(static_cast<int>(GetDurationTime()));
+		WRITE_SHORT(static_cast<int>(GetCooldownTime()));
+		MESSAGE_END();
+	}
+	else if (m_pPlayer->m_bIsZombieGanimed == true)
+	{
+		//EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombie_female_invis.wav", VOL_NORM, ATTN_NORM);
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
+		WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);
+		WRITE_BYTE(ZOMBIE_SKILL_CRAZY2);
+		WRITE_SHORT(static_cast<int>(GetDurationTime()));
+		WRITE_SHORT(static_cast<int>(GetCooldownTime()));
+		MESSAGE_END();
+	}
+	else if (m_pPlayer->m_bIsZombieBanchee == true)
+	{
+		//EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombie_female_invis.wav", VOL_NORM, ATTN_NORM);
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
+		WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);
+		WRITE_BYTE(ZOMBIE_SKILL_RATS);
+		WRITE_SHORT(static_cast<int>(GetDurationTime()));
+		WRITE_SHORT(static_cast<int>(GetCooldownTime()));
+		MESSAGE_END();
+	}
+	else if (m_pPlayer->m_bIsZombieStamp == true)
+	{
+		//EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombie_female_invis.wav", VOL_NORM, ATTN_NORM);
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
+		WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);
+		WRITE_BYTE(ZOMBIE_SKILL_STAMP);
+		WRITE_SHORT(static_cast<int>(GetDurationTime()));
+		WRITE_SHORT(static_cast<int>(GetCooldownTime()));
+		MESSAGE_END();
+	}
+	else if(m_pPlayer->m_bIsZombieTank == true)
+	{
+		m_pPlayer->pev->renderfx = kRenderFxGlowShell;
+		m_pPlayer->pev->rendercolor = { 255,0,0 };
+		m_pPlayer->pev->renderamt = 1;
+		m_pPlayer->pev->fov = m_pPlayer->m_iFOV = 105;
+		m_pPlayer->pev->speed = 1800;
+
+		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_pressure.wav", VOL_NORM, ATTN_NORM);
+		
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
+		WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);
+		WRITE_BYTE(ZOMBIE_SKILL_CRAZY);
+		WRITE_SHORT(static_cast<int>(GetDurationTime()));
+		WRITE_SHORT(static_cast<int>(GetCooldownTime()));
+		MESSAGE_END();
+	}
+
+
+	else if (m_pPlayer->m_bIsZombieMeatWall == true)
+	{
+		m_pPlayer->pev->renderfx = kRenderFxGlowShell;
+		m_pPlayer->pev->rendercolor = { 255,0,0 };
+		m_pPlayer->pev->renderamt = 1;
+		m_pPlayer->pev->fov = m_pPlayer->m_iFOV = 105;
+		m_pPlayer->pev->speed = 1800;
+
+		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_pressure.wav", VOL_NORM, ATTN_NORM);
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
+		WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);
+		WRITE_BYTE(ZOMBIE_SKILL_MW);
+		WRITE_SHORT(static_cast<int>(GetDurationTime()));
+		WRITE_SHORT(static_cast<int>(GetCooldownTime()));
+		MESSAGE_END();
+
+		}
+	else if (m_pPlayer->m_bIsZombieDeathKnight == true)
+	{
+		m_pPlayer->pev->renderfx = kRenderFxGlowShell;
+		m_pPlayer->pev->rendercolor = { 255,0,0 };
+		m_pPlayer->pev->renderamt = 1;
+		m_pPlayer->pev->fov = m_pPlayer->m_iFOV = 105;
+		m_pPlayer->pev->speed = 1800;
+
+		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_pressure.wav", VOL_NORM, ATTN_NORM);
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
+		WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);
+		WRITE_BYTE(ZOMBIE_SKILL_DK);
+		WRITE_SHORT(static_cast<int>(GetDurationTime()));
+		WRITE_SHORT(static_cast<int>(GetCooldownTime()));
+		MESSAGE_END();
+
+		}
+	else if (m_pPlayer->m_bIsZombieSpider == true)
+	{
+		m_pPlayer->pev->renderfx = kRenderFxGlowShell;
+		m_pPlayer->pev->rendercolor = { 255,0,0 };
+		m_pPlayer->pev->renderamt = 1;
+		m_pPlayer->pev->fov = m_pPlayer->m_iFOV = 105;
+		m_pPlayer->pev->speed = 1800;
+
+		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_pressure.wav", VOL_NORM, ATTN_NORM);
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
+		WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);
+		WRITE_BYTE(ZOMBIE_SKILL_SPIDER);
+		WRITE_SHORT(static_cast<int>(GetDurationTime()));
+		WRITE_SHORT(static_cast<int>(GetCooldownTime()));
+		MESSAGE_END();
+
+	}
+}
+
+void CZombieSkill_ZombieCrazyR::ResetMaxSpeed()
+{
+	if (m_iZombieSkillStatus == SKILL_STATUS_USING)
+		m_pPlayer->pev->maxspeed = 390;
+}
+
+void CZombieSkill_ZombieCrazyR::OnSkillEnd()
+{
+	m_iZombieSkillStatus = SKILL_STATUS_FREEZING;
+
+
+	if (m_pPlayer->m_bIsZombieFemale == true)
+	{
+		m_pPlayer->pev->renderfx = kRenderFxNone;
+		m_pPlayer->pev->rendermode = kRenderNormal;
+		m_pPlayer->pev->fov = m_pPlayer->m_iFOV = 90;
+		m_pPlayer->ResetMaxSpeed();
+	}
+	else
+	{
+		m_pPlayer->pev->renderfx = kRenderFxNone;
+		m_pPlayer->pev->rendercolor = { 255,255,255 };
+		m_pPlayer->pev->renderamt = 16;
+		m_pPlayer->pev->fov = m_pPlayer->m_iFOV = 90;
+		m_pPlayer->ResetMaxSpeed();
+	}
+
+}
+
+void CZombieSkill_ZombieCrazyR::OnCrazyEffect()
+{
+	m_flTimeZombieSkillEffect = gpGlobals->time + 3.0f;
+
+	if (m_pPlayer->m_bIsZombieFemale == true)
+	{
+
+	}
+	else
+	{
+		if (RANDOM_LONG(0, 1))
+			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_pre_idle_1.wav", VOL_NORM, ATTN_NORM);
+		else
+			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_pre_idle_2.wav", VOL_NORM, ATTN_NORM);
+	}
+	
+}
+
+float CZombieSkill_ZombieCrazyR::GetDurationTime() const
+{
+	return m_pPlayer->m_iZombieLevel == ZOMBIE_LEVEL_HOST ? 3.0f : 10.0f;
+}
+
+float CZombieSkill_ZombieCrazyR::GetCooldownTime() const
+{
+	return m_pPlayer->m_iZombieLevel == ZOMBIE_LEVEL_HOST ? 15.0f : 10.0f;
+}
+
+float CZombieSkill_ZombieCrazyR::GetDamageRatio() const
+{
+	if (m_iZombieSkillStatus == SKILL_STATUS_USING)
+		return 1.6f;
+	return 1.0f;
+}
+

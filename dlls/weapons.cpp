@@ -559,16 +559,6 @@ void CBasePlayerItem::DefaultTouch(CBaseEntity *pOther)
 
 	CBasePlayer *pPlayer = static_cast<CBasePlayer *>(pOther);
 
-	if (pPlayer->m_bIsVIP
-		&& m_iId != WEAPON_USP
-		&& m_iId != WEAPON_GLOCK18
-		&& m_iId != WEAPON_P228
-		&& m_iId != WEAPON_DEAGLE
-		&& m_iId != WEAPON_KNIFE)
-	{
-		return;
-	}
-
 
 	if (pPlayer->m_bIsZombie && m_iId != WEAPON_KNIFE)
 	{
@@ -1651,7 +1641,7 @@ void CWeaponBox::Touch(CBaseEntity *pOther)
 
 	CBasePlayer *pPlayer = static_cast<CBasePlayer *>(pOther);
 
-	if (pPlayer->m_bIsVIP || pPlayer->m_bShieldDrawn || pPlayer->m_bIsZombie)
+	if (pPlayer->m_bShieldDrawn || pPlayer->m_bIsZombie)
 		return;
 
 	pPlayer->OnTouchingWeapon(this);
@@ -2159,9 +2149,6 @@ void CArmoury::ArmouryTouch(CBaseEntity *pOther)
 		return;
 
 	CBasePlayer *p = static_cast<CBasePlayer *>(pOther);
-
-	if (p->m_bIsVIP)
-		return;
 
 	if (m_iCount > 0 && m_iItem <= ARMOURY_M249)
 	{

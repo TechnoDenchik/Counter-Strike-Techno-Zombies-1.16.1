@@ -28,12 +28,14 @@ GNU General Public License for more details.
 #include "zb2_skill.h"
 #include "hud_sub_impl.h"
 #include "player/player_const.h"
+#include "zb3/InventorySet.h"
+#include "zb5/InventorySetZb5.h"
 
 #include "gamemode/zb2/zb2_const.h"
 #include "gamemode/interface/interface_const.h"
 #include <vector>
 
-class CHudZB2_impl_t : public THudSubDispatcher<CHudZB2_Skill, CHudWinhudZB1, CHudTextZB1, CHudTextZB3, CHudInfection, CHudMakeZombies>
+class CHudZB2_impl_t : public THudSubDispatcher<CHudZB2_Skill, CHudWinhudZB1, CHudTextZB1, CHudTextZB3, CHudInfection, CHudMakeZombies, CHeroSet, CHeroSetZb5>
 {
 public:
 	SharedTexture m_pTexture_RageRetina;
@@ -46,6 +48,8 @@ public:
 DECLARE_MESSAGE(m_ZB2, ZB2Msg)
 DECLARE_MESSAGE(m_ZB2, ZB3RenMsg)
 DECLARE_MESSAGE(m_ZB2, ZB3RespMsg)
+DECLARE_MESSAGE(m_ZB2, ZB3Hero)
+DECLARE_MESSAGE(m_ZB2, ZB5Hero)
 
 int CHudZB2::MsgFunc_ZB3RespMsg(const char* pszName, int iSize, void* pbuf)
 {
@@ -148,6 +152,42 @@ int CHudZB2::MsgFunc_ZB2Msg(const char *pszName, int iSize, void *pbuf)
 	return 1;
 }
 
+int CHudZB2::MsgFunc_ZB3Hero(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+	auto type = static_cast<ZB2MessageType>(buf.ReadByte());
+
+	switch (type)
+	{
+	case ZB3_GETHERO:
+	{
+		pimpl->get<CHeroSet>().SetHero();
+		break;
+	}
+
+	}
+
+	return 1;
+}
+
+int CHudZB2::MsgFunc_ZB5Hero(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+	auto type = static_cast<ZB2MessageType>(buf.ReadByte());
+
+	switch (type)
+	{
+	case ZB5_GETHERO:
+	{
+		pimpl->get<CHeroSetZb5>().SetHero();
+		break;
+	}
+
+	}
+
+	return 1;
+}
+
 int CHudZB2::Init()
 {
 	pimpl = new CHudZB2_impl_t;
@@ -157,6 +197,8 @@ int CHudZB2::Init()
 	HOOK_MESSAGE(ZB2Msg);
 //	HOOK_MESSAGE(SupplyText);
 	HOOK_MESSAGE(ZB3RenMsg);
+	HOOK_MESSAGE(ZB3Hero);
+	HOOK_MESSAGE(ZB5Hero);
 
 	return 1;
 }

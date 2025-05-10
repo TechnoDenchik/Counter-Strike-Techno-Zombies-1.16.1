@@ -33,6 +33,7 @@ public:
 	UniqueTexture m_pTexture_BombAB[2];
 	UniqueTexture m_pTexture_Supplybox;
 	UniqueTexture m_pTexture_woods;
+	UniqueTexture m_pTexture_virus;
 	UniqueTexture m_icon_player[2];
 	Vector m_vecBombTargets[2];
 	Vector m_vecPlayerlocation[2];

@@ -18,3 +18,23 @@ protected:
 	SharedTexture m_pCurTexture;
 	float m_flDisplayTime;
 };
+
+class CHudTextZBS : public IBaseHudSub
+{
+public:
+	int VidInit(void) override;
+	int Draw(float time) override;
+
+	void Settext();
+
+	void renaining(int iCountDown)
+	{
+		times = iCountDown;
+	}
+protected:
+	int times;
+	int names;
+	SharedTexture m_pCurTexture;
+	SharedTexture stringtext;
+	float m_flDisplayTime;
+};

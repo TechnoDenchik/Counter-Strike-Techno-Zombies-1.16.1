@@ -55,7 +55,8 @@ protected:
 	virtual void PickZombieOrigin();
 	virtual void HumanInfectionByZombie(CBasePlayer *player, CBasePlayer *attacker);
 	virtual void RoundEndScore(int iWinStatus);
-
+	
+	bool iszombiemod1;
 protected:
 	void TeamCheck();
 	void InfectionSound();
@@ -65,7 +66,10 @@ protected:
 
 	BOOL FInfectionStarted();
 
-	void MakeZombie(CBasePlayer *player, ZombieLevel iEvolutionLevel) { m_eventBecomeZombie.dispatch(player, iEvolutionLevel); }
+	void MakeZombie(CBasePlayer *player, ZombieLevel iEvolutionLevel) 
+	{ 
+		m_eventBecomeZombie.dispatch(player, iEvolutionLevel); 
+	}
 
 public:
 	EventDispatcher<void(CBasePlayer *who, ZombieLevel iEvolutionLevel)> m_eventBecomeZombie;

@@ -16,9 +16,14 @@ public:
 
 public:
 	void OnKillMessage();
+	void OnKillType(int buf)
+	{
+		szbufer = buf;
+	}
 
 protected:
-	
+	int szbufer;
 	UniqueTexture m_iKillTexture;
+	UniqueTexture m_iBossKillTexture;
 	std::vector<float> m_killTimes;
 };

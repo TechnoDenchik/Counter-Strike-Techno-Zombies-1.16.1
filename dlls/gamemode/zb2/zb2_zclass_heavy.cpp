@@ -37,6 +37,8 @@ CZombieClass_Heavy::CZombieClass_Heavy(CBasePlayer *player, ZombieLevel iEvoluti
 	m_pPlayer->pev->armortype = ARMOR_TYPE_HELMET;
 	m_pPlayer->pev->armorvalue = 5500;
 	m_pPlayer->pev->gravity = 0.98f;
+	m_pPlayer->pev->renderfx = kRenderFxNone;
+	m_pPlayer->pev->rendermode = kRenderNormal;
 	m_pPlayer->ResetMaxSpeed();
 	m_pPlayer->GiveNamedItem("Knife_Zombi_heavy");
 	m_pPlayer->m_bIsZombieHeavy = true;

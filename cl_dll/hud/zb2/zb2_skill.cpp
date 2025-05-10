@@ -32,6 +32,12 @@ const char *  const CHudZB2_Skill::Config::ZOMBIE_SKILL_HUD_ICON_NEW[MAX_ZOMBIE_
 		"resource/zb3/zombieskill_zombicrazy2", // ZOMBIE_SKILL_CRAZY2,
 		"resource/zb3/zombieskill_zombihook", // ZOMBIE_SKILL_RATS,
 		"resource/zb3/zombieskill_zombipileexp", // ZOMBIE_SKILL_STAMP,
+		"resource/zb5/zombieskill_dogshoot",
+		"resource/zb5/zombieskill_rush",
+		"resource/zb5/zombieskill_protect",
+		"resource/zb5/zombieskill_chargeslash",
+		"resource/zb5/zombieskill_webshooter", 
+		"resource/zb5/zombieskill_webbomb",
 };
 
 const char *  const CHudZB2_Skill::Config::ZOMBIE_CLASS_HUD_ICON_NEW[MAX_ZOMBIE_CLASS] =
@@ -46,6 +52,9 @@ const char *  const CHudZB2_Skill::Config::ZOMBIE_CLASS_HUD_ICON_NEW[MAX_ZOMBIE_
 		"resource/zb3/zombietype_deimos2zb", // ZOMBIE_CLASS_DEIMOS2,
 		"resource/zb3/zombietype_witchzb", // ZOMBIE_CLASS_BANCHEE,
 		"resource/zb3/zombietype_undertakerzb", // ZOMBIE_CLASS_STAMPER,
+		"resource/zb5/zombietype_meatwallzb", 
+		"resource/zb5/ZombieType_deathknightzb", 
+		"resource/zb5/zombietype_spiderzb", 
 };
 
 const char *  const CHudZB2_Skill::Config::ZOMBIE_ITEM_HUD_ICON[2][3] =

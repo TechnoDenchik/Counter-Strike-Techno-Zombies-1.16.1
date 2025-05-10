@@ -316,7 +316,9 @@ void CMenuCreateGame::Begin( )
 			}
 
 			EngFuncs::CvarSetValue("deathmatch", 1.0f);	// start deathmatch as default
-			EngFuncs::CvarSetValue("public", 1.0f);
+			//EngFuncs::CvarSetValue("public", 1.0f);
+			EngFuncs::CvarSetValue("cl_nat", 1);
+
 
 			password.WriteCvar();
 			hostName.WriteCvar();
@@ -2403,7 +2405,7 @@ void CMenuCreateGame::ResetMode(const char *value)
 			mapdarksnow.Show();
 		}
 	}
-	else if (value == "zb3")
+	else if (value == "zb5")
 	{
 		zh.LinkCvar("mp_gamemode");
 		EngFuncs::CvarSetString("mp_gamemode", value);
@@ -5934,7 +5936,7 @@ void CMenuCreateGame::_Init( void )
 	SET_EVENT_MULTI(zh.onChanged,
 		{
 			uiCreateGame.botNum.Show();
-			uiCreateGame.ResetMode("zb3");
+			uiCreateGame.ResetMode("zb5");
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
 

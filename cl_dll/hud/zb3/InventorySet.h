@@ -10,8 +10,16 @@ public:
 	int Draw(float time) override;
 
 	void SetWeaponKit();
+};
 
-	char szbuffer[64];
+class CHeroSet : public IBaseHudSub
+{
+public:
+	int VidInit(void) override;
+	int Draw(float time) override;
+
+	void SetHero();
+
 protected:
 	SharedTexture m_pCurTexture;
 	SharedTexture stringtext;

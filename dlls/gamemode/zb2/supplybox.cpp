@@ -68,7 +68,7 @@ void CSupplyBox::SupplyboxTouch(CBaseEntity *pOther)
 
 	CBasePlayer *p = static_cast<CBasePlayer *>(pOther);
 
-	if (p->m_bIsVIP || p->m_bIsZombie)
+	if (p->m_bIsZombie)
 		return;
 
 	auto &nf = g_SupplyboxItems[RANDOM_LONG(0, std::extent<decltype(g_SupplyboxItems)>::value - 1)];

@@ -260,6 +260,29 @@
     <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass_stamper.cpp" />
     <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass_tank.cpp" />
     <ClCompile Include="..\dlls\gamemode\zb3\zb3_hero.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\mod_zb1reference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\mod_zb2reference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\mod_zb5.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\supplyboxreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_skill_heroreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_skill_humanreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_skill_zombiereference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_winhudreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclassreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_bancheereference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_deimosreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_ganimedreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_healreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_heavyreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_pcreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_speedreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_stamperreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_tankreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb5_zclass_deathknight.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb5_zclass_meatwall.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb5_zclass_spider.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb3reference\zb3_heroreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb5_evobox.cpp" />
     <ClCompile Include="..\dlls\gamemode\zbs\boss_manager.cpp" />
     <ClCompile Include="..\dlls\gamemode\zbs\monster_entity.cpp" />
     <ClCompile Include="..\dlls\gamemode\zbs\monster_entity2.cpp" />
@@ -267,6 +290,7 @@
     <ClCompile Include="..\dlls\gamemode\zbs\monster_manager.cpp" />
     <ClCompile Include="..\dlls\gamemode\zbs\monster_manager2.cpp" />
     <ClCompile Include="..\dlls\gamemode\zbs\npc_group.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zbs\zbs_box.cpp" />
     <ClCompile Include="..\dlls\gamemode\zbs\zs_subs.cpp" />
     <ClCompile Include="..\dlls\gamemode\zsh\base.cpp" />
     <ClCompile Include="..\dlls\gamemode\zsh\buildobject\Generator\male_generator.cpp" />
@@ -433,12 +457,15 @@
     <ClCompile Include="..\dlls\wpn_shared\knife_twin_axesex.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_banchee.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_deathknight.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_deimos.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_female.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_ganimed.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_heal.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_heavy.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_meatwall.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_pc.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_spider.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_stamper.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wondercannon.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wondercannonex.cpp" />
@@ -788,6 +815,29 @@
     <ClInclude Include="..\dlls\gamemode\zb3\zb3_const.h" />
     <ClInclude Include="..\dlls\gamemode\zb3\zb3_hero.h" />
     <ClInclude Include="..\dlls\gamemode\zb3\zb3_morale.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\mod_zb1reference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\mod_zb2reference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\mod_zb5.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb1reference\zb1_zclassreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\supplyboxreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb2_skillreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclassreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_bancheereference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_deimosreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_ganimedreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_healreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_heavyreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_pcreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_speedreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_stamperreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_tankreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb5_zclass_deathknight.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb5_zclass_meatwall.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb5_zclass_spider.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb3reference\zb3_heroreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb3reference\zb3_moralereference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb5_const.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb5_evobox.h" />
     <ClInclude Include="..\dlls\gamemode\zbs\boss_manager.h" />
     <ClInclude Include="..\dlls\gamemode\zbs\monster_entity.h" />
     <ClInclude Include="..\dlls\gamemode\zbs\monster_entity2.h" />
@@ -795,6 +845,7 @@
     <ClInclude Include="..\dlls\gamemode\zbs\monster_manager.h" />
     <ClInclude Include="..\dlls\gamemode\zbs\monster_manager2.h" />
     <ClInclude Include="..\dlls\gamemode\zbs\npc_group.h" />
+    <ClInclude Include="..\dlls\gamemode\zbs\zbs_box.h" />
     <ClInclude Include="..\dlls\gamemode\zbs\zbs_const.h" />
     <ClInclude Include="..\dlls\gamemode\zbs\zs_subs.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\base.h" />
@@ -819,7 +870,6 @@
     <ClInclude Include="..\dlls\gamemode\zsh\resources\wood.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\resources\wood_manager.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\resources\zsh_subs.h" />
-    <ClInclude Include="..\dlls\gamemode\zsh\shelter_axe.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\skills.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\skill\Enginner\engineer.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\skill\Survival\survival.h" />
@@ -1104,7 +1154,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRules />
     <CodeAnalysisRuleAssemblies />
-    <OutDir>G:\CSTZ\Counter-Strike-TZ</OutDir>
+    <OutDir>L:\CSTZ\Counter-Strike-TZ</OutDir>
     <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

@@ -41,7 +41,12 @@ void PlayerExtraHumanLevel_ZBS::LevelUpHealth()
 		if (!m_pPlayer->IsAlive())
 			return;
 		
-		m_pPlayer->pev->health += 20.0f;
+		MESSAGE_BEGIN(MSG_ONE, gmsgZBSMsgLevel, NULL, m_pPlayer->pev);
+		WRITE_BYTE(0); // type, reserved.
+		WRITE_BYTE(m_iHealth);
+		MESSAGE_END();
+
+		m_pPlayer->pev->health += 60.0f;
 
 		numkill = 0;
 	}

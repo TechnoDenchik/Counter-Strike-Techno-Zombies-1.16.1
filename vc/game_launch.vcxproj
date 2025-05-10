@@ -71,7 +71,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>G:\CSTZ</OutDir>
+    <OutDir>L:\CSTZ</OutDir>
     <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
     <TargetName>Cstrike Techno Zombies</TargetName>
   </PropertyGroup>
@@ -152,8 +152,6 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\game_launch\game.ico" />
-    <Image Include="C:\Users\SnailKick-PC\Desktop\cstz.ico" />
-    <Image Include="game.ico" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\game_launch\resource.h" />

@@ -172,6 +172,12 @@
     <ClCompile Include="..\cl_dll\hud\zb3\zb3.cpp" />
     <ClCompile Include="..\cl_dll\hud\zb3\zb3_morale.cpp" />
     <ClCompile Include="..\cl_dll\hud\zb3\zb3_rage.cpp" />
+    <ClCompile Include="..\cl_dll\hud\zb5\InventorySetZb5.cpp" />
+    <ClCompile Include="..\cl_dll\hud\zb5\TextSetZb5.cpp" />
+    <ClCompile Include="..\cl_dll\hud\zb5\Webmsprite.cpp" />
+    <ClCompile Include="..\cl_dll\hud\zb5\zb5.cpp" />
+    <ClCompile Include="..\cl_dll\hud\zb5\zb5_morale.cpp" />
+    <ClCompile Include="..\cl_dll\hud\zb5\zb5_rage.cpp" />
     <ClCompile Include="..\cl_dll\hud\zbs\zbs.cpp" />
     <ClCompile Include="..\cl_dll\hud\zbs\zbs_kill.cpp" />
     <ClCompile Include="..\cl_dll\hud\zbs\zbs_level.cpp" />
@@ -219,81 +225,230 @@
     <ClCompile Include="..\dlls\wpn_shared\knife_twin_axesex.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_banchee.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_deathknight.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_deimos.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_female.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_ganimed.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_heal.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_heavy.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_meatwall.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_pc.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_spider.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_stamper.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wondercannon.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wondercannonex.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_ak47.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_ak47.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_ak47l.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_arbalest.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_as50.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_aug.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_awp.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_aug.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_awp.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_bow.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_buffm4a1.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_c4.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_c4.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_c4shelter.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_cannon.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_chainsaw.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_deagle.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_deagle.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_deagled.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_elite.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_famas.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_fiveseven.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_flashbang.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_g3sg1.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_galil.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_glock18.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_elite.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_famas.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_fiveseven.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_flashbang.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_g3sg1.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_galil.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_glock18.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_gungnir.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_gunkata.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_hegrenade.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_hegrenade.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_infinity.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_infinityex1.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_infinityex2.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_infinitys.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_k1a.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_knife.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_knife.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_kriss.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_m14ebr.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_m1887.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_m249.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_m3.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_m4a1.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_m249.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_m3.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_m4a1.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_m95.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_mac10.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_mac10.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_mg3.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_mp5navy.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_mp5navy.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_mp7a1c.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_mp7a1d.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_mp7a1p.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_p228.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_p90.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_p228.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_p90.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_paladin.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_quant.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_sbmine.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_scarh.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_scarl.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_scout.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_sg550.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_sg552.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_scout.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_sg550.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_sg552.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_sgdrill.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_smokegrenade.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_smokegrenade.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_starchaserar.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_svdex.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_tar21.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_thompson.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_tmp.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_tmp.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_twinsummon.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_ump45.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_usp.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_ump45.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_usp.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_voidpistol.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_voidpistolex.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_wa2000.cpp" />
-    <ClCompile Include="..\dlls\wpn_shared\wpn_xm1014.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_xm1014.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_xm8c.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_xm8s.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_zombiebomb.cpp" />
@@ -417,6 +572,12 @@
     <ClInclude Include="..\cl_dll\hud\zb3\zb3.h" />
     <ClInclude Include="..\cl_dll\hud\zb3\zb3_morale.h" />
     <ClInclude Include="..\cl_dll\hud\zb3\zb3_rage.h" />
+    <ClInclude Include="..\cl_dll\hud\zb5\InventorySetZb5.h" />
+    <ClInclude Include="..\cl_dll\hud\zb5\TextSetZb5.h" />
+    <ClInclude Include="..\cl_dll\hud\zb5\Webmsprites.h" />
+    <ClInclude Include="..\cl_dll\hud\zb5\zb5.h" />
+    <ClInclude Include="..\cl_dll\hud\zb5\zb5_morale.h" />
+    <ClInclude Include="..\cl_dll\hud\zb5\zb5_rage.h" />
     <ClInclude Include="..\cl_dll\hud\zbs\zbs.h" />
     <ClInclude Include="..\cl_dll\hud\zbs\zbs_kill.h" />
     <ClInclude Include="..\cl_dll\hud\zbs\zbs_level.h" />
@@ -459,7 +620,10 @@
     <ClInclude Include="..\common2\render_api.h" />
     <ClInclude Include="..\dlls\gamemode\gd\gd_const.h" />
     <ClInclude Include="..\dlls\gamemode\interface\interface_const.h" />
+    <ClInclude Include="..\dlls\gamemode\zb1\zb1_const.h" />
     <ClInclude Include="..\dlls\gamemode\zb2\zb2_const.h" />
+    <ClInclude Include="..\dlls\gamemode\zb3\zb3_const.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb5_const.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\zsh_const.h" />
     <ClInclude Include="..\dlls\wpn_shared\knife_shelter_axe.h" />
     <ClInclude Include="..\dlls\wpn_shared\knife_twin_axes.h" />
@@ -467,7 +631,6 @@
     <ClInclude Include="..\dlls\wpn_shared\wondercannon.h" />
     <ClInclude Include="..\dlls\wpn_shared\wondercannonex.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_ak47.h" />
-    <ClInclude Include="..\dlls\wpn_shared\wpn_ak47l.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_arbalest.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_as50.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_aug.h" />
@@ -475,6 +638,7 @@
     <ClInclude Include="..\dlls\wpn_shared\wpn_bow.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_buffm4a1.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_c4.h" />
+    <ClInclude Include="..\dlls\wpn_shared\wpn_c4shelter.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_cannon.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_chainsaw.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_deagle.h" />
@@ -526,7 +690,6 @@
     <ClInclude Include="..\dlls\wpn_shared\wpn_voidpistolex.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_wa2000.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_xm1014.h" />
-    <ClInclude Include="..\dlls\wpn_shared\wpn_xm8c.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_xm8s.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_zombiebomb.h" />
     <ClInclude Include="..\engine2\cdll_int.h" />
@@ -638,7 +801,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>G:\CSTZ\</OutDir>
+    <OutDir>L:\CSTZ\</OutDir>
     <TargetName>client</TargetName>
     <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>..\vgui2_support\SourceSDK\lib\public;$(VC_LibraryPath_x86);$(WindowsSdk_71A_LibraryPath_x86);</LibraryPath>
@@ -685,6 +848,7 @@
       <BuildStlModules>true</BuildStlModules>
       <CompileAs>Default</CompileAs>
       <OmitFramePointers>true</OmitFramePointers>
+      <LanguageStandard_C>Default</LanguageStandard_C>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

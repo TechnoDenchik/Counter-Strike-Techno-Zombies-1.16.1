@@ -402,7 +402,22 @@ int CSTwinShadowAxes::Swing(int fFirst)
 #ifndef CLIENT_DLL
 		m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 #endif
-		ClearMultiDamage();
+	
+		float flDamage = 15;
+		if (m_flNextPrimaryAttack + 0.9 < UTIL_WeaponTimeBase())
+			flDamage = 20;
+
+#ifndef CLIENT_DLL
+		if (g_pModRunning->DamageTrack() == DT_ZB)
+			flDamage *= 900.5f;
+		else if (g_pModRunning->DamageTrack() == DT_ZBS)
+			flDamage *= 500.5f;
+
+
+		hit_result_t iCallBack = KnifeAttack1(vecSrc, gpGlobals->v_forward, flDamage, 400, 100, DMG_NEVERGIB | DMG_BULLET, m_pPlayer->pev, m_pPlayer->pev, FALSE);
+#endif
+
+	//	ClearMultiDamage();
 		if (pEntity)
 		{
 			float flDamage = 15;
@@ -416,9 +431,9 @@ int CSTwinShadowAxes::Swing(int fFirst)
 				flDamage *= 500.5f;
 #endif
 
-			pEntity->TraceAttack(m_pPlayer->pev, flDamage, gpGlobals->v_forward, &tr, DMG_NEVERGIB | DMG_BULLET);
+		//	pEntity->TraceAttack(m_pPlayer->pev, flDamage, gpGlobals->v_forward, &tr, DMG_NEVERGIB | DMG_BULLET);
 		}
-		ApplyMultiDamage(m_pPlayer->pev, m_pPlayer->pev);
+		//ApplyMultiDamage(m_pPlayer->pev, m_pPlayer->pev);
 
 		float flVol = 1;
 #ifndef CLIENT_DLL
@@ -635,14 +650,14 @@ hit_result_t CSTwinShadowAxes::KnifeAttack1(Vector vecSrc, Vector vecDir, float 
 		}
 	}
 
-	if (m_pPlayer->m_rgAmmo[m_iKnifeAmmoType] > 50)
-	{
-		Skill1(TRUE);
-		setskill1 = true;
-		setskin2 = true;
-		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1.15f;
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.5f;
-	}
+	//if (m_pPlayer->m_rgAmmo[m_iKnifeAmmoType] > 50)
+	//{
+	//	Skill1(TRUE);
+	//	setskill1 = true;
+	//	setskin2 = true;
+	//	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1.15f;
+	//	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.5f;
+	//}
 
 	CBaseEntity* pEntity = nullptr;
 	while ((pEntity = UTIL_FindEntityInSphere(pEntity, vecSrc, flRadius)) != nullptr) {
@@ -785,18 +800,22 @@ int CSTwinShadowAxes::Stab(int fFirst)
 				flDamage *= 3.0;
 		}
 
-#ifndef CLIENT_DLL
-		if (g_pModRunning->DamageTrack() == DT_ZB)
-			flDamage *= 600.5f;
-		else if (g_pModRunning->DamageTrack() == DT_ZBS)
-			flDamage *= 700.5f;
-#endif
+
 
 		UTIL_MakeVectors(m_pPlayer->pev->v_angle);
-		ClearMultiDamage();
-		if (pEntity)
-			pEntity->TraceAttack(m_pPlayer->pev, flDamage, gpGlobals->v_forward, &tr, DMG_NEVERGIB | DMG_BULLET);
-		ApplyMultiDamage(m_pPlayer->pev, m_pPlayer->pev);
+
+		if (m_flNextPrimaryAttack + 0.9 < UTIL_WeaponTimeBase())
+			flDamage = 20;
+
+#ifndef CLIENT_DLL
+		if (g_pModRunning->DamageTrack() == DT_ZB)
+			flDamage *= 900.5f;
+		else if (g_pModRunning->DamageTrack() == DT_ZBS)
+			flDamage *= 500.5f;
+
+
+		hit_result_t iCallBack = KnifeAttack1(vecSrc, gpGlobals->v_forward, flDamage, 400, 100, DMG_NEVERGIB | DMG_BULLET, m_pPlayer->pev, m_pPlayer->pev, FALSE);
+#endif
 
 		float flVol = 1;
 #ifndef CLIENT_DLL
@@ -961,23 +980,20 @@ int CSTwinShadowAxes::kombo(int fFirst)
 #ifndef CLIENT_DLL
 		m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 #endif
-		ClearMultiDamage();
-		if (pEntity)
-		{
-			float flDamage = 15;
-			if (m_flNextPrimaryAttack + 3.9 < UTIL_WeaponTimeBase())
-				flDamage = 20;
+
+		float flDamage = 15;
+		if (m_flNextPrimaryAttack + 0.9 < UTIL_WeaponTimeBase())
+			flDamage = 20;
 
 #ifndef CLIENT_DLL
-			if (g_pModRunning->DamageTrack() == DT_ZB)
-				flDamage *= 900.5f;
-			else if (g_pModRunning->DamageTrack() == DT_ZBS)
-				flDamage *= 500.5f;
-#endif
+		if (g_pModRunning->DamageTrack() == DT_ZB)
+			flDamage *= 900.5f;
+		else if (g_pModRunning->DamageTrack() == DT_ZBS)
+			flDamage *= 500.5f;
 
-			pEntity->TraceAttack(m_pPlayer->pev, flDamage, gpGlobals->v_forward, &tr, DMG_NEVERGIB | DMG_BULLET);
-		}
-		ApplyMultiDamage(m_pPlayer->pev, m_pPlayer->pev);
+
+		hit_result_t iCallBack = KnifeAttack1(vecSrc, gpGlobals->v_forward, flDamage, 400, 100, DMG_NEVERGIB | DMG_BULLET, m_pPlayer->pev, m_pPlayer->pev, FALSE);
+#endif
 
 		float flVol = 1;
 #ifndef CLIENT_DLL

@@ -426,6 +426,7 @@ int CHudHealth::Draw(float flTime)
 			case MOD_ZB1:
 			case MOD_ZB2:
 			case MOD_ZB3:
+			case MOD_ZB5:
 
 				rc = m_hEmpty[m_enArmorType].rect;
 				rc.top += m_iHeight * ((float)(100 - (min(100, m_iBat))) * 0.01f);
@@ -546,7 +547,7 @@ int CHudHealth::Draw(float flTime)
 
 					gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
 					(m_hEmpty[m_enArmorType].rect.right - m_hEmpty[m_enArmorType].rect.left);
-					DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 50, y14 + 14, 1);
+					DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 65, y14 + 14, 1);
 				}
 				break;
 			
@@ -563,8 +564,6 @@ int CHudHealth::Draw(float flTime)
 				m_plus->Bind();
 				DrawUtils::Draw2DQuadScaled(x2 - 8, y2 - 8, x2 + 8, y2 + 8);
 				gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
-				m_armors->Bind();
-				DrawUtils::Draw2DQuadScaled(x3 - 8, y3 - 8, x3 + 8, y3 + 8);
 
 				if (m_fFade)
 				{
@@ -626,7 +625,7 @@ int CHudHealth::Draw(float flTime)
 				}
 				else if (m_iBat < 100)
 				{
-					x15 = ScreenWidth / 9.0;
+					x15 = ScreenWidth / 10.0;
 					y15 = ScreenHeight / 1.0215;
 
 					gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
@@ -674,7 +673,7 @@ int CHudHealth::Draw(float flTime)
 
 					gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
 					(m_hEmpty[m_enArmorType].rect.right - m_hEmpty[m_enArmorType].rect.left);
-					DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 50, y14 + 14, 1);
+					DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 65, y14 + 14, 1);
 				}
 
 				break;
@@ -800,7 +799,7 @@ int CHudHealth::Draw(float flTime)
 
 						gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
 						(m_hEmpty[m_enArmorType].rect.right - m_hEmpty[m_enArmorType].rect.left);
-						DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 50, y14 + 14, 1);
+						DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 65, y14 + 14, 1);
 					}		
 					break;
 

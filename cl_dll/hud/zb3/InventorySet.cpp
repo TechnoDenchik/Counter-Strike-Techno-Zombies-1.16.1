@@ -95,37 +95,11 @@ inline int DrawTexturedNumbersTopCenterAligned(const CTextureRef& tex, const wre
 
 int CInventorySet::VidInit(void)
 {
-	if (!stringtext)
-		stringtext = R_LoadTextureShared("resource/hud/zb3/hud_string_bg", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
 	return 1;
 }
 
 int CInventorySet::Draw(float time)
 {
-	if (!m_pCurTexture)
-		return 1;
-
-	if (time > m_flDisplayTime + 2.0f)
-	{
-		m_pCurTexture = nullptr;
-		return 1;
-	}
-
-	int x = ScreenWidth / 1.995;
-	int y = ScreenHeight / 1.4;
-	int y2 = ScreenHeight / 1.4;
-
-	const float flScale = 0.0f;
-	const int r = 153, g = 97, b = 7;
-
-	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
-	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255 - std::min(5.0f - (time - m_flDisplayTime), 1.0f));
-
-	m_pCurTexture->Bind();
-	DrawUtils::Draw2DQuadScaled(x - 600 / 2, y - 38, x + 600 / 2, y - 8);
-
-	DrawUtils::DrawHudString(x - 190, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
-
 	return 1;
 }
 
@@ -291,7 +265,40 @@ void CInventorySet::SetWeaponKit()
 	{
 		ClientCmd("cstbuy weapon_sandalphone");
 	}	
+}
 
+int CHeroSet::VidInit(void)
+{
+	if (!stringtext)
+		stringtext = R_LoadTextureShared("resource/hud/zb3/zmrewalk_hero", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
+	return 1;
+}
+
+int CHeroSet::Draw(float time)
+{
+	if (!m_pCurTexture)
+		return 1;
+
+	if (time > m_flDisplayTime + 5.0f)
+	{
+		m_pCurTexture = nullptr;
+		return 1;
+	}
+
+	int x = ScreenWidth / 2;
+	int y = ScreenHeight / 4;
+	const float flScale = 0.0f;
+
+	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
+	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255 * std::min(5.0f - (time - m_flDisplayTime), 1.0f));
+	m_pCurTexture->Bind();
+	DrawUtils::Draw2DQuadScaled(x - 881 / 3.0, y - 3.5, x + 881 / 3.0, y + 215);
+
+	return 1;
+}
+
+void CHeroSet::SetHero()
+{
 	m_pCurTexture = stringtext;
 	m_flDisplayTime = gHUD.m_flTime;
 }

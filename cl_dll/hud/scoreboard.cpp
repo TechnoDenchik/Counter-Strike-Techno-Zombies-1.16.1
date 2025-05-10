@@ -27,6 +27,8 @@
 	team_info_t         g_TeamInfo[MAX_TEAMS + 1];
 	hostage_info_t      g_HostageInfo[MAX_HOSTAGES + 1];
 
+
+	zombiebox_info_t	 g_ZombieBoxInfo[MAX_HOSTAGES + 1];
 	zombie_info_t		g_ZombieInfo[MAX_HOSTAGES + 1];
 	wood_info_t		g_WoodInfo[MAX_HOSTAGES + 1];
 	metal_info_t		g_MetalInfo[MAX_HOSTAGES + 1];
@@ -209,8 +211,9 @@
 			case MOD_ZB2: return "Зомби Классика";
 			case MOD_ZBU: return "Zombie United";
 			case MOD_ZB3: return "Зомби Герой";
-			case MOD_ZBS: return "Сценарий зомби";
-			case MOD_ZE: return "Зомби побег";
+			case MOD_ZB5: return "Эволюция Зомби";
+			case MOD_ZBS: return "Сценарий Зомби";
+			case MOD_ZE: return "Зомби Побег";
 			case MOD_ZB4: return "Zombie Darkness";
 			case MOD_GD: return "Бой насмерть 'Оружие'";
 			case MOD_ZSH: return "Убежище зомби";
@@ -240,7 +243,7 @@
 		const auto iTextLen = DrawUtils::HudStringLen(szTitle, flScale);
 		DrawUtils::DrawHudString(iCenterX - iTextLen / 2, iStartY + 35, 1000, szTitle, 255, 255, 255, flScale);
 
-		if ((gHUD.m_iModRunning == MOD_ZB1 || gHUD.m_iModRunning == MOD_ZB2 || gHUD.m_iModRunning == MOD_ZB3 || gHUD.m_iModRunning == MOD_ZB4 || gHUD.m_iModRunning == MOD_ZBB || gHUD.m_iModRunning == MOD_ZE || gHUD.m_iModRunning == MOD_DM || gHUD.m_iModRunning == MOD_ZBS))
+		if ((gHUD.m_iModRunning == MOD_ZB1 || gHUD.m_iModRunning == MOD_ZB2 || gHUD.m_iModRunning == MOD_ZB3 || gHUD.m_iModRunning == MOD_ZB5 || gHUD.m_iModRunning == MOD_ZB4 || gHUD.m_iModRunning == MOD_ZBB || gHUD.m_iModRunning == MOD_ZE || gHUD.m_iModRunning == MOD_DM || gHUD.m_iModRunning == MOD_ZBS))
 		{
 			DrawScoreNew(false);
 		}
@@ -269,7 +272,7 @@
 			});
 
 		int r = 255, g = 255, b = 255, a = 255;
-		const bool bIsZombieMode = gHUD.m_iModRunning == MOD_ZB1 || gHUD.m_iModRunning == MOD_ZB2 || gHUD.m_iModRunning == MOD_ZB3 || gHUD.m_iModRunning == MOD_ZB4 || gHUD.m_iModRunning == MOD_ZBB ;
+		const bool bIsZombieMode = gHUD.m_iModRunning == MOD_ZB1 || gHUD.m_iModRunning == MOD_ZB2 || gHUD.m_iModRunning == MOD_ZB3 || gHUD.m_iModRunning == MOD_ZB5 || gHUD.m_iModRunning == MOD_ZB4 || gHUD.m_iModRunning == MOD_ZBB ;
 
 		for (int iColumn = 1; iColumn <= 2; iColumn++)
 		{
@@ -329,7 +332,7 @@
 				sprintf(szBuf, "%d", g_PlayerExtraInfo[id].deaths);
 				DrawUtils::DrawHudStringReverse(x + (iStartW / 2) - 5 - 75, y + offsetY, 0, szBuf, r, g, b, flScale);
 
-				if(gHUD.m_iModRunning == MOD_ZB1 || gHUD.m_iModRunning == MOD_ZB3)
+				if(gHUD.m_iModRunning == MOD_ZB1 || gHUD.m_iModRunning == MOD_ZB3 || gHUD.m_iModRunning == MOD_ZB5)
 				{
 					if (g_PlayerExtraInfo[id].dead)
 					{
@@ -368,7 +371,7 @@
 				}
 				else if (g_PlayerExtraInfo[id].vip)
 				{
-					if (gHUD.m_iModRunning == MOD_ZB3)
+					if (gHUD.m_iModRunning == MOD_ZB3 || gHUD.m_iModRunning == MOD_ZB5)
 						sprintf(szBuf, "Герой");
 					else
 						sprintf(szBuf, "VIP");
@@ -399,7 +402,7 @@
 
 			std::tie(r, g, b, a) = std::make_tuple(255, 188, 0, 255);
 			
-			if (gHUD.m_iModRunning == MOD_ZSH || gHUD.m_iModRunning == MOD_ZB3)
+			if (gHUD.m_iModRunning == MOD_ZSH || gHUD.m_iModRunning == MOD_ZB3 || gHUD.m_iModRunning == MOD_ZB5)
 			{
 				sprintf(szBuf, "Счёт");
 				DrawUtils::DrawHudStringReverse(x + (iStartW / 2) - 5 - 145, y + 110 + iCharHeightOffset, 0, szBuf, r, g, b, flScale);
@@ -419,7 +422,7 @@
 
 			if (bDivideTeam && iPlayerCount)
 			{
-				const bool bIsZombieMode = gHUD.m_iModRunning == MOD_ZB1 || gHUD.m_iModRunning == MOD_ZB2 || gHUD.m_iModRunning == MOD_ZB3 || gHUD.m_iModRunning == MOD_ZB4 || gHUD.m_iModRunning == MOD_ZBB;
+				const bool bIsZombieMode = gHUD.m_iModRunning == MOD_ZB1 || gHUD.m_iModRunning == MOD_ZB2 || gHUD.m_iModRunning == MOD_ZB3 || gHUD.m_iModRunning == MOD_ZB5 || gHUD.m_iModRunning == MOD_ZB4 || gHUD.m_iModRunning == MOD_ZBB;
 				if (iColumn == 2)
 					sprintf(szBuf, "%s  (%d)", bIsZombieMode ? "Контр-Террористы" : "CT", iPlayerCount);
 				else

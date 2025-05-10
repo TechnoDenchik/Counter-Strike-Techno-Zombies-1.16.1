@@ -302,6 +302,7 @@ void CCSBot::OnEvent(GameEventType event, CBaseEntity *entity, CBaseEntity *othe
 					if ((pev->origin - entity->pev->origin).IsLengthLessThan(skillUseRange))
 					{
 						ClientCommand("BTE_ZombieSkill1");
+						ClientCommand("CST_SetEvo");
 					}
 				}
 			}

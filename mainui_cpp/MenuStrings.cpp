@@ -162,8 +162,8 @@ static void UI_InitAliasStrings( void )
 
 static void Localize_AddToDictionary( const char *name, const char *lang )
 {
-	char filename[256];
-	snprintf( filename, sizeof( filename ), "resource/%s_%s.txt", name, lang );
+	char filename[32000];
+	snprintf( filename, sizeof( filename ), "Resource/%s_%s.txt", name, lang );
 
 	int unicodeLength;
 	uchar16 *unicodeBuf = (uchar16*)EngFuncs::COM_LoadFile( filename, &unicodeLength );
@@ -173,8 +173,8 @@ static void Localize_AddToDictionary( const char *name, const char *lang )
 		int ansiLength = unicodeLength / 2;
 		char *afile = new char[ansiLength]; // save original pointer, so we can free it later
 		char *pfile = afile;
-		char token[4096];
-		char token2[4096];
+		char token[32000];
+		char token2[32000];
 		int i = 0;
 
 		Q_UTF16ToUTF8( unicodeBuf + 1, afile, ansiLength, STRINGCONVERT_ASSERT_REPLACE );
@@ -227,7 +227,7 @@ static void Localize_AddToDictionary( const char *name, const char *lang )
 			if( !strcmp( token, "}" ))
 				break;
 
-			char szLocString[4096];
+			char szLocString[32000];
 			pfile = EngFuncs::COM_ParseFile( pfile, szLocString );
 
 			if( !strcmp( szLocString, "}" ))
@@ -256,8 +256,8 @@ error:
 
 static void Localize_Init( void )
 {
-	char gamedir[2024];
-	char gamedir2[256];
+	char gamedir[32000];
+	char gamedir2[32000];
 
 	EngFuncs::GetGameDir( gamedir );
 	EngFuncs::GetGameDir(gamedir2);
@@ -307,7 +307,7 @@ void UI_LoadCustomStrings( void )
 {
 	char *afile = (char *)EngFuncs::COM_LoadFile( "gfx/shell/strings.lst", NULL );
 	char *pfile = afile;
-	char token[4096];
+	char token[32000];
 	int string_num;
 
 	UI_InitAliasStrings ();

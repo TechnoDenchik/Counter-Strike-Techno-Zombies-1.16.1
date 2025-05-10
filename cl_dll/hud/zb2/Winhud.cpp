@@ -36,7 +36,7 @@ int CHudWinhudZB1::Draw(float time)
 	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
 	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255 * std::min(5.0f - (time - m_flDisplayTime), 1.0f));
 	m_pCurTexture->Bind();
-	DrawUtils::Draw2DQuadScaled(x - 881 / 3.0, y - 3.5, x + 881 / 3.0, y + 120);
+	DrawUtils::Draw2DQuadScaled(x - 881 / 3.0, y - 3.5, x + 881 / 3.0, y + 140);
 	return 1;
 }
 

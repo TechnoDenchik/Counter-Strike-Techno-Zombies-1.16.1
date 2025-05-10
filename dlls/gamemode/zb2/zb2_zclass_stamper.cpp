@@ -37,6 +37,8 @@ CZombieClass_Stamper::CZombieClass_Stamper(CBasePlayer *player, ZombieLevel iEvo
 	m_pPlayer->pev->armortype = ARMOR_TYPE_HELMET;
 	m_pPlayer->pev->armorvalue = 5500;
 	m_pPlayer->pev->gravity = 0.98f;
+	m_pPlayer->pev->renderfx = kRenderFxNone;
+	m_pPlayer->pev->rendermode = kRenderNormal;
 	m_pPlayer->ResetMaxSpeed();
 	m_pPlayer->GiveNamedItem("Knife_Zombi_stamper");
 	m_pPlayer->m_bIsZombieStamp = true;

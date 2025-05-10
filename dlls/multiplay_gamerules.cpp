@@ -3634,11 +3634,6 @@ void CCstrikeTechnoZombies::ClientDisconnected(edict_t *pClient)
 				pPlayer->DropPlayerItem("item_thighpack");
 			}
 
-			if (pPlayer->m_bIsVIP)
-			{
-				m_pVIP = NULL;
-			}
-
 			pPlayer->m_iCurrentKickVote = 0;
 
 			if (pPlayer->m_iMapVote)
@@ -4104,8 +4099,8 @@ void CCstrikeTechnoZombies::DeathNotice(CBasePlayer *pVictim, entvars_t *pKiller
 	{
 		// killed self
 		const char *team = GetTeam(pVictim->m_iTeam);
-		UTIL_LogPrintf("\"%s<%i><%s><%s>\" committed suicide with \"%s\"\n", STRING(pVictim->pev->netname), GETPLAYERUSERID(pVictim->edict()),
-			GETPLAYERAUTHID(pVictim->edict()), team, killer_weapon_name);
+		//UTIL_LogPrintf("\"%s<%i><%s><%s>\" committed suicide with \"%s\"\n", STRING(pVictim->pev->netname), GETPLAYERUSERID(pVictim->edict()),
+		//	GETPLAYERAUTHID(pVictim->edict()), team, killer_weapon_name);
 	}
 	else if (pKiller->flags & FL_CLIENT)
 	{
@@ -4114,15 +4109,15 @@ void CCstrikeTechnoZombies::DeathNotice(CBasePlayer *pVictim, entvars_t *pKiller
 		const char *VictimTeam = GetTeam(pVictim->m_iTeam);
 		const char *KillerTeam = (pPlayer != NULL) ? GetTeam(pPlayer->m_iTeam) : "";
 
-		UTIL_LogPrintf("\"%s<%i><%s><%s>\" killed \"%s<%i><%s><%s>\" with \"%s\"\n", STRING(pKiller->netname), GETPLAYERUSERID(ENT(pKiller)), GETPLAYERAUTHID(ENT(pKiller)),
-			KillerTeam, STRING(pVictim->pev->netname), GETPLAYERUSERID(pVictim->edict()), GETPLAYERAUTHID(pVictim->edict()), VictimTeam, killer_weapon_name);
+		//UTIL_LogPrintf("\"%s<%i><%s><%s>\" killed \"%s<%i><%s><%s>\" with \"%s\"\n", STRING(pKiller->netname), GETPLAYERUSERID(ENT(pKiller)), GETPLAYERAUTHID(ENT(pKiller)),
+		//	KillerTeam, STRING(pVictim->pev->netname), GETPLAYERUSERID(pVictim->edict()), GETPLAYERAUTHID(pVictim->edict()), VictimTeam, killer_weapon_name);
 	}
 	else
 	{ 
 		// killed by the world
 		const char *team = GetTeam(pVictim->m_iTeam);
-		UTIL_LogPrintf("\"%s<%i><%s><%s>\" committed suicide with \"%s\" (world)\n", STRING(pVictim->pev->netname), GETPLAYERUSERID(pVictim->edict()),
-			GETPLAYERAUTHID(pVictim->edict()), team, killer_weapon_name);
+		//UTIL_LogPrintf("\"%s<%i><%s><%s>\" committed suicide with \"%s\" (world)\n", STRING(pVictim->pev->netname), GETPLAYERUSERID(pVictim->edict()),
+			//GETPLAYERAUTHID(pVictim->edict()), team, killer_weapon_name);
 	}
 
 	CheckWinConditions();

@@ -12,6 +12,7 @@ class CZombieSpawn;
 class CMonster;
 class CMonster2;
 class CMonsterBoss;
+class CZbsSupplyBox;
 
 class CMod_ZombieScenario : public TBaseMod_RemoveObjects<>
 {
@@ -32,6 +33,11 @@ public:
 	float GetAdjustedEntityDamage(CBaseEntity *victim, entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) override;
 
 public:
+	void MakeSupplyboxThink(Vector x, Vector y);
+	void RemoveAllSupplybox();
+	CZbsSupplyBox* CreateSupplybox(Vector x, Vector y);
+	int SupplyboxCount();
+
 	void TeamCheck();
 	void WaitingSound();
 	void RoundStart();
@@ -58,6 +64,7 @@ public:
 public:
 	std::vector<CZombieSpawn *> m_vecZombieSpawns;
 	float m_flNextSpawnNPC;
+	float m_flTimeNextMakeSupplybox;
 
 	EventDispatcher<void(CBasePlayer *attacker, float &)> m_eventAdjustDamage;
 	EventDispatcher<void(CBasePlayer *attacker, float &)> m_eventAdjustDamage2;

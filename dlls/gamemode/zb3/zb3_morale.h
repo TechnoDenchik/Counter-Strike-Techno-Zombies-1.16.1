@@ -42,7 +42,6 @@ public:
 	}
 	void ResetLevel() { m_iHumanMoraleLevel = 0; }
 	void UpdateHUD(CBasePlayer * pPlayer = nullptr, ZB3HumanMoraleType_e type = ZB3_MORALE_DEFAULT) const;
-
 protected:
 	int m_iHumanMoraleLevel;
 };

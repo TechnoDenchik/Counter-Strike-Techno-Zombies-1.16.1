@@ -32,6 +32,7 @@ DECLARE_MESSAGE(m_ZB3, ZB3SkillUsed)
 DECLARE_MESSAGE(m_ZB3, ZB3SkillUsed2)
 DECLARE_MESSAGE(m_ZB3, ZB3Inventory)
 
+
 int CHudZB3::MsgFunc_ZB3Msg(const char *pszName, int iSize, void *pbuf)
 {
 	BufferReader buf(pszName, pbuf, iSize);

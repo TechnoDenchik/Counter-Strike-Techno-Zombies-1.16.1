@@ -5,14 +5,14 @@
 
 #include "Framework.h"
 #include "Slider.h"
-#include "Bitmap.h"
+#include "Bitmap.h"/*      ποπποπονπο*/
 #include "PicButton.h"
 #include "CheckBox.h"
 #include "SpinControl.h"
 #include "StringArrayModel.h"
 #include "Table.h"
 
-#define ART_BACK	"gfx/shell/WeaponGet/hud_weapon_off_bg"
+#define ART_BACK		"gfx/shell/WeaponGet/hud_weapon_off_bg"
 #define ART_UPARROW		"gfx/shell/uparrowp"
 #define ART_DOWNARROW	"gfx/shell/sm_dnarw"
 
@@ -226,7 +226,6 @@ private:
 	void GetWp(int primary, int secondary, int melee, int grenade);
 	void GetPage(int page);
 	void SaveAndPopMenu() override;
-	void exits() override;
 	void SetGun(int value);
 	void SetPistol(int value);
 	void SetKnife(int value);
@@ -269,20 +268,6 @@ void CMenuInventory::GetWp(int primary, int secondary, int melee, int grenade)
 	SetKnife(melee);
 	SetGrenade(grenade);
 }
-/*
-* halogun,
- wondercannonex,
- wondercannon,
-revivegun,
-gungnir,
- sgdrill,
-cannon,
-paladin;
-buffm4a1,
-chainsaw,
-starchaserar,
-bow, 
-*/
 
 void CMenuInventory::GetPage(int page)
 {
@@ -467,12 +452,6 @@ void CMenuInventory::SaveAndPopMenu()
 	CMenuFramework::SaveAndPopMenu();
 }
 
-void CMenuInventory::exits()
-{
-		
-	CMenuFramework::exits();
-}
-
 void CMenuInventory::_Init( void )
 {
 	stringsprimary = 1;
@@ -555,7 +534,7 @@ void CMenuInventory::_Init( void )
 	SetBack15.SetRect(810, 345, 180, 90);
 
 	SetBack16.iFlags = QMF_INACTIVE;
-	SetBack16.SetCharSize(QM_SMALLFONT);
+	SetBack16.SetCharSize(QM_SMALLFONT);                                     
 	SetBack16.SetModel(&mapsListModel);
 	SetBack16.SetRect(810, 415, 180, 90);
 
@@ -568,9 +547,6 @@ void CMenuInventory::_Init( void )
 	SetBack18.SetCharSize(QM_SMALLFONT);
 	SetBack18.SetModel(&mapsListModel);
 	SetBack18.SetRect(810, 555, 180, 90);
-
-
-
 
 	//primary
 	wphalogun.iFlags = QMF_NOTIFY;
@@ -798,30 +774,6 @@ skullaxe,
 	wpskullaxe.SetRect(200, 463, 235, 81);
 	wpskullaxe.SetPicture(ART_SKULLAXE);
 	wpskullaxe.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	wphaloguntex.iFlags = QMF_NOTIFY;
 	wphaloguntex.SetRect(590, 237, 220, 55);
@@ -1843,22 +1795,6 @@ skullaxe,
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	wptwinaxesextex.iFlags = QMF_NOTIFY;
 	wptwinaxesextex.SetRect(590, 237, 220, 55);
 	wptwinaxesextex.SetPicture(ART_DGAXEEX);
@@ -1938,27 +1874,6 @@ skullaxe,
 			uiInventory.SetKnife(5);
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	SetBack1.iFlags = QMF_INACTIVE;
 	SetBack1.SetCharSize(QM_SMALLFONT);

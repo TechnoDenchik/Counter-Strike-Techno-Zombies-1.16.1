@@ -32,6 +32,9 @@ GNU General Public License for more details.
 #include <dlls/util/u_range.hpp>
 #include "gamemode/interface/interface_const.h"
 
+#include <functional>
+#include <random>
+
 CMod_ZombieMod2::CMod_ZombieMod2() // precache
 {
 	UTIL_PrecacheOther("supplybox");
@@ -53,6 +56,9 @@ void CMod_ZombieMod2::UpdateGameMode(CBasePlayer *pPlayer)
 	WRITE_BYTE(0); // Reserved. (MaxTime?)
 
 	MESSAGE_END();
+
+	pPlayer->m_bIsZombieMod1 = false;
+	iszombiemod1 = false;
 }
 
 void CMod_ZombieMod2::Think()
@@ -238,6 +244,25 @@ void CMod_ZombieMod2::InstallPlayerModStrategy(CBasePlayer *player)
 	player->m_pModStrategy.reset(new CPlayerModStrategy_ZB2(player, this));
 }
 
+void CMod_ZombieMod2::PickZombieOrigin()
+{
+	CMod_Zombi::PickZombieOrigin();
+	PickHero();
+}
+
+void CMod_ZombieMod2::PickHero()
+{
+	// randomize player list
+	moe::range::PlayersList list;
+	std::random_device rd;
+	std::vector<CBasePlayer*> players(list.begin(), list.end());
+	players.erase(std::remove_if(players.begin(), players.end(), [](CBasePlayer* player) { return !player->IsAlive() || player->m_iTeam != TEAM_CT || player->m_bIsZombie; }), players.end());
+	std::shuffle(players.begin(), players.end(), rd);
+	// make heroes
+	const auto iNumHeroes = std::min(players.size(), players.size() / 10 + std::uniform_int_distribution<size_t>(0, 1)(rd));
+	std::for_each(players.begin(), players.begin() + iNumHeroes, std::bind(&CMod_ZombieMod2::MakeHero, this, std::placeholders::_1));
+}
+
 CPlayerModStrategy_ZB2::CPlayerModStrategy_ZB2(CBasePlayer *player, CMod_ZombieMod2 *mp)
 	:	CPlayerModStrategy_ZB1(player, mp),
 		m_eventListeners {
@@ -245,6 +270,7 @@ CPlayerModStrategy_ZB2::CPlayerModStrategy_ZB2(CBasePlayer *player, CMod_ZombieM
 			mp->m_eventAdjustDamage.subscribe([this](CBasePlayer *attacker, float &out){ return this->Event_AdjustHumanDamage(attacker, out); }),
 			mp->m_eventAdjustHitgroup.subscribe([this](CBasePlayer *attacker, HitBoxGroup &out) { return this->Event_AdjustHumanHitgroup(attacker, out); })
 		} ,
+		m_eventBecomeHeroListener(mp->m_eventBecomeHero.subscribe(&CPlayerModStrategy_ZB2::Event_OnBecomeHero, this)),
 		m_pModZB2(mp)
 {}
 
@@ -259,6 +285,12 @@ bool CPlayerModStrategy_ZB2::ClientCommand(const char *pcmd)
 	if (!Q_stricmp(pcmd, "CST_ClassHuman"))
 	{
 		BecomeHuman();
+		return true;
+	}
+
+	if (!Q_stricmp(pcmd, "CST_ClassHero"))
+	{
+		BecomeHero();
 		return true;
 	}
 
@@ -459,31 +491,31 @@ void CPlayerModStrategy_ZB2::BecomeZombie(ZombieLevel iEvolutionLevel)
 		switch (RANDOM_LONG(1, 9))
 		{
 		case 1:
-			BecomeTank(ZOMBIE_LEVEL_ORIGIN);
+			BecomeTank(ZOMBIE_LEVEL_HOST);
 			break;
 		case 2:
-			BecomeSpeed(ZOMBIE_LEVEL_ORIGIN);
+			BecomeSpeed(ZOMBIE_LEVEL_HOST);
 			break;
 		case 3:
-			BecomeHeavy(ZOMBIE_LEVEL_ORIGIN);
+			BecomeHeavy(ZOMBIE_LEVEL_HOST);
 			break;
 		case 4:
-			BecomeHeal(ZOMBIE_LEVEL_ORIGIN);
+			BecomeHeal(ZOMBIE_LEVEL_HOST);
 			break;
 		case 5:
-			BecomePsycho(ZOMBIE_LEVEL_ORIGIN);
+			BecomePsycho(ZOMBIE_LEVEL_HOST);
 			break;
 		case 6:
-			BecomeDeimos(ZOMBIE_LEVEL_ORIGIN);
+			BecomeDeimos(ZOMBIE_LEVEL_HOST);
 			break;
 		case 7:
-			BecomeGanimed(ZOMBIE_LEVEL_ORIGIN);
+			BecomeGanimed(ZOMBIE_LEVEL_HOST);
 			break;
 		case 8:
-			BecomeBanchee(ZOMBIE_LEVEL_ORIGIN);
+			BecomeBanchee(ZOMBIE_LEVEL_HOST);
 			break;
 		case 9:
-			BecomeStamper(ZOMBIE_LEVEL_ORIGIN);
+			BecomeStamper(ZOMBIE_LEVEL_HOST);
 			break;
 		}
 	}
@@ -723,6 +755,31 @@ void CPlayerModStrategy_ZB2::BecomeHuman()
 	m_pCharacter = sp;
 
 	sp->InitHUD();
+	sp->ResetMaxSpeed();
+}
+
+void CPlayerModStrategy_ZB2::Event_OnBecomeHero(CBasePlayer* who)
+{
+	if (m_pPlayer != who)
+		return;
+	BecomeHero();
+}
+
+void CPlayerModStrategy_ZB2::BecomeHero()
+{
+	auto sp = std::make_shared<CHero_ZB1>(m_pPlayer);
+
+	m_pPlayer->m_bIsHero = true;
+	m_pPlayer->m_bIsVIP = true;
+
+	MESSAGE_BEGIN(MSG_ONE, gmsgZB3InventorySet, nullptr, m_pPlayer->pev);
+	WRITE_BYTE(WPN_INVENTORY);
+	MESSAGE_END();
+
+	MESSAGE_BEGIN(MSG_ONE, gmsgZB3SetHero, nullptr, m_pPlayer->pev);
+	WRITE_BYTE(ZB3_GETHERO);
+	MESSAGE_END();
+
 	sp->ResetMaxSpeed();
 }
 

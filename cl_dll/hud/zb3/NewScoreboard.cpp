@@ -1,5 +1,5 @@
 /* =================================================================================== *
-	  * =================== TechnoSoftware & Valve Developing =================== *
+			 * =================== TechnoSoftware =================== *
  * =================================================================================== */
 
 #include "hud.h"
@@ -10,6 +10,7 @@
 #include "eventscripts.h"
 #include "triangleapi.h"
 #include "player/player_const.h"
+#include "zb5/TextSetZb5.h"
 
 inline void BuildNumberRC(wrect_t(&rgrc)[10], int w, int h)
 {
@@ -118,6 +119,8 @@ int CHudZB3ScoreBoard::VidInit(void)
 	R_InitTexture(iconmy, "resource/hud/hud_text_icon_my");
 	R_InitTexture(icononest, "resource/hud/hud_text_icon_1st");
 
+
+
 	BuildNumberRC( m_rcSelfnumber, 18, 22);
 	BuildNumberRC( m_rcTeamnumber, 18, 22);
 	BuildNumberRC( m_rcToprecord, 11, 13);
@@ -125,6 +128,8 @@ int CHudZB3ScoreBoard::VidInit(void)
 	BuildNumberRC(m_rcToprecord3, 18, 22);
 	BuildNumberRC( m_rcroundmax, 11, 13);
 	BuildNumberRC( m_rcroundnumber, 11, 13);
+
+	
 
     return 1;
 }
@@ -184,6 +189,8 @@ int CHudZB3ScoreBoard::Draw(float time)
 
 	int x17 = ScreenWidth / 2.03;
 	int y17 = ScreenHeight / 50;
+
+	
 
 	const float flScale = 0.0f;
 	int best_player = gHUD.m_Scoreboard.FindBestPlayer();
@@ -293,8 +300,67 @@ int CHudZB3ScoreBoard::Draw(float time)
 
 		DrawTexturedNumbersTopRightAligned(*countplayer, m_rcToprecord2, countHM, x5 + 77, y5, 1.0f);
 		DrawTexturedNumbersTopRightAligned(*countplayer2, m_rcToprecord2, countZB, x6 - 87, y5, 1.0f);
-		
-	 break;
+
+		 break;
+	 case MOD_ZB5:
+
+		 gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
+		 gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
+
+		 newscoreboard->Bind();
+		 DrawUtils::Draw2DQuadScaled(x - 450 / 3.0, y - 4.6, x + 450 / 3.0, y + 78);
+
+		 iconround->Bind();
+		 DrawUtils::Draw2DQuadScaled(x9 - 39.7, y9 - 1.7, x9 + 39.7, y9 + 10.7);
+
+		 slash->Bind();
+		 DrawUtils::Draw2DQuadScaled(x15 - 4.0, y15 - 8.7, x15 + 4.0, y15 + 5.0);
+
+		 iconhm->Bind();
+		 DrawUtils::Draw2DQuadScaled(x10 - 34.7, y11 - 1.7, x10 + 34.7, y11 + 10.7);
+
+		 iconzb->Bind();
+		 DrawUtils::Draw2DQuadScaled(x11 - 34.7, y11 - 1.7, x11 + 34.7, y11 + 10.7);
+
+		 gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
+		 DrawTexturedNumbersTopRightAligned(*countround, m_rcToprecord, roundmax, x16 + 19, y16 + 14, 1.0f);
+		 gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
+		 DrawTexturedNumbersTopRightAligned(*countround, m_rcToprecord, roundNumber2, x16 - 24, y16 + 14, 1.0f);
+
+		 gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
+
+		 if (gHUD.m_Scoreboard.m_iTeamScore_CT < 10)
+		 {
+			 DrawTexturedNumbersTopRightAligned(*winhm, m_rcTeamnumber, gHUD.m_Scoreboard.m_iTeamScore_CT, x4 + 70, y4 + 14, 1.0f);
+			 DrawTexturedNumbersTopRightAligned(*winhm, m_rcTeamnumber, 0, x4 + 50, y4 + 14, 1.0f);
+		 }
+		 else if (gHUD.m_Scoreboard.m_iTeamScore_CT < 100)
+		 {
+			 DrawTexturedNumbersTopRightAligned(*winhm, m_rcTeamnumber, gHUD.m_Scoreboard.m_iTeamScore_CT, x4 + 75, y4 + 14, 1.0f);
+		 }
+		 else
+		 {
+			 DrawTexturedNumbersTopRightAligned(*winhm, m_rcTeamnumber, gHUD.m_Scoreboard.m_iTeamScore_CT, x4 + 87, y4 + 14, 1.0f);
+		 }
+
+		 if (gHUD.m_Scoreboard.m_iTeamScore_T < 10)
+		 {
+			 DrawTexturedNumbersTopRightAligned(*winzb, m_rcSelfnumber, gHUD.m_Scoreboard.m_iTeamScore_T, x3 - 68, y3 + 14, 1.0f);
+			 DrawTexturedNumbersTopRightAligned(*winzb, m_rcSelfnumber, 0, x3 - 88, y3 + 14, 1.0f);
+		 }
+		 else if (gHUD.m_Scoreboard.m_iTeamScore_T < 100)
+		 {
+			 DrawTexturedNumbersTopRightAligned(*winzb, m_rcSelfnumber, gHUD.m_Scoreboard.m_iTeamScore_T, x3 - 77, y3 + 14, 1.0f);
+		 }
+		 else
+		 {
+			 DrawTexturedNumbersTopRightAligned(*winzb, m_rcSelfnumber, gHUD.m_Scoreboard.m_iTeamScore_T, x3 - 78, y3 + 14, 1.0f);
+		 }
+
+		 DrawTexturedNumbersTopRightAligned(*countplayer, m_rcToprecord2, countHM, x5 + 77, y5, 1.0f);
+		 DrawTexturedNumbersTopRightAligned(*countplayer2, m_rcToprecord2, countZB, x6 - 87, y5, 1.0f);
+
+		break;
 	 case MOD_NONE:
 
 		gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);

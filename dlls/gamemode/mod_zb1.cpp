@@ -73,6 +73,9 @@ void CMod_Zombi::UpdateGameMode(CBasePlayer *pPlayer)
 	WRITE_BYTE(0); // Reserved. (MaxTime?)
 
 	MESSAGE_END();
+
+	pPlayer->m_bIsZombieMod1 = true;
+	iszombiemod1 = true;
 }
 
 BOOL CMod_Zombi::ClientConnected(edict_t *pEntity, const char *pszName, const char *pszAddress, char *szRejectReason)
@@ -351,16 +354,25 @@ void CPlayerModStrategy_ZB1::Event_OnBecomeZombie(CBasePlayer *who, ZombieLevel 
 
 	BecomeZombie(iEvolutionLevel);
 	m_pPlayer->OnBecomeZombie(iEvolutionLevel);
+
+	if (m_pPlayer->m_bIsZombieMod1 == true)
+	{
+		m_pPlayer->GiveNamedItem("knife_zombi");
+	}
 }
 
 void CPlayerModStrategy_ZB1::BecomeZombie(ZombieLevel iEvolutionLevel)
 {
 	m_pCharacter = std::make_shared<CZombie_ZB1>(m_pPlayer, iEvolutionLevel);
+	m_pPlayer->pev->renderfx = kRenderFxNone;
+	m_pPlayer->pev->rendermode = kRenderNormal;
 }
 
 void CPlayerModStrategy_ZB1::BecomeHuman()
 {
 	m_pCharacter = std::make_shared<CHuman_ZB1>(m_pPlayer);
+	m_pPlayer->pev->renderfx = kRenderFxNone;
+	m_pPlayer->pev->rendermode = kRenderNormal;
 	
 }
 
@@ -424,9 +436,6 @@ void CMod_Zombi::PickZombieOrigin()
 void CMod_Zombi::HumanInfectionByZombie(CBasePlayer *player, CBasePlayer *attacker)
 {
 	MakeZombie(player, ZOMBIE_LEVEL_HOST);
-	player->GiveNamedItem("knife_zombi");
-	player->pev->health = player->pev->max_health = std::max(1000, static_cast<int>(attacker->pev->health * 0.5f));
-	player->pev->armorvalue = std::max(100, static_cast<int>(attacker->pev->armorvalue * 0.5f));
 
 	InfectionSound();
 	PRECACHE_SOUND("zb3/human_death_01.wav");
@@ -441,7 +450,7 @@ void CMod_Zombi::HumanInfectionByZombie(CBasePlayer *player, CBasePlayer *attack
 	SetScoreAttrib(player, player);
 	TeamCheck();
 	CheckWinConditions();
-
+	
 	player->m_iDeaths += 1;
 	player->AddPoints(0, FALSE);
 	attacker->AddPoints(1, FALSE);
@@ -456,7 +465,18 @@ void CMod_Zombi::InfectionSound()
 void CMod_Zombi::RestartRound()
 {
 	for(CBasePlayer *player : moe::range::PlayersList())
-		player->m_bIsZombie = false;
+		player->m_bIsZombie = false,
+		player->m_bIsHero = false,
+		player->m_bIsZombie = false,
+		player->m_bIsZombieTank = false,
+		player->m_bIsZombieFemale = false,
+		player->m_bIsZombieHeavy = false,
+		player->m_bIsZombieHeal = false,
+		player->m_bIsZombiePc = false,
+		player->m_bIsZombieDeimos = false,
+		player->m_bIsZombieGanimed = false,
+		player->m_bIsZombieBanchee = false,
+		player->m_bIsZombieStamp = false;
 
 	TeamCheck();
 
@@ -482,6 +502,8 @@ void CMod_Zombi::TeamCheck()
 
 void CMod_Zombi::PlayerSpawn(CBasePlayer *pPlayer)
 {
+	pPlayer->m_bIsHero = false;
+
 	pPlayer->m_bIsZombie = false;
 	pPlayer->m_bIsZombieTank = false;
 	pPlayer->m_bIsZombieFemale = false;
@@ -497,15 +519,13 @@ void CMod_Zombi::PlayerSpawn(CBasePlayer *pPlayer)
 	IBaseMod::PlayerSpawn(pPlayer);
 	pPlayer->AddAccount(32000);
 
-	MESSAGE_BEGIN(MSG_ONE, gmsgZB3InventorySet, nullptr, pPlayer->pev);
-	WRITE_BYTE(WPN_INVENTORY);
-	MESSAGE_END();
-
-	// Open buy menu on spawn
-	if (!pPlayer->m_bIsZombie)
+	if (pPlayer->m_bIsZombie == false)
 	{
-		ShowVGUIMenu(pPlayer, VGUI_Menu_Buy, (MENU_KEY_1 | MENU_KEY_2 | MENU_KEY_3 | MENU_KEY_4 | MENU_KEY_5 | MENU_KEY_6 | MENU_KEY_7 | MENU_KEY_8 | MENU_KEY_0), "#Buy");
-		pPlayer->m_iMenu = Menu_Buy;
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB3InventorySet, nullptr, pPlayer->pev);
+		WRITE_BYTE(WPN_INVENTORY);
+		MESSAGE_END();
+		//ShowVGUIMenu(pPlayer, VGUI_Menu_Buy, (MENU_KEY_1 | MENU_KEY_2 | MENU_KEY_3 | MENU_KEY_4 | MENU_KEY_5 | MENU_KEY_6 | MENU_KEY_7 | MENU_KEY_8 | MENU_KEY_0), "#Buy");
+		//pPlayer->m_iMenu = Menu_Buy;
 	}
 }
 
@@ -530,9 +550,16 @@ BOOL CMod_Zombi::FPlayerCanTakeDamage(CBasePlayer *pPlayer, CBaseEntity *pAttack
 	if (pAttackerPlayer)
 	{
 		if (pAttackerPlayer->m_bIsZombie && !pPlayer->m_bIsZombie)
-		{
-			HumanInfectionByZombie(pPlayer, pAttackerPlayer);
-			iReturn = false;
+		{	
+			if(pPlayer->m_bIsHero)
+			{
+				iReturn = true;
+			}
+			else
+			{
+				HumanInfectionByZombie(pPlayer, pAttackerPlayer);
+				iReturn = false;
+			}
 		}
 	}
 	return iReturn;

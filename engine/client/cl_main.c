@@ -1241,6 +1241,7 @@ void CL_InternetServers_f( void )
 	char *info = fullquery + sizeof( MS_SCAN_REQUEST ) - 1;
 	const size_t remaining = sizeof( fullquery ) - sizeof( MS_SCAN_REQUEST );
 
+
 	Info_SetValueForKey( info, "nat", cl_nat->string, remaining );
 	Info_SetValueForKey( info, "gamedir", GI->gamefolder, remaining );
 

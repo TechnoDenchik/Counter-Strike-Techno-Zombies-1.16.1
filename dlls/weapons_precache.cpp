@@ -128,6 +128,11 @@ void W_Precache()
 	UTIL_PrecacheOtherWeapon("Knife_Zombi_ganimed");
 	UTIL_PrecacheOtherWeapon("Knife_Zombi_banchee");
 	UTIL_PrecacheOtherWeapon("Knife_Zombi_stamper");
+
+	UTIL_PrecacheOtherWeapon("knife_zombi_meatwall");
+	UTIL_PrecacheOtherWeapon("knife_zombi_deathknight");
+	UTIL_PrecacheOtherWeapon("knife_zombi_spider");
+
 	UTIL_PrecacheOtherWeapon("weapon_infinityex1");
 	UTIL_PrecacheOtherWeapon("weapon_infinityex2");
 	UTIL_PrecacheOtherWeapon("knife_katana");

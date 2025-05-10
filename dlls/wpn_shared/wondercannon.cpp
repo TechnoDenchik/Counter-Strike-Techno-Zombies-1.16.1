@@ -56,7 +56,6 @@ void CWonderCannon::Precache(void)
 	PRECACHE_MODEL("models/v_wondercannon.mdl");
 	PRECACHE_MODEL("models/w_wondercannon.mdl");
 
-	PRECACHE_MODEL("models/s_wondercannon.mdl");
 	PRECACHE_MODEL("models/ef_wondercannon_area.mdl");
 	PRECACHE_MODEL("models/d_wondercannon.mdl");
 	PRECACHE_MODEL("models/bomb_wondercannon.mdl");
@@ -502,7 +501,7 @@ void CWonderCannon::WonderCannonFire(float flSpread, float flCycleTime, BOOL fUs
 		break;
 	}
 
-	m_pPlayer->pev->effects |= EF_MUZZLEFLASH;
+	//m_pPlayer->pev->effects |= EF_MUZZLEFLASH;
 #ifndef CLIENT_DLL
 
 	m_pPlayer->SetAnimation(PLAYER_ATTACK1);
@@ -521,7 +520,7 @@ void CWonderCannon::WonderCannonFire(float flSpread, float flCycleTime, BOOL fUs
 	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usFireWonderCannon, 0, (float*)&g_vecZero, (float*)&g_vecZero, vecDir.x, vecDir.y, 0, 0, FALSE, FALSE);
 
 	m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME;
-	m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
+	//m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
 	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + flCycleTime;
 
 #ifndef CLIENT_DLL
@@ -561,7 +560,7 @@ void CWonderCannon::WonderCannonFire2(float flSpread, float flCycleTime, BOOL fU
 	}
 
 	m_iClip--;
-	m_pPlayer->pev->effects |= EF_MUZZLEFLASH;
+	//m_pPlayer->pev->effects |= EF_MUZZLEFLASH;
 #ifndef CLIENT_DLL
 	m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 #endif
@@ -579,7 +578,7 @@ void CWonderCannon::WonderCannonFire2(float flSpread, float flCycleTime, BOOL fU
 	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usFireWonderCannon, 0, (float*)&g_vecZero, (float*)&g_vecZero, vecDir.x, vecDir.y, 0, 0, FALSE, FALSE);
 
 	m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME;
-	m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
+	//m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
 	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + flCycleTime;
 
 #ifndef CLIENT_DLL
@@ -659,8 +658,12 @@ void CWonderCannon::ItemPostFrame()
 					{
 						PrimaryAttack_FindTargets();
 #ifndef CLIENT_DLL
+						
 						WonderExp++;
 						RadiusDamage2();
+					
+					//	m_pPlayer->FireBullets5(WonderExp, m_pPlayer, 8, m_pPlayer->GetGunPosition(), gpGlobals->v_forward, Vector(0.0675, 0.0675, 0), 3000, BULLET_PLAYER_BUCKSHOT, 0);
+
 #endif
 					}
 					if (WonderExp == 14)

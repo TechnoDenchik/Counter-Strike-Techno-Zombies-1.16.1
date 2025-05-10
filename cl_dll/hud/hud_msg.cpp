@@ -119,6 +119,7 @@ int CHud :: MsgFunc_GameMode(const char *pszName, int iSize, void *pbuf )
 	gHUD.m_gd.m_iFlags &= ~HUD_ACTIVE;
 	gHUD.m_ZB2.m_iFlags &= ~HUD_ACTIVE;
 	gHUD.m_ZB3.m_iFlags &= ~HUD_ACTIVE;
+	gHUD.m_ZB5.m_iFlags &= ~HUD_ACTIVE;
 	gHUD.m_ZSH.m_iFlags &= ~HUD_ACTIVE;
 	gHUD.m_ZBS.m_iFlags &= ~HUD_ACTIVE;
 
@@ -185,6 +186,14 @@ int CHud :: MsgFunc_GameMode(const char *pszName, int iSize, void *pbuf )
 	{
 	
 		gHUD.m_ZB3.m_iFlags |= HUD_ACTIVE;
+		gHUD.m_WPI.m_iFlags |= HUD_ACTIVE;
+		// dont break, continue to ZB2...
+		//[fallthrough]];
+	}
+	case MOD_ZB5:
+	{
+
+		gHUD.m_ZB5.m_iFlags |= HUD_ACTIVE;
 		gHUD.m_WPI.m_iFlags |= HUD_ACTIVE;
 		// dont break, continue to ZB2...
 		//[fallthrough]];

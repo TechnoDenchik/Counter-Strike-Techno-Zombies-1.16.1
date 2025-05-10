@@ -41,7 +41,7 @@ CHero_ZB1::CHero_ZB1(CBasePlayer* player) : BasePlayerExtra(player)
 
 void CHero_ZB1::ResetMaxSpeed() const
 {
-	m_pPlayer->pev->maxspeed = 310;
+	m_pPlayer->pev->maxspeed = 360;
 }
 
 void CHero_ZB1::DeathSound_Hero()

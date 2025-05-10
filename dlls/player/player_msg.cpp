@@ -110,6 +110,8 @@ int gmsgShowTimer = 0;
 
 int gmsgZBSTip = 0;
 int gmsgZBSLevel = 0;
+int gmsgZBSMsgLevel = 0;
+int gmsgZBSRenMsg = 0;
 int gmsgZSHUpdateDay = 0;
 int gmsgZSHUpdateRes = 0;
 int gmsgZSHUpdateResHome = 0;
@@ -120,6 +122,18 @@ int gmsgBTEWeapon = 0;
 int gmsgZB2Msg = 0;
 int gmsgZB3Msg = 0;
 int gmsgZB3RenMsg = 0;
+
+int gmsgZB5Msg = 0;
+int gmsgZB5RenMsg = 0;
+int gmsgZB5UsedMsg = 0;
+int gmsgZB5UsedMsg2 = 0;
+int gmsgZB5SetHero = 0;
+int gmsgZB5InventorySet = 0;
+int gmsgZB5Evolution = 0;
+
+int gmsgZB5GetLocationBox = 0;
+int gmsgZB5GetLocationBoxK = 0;
+
 int gmsgOriginalMsg = 0;
 int gmsgOriginalMsg2 = 0;
 int gmsgOriginalMsg3 = 0;
@@ -140,6 +154,7 @@ int gmsgArbalestMsg = 0;
 int gmsgZB3UsedMsg = 0;
 int gmsgZB3UsedMsg2 = 0;
 int gmsgZB3InventorySet = 0;
+int gmsgZB3SetHero = 0;
 int gmsgZSHMsg = 0;
 int gmsgZSHMsgText = 0;
 int gmsgZSHMsgTextNextDay = 0;
@@ -252,6 +267,8 @@ void LinkUserMessages()
 
 	gmsgZBSTip = REG_USER_MSG("ZBSTip", -1);
 	gmsgZBSLevel = REG_USER_MSG("ZBSLevel", -1);
+	gmsgZBSMsgLevel = REG_USER_MSG("ZBSMsgLevel", -1);
+	gmsgZBSRenMsg = REG_USER_MSG("ZBSRenMsg", -1);
 	gmsgZSHUpdateDay = REG_USER_MSG("ZSHUpdateDay", -1);
 	gmsgZSHUpdateRes = REG_USER_MSG("ZSHUpdateRes", -1);
 	gmsgZSHUpdateResHome = REG_USER_MSG("ZSHUpdateResHome", -1);
@@ -276,6 +293,16 @@ void LinkUserMessages()
 	gmsgZB3Msg = REG_USER_MSG("ZB3Msg", -1);
 	gmsgZB3RenMsg = REG_USER_MSG("ZB3RenMsg", -1);
 
+	gmsgZB5Msg = REG_USER_MSG("ZB5Msg", -1);
+	gmsgZB5RenMsg = REG_USER_MSG("ZB5RenMsg", -1);
+	gmsgZB5UsedMsg = REG_USER_MSG("ZB5SkillUsed", -1);
+	gmsgZB5UsedMsg2 = REG_USER_MSG("ZB5SkillUsed2", -1);
+	gmsgZB5InventorySet = REG_USER_MSG("ZB5Inventory", -1);
+	gmsgZB5SetHero = REG_USER_MSG("ZB5Hero", -1);
+	gmsgZB5Evolution = REG_USER_MSG("ZB5Evolevel", -1);
+	gmsgZB5GetLocationBox = REG_USER_MSG("ZB5Getlocationbox", -1);
+	gmsgZB5GetLocationBoxK = REG_USER_MSG("ZB5GetlocationboxK", -1);
+
 	gmsgOriginalMsg = REG_USER_MSG("StartGame", -1);
 	gmsgOriginalMsg2 = REG_USER_MSG("BombPlant", -1);
 	gmsgOriginalMsg3 = REG_USER_MSG("BombDefuse", -1);
@@ -297,6 +324,7 @@ void LinkUserMessages()
 	gmsgZB3UsedMsg = REG_USER_MSG("ZB3SkillUsed", -1);
 	gmsgZB3UsedMsg2 = REG_USER_MSG("ZB3SkillUsed2", -1);
 	gmsgZB3InventorySet = REG_USER_MSG("ZB3Inventory", -1);
+	gmsgZB3SetHero = REG_USER_MSG("ZB3Hero", -1);
 	gmsgResetRound = REG_USER_MSG("ResetRound", -1);
 	gmsgGunDeath = REG_USER_MSG("GunDeath", -1);
 	gmsgMPToCL = REG_USER_MSG("MPToCL", -1);

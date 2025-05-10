@@ -24,6 +24,9 @@ enum INTMessage : byte
 	MUSIC_PACK_CT,
 	MUSIC_PACK_TR,
 	WPN_INVENTORY,
+	ZB5_REN_MSG,
+	ZB5_USED_MSG,
+	ZB5_USED_MSG2,
 };
 
 enum INTWeaponMsg : byte

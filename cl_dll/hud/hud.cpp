@@ -259,6 +259,7 @@ void CHud :: Init( void )
 	m_ZBS.Init();
 	m_ZB2.Init();
 	m_ZB3.Init();
+	m_ZB5.Init();
 	m_ZSH.Init();
 	m_CLS.Init();
 	m_WPI.Init();
@@ -672,5 +673,5 @@ void CHud::AddHudElem(CHudBase *phudelem)
 
 bool CHud::IsZombieMod() const
 {
-	return m_iModRunning == MOD_ZB1 || m_iModRunning == MOD_ZB2 || m_iModRunning == MOD_ZB3;
+	return m_iModRunning == MOD_ZB1 || m_iModRunning == MOD_ZB2 || m_iModRunning == MOD_ZB3 || m_iModRunning == MOD_ZB5;
 }

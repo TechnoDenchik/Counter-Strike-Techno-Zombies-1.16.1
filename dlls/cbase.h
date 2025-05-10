@@ -269,6 +269,7 @@ public:
 	void MakeDormant(void);
 	int IsDormant(void);
 	BOOL IsLockedByMaster(void) { return FALSE; }
+	void FireBullets5(int WonderExp, CBasePlayer* m_pPlayer,ULONG cShots, Vector vecSrc, Vector vecDirShooting, Vector vecSpread, float flDistance, int iBulletType, int iTracerFreq = 4, int iDamage = 0, entvars_t* pevAttacker = NULL);
 
 public:
 	static CBaseEntity *Instance(edict_t *pent) { return GET_PRIVATE<CBaseEntity>(pent ? pent : ENT(0)); }

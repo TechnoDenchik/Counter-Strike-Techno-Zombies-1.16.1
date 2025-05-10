@@ -49,6 +49,8 @@ CZombieClass_Speed::CZombieClass_Speed(CBasePlayer *player, ZombieLevel iEvoluti
 	m_pPlayer->pev->armortype = ARMOR_TYPE_HELMET;
 	m_pPlayer->pev->armorvalue = 2500;
 	m_pPlayer->pev->gravity = 0.94f;
+	m_pPlayer->pev->renderfx = kRenderFxNone;
+	m_pPlayer->pev->rendermode = kRenderNormal;
 	m_pPlayer->ResetMaxSpeed();
 	m_pPlayer->GiveNamedItem("Knife_Zombi_female");
 	m_pPlayer->m_bIsZombieFemale = true;

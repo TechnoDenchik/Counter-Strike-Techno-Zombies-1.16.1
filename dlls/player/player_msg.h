@@ -105,6 +105,8 @@ extern int gmsgShowTimer;
 
 extern int gmsgZBSTip;
 extern int gmsgZBSLevel;
+extern int gmsgZBSMsgLevel;
+extern int gmsgZBSRenMsg;
 extern int gmsgZSHUpdateDay;
 extern int gmsgZSHUpdateRes;
 extern int gmsgZSHUpdateResHome;
@@ -117,6 +119,18 @@ extern int gmsgZB3RenMsg;
 extern int gmsgZB3UsedMsg;
 extern int gmsgZB3UsedMsg2;
 extern int gmsgZB3InventorySet;
+extern int gmsgZB3SetHero;
+
+extern int gmsgZB5Msg;
+extern int gmsgZB5RenMsg;
+extern int gmsgZB5UsedMsg;
+extern int gmsgZB5UsedMsg2;
+extern int gmsgZB5InventorySet;
+extern int gmsgZB5SetHero;
+extern int gmsgZB5Evolution;
+extern int gmsgZB5GetLocationBox;
+extern int gmsgZB5GetLocationBoxK;
+
 extern int gmsgZSHMsg;
 extern int gmsgZSHMsgText;
 extern int gmsgZSHMsgTextNextDay;

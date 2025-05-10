@@ -29,6 +29,7 @@ GNU General Public License for more details.
 #include "mod_zbs.h"
 #include "mod_zb2.h"
 #include "mod_zb3.h"
+#include "zb5/mod_zb5.h"
 #include "mod_zbshelter_pve.h"
 #include "mod_gd.h"
 
@@ -51,7 +52,8 @@ std::pair<const char *, IBaseMod *(*)()> g_FindList[] = {
 	{ "zb2", DefaultFactory<CMod_ZombieMod2> },
 	{ "zb3", DefaultFactory<CMod_ZombieHero> },
 	{ "zsh_pve", DefaultFactory<CMod_ZombieShelter_coop> },
-	{ "gd", DefaultFactory<CMod_GunDeath> }
+	{ "gd", DefaultFactory<CMod_GunDeath> },
+	{ "zb5", DefaultFactory<CMod_ZombieEvolution> }
 };
 
 void InstallBteMod(const char *name)

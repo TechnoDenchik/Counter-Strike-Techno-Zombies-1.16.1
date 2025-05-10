@@ -181,7 +181,7 @@ int CHudDeathNotice :: Draw( float time)
 
 		// Hide when scoreboard drawing. It will break triapi
 		//if ( gViewPort && gViewPort->AllowedToPrintText() )
-		//if ( !gHUD.m_iNoConsolePrint )
+		if ( !gHUD.m_iNoConsolePrint )
 		{
 			// Draw the death notice
 			if( !g_iUser1 )
@@ -680,54 +680,54 @@ int CHudDeathNotice :: MsgFunc_DeathMsg( const char *pszName, int iSize, void *p
 
 	if (rgDeathNoticeList[i].bNonPlayerKill)
 	{
-		ConsolePrint( rgDeathNoticeList[i].szKiller );
-		ConsolePrint( " killed a " );
-		ConsolePrint( rgDeathNoticeList[i].szVictim );
-		ConsolePrint( "\n" );
+	//	ConsolePrint( rgDeathNoticeList[i].szKiller );
+	//	ConsolePrint( " killed a " );
+	//	ConsolePrint( rgDeathNoticeList[i].szVictim );
+	//	ConsolePrint( "\n" );
 	}
 	else
 	{
 		// record the death notice in the console
 		if ( rgDeathNoticeList[i].bSuicide )
 		{
-			ConsolePrint( rgDeathNoticeList[i].szVictim );
+			//ConsolePrint( rgDeathNoticeList[i].szVictim );
 
 			if ( !strncmp( killedwith, "d_world", sizeof(killedwith)  ) )
 			{
-				ConsolePrint( " died" );
+			//	ConsolePrint( " died" );
 			}
 			else
 			{
-				ConsolePrint( " killed self" );
+			//	ConsolePrint( " killed self" );
 			}
 		}
 		else if ( rgDeathNoticeList[i].bTeamKill )
 		{
-			ConsolePrint( rgDeathNoticeList[i].szKiller );
-			ConsolePrint( " killed his teammate " );
-			ConsolePrint( rgDeathNoticeList[i].szVictim );
+			//ConsolePrint( rgDeathNoticeList[i].szKiller );
+			//ConsolePrint( " killed his teammate " );
+			//ConsolePrint( rgDeathNoticeList[i].szVictim );
 		}
 		else
 		{
-			if( headshot )
-				ConsolePrint( "*** ");
-			ConsolePrint( rgDeathNoticeList[i].szKiller );
-			ConsolePrint( " killed " );
-			ConsolePrint( rgDeathNoticeList[i].szVictim );
+			//if( headshot )
+			//	ConsolePrint( "*** ");
+			//ConsolePrint( rgDeathNoticeList[i].szKiller );
+			//ConsolePrint( " killed " );
+			//ConsolePrint( rgDeathNoticeList[i].szVictim );
 		}
 
 		if ( *killedwith && (*killedwith > 13 ) && strncmp( killedwith, "d_world", sizeof(killedwith) ) && !rgDeathNoticeList[i].bTeamKill )
 		{
-			if ( headshot )
-				ConsolePrint(" with a headshot from ");
-			else
-				ConsolePrint(" with ");
+			//if ( headshot )
+			//	ConsolePrint(" with a headshot from ");
+			//else
+			//	ConsolePrint(" with ");
 
-			ConsolePrint( killedwith+2 ); // skip over the "d_" part
+			//ConsolePrint( killedwith+2 ); // skip over the "d_" part
 		}
 
-		if( headshot ) ConsolePrint( " ***");
-		ConsolePrint( "\n" );
+		//if( headshot ) ConsolePrint( " ***");
+		//ConsolePrint( "\n" );
 	}
 
 	return 1;

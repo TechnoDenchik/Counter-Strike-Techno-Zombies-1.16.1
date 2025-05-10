@@ -5,23 +5,27 @@
 #include "game.h"
 #include "client.h"
 #include "globals.h"
+#include "progdefs.h"
 
 #include "mod_zbs.h"
-
 #include "zbs/zs_subs.h"
 #include "zbs/zbs_const.h"
 #include "zbs/monster_entity.h"
 #include "zbs/monster_entity2.h"
 #include "zbs/monster_entity_boss.h"
-#include "player/csdm_randomspawn.h"
+#include "zbs/zbs_box.h"
 #include "zbs/monster_manager.h"
 #include "zbstrigger.h"
 
+#include "gamemode/interface/interface_const.h"
 #include "player/player_human_level.h"
-#include "progdefs.h"
-#include <algorithm>
+#include "player/csdm_randomspawn.h"
 
-//PlayerExtraHumanLevel_ZBS m_HumanLevel;
+#include <algorithm>
+#include <dlls/util/u_range.hpp>
+
+#define ZBS_ZM_DAMAGE 5
+#define ZBS_BOSS_DAMAGE 15
 
 class PlayerModStrategy_ZBS : public CPlayerModStrategy_Default
 {
@@ -48,6 +52,7 @@ public:
 					m_HumanLevel.LevelUpAttack();
 					MESSAGE_BEGIN(MSG_ONE, gmsgZBSTip, NULL, m_pPlayer->pev);
 					WRITE_BYTE(ZBS_TIP_KILL);
+					WRITE_BYTE(1);
 					MESSAGE_END();
 				}
 			}
@@ -67,6 +72,7 @@ public:
 					m_HumanLevel.LevelUpAttack();
 					MESSAGE_BEGIN(MSG_ONE, gmsgZBSTip, NULL, m_pPlayer->pev);
 					WRITE_BYTE(ZBS_TIP_KILL);
+					WRITE_BYTE(1);
 					MESSAGE_END();
 				}
 			}
@@ -84,8 +90,10 @@ public:
 					m_HumanLevel.LevelUpHealth();
 					m_HumanLevel.LevelUpAttack();
 
+					Win.MakeSupplyboxThink(victim->pev->origin, victim->pev->angles);
 					MESSAGE_BEGIN(MSG_ONE, gmsgZBSTip, NULL, m_pPlayer->pev);
 					WRITE_BYTE(ZBS_TIP_KILL);
+					WRITE_BYTE(2);
 					MESSAGE_END();
 				}
 			}
@@ -104,9 +112,10 @@ public:
 	}
 	void GiveDefaultItems() override
 	{
-		m_pPlayer->GiveNamedItem("knife_dualsword");
-		m_pPlayer->GiveNamedItem("weapon_gunkata");
-		m_pPlayer->GiveNamedItem("weapon_gungnir");
+		m_pPlayer->AddAccount(8000);
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB3InventorySet, nullptr, m_pPlayer->pev);
+		WRITE_BYTE(WPN_INVENTORY);
+		MESSAGE_END();
 	}
 	void OnSpawn() override
 	{
@@ -297,6 +306,8 @@ CMod_ZombieScenario::CMod_ZombieScenario()
 {
 	m_iRoundTimeSecs = m_iIntroRoundTime = 20 + 2; // keep it from ReadMultiplayCvars
 	
+	UTIL_PrecacheOther("zbssupplybox");
+
 	PRECACHE_GENERIC("sound/zbs/Scenario_Ready.mp3");
 	PRECACHE_GENERIC("sound/zbs/Scenario_Normal.mp3");
 	PRECACHE_GENERIC("sound/zbs/Scenario_Rush.mp3");
@@ -341,7 +352,7 @@ void CMod_ZombieScenario::UpdateGameMode(CBasePlayer *pPlayer)
 	WRITE_BYTE(MOD_ZBS);
 	WRITE_BYTE(0); // Reserved. (weapon restriction? )
 	WRITE_BYTE(6); // MaxRound (mp_roundlimit)
-	WRITE_BYTE(0); // Reserved. (MaxTime?)
+	WRITE_BYTE(4); // Reserved. (MaxTime?)
 	MESSAGE_END();
 }
 
@@ -354,8 +365,7 @@ void CMod_ZombieScenario::CheckMapConditions()
 		m_vecZombieSpawns.push_back(static_cast<CZombieSpawn *>(sp));
 	}
 
-	// hook from RestartRound()
-	m_iRoundTimeSecs = m_iIntroRoundTime = 20 + 2; // keep it from ReadMultiplayCvars
+	m_iRoundTimeSecs = m_iIntroRoundTime = 20 + 2;
 
 	return Base::CheckMapConditions();
 }
@@ -379,7 +389,6 @@ void CMod_ZombieScenario::WaitingSound()
 		if (!entity)
 			continue;
 		CLIENT_COMMAND(entity->edict(), "mp3 play sound/zbs/Scenario_Ready.mp3\n");
-		
 	}
 }
 
@@ -408,9 +417,13 @@ void CMod_ZombieScenario::Think()
 			if (iCountDown != iLastCountDown)
 			{
 				iLastCountDown = iCountDown;
+
 				if (iCountDown > 0 && iCountDown < 20)
 				{
-					UTIL_ClientPrintAll(HUD_PRINTCENTER, "Waiting for Round Start: %s1 sec(s)", UTIL_dtos1(iCountDown)); // #CSO_ZBS_StartCount
+					MESSAGE_BEGIN(MSG_ALL, gmsgZBSRenMsg);
+					WRITE_BYTE(ZBS_TIP_RENAINING);
+					WRITE_BYTE(iCountDown);
+					MESSAGE_END();
 				}
 
 				if (iCountDown == 19)
@@ -472,10 +485,8 @@ void CMod_ZombieScenario::Think()
 
 	if (FRoundStarted() && !m_bRoundTerminating)
 	{
-	 
-
-	  if (gpGlobals->time > m_flNextSpawnNPC)
-	  {
+		if (gpGlobals->time > m_flNextSpawnNPC)
+		{
 			MakeZombieNPC();
 			MakeZombieNPC2();
 			MakeZombieNPC3();
@@ -489,7 +500,7 @@ void CMod_ZombieScenario::Think()
 			MakeZombieNPC11();
 			MakeZombieBoss();
 			m_flNextSpawnNPC = gpGlobals->time + 18.0f;
-	  }
+		}
 	}
 
 	if (TimeRemaining() <= 0 && !m_bRoundTerminating )
@@ -511,7 +522,6 @@ void CMod_ZombieScenario::CheckWinConditions()
 	{
 		ZombieWin();
 	}
-
 }
 
 void CMod_ZombieScenario::HumanWin()
@@ -560,27 +570,72 @@ void CMod_ZombieScenario::RoundStart()
 	m_flNextSpawnNPC = gpGlobals->time;
 
 	for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
-	  {
-			CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
-			if (!entity)
-				continue;
+	{
+		CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
+		if (!entity)
+			continue;
 
-			switch (RANDOM_LONG(1, 2))
-			{
-			case 1: CLIENT_COMMAND(entity->edict(), "mp3 play sound/zbs/Scenario_Normal.mp3\n"); break;
-			case 2: CLIENT_COMMAND(entity->edict(), "mp3 play sound/zbs/Scenario_Rush.mp3\n"); break;
+		switch (RANDOM_LONG(1, 2))
+		{
+		case 1: CLIENT_COMMAND(entity->edict(), "mp3 play sound/zbs/Scenario_Normal.mp3\n"); break;
+		case 2: CLIENT_COMMAND(entity->edict(), "mp3 play sound/zbs/Scenario_Rush.mp3\n"); break;
 
-			default:
-				break;
-			}
-	  }
+		default:
+			break;
+		}
+	}
 }
-
-
 
 BOOL CMod_ZombieScenario::FRoundStarted()
 {
 	return !IsFreezePeriod();
+}
+
+void CMod_ZombieScenario::MakeSupplyboxThink(Vector x, Vector y)
+{
+	RemoveAllSupplybox();
+
+	int iSupplyboxCount = SupplyboxCount();
+	for (int i = 0; i < iSupplyboxCount; ++i)
+	{
+		CZbsSupplyBox* sb = CreateSupplybox(x, y);
+		if (!sb)
+			continue;
+		sb->m_iSupplyboxIndex = i + 1;
+	}
+}
+
+int CMod_ZombieScenario::SupplyboxCount()
+{
+	int NumDeadCT, NumDeadTerrorist, NumAliveTerrorist, NumAliveCT;
+	InitializePlayerCounts(NumAliveTerrorist, NumAliveCT, NumDeadTerrorist, NumDeadCT);
+	int iSupplyboxCount = (NumAliveTerrorist + NumAliveCT + NumDeadTerrorist) / 10 + 1;
+	return iSupplyboxCount;
+}
+
+void CMod_ZombieScenario::RemoveAllSupplybox()
+{
+	CBaseEntity* ent = nullptr;
+	while ((ent = UTIL_FindEntityByClassname(ent, "zbssupplybox")) != nullptr)
+	{
+		CZbsSupplyBox* sb = dynamic_ent_cast<CZbsSupplyBox*>(ent);
+		sb->pev->effects |= EF_NODRAW;
+		sb->pev->flags |= FL_KILLME;
+		sb->SetThink(&CBaseEntity::SUB_Remove);
+	}
+}
+
+CZbsSupplyBox* CMod_ZombieScenario::CreateSupplybox(Vector x, Vector y)
+{
+	auto supplybox = CreateClassPtr<CZbsSupplyBox>();
+
+	supplybox->pev->origin = x;
+	supplybox->pev->angles = y;
+	
+	supplybox->pev->spawnflags |= SF_NORESPAWN;
+
+	DispatchSpawn(supplybox->edict());
+	return supplybox;
 }
 
 CZombieSpawn *CMod_ZombieScenario::SelectZombieSpawnPoint()
@@ -620,7 +675,8 @@ CBaseEntity *CMod_ZombieScenario::MakeZombieNPC()
 	// default settings
 	monster->pev->health = monster->pev->max_health = 22100 + m_iNumCTWins * 15;
 	monster->pev->maxspeed = 180.0f + (m_iNumCTWins / static_cast<float>(3)) * 15;
-	monster->m_flAttackDamage = (129320.2f * m_iNumCTWins + 1) * (129320.2f * m_iNumCTWins + 1);
+	monster->m_flAttackDamage = ZBS_ZM_DAMAGE;
+
 	if (m_iNumCTWins < 5 || RANDOM_LONG(0, 3))
 	{
 		monster->pev->health = monster->pev->max_health = monster->pev->max_health / 2;
@@ -670,7 +726,7 @@ CBaseEntity* CMod_ZombieScenario::MakeZombieNPC2()
 	// default settings
 	monster->pev->health = monster->pev->max_health = 22100 + m_iNumCTWins * 15;
 	monster->pev->maxspeed = 180.0f + (m_iNumCTWins / static_cast<float>(3)) * 15;
-	monster->m_flAttackDamage = (129320.2f * m_iNumCTWins + 1) * (129320.2f * m_iNumCTWins + 1);
+	monster->m_flAttackDamage = ZBS_ZM_DAMAGE;
 
 	if (m_iNumCTWins < 5 || RANDOM_LONG(0, 3))
 	{
@@ -720,7 +776,7 @@ CBaseEntity* CMod_ZombieScenario::MakeZombieNPC3()
 	// default settings
 	monster2->pev->health = monster2->pev->max_health = 20000 + m_iNumCTWins * 15;
 	monster2->pev->maxspeed = 200.0f + (m_iNumCTWins / static_cast<float>(3)) * 15;
-	monster2->m_flAttackDamage = (112210.2f * m_iNumCTWins + 1) * (112210.2f * m_iNumCTWins + 1);
+	monster2->m_flAttackDamage = ZBS_ZM_DAMAGE;
 
 	if (m_iNumCTWins < 5 || RANDOM_LONG(0, 3))
 	{
@@ -769,7 +825,7 @@ CBaseEntity* CMod_ZombieScenario::MakeZombieNPC4()
 	// default settings
 	monster->pev->health = monster->pev->max_health = 22100 + m_iNumCTWins * 15;
 	monster->pev->maxspeed = 180.0f + (m_iNumCTWins / static_cast<float>(3)) * 15;
-	monster->m_flAttackDamage = (129320.2f * m_iNumCTWins + 1) * (129320.2f * m_iNumCTWins + 1);
+	monster->m_flAttackDamage = ZBS_ZM_DAMAGE;
 
 	if (m_iNumCTWins < 5 || RANDOM_LONG(0, 3))
 	{
@@ -820,7 +876,7 @@ CBaseEntity* CMod_ZombieScenario::MakeZombieNPC5()
 	// default settings
 	monster2->pev->health = monster2->pev->max_health = 20000 + m_iNumCTWins * 15;
 	monster2->pev->maxspeed = 200.0f + (m_iNumCTWins / static_cast<float>(3)) * 15;
-	monster2->m_flAttackDamage = (112210.2f * m_iNumCTWins + 1) * (112210.2f * m_iNumCTWins + 1);
+	monster2->m_flAttackDamage = ZBS_ZM_DAMAGE;
 
 	if (m_iNumCTWins < 5 || RANDOM_LONG(0, 3))
 	{
@@ -869,7 +925,7 @@ CBaseEntity* CMod_ZombieScenario::MakeZombieNPC6()
 	// default settings
 	monster->pev->health = monster->pev->max_health = 22100 + m_iNumCTWins * 15;
 	monster->pev->maxspeed = 180.0f + (m_iNumCTWins / static_cast<float>(3)) * 15;
-	monster->m_flAttackDamage = (129320.2f * m_iNumCTWins + 1) * (129320.2f * m_iNumCTWins + 1);
+	monster->m_flAttackDamage = ZBS_ZM_DAMAGE;
 
 	if (m_iNumCTWins < 5 || RANDOM_LONG(0, 3))
 	{
@@ -920,7 +976,7 @@ CBaseEntity* CMod_ZombieScenario::MakeZombieNPC7()
 	// default settings
 	monster->pev->health = monster->pev->max_health = 22100 + m_iNumCTWins * 15;
 	monster->pev->maxspeed = 180.0f + (m_iNumCTWins / static_cast<float>(3)) * 15;
-	monster->m_flAttackDamage = (129320.2f * m_iNumCTWins + 1) * (129320.2f * m_iNumCTWins + 1);
+	monster->m_flAttackDamage = ZBS_ZM_DAMAGE;
 
 	if (m_iNumCTWins < 5 || RANDOM_LONG(0, 3))
 	{
@@ -984,7 +1040,7 @@ CBaseEntity* CMod_ZombieScenario::MakeZombieNPC8()
 	// default settings
 	monster->pev->health = monster->pev->max_health = 22100 + m_iNumCTWins * 15;
 	monster->pev->maxspeed = 180.0f + (m_iNumCTWins / static_cast<float>(3)) * 15;
-	monster->m_flAttackDamage = (129320.2f * m_iNumCTWins + 1) * (129320.2f * m_iNumCTWins + 1);
+	monster->m_flAttackDamage = ZBS_ZM_DAMAGE;
 
 	if (m_iNumCTWins < 5 || RANDOM_LONG(0, 3))
 	{
@@ -1035,7 +1091,7 @@ CBaseEntity* CMod_ZombieScenario::MakeZombieNPC9()
 	// default settings
 	monster->pev->health = monster->pev->max_health = 22100 + m_iNumCTWins * 15;
 	monster->pev->maxspeed = 180.0f + (m_iNumCTWins / static_cast<float>(3)) * 15;
-	monster->m_flAttackDamage = (129320.2f * m_iNumCTWins + 1) * (129320.2f * m_iNumCTWins + 1);
+	monster->m_flAttackDamage = ZBS_ZM_DAMAGE;
 
 	if (m_iNumCTWins < 5 || RANDOM_LONG(0, 3))
 	{
@@ -1086,7 +1142,7 @@ CBaseEntity* CMod_ZombieScenario::MakeZombieNPC10()
 	// default settings
 	monster->pev->health = monster->pev->max_health = 22100 + m_iNumCTWins * 15;
 	monster->pev->maxspeed = 180.0f + (m_iNumCTWins / static_cast<float>(3)) * 15;
-	monster->m_flAttackDamage = (129320.2f * m_iNumCTWins + 1) * (129320.2f * m_iNumCTWins + 1);
+	monster->m_flAttackDamage = ZBS_ZM_DAMAGE;
 
 	if (m_iNumCTWins < 5 || RANDOM_LONG(0, 3))
 	{
@@ -1137,7 +1193,7 @@ CBaseEntity* CMod_ZombieScenario::MakeZombieNPC11()
 	// default settings
 	monster2->pev->health = monster2->pev->max_health = 20000 + m_iNumCTWins * 15;
 	monster2->pev->maxspeed = 200.0f + (m_iNumCTWins / static_cast<float>(3)) * 15;
-	monster2->m_flAttackDamage = (112210.2f * m_iNumCTWins + 1) * (112210.2f * m_iNumCTWins + 1);
+	monster2->m_flAttackDamage = ZBS_ZM_DAMAGE;
 
 	if (m_iNumCTWins < 5 || RANDOM_LONG(0, 3))
 	{
@@ -1184,9 +1240,9 @@ CBaseEntity* CMod_ZombieScenario::MakeZombieBoss()
 	DispatchSpawn(pent);
 
 	// default settings
-	boss->pev->health = boss->pev->max_health = 10000 + m_iNumCTWins * 15;
+	boss->pev->health = boss->pev->max_health = 35000 + m_iNumCTWins * 15;
 	boss->pev->maxspeed = 200.0f + (m_iNumCTWins / static_cast<float>(3)) * 15;
-	boss->m_flAttackDamage = (1212210.2f * m_iNumCTWins + 1) * (112210.2f * m_iNumCTWins + 1);
+	boss->m_flAttackDamage = ZBS_BOSS_DAMAGE;
 
 	if (m_iNumCTWins < 5 || RANDOM_LONG(0, 3))
 	{

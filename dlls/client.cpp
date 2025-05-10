@@ -3725,10 +3725,8 @@ void EXT_FUNC ClientCommand(edict_t *pEntity)
 			{
 				if (slot == MENU_SLOT_TEAM_VIP || slot == MENU_SLOT_TEAM_SPECT || player->m_bIsVIP)
 				{
-					player->ResetMenu();
-				}
-				else
 					player->m_iMenu = Menu_ChooseAppearance;
+				}			
 			}
 			else
 			{
@@ -4028,6 +4026,24 @@ void EXT_FUNC ClientCommand(edict_t *pEntity)
 					return;
 
 				if (!g_pGameRules->ClientCommand(GetClassPtr<CBasePlayer>(pev), pcmd) && !player->m_pModStrategy->ClientCommand(pcmd))
+				{
+					// tell the user they entered an unknown command
+					char command[128];
+
+					// check the length of the command (prevents crash)
+					// max total length is 192 ...and we're adding a string below ("Unknown command: %s\n")
+					Q_strncpy(command, pcmd, sizeof(command) - 1);
+					command[sizeof(command) - 1] = '\0';
+
+					// Add extra '\n' to make command string safe
+					// This extra '\n' is removed by the client, so it is ok
+					command[sizeof(command) - 2] = '\0';
+					command[Q_strlen(command)] = '\n';
+
+					// tell the user they entered an unknown command
+					ClientPrint(&pEntity->v, HUD_PRINTCONSOLE, "", command);
+				}
+				if (!g_pGameRules->ClientCommand(GetClassPtr<CBasePlayer>(pev), pcmd) && !player->m_pModStrategy->ClientCommand2(pcmd))
 				{
 					// tell the user they entered an unknown command
 					char command[128];

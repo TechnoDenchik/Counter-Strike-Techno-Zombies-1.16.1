@@ -82,16 +82,6 @@ bool CPlayerModStrategy_Default::CanPlayerBuy(bool display)
 		return false;
 	}
 
-	if (player->m_bIsVIP)
-	{
-		if (display)
-		{
-			ClientPrint(player->pev, HUD_PRINTCENTER, "#VIP_cant_buy");
-		}
-
-		return false;
-	}
-
 	if (g_pGameRules->m_bCTCantBuy && player->m_iTeam == CT)
 	{
 		if (display)
@@ -175,22 +165,26 @@ void CPlayerModStrategy_Default::GiveDefaultItems()
 	switch (m_pPlayer->m_iTeam)
 	{
 	case CT:
-		MESSAGE_BEGIN(MSG_ALL, gmsgZB3InventorySet);
-		WRITE_BYTE(WPN_INVENTORY);
-		MESSAGE_END();
-		//m_pPlayer->GiveNamedItem("weapon_knife");
-		//m_pPlayer->GiveNamedItem("weapon_usp");
-	//	m_pPlayer->GiveAmmo(m_pPlayer->m_bIsVIP ? 12 : 24, "45acp", MAX_AMMO_45ACP);
-
+		if (m_pPlayer->m_bIsZombie == false)
+		{
+			MESSAGE_BEGIN(MSG_ONE, gmsgZB3InventorySet, nullptr, m_pPlayer->pev);
+			WRITE_BYTE(WPN_INVENTORY);
+			MESSAGE_END();
+			//m_pPlayer->GiveNamedItem("weapon_knife");
+			//m_pPlayer->GiveNamedItem("weapon_usp");
+			//m_pPlayer->GiveAmmo(m_pPlayer->m_bIsVIP ? 12 : 24, "45acp", MAX_AMMO_45ACP);
+		}
 		break;
 	case TERRORIST:
-		MESSAGE_BEGIN(MSG_ALL, gmsgZB3InventorySet);
-		WRITE_BYTE(WPN_INVENTORY);
-		MESSAGE_END();
-		//m_pPlayer->GiveNamedItem("weapon_knife");
-		//m_pPlayer->GiveNamedItem("weapon_glock18");
-	//	m_pPlayer->GiveAmmo(40, "9mm", MAX_AMMO_9MM);
-
+		if (m_pPlayer->m_bIsZombie == false)
+		{
+			MESSAGE_BEGIN(MSG_ONE, gmsgZB3InventorySet, nullptr, m_pPlayer->pev);
+			WRITE_BYTE(WPN_INVENTORY);
+			MESSAGE_END();
+			//m_pPlayer->GiveNamedItem("weapon_knife");
+			//m_pPlayer->GiveNamedItem("weapon_glock18");
+			//m_pPlayer->GiveAmmo(40, "9mm", MAX_AMMO_9MM);
+		}
 		break;
 	default:
 		break;

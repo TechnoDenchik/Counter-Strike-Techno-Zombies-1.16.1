@@ -290,11 +290,7 @@ BOOL CSgdrill::KnifeAttack(Vector vecSrc, Vector vecDir, float flDamage, float f
 				pEntity->TraceAttack(pevInflictor, flDamage, vecRealDir, &tr, bitsDamageType);
 				ApplyMultiDamage(pevInflictor, pevAttacker);
 
-				CBasePlayer *pVictim = dynamic_cast<CBasePlayer *>(pEntity);
-				if (pVictim->m_bIsZombie) // Zombie Knockback...
-				{
-					ApplyKnockbackData(pVictim, vecSpot - vecSrc, { 700, 1600, 1300, 400, 1.0f });
-				}
+				
 				result = TRUE;
 
 			}

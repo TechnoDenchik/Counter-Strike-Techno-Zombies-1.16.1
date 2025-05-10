@@ -43,6 +43,8 @@ public:
 	CHudMsgFunc(ZB2Msg);
 	CHudMsgFunc(ZB3RenMsg);
 	CHudMsgFunc(ZB3RespMsg);
+	CHudMsgFunc(ZB3Hero);
+	CHudMsgFunc(ZB5Hero);
 
 public:
 	class CHudZB2_impl_t *pimpl = nullptr;
