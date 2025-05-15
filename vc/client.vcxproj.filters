@@ -798,9 +798,6 @@
     <ClCompile Include="..\vgui2_support\SourceSDK\vgui2\src\vgui_key_translation.cpp">
       <Filter>vgui2_support\SourceSDK\vgui2\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\cl_dll\hud\zb3\NewScoreboard.cpp">
-      <Filter>cl_dll\hud\zb3</Filter>
-    </ClCompile>
     <ClCompile Include="..\cl_dll\hud\zb3\TextSet.cpp">
       <Filter>cl_dll\hud\zb3</Filter>
     </ClCompile>
@@ -1269,6 +1266,9 @@
     <ClCompile Include="..\cl_dll\hud\zb5\Webmsprite.cpp">
       <Filter>cl_dll\hud\zb5</Filter>
     </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\zb3\NewScoreboard.cpp">
+      <Filter>cl_dll\hud</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\cl_dll\hud\followicon.h">
@@ -1513,9 +1513,6 @@
     </ClInclude>
     <ClInclude Include="..\vgui2_support\vgui_controls\QueryBox.h">
       <Filter>vgui2_support\vgui_controls</Filter>
-    </ClInclude>
-    <ClInclude Include="..\cl_dll\hud\zb3\NewScoreboard.h">
-      <Filter>cl_dll\hud\zb3</Filter>
     </ClInclude>
     <ClInclude Include="..\cl_dll\hud\zb3\TextSet.h">
       <Filter>cl_dll\hud\zb3</Filter>
@@ -1921,6 +1918,9 @@
     </ClInclude>
     <ClInclude Include="..\dlls\gamemode\zb1\zb1_const.h">
       <Filter>dlls\gamemode\zb1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\zb3\NewScoreboard.h">
+      <Filter>cl_dll\hud</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

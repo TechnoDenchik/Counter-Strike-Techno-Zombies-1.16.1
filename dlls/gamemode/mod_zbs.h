@@ -23,6 +23,7 @@ public:
 	void UpdateGameMode(CBasePlayer *pPlayer) override;
 	void RestartRound() override;
 	void PlayerSpawn(CBasePlayer *pPlayer) override;
+	BOOL IsShelter(void) override { return TRUE; }
 	void Think() override;
 	void CheckWinConditions() override;
 	void CheckMapConditions() override;

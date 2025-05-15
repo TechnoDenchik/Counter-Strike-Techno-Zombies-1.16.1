@@ -198,7 +198,7 @@ void CZombieSkill_ZombieCrazyR::Activate()
 		m_pPlayer->pev->rendercolor = { 255,0,0 };
 		m_pPlayer->pev->renderamt = 1;
 		m_pPlayer->pev->fov = m_pPlayer->m_iFOV = 105;
-		m_pPlayer->pev->speed = 1800;
+		m_pPlayer->pev->maxspeed = 1800;
 
 		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_pressure.wav", VOL_NORM, ATTN_NORM);
 		

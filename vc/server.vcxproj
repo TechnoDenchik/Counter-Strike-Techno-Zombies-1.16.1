@@ -282,6 +282,7 @@
     <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb5_zclass_meatwall.cpp" />
     <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb5_zclass_spider.cpp" />
     <ClCompile Include="..\dlls\gamemode\zb5\zb3reference\zb3_heroreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb5\zb5_humanclass.cpp" />
     <ClCompile Include="..\dlls\gamemode\zb5\zb5_evobox.cpp" />
     <ClCompile Include="..\dlls\gamemode\zbs\boss_manager.cpp" />
     <ClCompile Include="..\dlls\gamemode\zbs\monster_entity.cpp" />

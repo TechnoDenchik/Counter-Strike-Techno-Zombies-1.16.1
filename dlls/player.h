@@ -721,10 +721,19 @@ public:
 	bool m_bIsZombieDeathKnight;
 	bool m_bIsZombieSpider;
 
+
+
+
+	//skills
+	bool m_bIsSkillHeadK2x;
+	bool m_bIsSkillHeal;
+
+
+
 	bool m_bSpawnProtection; // pack bools
 	
 	bool m_bEvolutionProtected;
-
+	bool m_bEvolutionProtectedH;
 	ZombieLevel m_iZombieLevel;
 	float m_flTimeSpawnProctionExpires;
 

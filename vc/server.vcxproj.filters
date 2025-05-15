@@ -1218,6 +1218,9 @@
     <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb5_zclass_deathknight.cpp">
       <Filter>dlls\gamemode\zb5\Class</Filter>
     </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb5\zb5\zb5_humanclass.cpp">
+      <Filter>dlls\gamemode\zb5\Class</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\dlls\activity.h">

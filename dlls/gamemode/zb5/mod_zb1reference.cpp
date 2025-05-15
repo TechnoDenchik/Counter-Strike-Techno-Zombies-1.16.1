@@ -458,8 +458,17 @@ void CMod_ZombiR::HumanInfectionByZombie(CBasePlayer *player, CBasePlayer *attac
 
 void CMod_ZombiR::InfectionSound()
 {
-	for(CBasePlayer *player : moe::range::PlayersList())
-		CLIENT_COMMAND(player->edict(), "spk zb3/zombi_coming_%d\n", RANDOM_LONG(1, 2));
+
+	for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
+	{
+		CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
+		if (!entity)
+			continue;
+		CLIENT_COMMAND(entity->edict(), "spk zb3/zombi_coming_%d\n", RANDOM_LONG(1, 2));
+	}
+
+	//for(CBasePlayer *player : moe::range::PlayersList())
+	//	CLIENT_COMMAND(player->edict(), "spk zb3/zombi_coming_%d\n", RANDOM_LONG(1, 2));
 }
 
 void CMod_ZombiR::RestartRound()

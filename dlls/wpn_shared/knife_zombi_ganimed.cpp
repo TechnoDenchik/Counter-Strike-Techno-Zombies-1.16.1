@@ -192,9 +192,9 @@ int CKnife_Zombi_ganimed::Swing(int fFirst)
 		if (pEntity)
 		{
 			if (m_flNextPrimaryAttack + 0.4 < UTIL_WeaponTimeBase())
-				pEntity->TraceAttack(m_pPlayer->pev, 20, gpGlobals->v_forward, &tr, DMG_NEVERGIB | DMG_BULLET);
+				pEntity->TraceAttack(m_pPlayer->pev, 450, gpGlobals->v_forward, &tr, DMG_NEVERGIB | DMG_BULLET);
 			else
-				pEntity->TraceAttack(m_pPlayer->pev, 15, gpGlobals->v_forward, &tr, DMG_NEVERGIB | DMG_BULLET);
+				pEntity->TraceAttack(m_pPlayer->pev, 250, gpGlobals->v_forward, &tr, DMG_NEVERGIB | DMG_BULLET);
 		}
 		ApplyMultiDamage(m_pPlayer->pev, m_pPlayer->pev);
 
@@ -311,7 +311,7 @@ int CKnife_Zombi_ganimed::Stab(int fFirst)
 #ifndef CLIENT_DLL
 		m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 #endif
-		float flDamage = 65.0;
+		float flDamage = 85.0;
 
 		if (pEntity && pEntity->IsPlayer())
 		{
@@ -324,13 +324,13 @@ int CKnife_Zombi_ganimed::Stab(int fFirst)
 			vec2LOS = vec2LOS.Normalize();
 
 			if (DotProduct(vec2LOS, gpGlobals->v_forward.Make2D()) > 0.8)
-				flDamage *= 3.0;
+				flDamage *= 35.0;
 		}
 
 		UTIL_MakeVectors(m_pPlayer->pev->v_angle);
 		ClearMultiDamage();
 		if (pEntity)
-			pEntity->TraceAttack(m_pPlayer->pev, flDamage, gpGlobals->v_forward, &tr, DMG_NEVERGIB | DMG_BULLET);
+			pEntity->TraceAttack(m_pPlayer->pev, flDamage + 100, gpGlobals->v_forward, &tr, DMG_NEVERGIB | DMG_BULLET);
 		ApplyMultiDamage(m_pPlayer->pev, m_pPlayer->pev);
 
 		float flVol = 1;

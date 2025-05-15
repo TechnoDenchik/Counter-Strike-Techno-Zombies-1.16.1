@@ -51,13 +51,19 @@ public:
 	void Event_OnInfection(CBasePlayer *victim, CBasePlayer *attacker) override;
 	void UpdatePlayerEvolutionHUD() override;
 	float AdjustDamageTaken(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) override;
+	void Event_AdjustHumanDamage(CBasePlayer* attacker, float& flDamage) override;
 	void OnThink() override;
 	void OnKilled(entvars_t *pKiller, entvars_t *pInflictor) override;
 	void addevofrombox(CBaseEntity* pOther);
 	bool ClientCommand2(const char* pcmd) override;
+	void BecomeHuman() override;
+	void Event_AdjustHumanHitgroup(CBasePlayer* attacker, HitBoxGroup& iHitgroup) override;
 
 	virtual void Event_OnRoundStart();
 private:
+
+	std::shared_ptr<IZombieModeCharacter_ZB2_ExtraR> m_pCharacter_ZB5;
+
 	CMod_ZombieEvolution* const m_pModZB5;
 	CZB3HumanMoraleR m_Morale;
 	const EventListener m_eventRoundStartListener;

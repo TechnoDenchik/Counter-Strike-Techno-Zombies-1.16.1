@@ -1,17 +1,6 @@
-/*
-zb2_skill_human.cpp - CSMoE Gameplay server : Zombie Mod 2
-Copyright (C) 2019 Moemod Yanase
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-*/
+/* =================================================================================== *
+			 * =================== TechnoSoftware =================== *
+ * =================================================================================== */
 
 #include "extdll.h"
 #include "util.h"
@@ -211,7 +200,25 @@ public:
 };
 
 CHuman_ZB2R::CHuman_ZB2R(CBasePlayer * player) : CHuman_ZB1R(player), pimpl(std::unique_ptr<impl_t>(new impl_t(player)))
-{}
+{
+	m_pPlayer->m_bIsZombie = false;
+	m_pPlayer->m_bNotKilled = false;
+	m_pPlayer->m_bIsVIP = false;
+	m_pPlayer->m_bIsHero = false;
+
+	m_pPlayer->pev->body = 0;
+
+	const char* szModel = "rb";
+	SET_CLIENT_KEY_VALUE(m_pPlayer->entindex(), GET_INFO_BUFFER(m_pPlayer->edict()), "model", const_cast<char*>(szModel));
+
+	static char szModelPath[64];
+	Q_snprintf(szModelPath, sizeof(szModelPath), "models/player/%s/%s.mdl", szModel, szModel);
+	m_pPlayer->SetNewPlayerModel(szModelPath);
+
+
+	// remove guns & give nvg
+	m_pPlayer->m_bNightVisionOn = false;
+}
 
 void CHuman_ZB2R::ActivateSkill(ZombieSkillSlot which)
 {
@@ -231,6 +238,16 @@ void CHuman_ZB2R::InitHUD() const
 	WRITE_BYTE(ENABLE_SPRINT ? ZOMBIE_SKILL_SPRINT : ZOMBIE_SKILL_EMPTY);
 	WRITE_BYTE(ENABLE_HEADSHOT ? ZOMBIE_SKILL_HEADSHOT : ZOMBIE_SKILL_EMPTY);
 	WRITE_BYTE(ENABLE_KNIFE2X ? ZOMBIE_SKILL_KNIFE2X : ZOMBIE_SKILL_EMPTY);
+	MESSAGE_END();
+}
+
+void CHuman_ZB2R::InitHUD2() const
+{
+	MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
+	WRITE_BYTE(ZB2_MESSAGE_SKILL_INIT);
+	WRITE_BYTE(ZOMBIE_CLASS_HUMAN);
+	WRITE_BYTE(m_pPlayer->m_bIsSkillHeadK2x ? ZOMBIE_SKILL_KNIFE2X : ZOMBIE_SKILL_EMPTY);
+	WRITE_BYTE(m_pPlayer->m_bIsSkillHeal ? ZOMBIE_SKILL_HEAL : ZOMBIE_SKILL_EMPTY);
 	MESSAGE_END();
 }
 

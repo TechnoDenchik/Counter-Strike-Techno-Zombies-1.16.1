@@ -91,12 +91,12 @@ bool CZombieClass_BancheeR::ApplyKnockback(CBasePlayer *attacker, const Knockbac
 
 void CZombieClass_BancheeR::Pain_Zombie(int m_LastHitGroup, bool HasArmour)
 {
-	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_AUTO, "zb3/zombi_hurt_banshee_1.wav", VOL_NORM, ATTN_NORM);	
+	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_hurt_banshee_1.wav", VOL_NORM, ATTN_NORM);
 }
 
 void CZombieClass_BancheeR::DeathSound_Zombie()
 {
-	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_AUTO, "zb3/zombi_death_banshee_1.wav", VOL_NORM, ATTN_NORM);
+	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_death_banshee_1.wav", VOL_NORM, ATTN_NORM);
 }
 
 void CZombieClass_BancheeR::OnThink()

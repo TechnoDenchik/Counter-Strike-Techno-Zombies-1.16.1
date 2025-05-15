@@ -526,6 +526,9 @@ void CMod_ZombieScenario::CheckWinConditions()
 
 void CMod_ZombieScenario::HumanWin()
 {
+	m_fRoundCount = gpGlobals->time;
+	m_iRoundTimeSecs = m_iRoundTime;
+
 	MESSAGE_BEGIN(MSG_ALL, gmsgZBSTip);
 	WRITE_BYTE(ZBS_TIP_ROUNDCLEAR);
 	MESSAGE_END();

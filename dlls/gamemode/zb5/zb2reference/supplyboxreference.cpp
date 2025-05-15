@@ -12,18 +12,19 @@
 
 static std::pair<const char *, void(*)(CBasePlayer *p)> g_SupplyboxItems[]=
 {
-	{ "Dual MP7A1", [](CBasePlayer *p) {
+	{ "Human", [](CBasePlayer *p) {
 			DropPrimary(p);
-			p->GiveNamedItem("weapon_quantum");
-			int iAmount = p->m_pModStrategy->ComputeMaxAmmo("46mm", MAX_AMMO_46MM);
-			p->GiveAmmo(iAmount, "46mm", iAmount);
+			p->GiveNamedItem("weapon_starchaserar");
+			int iAmount = p->m_pModStrategy->ComputeMaxAmmo("556Nato", MAX_AMMO_556NATOBOX);
+			p->GiveAmmo(iAmount, "556Nato", iAmount);
 			
 			DropSecondary(p);
-			p->GiveNamedItem("weapon_gunkata");
-			int iAmount2 = p->m_pModStrategy->ComputeMaxAmmo("50ae", MAX_AMMO_50AE);
-			p->GiveAmmo(iAmount2, "762Nato", iAmount2);
+			p->GiveNamedItem("weapon_infinityex2");
+			int iAmount2 = p->m_pModStrategy->ComputeMaxAmmo("45acp", MAX_AMMO_45ACP);
+			p->GiveAmmo(iAmount2, "45acp", iAmount2);
 
-			p->GiveNamedItem("weapon_twinaxes");
+			p->GiveNamedItem("knife_dragonsword");
+			p->GiveNamedItem("weapon_hegrenade");
 		}
 	}
 };
@@ -73,15 +74,6 @@ void CSupplyBoxR::SupplyboxTouch(CBaseEntity *pOther)
 
 	auto &nf = g_SupplyboxItems[RANDOM_LONG(0, std::extent<decltype(g_SupplyboxItems)>::value - 1)];
 	nf.second(p);
-
-	//UTIL_ClientPrintAll(HUD_PRINTCENTER, "%s1 obtained supply item (%s2).", STRING(p->pev->netname), nf.first);
-	//ClientPrint(p->pev, HUD_PRINTCENTER, "You obtained supply item (%s1).", nf.first);
-	
-
-	//MESSAGE_BEGIN(MSG_ALL, gmsgSupplyText, NULL, p->pev);
-	//WRITE_STRING(STRING(p->pev->netname));
-	//WRITE_BYTE(RANDOM_LONG(0, std::extent<decltype(g_SupplyboxItems)>::value - 1));
-	//MESSAGE_END();
 
 	EMIT_SOUND(ENT(p->pev), CHAN_BODY, "zb3/get_box.wav", VOL_NORM, ATTN_NORM);
 
@@ -136,8 +128,7 @@ void CSupplyBoxR::SendPositionMsg()
 				WRITE_COORD(pev->origin.y);
 				WRITE_COORD(pev->origin.z);
 				MESSAGE_END();
-			}
-			
+			}		
 		}
 	}
 }

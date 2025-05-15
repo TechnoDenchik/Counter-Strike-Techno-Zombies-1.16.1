@@ -115,8 +115,18 @@ public:
 		int iAmount18 = m_pPlayer->m_pModStrategy->ComputeMaxAmmo("50ae", MAX_AMMO_50AE);
 		int iAmount19 = m_pPlayer->m_pModStrategy->ComputeMaxAmmo("50ae", MAX_AMMO_50AE);
 
+
+		m_pPlayer->GiveNamedItem("weapon_knife");
+		m_pPlayer->GiveNamedItem("weapon_usp");
+
 		switch (m_iLevel)
 		{
+		case 0:
+
+			m_pPlayer->GiveNamedItem("weapon_knife");
+			m_pPlayer->GiveNamedItem("weapon_usp");
+			break;
+
 		case 1:
 			
 			m_pPlayer->GiveNamedItem("knife_katana");

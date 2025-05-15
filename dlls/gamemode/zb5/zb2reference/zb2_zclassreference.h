@@ -1,3 +1,6 @@
+/* =================================================================================== *
+			 * =================== TechnoSoftware =================== *
+ * =================================================================================== */
 
 #ifndef PROJECT_ZCLASSR_H
 #define PROJECT_ZCLASSR_H
@@ -11,6 +14,7 @@ public:
 	virtual float HealthRecoveryAmount() const = 0;
 	virtual void ActivateSkill(ZombieSkillSlot which) = 0;
 	virtual void InitHUD() const = 0;
+	virtual void InitHUD2() const = 0;
 	virtual ZombieSkillStatus GetSkillStatus(ZombieSkillSlot which) const = 0;
 };
 
@@ -22,6 +26,28 @@ public:
 	void ActivateSkill(ZombieSkillSlot which) override;
 	float HealthRecoveryAmount() const override { return 0.0f; }
 	void InitHUD() const override;
+	void InitHUD2() const override;
+	void Think() override;
+	void ResetMaxSpeed() const override;
+	ZombieSkillStatus GetSkillStatus(ZombieSkillSlot which) const override;
+
+	void Pain_Zombie(int m_LastHitGroup, bool HasArmour) override {}
+	void DeathSound_Zombie() override {}
+
+protected:
+	class impl_t;
+	const std::unique_ptr<impl_t> pimpl;
+};
+
+class CHuman_ZB5 : public CHuman_ZB2R, public IZombieModeCharacter_ZB2_ExtraR
+{
+public:
+	explicit CHuman_ZB5(CBasePlayer* player);
+	~CHuman_ZB5() override;
+	void ActivateSkill(ZombieSkillSlot which) override;
+	float HealthRecoveryAmount() const override { return 0.0f; }
+	void InitHUD() const override;
+	void InitHUD2() const override;
 	void Think() override;
 	void ResetMaxSpeed() const override;
 	ZombieSkillStatus GetSkillStatus(ZombieSkillSlot which) const override;
@@ -44,6 +70,7 @@ public:
 	float HealthRecoveryAmount() const override;
 	void ActivateSkill(ZombieSkillSlot which) override;
 	void InitHUD() const override;
+	void InitHUD2() const override;
 	void Think() override;
 	virtual void OnThink() = 0;
 	void ResetMaxSpeed() const override;

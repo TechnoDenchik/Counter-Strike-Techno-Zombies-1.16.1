@@ -93,6 +93,7 @@ int CHudZB3ScoreBoard::VidInit(void)
 { 
 	if (!m_iCharacterBG_New_Bottom)
 		m_iCharacterBG_New_Bottom = R_LoadTextureUnique("resource/hud/hud_character_bg_new_bottom");
+
 	R_InitTexture(newscoreboard, "resource/hud/hud_scoreboard_bg_gundeath");
     R_InitTexture(weaponboard, "resource/hud/zb3/weapon_list_new");
     R_InitTexture(ammoboard,"resource/hud/zb3/hud_weapon_bg");
@@ -119,17 +120,13 @@ int CHudZB3ScoreBoard::VidInit(void)
 	R_InitTexture(iconmy, "resource/hud/hud_text_icon_my");
 	R_InitTexture(icononest, "resource/hud/hud_text_icon_1st");
 
-
-
 	BuildNumberRC( m_rcSelfnumber, 18, 22);
 	BuildNumberRC( m_rcTeamnumber, 18, 22);
 	BuildNumberRC( m_rcToprecord, 11, 13);
 	BuildNumberRC( m_rcToprecord2, 8, 11);
-	BuildNumberRC(m_rcToprecord3, 18, 22);
+	BuildNumberRC( m_rcToprecord3, 18, 22);
 	BuildNumberRC( m_rcroundmax, 11, 13);
 	BuildNumberRC( m_rcroundnumber, 11, 13);
-
-	
 
     return 1;
 }
@@ -189,8 +186,6 @@ int CHudZB3ScoreBoard::Draw(float time)
 
 	int x17 = ScreenWidth / 2.03;
 	int y17 = ScreenHeight / 50;
-
-	
 
 	const float flScale = 0.0f;
 	int best_player = gHUD.m_Scoreboard.FindBestPlayer();
@@ -546,14 +541,12 @@ int CHudZB3ScoreBoard::Draw(float time)
 		{
 			if (gHUD.m_Health.m_iHealth != 0)
 			{
-
 				iW = m_iCharacter->w();
 				iH = m_iCharacter->h();
 				iX = 2.47;
 				iY = ScreenHeight - 44;
 
 				m_iCharacter->Draw2DQuadScaled(iX, iY - iH, iX + iW, iY - iH + iH);
-
 			}
 		}
 	}

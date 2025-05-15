@@ -10,7 +10,7 @@
 #include "game.h"
 #include "bot_include.h"
 
-/*LINK_ENTITY_TO_CLASS(generatormale, CGeneratorMale);
+LINK_ENTITY_TO_CLASS(generatormale, CGeneratorMale);
 
 void CGeneratorMale::Precache()
 {
@@ -31,7 +31,7 @@ void CGeneratorMale::Spawn()
 
 	SET_MODEL(edict(), "models/zsh_deadcity/zsh_generator_1.mdl");
 
-	SetTouch(&CGeneratorMale::GeneratorTouch);
+	
 	SetThink(&CGeneratorMale::GeneratorThink);
 
 	UTIL_MakeVectors(pev->v_angle);
@@ -81,14 +81,17 @@ void CGeneratorMale::GeneratorTouch(CBaseEntity* pOther)
 
 	CBasePlayer* p = static_cast<CBasePlayer*>(pOther);
 
-	pev->effects |= EF_NODRAW;
-	SUB_Remove();
+
 }
 
 void CGeneratorMale::GeneratorThink()
 {
-	if (pev->deadflag != DEAD_DEAD)
+	if (pev->deadflag != DEAD_DEAD && !(pev->effects & EF_NODRAW))
 	{
+		if (m_flNextRadarTime <= gpGlobals->time)
+		{
+			m_flNextRadarTime = gpGlobals->time + 1;
+		}
 	}
 }
 
@@ -129,18 +132,11 @@ int CGeneratorMale::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, 
 
 	//flActualDamage = g_pModRunning->GetAdjustedEntityDamage(this, pevInflictor, pevAttacker, flActualDamage, bitsDamageType);
 
-	//PlayPainSound();
-
-	MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, pevAttacker);
-	WRITE_LONG((long)flDamage);
-	WRITE_SHORT(ENTINDEX(edict()));
-	WRITE_BYTE(0);
-	MESSAGE_END();
 	if (pev->health > 0)
 	{
 		if (pAttacker != NULL)
 		{
-			// Player damaged monster
+			
 			return 1;
 		}
 	}
@@ -148,7 +144,6 @@ int CGeneratorMale::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, 
 	{
 
 	}
-
 
 	return 0;
 }
@@ -158,42 +153,3 @@ void CGeneratorMale::PlayDeadSound()
 	 EMIT_SOUND(edict(), CHAN_VOICE, "zsh/crash.wav", VOL_NORM, ATTN_NORM);
 }
 
-void CGeneratorMale::SendPositionMsg()
-{
-	CBaseEntity* pEntity = NULL;
-
-	while ((pEntity = UTIL_FindEntityByClassname(pEntity, "player")) != NULL)
-	{
-		if (FNullEnt(pEntity->edict()))
-			break;
-
-		if (!pEntity->IsPlayer())
-			continue;
-
-		if (pEntity->pev->flags == FL_DORMANT)
-			continue;
-
-		CBasePlayer* pTempPlayer = static_cast<CBasePlayer*>(pEntity);
-
-		if (pTempPlayer->pev->deadflag == DEAD_NO && pTempPlayer->m_iTeam == CT)
-		{
-			if (pev->effects & EF_NODRAW)
-			{
-				MESSAGE_BEGIN(MSG_ONE, gmsgHostageK, NULL, pTempPlayer->pev);
-				WRITE_BYTE(m_iGeneratorIndex);
-				MESSAGE_END();
-			}
-			else
-			{
-				MESSAGE_BEGIN(MSG_ONE, gmsgHostagePos, NULL, pTempPlayer->pev);
-				WRITE_BYTE(0);
-				WRITE_BYTE(m_iGeneratorIndex);
-				WRITE_COORD(pev->origin.x);
-				WRITE_COORD(pev->origin.y);
-				WRITE_COORD(pev->origin.z);
-				MESSAGE_END();
-			}
-
-		}
-	}
-}*/

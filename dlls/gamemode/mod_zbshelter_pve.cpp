@@ -875,6 +875,12 @@ BOOL CMod_ZombieShelter_coop::HandleSkillsAliasCommands(CBasePlayer* pPlayer, co
 		SurvSkills(pPlayer, 3);
 	}
 
+	else if (FStrEq(pszCommand, "generator"))
+	{
+		CreateGenerator();
+		bRetVal = TRUE;
+	}
+
 	return bRetVal;
 }
 
@@ -899,13 +905,13 @@ void CMod_ZombieShelter_coop::MakeMenThink()
 				continue;
 
 
-			MESSAGE_BEGIN(MSG_ALL, gmsgZSHMsgShelterPos, nullptr, player->pev);
-			WRITE_BYTE(1);
-			WRITE_BYTE(sb->m_iId);
-			WRITE_COORD(sb->pev->origin.x);
-			WRITE_COORD(sb->pev->origin.y);
-			WRITE_COORD(sb->pev->origin.z);
-			MESSAGE_END();
+			//MESSAGE_BEGIN(MSG_ALL, gmsgZSHMsgShelterPos, nullptr, player->pev);
+		//	WRITE_BYTE(1);
+		//	WRITE_BYTE(sb->m_iId);
+		//	WRITE_COORD(sb->pev->origin.x);
+		//	WRITE_COORD(sb->pev->origin.y);
+		//	WRITE_COORD(sb->pev->origin.z);
+		//	MESSAGE_END();
 		}
 	}
 }
@@ -1122,27 +1128,52 @@ CZombieSpawn* CMod_ZombieShelter_coop::SelectZombieSpawn()
 
 CMentalityHealth* CMod_ZombieShelter_coop::CreateMentality()
 {
-		//CMentalityHealth* supplybox = GetClassPtr<CMentalityHealth>(nullptr);
-		auto supplybox = CreateClassPtr<CMentalityHealth>();
-		if (!supplybox)
-			return nullptr;
+	//CMentalityHealth* supplybox = GetClassPtr<CMentalityHealth>(nullptr);
+	auto supplybox = CreateClassPtr<CMentalityHealth>();
+	if (!supplybox)
+		return nullptr;
 
-		CMenSpawn* sp = SelectMenSpawn();
-		if (sp)
-		{
-			supplybox->pev->origin = sp->pev->origin;
-			supplybox->pev->angles = sp->pev->angles;
-		}
-		else
-		{
-			Vector backup_v_angle = supplybox->pev->v_angle;
-			RES_DoRandomSpawn(supplybox);
-			supplybox->pev->v_angle = backup_v_angle;
-		}
+	CMenSpawn* sp = SelectMenSpawn();
+	if (sp)
+	{
+		supplybox->pev->origin = sp->pev->origin;
+		supplybox->pev->angles = sp->pev->angles;
+	}
+	else
+	{
+		Vector backup_v_angle = supplybox->pev->v_angle;
+		RES_DoRandomSpawn(supplybox);
+		supplybox->pev->v_angle = backup_v_angle;
+	}
 
-		supplybox->pev->spawnflags |= SF_NORESPAWN;
+	supplybox->pev->spawnflags |= SF_NORESPAWN;
 
-		DispatchSpawn(supplybox->edict());
+	DispatchSpawn(supplybox->edict());
+}
+
+CGeneratorMale* CMod_ZombieShelter_coop::CreateGenerator()
+{
+	//CGeneratorMale* generator = GetClassPtr<CGeneratorMale>(nullptr);
+	auto generator = CreateClassPtr<CGeneratorMale>();
+	if (!generator)
+		return nullptr;
+
+	CMenSpawn* sp = SelectMenSpawn();
+	if (sp)
+	{
+		generator->pev->origin = sp->pev->origin;
+		generator->pev->angles = sp->pev->angles;
+	}
+	else
+	{
+		Vector backup_v_angle = generator->pev->v_angle;
+		RES_DoRandomSpawn(generator);
+		//generator->pev->v_angle = backup_v_angle;
+	}
+
+	generator->pev->spawnflags |= SF_NORESPAWN;
+
+	DispatchSpawn(generator->edict());
 }
 
 CBaseEntity* CMod_ZombieShelter_coop::MakeResources()

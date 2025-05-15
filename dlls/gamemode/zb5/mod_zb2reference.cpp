@@ -274,15 +274,21 @@ bool CPlayerModStrategy_ZB2R::ClientCommand(const char* pcmd)
 			m_pCharacter_ZB2->ActivateSkill(SKILL_SLOT_1);
 		return true;
 	}
-	if (!Q_stricmp(pcmd, "CST_ClassHuman"))
+	if (!Q_stricmp(pcmd, "CST_ClassHuman") && m_pPlayer->m_bIsZombie)
 	{
 		BecomeHuman();
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB3InventorySet, nullptr, m_pPlayer->pev);
+		WRITE_BYTE(WPN_INVENTORY);
+		MESSAGE_END();
 		return true;
 	}
 
-	if (!Q_stricmp(pcmd, "CST_ClassHero"))
+	if (!Q_stricmp(pcmd, "CST_ClassHero") && m_pPlayer->m_bIsZombie)
 	{
 		BecomeHero();
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB3InventorySet, nullptr, m_pPlayer->pev);
+		WRITE_BYTE(WPN_INVENTORY);
+		MESSAGE_END();
 		return true;
 	}
 
@@ -346,7 +352,7 @@ bool CPlayerModStrategy_ZB2R::ClientCommand(const char* pcmd)
 		return true;
 	}
 
-	else if (!Q_stricmp(pcmd, "CST_ClassDeathKnight") && m_pPlayer->m_bIsZombie)
+	else if (!Q_stricmp(pcmd, "CST_ClassDeathKnight") /* && m_pPlayer->m_bIsZombie*/)
 	{
 		BecomeDeathknight(ZOMBIE_LEVEL_HOST);
 		return true;
@@ -376,30 +382,6 @@ bool CPlayerModStrategy_ZB2R::ClientCommand(const char* pcmd)
 				BecomeSpider(ZOMBIE_LEVEL_HOST);
 				break;
 			}
-			return true;
-		}
-	}
-
-	if (!m_pPlayer->m_bIsZombie)
-	{
-		if (!Q_stricmp(pcmd, "MoE_HumanSkill1"))
-		{
-			m_pCharacter_ZB2->ActivateSkill(SKILL_SLOT_1);
-			return true;
-		}
-		else if (!Q_stricmp(pcmd, "MoE_HumanSkill2"))
-		{
-			m_pCharacter_ZB2->ActivateSkill(SKILL_SLOT_2);
-			return true;
-		}
-		else if (!Q_stricmp(pcmd, "MoE_HumanSkill3"))
-		{
-			m_pCharacter_ZB2->ActivateSkill(SKILL_SLOT_3);
-			return true;
-		}
-		else if (!Q_stricmp(pcmd, "MoE_HumanSkill4"))
-		{
-			m_pCharacter_ZB2->ActivateSkill(SKILL_SLOT_4);
 			return true;
 		}
 	}
@@ -1152,8 +1134,6 @@ void CPlayerModStrategy_ZB2R::CheckEvolution()
 			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 18000.0f;
 			m_pPlayer->pev->armorvalue = 4500.0f;
 		}
-
-		EvolutionSound();
 	}
 
 	if (m_pPlayer->m_iZombieLevel == ZOMBIE_LEVEL_ORIGIN && m_iZombieInfections >= 5)
@@ -1212,8 +1192,6 @@ void CPlayerModStrategy_ZB2R::CheckEvolution()
 			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 22000.0f;
 			m_pPlayer->pev->armorvalue = 5000.0f;
 		}
-
-		EvolutionSound();
 	}
 
 	UpdatePlayerEvolutionHUD();
@@ -1221,5 +1199,11 @@ void CPlayerModStrategy_ZB2R::CheckEvolution()
 
 void CPlayerModStrategy_ZB2R::EvolutionSound() const
 {
-	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_BODY, "zb3/zombi_evolution.wav", VOL_NORM, ATTN_NORM);
+	for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
+	{
+		CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
+		if (!entity)
+			continue;	
+		CLIENT_COMMAND(entity->edict(), "spk zb3/zombi_evolution.wav\n");
+	}
 }

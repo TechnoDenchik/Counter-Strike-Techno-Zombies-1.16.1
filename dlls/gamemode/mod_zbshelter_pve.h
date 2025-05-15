@@ -32,6 +32,8 @@ class CGenSpawn;
 class CMenSpawn;
 class CMentalityHealth;
 class CShelter;
+class CGeneratorMale;
+
 typedef struct entvars_s entvars_t;
 
 class CMod_ZombieShelter_coop : public TBaseMod_RemoveObjects<>
@@ -91,6 +93,8 @@ public:
 	void ResetResHome();
 	void UpdateHUDBarHome();
 	CMentalityHealth* CreateMentality();
+
+	CGeneratorMale* CreateGenerator();
 
 	void NightSound();
 	virtual void RoundEndScore(int iWinStatus);

@@ -35,7 +35,6 @@ void CPlayerModStrategy_ZB5::OnSpawn()
 
 	m_pPlayer->m_bIsVIP = false;
 	m_pPlayer->m_bIsHero = false;
-	m_pModZB5->HumanMorale().UpdateHUD(m_pPlayer);
 	return CPlayerModStrategy_ZB2R::OnSpawn();
 }
 
@@ -46,17 +45,69 @@ bool CPlayerModStrategy_ZB5::ClientCommand2(const char* pcmd)
 		addevofrombox(m_pPlayer);
 		return true;
 	}
-	if (!Q_stricmp(pcmd, "CST_SetEvo") && m_pPlayer->m_bIsZombie)
+	if (!Q_stricmp(pcmd, "CST_SetEvo"))
 	{
-		if (m_pPlayer->m_bEvolutionProtected == true)
+		if (m_pPlayer->m_bIsZombie)
 		{
-			m_pPlayer->m_bEvolutionProtected = false;
-			evolvl = 0;
+			if (m_pPlayer->m_bEvolutionProtected == true)
+			{
+				m_pPlayer->m_bEvolutionProtected = false;
+				evolvl = 0;
 
-			MESSAGE_BEGIN(MSG_ONE, gmsgZB5Evolution, nullptr, m_pPlayer->edict());
-			WRITE_BYTE(ZB5_MESSAGE_EVOLUTION);
-			WRITE_BYTE(evolvl);
-			MESSAGE_END();
+				MESSAGE_BEGIN(MSG_ONE, gmsgZB5Evolution, nullptr, m_pPlayer->edict());
+				WRITE_BYTE(ZB5_MESSAGE_EVOLUTION);
+				WRITE_BYTE(evolvl);
+				MESSAGE_END();
+
+			}
+		}
+		else
+		{
+			if (m_pPlayer->m_bEvolutionProtectedH == true)
+			{
+				m_Morale.UpdateHUD(m_pPlayer);
+				m_Morale.GetMoraleLevel() - 3;
+
+				CLIENT_COMMAND(m_pPlayer->edict(), "spk zb5/human_ability.wav\n");
+
+				switch (RANDOM_LONG(1, 2))
+				{
+				case 1:
+					m_pPlayer->m_bIsSkillHeadK2x = true;
+
+					m_pCharacter_ZB5->InitHUD();
+
+					break;
+				case 2:
+					m_pPlayer->m_bIsSkillHeal = true;
+
+					m_pCharacter_ZB5->InitHUD();
+					break;
+				}
+			}
+		}
+		return true;
+	}
+	if (!m_pPlayer->m_bIsZombie)
+	{
+		if (!Q_stricmp(pcmd, "MoE_HumanSkill1"))
+		{
+			m_pCharacter_ZB5->ActivateSkill(SKILL_SLOT_1);
+			return true;
+		}
+		else if (!Q_stricmp(pcmd, "MoE_HumanSkill2"))
+		{
+			m_pCharacter_ZB5->ActivateSkill(SKILL_SLOT_2);
+			return true;
+		}
+		else if (!Q_stricmp(pcmd, "MoE_HumanSkill3"))
+		{
+			m_pCharacter_ZB5->ActivateSkill(SKILL_SLOT_3);
+			return true;
+		}
+		else if (!Q_stricmp(pcmd, "MoE_HumanSkill4"))
+		{
+			m_pCharacter_ZB5->ActivateSkill(SKILL_SLOT_4);
 			return true;
 		}
 	}
@@ -127,7 +178,6 @@ void CPlayerModStrategy_ZB5::CheckEvolution()
 
 		m_flRagePercent = (flLastRagePercent - 100.0f) * 0.5f;
 
-		EvolutionSound();
 	}
 
 	if (m_pPlayer->m_iZombieLevel == ZOMBIE_LEVEL_ORIGIN && m_flRagePercent > 100.0f)
@@ -188,8 +238,6 @@ void CPlayerModStrategy_ZB5::CheckEvolution()
 		}
 
 		m_flRagePercent = (flLastRagePercent - 100.0f) * 0.5f;
-
-		EvolutionSound();
 	}
 
 	if (m_pPlayer->m_iZombieLevel == ZOMBIE_LEVEL_ORIGIN_LV2)
@@ -208,6 +256,32 @@ void CPlayerModStrategy_ZB5::BecomeZombie(ZombieLevel iEvolutionLevel)
 	m_pPlayer->pev->rendercolor = { 255,255,255 };
 	m_pPlayer->pev->renderamt = 16;
 	return CPlayerModStrategy_ZB2R::BecomeZombie(iEvolutionLevel);
+}
+
+void CPlayerModStrategy_ZB5::BecomeHuman()
+{
+	auto sp = std::make_shared<CHuman_ZB5>(m_pPlayer);
+
+	m_pPlayer->m_bIsZombieTank = false;
+	m_pPlayer->m_bIsZombieFemale = false;
+	m_pPlayer->m_bIsZombieHeavy = false;
+	m_pPlayer->m_bIsZombieHeal = false;
+	m_pPlayer->m_bIsZombiePc = false;
+	m_pPlayer->m_bIsZombieDeimos = false;
+	m_pPlayer->m_bIsZombieGanimed = false;
+	m_pPlayer->m_bIsZombieBanchee = false;
+	m_pPlayer->m_bIsZombieStamp = false;
+
+	m_pPlayer->m_bIsZombieMeatWall = false;
+	m_pPlayer->m_bIsZombieDeathKnight = false;
+	m_pPlayer->m_bIsZombieSpider = false;
+
+	m_pCharacter_ZB5 = sp;
+	m_pCharacter = sp;
+
+	m_Morale.UpdateHUD(m_pPlayer);
+	sp->InitHUD();
+	sp->ResetMaxSpeed();
 }
 
 void CPlayerModStrategy_ZB5::Event_OnInfection(CBasePlayer * victim, CBasePlayer * attacker)
@@ -233,16 +307,9 @@ void CPlayerModStrategy_ZB5::Event_OnInfection(CBasePlayer * victim, CBasePlayer
 				m_pPlayer->m_bEvolutionProtected = false;
 			}
 
-			m_pModZB5->kills++;
-
 			MESSAGE_BEGIN(MSG_ONE, gmsgZB5Evolution, nullptr, m_pPlayer->edict());
 			WRITE_BYTE(ZB5_MESSAGE_EVOLUTION);
 			WRITE_BYTE(evolvl);
-			MESSAGE_END();
-
-			MESSAGE_BEGIN(MSG_ONE, gmsgZB5Msg, nullptr, m_pPlayer->edict());
-			WRITE_BYTE(ZB5_MESSAGE_KILL);
-			WRITE_BYTE(m_pModZB5->kills);
 			MESSAGE_END();
 
 			CLIENT_COMMAND(m_pPlayer->edict(), "spk zb5/level_up.wav\n");
@@ -261,16 +328,9 @@ void CPlayerModStrategy_ZB5::Event_OnInfection(CBasePlayer * victim, CBasePlayer
 			evolvl += 3;
 			m_pPlayer->m_bEvolutionProtected = false;
 
-			m_pModZB5->kills++;
-
 			MESSAGE_BEGIN(MSG_ONE, gmsgZB5Evolution, nullptr, m_pPlayer->edict());
 			WRITE_BYTE(ZB5_MESSAGE_EVOLUTION); // type, reserved.
 			WRITE_BYTE(evolvl);
-			MESSAGE_END();
-
-			MESSAGE_BEGIN(MSG_ONE, gmsgZB5Msg, nullptr, m_pPlayer->edict());
-			WRITE_BYTE(ZB5_MESSAGE_KILL);
-			WRITE_BYTE(m_pModZB5->kills);
 			MESSAGE_END();
 			
 			CLIENT_COMMAND(m_pPlayer->edict(), "spk zb5/level_up.wav\n");
@@ -287,8 +347,6 @@ void CPlayerModStrategy_ZB5::Event_OnInfection(CBasePlayer * victim, CBasePlayer
 
 void CPlayerModStrategy_ZB5::UpdatePlayerEvolutionHUD()
 {
-	evolvl += m_Morale.GetMoraleLevel();
-
 	MESSAGE_BEGIN(MSG_ONE, gmsgZB5Evolution, nullptr, m_pPlayer->edict());
 	WRITE_BYTE(ZB5_MESSAGE_EVOLUTION); // type, reserved.
 	WRITE_BYTE(evolvl);
@@ -312,11 +370,34 @@ float CPlayerModStrategy_ZB5::AdjustDamageTaken(entvars_t * pevInflictor, entvar
 	return flDamage;
 }
 
+void CPlayerModStrategy_ZB5::Event_AdjustHumanHitgroup(CBasePlayer* attacker, HitBoxGroup& iHitgroup)
+{
+	if (attacker != m_pPlayer)
+		return;
+
+	if (!m_pPlayer->m_bIsZombie && m_pCharacter_ZB5->GetSkillStatus(SKILL_SLOT_2) == SKILL_STATUS_USING)
+	{
+		if (m_pPlayer->m_pActiveItem->iItemSlot() != KNIFE_SLOT)
+			iHitgroup = HITGROUP_HEAD;
+	}
+}
+
+void CPlayerModStrategy_ZB5::Event_AdjustHumanDamage(CBasePlayer* attacker, float& flDamage)
+{
+	if (attacker != m_pPlayer)
+		return;
+	if (!m_pPlayer->m_bIsZombie && m_pCharacter_ZB5->GetSkillStatus(SKILL_SLOT_3) == SKILL_STATUS_USING)
+	{
+		// using knife 2x?
+		if (m_pPlayer->m_pActiveItem->iItemSlot() == KNIFE_SLOT)
+			flDamage *= 2.0f;
+	}
+}
+
 void CPlayerModStrategy_ZB5::OnThink()
 {
 	if (!m_pPlayer->IsAlive() && m_pPlayer->m_bIsZombie)
 	{
-		// respawn after 5 secs
 		if (!m_pPlayer->m_bHeadshotKilled && gpGlobals->time > m_flDeadTime + 5.0f)
 		{
 			const float health = max(m_flBackupMaxHealth / 2, 1000);
@@ -330,13 +411,18 @@ void CPlayerModStrategy_ZB5::OnThink()
 
 			for (CBasePlayer *dest : moe::range::PlayersList())
 			{
-				CLIENT_COMMAND(dest->edict(), "spk zb3/zombi_comeback\n");
 				SetScoreAttrib(dest, m_pPlayer);
+			}
+			for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
+			{
+				CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
+				if (!entity)
+					continue;
+				CLIENT_COMMAND(entity->edict(), "spk zb3/zombi_comeback\n");
 			}
 		}
 	}
 
-	
 	return CPlayerModStrategy_ZB2R::OnThink();
 }
 
@@ -363,6 +449,11 @@ void CZB3HumanMoraleR::UpdateHUD(CBasePlayer *player) const
 	WRITE_BYTE(ZB5_MESSAGE_EVOLUTION);
 	WRITE_BYTE(GetMoraleLevel());
 	MESSAGE_END();
+
+	if (GetMoraleLevel() < 3)
+	{
+		player->m_bEvolutionProtected = false;
+	}
 }
 
 CMod_ZombieEvolution::CMod_ZombieEvolution(){}
@@ -408,7 +499,7 @@ void CPlayerModStrategy_ZB5::addevofrombox(CBaseEntity* pOther)
 	}
 
 	MESSAGE_BEGIN(MSG_ONE, gmsgZB5Evolution, nullptr, m_pPlayer->edict());
-	WRITE_BYTE(ZB5_MESSAGE_EVOLUTION); // type, reserved.
+	WRITE_BYTE(ZB5_MESSAGE_EVOLUTION);
 	WRITE_BYTE(evolvl);
 	MESSAGE_END();
 }
@@ -417,20 +508,33 @@ void CMod_ZombieEvolution::PlayerKilled(CBasePlayer * pVictim, entvars_t * pKill
 {
 	if (pVictim->m_bIsZombie)
 	{
-		MakeEvoboxThink(pVictim->pev->origin, pVictim->pev->angles);
-
 		CBaseEntity* pKiller2 = CBaseEntity::Instance(pKiller);
 		CBasePlayer* pAttacker = dynamic_cast<CBasePlayer*>(pKiller2);
+
+		if (!pKiller2->IsAlive())
+			return;
+
+		if (!pKiller2->IsPlayer())
+			return;
+
+		if (!pAttacker->IsAlive())
+			return;
+
+		if (!pAttacker->IsPlayer())
+			return;
+
 		if (m_Morale.LevelUp())
 			m_Morale.UpdateHUD(pAttacker);
 
-		if (m_Morale.GetMoraleLevel() > 2)
+		MakeEvoboxThink(pVictim->pev->origin, pVictim->pev->angles);
+
+		if(m_Morale.GetMoraleLevel() > 2)
 		{
-			pAttacker->m_bEvolutionProtected = true;
+			pAttacker->m_bEvolutionProtectedH = true;
 		}
 		else
 		{
-			pAttacker->m_bEvolutionProtected = false;
+			pAttacker->m_bEvolutionProtectedH = false;
 		}
 
 		kills++;
@@ -442,13 +546,11 @@ void CMod_ZombieEvolution::PlayerKilled(CBasePlayer * pVictim, entvars_t * pKill
 
 		CLIENT_COMMAND(pAttacker->edict(), "spk zb5/level_up.wav\n");
 	}
-
 	return CMod_ZombieMod2R::PlayerKilled(pVictim, pKiller, pInflictor);
 }
 
 void CMod_ZombieEvolution::CheckWinConditions()
 {
-	// If a winner has already been determined and game of started.. then get the heck out of here
 	if (m_bFirstConnected && m_iRoundWinStatus != WINNER_NONE)
 		return;
 
@@ -463,6 +565,14 @@ void CMod_ZombieEvolution::CheckWinConditions()
 		ZombieWin();
 	else if (!iAliveZombie)
 		HumanWin();
+}
+
+int CMod_ZombieEvolution::EvoboxCount()
+{
+	int NumDeadCT, NumDeadTerrorist, NumAliveTerrorist, NumAliveCT;
+	InitializePlayerCounts(NumAliveTerrorist, NumAliveCT, NumDeadTerrorist, NumDeadCT);
+	int iSupplyboxCount = (NumAliveTerrorist + NumAliveCT + NumDeadTerrorist) / 10 + 1;
+	return iSupplyboxCount;
 }
 
 void CMod_ZombieEvolution::MakeEvoboxThink(Vector x, Vector y)
@@ -494,14 +604,6 @@ void CMod_ZombieEvolution::MakeEvoboxThink(Vector x, Vector y)
 	}
 }
 
-int CMod_ZombieEvolution::EvoboxCount()
-{
-	int NumDeadCT, NumDeadTerrorist, NumAliveTerrorist, NumAliveCT;
-	InitializePlayerCounts(NumAliveTerrorist, NumAliveCT, NumDeadTerrorist, NumDeadCT);
-	int iSupplyboxCount = (NumAliveTerrorist + NumAliveCT + NumDeadTerrorist) / 10 + 1;
-	return iSupplyboxCount;
-}
-
 void CMod_ZombieEvolution::RemoveAllEvobox()
 {
 	CBaseEntity* ent = nullptr;
@@ -511,24 +613,12 @@ void CMod_ZombieEvolution::RemoveAllEvobox()
 		sb->pev->effects |= EF_NODRAW;
 		sb->pev->flags |= FL_KILLME;
 		sb->SetThink(&CBaseEntity::SUB_Remove);
-
 	}
 }
 
 CZb5EvoBox* CMod_ZombieEvolution::CreateEvobox(Vector x, Vector y)
 {
 	auto supplybox = CreateClassPtr<CZb5EvoBox>();
-
-	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
-	WRITE_BYTE(TE_EXPLOSION);
-	WRITE_COORD(supplybox->pev->origin.x);
-	WRITE_COORD(supplybox->pev->origin.y);
-	WRITE_COORD(supplybox->pev->origin.z);
-	WRITE_SHORT(MODEL_INDEX("sprites/deathres_zombie.spr"));
-	WRITE_BYTE(8);
-	WRITE_BYTE(40);
-	WRITE_BYTE(TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOSOUND);
-	MESSAGE_END();
 
 	supplybox->pev->origin = x;
 	supplybox->pev->angles = y;

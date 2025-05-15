@@ -120,6 +120,13 @@ void CBaseZombieClass_ZB2R::InitHUD() const
 	MESSAGE_END();
 }
 
+void CBaseZombieClass_ZB2R::InitHUD2() const
+{
+	MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, nullptr, m_pPlayer->pev);
+	WRITE_BYTE(ZB2_MESSAGE_SKILL_INIT);
+	MESSAGE_END();
+}
+
 void CBaseZombieClass_ZB2R::ActivateSkill(ZombieSkillSlot which)
 {
 	if (m_pZombieSkillR && which == SKILL_SLOT_1)

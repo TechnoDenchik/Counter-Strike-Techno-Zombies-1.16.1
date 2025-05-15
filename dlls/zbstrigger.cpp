@@ -471,7 +471,7 @@ void CRenderFxManager2::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_T
 	}
 }
 
-LINK_ENTITY_TO_CLASS(zbstrigger, ZBSTrigger);
+LINK_ENTITY_TO_CLASS(zbstrigger2, ZBSTrigger);
 
 void ZBSTrigger::InitTrigger()
 {

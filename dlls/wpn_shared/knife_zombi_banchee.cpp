@@ -192,9 +192,9 @@ int CKnife_Zombi_banchee::Swing(int fFirst)
 		if (pEntity)
 		{
 			if (m_flNextPrimaryAttack + 0.4 < UTIL_WeaponTimeBase())
-				pEntity->TraceAttack(m_pPlayer->pev, 20, gpGlobals->v_forward, &tr, DMG_NEVERGIB | DMG_BULLET);
+				pEntity->TraceAttack(m_pPlayer->pev, 200, gpGlobals->v_forward, &tr, DMG_NEVERGIB | DMG_BULLET);
 			else
-				pEntity->TraceAttack(m_pPlayer->pev, 15, gpGlobals->v_forward, &tr, DMG_NEVERGIB | DMG_BULLET);
+				pEntity->TraceAttack(m_pPlayer->pev, 150, gpGlobals->v_forward, &tr, DMG_NEVERGIB | DMG_BULLET);
 		}
 		ApplyMultiDamage(m_pPlayer->pev, m_pPlayer->pev);
 

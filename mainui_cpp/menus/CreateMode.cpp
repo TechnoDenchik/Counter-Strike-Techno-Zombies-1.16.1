@@ -1,3 +1,22 @@
+/*
+Copyright (C) 1997-2025 Id Software & TechnoSoftware, Inc.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+*/
 
 #include "Framework.h"
 #include "keydefs.h"
@@ -74,7 +93,7 @@
 #define ART_PANIC	"gfx/maps/zs_panic_cso"
 #define ART_TRAP	"gfx/maps/zs_trap_cso"
 
-#define ART_SNAILCITY	"gfx/maps/zsh_deadcity_pve_cso"
+#define ART_SNAILCITY	"gfx/maps/awp_greesia2_cso"
 
 /*=================== End Gamemodes Map ===================*/
 
@@ -100,8 +119,8 @@ public:
 	int	m_iNumItems;
 };
 
-#define MAX_GAMEMODES 9
-static const char* g_szGameModeCodes[MAX_GAMEMODES] = {"none", "dm", "tdm", "gd", "zb1", "zb3","zb5", "zbs", "zsh_pve"};
+#define MAX_GAMEMODES 8
+static const char* g_szGameModeCodes[MAX_GAMEMODES] = {"none", "dm", "tdm", "gd", "zb1", "zb3", "zbs", "zsh_pve"};
 
 class CMenuCreateGame : public CMenuFramework
 {
@@ -124,7 +143,6 @@ public:
 	bool modegd;
 	bool modezb1;
 	bool modezb3;
-	bool modezb5;
 	bool modezbs;
 	bool modezsh;
 
@@ -176,12 +194,6 @@ public:
 	=======================
 	*/
 		CMenuCheckBox	zh;
-	/*
-	==========================
-	   GameMode: Zombie Evo
-	==========================
-	*/
-		CMenuCheckBox	zevo;
 	/*
 	===========================
 	 GameMode: Scenario Zombie
@@ -235,10 +247,41 @@ class CMenuVidPreview : public
 	CMenuPicButton Inventory;
 	CMenuPicButton* done;
 	CMenuPicButton 
-		Adv, 		textmap, textmap2, textmap3, textmap4, textmap5, textmap6, textmap7, textmap8,textmap9,textmap10,textmap11,
-		textmap12,textmap13,textmap14,textmap15,textmap16,textmap17,textmap18,textmap19,textmap20,textmap21,textmap22,textmap23,
-		textmap24,textmap25,textmap26,textmap27,textmap28,textmap29, textmap30, textmap31, textmap32, textmap33, textmap34, textmap35;
-
+		Adv, 
+		textmap, 
+		textmap2, 
+		textmap3, 
+		textmap4, 
+		textmap5, 
+		textmap6, 
+		textmap7, 
+		textmap8,
+		textmap9,
+		textmap10,
+		textmap11,
+		textmap12,
+		textmap13,
+		textmap14,
+		textmap15,
+		textmap16,
+		textmap17,
+		textmap18,
+		textmap19,
+		textmap20,
+		textmap21,
+		textmap22,
+		textmap23,
+		textmap24,
+		textmap25,
+		textmap26,
+		textmap27,
+		textmap28,
+		textmap29, 
+		textmap30, 
+		textmap31, 
+		textmap32, 
+		textmap33, 
+		textmap34;
 	CMenuPicButton Exit, Exit1;
 private:
 	void _Init() override;
@@ -379,7 +422,7 @@ void CMenuCreateGame::Begin( )
 			else if (trap.bChecked == true)
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zs_trap", atoi(maxClients.GetBuffer()));
 			else if (snailcity.bChecked == true)
-				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zsh_deadcity_pve", atoi(maxClients.GetBuffer()));
+				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zsh_snailcity", atoi(maxClients.GetBuffer()));
 			else
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map %s\n", atoi(maxClients.GetBuffer()));		
 
@@ -457,7 +500,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 		modegd = false;
 		modezb1 = false;
 		modezb3 = false;
-		modezb5 = false;
 		modezbs = false;
 		modezsh = false;
 
@@ -467,7 +509,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 		gd.bChecked = false;
 		zc.bChecked = false;
 		zh.bChecked = false;
-		zevo.bChecked = false;
 		sz.bChecked = false;
 		zsh.bChecked = false;
 
@@ -551,12 +592,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 
 		trap.Hide();
 		textmap34.Hide();
-
-		snailcity.Hide();
-		textmap35.Hide();
-
-		MapSetSnailCity.Hide();
-		mapsnailcity.Hide();
 
 		nightmare2.bChecked = false;
 		nightmare3.bChecked = false;
@@ -911,7 +946,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 		modegd = false;
 		modezb1 = false;
 		modezb3 = false;
-		modezb5 = false;
 		modezbs = false;
 		modezsh = false;
 
@@ -921,7 +955,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 		gd.bChecked = false;
 		zc.bChecked = false;
 		zh.bChecked = false;
-		zevo.bChecked = false;
 		sz.bChecked = false;
 		zsh.bChecked = false;
 		
@@ -1012,13 +1045,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 		lostcity.bChecked = false;
 		panic.bChecked = false;
 		trap.bChecked = false;
-
-		snailcity.Hide();
-		textmap35.Hide();
-
-		MapSetSnailCity.Hide();
-		mapsnailcity.Hide();
-		snailcity.bChecked = false;
 
 		MapSetBigTree.Hide();
 		MapSetDustMini.Hide();
@@ -1366,7 +1392,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 		modegd = false;
 		modezb1 = false;
 		modezb3 = false;
-		modezb5 = false;
 		modezbs = false;
 		modezsh = false;
 
@@ -1376,7 +1401,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 		gd.bChecked = false;
 		zc.bChecked = false;
 		zh.bChecked = false;
-		zevo.bChecked = false;
 		sz.bChecked = false;
 		zsh.bChecked = false;
 
@@ -1467,13 +1491,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 		lostcity.bChecked = false;
 		panic.bChecked = false;
 		trap.bChecked = false;
-
-		snailcity.Hide();
-		textmap35.Hide();
-
-		MapSetSnailCity.Hide();
-		mapsnailcity.Hide();
-		snailcity.bChecked = false;
 
 		MapSetBigTree.Hide();
 		MapSetDustMini.Hide();
@@ -1821,7 +1838,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 		modegd = true;
 		modezb1 = false;
 		modezb3 = false;
-		modezb5 = false;
 		modezbs = false;
 		modezsh = false;
 
@@ -1831,7 +1847,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 		gd.bChecked = true;
 		zc.bChecked = false;
 		zh.bChecked = false;
-		zevo.bChecked = false;
 		sz.bChecked = false;
 		zsh.bChecked = false;
 
@@ -1922,13 +1937,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 		lostcity.bChecked = false;
 		panic.bChecked = false;
 		trap.bChecked = false;
-
-		snailcity.Hide();
-		textmap35.Hide();
-
-		MapSetSnailCity.Hide();
-		mapsnailcity.Hide();
-		snailcity.bChecked = false;
 
 		MapSetBigTree.Hide();
 		MapSetDustMini.Hide();
@@ -1961,7 +1969,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 		modegd = false;
 		modezb1 = true;
 		modezb3 = false;
-		modezb5 = false;
 		modezbs = false;
 		modezsh = false;
 
@@ -1971,7 +1978,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 		gd.bChecked = false;
 		zc.bChecked = true;
 		zh.bChecked = false;
-		zevo.bChecked = false;
 		sz.bChecked = false;
 		zsh.bChecked = false;
 
@@ -2063,13 +2069,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 		panic.bChecked = false;
 		trap.bChecked = false;
 
-		snailcity.Hide();
-		textmap35.Hide();
-
-		MapSetSnailCity.Hide();
-		mapsnailcity.Hide();
-		snailcity.bChecked = false;
-
 		MapSetBigTree.Hide();
 		MapSetDustMini.Hide();
 		MapSet747.Hide();
@@ -2246,471 +2245,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 			mapmirage.Hide();
 			mapgressia.Hide();
 			mapruin.Hide();
-
-			assault.Hide();
-			vertigo.Hide();
-			italy.Hide();
-			nuke.Hide();
-			dust2.Hide();
-			inferno.Hide();
-			mirage.Hide();
-			gressia.Hide();
-			ruin.Hide();
-
-			bigtree.Show();
-			dustmini.Show();
-			cs747.Show();
-			estate.Show();
-			havana.Show();
-			militia.Show();
-			office.Show();
-			siege.Show();
-			angelcity.Show();
-
-			mapbigtree.Show();
-			mapdustmini.Show();
-			mapcs747.Show();
-			mapestate.Show();
-			maphavana.Show();
-			mapmilitia.Show();
-			mapoffice.Show();
-			mapsiege.Show();
-			mapangelcity.Show();
-
-			aztec.Hide();
-			cbble.Hide();
-			chateau.Hide();
-			prodigy.Hide();
-			rats.Hide();
-			santorini.Hide();
-			skyscraper.Hide();
-			torn.Hide();
-			darksnow.Hide();
-
-			mapaztec.Hide();
-			mapcbble.Hide();
-			mapchateau.Hide();
-			mapprodigy.Hide();
-			maprats.Hide();
-			mapsantorini.Hide();
-			mapskyscraper.Hide();
-			maptorn.Hide();
-			mapdarksnow.Hide();
-		}
-		else if (stringmaplist == 3)
-		{
-			textmap19.SetNameAndStatus(L("Aztec"), L(""));
-			textmap20.SetNameAndStatus(L("CobbleStone"), L(""));
-			textmap21.SetNameAndStatus(L("ChateAu"), L(""));
-
-			textmap22.SetNameAndStatus(L("Prodigy"), L(""));
-			textmap23.SetNameAndStatus(L("Rats"), L(""));
-			textmap24.SetNameAndStatus(L("Santorini"), L(""));
-
-			textmap25.SetNameAndStatus(L("SkyScraper"), L(""));
-			textmap26.SetNameAndStatus(L("Torn"), L(""));
-			textmap27.SetNameAndStatus(L("DarkSnow"), L(""));
-
-			textmap.Hide();
-			textmap2.Hide();
-			textmap3.Hide();
-			textmap4.Hide();
-			textmap5.Hide();
-			textmap6.Hide();
-			textmap7.Hide();
-			textmap8.Hide();
-			textmap9.Hide();
-
-			textmap10.Hide();
-			textmap11.Hide();
-			textmap12.Hide();
-			textmap13.Hide();
-			textmap14.Hide();
-			textmap15.Hide();
-			textmap16.Hide();
-			textmap17.Hide();
-			textmap18.Hide();
-
-			textmap19.Show();
-			textmap20.Show();
-			textmap21.Show();
-			textmap22.Show();
-			textmap23.Show();
-			textmap24.Show();
-			textmap25.Show();
-			textmap26.Show();
-			textmap27.Show();
-
-			mapassault.Hide();
-			mapitaly.Hide();
-			mapvertigo.Hide();
-			mapinferno.Hide();
-			mapnuke.Hide();
-			mapdust.Hide();
-			mapmirage.Hide();
-			mapgressia.Hide();
-			mapruin.Hide();
-
-			assault.Hide();
-			vertigo.Hide();
-			italy.Hide();
-			nuke.Hide();
-			dust2.Hide();
-			inferno.Hide();
-			mirage.Hide();
-			gressia.Hide();
-			ruin.Hide();
-
-			mapnightmare.Hide();
-			MapSetNightMare.Hide();
-			nightmare.Hide();
-
-			bigtree.Hide();
-			dustmini.Hide();
-			cs747.Hide();
-			estate.Hide();
-			havana.Hide();
-			militia.Hide();
-			office.Hide();
-			siege.Hide();
-			angelcity.Hide();
-
-			mapbigtree.Hide();
-			mapdustmini.Hide();
-			mapcs747.Hide();
-			mapestate.Hide();
-			maphavana.Hide();
-			mapmilitia.Hide();
-			mapoffice.Hide();
-			mapsiege.Hide();
-			mapangelcity.Hide();
-
-			aztec.Show();
-			cbble.Show();
-			chateau.Show();
-			prodigy.Show();
-			rats.Show();
-			santorini.Show();
-			skyscraper.Show();
-			torn.Show();
-			darksnow.Show();
-
-			mapaztec.Show();
-			mapcbble.Show();
-			mapchateau.Show();
-			mapprodigy.Show();
-			maprats.Show();
-			mapsantorini.Show();
-			mapskyscraper.Show();
-			maptorn.Show();
-			mapdarksnow.Show();
-		}
-	}
-	else if (value == "zb3")
-	{
-		zh.LinkCvar("mp_gamemode");
-		EngFuncs::CvarSetString("mp_gamemode", value);
-		ischecksetmode = true;
-
-		modenone = false;
-		modedm = false;
-		modetdm = false;
-		modegd = false;
-		modezb1 = false;
-		modezb3 = true;
-		modezb5 = false;
-		modezbs = false;
-		modezsh = false;
-
-		classic.bChecked = false;
-		dm.bChecked = false;
-		tdm.bChecked = false;
-		gd.bChecked = false;
-		zc.bChecked = false;
-		zh.bChecked = true;
-		zevo.bChecked = false;
-		sz.bChecked = false;
-		zsh.bChecked = false;
-
-		assault.bChecked = false;
-		vertigo.bChecked = false;
-		nuke.bChecked = false;
-		dust2.bChecked = false;
-		italy.bChecked = false;
-		mirage.bChecked = false;
-		inferno.bChecked = false;
-		gressia.bChecked = false;
-		ruin.bChecked = false;
-		bigtree.bChecked = false;
-		dustmini.bChecked = false;
-		cs747.bChecked = false;
-		estate.bChecked = false;
-		havana.bChecked = false;
-		militia.bChecked = false;
-		office.bChecked = false;
-		siege.bChecked = false;
-		angelcity.bChecked = false;
-
-		aztec.bChecked = false;
-		cbble.bChecked = false;
-		chateau.bChecked = false;
-		prodigy.bChecked = false;
-		rats.bChecked = false;
-		santorini.bChecked = false;
-		skyscraper.bChecked = false;
-		torn.bChecked = false;
-		darksnow.bChecked = false;
-
-		uparrow.Show();
-		downarrow.Show();
-
-		mapnightmare.Hide();
-		MapSetNightMare.Hide();
-		nightmare.Hide();
-		nightmare.bChecked = false;
-
-		mapnightmare2.Hide();
-		MapSetNightMare2.Hide();
-		mapnightmare3.Hide();
-		MapSetNightMare3.Hide();
-		maplastclue.Hide();
-		MapSetLastClue.Hide();
-		maplostcity.Hide();
-		MapSetLostCity.Hide();
-		mappanic.Hide();
-		MapSetPanic.Hide();
-		maptrap.Hide();
-		MapSetTrap.Hide();
-
-
-
-		nightmare2.Hide();
-		textmap29.Hide();
-
-		nightmare3.Hide();
-		textmap30.Hide();
-
-		lastclue.Hide();
-		textmap31.Hide();
-
-		lostcity.Hide();
-		textmap32.Hide();
-
-		panic.Hide();
-		textmap33.Hide();
-
-		trap.Hide();
-		textmap34.Hide();
-
-		nightmare2.bChecked = false;
-		nightmare3.bChecked = false;
-		lastclue.bChecked = false;
-		lostcity.bChecked = false;
-		panic.bChecked = false;
-		trap.bChecked = false;
-
-		snailcity.Hide();
-		textmap35.Hide();
-
-		MapSetSnailCity.Hide();
-		mapsnailcity.Hide();
-		snailcity.bChecked = false;
-
-		MapSetAztec.Hide();
-		MapSetCbble.Hide();
-		MapSetChateau.Hide();
-		MapSetProdigy.Hide();
-		MapSetRats.Hide();
-		MapSetSantorini.Hide();
-		MapSetSkyScraper.Hide();
-		MapSetTorn.Hide();
-		MapSetDarkSnow.Hide();
-
-		MapSetBigTree.Hide();
-		MapSetDustMini.Hide();
-		MapSet747.Hide();
-		MapSetEstate.Hide();
-		MapSetHavana.Hide();
-		MapSetMilitia.Hide();
-		MapSetOffice.Hide();
-		MapSetSiege.Hide();
-		MapSetAngelCity.Hide();
-		MapSetAssault.Hide();
-		MapSetItaly.Hide();
-		MapSetVertigo.Hide();
-		MapSetInferno.Hide();
-		MapSetNuke.Hide();
-		MapSetDust.Hide();
-		MapSetMirage.Hide();
-		MapSetGressia.Hide();
-		MapSetRuin.Hide();
-
-		if (stringmaplist == 1)
-		{
-			textmap.SetNameAndStatus(L("Assault"), L(""));
-			textmap2.SetNameAndStatus(L("Italy"), L(""));
-			textmap3.SetNameAndStatus(L("Vertigo"), L(""));
-
-			textmap4.SetNameAndStatus(L("Inferno"), L(""));
-			textmap5.SetNameAndStatus(L("Nuke"), L(""));
-			textmap6.SetNameAndStatus(L("Dust II"), L(""));
-
-			textmap7.SetNameAndStatus(L("Mirage"), L(""));
-			textmap8.SetNameAndStatus(L("Greesia"), L(""));
-			textmap9.SetNameAndStatus(L("Ruin"), L(""));
-
-			textmap.Show();
-			textmap2.Show();
-			textmap3.Show();
-			textmap4.Show();
-			textmap5.Show();
-			textmap6.Show();
-			textmap7.Show();
-			textmap8.Show();
-			textmap9.Show();
-
-			textmap10.Hide();
-			textmap11.Hide();
-			textmap12.Hide();
-			textmap13.Hide();
-			textmap14.Hide();
-			textmap15.Hide();
-			textmap16.Hide();
-			textmap17.Hide();
-			textmap18.Hide();
-
-			textmap19.Hide();
-			textmap20.Hide();
-			textmap21.Hide();
-			textmap22.Hide();
-			textmap23.Hide();
-			textmap24.Hide();
-			textmap25.Hide();
-			textmap26.Hide();
-			textmap27.Hide();
-
-			mapassault.Show();
-			mapitaly.Show();
-			mapvertigo.Show();
-			mapinferno.Show();
-			mapnuke.Show();
-			mapdust.Show();
-			mapmirage.Show();
-			mapgressia.Show();
-			mapruin.Show();
-
-			mapnightmare.Hide();
-			MapSetNightMare.Hide();
-			nightmare.Hide();
-			textmap28.Hide();
-
-			assault.Show();
-			vertigo.Show();
-			italy.Show();
-			nuke.Show();
-			dust2.Show();
-			inferno.Show();
-			mirage.Show();
-			gressia.Show();
-			ruin.Show();
-
-			bigtree.Hide();
-			dustmini.Hide();
-			cs747.Hide();
-			estate.Hide();
-			havana.Hide();
-			militia.Hide();
-			office.Hide();
-			siege.Hide();
-			angelcity.Hide();
-
-			mapbigtree.Hide();
-			mapdustmini.Hide();
-			mapcs747.Hide();
-			mapestate.Hide();
-			maphavana.Hide();
-			mapmilitia.Hide();
-			mapoffice.Hide();
-			mapsiege.Hide();
-			mapangelcity.Hide();
-
-			aztec.Hide();
-			cbble.Hide();
-			chateau.Hide();
-			prodigy.Hide();
-			rats.Hide();
-			santorini.Hide();
-			skyscraper.Hide();
-			torn.Hide();
-			darksnow.Hide();
-
-			mapaztec.Hide();
-			mapcbble.Hide();
-			mapchateau.Hide();
-			mapprodigy.Hide();
-			maprats.Hide();
-			mapsantorini.Hide();
-			mapskyscraper.Hide();
-			maptorn.Hide();
-			mapdarksnow.Hide();
-		}
-		else if (stringmaplist == 2)
-		{
-			textmap10.SetNameAndStatus(L("BigTree"), L(""));
-			textmap11.SetNameAndStatus(L("Dust EX"), L(""));
-			textmap12.SetNameAndStatus(L("747"), L(""));
-
-			textmap13.SetNameAndStatus(L("Estate"), L(""));
-			textmap14.SetNameAndStatus(L("Havana"), L(""));
-			textmap15.SetNameAndStatus(L("Militia"), L(""));
-
-			textmap16.SetNameAndStatus(L("Office"), L(""));
-			textmap17.SetNameAndStatus(L("Siege"), L(""));
-			textmap18.SetNameAndStatus(L("Angel City"), L(""));
-
-			textmap.Hide();
-			textmap2.Hide();
-			textmap3.Hide();
-			textmap4.Hide();
-			textmap5.Hide();
-			textmap6.Hide();
-			textmap7.Hide();
-			textmap8.Hide();
-			textmap9.Hide();
-
-			textmap10.Show();
-			textmap11.Show();
-			textmap12.Show();
-			textmap13.Show();
-			textmap14.Show();
-			textmap15.Show();
-			textmap16.Show();
-			textmap17.Show();
-			textmap18.Show();
-
-			textmap19.Hide();
-			textmap20.Hide();
-			textmap21.Hide();
-			textmap22.Hide();
-			textmap23.Hide();
-			textmap24.Hide();
-			textmap25.Hide();
-			textmap26.Hide();
-			textmap27.Hide();
-
-			mapassault.Hide();
-			mapitaly.Hide();
-			mapvertigo.Hide();
-			mapinferno.Hide();
-			mapnuke.Hide();
-			mapdust.Hide();
-			mapmirage.Hide();
-			mapgressia.Hide();
-			mapruin.Hide();
-
-			mapnightmare.Hide();
-			MapSetNightMare.Hide();
-			nightmare.Hide();
 
 			assault.Hide();
 			vertigo.Hide();
@@ -2873,7 +2407,7 @@ void CMenuCreateGame::ResetMode(const char *value)
 	}
 	else if (value == "zb5")
 	{
-		zevo.LinkCvar("mp_gamemode");
+		zh.LinkCvar("mp_gamemode");
 		EngFuncs::CvarSetString("mp_gamemode", value);
 		ischecksetmode = true;
 
@@ -2882,8 +2416,7 @@ void CMenuCreateGame::ResetMode(const char *value)
 		modetdm = false;
 		modegd = false;
 		modezb1 = false;
-		modezb3 = false;
-		modezb5 = true;
+		modezb3 = true;
 		modezbs = false;
 		modezsh = false;
 
@@ -2892,8 +2425,7 @@ void CMenuCreateGame::ResetMode(const char *value)
 		tdm.bChecked = false;
 		gd.bChecked = false;
 		zc.bChecked = false;
-		zh.bChecked = false;
-		zevo.bChecked = true;
+		zh.bChecked = true;
 		sz.bChecked = false;
 		zsh.bChecked = false;
 
@@ -2947,6 +2479,8 @@ void CMenuCreateGame::ResetMode(const char *value)
 		maptrap.Hide();
 		MapSetTrap.Hide();
 
+
+
 		nightmare2.Hide();
 		textmap29.Hide();
 
@@ -2964,13 +2498,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 
 		trap.Hide();
 		textmap34.Hide();
-
-		snailcity.Hide();
-		textmap35.Hide();
-
-		MapSetSnailCity.Hide();
-		mapsnailcity.Hide();
-		snailcity.bChecked = false;
 
 		nightmare2.bChecked = false;
 		nightmare3.bChecked = false;
@@ -3346,7 +2873,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 		modegd = false;
 		modezb1 = false;
 		modezb3 = false;
-		modezb5 = false;
 		modezbs = true;
 		modezsh = false;
 
@@ -3356,7 +2882,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 		gd.bChecked = false;
 		zc.bChecked = false;
 		zh.bChecked = false;
-		zevo.bChecked = false;
 		sz.bChecked = true;
 		zsh.bChecked = false;
 
@@ -3386,12 +2911,7 @@ void CMenuCreateGame::ResetMode(const char *value)
 		maptrap.Show();
 		//MapSetTrap.Show();
 
-		snailcity.Hide();
-		textmap35.Hide();
 
-		MapSetSnailCity.Hide();
-		mapsnailcity.Hide();
-		snailcity.bChecked = false;
 
 		nightmare2.Show();
 		textmap29.Show();
@@ -3575,15 +3095,12 @@ void CMenuCreateGame::ResetMode(const char *value)
 		EngFuncs::CvarSetString("mp_gamemode", value);
 		ischecksetmode = true;
 
-		textmap35.SetNameAndStatus(L("SnailCity"), L(""));
-
 		modenone = false;
 		modedm = false;
 		modetdm = false;
 		modegd = false;
 		modezb1 = false;
 		modezb3 = false;
-		modezb5 = false;
 		modezbs = false;
 		modezsh = true;
 
@@ -3593,7 +3110,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 		gd.bChecked = false;
 		zc.bChecked = false;
 		zh.bChecked = false;
-		zevo.bChecked = false;
 		sz.bChecked = false;
 		zsh.bChecked = true;
 
@@ -3626,8 +3142,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 		torn.bChecked = false;
 		darksnow.bChecked = false;
 
-		snailcity.bChecked = false;
-
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
 		MapSetChateau.Hide();
@@ -3656,13 +3170,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetMirage.Hide();
 		MapSetGressia.Hide();
 		MapSetRuin.Hide();
-
-		MapSetSnailCity.Hide();
-		snailcity.Show();
-		textmap35.Show();
-
-		mapsnailcity.Show();
-		snailcity.bChecked = false;
 
 		textmap.Hide();
 		textmap2.Hide();
@@ -3752,7 +3259,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 		nightmare.Hide();
 		textmap28.Hide();
 		nightmare.bChecked = false;
-
 
 		mapnightmare2.Hide();
 		MapSetNightMare2.Hide();
@@ -4127,7 +3633,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 		modegd = false;
 		modezb1 = false;
 		modezb3 = false;
-		modezb5 = false;
 		modezbs = false;
 		modezsh = false;
 
@@ -4137,7 +3642,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 		gd.bChecked = false;
 		zc.bChecked = false;
 		zh.bChecked = false;
-		zevo.bChecked = false;
 		sz.bChecked = false;
 		zsh.bChecked = false;
 
@@ -4871,9 +4375,6 @@ void CMenuCreateGame::ResetMap( int value)
 		panic.bChecked = false;
 		trap.bChecked = false;
 
-		snailcity.bChecked = false;
-		MapSetSnailCity.Hide();
-
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
 		MapSetChateau.Hide();
@@ -4914,9 +4415,6 @@ void CMenuCreateGame::ResetMap( int value)
 		lostcity.bChecked = false;
 		panic.bChecked = false;
 		trap.bChecked = false;
-
-		snailcity.bChecked = false;
-		MapSetSnailCity.Hide();
 
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
@@ -4959,9 +4457,6 @@ void CMenuCreateGame::ResetMap( int value)
 		panic.bChecked = false;
 		trap.bChecked = false;
 
-		snailcity.bChecked = false;
-		MapSetSnailCity.Hide();
-
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
 		MapSetChateau.Hide();
@@ -5003,9 +4498,6 @@ void CMenuCreateGame::ResetMap( int value)
 		panic.bChecked = false;
 		trap.bChecked = false;
 
-		snailcity.bChecked = false;
-		MapSetSnailCity.Hide();
-
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
 		MapSetChateau.Hide();
@@ -5045,9 +4537,6 @@ void CMenuCreateGame::ResetMap( int value)
 		lostcity.bChecked = true;
 		panic.bChecked = false;
 		trap.bChecked = false;
-
-		snailcity.bChecked = false;
-		MapSetSnailCity.Hide();
 
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
@@ -5089,9 +4578,6 @@ void CMenuCreateGame::ResetMap( int value)
 		panic.bChecked = true;
 		trap.bChecked = false;
 
-		snailcity.bChecked = false;
-		MapSetSnailCity.Hide();
-
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
 		MapSetChateau.Hide();
@@ -5132,9 +4618,6 @@ void CMenuCreateGame::ResetMap( int value)
 		panic.bChecked = false;
 		trap.bChecked = true;
 
-		snailcity.bChecked = false;
-		MapSetSnailCity.Hide();
-
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
 		MapSetChateau.Hide();
@@ -5152,49 +4635,6 @@ void CMenuCreateGame::ResetMap( int value)
 		MapSetLostCity.Hide();
 		MapSetPanic.Hide();
 		MapSetTrap.Show();
-	}
-
-	else if (value == 35)//snailcity
-	{
-		ischecksetmap = true;
-
-		aztec.bChecked = false;
-		cbble.bChecked = false;
-		chateau.bChecked = false;
-		prodigy.bChecked = false;
-		rats.bChecked = false;
-		santorini.bChecked = false;
-		skyscraper.bChecked = false;
-		torn.bChecked = false;
-		darksnow.bChecked = false;
-		nightmare.bChecked = false;
-
-		nightmare2.bChecked = false;
-		nightmare3.bChecked = false;
-		lastclue.bChecked = false;
-		lostcity.bChecked = false;
-		panic.bChecked = false;
-		trap.bChecked = false;
-		snailcity.bChecked = true;
-
-		MapSetAztec.Hide();
-		MapSetCbble.Hide();
-		MapSetChateau.Hide();
-		MapSetProdigy.Hide();
-		MapSetRats.Hide();
-		MapSetSantorini.Hide();
-		MapSetSkyScraper.Hide();
-		MapSetTorn.Hide();
-		MapSetDarkSnow.Hide();
-		MapSetNightMare.Hide();
-
-		MapSetNightMare2.Hide();
-		MapSetNightMare3.Hide();
-		MapSetLastClue.Hide();
-		MapSetLostCity.Hide();
-		MapSetPanic.Hide();
-		MapSetTrap.Hide();
-		MapSetSnailCity.Show();
 	}
 
 	else
@@ -5306,10 +4746,6 @@ void CMenuCreateGame::ResetMap( int value)
 			mapnightmare.Hide();
 			MapSetNightMare.Hide();
 			nightmare.Hide();
-
-			mapsnailcity.Hide();
-			MapSetSnailCity.Hide();
-			snailcity.Hide();
 		}
 		else if (stringmaplist == 2)
 		{
@@ -5637,7 +5073,6 @@ void CMenuCreateGame::_Init( void )
 		L("CstzUI_Mod_gdm"),
 		L("CstzUI_Mod_zbm"),
 		L("CstzUI_Mod_zbh"),
-		L("CstzUI_Mod_zbe"),
 		L("CstzUI_Mod_scen"),
 		L("CstzUI_Mod_zsh")
 	};
@@ -6444,32 +5879,6 @@ void CMenuCreateGame::_Init( void )
 		});
 
 
-	mapsnailcity.iFlags = QMF_NOTIFY;
-	mapsnailcity.SetRect(160, 225, 256, 124);
-	mapsnailcity.SetPicture(ART_SNAILCITY);
-	mapsnailcity.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
-	SET_EVENT_MULTI(mapsnailcity.onActivated,
-		{
-			uiCreateGame.ResetMap(35);
-			((CMenuCheckBox*)pSelf)->bChecked = true;
-		});
-
-	MapSetSnailCity.SetCharSize(QM_SMALLFONT);
-	MapSetSnailCity.SetModel(&mapsListModel);
-	MapSetSnailCity.SetRect(160, 193, 252, 154);
-
-	snailcity.SetNameAndStatus(L(""), L(""));
-	snailcity.iFlags |= QMF_NOTIFY;
-	snailcity.SetCoord(380, 230);
-	SET_EVENT_MULTI(snailcity.onChanged,
-		{
-			uiCreateGame.ResetMap(35);
-			((CMenuCheckBox*)pSelf)->bChecked = true;
-		});
-
-
-
-
 
 	classic.SetNameAndStatus(L("CstzUI_Mod_classic"), L(""));
 	classic.iFlags |= QMF_NOTIFY;
@@ -6527,24 +5936,13 @@ void CMenuCreateGame::_Init( void )
 	SET_EVENT_MULTI(zh.onChanged,
 		{
 			uiCreateGame.botNum.Show();
-			uiCreateGame.ResetMode("zb3");
-			((CMenuCheckBox*)pSelf)->bChecked = true;
-		});
-
-
-	zevo.SetNameAndStatus(L("CstzUI_Mod_zbe"), L(""));
-	zevo.iFlags |= QMF_NOTIFY;
-	zevo.SetCoord(1025, 480);
-	SET_EVENT_MULTI(zevo.onChanged,
-		{
-			uiCreateGame.botNum.Show();
 			uiCreateGame.ResetMode("zb5");
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
 
 	sz.SetNameAndStatus(L("CstzUI_Mod_scen"), L(""));
 	sz.iFlags |= QMF_NOTIFY;
-	sz.SetCoord(1025, 520);
+	sz.SetCoord(1025, 480);
 	SET_EVENT_MULTI(sz.onChanged,
 		{
 			uiCreateGame.botNum.Hide();
@@ -6554,7 +5952,7 @@ void CMenuCreateGame::_Init( void )
 
 	zsh.SetNameAndStatus(L("CstzUI_Mod_zsh"), L(""));
 	zsh.iFlags |= QMF_NOTIFY;
-	zsh.SetCoord(1025, 560);
+	zsh.SetCoord(1025, 520);
 	SET_EVENT_MULTI(zsh.onChanged,
 		{
 			uiCreateGame.ResetMap(0);
@@ -6574,7 +5972,7 @@ void CMenuCreateGame::_Init( void )
 	Inventory.SetCoord(460, 660);
 
 	playbutton.iFlags = QMF_NOTIFY;
-	playbutton.SetRect(1025, 610, 256, 124);
+	playbutton.SetRect(1025, 555, 256, 124);
 	playbutton.SetPicture(ART_PLAY);
 	playbutton.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	SET_EVENT_MULTI(playbutton.onActivated,
@@ -6674,7 +6072,7 @@ void CMenuCreateGame::_Init( void )
 	Exit.SetNameAndStatus(L("GameUI_Cancel"), L(""));
 	Exit.onActivated = VoidCb(&CMenuCreateGame::Hide);
 	Exit.iFlags |= QMF_NOTIFY;
-	Exit.SetCoord(1098, 715);
+	Exit.SetCoord(1098, 685);
 
 	AddItem( mapassault );
 	AddItem( mapitaly );
@@ -6713,7 +6111,6 @@ void CMenuCreateGame::_Init( void )
 	AddItem(maplostcity);
 	AddItem(mappanic);
 	AddItem(maptrap);
-	AddItem(mapsnailcity);
 
 	AddItem(MapSetAztec);
 	AddItem(MapSetCbble);
@@ -6732,8 +6129,6 @@ void CMenuCreateGame::_Init( void )
 	AddItem(MapSetLostCity);
 	AddItem(MapSetPanic);
 	AddItem(MapSetTrap);
-	
-	AddItem(MapSetSnailCity);
 
 	AddItem( MapSetVertigo );
 	AddItem( MapSetAssault );
@@ -6782,7 +6177,6 @@ void CMenuCreateGame::_Init( void )
 	AddItem(lostcity);
 	AddItem(panic);
 	AddItem(trap);
-	AddItem( snailcity );
 
 	AddItem( bigtree );
 	AddItem( dustmini );
@@ -6800,7 +6194,6 @@ void CMenuCreateGame::_Init( void )
 	AddItem( gd );
 	AddItem( zc );
 	AddItem( zh );
-	AddItem( zevo );
 	AddItem( sz );
 	AddItem( zsh );
 
@@ -6842,7 +6235,6 @@ void CMenuCreateGame::_Init( void )
 	AddItem(textmap32);
 	AddItem(textmap33);
 	AddItem(textmap34);
-	AddItem(textmap35);
 
 	AddItem(Inventory);
 
@@ -6959,8 +6351,6 @@ void CMenuCreateGame::_VidInit()
 		uiCreateGame.textmap33.SetCoord(845, 450);
 		uiCreateGame.textmap34.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap34.SetCoord(228, 592);
-		uiCreateGame.textmap35.iFlags |= QMF_INACTIVE;
-		uiCreateGame.textmap35.SetCoord(248, 310);
 
 		textmap.Show();
 		textmap2.Show();
@@ -6999,7 +6389,6 @@ void CMenuCreateGame::_VidInit()
 		textmap32.Hide();
 		textmap33.Hide();
 		textmap34.Hide();
-		textmap35.Hide();
 
 		mapassault.Show();
 		mapitaly.Show();
@@ -7087,11 +6476,6 @@ void CMenuCreateGame::_VidInit()
 		maptrap.Hide();
 		MapSetTrap.Hide();
 		trap.Hide();
-
-		mapsnailcity.Hide();
-		MapSetSnailCity.Hide();
-		snailcity.Hide();
-
 	}
 	else if (stringmaplist == 2)
 	{
@@ -7320,7 +6704,6 @@ void UI_CreateGame_Precache( void )
 	EngFuncs::PIC_Load( ART_SKYSCRAPER );
 	EngFuncs::PIC_Load( ART_TORN );
 	EngFuncs::PIC_Load( ART_DARKSNOW );
-	EngFuncs::PIC_Load( ART_SNAILCITY );
 }
 
 /*

@@ -8,6 +8,7 @@
 #include "draw_util.h"
 #include "triangleapi.h"
 #include "TextSetZb5.h"
+#include "gamemode/mods_const.h"
 
 #include "string.h"
 #include "assert.h"
@@ -518,6 +519,9 @@ int CHudTextNum::Draw(float time)
 	const int r = 153, g = 97, b = 7;
 
 	int idx = gEngfuncs.GetLocalPlayer()->index;
+
+	if (gHUD.m_iModRunning != MOD_ZB5)
+		return 0;
 
 	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
 	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
