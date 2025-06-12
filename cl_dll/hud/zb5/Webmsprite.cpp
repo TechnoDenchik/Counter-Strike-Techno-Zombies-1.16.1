@@ -2,7 +2,6 @@
 			 * =================== TechnoSoftware =================== *
  * =================================================================================== */
 
-
 #include "hud.h"
 #include "followicon.h"
 #include "cl_util.h"
@@ -94,140 +93,24 @@ inline int DrawTexturedNumbersTopCenterAligned(const CTextureRef& tex, const wre
 
 int CHudWebm::VidInit(void)
 {
-	if (!stringtext1)
-		stringtext1 = R_LoadTextureShared("resource/hud/zb5/videoframe_0", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext2)
-		stringtext2 = R_LoadTextureShared("resource/hud/zb5/videoframe_2", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext3)
-		stringtext3 = R_LoadTextureShared("resource/hud/zb5/videoframe_3", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext4)
-		stringtext4 = R_LoadTextureShared("resource/hud/zb5/videoframe_4", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext5)
-		stringtext5 = R_LoadTextureShared("resource/hud/zb5/videoframe_5", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext6)
-		stringtext6 = R_LoadTextureShared("resource/hud/zb5/videoframe_6", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext7)
-		stringtext7 = R_LoadTextureShared("resource/hud/zb5/videoframe_7", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext8)
-		stringtext8 = R_LoadTextureShared("resource/hud/zb5/videoframe_8", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext9)
-		stringtext9 = R_LoadTextureShared("resource/hud/zb5/videoframe_9", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext10)
-		stringtext10 = R_LoadTextureShared("resource/hud/zb5/videoframe_10", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext11)
-		stringtext11 = R_LoadTextureShared("resource/hud/zb5/videoframe_11", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext12)
-		stringtext12 = R_LoadTextureShared("resource/hud/zb5/videoframe_12", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext13)
-		stringtext13 = R_LoadTextureShared("resource/hud/zb5/videoframe_13", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext14)
-		stringtext14 = R_LoadTextureShared("resource/hud/zb5/videoframe_14", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext15)
-		stringtext15 = R_LoadTextureShared("resource/hud/zb5/videoframe_15", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext16)
-		stringtext16 = R_LoadTextureShared("resource/hud/zb5/videoframe_16", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext17)
-		stringtext17 = R_LoadTextureShared("resource/hud/zb5/videoframe_17", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext18)
-		stringtext18 = R_LoadTextureShared("resource/hud/zb5/videoframe_18", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext19)
-		stringtext19 = R_LoadTextureShared("resource/hud/zb5/videoframe_19", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext20)
-		stringtext20 = R_LoadTextureShared("resource/hud/zb5/videoframe_20", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext21)
-		stringtext21 = R_LoadTextureShared("resource/hud/zb5/videoframe_21", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext22)
-		stringtext22 = R_LoadTextureShared("resource/hud/zb5/videoframe_22", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext23)
-		stringtext23 = R_LoadTextureShared("resource/hud/zb5/videoframe_23", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext24)
-		stringtext24 = R_LoadTextureShared("resource/hud/zb5/videoframe_24", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext25)
-		stringtext25 = R_LoadTextureShared("resource/hud/zb5/videoframe_25", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext26)
-		stringtext26 = R_LoadTextureShared("resource/hud/zb5/videoframe_26", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext27)
-		stringtext27 = R_LoadTextureShared("resource/hud/zb5/videoframe_27", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext28)
-		stringtext28 = R_LoadTextureShared("resource/hud/zb5/videoframe_28", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext29)
-		stringtext29 = R_LoadTextureShared("resource/hud/zb5/videoframe_29", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext30)
-		stringtext30 = R_LoadTextureShared("resource/hud/zb5/videoframe_30", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext31)
-		stringtext31 = R_LoadTextureShared("resource/hud/zb5/videoframe_31", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext32)
-		stringtext32 = R_LoadTextureShared("resource/hud/zb5/videoframe_32", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext33)
-		stringtext33 = R_LoadTextureShared("resource/hud/zb5/videoframe_33", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext34)
-		stringtext34 = R_LoadTextureShared("resource/hud/zb5/videoframe_34", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext35)
-		stringtext35 = R_LoadTextureShared("resource/hud/zb5/videoframe_35", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext36)
-		stringtext36 = R_LoadTextureShared("resource/hud/zb5/videoframe_36", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext37)
-		stringtext37 = R_LoadTextureShared("resource/hud/zb5/videoframe_37", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext38)
-		stringtext38 = R_LoadTextureShared("resource/hud/zb5/videoframe_38", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext39)
-		stringtext39 = R_LoadTextureShared("resource/hud/zb5/videoframe_39", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext40)
-		stringtext40 = R_LoadTextureShared("resource/hud/zb5/videoframe_40", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext41)
-		stringtext41 = R_LoadTextureShared("resource/hud/zb5/videoframe_41", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext42)
-		stringtext42 = R_LoadTextureShared("resource/hud/zb5/videoframe_42", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext43)
-		stringtext43 = R_LoadTextureShared("resource/hud/zb5/videoframe_43", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext44)
-		stringtext44 = R_LoadTextureShared("resource/hud/zb5/videoframe_44", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext45)
-		stringtext45 = R_LoadTextureShared("resource/hud/zb5/videoframe_45", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext46)
-		stringtext46 = R_LoadTextureShared("resource/hud/zb5/videoframe_46", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext47)
-		stringtext47 = R_LoadTextureShared("resource/hud/zb5/videoframe_47", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext48)
-		stringtext48 = R_LoadTextureShared("resource/hud/zb5/videoframe_48", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext49)
-		stringtext49 = R_LoadTextureShared("resource/hud/zb5/videoframe_49", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext50)
-		stringtext50 = R_LoadTextureShared("resource/hud/zb5/videoframe_50", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext51)
-		stringtext51 = R_LoadTextureShared("resource/hud/zb5/videoframe_51", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext52)
-		stringtext52 = R_LoadTextureShared("resource/hud/zb5/videoframe_52", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext53)
-		stringtext53 = R_LoadTextureShared("resource/hud/zb5/videoframe_53", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext54)
-		stringtext54 = R_LoadTextureShared("resource/hud/zb5/videoframe_54", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext55)
-		stringtext55 = R_LoadTextureShared("resource/hud/zb5/videoframe_55", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext56)
-		stringtext56 = R_LoadTextureShared("resource/hud/zb5/videoframe_56", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext57)
-		stringtext57 = R_LoadTextureShared("resource/hud/zb5/videoframe_57", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext58)
-		stringtext58 = R_LoadTextureShared("resource/hud/zb5/videoframe_58", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext59)
-		stringtext59 = R_LoadTextureShared("resource/hud/zb5/videoframe_59", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext60)
-		stringtext60 = R_LoadTextureShared("resource/hud/zb5/videoframe_60", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext61)
-		stringtext61 = R_LoadTextureShared("resource/hud/zb5/videoframe_61", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext62)
-		stringtext62 = R_LoadTextureShared("resource/hud/zb5/videoframe_62", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext63)
-		stringtext63 = R_LoadTextureShared("resource/hud/zb5/videoframe_63", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
+	if (!stringtext)
+		stringtext = R_LoadTextureShared("resource/zb5/zb5_evolution_bg", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
 
-	
+	if (!stringtext2)
+		stringtext2 = R_LoadTextureShared("resource/zb5/meatwall", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
+
+	if (!stringtext3)
+		stringtext3 = R_LoadTextureShared("resource/zb5/deathknight", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
+
+	if (!stringtext4)
+		stringtext4 = R_LoadTextureShared("resource/zb5/spider", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
+
 	return 1;
 }
 
 int CHudWebm::Draw(float time)
 {
-	if (!m_pCurTexture1)
+	if (!m_pCurTexture)
 		return 1;
 
 	int x = ScreenWidth / 1.995;
@@ -235,21 +118,298 @@ int CHudWebm::Draw(float time)
 	int y2 = ScreenHeight / 1.4;
 
 	const float flScale = 0.0f;
-	const int r = 153, g = 97, b = 7;
 
+	int iW = stringtext->w();
+	int iH = stringtext->h();
+
+	iW = stringtext->w();
+	iH = stringtext->h();
+
+	int iX = 0;
+	int iY = ScreenHeight - 1;
+
+	iX = ScreenWidth;
+	iY = ScreenHeight - 1;
+
+	int iW2 = stringtext2->w();
+	int iH2 = stringtext2->h();
+
+	iW2 = stringtext2->w();
+	iH2 = stringtext2->h();
+
+	int iX2 = 0;
+	int iY2 = ScreenHeight - 4;
+
+	iX2 = ScreenWidth;
+	iY2 = ScreenHeight - 4;
+
+	int iW3 = stringtext3->w();
+	int iH3 = stringtext3->h();
+
+	iW3 = stringtext3->w();
+	iH3 = stringtext3->h();
+
+	int iX3 = 0;
+	int iY3 = ScreenHeight - 1;
+
+	iX3 = ScreenWidth;
+	iY3 = ScreenHeight - 1;
+
+	int iW4 = stringtext4->w();
+	int iH4 = stringtext4->h();
+
+	iW4 = stringtext4->w();
+	iH4 = stringtext4->h();
+
+	int iX4 = 0;
+	int iY4 = ScreenHeight - 4;
+
+	iX4 = ScreenWidth;
+	iY4 = ScreenHeight - 4;
+
+	//w - горизонталь(ширина)
+	//h - вертикаль(высота)
+	//start -		//end - 1940.18
+	int w = 123940.148;  int w2 = 335;
+	int h = 668;	  int h2 = 38;
+
+	int w3 = 335;  int w4 = 335;
+	int h3 = 38;     int h4 = 38;
+
+	int w5 = 335;  int w6 = 335;
+	int h5 = 38;	 int h6 = 38;
+
+	int w7 = 335;  int w8 = 335;
+	int h7 = 38;	 int h8 = 38;
+
+	int w9 = 335;  int w10 = 335;
+	int h9 = 38;	 int h10 = 38;
+
+	int w11 = 335;  int w12 = 335;
+	int h11 = 38;	 int h12 = 38;
+
+	int w13 = 335;  int w14 = 335;
+	int h13 = 38;	 int h14 = 38;
+
+	int w15 = 335;  int w16 = 335;
+	int h15 = 38;	 int h16 = 38;
+
+	int w17 = 335;  int w18 = 335;
+	int h17 = 38;	 int h18 = 38;
+
+	int w19 = 335;  int w20 = 335;
+	int h19 = 38;	 int h20 = 38;
+
+	int w21 = 335;  int w22 = 335;
+	int h21 = 38;	 int h22 = 38;
+
+	int w23 = 335;  int w24 = 335;
+	int h23 = 38;	 int h24 = 38;
+
+	int w25 = 335;  int w26 = 335;
+	int h25 = 38;	 int h26 = 38; 
+
+	int w27 = 335;  int w28 = 335;
+	int h27 = 38;	 int h28 = 38;
+
+	int w29 = 335;  int w30 = 335;
+	int h29 = 38;	 int h30 = 38;
+
+	char szbuffer[64];
+	int id = gEngfuncs.GetLocalPlayer()->index;
 	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
 	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
 
-	char szbuffer[64];
+	if (gHUD.m_flTime - timesecond1 < 1.0f)
+	{
+		tDeltasecond1 += gHUD.m_flTime - timesecond1;
+	}
+	if (tNextsecond1 > 0.024f || (gHUD.m_flTime - timesecond1 > 0.024f) || tDeltasecond1 > 0.024f)
+	{
+		tNextsecond1 = 0.0f;
+		tDeltasecond1 = 0.0f;
 
-	DrawUtils::DrawHudString(x - 190, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+		if (timetx1 < 30)
+		{
+			timetx1++;
+		}
+	}
+	timesecond1 = gHUD.m_flTime;
+
+	if (timetx1 > 1)
+	{
+		if (skin == 1)
+		{
+			iW = stringtext->w();
+			iH = stringtext->h();
+			iX = ScreenWidth / w;
+			iY = ScreenHeight - h;
+			stringtext->Draw2DQuadScaled(iX, iY - iH, iX + iW, iY - iH + iH);
+
+			iW2 = stringtext2->w();
+			iH2 = stringtext2->h();
+			iX2 = ScreenWidth / w;
+			iY2 = ScreenHeight - h;
+			stringtext2->Draw2DQuadScaled(iX2, iY2 - iH2, iX2 + iW2, iY2 - iH2 + iH2);
+		}
+		else if (skin == 2)
+		{
+			iW = stringtext->w();
+			iH = stringtext->h();
+			iX = ScreenWidth / w;
+			iY = ScreenHeight - h;
+			stringtext->Draw2DQuadScaled(iX, iY - iH, iX + iW, iY - iH + iH);
+
+			iW3 = stringtext3->w();
+			iH3 = stringtext3->h();
+			iX3 = ScreenWidth / w;
+			iY3 = ScreenHeight - h;
+			stringtext3->Draw2DQuadScaled(iX3, iY3 - iH3, iX3 + iW3, iY3 - iH3 + iH3);
+
+			
+
+			sprintf(szbuffer, g_PlayerInfoList[id].name);
+			DrawUtils::DrawHudString(x - 190, y2 - 32, ScreenWidth, szbuffer, 255, 255, 255, flScale);
+		}
+		else if (skin == 3)
+		{
+			iW = stringtext->w();
+			iH = stringtext->h();
+			iX = ScreenWidth / w;
+			iY = ScreenHeight - h;
+			stringtext->Draw2DQuadScaled(iX, iY - iH, iX + iW, iY - iH + iH);
+
+			iW4 = stringtext4->w();
+			iH4 = stringtext4->h();
+			iX4 = ScreenWidth / w;
+			iY4 = ScreenHeight - h;
+			stringtext4->Draw2DQuadScaled(iX4, iY4 - iH4, iX4 + iW4, iY4 - iH4 + iH4);
+		}
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
+	else if (timetx1 == 2)
+	{
+
+	}
 
 	return 1;
 }
 
 void CHudWebm::Settext()
 {
-	m_pCurTexture1 = stringtext1;
+	m_pCurTexture = stringtext;
+	m_flDisplayTime = gHUD.m_flTime;
 }
 
 int CHudWebm2::VidInit(void)

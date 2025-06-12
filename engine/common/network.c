@@ -1707,8 +1707,8 @@ void NET_Init(void)
 #endif
 
 	net_showpackets = Cvar_Get("net_showpackets", "0", 0, "show network packets");
-	net_clientport = Cvar_Get("clientport", "66666", 0, "client tcp/ip port");
-	net_port = Cvar_Get("port", "77777", 0, "server tcp/ip port");
+	net_clientport = Cvar_Get("clientport", "12242", 0, "client tcp/ip port");
+	net_port = Cvar_Get("port", "12241", 0, "server tcp/ip port");
 	net_ip = Cvar_Get("ip", "localhost", 0, "local server ip");
 
 	Cmd_AddCommand("net_showip", NET_ShowIP_f, "show hostname and IPs");

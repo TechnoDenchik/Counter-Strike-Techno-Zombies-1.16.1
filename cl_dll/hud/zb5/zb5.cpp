@@ -38,6 +38,7 @@ DECLARE_MESSAGE(m_ZB5, ZB5Inventory)
 DECLARE_MESSAGE(m_ZB5, ZB5Evolevel)
 DECLARE_MESSAGE(m_ZB5, ZB5Getlocationbox)
 DECLARE_MESSAGE(m_ZB5, ZB5GetlocationboxK)
+DECLARE_MESSAGE(m_ZB5, ZB5ExternEvo)
 
 int CHudZB5::MsgFunc_ZB5Msg(const char *pszName, int iSize, void *pbuf)
 {
@@ -169,6 +170,27 @@ int CHudZB5::MsgFunc_ZB5GetlocationboxK(const char* pszName, int iSize, void* pb
 	return 1;
 }
 
+int CHudZB5::MsgFunc_ZB5ExternEvo(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+	auto type = static_cast<ZB5MessageType>(buf.ReadByte());
+	int evlv = buf.ReadByte();
+	char* name = buf.ReadString();
+
+	switch (type)
+	{
+	case ZB5_EXTERN:
+	{
+		pimpl->get<CHudWebm>().renaining(evlv);
+		pimpl->get<CHudWebm>().Settext();
+		pimpl->get<CHudWebm>().SetName(name);
+		break;
+	}
+	}
+
+	return 1;
+}
+
 int CHudZB5::Init(void)
 {
 	pimpl = new CHudZB5::impl_t;
@@ -182,6 +204,7 @@ int CHudZB5::Init(void)
 	HOOK_MESSAGE(ZB5Evolevel);
 	HOOK_MESSAGE(ZB5Getlocationbox);
 	HOOK_MESSAGE(ZB5GetlocationboxK);
+	HOOK_MESSAGE(ZB5ExternEvo);
 
 	return 1;
 }

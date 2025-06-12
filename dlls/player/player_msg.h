@@ -127,6 +127,7 @@ extern int gmsgZB5UsedMsg;
 extern int gmsgZB5UsedMsg2;
 extern int gmsgZB5InventorySet;
 extern int gmsgZB5SetHero;
+extern int gmsgZB5ExternEvo;
 extern int gmsgZB5Evolution;
 extern int gmsgZB5GetLocationBox;
 extern int gmsgZB5GetLocationBoxK;

@@ -20,6 +20,7 @@
 #include <dlls/gamemode/zb5/zb3reference/zb3_heroreference.h>
 #include <dlls/util/u_range.hpp>
 #include "gamemode/interface/interface_const.h"
+#include "dlls/gamemode/zb5/zb5_const.h"
 
 #include <functional>
 #include <random>
@@ -834,6 +835,12 @@ void CPlayerModStrategy_ZB2R::BecomeMeatwall(ZombieLevel iEvolutionLevel)
 	m_iZombieInfections = 0;
 	UpdatePlayerEvolutionHUD();
 
+	MESSAGE_BEGIN(MSG_ALL, gmsgZB5ExternEvo, NULL);
+	WRITE_BYTE(ZB5_EXTERN);
+	WRITE_BYTE(1);
+	WRITE_STRING(STRING(m_pPlayer->pev->netname));
+	MESSAGE_END();
+
 	for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
 	{
 		CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
@@ -881,6 +888,12 @@ void CPlayerModStrategy_ZB2R::BecomeDeathknight(ZombieLevel iEvolutionLevel)
 	m_iZombieInfections = 0;
 	UpdatePlayerEvolutionHUD();
 
+	MESSAGE_BEGIN(MSG_ALL, gmsgZB5ExternEvo, NULL);
+	WRITE_BYTE(ZB5_EXTERN);
+	WRITE_BYTE(2);
+	WRITE_STRING(STRING(m_pPlayer->pev->globalname));
+	MESSAGE_END();
+
 	for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
 	{
 		CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
@@ -924,6 +937,12 @@ void CPlayerModStrategy_ZB2R::BecomeSpider(ZombieLevel iEvolutionLevel)
 
 	m_iZombieInfections = 0;
 	UpdatePlayerEvolutionHUD();
+
+	MESSAGE_BEGIN(MSG_ALL, gmsgZB5ExternEvo, NULL);
+	WRITE_BYTE(ZB5_EXTERN);
+	WRITE_BYTE(3);
+	WRITE_STRING(STRING(m_pPlayer->pev->netname));
+	MESSAGE_END();
 
 	for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
 	{

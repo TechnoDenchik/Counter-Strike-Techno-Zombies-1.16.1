@@ -15,6 +15,7 @@ enum ZB5MessageType : byte
 	ZB5_MESSAGE_KILL, 
 	ZB5_MESSAGE_RAGE,
 	ZB5_MESSAGE_EVOLUTION,
+	ZB5_EXTERN,
 };
 
 #endif

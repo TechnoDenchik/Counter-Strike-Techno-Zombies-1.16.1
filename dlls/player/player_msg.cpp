@@ -128,6 +128,7 @@ int gmsgZB5RenMsg = 0;
 int gmsgZB5UsedMsg = 0;
 int gmsgZB5UsedMsg2 = 0;
 int gmsgZB5SetHero = 0;
+int gmsgZB5ExternEvo;
 int gmsgZB5InventorySet = 0;
 int gmsgZB5Evolution = 0;
 
@@ -299,6 +300,7 @@ void LinkUserMessages()
 	gmsgZB5UsedMsg2 = REG_USER_MSG("ZB5SkillUsed2", -1);
 	gmsgZB5InventorySet = REG_USER_MSG("ZB5Inventory", -1);
 	gmsgZB5SetHero = REG_USER_MSG("ZB5Hero", -1);
+	gmsgZB5ExternEvo = REG_USER_MSG("ZB5ExternEvo", -1);
 	gmsgZB5Evolution = REG_USER_MSG("ZB5Evolevel", -1);
 	gmsgZB5GetLocationBox = REG_USER_MSG("ZB5Getlocationbox", -1);
 	gmsgZB5GetLocationBoxK = REG_USER_MSG("ZB5GetlocationboxK", -1);

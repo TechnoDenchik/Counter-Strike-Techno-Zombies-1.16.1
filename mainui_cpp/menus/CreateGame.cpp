@@ -379,7 +379,7 @@ void CMenuCreateGame::Begin( )
 			else if (trap.bChecked == true)
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zs_trap", atoi(maxClients.GetBuffer()));
 			else if (snailcity.bChecked == true)
-				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zsh_deadcity_pve", atoi(maxClients.GetBuffer()));
+				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zsh_snailcity", atoi(maxClients.GetBuffer()));
 			else
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map %s\n", atoi(maxClients.GetBuffer()));		
 
