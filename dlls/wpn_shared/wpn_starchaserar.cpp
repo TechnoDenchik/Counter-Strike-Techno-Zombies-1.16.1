@@ -293,6 +293,22 @@ void CStarchaserar::StarchaserarFire(float flSpread, duration_t flCycleTime, BOO
 	Vector vecSrc = m_pPlayer->GetGunPosition();
 	Vector vecDir = m_pPlayer->FireBullets3(vecSrc, gpGlobals->v_forward, flSpread, 8192, 2, BULLET_PLAYER_556MM, GetDamage(), 0.96, m_pPlayer->pev, FALSE, m_pPlayer->random_seed);
 
+
+	EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/starchaserar-1.wav", VOL_NORM, ATTN_NORM, 0, 94);
+
+	switch (RANDOM_LONG(1,3))
+	{
+	case 1:
+		SendWeaponAnim(STARCHASERAR_SHOOT1, UseDecrement() != FALSE);
+		break;
+	case 2:
+		SendWeaponAnim(STARCHASERAR_SHOOT2, UseDecrement() != FALSE);
+		break;
+	case 3:
+		SendWeaponAnim(STARCHASERAR_SHOOT3, UseDecrement() != FALSE);
+		break;
+	}
+
 	if (gpGlobals->time - tWorldTime < 1.0f)
 	{
 		tDelta += gpGlobals->time - tWorldTime;

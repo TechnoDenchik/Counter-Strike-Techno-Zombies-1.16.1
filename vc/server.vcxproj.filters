@@ -232,6 +232,15 @@
     <Filter Include="dlls\gamemode\zb5\Reference\zb2">
       <UniqueIdentifier>{c6d5bc51-e45c-4232-b25a-9ac2d483e15e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="dlls\wpn_shared\Melee\old">
+      <UniqueIdentifier>{3cbdd1b4-8be0-4498-aea4-a703c815e294}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Primary\old">
+      <UniqueIdentifier>{202cb23f-8506-4e9f-be58-ed4ae151d7fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Secondary\old">
+      <UniqueIdentifier>{dac6a570-1943-4181-b0e6-a9ac550e1775}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\dlls\h_export.cpp">
@@ -1220,6 +1229,66 @@
     </ClCompile>
     <ClCompile Include="..\dlls\gamemode\zb5\zb5\zb5_humanclass.cpp">
       <Filter>dlls\gamemode\zb5\Class</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\melee\wpn_balrog9.cpp">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\melee\wpn_clawhammer.cpp">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\melee\wpn_dragonclaw.cpp">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\melee\wpn_dualkatana.cpp">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\melee\wpn_nataknifed.cpp">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\melee\wpn_serpentblade.cpp">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\melee\wpn_stormgiant.cpp">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\melee\wpn_thanatos9.cpp">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_balrog3.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_balrog5.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_balrog7.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_balrog11.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_guitar.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_m134hero.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_plasmagun.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_poisongun.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_spas12ex.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_violingun.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\secondary\wpn_balrog1.cpp">
+      <Filter>dlls\wpn_shared\Secondary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_ethereal.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2254,6 +2323,66 @@
     </ClInclude>
     <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb5_zclass_deathknight.h">
       <Filter>dlls\gamemode\zb5\Class</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\melee\wpn_balrog9.h">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\melee\wpn_clawhammer.h">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\melee\wpn_dragonclaw.h">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\melee\wpn_dualkatana.h">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\melee\wpn_nataknifed.h">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\melee\wpn_serpentblade.h">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\melee\wpn_stormgiant.h">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\melee\wpn_thanatos9.h">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_balrog3.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_balrog5.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_balrog7.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_balrog11.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_guitar.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_m134hero.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_plasmagun.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_poisongun.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_spas12ex.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_violingun.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\secondary\wpn_balrog1.h">
+      <Filter>dlls\wpn_shared\Secondary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_ethereal.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

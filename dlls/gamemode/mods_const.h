@@ -44,6 +44,7 @@ enum DamageTrack_e : byte
 	DT_NONE,
 	DT_ZB,
 	DT_ZBS,
+	DT_ZSH,
 	DT_ZSE
 };
 

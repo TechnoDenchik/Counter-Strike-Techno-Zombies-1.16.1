@@ -415,6 +415,7 @@ public:
 	int m_iSwing12;
 	int m_iSwing13;
 	int m_iSwing14;
+	int m_iSwing15;
 	bool has_disconnected;
 	bool zbstriggeruse;
 };

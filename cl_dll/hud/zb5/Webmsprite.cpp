@@ -119,58 +119,12 @@ int CHudWebm::Draw(float time)
 
 	const float flScale = 0.0f;
 
-	int iW = stringtext->w();
-	int iH = stringtext->h();
 
-	iW = stringtext->w();
-	iH = stringtext->h();
-
-	int iX = 0;
-	int iY = ScreenHeight - 1;
-
-	iX = ScreenWidth;
-	iY = ScreenHeight - 1;
-
-	int iW2 = stringtext2->w();
-	int iH2 = stringtext2->h();
-
-	iW2 = stringtext2->w();
-	iH2 = stringtext2->h();
-
-	int iX2 = 0;
-	int iY2 = ScreenHeight - 4;
-
-	iX2 = ScreenWidth;
-	iY2 = ScreenHeight - 4;
-
-	int iW3 = stringtext3->w();
-	int iH3 = stringtext3->h();
-
-	iW3 = stringtext3->w();
-	iH3 = stringtext3->h();
-
-	int iX3 = 0;
-	int iY3 = ScreenHeight - 1;
-
-	iX3 = ScreenWidth;
-	iY3 = ScreenHeight - 1;
-
-	int iW4 = stringtext4->w();
-	int iH4 = stringtext4->h();
-
-	iW4 = stringtext4->w();
-	iH4 = stringtext4->h();
-
-	int iX4 = 0;
-	int iY4 = ScreenHeight - 4;
-
-	iX4 = ScreenWidth;
-	iY4 = ScreenHeight - 4;
 
 	//w - горизонталь(ширина)
 	//h - вертикаль(высота)
 	//start -		//end - 1940.18
-	int w = 123940.148;  int w2 = 335;
+	int w = 1940.18;  int w2 = 335;
 	int h = 668;	  int h2 = 38;
 
 	int w3 = 335;  int w4 = 335;
@@ -240,50 +194,34 @@ int CHudWebm::Draw(float time)
 	{
 		if (skin == 1)
 		{
-			iW = stringtext->w();
-			iH = stringtext->h();
-			iX = ScreenWidth / w;
-			iY = ScreenHeight - h;
-			stringtext->Draw2DQuadScaled(iX, iY - iH, iX + iW, iY - iH + iH);
+			
+			stringtext->Bind();
+			DrawUtils::Draw2DQuadScaled(x - 600 / 2, y - 38, x + 600 / 2, y - 8);
 
-			iW2 = stringtext2->w();
-			iH2 = stringtext2->h();
-			iX2 = ScreenWidth / w;
-			iY2 = ScreenHeight - h;
-			stringtext2->Draw2DQuadScaled(iX2, iY2 - iH2, iX2 + iW2, iY2 - iH2 + iH2);
+			stringtext2->Bind();
+			DrawUtils::Draw2DQuadScaled(x - 600 / 2, y - 38, x + 600 / 2, y - 8);
+			
 		}
 		else if (skin == 2)
 		{
-			iW = stringtext->w();
-			iH = stringtext->h();
-			iX = ScreenWidth / w;
-			iY = ScreenHeight - h;
-			stringtext->Draw2DQuadScaled(iX, iY - iH, iX + iW, iY - iH + iH);
+			
+			stringtext->Bind();
+			DrawUtils::Draw2DQuadScaled(x - 300 / 2, y - 38, x + 300 / 2, y + 58);
 
-			iW3 = stringtext3->w();
-			iH3 = stringtext3->h();
-			iX3 = ScreenWidth / w;
-			iY3 = ScreenHeight - h;
-			stringtext3->Draw2DQuadScaled(iX3, iY3 - iH3, iX3 + iW3, iY3 - iH3 + iH3);
-
+			stringtext3->Bind();
+			DrawUtils::Draw2DQuadScaled(x - 100 / 2, y - 38, x + 100 / 2, y + 28);
 			
 
-			sprintf(szbuffer, g_PlayerInfoList[id].name);
-			DrawUtils::DrawHudString(x - 190, y2 - 32, ScreenWidth, szbuffer, 255, 255, 255, flScale);
+			//sprintf(szbuffer, g_PlayerInfoList[id].name);
+			//DrawUtils::DrawHudString(x - 190, y2 - 32, ScreenWidth, szbuffer, 255, 255, 255, flScale);
 		}
 		else if (skin == 3)
 		{
-			iW = stringtext->w();
-			iH = stringtext->h();
-			iX = ScreenWidth / w;
-			iY = ScreenHeight - h;
-			stringtext->Draw2DQuadScaled(iX, iY - iH, iX + iW, iY - iH + iH);
+			stringtext->Bind();
+			DrawUtils::Draw2DQuadScaled(x - 600 / 2, y - 38, x + 600 / 2, y - 8);
 
-			iW4 = stringtext4->w();
-			iH4 = stringtext4->h();
-			iX4 = ScreenWidth / w;
-			iY4 = ScreenHeight - h;
-			stringtext4->Draw2DQuadScaled(iX4, iY4 - iH4, iX4 + iW4, iY4 - iH4 + iH4);
+			stringtext4->Bind();
+			DrawUtils::Draw2DQuadScaled(x - 600 / 2, y - 38, x + 600 / 2, y - 8);
 		}
 	}
 	else if (timetx1 == 2)

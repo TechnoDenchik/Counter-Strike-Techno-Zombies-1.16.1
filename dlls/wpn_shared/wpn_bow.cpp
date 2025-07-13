@@ -509,7 +509,7 @@ void CBow::ItemPostFrame(void)
 
 void CBow::Reload(void)
 {
-		return;
+	return;
 }
 
 void CBow::WeaponIdle(void)

@@ -138,6 +138,30 @@ void W_Precache()
 	UTIL_PrecacheOtherWeapon("knife_katana");
 	UTIL_PrecacheOtherWeapon("knife_dragonsword");
 	UTIL_PrecacheOtherWeapon("knife_knifedragon");
+
+	UTIL_PrecacheOtherWeapon("knife_thanatos9");
+	UTIL_PrecacheOtherWeapon("knife_stormgiant");
+	UTIL_PrecacheOtherWeapon("knife_snakesword");
+	UTIL_PrecacheOtherWeapon("knife_nataknifed");
+	UTIL_PrecacheOtherWeapon("knife_katanad");
+	UTIL_PrecacheOtherWeapon("knife_dragontail");
+	UTIL_PrecacheOtherWeapon("knife_zsh_clawhammer");
+	UTIL_PrecacheOtherWeapon("knife_balrog9");
+
+	UTIL_PrecacheOtherWeapon("weapon_balrog1");
+	UTIL_PrecacheOtherWeapon("weapon_balrog3");
+	UTIL_PrecacheOtherWeapon("weapon_balrog5");
+	UTIL_PrecacheOtherWeapon("weapon_balrog7");
+	UTIL_PrecacheOtherWeapon("weapon_balrog11");
+	UTIL_PrecacheOtherWeapon("weapon_guitar");
+	UTIL_PrecacheOtherWeapon("weapon_m134hero");
+	UTIL_PrecacheOtherWeapon("weapon_plasmagun");
+	UTIL_PrecacheOtherWeapon("weapon_poisongun");
+	UTIL_PrecacheOtherWeapon("weapon_ethereal");
+	UTIL_PrecacheOtherWeapon("weapon_spas12ex");
+	UTIL_PrecacheOtherWeapon("weapon_violingun");
+
+
 	UTIL_PrecacheOtherWeapon("weapon_sgdrill");
 	UTIL_PrecacheOther("ammo_sgdrill");
 	UTIL_PrecacheOther("ammo_cannon");

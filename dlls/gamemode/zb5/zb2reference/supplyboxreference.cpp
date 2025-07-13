@@ -13,18 +13,7 @@
 static std::pair<const char *, void(*)(CBasePlayer *p)> g_SupplyboxItems[]=
 {
 	{ "Human", [](CBasePlayer *p) {
-			DropPrimary(p);
-			p->GiveNamedItem("weapon_starchaserar");
-			int iAmount = p->m_pModStrategy->ComputeMaxAmmo("556Nato", MAX_AMMO_556NATOBOX);
-			p->GiveAmmo(iAmount, "556Nato", iAmount);
-			
-			DropSecondary(p);
-			p->GiveNamedItem("weapon_infinityex2");
-			int iAmount2 = p->m_pModStrategy->ComputeMaxAmmo("45acp", MAX_AMMO_45ACP);
-			p->GiveAmmo(iAmount2, "45acp", iAmount2);
-
-			p->GiveNamedItem("knife_dragonsword");
-			p->GiveNamedItem("weapon_hegrenade");
+			CLIENT_COMMAND(p->edict(), "CST_GetWeapon\n");
 		}
 	}
 };
@@ -46,7 +35,7 @@ void CSupplyBoxR::Spawn()
 		RemoveEntityHashValue(pev, STRING(pev->classname), CLASSNAME);
 	}
 
-	MAKE_STRING_CLASS("supplybox", pev);
+	MAKE_STRING_CLASS("supplyboxR", pev);
 	AddEntityHashValue(pev, STRING(pev->classname), CLASSNAME);
 
 	pev->movetype = MOVETYPE_TOSS;

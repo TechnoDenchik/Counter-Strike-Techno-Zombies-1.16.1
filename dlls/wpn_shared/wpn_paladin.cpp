@@ -369,10 +369,6 @@ void CAK47Paladin::AK47PaladinFire2(float flSpread, float flCycleTime, BOOL fUse
 		KickBack(1.0, 0.375, 0.175, 0.0375, 5.75, 1.75, 8);
 }
 
-
-
-
-
 void CAK47Paladin::Reload(void)
 {
 	if (m_pPlayer->ammo_762nato <= 0)

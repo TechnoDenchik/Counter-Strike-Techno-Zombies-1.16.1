@@ -83,15 +83,20 @@ int g_iRShell, g_iPShell, g_iBlackSmoke, g_iShotgunShell;
 	DECLARE_EVENT(FireTwinAxes);
 	DECLARE_EVENT(FireWonderCannon);
 	DECLARE_EVENT(FireWonderCannonEx);
-	//DECLARE_EVENT(FireQuantum);
 	DECLARE_EVENT(FireArbalest);
-	//DECLARE_EVENT(FireGungnir);
 	DECLARE_EVENT(FireChainsaw);
 	DECLARE_EVENT(FireSgDrill);
 	DECLARE_EVENT(FireGunKata);
 	DECLARE_EVENT(FireBuffM4A1);
 	DECLARE_EVENT(FirePaladin);
 	DECLARE_EVENT(FirePaladin2);
+	DECLARE_EVENT(FireGuitar);
+	DECLARE_EVENT(FireBALROG1);
+	DECLARE_EVENT(Fire2BALROG1);
+	DECLARE_EVENT(FireStarchaserar);
+	DECLARE_EVENT(FireBALROG3);
+	DECLARE_EVENT(Fire2BALROG3);
+	
 /*
 ======================
 Game_HookEvents
@@ -172,13 +177,17 @@ void Game_HookEvents( void )
 	HOOK_EVENT(twinaxes, FireTwinAxes);
 	HOOK_EVENT(wondercannon, FireWonderCannon);
 	HOOK_EVENT(wondercannonex, FireWonderCannonEx);
-	//HOOK_EVENT(quantum, FireQuantum);
 	HOOK_EVENT(arbalest, FireArbalest);
-	//HOOK_EVENT(gungnir, FireGungnir);
 	HOOK_EVENT(chainsaw, FireChainsaw);
 	HOOK_EVENT(sgdrill, FireSgDrill);
 	HOOK_EVENT(gunkata, FireGunKata);
 	HOOK_EVENT(buffm4a1, FireBuffM4A1);
 	HOOK_EVENT(ak47paladin, FirePaladin);
 	HOOK_EVENT(ak47paladin2, FirePaladin2);
+	HOOK_EVENT(guitar, FireGuitar);
+	HOOK_EVENT(balrog1, FireBALROG1);
+	HOOK_EVENT(2balrog1, Fire2BALROG1);
+	HOOK_EVENT(balrog3, FireBALROG3);
+	HOOK_EVENT(2balrog3, Fire2BALROG3);
+	HOOK_EVENT(2starchaserar, FireStarchaserar);
 }
