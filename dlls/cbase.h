@@ -264,6 +264,11 @@ public:
 	int ShouldToggle(USE_TYPE useType, BOOL currentState);
 	void FireBullets(ULONG cShots, Vector vecSrc, Vector vecDirShooting, Vector vecSpread, float flDistance, int iBulletType, int iTracerFreq = 4, int iDamage = 0, entvars_t *pevAttacker = NULL);
 	Vector FireBullets3(Vector vecSrc, Vector vecDirShooting, float flSpread, float flDistance, int iPenetration, int iBulletType, int iDamage, float flRangeModifier, entvars_t *pevAttacker, bool bPistol, int shared_rand = 0);
+
+
+	Vector WonderFireBullets(Vector vecSrc, Vector vecDirShooting, float flSpread, float flDistance, int iPenetration, int iBulletType, int iDamage, float flRangeModifier, entvars_t* pevAttacker, bool bPistol, int shared_rand = 0, int wonderfirecount = 0);
+
+	
 	Vector FireBullets4(Vector vecSrc, Vector vecDirShooting, float flSpread, float flDistance, int iPenetration, int iBulletType, int iDamage, float flRangeModifier, entvars_t* pevAttacker, bool bPistol, int& iWeaponType, int shared_rand = 0, CBasePlayer* pPlayer = NULL);
 	int Intersects(CBaseEntity *pOther);
 	void MakeDormant(void);

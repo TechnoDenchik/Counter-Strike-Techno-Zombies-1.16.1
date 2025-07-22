@@ -686,7 +686,7 @@ void CQuantum::RadiusDamage2()
 			CBeam* pBeam = phs12_13_14[v8];
 			if (pBeam)
 			{
-				//pBeam->EntsInit(ENTINDEX(m_pPlayer->edict()), ENTINDEX(pEntity->edict()));
+				pBeam->EntsInit(ENTINDEX(m_pPlayer->edict()), ENTINDEX(pEntity->edict()));
 				pBeam->SetType(BEAM_ENTS);
 				pBeam->SetStartEntity(ENTINDEX(m_pPlayer->edict()));
 				pBeam->SetEndEntity(ENTINDEX(pEntity->edict()));

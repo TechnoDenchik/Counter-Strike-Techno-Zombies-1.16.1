@@ -27,6 +27,7 @@ enum INTMessage : byte
 	ZB5_REN_MSG,
 	ZB5_USED_MSG,
 	ZB5_USED_MSG2,
+	ZB3_HIT,
 };
 
 enum INTWeaponMsg : byte

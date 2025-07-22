@@ -22,6 +22,7 @@ public:
 	CHudMsgFunc(ZB5Getlocationbox);
 	CHudMsgFunc(ZB5GetlocationboxK);
 	CHudMsgFunc(ZB5ExternEvo);
+	CHudMsgFunc(HitDamageMsgZB5);
 protected:
 	class impl_t;
 	impl_t *pimpl;

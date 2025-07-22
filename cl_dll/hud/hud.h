@@ -1369,6 +1369,19 @@ private:
 
 };
 
+class CHudHitDamage : public IBaseHudSub
+{
+public:
+	int VidInit(void);
+	int Draw(float flTime);
+	void Settext();
+
+private:
+	SharedTexture m_iTex;
+	SharedTexture m_pCurTexture;
+	float m_flDisplayTime;
+};
+
 class CHudSiFiammo : public CHudBase
 {
 public:

@@ -167,6 +167,10 @@ extern int gmsgQuantumMsg;
 extern int gmsgArbalestMsg;
 extern int gmsgZSHUpdateTime;
 extern int gmsgMPToCL;
+extern int gmsgHitDamageMsgZB3;
+extern int gmsgHitDamageMsgZB5;
+extern int gmsgHitDamageMsgZBS;
+extern int gmsgHitDamageMsgZSH;
 
 void LinkUserMessages();
 void WriteSigonMessages();

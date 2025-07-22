@@ -71,7 +71,7 @@ static MoEWeaponBuyInfo_s g_MoEWeaponBuyInfo[] = {
 	{ "weapon_gungnir", "Gungnir", 6700, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_quantum", "QuantumHorizon", 8800, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_arbalest", "Arbalest", 6300, PRIMARY_WEAPON_SLOT, UNASSIGNED },
-	{ "weapon_wondercannon", "Heaven Splitter", 7300, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_wondercannon", "Heaven Splitter", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_wondercannonex", "Asura Hell Splitter", 8500, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 
 	{ "weapon_shelteraxe", "ShelterAxe", 0, KNIFE_SLOT, UNASSIGNED },

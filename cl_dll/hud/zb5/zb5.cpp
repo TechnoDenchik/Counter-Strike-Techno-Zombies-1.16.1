@@ -26,7 +26,7 @@
 #include <vector>
 
 class CHudZB5::impl_t
-	: public THudSubDispatcher<CHudTextZB5, CHudText2ZB5, CInventorySetZb5, CHudWebm, CHudTextNum, CHudKillZB5>
+	: public THudSubDispatcher<CHudTextZB5, CHudText2ZB5, CInventorySetZb5, CHudWebm, CHudTextNum, CHudKillZB5, CHudHitDamage>
 {
 public:
 };
@@ -39,6 +39,7 @@ DECLARE_MESSAGE(m_ZB5, ZB5Evolevel)
 DECLARE_MESSAGE(m_ZB5, ZB5Getlocationbox)
 DECLARE_MESSAGE(m_ZB5, ZB5GetlocationboxK)
 DECLARE_MESSAGE(m_ZB5, ZB5ExternEvo)
+DECLARE_MESSAGE(m_ZB5, HitDamageMsgZB5)
 
 int CHudZB5::MsgFunc_ZB5Msg(const char *pszName, int iSize, void *pbuf)
 {
@@ -191,6 +192,23 @@ int CHudZB5::MsgFunc_ZB5ExternEvo(const char* pszName, int iSize, void* pbuf)
 	return 1;
 }
 
+int CHudZB5::MsgFunc_HitDamageMsgZB5(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+	auto type = static_cast<INTMessage>(buf.ReadByte());
+
+	switch (type)
+	{
+	case ZB3_HIT:
+	{
+		pimpl->get<CHudHitDamage>().Settext();
+		break;
+	}
+	}
+
+	return 1;
+}
+
 int CHudZB5::Init(void)
 {
 	pimpl = new CHudZB5::impl_t;
@@ -205,6 +223,7 @@ int CHudZB5::Init(void)
 	HOOK_MESSAGE(ZB5Getlocationbox);
 	HOOK_MESSAGE(ZB5GetlocationboxK);
 	HOOK_MESSAGE(ZB5ExternEvo);
+	HOOK_MESSAGE(HitDamageMsgZB5);
 
 	return 1;
 }

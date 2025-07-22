@@ -205,3 +205,49 @@ void CHudText2ZB3::Settext()
 	m_pCurTexture = stringtext;
 	m_flDisplayTime = gHUD.m_flTime;
 }
+
+
+
+
+
+
+
+
+int CHudHitDamage::VidInit(void)
+{
+	if (!m_iTex)
+		m_iTex = R_LoadTextureShared("resource/hud/i_damage", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
+	return 1;
+}
+
+int CHudHitDamage::Draw(float time)
+{
+	if (!m_pCurTexture)
+		return 1;
+
+	if (time > m_flDisplayTime + 0.5f)
+	{
+		m_pCurTexture = nullptr;
+		return 1;
+	}
+
+	int x = ScreenWidth / 1.995;
+	int y = ScreenHeight / 1.950;
+
+	const float flScale = 0.0f;
+	const int r = 153, g = 97, b = 7;
+
+	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
+	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255 * std::min(5.0f - (time - m_flDisplayTime), 0.5f));
+
+	m_iTex->Bind();
+	DrawUtils::Draw2DQuadScaled(x - 100 / 2, y - 38, x + 100 / 2, y + 16);
+
+	return 1;
+}
+
+void CHudHitDamage::Settext()
+{
+	m_pCurTexture = m_iTex;
+	m_flDisplayTime = gHUD.m_flTime;
+}

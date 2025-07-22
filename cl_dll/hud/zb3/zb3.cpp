@@ -22,7 +22,7 @@
 #include <vector>
 
 class CHudZB3::impl_t
-	: public THudSubDispatcher<CHudZB3Morale, CHudZB3Rage, CHudTextZB3, CHudText2ZB3, CInventorySet>
+	: public THudSubDispatcher<CHudZB3Morale, CHudZB3Rage, CHudTextZB3, CHudText2ZB3, CInventorySet, CHudHitDamage>
 {
 public:
 };
@@ -31,7 +31,7 @@ DECLARE_MESSAGE(m_ZB3, ZB3Msg)
 DECLARE_MESSAGE(m_ZB3, ZB3SkillUsed)
 DECLARE_MESSAGE(m_ZB3, ZB3SkillUsed2)
 DECLARE_MESSAGE(m_ZB3, ZB3Inventory)
-
+DECLARE_MESSAGE(m_ZB3, HitDamageMsgZB3)
 
 int CHudZB3::MsgFunc_ZB3Msg(const char *pszName, int iSize, void *pbuf)
 {
@@ -114,6 +114,23 @@ int CHudZB3::MsgFunc_ZB3Inventory(const char* pszName, int iSize, void* pbuf)
 	return 1;
 }
 
+int CHudZB3::MsgFunc_HitDamageMsgZB3(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+	auto type = static_cast<INTMessage>(buf.ReadByte());
+
+	switch (type)
+	{
+	case ZB3_HIT:
+	{
+		pimpl->get<CHudHitDamage>().Settext();
+		break;
+	}
+	}
+
+	return 1;
+}
+
 int CHudZB3::Init(void)
 {
 	pimpl = new CHudZB3::impl_t;
@@ -124,6 +141,7 @@ int CHudZB3::Init(void)
 	HOOK_MESSAGE(ZB3SkillUsed);
 	HOOK_MESSAGE(ZB3SkillUsed2);
 	HOOK_MESSAGE(ZB3Inventory);
+	HOOK_MESSAGE(HitDamageMsgZB3);
 
 	return 1;
 }

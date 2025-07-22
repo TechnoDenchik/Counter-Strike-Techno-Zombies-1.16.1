@@ -16,14 +16,16 @@
 #include "zbs_kill.h"
 
 #include "gamemode/zbs/zbs_const.h"
+#include "gamemode/interface/interface_const.h"
 
 class CHudZBS::impl_t
-	: public THudSubDispatcher<CHudZBSLevel, CHudZBSScoreBoard, CHudZBSKill, CHudZBSRoundClear, CHudZBSMsgLevel, CHudTextZBS> {};
+	: public THudSubDispatcher<CHudZBSLevel, CHudZBSScoreBoard, CHudZBSKill, CHudZBSRoundClear, CHudZBSMsgLevel, CHudTextZBS, CHudHitDamage> {};
 
 DECLARE_MESSAGE(m_ZBS, ZBSTip)
 DECLARE_MESSAGE(m_ZBS, ZBSLevel)
 DECLARE_MESSAGE(m_ZBS, ZBSMsgLevel)
 DECLARE_MESSAGE(m_ZBS, ZBSRenMsg)
+DECLARE_MESSAGE(m_ZBS, HitDamageMsgZBS)
 
 int CHudZBS::MsgFunc_ZBSTip(const char* pszName, int iSize, void* pbuf)
 {
@@ -93,6 +95,23 @@ int CHudZBS::MsgFunc_ZBSRenMsg(const char* pszName, int iSize, void* pbuf)
 	return 1;
 }
 
+int CHudZBS::MsgFunc_HitDamageMsgZBS(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+	auto type = static_cast<INTMessage>(buf.ReadByte());
+
+	switch (type)
+	{
+	case ZB3_HIT:
+	{
+		pimpl->get<CHudHitDamage>().Settext();
+		break;
+	}
+	}
+
+	return 1;
+}
+
 int CHudZBS::Init(void)
 {
 	pimpl = new CHudZBS::impl_t;
@@ -103,6 +122,7 @@ int CHudZBS::Init(void)
 	HOOK_MESSAGE(ZBSLevel);
 	HOOK_MESSAGE(ZBSMsgLevel);
 	HOOK_MESSAGE(ZBSRenMsg);
+	HOOK_MESSAGE(HitDamageMsgZBS);
 
 	return 1;
 }
@@ -139,4 +159,3 @@ void CHudZBS::Shutdown(void)
 	delete pimpl;
 	pimpl = nullptr;
 }
-

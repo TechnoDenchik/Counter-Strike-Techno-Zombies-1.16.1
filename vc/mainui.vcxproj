@@ -200,7 +200,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <TargetName>interface</TargetName>
-    <OutDir>L:\CSTZ</OutDir>
+    <OutDir>E:\CSTZ</OutDir>
     <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -223,7 +223,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>MAINUI_USE_CUSTOM_FONT_RENDER;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>../engine;../common;../pm_shared;../mainui_cpp;../mainui_cpp/model;../mainui_cpp/font;../mainui_cpp/controls;../mainui_cpp/menus;../mainui_cpp/utl</AdditionalIncludeDirectories>

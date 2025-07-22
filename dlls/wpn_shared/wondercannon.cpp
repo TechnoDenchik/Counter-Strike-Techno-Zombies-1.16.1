@@ -48,6 +48,7 @@ void CWonderCannon::Spawn(void)
 	WonderAmmo = 3;
 	m_fireuse2 = false;
 	WonderExp = 0;
+	phs13 = 3;
 	FallInit();
 }
 
@@ -120,6 +121,12 @@ BOOL CWonderCannon::Deploy(void)
 	m_flAccuracy = 0.2;
 	m_iShotsFired = 0;
 	iShellOn = 1;
+	phs2 = -1;
+	phs3 = -1;
+	phs4 = -1;
+	phs12 = -1;
+	phs13 = 3;
+
 	return DefaultDeploy("models/v_wondercannon.mdl", "models/p_wondercannon.mdl", ANIM_DRAW, "ak47", UseDecrement() != FALSE);
 }
 
@@ -128,6 +135,11 @@ void CWonderCannon::Holster(int skiplocal)
 	ClearEffect();
 	DestroyEffect();
 
+	phs2 = -1;
+	phs3 = -1;
+	phs4 = -1;
+	phs12 = -1;
+	phs13 = 3;
 	// clear target list ?
 	return CBasePlayerWeapon::Holster(skiplocal);
 }
@@ -450,12 +462,78 @@ void CWonderCannon::PrimaryAttack(void)
 		WonderCannonFire(0.04 + (0.07) * m_flAccuracy, 0.7, FALSE);
 	else
 		WonderCannonFire((0.0275), 0.7, FALSE);
+
+	if (phs2 > 0.0f)
+		phs2 = -1.0f; // 0xBF800000
+	bool v6 = gpGlobals->time > phs12 + 1.0f;
+
 	PrimaryAttack_FindTargets();
 }
 
 void CWonderCannon::SecondaryAttack(void)
 {
-	
+	if (phs2 > 0.0f)
+		phs2 = -1.0f; // 0xBF800000
+
+
+
+	if (gpGlobals->time - tWorldTime6 < 99.0f)
+	{
+		tDelta6 += gpGlobals->time - tWorldTime6;
+	}
+
+	if (tNextAttack6 > 0.5f || (gpGlobals->time - tWorldTime6 > 0.5f) || tDelta6 > 0.5f)
+	{
+		tNextAttack6 = 0.0f;
+		tDelta6 = 0.0f;
+
+		phs13--;
+
+		static int iLastCountDown = -1;
+		int iCountDown = phs13;
+
+		if (iCountDown > 0)
+		{
+			if (iCountDown != iLastCountDown)
+			{
+				iLastCountDown = iCountDown;
+
+				if (iCountDown == 2)
+				{
+					EMIT_SOUND_DYN(ENT(pev), CHAN_ITEM, "weapons/wondercannon_cmod_charging.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+				}
+
+				if (iCountDown < 2)
+				{
+					if (phs3 == -1.0f)
+					{
+
+						SendWeaponAnim(ANIM_BMODE_START, UseDecrement() != FALSE);
+						phs3 = gpGlobals->time + 0.43;
+						m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 99999.0;
+						m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 99999.0;
+					}
+
+					bool v6 = gpGlobals->time > phs12 + 1.0f;
+					int flags;
+#ifdef CLIENT_WEAPONS
+					flags = FEV_NOTHOST;
+#else
+					flags = 0;
+#endif
+
+					if (v6)
+						phs12 = v6 = gpGlobals->time;
+					m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.12f;
+
+					m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.9f;
+
+				}
+			}
+		}
+	}
+	tWorldTime6 = gpGlobals->time;
+
 }
 
 void CWonderCannon::WonderCannonFire(float flSpread, float flCycleTime, BOOL fUseAutoAim)
@@ -520,7 +598,7 @@ void CWonderCannon::WonderCannonFire(float flSpread, float flCycleTime, BOOL fUs
 	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usFireWonderCannon, 0, (float*)&g_vecZero, (float*)&g_vecZero, vecDir.x, vecDir.y, 0, 0, FALSE, FALSE);
 
 	m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME;
-	//m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
+	m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
 	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + flCycleTime;
 
 #ifndef CLIENT_DLL
@@ -599,7 +677,6 @@ void CWonderCannon::WonderCannonFire2(float flSpread, float flCycleTime, BOOL fU
 
 void CWonderCannon::Reload(void)
 {
-	
 	if (DefaultReload(30, ANIM_RELOAD, 2.35))
 	{
 #ifndef CLIENT_DLL
@@ -608,6 +685,7 @@ void CWonderCannon::Reload(void)
 		m_flAccuracy = 0.2;
 		m_iShotsFired = 0;
 		m_bDelayFire = false;
+		phs13 = 3;
 	}
 }
 
@@ -677,6 +755,39 @@ void CWonderCannon::ItemPostFrame()
 		}
 
 		tWorldTime3 = gpGlobals->time;
+	}
+
+	if (phs4 > 0.0f && gpGlobals->time > phs4)
+	{
+		phs4 = -1;
+
+		return;
+	}
+
+	if (phs2 <= 0.0f)
+	{
+		if (phs3 > 0.0f)
+		{
+			if (this->m_pPlayer->pev->button & IN_ATTACK2 && this->m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] > 0)
+			{
+				if (gpGlobals->time > phs3)
+				{
+					this->SendWeaponAnim(ANIM_BMODE_IDLE, UseDecrement() != FALSE); // 4
+					phs3 = gpGlobals->time + 10.0f;
+
+					return CBasePlayerWeapon::ItemPostFrame();
+				}
+			}
+			else
+			{
+				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/wondercannon_comd_shoot.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+				this->SendWeaponAnim(ANIM_BMODE_SHOOT, UseDecrement() != FALSE); // 5
+				phs3 = -1;
+				m_flNextPrimaryAttack = m_flNextSecondaryAttack = m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.7f;
+				phs12 = -1;
+				phs13 = 3;
+			}
+		}
 	}
 
 	return CBasePlayerWeapon::ItemPostFrame();
