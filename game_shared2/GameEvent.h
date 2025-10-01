@@ -38,6 +38,7 @@ enum GameEventType : int
 	EVENT_WEAPON_FIRED,			// tell bots the player is attack (argumens: 1 = attacker, 2 = NULL)
 	EVENT_WEAPON_FIRED_ON_EMPTY,		// tell bots the player is attack without clip ammo (argumens: 1 = attacker, 2 = NULL)
 	EVENT_WEAPON_RELOADED,			// tell bots the player is reloading his weapon (argumens: 1 = reloader, 2 = NULL)
+	EVENT_SUPPLYBOX_ARRIVE,
 
 	EVENT_HE_GRENADE_EXPLODED,		// tell bots the HE grenade is exploded (argumens: 1 = grenade thrower, 2 = NULL)
 	EVENT_FLASHBANG_GRENADE_EXPLODED,	// tell bots the flashbang grenade is exploded (argumens: 1 = grenade thrower, 2 = explosion origin)

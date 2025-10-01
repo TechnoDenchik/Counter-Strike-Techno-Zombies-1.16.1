@@ -33,9 +33,9 @@ extern byte	*r_temppool;
 #define BLOCK_SIZE_DEFAULT	128		// for keep backward compatibility
 #define BLOCK_SIZE_MAX	1024
 
-#define MAX_TEXTURES	8096
+#define MAX_TEXTURES	16192
 #define MAX_DETAIL_TEXTURES	1024
-#define MAX_LIGHTMAPS	1024
+#define MAX_LIGHTMAPS	32684
 #define SUBDIVIDE_SIZE	64
 #define MAX_MIRRORS		64	// per one frame!
 
@@ -200,12 +200,14 @@ typedef struct
 	cl_entity_t	*solid_entities[MAX_VISIBLE_PACKET];	// opaque moving or alpha brushes
 	cl_entity_t	*trans_entities[MAX_VISIBLE_PACKET];	// translucent brushes
 	cl_entity_t	*child_entities[MAX_VISIBLE_PACKET];	// entities with MOVETYPE_FOLLOW
+	cl_entity_t* delay_entities[MAX_VISIBLE_PACKET];	// entities draw after viewmodel
 	uint		num_static_entities;
 	uint		num_mirror_entities;
 	uint		num_solid_entities;
 	uint		num_trans_entities;
 	uint		num_child_entities;
-         
+    uint		num_delay_entities;
+
 	// OpenGL matrix states
 	qboolean		modelviewIdentity;
 	qboolean		fResetVis;

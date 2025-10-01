@@ -51,7 +51,7 @@ void CThanatos9::Spawn(void)
 {
 	Precache();
 	m_iId = WEAPON_KNIFE;
-	SET_MODEL(ENT(pev), "models/w_knife.mdl");
+	SET_MODEL(ENT(pev), "models/w_thanatos9.mdl");
 
 	m_iClip = WEAPON_NOCLIP;
 	m_iWeaponState &= ~WPNSTATE_SHIELD_DRAWN;
@@ -61,21 +61,25 @@ void CThanatos9::Spawn(void)
 
 void CThanatos9::Precache(void)
 {
-	PRECACHE_MODEL("models/v_knife.mdl");
+	PRECACHE_MODEL("models/v_thanatos9.mdl");
+	PRECACHE_MODEL("models/p_thanatos9a.mdl");
+	PRECACHE_MODEL("models/p_thanatos9b.mdl");
 #ifdef ENABLE_SHIELD
 	PRECACHE_MODEL("models/shield/v_shield_knife.mdl");
 #endif
-	PRECACHE_MODEL("models/w_knife.mdl");
+	PRECACHE_MODEL("models/w_thanatos9.mdl");
 
-	PRECACHE_SOUND("weapons/knife_deploy1.wav");
-	PRECACHE_SOUND("weapons/knife_hit1.wav");
-	PRECACHE_SOUND("weapons/knife_hit2.wav");
-	PRECACHE_SOUND("weapons/knife_hit3.wav");
-	PRECACHE_SOUND("weapons/knife_hit4.wav");
-	PRECACHE_SOUND("weapons/knife_slash1.wav");
-	PRECACHE_SOUND("weapons/knife_slash2.wav");
-	PRECACHE_SOUND("weapons/knife_stab.wav");
-	PRECACHE_SOUND("weapons/knife_hitwall1.wav");
+	PRECACHE_SOUND("weapons/thanatos9_changea_1.wav");
+	PRECACHE_SOUND("weapons/thanatos9_changea_2.wav");
+	PRECACHE_SOUND("weapons/thanatos9_changea_3.wav");
+	PRECACHE_SOUND("weapons/thanatos9_changea_4.wav");
+	PRECACHE_SOUND("weapons/thanatos9_changeb_1.wav");
+	PRECACHE_SOUND("weapons/thanatos9_changeb_2.wav");
+	PRECACHE_SOUND("weapons/thanatos9_drawa.wav");
+	PRECACHE_SOUND("weapons/thanatos9_shoota1.wav");
+	PRECACHE_SOUND("weapons/thanatos9_shoota2.wav");
+	PRECACHE_SOUND("weapons/thanatos9_shootb_end.wav");
+	PRECACHE_SOUND("weapons/thanatos9_shootb_loop.wav");
 
 	m_usKnife = PRECACHE_EVENT(1, "events/thanatos9.sc");
 }
@@ -114,7 +118,7 @@ BOOL CThanatos9::Deploy(void)
 		return DefaultDeploy("models/shield/v_shield_knife.mdl", "models/shield/p_shield_knife.mdl", KNIFE_SHIELD_DRAW, "shieldknife", UseDecrement() != FALSE);
 	else
 #endif
-		return DefaultDeploy("models/v_knife.mdl", "models/p_knife.mdl", KNIFE_DRAWA, "knife", UseDecrement() != FALSE);
+		return DefaultDeploy("models/v_thanatos9.mdl", "models/p_thanatos9a.mdl", KNIFE_DRAWA, "knife", UseDecrement() != FALSE);
 }
 
 void CThanatos9::Holster(int skiplocal)

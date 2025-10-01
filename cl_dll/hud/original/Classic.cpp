@@ -14,7 +14,7 @@
 #include "OrigWinhud.h"
 #include <vector>
 
-class CHudClassic_impl_t : public THudSubDispatcher<CHudGameStart, CHudBombPlant, CHudBombDefuse, CHudOrigWins, CHudRoundDraw, CHudBombnozone, CHudBombnoground, CHudBombgive, CHudBombdrop, CHudWPNDrop, CClientMusicPack>
+class CHudClassic_impl_t : public THudSubDispatcher<CHudGameStart, CHudBombPlant, CHudBombDefuse, CHudOrigWins, CHudRoundDraw, CHudBombnozone, CHudBombnoground, CHudBombgive, CHudBombdrop, CHudWPNDrop, CClientMusicPack, CHudCantBuy>
 {
 public:
 };
@@ -31,6 +31,7 @@ DECLARE_MESSAGE(m_CLS, Bombgive)
 DECLARE_MESSAGE(m_CLS, Bombdrop)
 DECLARE_MESSAGE(m_CLS, WPNDrop)
 DECLARE_MESSAGE(m_CLS, MusicKit)
+DECLARE_MESSAGE(m_CLS, CantBuy)
 
 int CHudClassic::MsgFunc_StartGame(const char* pszName, int iSize, void* pbuf)
 {
@@ -231,6 +232,34 @@ int CHudClassic::MsgFunc_MusicKit(const char* pszName, int iSize, void* pbuf)
 	return 1;
 }
 
+int CHudClassic::MsgFunc_CantBuy(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+	auto type = static_cast<INTMessage>(buf.ReadByte());
+	int time = buf.ReadByte();
+
+	switch (type)
+	{
+	case ORIG_CANT_BUY:
+	{
+		pimpl->get<CHudCantBuy>().Settext(time, 1);
+		break;
+	}
+	case ORIG_CANT_BUY_CT:
+	{
+		pimpl->get<CHudCantBuy>().Settext(time, 2);
+		break;
+	}
+	case ORIG_CANT_BUY_T:
+	{
+		pimpl->get<CHudCantBuy>().Settext(time, 3);
+		break;
+	}
+	}
+
+	return 1;
+}
+
 int CHudClassic::Init()
 {
 	pimpl = new CHudClassic_impl_t;
@@ -249,6 +278,7 @@ int CHudClassic::Init()
 	HOOK_MESSAGE(Bombdrop);
 	HOOK_MESSAGE(WPNDrop);
 	HOOK_MESSAGE(MusicKit);
+	HOOK_MESSAGE(CantBuy);
 
 	return 1;
 }

@@ -39,6 +39,7 @@ void CEthereal::Spawn(void)
 void CEthereal::Precache(void)
 {
 	PRECACHE_MODEL("models/v_ethereal.mdl");
+	PRECACHE_MODEL("models/p_ethereal.mdl");
 	PRECACHE_MODEL("models/w_ethereal.mdl");
 
 	PRECACHE_SOUND("weapons/ethereal_draw.wav");

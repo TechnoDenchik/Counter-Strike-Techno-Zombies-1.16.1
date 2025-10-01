@@ -41,12 +41,35 @@ void CZombieBomb::Spawn(void)
 
 void CZombieBomb::Precache(void)
 {
-	PRECACHE_MODEL("models/v_zombibomb.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_trans.mdl");
+
+	PRECACHE_MODEL("models/v_zombibomb_aksha_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_boomer_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_booster_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_china_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_deathknight_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_deimos_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_fly_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_h_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_heal_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_meatwall.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_meatwall_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_pass_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_resident_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_revival_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_s_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_spider_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_teleport.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_teleport_host.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_undertaker.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_witch_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb-deimos.mdl");
+	PRECACHE_MODEL("models/v_zombibomb-deimos_host.mdl");
+	PRECACHE_MODEL("models/v_zombibomb-deimos2.mdl");
+	PRECACHE_MODEL("models/v_zombibombpc.mdl");
+
 	PRECACHE_MODEL("models/w_zombibomb.mdl");
 	PRECACHE_MODEL("models/p_zombibomb.mdl");
-#ifdef ENABLE_SHIELD
-	PRECACHE_MODEL("models/shield/v_shield_hegrenade.mdl");
-#endif
 	PRECACHE_SOUND("zb3/zombi_bomb_deploy.wav");
 	PRECACHE_SOUND("zb3/zombi_bomb_idle_1.wav");
 	PRECACHE_SOUND("zb3/zombi_bomb_idle_2.wav");
@@ -85,17 +108,93 @@ BOOL CZombieBomb::Deploy(void)
 	m_fMaxSpeed = 250;
 	m_iWeaponState &= ~WPNSTATE_SHIELD_DRAWN;
 	m_pPlayer->m_bShieldDrawn = false;
-#ifdef ENABLE_SHIELD
-	if (m_pPlayer->HasShield() != false)
-		return DefaultDeploy("models/shield/v_shield_hegrenade.mdl", "models/shield/p_shield_hegrenade.mdl", HEGRENADE_DRAW, "shieldgren", UseDecrement() != FALSE);
-	else
-#endif
-		return DefaultDeploy("models/v_zombibomb.mdl", "models/p_zombibomb.mdl", HEGRENADE_DRAW, "grenade", UseDecrement() != FALSE);
+
+	if (m_pPlayer->m_bIsZombieTank)
+	{
+		return DefaultDeploy("models/v_zombibomb_trans.mdl", "models/p_zombibomb.mdl", HEGRENADE_DRAW, "grenade", UseDecrement() != FALSE);
+	}
+	else if (m_pPlayer->m_bIsZombieFemale)
+	{
+		return DefaultDeploy("models/v_zombibomb_s_trans.mdl", "models/p_zombibomb.mdl", HEGRENADE_DRAW, "grenade", UseDecrement() != FALSE);
+	}
+	else if (m_pPlayer->m_bIsZombieHeavy)
+	{
+		return DefaultDeploy("models/v_zombibomb_h_trans.mdl", "models/p_zombibomb.mdl", HEGRENADE_DRAW, "grenade", UseDecrement() != FALSE);
+	}
+	else if (m_pPlayer->m_bIsZombieHeal)
+	{
+		return DefaultDeploy("models/v_zombibomb_heal_trans.mdl", "models/p_zombibomb.mdl", HEGRENADE_DRAW, "grenade", UseDecrement() != FALSE);
+	}
+	else if (m_pPlayer->m_bIsZombiePc)
+	{
+		return DefaultDeploy("models/v_zombibombpc.mdl", "models/p_zombibomb.mdl", HEGRENADE_DRAW, "grenade", UseDecrement() != FALSE);
+	}
+	else if (m_pPlayer->m_bIsZombieDeimos)
+	{
+		if (m_pPlayer->m_iZombieLevel == ZOMBIE_LEVEL_HOST)
+		{
+			return DefaultDeploy("models/v_zombibomb-deimos_host.mdl", "models/p_zombibomb.mdl", HEGRENADE_DRAW, "grenade", UseDecrement() != FALSE);
+		}
+		else
+			return DefaultDeploy("models/v_zombibomb-deimos.mdl", "models/p_zombibomb.mdl", HEGRENADE_DRAW, "grenade", UseDecrement() != FALSE);
+	}
+	else if (m_pPlayer->m_bIsZombieGanimed)
+	{
+		if (m_pPlayer->m_iZombieLevel == ZOMBIE_LEVEL_HOST)
+		{
+			return DefaultDeploy("models/v_zombibomb-deimos_host.mdl", "models/p_zombibomb.mdl", HEGRENADE_DRAW, "grenade", UseDecrement() != FALSE);
+		}
+		else
+			return DefaultDeploy("models/v_zombibomb-deimos2.mdl", "models/p_zombibomb.mdl", HEGRENADE_DRAW, "grenade", UseDecrement() != FALSE);
+	}
+	else if (m_pPlayer->m_bIsZombieBanchee)
+	{
+		return DefaultDeploy("models/v_zombibomb_witch_trans.mdl", "models/p_zombibomb.mdl", HEGRENADE_DRAW, "grenade", UseDecrement() != FALSE);
+	}
+	else if (m_pPlayer->m_bIsZombieStamp)
+	{
+		return DefaultDeploy("models/v_zombibomb_undertaker.mdl", "models/p_zombibomb.mdl", HEGRENADE_DRAW, "grenade", UseDecrement() != FALSE);
+	}
+	else if (m_pPlayer->m_bIsZombieAksha)
+	{
+		return DefaultDeploy("models/v_zombibomb_aksha_trans.mdl", "models/p_zombibomb.mdl", HEGRENADE_DRAW, "grenade", UseDecrement() != FALSE);
+	}
+	else if (m_pPlayer->m_bIsZombieBoomer)
+	{
+		return DefaultDeploy("models/v_zombibomb_boomer_trans.mdl", "models/p_zombibomb.mdl", HEGRENADE_DRAW, "grenade", UseDecrement() != FALSE);
+	}
+	else if (m_pPlayer->m_bIsZombieBooster)
+	{
+		return DefaultDeploy("models/v_zombibomb_booster_trans.mdl", "models/p_zombibomb.mdl", HEGRENADE_DRAW, "grenade", UseDecrement() != FALSE);
+	}
+	else if (m_pPlayer->m_bIsZombieChina)
+	{
+		return DefaultDeploy("models/v_zombibomb_china_trans.mdl", "models/p_zombibomb.mdl", HEGRENADE_DRAW, "grenade", UseDecrement() != FALSE);
+	}
+	else if (m_pPlayer->m_bIsZombieFlying)
+	{
+		return DefaultDeploy("models/v_zombibomb_fly_trans.mdl", "models/p_zombibomb.mdl", HEGRENADE_DRAW, "grenade", UseDecrement() != FALSE);
+	}
+	else if (m_pPlayer->m_bIsZombieResident)
+	{
+		return DefaultDeploy("models/v_zombibomb_resident_trans.mdl", "models/p_zombibomb.mdl", HEGRENADE_DRAW, "grenade", UseDecrement() != FALSE);
+	}
+	else if (m_pPlayer->m_bIsZombieMeatWall)
+	{
+		return DefaultDeploy("models/v_zombibomb_meatwall_trans.mdl", "models/p_zombibomb.mdl", HEGRENADE_DRAW, "grenade", UseDecrement() != FALSE);
+	}
+	else if (m_pPlayer->m_bIsZombieDeathKnight)
+	{
+		return DefaultDeploy("models/v_zombibomb_deathknight_trans.mdl", "models/p_zombibomb.mdl", HEGRENADE_DRAW, "grenade", UseDecrement() != FALSE);
+	}
+	else if (m_pPlayer->m_bIsZombieSpider)
+	{
+		return DefaultDeploy("models/v_zombibomb_spider_trans.mdl", "models/p_zombibomb.mdl", HEGRENADE_DRAW, "grenade", UseDecrement() != FALSE);
+	}
 }
 
 BOOL CZombieBomb::CanHolster(void)
 {
-	//return m_flStartThrow != invalid_time_point;
 	return CBasePlayerWeapon::CanHolster();
 }
 

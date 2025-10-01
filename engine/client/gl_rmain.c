@@ -1092,100 +1092,156 @@ void R_DrawEntitiesOnList( void )
 	glState.drawTrans = false;
 
 	// draw the solid submodels fog
-	R_DrawFog ();
+	R_DrawFog();
 
 	// first draw solid entities
-	for( i = 0; i < tr.num_solid_entities; i++ )
+	for (i = 0; i < tr.num_solid_entities; i++)
 	{
-		if( RI.refdef.onlyClientDraw )
+		if (RI.refdef.onlyClientDraw)
 			break;
 
 		RI.currententity = tr.solid_entities[i];
 		RI.currentmodel = RI.currententity->model;
-	
-		ASSERT( RI.currententity != NULL );
-		ASSERT( RI.currententity->model != NULL );
 
-		switch( RI.currentmodel->type )
+		ASSERT(RI.currententity != NULL);
+		ASSERT(RI.currententity->model != NULL);
+
+		switch (RI.currentmodel->type)
 		{
 		case mod_brush:
-			R_DrawBrushModel( RI.currententity );
+			R_DrawBrushModel(RI.currententity);
 			break;
 		case mod_studio:
-			R_DrawStudioModel( RI.currententity );
+			R_DrawStudioModel(RI.currententity);
 			break;
 		case mod_sprite:
-			R_DrawSpriteModel( RI.currententity );
+			R_DrawSpriteModel(RI.currententity);
 			break;
 		default:
 			break;
 		}
 	}
 
-	if( !RI.refdef.onlyClientDraw )
+	if (!RI.refdef.onlyClientDraw)
 	{
-		CL_DrawBeams( false );
+		CL_DrawBeams(false);
 	}
 
-	if( RI.drawWorld )
+	if (RI.drawWorld)
 		clgame.dllFuncs.pfnDrawNormalTriangles();
 
+#ifdef XASH_RAGDOLL
+	physics::gPhysicsManager.DebugDraw();
+#endif
 	// NOTE: some mods with custom renderer may generate glErrors
 	// so we clear it here
-	while( pglGetError() != GL_NO_ERROR );
+	while (pglGetError() != GL_NO_ERROR);
 
 	// don't fogging translucent surfaces
-	if( !RI.fogCustom )
-		pglDisable( GL_FOG );
-	pglDepthMask( GL_FALSE );
+	if (!RI.fogCustom)
+		pglDisable(GL_FOG);
+	pglDepthMask(GL_FALSE);
 	glState.drawTrans = true;
 
 	// then draw translucent entities
-	for( i = 0; i < tr.num_trans_entities; i++ )
+	for (i = 0; i < tr.num_trans_entities; i++)
 	{
-		if( RI.refdef.onlyClientDraw )
+		if (RI.refdef.onlyClientDraw)
 			break;
 
 		RI.currententity = tr.trans_entities[i];
 		RI.currentmodel = RI.currententity->model;
-	
-		ASSERT( RI.currententity != NULL );
-		ASSERT( RI.currententity->model != NULL );
 
-		switch( RI.currentmodel->type )
+		ASSERT(RI.currententity != NULL);
+		ASSERT(RI.currententity->model != NULL);
+
+		if (RI.currententity->curstate.eflags & EFLAG_DEPTH_CHANGED)
+		{
+			pglDepthRange(gldepthmin, gldepthmin + 0.3f * (gldepthmax - gldepthmin));
+		}
+		switch (RI.currentmodel->type)
 		{
 		case mod_brush:
-			R_DrawBrushModel( RI.currententity );
+			R_DrawBrushModel(RI.currententity);
 			break;
 		case mod_studio:
-			R_DrawStudioModel( RI.currententity );
+			R_DrawStudioModel(RI.currententity);
 			break;
 		case mod_sprite:
-			R_DrawSpriteModel( RI.currententity );
+			R_DrawSpriteModel(RI.currententity);
 			break;
 		default:
 			break;
 		}
+		if (RI.currententity->curstate.eflags & EFLAG_DEPTH_CHANGED)
+		{
+			pglDepthRange(gldepthmin, gldepthmax);
+		}
 	}
 
-	if( RI.drawWorld )
-		clgame.dllFuncs.pfnDrawTransparentTriangles ();
+	if (RI.drawWorld)
+		clgame.dllFuncs.pfnDrawTransparentTriangles();
 
-	if( !RI.refdef.onlyClientDraw )
+	if (!RI.refdef.onlyClientDraw)
 	{
-		CL_DrawBeams( true );
+		CL_DrawBeams(true);
 		CL_DrawParticles();
 	}
 
 	// NOTE: some mods with custom renderer may generate glErrors
 	// so we clear it here
-	while( pglGetError() != GL_NO_ERROR );
+	while (pglGetError() != GL_NO_ERROR);
 
 	glState.drawTrans = false;
-	pglDepthMask( GL_TRUE );
-	pglDisable( GL_BLEND );	// Trinity Render issues
+	pglDepthMask(GL_TRUE);
+	pglDisable(GL_BLEND);	// Trinity Render issues
 
 	R_DrawViewModel();
+
+	if (tr.num_delay_entities)
+	{
+		pglEnable(GL_BLEND);
+		pglDepthMask(GL_FALSE);
+		glState.drawTrans = true;
+
+		for (i = 0; i < tr.num_delay_entities; i++)
+		{
+			if (RI.refdef.onlyClientDraw)
+				break;
+
+			RI.currententity = tr.delay_entities[i];
+			RI.currentmodel = RI.currententity->model;
+
+			ASSERT(RI.currententity != NULL);
+			ASSERT(RI.currententity->model != NULL);
+
+			if (RI.currententity->curstate.eflags & EFLAG_DEPTH_CHANGED)
+			{
+				pglDepthRange(gldepthmin, gldepthmin + 0.2f * (gldepthmax - gldepthmin));
+			}
+			switch (RI.currentmodel->type)
+			{
+			case mod_brush:
+				R_DrawBrushModel(RI.currententity);
+				break;
+			case mod_studio:
+				R_DrawStudioModel(RI.currententity);
+				break;
+			case mod_sprite:
+				R_DrawSpriteModel(RI.currententity);
+				break;
+			default:
+				break;
+			}
+			if (RI.currententity->curstate.eflags & EFLAG_DEPTH_CHANGED)
+			{
+				pglDepthRange(gldepthmin, gldepthmax);
+			}
+		}
+		glState.drawTrans = false;
+		pglDepthMask(GL_TRUE);
+		pglDisable(GL_BLEND);	// Trinity Render issues
+	}
 
 	CL_ExtraUpdate();
 }

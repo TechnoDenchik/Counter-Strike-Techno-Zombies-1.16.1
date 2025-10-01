@@ -86,7 +86,14 @@ BOOL CKnife_Zombi_deimos::Deploy(void)
 	m_iWeaponState &= ~WPNSTATE_SHIELD_DRAWN;
 	m_pPlayer->m_bShieldDrawn = false;
 
-	return DefaultDeploy("models/v_knife_zombideimos_host.mdl", "", KNIFE_DRAW, "knife", UseDecrement() != FALSE);
+	if (m_pPlayer->m_iZombieLevel == ZOMBIE_LEVEL_HOST)
+	{
+		return DefaultDeploy("models/v_knife_zombideimos_host.mdl", "", KNIFE_DRAW, "knife", UseDecrement() != FALSE);
+	}
+	else
+	{
+		return DefaultDeploy("models/v_knife_zombideimos.mdl", "", KNIFE_DRAW, "knife", UseDecrement() != FALSE);
+	}
 }
 
 void CKnife_Zombi_deimos::PrimaryAttack(void)

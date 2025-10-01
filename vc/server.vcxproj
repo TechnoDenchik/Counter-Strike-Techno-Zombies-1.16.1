@@ -215,6 +215,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\dlls\bot\states\cs_bot_supplybox_rush.cpp" />
     <ClCompile Include="..\dlls\bot\states\cs_bot_use_entity.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
@@ -235,6 +236,7 @@
     <ClCompile Include="..\dlls\func_shelter.cpp" />
     <ClCompile Include="..\dlls\func_tank.cpp" />
     <ClCompile Include="..\dlls\game.cpp" />
+    <ClCompile Include="..\dlls\gamemode\backui\mod_backui.cpp" />
     <ClCompile Include="..\dlls\gamemode\mods.cpp" />
     <ClCompile Include="..\dlls\gamemode\mod_base.cpp" />
     <ClCompile Include="..\dlls\gamemode\mod_dm.cpp" />
@@ -246,6 +248,12 @@
     <ClCompile Include="..\dlls\gamemode\mod_zb3.cpp" />
     <ClCompile Include="..\dlls\gamemode\mod_zbs.cpp" />
     <ClCompile Include="..\dlls\gamemode\mod_zbshelter_pve.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_aksha.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_boomer.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_booster.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_china.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_fly.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_resident.cpp" />
     <ClCompile Include="..\dlls\gamemode\zb2\supplybox.cpp" />
     <ClCompile Include="..\dlls\gamemode\zb2\zb2_skill_human.cpp" />
     <ClCompile Include="..\dlls\gamemode\zb2\zb2_skill_zombie.cpp" />
@@ -263,6 +271,12 @@
     <ClCompile Include="..\dlls\gamemode\zb5\mod_zb1reference.cpp" />
     <ClCompile Include="..\dlls\gamemode\zb5\mod_zb2reference.cpp" />
     <ClCompile Include="..\dlls\gamemode\zb5\mod_zb5.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_akshaR.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_boomerR.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_boosterR.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_chinaR.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_flyR.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_residentR.cpp" />
     <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\supplyboxreference.cpp" />
     <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_skill_heroreference.cpp" />
     <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_skill_humanreference.cpp" />
@@ -449,6 +463,7 @@
     <ClCompile Include="..\dlls\weapons_msg.cpp" />
     <ClCompile Include="..\dlls\weapons_precache.cpp" />
     <ClCompile Include="..\dlls\world.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\hl\weapon_egon.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_dragonsword.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_dualsword.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_katana.cpp" />
@@ -457,15 +472,21 @@
     <ClCompile Include="..\dlls\wpn_shared\knife_twin_axes.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_twin_axesex.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_aksha.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_banchee.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_boomer.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_booster.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_china.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_deathknight.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_deimos.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_female.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_fly.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_ganimed.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_heal.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_heavy.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_meatwall.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_pc.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_resident.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_spider.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_stamper.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\melee\wpn_balrog9.cpp" />
@@ -480,6 +501,7 @@
     <ClCompile Include="..\dlls\wpn_shared\primary\wpn_balrog3.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\primary\wpn_balrog5.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\primary\wpn_balrog7.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_buffaug.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\primary\wpn_ethereal.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\primary\wpn_guitar.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\primary\wpn_m134hero.cpp" />
@@ -489,7 +511,9 @@
     <ClCompile Include="..\dlls\wpn_shared\primary\wpn_violingun.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\secondary\wpn_balrog1.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wondercannon.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wondercannonchain.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wondercannonex.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wondercannonmine.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_ak47.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
@@ -804,6 +828,7 @@
     <ClInclude Include="..\dlls\func_shelter.h" />
     <ClInclude Include="..\dlls\func_tank.h" />
     <ClInclude Include="..\dlls\game.h" />
+    <ClInclude Include="..\dlls\gamemode\backui\mod_backui.h" />
     <ClInclude Include="..\dlls\gamemode\gd\gd_const.h" />
     <ClInclude Include="..\dlls\gamemode\interface\interface_const.h" />
     <ClInclude Include="..\dlls\gamemode\mods.h" />
@@ -820,6 +845,12 @@
     <ClInclude Include="..\dlls\gamemode\mod_zbshelter_pve.h" />
     <ClInclude Include="..\dlls\gamemode\zb1\zb1_const.h" />
     <ClInclude Include="..\dlls\gamemode\zb1\zb1_zclass.h" />
+    <ClInclude Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_aksha.h" />
+    <ClInclude Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_boomer.h" />
+    <ClInclude Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_booster.h" />
+    <ClInclude Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_china.h" />
+    <ClInclude Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_fly.h" />
+    <ClInclude Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_resident.h" />
     <ClInclude Include="..\dlls\gamemode\zb2\supplybox.h" />
     <ClInclude Include="..\dlls\gamemode\zb2\zb2_const.h" />
     <ClInclude Include="..\dlls\gamemode\zb2\zb2_skill.h" />
@@ -840,6 +871,12 @@
     <ClInclude Include="..\dlls\gamemode\zb5\mod_zb2reference.h" />
     <ClInclude Include="..\dlls\gamemode\zb5\mod_zb5.h" />
     <ClInclude Include="..\dlls\gamemode\zb5\zb1reference\zb1_zclassreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_akshaR.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_boomerR.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_boosterR.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_chinaR.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_flyR.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_residentR.h" />
     <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\supplyboxreference.h" />
     <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb2_skillreference.h" />
     <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclassreference.h" />
@@ -981,6 +1018,7 @@
     <ClInclude Include="..\dlls\weapons_msg.h" />
     <ClInclude Include="..\dlls\weapons_precache.h" />
     <ClInclude Include="..\dlls\world.h" />
+    <ClInclude Include="..\dlls\wpn_shared\hl\weapon_egon.h" />
     <ClInclude Include="..\dlls\wpn_shared\knife_shelter_axe.h" />
     <ClInclude Include="..\dlls\wpn_shared\knife_twin_axes.h" />
     <ClInclude Include="..\dlls\wpn_shared\knife_twin_axesex.h" />
@@ -996,6 +1034,7 @@
     <ClInclude Include="..\dlls\wpn_shared\primary\wpn_balrog3.h" />
     <ClInclude Include="..\dlls\wpn_shared\primary\wpn_balrog5.h" />
     <ClInclude Include="..\dlls\wpn_shared\primary\wpn_balrog7.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_buffaug.h" />
     <ClInclude Include="..\dlls\wpn_shared\primary\wpn_ethereal.h" />
     <ClInclude Include="..\dlls\wpn_shared\primary\wpn_guitar.h" />
     <ClInclude Include="..\dlls\wpn_shared\primary\wpn_m134hero.h" />
@@ -1195,7 +1234,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRules />
     <CodeAnalysisRuleAssemblies />
-    <OutDir>E:\CSTZ\Counter-Strike-TZ</OutDir>
+    <OutDir>K:\CSTZ\Counter-Strike-TZ</OutDir>
     <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

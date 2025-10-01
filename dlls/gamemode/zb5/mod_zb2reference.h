@@ -93,7 +93,12 @@ protected:
 	void BecomeGanimed(ZombieLevel iEvolutionLevel);
 	void BecomeBanchee(ZombieLevel iEvolutionLevel);
 	void BecomeStamper(ZombieLevel iEvolutionLevel);
-
+	void BecomeAksha(ZombieLevel iEvolutionLevel);
+	void BecomeBoomer(ZombieLevel iEvolutionLevel);
+	void BecomeBooster(ZombieLevel iEvolutionLevel);
+	void BecomeChina(ZombieLevel iEvolutionLevel);
+	void BecomeFly(ZombieLevel iEvolutionLevel);
+	void BecomeResident(ZombieLevel iEvolutionLevel);
 	void BecomeMeatwall(ZombieLevel iEvolutionLevel);
 	void BecomeDeathknight(ZombieLevel iEvolutionLevel);
 	void BecomeSpider(ZombieLevel iEvolutionLevel);

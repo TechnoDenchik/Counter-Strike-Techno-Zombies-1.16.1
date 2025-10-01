@@ -24,6 +24,7 @@ public:
 	CHudMsgFunc(Bombgive);
 	CHudMsgFunc(WPNDrop);
 	CHudMsgFunc(MusicKit);
+	CHudMsgFunc(CantBuy);
 
 public:
 	class CHudClassic_impl_t* pimpl = nullptr;

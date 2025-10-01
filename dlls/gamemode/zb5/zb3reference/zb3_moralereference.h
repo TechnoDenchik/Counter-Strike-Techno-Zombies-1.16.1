@@ -38,8 +38,17 @@ public:
 		}
 		return false;
 	}
-	void ResetLevel() { m_iHumanMoraleLevel = 0; }
+
+	bool LevelDown()
+	{
+		if (m_iHumanMoraleLevel > 2)
+		{
+			m_iHumanMoraleLevel -= 3;
+			return true;
+		}
+		return false;
+	}
+	
 	void UpdateHUD(CBasePlayer * pPlayer) const;
-protected:
 	int m_iHumanMoraleLevel;
 };

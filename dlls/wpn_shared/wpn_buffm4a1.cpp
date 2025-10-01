@@ -40,6 +40,7 @@ void CM4A1Buff::Spawn(void)
 void CM4A1Buff::Precache(void)
 {
 	PRECACHE_MODEL("models/v_buffm4.mdl");
+	PRECACHE_MODEL("models/p_buffm4.mdl");
 	PRECACHE_MODEL("models/w_buffm4.mdl");
 
 	PRECACHE_SOUND("weapons/m4a1buff-1.wav");

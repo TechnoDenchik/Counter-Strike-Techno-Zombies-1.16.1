@@ -107,7 +107,7 @@ int gmsgBotProgress = 0;
 int gmsgBrass = 0;
 int gmsgFog = 0;
 int gmsgShowTimer = 0;
-
+int gmsgHeadIcon = 0;
 int gmsgZBSTip = 0;
 int gmsgZBSLevel = 0;
 int gmsgZBSMsgLevel = 0;
@@ -122,7 +122,7 @@ int gmsgBTEWeapon = 0;
 int gmsgZB2Msg = 0;
 int gmsgZB3Msg = 0;
 int gmsgZB3RenMsg = 0;
-
+int gmsgMVPInfo = 0;
 int gmsgZB5Msg = 0;
 int gmsgZB5RenMsg = 0;
 int gmsgZB5UsedMsg = 0;
@@ -149,6 +149,7 @@ int gmsgOriginalMsg11 = 0;
 int gmsgOriginalMsg12 = 0;
 int gmsgOriginalMsg13 = 0;
 int gmsgOriginalMsgMusic = 0;
+int gmsgOriginalMsgCantBuy = 0;
 int gmsgTwinAxesMsg = 0;
 int gmsgQuantumMsg = 0;
 int gmsgArbalestMsg = 0;
@@ -270,7 +271,7 @@ void LinkUserMessages()
 	gmsgFog = REG_USER_MSG("Fog", 7);
 	gmsgShowTimer = REG_USER_MSG("ShowTimer", 0);
 	gmsgHudTextArgs = REG_USER_MSG("HudTextArgs", -1);
-
+	gmsgHeadIcon = REG_USER_MSG("HeadIcon", -1);
 	gmsgZBSTip = REG_USER_MSG("ZBSTip", -1);
 	gmsgZBSLevel = REG_USER_MSG("ZBSLevel", -1);
 	gmsgZBSMsgLevel = REG_USER_MSG("ZBSMsgLevel", -1);
@@ -298,7 +299,7 @@ void LinkUserMessages()
 	gmsgZSHUpdateTime = REG_USER_MSG("ZSHUpdateTime", -1);
 	gmsgZB3Msg = REG_USER_MSG("ZB3Msg", -1);
 	gmsgZB3RenMsg = REG_USER_MSG("ZB3RenMsg", -1);
-
+	gmsgMVPInfo = REG_USER_MSG("MVPInfo", -1);
 	gmsgZB5Msg = REG_USER_MSG("ZB5Msg", -1);
 	gmsgZB5RenMsg = REG_USER_MSG("ZB5RenMsg", -1);
 	gmsgZB5UsedMsg = REG_USER_MSG("ZB5SkillUsed", -1);
@@ -324,6 +325,7 @@ void LinkUserMessages()
 	gmsgOriginalMsg12 = REG_USER_MSG("", -1);
 	gmsgOriginalMsg13 = REG_USER_MSG("AK47", -1);
 	gmsgOriginalMsgMusic = REG_USER_MSG("MusicKit", -1);
+	gmsgOriginalMsgCantBuy = REG_USER_MSG("CantBuy", -1);
 	gmsgTwinAxesMsg = REG_USER_MSG("HudTwinAxesMsg", -1);
 	gmsgQuantumMsg = REG_USER_MSG("HudQuantumMsg", -1);
 	gmsgArbalestMsg = REG_USER_MSG("ArbalestMsg", -1);
@@ -433,8 +435,20 @@ void SetScoreAttrib(CBasePlayer *dest, CBasePlayer *src)
 	if (src->m_bIsVIP)
 		state |= PLAYER_VIP;
 
+	if (src->m_bIsHero)
+		state |= PLAYER_ZOMBIE;
+
 	if (src->m_bIsZombie)
 		state |= PLAYER_ZOMBIE;
+
+	if (src->m_bIsZombieMeatWall)
+		state |= PLAYER_MUTANT;
+
+	if (src->m_bIsZombieDeathKnight)
+		state |= PLAYER_MUTANT;
+
+	if (src->m_bIsZombieSpider)
+		state |= PLAYER_MUTANT;
 
 	if (gmsgScoreAttrib)
 	{

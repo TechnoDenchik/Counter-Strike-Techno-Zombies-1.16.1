@@ -58,7 +58,6 @@ public:
 	bool ClientCommand2(const char* pcmd) override;
 	void BecomeHuman() override;
 	void Event_AdjustHumanHitgroup(CBasePlayer* attacker, HitBoxGroup& iHitgroup) override;
-
 	virtual void Event_OnRoundStart();
 private:
 
@@ -67,7 +66,7 @@ private:
 	CMod_ZombieEvolution* const m_pModZB5;
 	CZB3HumanMoraleR m_Morale;
 	const EventListener m_eventRoundStartListener;
-	int evolvl;
+	
 	float m_flRagePercent;
 	float m_flDeadTime;
 	float m_flBackupMaxHealth;

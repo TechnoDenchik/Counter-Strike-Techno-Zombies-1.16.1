@@ -71,6 +71,10 @@ public:
 	static int DrawHudStringReverse(int xpos, int ypos, int iMinX, const char* szString,
 		int r, int g, int b, float scale = 0.0f, bool drawing = false);
 
+	static int GetNEWHudNumberWidth(int type, int number, int iDrawZero, int maxsize, int widthplus = 0);
+
+	static int DrawNEWHudNumber(int index, int iX, int iY, int number, int r, int g, int b, int a, int iDrawZero, int maxsize, int widthplus = 0);
+
 	static inline int DrawHudNumberString(int xpos, int ypos, int iMinX, int iNumber,
 		int r, int g, int b, float scale = 0.0f)
 	{

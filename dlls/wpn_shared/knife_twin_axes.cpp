@@ -11,7 +11,6 @@
 #include "gamemode/interface/interface_const.h"
 #include "weapons/WeaponTemplate.hpp"
 
-
 #define KNIFE_BODYHIT_VOLUME 128
 #define KNIFE_WALLHIT_VOLUME 512
 
@@ -68,12 +67,11 @@ void CSTwinShadowAxes::Precache(void)
 {
 	PRECACHE_MODEL("models/v_dgaxe.mdl");
 	PRECACHE_MODEL("models/v_dgaxe_3.mdl");
+	PRECACHE_MODEL("models/p_dgaxe_a.mdl");
 	PRECACHE_MODEL("models/dgaxe_summon.mdl");
 
 
 	PRECACHE_MODEL("sprites/ef_dgaxe_change.spr");
-	PRECACHE_MODEL(Beam_SPR);
-	m_iModelLight1 = PRECACHE_MODEL("sprites/muzzleflash203.spr");
 
 	PRECACHE_SOUND("weapons/dgaxe_combo.wav");
 	PRECACHE_SOUND("weapons/dgaxe_draw.wav");
@@ -123,8 +121,6 @@ int CSTwinShadowAxes::GetItemInfo(ItemInfo* p)
 
 BOOL CSTwinShadowAxes::Deploy(void)
 {
-	
-	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/dgaxe_draw.wav", VOL_NORM , ATTN_NORM);
 	m_fMaxSpeed = 250;
 	m_iSwing = 0;
 	m_iSwing2 = 0;
@@ -143,12 +139,6 @@ BOOL CSTwinShadowAxes::Deploy(void)
 		return DefaultDeploy("models/v_dgaxe_3.mdl", "models/p_dgaxe_a.mdl", ANIM_DRAW, "knife", UseDecrement() != FALSE);
 	else
 		return DefaultDeploy("models/v_dgaxe.mdl", "models/p_dgaxe_a.mdl", ANIM_DRAW, "knife", UseDecrement() != FALSE);
-#ifndef CLIENT_DLL
-	MESSAGE_BEGIN(MSG_ONE, gmsgArbalestMsg, NULL);
-	WRITE_BYTE(WPN_ARBALEST);
-	WRITE_BYTE(0);
-	MESSAGE_END();
-#endif
 }
 
 void CSTwinShadowAxes::Holster(int skiplocal)
@@ -220,39 +210,32 @@ void CSTwinShadowAxes::PrimaryAttack(void)
 		pev->nextthink = UTIL_WeaponTimeBase() + 1.0;
 	}
 	else if (m_pPlayer->m_rgAmmo[m_iKnifeAmmoType] > 50)
-	{
-		if (m_pPlayer->m_rgAmmo[m_iKnifeAmmoType] > 50)
+	{	
+		if (setskill2 == true)
 		{
 			if (setskill2 == true)
 			{
-				
-				pev->nextthink = UTIL_WeaponTimeBase() + 1.0;
+
+				Vector vecSrc = m_pPlayer->GetGunPosition() + gpGlobals->v_forward * 10;
+#ifndef CLIENT_DLL
+				CTwinAxesSummon* pEnt = static_cast<CTwinAxesSummon*>(CBaseEntity::Create("twinaxes_summon", vecSrc, pev->angles, ENT(m_pPlayer->pev)));
+				if (pEnt)
+				{
+					pEnt->Init(m_pPlayer, gpGlobals->v_forward * 700);
+				}
+#endif
+				m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 2.0;
+				Skill2(TRUE);
 			}
+			pev->nextthink = UTIL_WeaponTimeBase() + 1.0;
 		}
+		
 	}
 	else
 	{ 	
 		Swing(TRUE);
 		pev->nextthink = UTIL_WeaponTimeBase() + 1.0;
 	}
-
-}
-
-void CSTwinShadowAxes::GiveSummon()
-{
-
-#ifndef CLIENT_DLL
-	UTIL_MakeVectors(m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle);
-	Vector vecSrcA = m_pPlayer->GetGunPosition() + gpGlobals->v_forward * 10 + gpGlobals->v_right * 5;
-	Vector vecSrcB = m_pPlayer->GetGunPosition() + gpGlobals->v_forward * 10 + -gpGlobals->v_right * (-5);
-	CTwinSummon* pEnt = static_cast<CTwinSummon*>(CBaseEntity::Create("twinsummlonexp", vecSrcA, m_pPlayer->pev->v_angle, ENT(m_pPlayer->pev)));
-	if (pEnt)
-	{
-		pEnt->Init(gpGlobals->v_forward * 2000, GetDamage_SpearA(), GetDamage_SpearB(), GetDamage_SpearC(), 210, m_pPlayer->m_iTeam);
-	}
-#endif
-
-	m_pPlayer->m_rgAmmo[m_iKnifeAmmoType] -= 50;
 
 }
 
@@ -265,7 +248,6 @@ void CSTwinShadowAxes::SecondaryAttack(void)
 	}
 	else
 		setkombo = true;
-	
 
 	pev->nextthink = UTIL_WeaponTimeBase() + 1.0;
 }
@@ -283,7 +265,6 @@ void CSTwinShadowAxes::GetSkin()
 
 void CSTwinShadowAxes::WeaponIdle(void)
 {
-
 	m_pPlayer->GetAutoaimVector(AUTOAIM_10DEGREES);
 	
 	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase())
@@ -295,12 +276,6 @@ void CSTwinShadowAxes::WeaponIdle(void)
 		case 1:	SendWeaponAnim(ANIM_IDLE2, UseDecrement() != FALSE); break;	
 	}
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 15;
-	#ifndef CLIENT_DLL
-		MESSAGE_BEGIN(MSG_ALL, gmsgTwinAxesMsg, NULL, m_pPlayer->pev);
-		WRITE_BYTE(TWINAXESMSG);
-		MESSAGE_END();
-	#endif // !CLIENT_DLL
-	
 }
 
 int CSTwinShadowAxes::Swing(int fFirst)
@@ -413,7 +388,6 @@ int CSTwinShadowAxes::Swing(int fFirst)
 		else if (g_pModRunning->DamageTrack() == DT_ZBS)
 			flDamage *= 500.5f;
 
-
 		hit_result_t iCallBack = KnifeAttack1(vecSrc, gpGlobals->v_forward, flDamage, 400, 100, DMG_NEVERGIB | DMG_BULLET, m_pPlayer->pev, m_pPlayer->pev, FALSE);
 #endif
 
@@ -499,74 +473,21 @@ int CSTwinShadowAxes::Swing(int fFirst)
 	return fDidHit;
 }
 
-void CSTwinShadowAxes::FlyingThink()
-{
-
-}
-
-bool CSTwinShadowAxes::SummonDamage(Vector vecSrc, entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, float flRadius, int iClassIgnore, int bitsDamageType)
-{
-	return 1;
-}
-
-void CSTwinShadowAxes::FlyingTouch(CBaseEntity* pOther)
-{
-	
-}
-
 void CSTwinShadowAxes::ItemPostFrame()
 {
 	int usableButtons = m_pPlayer->pev->button;
-	TraceResult tr;
-	if ((usableButtons & (IN_RELOAD)))
+	if ((usableButtons & (IN_RELOAD)) && (usableButtons & (IN_ATTACK)))
 	{
-		UTIL_MakeVectors(m_pPlayer->pev->v_angle);
-		Vector vecSrc = m_pPlayer->GetGunPosition();
-
-#ifndef CLIENT_DLL
-
-		Vector vecPlayerOrigin;
-		vecPlayerOrigin = m_pPlayer->pev->origin;
-
-		CBaseEntity* pEntity = NULL;
-		while ((pEntity = UTIL_FindEntityInSphere(pEntity, vecPlayerOrigin, 8192)) != NULL)
-		{
-			if (pEntity->pev->takedamage != DAMAGE_NO)
-			{
-				if (pEntity->pev == m_pPlayer->pev)
-					continue;
-
-				if (pEntity->IsBSPModel())
-					continue;
-
-				if (pEntity->pev->solid == SOLID_TRIGGER)
-					continue;
-
-				if (pEntity->pev->solid == SOLID_NOT)
-					continue;
-
-				if (pEntity->IsPlayer())
-				{
-					int iAnim = RANDOM_LONG(0, 1);
-					hit_result_t iCallBack = KnifeAttack1(vecSrc, gpGlobals->v_forward, 0, 2000, 100, DMG_NEVERGIB | DMG_BULLET, m_pPlayer->pev, m_pPlayer->pev, iAnim == 1);
-					m_pPlayer->SetAnimation(PLAYER_ATTACK2);
-					PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usKnife, 0.0, (float*)&g_vecZero, (float*)&g_vecZero, 2000, float(iAnim), iAnim, 2, iCallBack == HIT_PLAYER, m_iClip > 0);
-
-
-					pev->iuser3 = iAnim;
-				}
-			}
-		}
-#endif
-	
-
-		pev->iuser1 = 0;
+		setskill2 = true;
+		m_pPlayer->m_rgAmmo[m_iKnifeAmmoType] - 50;
 	}
 	else
 	{
+		setskill1 = false;
 		if (m_pPlayer->m_rgAmmo[m_iKnifeAmmoType] < 50)
 		{
-			setskill1 = false;
+			setskill2 = false;
+			
 			setskin2 = false;
 		}
 	}
@@ -800,8 +721,6 @@ int CSTwinShadowAxes::Stab(int fFirst)
 				flDamage *= 3.0;
 		}
 
-
-
 		UTIL_MakeVectors(m_pPlayer->pev->v_angle);
 
 		if (m_flNextPrimaryAttack + 0.9 < UTIL_WeaponTimeBase())
@@ -812,7 +731,6 @@ int CSTwinShadowAxes::Stab(int fFirst)
 			flDamage *= 900.5f;
 		else if (g_pModRunning->DamageTrack() == DT_ZBS)
 			flDamage *= 500.5f;
-
 
 		hit_result_t iCallBack = KnifeAttack1(vecSrc, gpGlobals->v_forward, flDamage, 400, 100, DMG_NEVERGIB | DMG_BULLET, m_pPlayer->pev, m_pPlayer->pev, FALSE);
 #endif
@@ -846,22 +764,21 @@ int CSTwinShadowAxes::Stab(int fFirst)
 #ifndef CLIENT_DLL
 		if (fHitWorld)
 		{
-		
-				if (RANDOM_LONG(0, 1))
-					EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/dgaxe_wall_stone1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
-				else
-					EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/dgaxe_wall_stone2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+			if (RANDOM_LONG(0, 1))
+				EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/dgaxe_wall_stone1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+			else
+				EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/dgaxe_wall_stone2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 
-				switch ((m_iSwing3++) % 4)
-				{
-				case 0: EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/dgaxe_slash1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM); break;
+			switch ((m_iSwing3++) % 4)
+			{
+			case 0: EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/dgaxe_slash1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM); break;
 
-				case 1: EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/dgaxe_slash2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM); break;
+			case 1: EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/dgaxe_slash2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM); break;
 
-				case 2: EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/dgaxe_slash3.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM); break;
+			case 2: EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/dgaxe_slash3.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM); break;
 
-				case 3: EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/dgaxe_slash4.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM); break;
-				}
+			case 3: EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/dgaxe_slash4.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM); break;
+			}
 		}
 #endif
 
@@ -877,7 +794,6 @@ int CSTwinShadowAxes::Stab(int fFirst)
 
 int CSTwinShadowAxes::kombo(int fFirst)
 {
-
 	#ifndef CLIENT_DLL
 		m_pPlayer->SpawnProtection_Start(3.0f);
 	#endif 
@@ -891,9 +807,6 @@ int CSTwinShadowAxes::kombo(int fFirst)
 	int v8 = m_waterlevel % 4;
 	SendWeaponAnim(v8 + 1);
 	m_weaponanim = v8 + 1;
-
-
-
 	
 	if (m_iuser3)
 	{
@@ -944,11 +857,8 @@ int CSTwinShadowAxes::kombo(int fFirst)
 			}
 
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 6;
-
 			
-			EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/dgaxe_combo.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
-
-			
+			EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/dgaxe_combo.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);		
 
 #ifndef CLIENT_DLL
 			m_pPlayer->SetAnimation(PLAYER_ATTACK1);
@@ -991,7 +901,6 @@ int CSTwinShadowAxes::kombo(int fFirst)
 		else if (g_pModRunning->DamageTrack() == DT_ZBS)
 			flDamage *= 500.5f;
 
-
 		hit_result_t iCallBack = KnifeAttack1(vecSrc, gpGlobals->v_forward, flDamage, 400, 100, DMG_NEVERGIB | DMG_BULLET, m_pPlayer->pev, m_pPlayer->pev, FALSE);
 #endif
 
@@ -999,7 +908,6 @@ int CSTwinShadowAxes::kombo(int fFirst)
 #ifndef CLIENT_DLL
 		int fHitWorld = TRUE;
 #endif
-
 		if (pEntity)
 		{
 			if (pEntity->Classify() != CLASS_NONE && pEntity->Classify() != CLASS_MACHINE)
@@ -1084,7 +992,7 @@ int CSTwinShadowAxes::Skill1(int fFirst)
 			{
 				if (m_pPlayer->m_rgAmmo[m_iKnifeAmmoType] > 50)
 				{
-					GiveSummon();
+					
 					SendWeaponAnim(ANIM_SKILL1, UseDecrement() != FALSE); 
 					m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 2.0;
 					m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 2.0;
@@ -1094,7 +1002,7 @@ int CSTwinShadowAxes::Skill1(int fFirst)
 			{
 				if (m_pPlayer->m_rgAmmo[m_iKnifeAmmoType] > 50)
 				{
-					GiveSummon();
+					
 					SendWeaponAnim(ANIM_SKILL1, UseDecrement() != FALSE);
 					m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 2.0;
 					m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 2.0;
@@ -1120,7 +1028,7 @@ int CSTwinShadowAxes::Skill1(int fFirst)
 		{
 			if (m_pPlayer->m_rgAmmo[m_iKnifeAmmoType] > 50)
 			{
-				GiveSummon();
+				
 				SendWeaponAnim(ANIM_SKILL1, UseDecrement() != FALSE);
 				m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 2.0;
 				m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 2.0;
@@ -1130,7 +1038,7 @@ int CSTwinShadowAxes::Skill1(int fFirst)
 		{
 			if (m_pPlayer->m_rgAmmo[m_iKnifeAmmoType] > 50)
 			{
-				GiveSummon();
+				
 				SendWeaponAnim(ANIM_SKILL1, UseDecrement() != FALSE);
 				m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 2.0;
 				m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 2.0;
@@ -1178,7 +1086,7 @@ int CSTwinShadowAxes::Skill1(int fFirst)
 					return TRUE;
 				if (m_pPlayer->m_rgAmmo[m_iKnifeAmmoType] > 50)
 				{
-					GiveSummon();
+				
 					SendWeaponAnim(ANIM_SKILL1, UseDecrement() != FALSE);
 				}
 				flVol = 0.1;
@@ -1274,10 +1182,8 @@ int CSTwinShadowAxes::Skill2(int fFirst)
 			}
 
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 6;
-
-			
-				EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/dgaxe_skill2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
-				 EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/dgaxe_skill2_exp.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+	
+			EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/dgaxe_skill2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 
 #ifndef CLIENT_DLL
 			m_pPlayer->SetAnimation(PLAYER_ATTACK1);
@@ -1323,23 +1229,6 @@ int CSTwinShadowAxes::Skill2(int fFirst)
 #ifndef CLIENT_DLL
 		m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 #endif
-		ClearMultiDamage();
-		if (pEntity)
-		{
-			float flDamage = 15;
-			if (m_flNextPrimaryAttack + 0.9 < UTIL_WeaponTimeBase())
-				flDamage = 20;
-
-#ifndef CLIENT_DLL
-			if (g_pModRunning->DamageTrack() == DT_ZB)
-				flDamage *= 900.5f;
-			else if (g_pModRunning->DamageTrack() == DT_ZBS)
-				flDamage *= 500.5f;
-#endif
-
-			pEntity->TraceAttack(m_pPlayer->pev, flDamage, gpGlobals->v_forward, &tr, DMG_NEVERGIB | DMG_BULLET);
-		}
-		ApplyMultiDamage(m_pPlayer->pev, m_pPlayer->pev);
 
 		float flVol = 1;
 #ifndef CLIENT_DLL

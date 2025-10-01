@@ -3,1332 +3,265 @@
 #include "cbase.h"
 #include "player.h"
 #include "weapons.h"
-#include <vector>
-#include <array>
 
-#include "weapons/WeaponTemplate.hpp"
+#include "gamemode/mod_zb1.h"
 
-#ifndef CLIENT_DLL
-#include "effects.h"
-#include "customentity.h"
-#include "monsters.h"
-#include "gamemode/mods.h"
-#endif
+#include "knife_twin_axes.h"
 
-class CBeam;
+LINK_ENTITY_TO_CLASS(twinaxes_summon, CTwinAxesSummon)
 
-#ifndef CLIENT_DLL
-class CGungnirProjectile2 : public CBaseEntity
+#define WONDERCANNON_MINE_EXP_RADIUS	39.37 * 5
+
+CTwinAxesSummon* CTwinAxesSummon::Create(int iType, const Vector& vecOrigin, const Vector& vecAngles, edict_t* pentOwner)
 {
-public:
-	void Spawn() override
+	edict_t* pent = CREATE_NAMED_ENTITY(MAKE_STRING("twinaxes_summon"));
+
+	if (FNullEnt(pent))
 	{
-		Precache();
-
-		m_fSequenceLoops = 0;
-		SetThink(&CGungnirProjectile2::OnThink);
-		SetTouch(&CGungnirProjectile2::OnTouch);
-		SET_MODEL(this->edict(), "sprites/ef_gungnir_missile.spr");
-		pev->rendermode = kRenderTransAdd; // 5;
-		pev->renderfx = kRenderFxNone;
-		pev->renderamt = 255.0;
-
-		//ph32 = ?
-		pev->framerate = 10;
-		pev->scale = 0.2;
-		pev->solid = SOLID_BBOX; // 2
-		pev->movetype = MOVETYPE_FLYMISSILE; // 9
-		pev->nextthink = gpGlobals->time + 0.0099999998;
-		m_flAnimEndTime = gpGlobals->time + 2.0; // ph27?
-		m_flMaxFrames = 300.0;
-		UTIL_SetSize(pev, { -4, -4, -4 }, { 4, 4, 4 });
-		}
-
-	void Precache() override
-	{
-		PRECACHE_MODEL("sprites/ef_gungnir_missile.spr");
-		PRECACHE_MODEL("sprites/ef_gungnir_bexplo.spr");
-		PRECACHE_SOUND("weapons/gungnir_shoot_b_exp.wav");
-		PRECACHE_SOUND("weapons/gungnir_charge_loop.wav");
-		PRECACHE_SOUND("weapons/gungnir_idle.wav");
-		PRECACHE_SOUND("weapons/gungnir_shoot_b.wav");
-		PRECACHE_SOUND("weapons/gungnir_shoot_end.wav");
-		PRECACHE_SOUND("weapons/gungnir_shoot_loop.wav");
+		ALERT(at_console, "NULL Ent in Create!\n");
+		return NULL;
 	}
 
-	KnockbackData GetKnockBackData()
+	CTwinAxesSummon* pMine = (CTwinAxesSummon*)Instance(pent);
+
+	if (pMine)
 	{
-		return { 0.0, 0.0, 0.0, 0.0, 1.0 };
+		pMine->m_iType = iType;
+		pMine->pev->owner = pentOwner;
+		pMine->pev->origin = vecOrigin;
+		pMine->pev->angles = vecAngles;
+		pMine->Spawn();
 	}
 
-	void EXPORT OnTouch(CBaseEntity* pOther)
-	{
-		if (pev->owner == pOther->edict())
-			return;
-
-		CBaseEntity* pAttacker = CBaseEntity::Instance(pev->owner);
-		CBasePlayer* pAttackePlayer = nullptr;
-		if (pAttacker && pAttacker->IsPlayer())
-			pAttackePlayer = static_cast<CBasePlayer*>(pAttacker);
-
-		if (pAttackePlayer && pOther->pev->takedamage != DAMAGE_NO && pOther->IsAlive())
-		{
-			Vector vecDirection = (pOther->pev->origin - pev->origin).Normalize();
-
-			TraceResult tr;
-			UTIL_TraceLine(pev->origin, pOther->pev->origin, missile, ENT(pAttackePlayer->pev), &tr);
-			tr.iHitgroup = HITGROUP_CHEST; // ...
-
-			ClearMultiDamage();
-			pOther->TraceAttack(pAttackePlayer->pev, m_flTouchDamage, vecDirection, &tr, DMG_BULLET);
-			ApplyMultiDamage(pAttackePlayer->pev, pAttackePlayer->pev);
-		}
-
-		RadiusDamage();
-	}
-
-	void EXPORT OnThink()
-	{
-		if (gpGlobals->time <= m_flAnimEndTime)
-		{
-			this->pev->frame = (float)(this->pev->framerate * gpGlobals->frametime) + this->pev->frame;
-			if (pev->frame > m_flMaxFrames)
-			{
-				pev->frame = fmod(pev->frame, m_flMaxFrames);
-			}
-			pev->nextthink = gpGlobals->time + 0.0099999998;
-		}
-		else
-		{
-			Remove();
-		}
-	}
-
-	void RadiusDamage()
-	{
-		const float flRadius = m_flExplodeRadius;
-		const float flDamage = m_flExplodeDamage;
-		const Vector vecSrc = pev->origin;
-		entvars_t* const pevAttacker = VARS(pev->owner);
-		entvars_t* const pevInflictor = this->pev;
-		int bitsDamageType = DMG_BULLET;
-
-		TraceResult tr;
-		const float falloff = flRadius ? flDamage / flRadius : 1;
-		const int bInWater = (UTIL_PointContents(vecSrc) == CONTENTS_WATER);
-
-		CBaseEntity* pEntity = NULL;
-		while ((pEntity = UTIL_FindEntityInSphere(pEntity, vecSrc, flRadius)) != NULL)
-		{
-			if (pEntity->pev->takedamage != DAMAGE_NO)
-			{
-				if (bInWater && !pEntity->pev->waterlevel)
-					continue;
-
-				if (!bInWater && pEntity->pev->waterlevel == 3)
-					continue;
-
-				if (pEntity->IsBSPModel())
-					continue;
-
-				if (pEntity->pev == pevAttacker)
-					continue;
-
-				Vector vecSpot = pEntity->BodyTarget(vecSrc);
-				UTIL_TraceLine(vecSrc, vecSpot, missile, ENT(pevInflictor), &tr);
-
-				if (tr.flFraction == 1.0f || tr.pHit == pEntity->edict())
-				{
-					if (tr.fStartSolid)
-					{
-						tr.vecEndPos = vecSrc;
-						tr.flFraction = 0;
-					}
-					float flAdjustedDamage = flDamage - (vecSrc - pEntity->pev->origin).Length() * falloff;
-					flAdjustedDamage = Q_max(0, flAdjustedDamage);
-
-					if (tr.flFraction == 1.0f)
-					{
-						pEntity->TakeDamage(pevInflictor, pevAttacker, flAdjustedDamage, bitsDamageType);
-					}
-					else
-					{
-						tr.iHitgroup = HITGROUP_CHEST;
-						ClearMultiDamage();
-						pEntity->TraceAttack(pevInflictor, flAdjustedDamage, (tr.vecEndPos - vecSrc).Normalize(), &tr, bitsDamageType);
-						ApplyMultiDamage(pevInflictor, pevAttacker);
-					}
-
-						
-				}
-			}
-		}
-
-		MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
-		WRITE_BYTE(TE_EXPLOSION);
-		WRITE_COORD(pev->origin.x);
-		WRITE_COORD(pev->origin.y);
-		WRITE_COORD(pev->origin.z);
-		WRITE_SHORT(MODEL_INDEX("sprites/ef_gungnir_bexplo.spr"));
-		WRITE_BYTE(10);
-		WRITE_BYTE(30);
-		WRITE_BYTE(TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NOSOUND);
-		MESSAGE_END();
-
-		EMIT_SOUND_DYN(this->edict(), CHAN_WEAPON, "weapons/gungnir_shoot_b_exp.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
-
-		return Remove();
-	}
-
-	void Init(Vector vecVelocity, float flTouchDamage, float flExplodeDamage, float flExplodeRadius, TeamName iTeam)
-	{
-		std::tie(m_flTouchDamage, m_flExplodeDamage, m_flExplodeRadius, m_iTeam) = std::make_tuple(flTouchDamage, flExplodeDamage, flExplodeRadius, iTeam);
-		pev->velocity = std::move(vecVelocity);
-	}
-
-	int m_fSequenceLoops;
-	float m_flAnimEndTime;
-	float m_flMaxFrames;
-	float m_flTouchDamage;
-	float m_flExplodeDamage;
-	float m_flExplodeRadius;
-	TeamName m_iTeam;
-
-protected:
-	void Remove()
-	{
-		SetThink(nullptr);
-		SetTouch(nullptr);
-		pev->effects |= EF_NODRAW; // 0x80u
-		return UTIL_Remove(this);
-	}
-};
-LINK_ENTITY_TO_CLASS(gungnir_projectile2, CGungnirProjectile2)
-
-class CTwinSummlonExp : public CBaseAnimating
-{
-public:
-	void Spawn() override
-	{
-		Precache();
-		ph4 = 0;
-		ph5 = 0;
-		ph6 = 0;
-
-		m_fSequenceLoops = 0;
-		//ph26 = 0;
-		SetTouch(&CTwinSummlonExp::OnTouch);
-		SetThink(&CTwinSummlonExp::FlyThink);
-
-		//ph32 = ?
-		pev->solid = SOLID_CUSTOM; // 5
-		pev->movetype = MOVETYPE_FLY; // 5
-		pev->nextthink = gpGlobals->time + 0.0099999998;
-		ph7 = gpGlobals->time + 1.0f;
-		ph8 = 300.0;
-		this_1_has_disconnected = 0;
-		UTIL_SetSize(pev, { -6, -6, -6 }, { 6, 6, 6 });
-
-		
-	}
-
-	void Precache() override
-	{
-		m_iModelExplo = PRECACHE_MODEL("sprites/ef_dgaxe_explo.spr");
-		m_iModelLight1 = PRECACHE_MODEL("sprites/ef_gungnir_lightline1.spr");
-		m_iModelLight2 = PRECACHE_MODEL("sprites/ef_gungnir_lightline2.spr");
-
-		PRECACHE_SOUND("sound/dgaxe_skill1.spr");
-		PRECACHE_SOUND("sound/dgaxe_skill1_exp.spr");
-	}
-
-	KnockbackData GetKnockBackData()
-	{
-		return { 1100.0f, 500.0f, 700.0f, 400.0f, 0.89999998f };
-	}
-
-	void EXPORT FlyThink()
-	{
-		if (gpGlobals->time < ph7)
-		{
-			this->pev->nextthink = gpGlobals->time + 0.0099999998;
-			this_1_m_iSwing = gpGlobals->time;
-
-			if (pev->solid == SOLID_NOT)
-			{
-				PenetrateEnd();
-			}
-		}
-		else
-		{
-			TouchWall();
-		}
-	}
-
-	void EXPORT OnTouch(CBaseEntity* pOther)
-	{
-		if (gpGlobals->time <= this_1_m_iSwing)
-		{
-			if (pOther && pOther->IsBSPModel())
-			{
-				TouchWall();
-			}
-			else if (pOther->pev->pContainingEntity != this->pev->owner)
-			{
-				TouchEntity(pOther);
-			}
-		}
-	}
-
-	void TouchWall()
-	{
-		pev->velocity = {};
-		RadiusDamage();
-	}
-
-	void TouchEntity(CBaseEntity* pOther)
-	{
-		if (pev->owner == pOther->edict())
-			return;
-
-		CBaseEntity* pAttacker = CBaseEntity::Instance(pev->owner);
-		CBasePlayer* pAttackePlayer = nullptr;
-		if (pAttacker && pAttacker->IsPlayer())
-			pAttackePlayer = static_cast<CBasePlayer*>(pAttacker);
-
-		if (pAttackePlayer && pOther->pev->takedamage != DAMAGE_NO && pOther->IsAlive())
-		{
-			Vector vecDirection = (pOther->pev->origin - pev->origin).Normalize();
-
-			TraceResult tr;
-			UTIL_TraceLine(pev->origin, pOther->pev->origin, missile, ENT(pAttackePlayer->pev), &tr);
-			tr.iHitgroup = HITGROUP_CHEST; // ...
-
-			ClearMultiDamage();
-			pOther->TraceAttack(pAttackePlayer->pev, m_flTouchDamage, vecDirection, &tr, DMG_BULLET);
-			ApplyMultiDamage(pAttackePlayer->pev, pAttackePlayer->pev);
-
-			PenetrateStart();
-		}
-	}
-
-	void PenetrateStart()
-	{
-		pev->origin = pev->origin + m_vecStartVelocity.Normalize() * 12;
-		
-
-		pev->solid = SOLID_NOT;
-
-		pev->nextthink = gpGlobals->time + 0.05f;
-	}
-
-	void PenetrateEnd()
-	{
-		pev->velocity = m_vecStartVelocity;
-		pev->solid = SOLID_CUSTOM;
-
-		pev->nextthink = gpGlobals->time + 0.001f;
-	}
-
-	void RadiusDamage()
-	{
-		const float flRadius = m_flExplodeRadius;
-		const float flDamage = m_flExplodeDamage;
-		const Vector vecSrc = pev->origin;
-		entvars_t* const pevAttacker = VARS(pev->owner);
-		entvars_t* const pevInflictor = this->pev;
-		int bitsDamageType = DMG_BULLET;
-
-		TraceResult tr;
-		const float falloff = flRadius ? flDamage / flRadius : 1;
-		const int bInWater = (UTIL_PointContents(vecSrc) == CONTENTS_WATER);
-
-		CBaseEntity* pEntity = NULL;
-		while ((pEntity = UTIL_FindEntityInSphere(pEntity, vecSrc, flRadius)) != NULL)
-		{
-			if (pEntity->pev->takedamage != DAMAGE_NO)
-			{
-				if (bInWater && !pEntity->pev->waterlevel)
-					continue;
-
-				if (!bInWater && pEntity->pev->waterlevel == 3)
-					continue;
-
-				if (pEntity->IsBSPModel())
-					continue;
-
-				if (pEntity->pev == pevAttacker)
-					continue;
-
-				Vector vecSpot = pEntity->BodyTarget(vecSrc);
-					UTIL_TraceLine(vecSrc, vecSpot, missile, ENT(pevInflictor), &tr);
-
-				if (tr.flFraction == 1.0f || tr.pHit == pEntity->edict())
-				{
-					if (tr.fStartSolid)
-					{
-						tr.vecEndPos = vecSrc;
-						tr.flFraction = 0;
-					}
-					float flAdjustedDamage = flDamage - (vecSrc - pEntity->pev->origin).Length() * falloff;
-					flAdjustedDamage = Q_max(0, flAdjustedDamage);
-
-					if (tr.flFraction == 1.0f)
-					{
-						pEntity->TakeDamage(pevInflictor, pevAttacker, flAdjustedDamage, bitsDamageType);
-					}
-					else
-					{
-						tr.iHitgroup = HITGROUP_CHEST;
-						ClearMultiDamage();
-						pEntity->TraceAttack(pevInflictor, flAdjustedDamage, (tr.vecEndPos - vecSrc).Normalize(), &tr, bitsDamageType);
-						ApplyMultiDamage(pevInflictor, pevAttacker);
-					}
-
-				}
-			}
-		}
-
-		Vector vecAiming;
-
-		MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, 0);
-		WRITE_BYTE(TE_EXPLOSION);
-		WRITE_COORD(pev->origin.x);
-		WRITE_COORD(pev->origin.y);
-		WRITE_COORD(pev->origin.z);
-		WRITE_SHORT(m_iModelExplo);
-		WRITE_BYTE(13);
-		WRITE_BYTE(50);
-		WRITE_BYTE(TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NOSOUND);
-		MESSAGE_END();
-
-		MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, 0);
-		WRITE_BYTE(TE_EXPLOSION);
-		WRITE_COORD(pev->origin.x);
-		WRITE_COORD(pev->origin.y);
-		WRITE_COORD(pev->origin.z);
-		WRITE_SHORT(m_iModelExplo);
-		WRITE_BYTE(13);
-		WRITE_BYTE(50);
-		WRITE_BYTE(TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NOSOUND);
-		MESSAGE_END();
-
-		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/dgaxe_skill1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
-		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/dgaxe_skill1_exp.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
-
-		SetThink(&CTwinSummlonExp::AdditionalDamageThink);
-			pev->nextthink = gpGlobals->time + 1.1f;
-	}
-
-	void EXPORT AdditionalDamageThink()
-	{
-		CBaseEntity::FireBullets3(pev->origin, (m_vecStartOrigin - pev->origin).Normalize(), 0.0f, (m_vecStartOrigin - pev->origin).Length(), 9, BULLET_NONE, m_flAdditionalDamage, 1.0f, this->pev, FALSE);
-	}
-
-	void Init(Vector vecVelocity, float flTouchDamage, float flExplodeDamage, float flAdditionalDamage, float flExplodeRadius, TeamName iTeam)
-	{
-		std::tie(m_flTouchDamage, m_flExplodeDamage, m_flAdditionalDamage, m_flExplodeRadius, m_iTeam) = std::make_tuple(flTouchDamage, flExplodeDamage, flAdditionalDamage, flExplodeRadius, iTeam);
-		m_vecStartVelocity = pev->velocity = std::move(vecVelocity);
-		m_vecStartOrigin = pev->origin;
-	}
-
-	int ph4;
-	int ph5;
-	int ph6;
-	float ph7;
-	float ph8; // m_pfnThink?
-	float this_1_m_iSwing;
-	short this_1_has_disconnected;
-
-	float m_flTouchDamage;
-	float m_flExplodeDamage;
-	float m_flAdditionalDamage;
-	float m_flExplodeRadius;
-	TeamName m_iTeam;
-
-	Vector m_vecStartOrigin;
-	Vector m_vecStartVelocity;
-	int m_iModelExplo;
-	int m_iModelLight1;
-	int m_iModelLight2;
-
-protected:
-	void Remove()
-	{
-		SetThink(nullptr);
-		SetTouch(nullptr);
-		pev->effects |= EF_NODRAW; // 0x80u
-		return UTIL_Remove(this);
-	}
-};
-LINK_ENTITY_TO_CLASS(twinsummlonexp, CTwinSummlonExp)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-class CTwinSummlonExpEx : public CBaseAnimating
-{
-public:
-	void Spawn() override
-	{
-		Precache();
-		ph4 = 0;
-		ph5 = 0;
-		ph6 = 0;
-
-		m_fSequenceLoops = 0;
-		//ph26 = 0;
-		SetTouch(&CTwinSummlonExpEx::OnTouch);
-		SetThink(&CTwinSummlonExpEx::FlyThink);
-
-		//ph32 = ?
-		pev->solid = SOLID_CUSTOM; // 5
-		pev->movetype = MOVETYPE_FLY; // 5
-		pev->nextthink = gpGlobals->time + 0.0099999998;
-		ph7 = gpGlobals->time + 1.0f;
-		ph8 = 300.0;
-		this_1_has_disconnected = 0;
-		UTIL_SetSize(pev, { -6, -6, -6 }, { 6, 6, 6 });
-
-
-	}
-
-	void Precache() override
-	{
-		m_iModelExplo = PRECACHE_MODEL("sprites/ef_dgaxeex_explo.spr");
-		m_iModelLight1 = PRECACHE_MODEL("sprites/ef_gungnir_lightline1.spr");
-		m_iModelLight2 = PRECACHE_MODEL("sprites/ef_gungnir_lightline2.spr");
-
-		PRECACHE_SOUND("sound/dgaxe_skill1.spr");
-		PRECACHE_SOUND("sound/dgaxeex_skill1_exp.spr");
-	}
-
-	KnockbackData GetKnockBackData()
-	{
-		return { 1100.0f, 500.0f, 700.0f, 400.0f, 0.89999998f };
-	}
-
-	void EXPORT FlyThink()
-	{
-		if (gpGlobals->time < ph7)
-		{
-			this->pev->nextthink = gpGlobals->time + 0.0099999998;
-			this_1_m_iSwing = gpGlobals->time;
-
-			if (pev->solid == SOLID_NOT)
-			{
-				PenetrateEnd();
-			}
-		}
-		else
-		{
-			TouchWall();
-		}
-	}
-
-	void EXPORT OnTouch(CBaseEntity* pOther)
-	{
-		if (gpGlobals->time <= this_1_m_iSwing)
-		{
-			if (pOther && pOther->IsBSPModel())
-			{
-				TouchWall();
-			}
-			else if (pOther->pev->pContainingEntity != this->pev->owner)
-			{
-				TouchEntity(pOther);
-			}
-		}
-	}
-
-	void TouchWall()
-	{
-		pev->velocity = {};
-		RadiusDamage();
-	}
-
-	void TouchEntity(CBaseEntity* pOther)
-	{
-		if (pev->owner == pOther->edict())
-			return;
-
-		CBaseEntity* pAttacker = CBaseEntity::Instance(pev->owner);
-		CBasePlayer* pAttackePlayer = nullptr;
-		if (pAttacker && pAttacker->IsPlayer())
-			pAttackePlayer = static_cast<CBasePlayer*>(pAttacker);
-
-		if (pAttackePlayer && pOther->pev->takedamage != DAMAGE_NO && pOther->IsAlive())
-		{
-			Vector vecDirection = (pOther->pev->origin - pev->origin).Normalize();
-
-			TraceResult tr;
-			UTIL_TraceLine(pev->origin, pOther->pev->origin, missile, ENT(pAttackePlayer->pev), &tr);
-			tr.iHitgroup = HITGROUP_CHEST; // ...
-
-			ClearMultiDamage();
-			pOther->TraceAttack(pAttackePlayer->pev, m_flTouchDamage, vecDirection, &tr, DMG_BULLET);
-			ApplyMultiDamage(pAttackePlayer->pev, pAttackePlayer->pev);
-
-			PenetrateStart();
-		}
-	}
-
-	void PenetrateStart()
-	{
-		pev->origin = pev->origin + m_vecStartVelocity.Normalize() * 12;
-
-
-		pev->solid = SOLID_NOT;
-
-		pev->nextthink = gpGlobals->time + 0.05f;
-	}
-
-	void PenetrateEnd()
-	{
-		pev->velocity = m_vecStartVelocity;
-		pev->solid = SOLID_CUSTOM;
-
-		pev->nextthink = gpGlobals->time + 0.001f;
-	}
-
-	void RadiusDamage()
-	{
-		const float flRadius = m_flExplodeRadius;
-		const float flDamage = m_flExplodeDamage;
-		const Vector vecSrc = pev->origin;
-		entvars_t* const pevAttacker = VARS(pev->owner);
-		entvars_t* const pevInflictor = this->pev;
-		int bitsDamageType = DMG_BULLET;
-
-		TraceResult tr;
-		const float falloff = flRadius ? flDamage / flRadius : 1;
-		const int bInWater = (UTIL_PointContents(vecSrc) == CONTENTS_WATER);
-
-		CBaseEntity* pEntity = NULL;
-		while ((pEntity = UTIL_FindEntityInSphere(pEntity, vecSrc, flRadius)) != NULL)
-		{
-			if (pEntity->pev->takedamage != DAMAGE_NO)
-			{
-				if (bInWater && !pEntity->pev->waterlevel)
-					continue;
-
-				if (!bInWater && pEntity->pev->waterlevel == 3)
-					continue;
-
-				if (pEntity->IsBSPModel())
-					continue;
-
-				if (pEntity->pev == pevAttacker)
-					continue;
-
-				Vector vecSpot = pEntity->BodyTarget(vecSrc);
-				UTIL_TraceLine(vecSrc, vecSpot, missile, ENT(pevInflictor), &tr);
-
-				if (tr.flFraction == 1.0f || tr.pHit == pEntity->edict())
-				{
-					if (tr.fStartSolid)
-					{
-						tr.vecEndPos = vecSrc;
-						tr.flFraction = 0;
-					}
-					float flAdjustedDamage = flDamage - (vecSrc - pEntity->pev->origin).Length() * falloff;
-					flAdjustedDamage = Q_max(0, flAdjustedDamage);
-
-					if (tr.flFraction == 1.0f)
-					{
-						pEntity->TakeDamage(pevInflictor, pevAttacker, flAdjustedDamage, bitsDamageType);
-					}
-					else
-					{
-						tr.iHitgroup = HITGROUP_CHEST;
-						ClearMultiDamage();
-						pEntity->TraceAttack(pevInflictor, flAdjustedDamage, (tr.vecEndPos - vecSrc).Normalize(), &tr, bitsDamageType);
-						ApplyMultiDamage(pevInflictor, pevAttacker);
-					}
-
-				}
-			}
-		}
-
-		Vector vecAiming;
-
-		MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, 0);
-		WRITE_BYTE(TE_EXPLOSION);
-		WRITE_COORD(pev->origin.x);
-		WRITE_COORD(pev->origin.y);
-		WRITE_COORD(pev->origin.z);
-		WRITE_SHORT(m_iModelExplo);
-		WRITE_BYTE(13);
-		WRITE_BYTE(50);
-		WRITE_BYTE(TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NOSOUND);
-		MESSAGE_END();
-
-		MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, 0);
-		WRITE_BYTE(TE_EXPLOSION);
-		WRITE_COORD(pev->origin.x);
-		WRITE_COORD(pev->origin.y);
-		WRITE_COORD(pev->origin.z);
-		WRITE_SHORT(m_iModelExplo);
-		WRITE_BYTE(13);
-		WRITE_BYTE(50);
-		WRITE_BYTE(TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NOSOUND);
-		MESSAGE_END();
-
-		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/dgaxe_skill1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
-		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/dgaxeex_skill1_exp.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
-
-		SetThink(&CTwinSummlonExp::AdditionalDamageThink);
-		pev->nextthink = gpGlobals->time + 1.1f;
-	}
-
-	void EXPORT AdditionalDamageThink()
-	{
-		CBaseEntity::FireBullets3(pev->origin, (m_vecStartOrigin - pev->origin).Normalize(), 0.0f, (m_vecStartOrigin - pev->origin).Length(), 9, BULLET_NONE, m_flAdditionalDamage, 1.0f, this->pev, FALSE);
-	}
-
-	void Init(Vector vecVelocity, float flTouchDamage, float flExplodeDamage, float flAdditionalDamage, float flExplodeRadius, TeamName iTeam)
-	{
-		std::tie(m_flTouchDamage, m_flExplodeDamage, m_flAdditionalDamage, m_flExplodeRadius, m_iTeam) = std::make_tuple(flTouchDamage, flExplodeDamage, flAdditionalDamage, flExplodeRadius, iTeam);
-		m_vecStartVelocity = pev->velocity = std::move(vecVelocity);
-		m_vecStartOrigin = pev->origin;
-	}
-
-	int ph4;
-	int ph5;
-	int ph6;
-	float ph7;
-	float ph8; // m_pfnThink?
-	float this_1_m_iSwing;
-	short this_1_has_disconnected;
-
-	float m_flTouchDamage;
-	float m_flExplodeDamage;
-	float m_flAdditionalDamage;
-	float m_flExplodeRadius;
-	TeamName m_iTeam;
-
-	Vector m_vecStartOrigin;
-	Vector m_vecStartVelocity;
-	int m_iModelExplo;
-	int m_iModelLight1;
-	int m_iModelLight2;
-
-protected:
-	void Remove()
-	{
-		SetThink(nullptr);
-		SetTouch(nullptr);
-		pev->effects |= EF_NODRAW; // 0x80u
-		return UTIL_Remove(this);
-	}
-};
-LINK_ENTITY_TO_CLASS(twinsummlonexpex, CTwinSummlonExpEx)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#endif
-
-class CGungnir2 : public LinkWeaponTemplate< CGungnir2,
-TGeneralData,
-BuildTGetItemInfoFromCSW<WEAPON_AK47>::template type,
-TPrecacheEvent,
-TReloadDefault,
-TWeaponIdleDefault,
-TGetDamageDefault>
-{
-public:
-
-	enum
-	{
-		ANIM_IDLE1,
-		ANIM_RELOAD,
-		ANIM_DRAW,
-		ANIM_SHOOT_START,
-		ANIM_SHOOT_LOOP,
-		ANIM_SHOOT_END,
-		ANIM_SHOOT_B,
-		ANIM_SHOOT_B_CHARGE,
-		ANIM_CHARGE_SHOOT,
-		ANIM_CHARGE_LOOP
-	};
-
-	static constexpr auto DefaultReloadTime = 1.9;
-	static constexpr const char* V_Model = "models/v_gungnir.mdl";
-	static constexpr const char* P_Model = "models/p_gungnira.mdl";
-	static constexpr const char* W_Model = "models/w_gungnir.mdl";
-	static constexpr const char* EventFile = "events/gungnir.sc";
-	static constexpr InventorySlotType ItemSlot = PRIMARY_WEAPON_SLOT;
-	static constexpr const char* ClassName = "weapon_gungnir";
-	static constexpr const char* AnimExtension = "m249";
-	struct ItemInfoData_t : Base::ItemInfoData_t
-	{
-		static constexpr const char* szAmmo1 = "GungnirAmmo";
-		static constexpr int iMaxAmmo1 = 100;
-	};
-	static constexpr int MaxClip = 50;
-	static constexpr float WeaponIdleTime = 10;
-
-	KnockbackData KnockBack = { 250.0f, 100.0f, 150.0f, 100.0f, 0.2f };
-	static constexpr const char* Beam_SPR = "sprites/ef_gungnir_xbeam.spr"; //
-
-public:
-	void Precache() override;
-	BOOL Deploy() override;
-	void Spawn() override;
-	void Holster(int skiplocal) override;
-	void PrimaryAttack() override;
-	void SecondaryAttack() override;
-	bool HasSecondaryAttack() override { return true; }
-	void ItemPostFrame() override;
-
-#ifndef CLIENT_DLL
-	WeaponBuyAmmoConfig GetBuyAmmoConfig() override { return { "ammo_gungnir" , 200 }; }
-#endif
-
-public:
-	void CreateEffect();
-	void DestroyEffect();
-	void PrimaryAttack_FindTargets();
-	bool PrimaryAttack_CheckTargetAvailable(CBaseEntity* a2, Vector vecDirection);
-	void PrimaryAttack_InstantDamage();
-	void ClearEffect();
-	void ShootProjectile();
-	void ShootSpear();
-
-	double GetDamage_PrimaryAttack_Instant() const
-	{
-#ifndef CLIENT_DLL
-		if (g_pModRunning->DamageTrack() == DT_ZBS)
-			return 1092.0;
-		if (g_pModRunning->DamageTrack() == DT_ZB)
-			return 304.0;
-#endif
-		return 20.0;
-	}
-	float GetDamage_ProjectileA() const
-	{
-#ifndef CLIENT_DLL
-		if (g_pModRunning->DamageTrack() == DT_ZBS)
-			return 5100.0f;
-		if (g_pModRunning->DamageTrack() == DT_ZB)
-			return 1100.0f;
-#endif
-		return 70.0f;
-	}
-	double GetDamage_ProjectileB() const
-	{
-#ifndef CLIENT_DLL
-		if (g_pModRunning->DamageTrack() == DT_ZBS)
-			return 1000.0;
-		if (g_pModRunning->DamageTrack() == DT_ZB)
-			return 900.0;
-#endif
-		return 50.0;
-	}
-	double GetDamage_SpearA() const
-	{
-#ifndef CLIENT_DLL
-		if (g_pModRunning->DamageTrack() == DT_ZBS)
-			return 27500.0;
-		if (g_pModRunning->DamageTrack() == DT_ZB)
-			return 6900.0;
-#endif
-		return 120.0;
-	}
-	double GetDamage_SpearB() const
-	{
-#ifndef CLIENT_DLL
-		if (g_pModRunning->DamageTrack() == DT_ZBS)
-			return 2500.0;
-		if (g_pModRunning->DamageTrack() == DT_ZB)
-			return 1500.0;
-#endif
-		return 80.0;
-	}
-	double GetDamage_SpearC() const
-	{
-#ifndef CLIENT_DLL
-		if (g_pModRunning->DamageTrack() == DT_ZBS)
-			return 4100.0;
-		if (g_pModRunning->DamageTrack() == DT_ZB)
-			return 2000.0;
-#endif
-		return 50.0;
-	}
-
-public:
-	float phs2;	// secondary attack start time
-	float phs3; // primary attack start time
-	float phs4; // spear attack end time... cannot switch weapon?
-	std::array<CBeam*, 3> phs5_6_7; // EHANDLE ?
-	std::vector<EHANDLE> phs9_10_11;
-	float phs12;
-};
-LINK_ENTITY_TO_CLASS(weapon_gungnir2, CGungnir2)
-
-void CGungnir2::Precache()
-{
-	PRECACHE_MODEL(Beam_SPR);
-	PRECACHE_MODEL("models/p_gungnirB.mdl");
-	PRECACHE_MODEL("sprites/ef_gungnir_aexplo.spr");
-	PRECACHE_SOUND("weapons/gungnir_charge_loop.wav");
-	PRECACHE_SOUND("weapons/gungnir_idle.wav");
-	PRECACHE_SOUND("weapons/gungnir_shoot_b.wav");
-	PRECACHE_SOUND("weapons/gungnir_shoot_end.wav");
-	PRECACHE_SOUND("weapons/gungnir_shoot_loop.wav");
-	PRECACHE_SOUND("weapons/gungnir_charge_shoot1.wav");
-	PRECACHE_SOUND("weapons/gungnir_charge_shoot2.wav");
-	return Base::Precache();
+	return pMine;
 }
 
-BOOL CGungnir2::Deploy()
+void CTwinAxesSummon::Spawn(void)
 {
-	phs2 = -1;
-	phs3 = -1;
-	phs4 = -1;
-	phs12 = -1; // 0xBF800000
+	Precache();
 
-	CreateEffect();
-	m_flNextPrimaryAttack = m_flNextSecondaryAttack = m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0f;
+	SET_MODEL(ENT(pev), "models/dgaxe_summon.mdl");
+	UTIL_SetOrigin(pev, pev->origin);
 
-	return DefaultDeploy(V_Model, P_Model, ANIM_DRAW, AnimExtension, UseDecrement() != FALSE);
+	pev->angles = g_vecZero;
+	pev->gravity = 2.5;
+	pev->solid = SOLID_BBOX;
+	pev->movetype = MOVETYPE_TOSS;
+	pev->frame = 0;
+	pev->rendermode = kRenderTransTexture;
+	pev->renderamt = 255;
+	pev->renderfx = kRenderFxFadeSlow;
+
+	m_iRenderAmt = 255;
+	pev->classname = MAKE_STRING("twinaxes_summon");
+	pev->nextthink = gpGlobals->time + 0.01f;
+	SetThink(&CTwinAxesSummon::MineThink);
 }
 
-void CGungnir2::Spawn()
+void CTwinAxesSummon::Init(CBasePlayer* pOwner, Vector vecVelocity)
 {
-	Base::Spawn();
-
-	constexpr auto flAngle = 60.0 * 0.0174532925199433;
-
-	phs2 = -1;
-	phs3 = -1;
-	phs4 = -1;
-	phs12 = -1;
+	m_pOwner = pOwner;
+	m_iTeam = m_pOwner->m_iTeam;
+	pev->velocity = std::move(vecVelocity);
 }
 
-void CGungnir2::Holster(int skiplocal)
+void CTwinAxesSummon::Precache(void)
 {
-	phs2 = -1;
-	phs3 = -1;
-	phs4 = -1;
-	phs12 = -1;
+	PRECACHE_MODEL("models/dgaxe_summon.mdl");
+	PRECACHE_MODEL("models/ef_wondercannon_area.mdl");
 
-	// clear target list ?
-	ClearEffect();
-	DestroyEffect();
-	return Base::Holster();
+	PRECACHE_MODEL("sprites/ef_wondercannon_bomb_set.spr");
+	PRECACHE_MODEL("sprites/ef_wondercannon_hit3.spr");
+
+	PRECACHE_SOUND("weapons/dgaxe_skill2_exp.wav");
+	PRECACHE_SOUND("weapons/wondercannon_comd_exp.wav");
 }
 
-void CGungnir2::PrimaryAttack()
+void CTwinAxesSummon::Remove()
 {
-	++m_iShotsFired;
-	m_bDelayFire = 1;
-	if (m_iClip <= 0)
-	{
-		if (m_fFireOnEmpty)
-		{
-			PlayEmptySound();
-			m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.2;
-		}
-		return; // sth ignored
-	}
-	--m_iClip;
-	if (phs2 > 0.0f)
-		phs2 = -1.0f; // 0xBF800000
-	if (phs3 == -1.0f)
-	{
-		SendWeaponAnim(ANIM_SHOOT_START, UseDecrement() != FALSE); // 3
-		phs3 = gpGlobals->time + 0.23;
-		m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 99999.0;
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 99999.0;
-	}
-#ifndef CLIENT_DLL
-	m_pPlayer->SetAnimation(PLAYER_ATTACK1); // 5
-#endif
-	m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME; // 600
-	m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH; // 512
-	m_pPlayer->pev->effects |= EF_MUZZLEFLASH; // 2u
+	MESSAGE_BEGIN(MSG_ALL, SVC_TEMPENTITY, pev->origin);
+	WRITE_BYTE(TE_KILLENTITYATTACHMENTS);
+	WRITE_SHORT(entindex());
+	MESSAGE_END();
 
-	bool v6 = gpGlobals->time > phs12 + 1.0f;
-	int flags;
-#ifdef CLIENT_WEAPONS
-	flags = FEV_NOTHOST;
-#else
-	flags = 0;
-#endif
-	PLAYBACK_EVENT_FULL(1, m_pPlayer->edict(), m_usFire, 0, (float*)&g_vecZero, (float*)&g_vecZero, v6 /*0*/, 0, v6, 0, FALSE, FALSE);
-
-	if (v6)
-		phs12 = v6 = gpGlobals->time;
-	m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.12f;
-
-#ifndef CLIENT_DLL
-	if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
-		m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
-#endif
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.9f;
-
-	PrimaryAttack_FindTargets();
-	PrimaryAttack_InstantDamage();
+	SetThink(nullptr);
+	pev->effects |= EF_NODRAW; // 0x80u
+	return UTIL_Remove(this);
 }
 
-void CGungnir2::ShootProjectile()
+void CTwinAxesSummon::GetSprite()
 {
-	if (m_iClip <= 0)
-	{
-		if (m_fFireOnEmpty)
-		{
-			m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.2;
-		}
-		return; // sth ignored
-	}
-	m_iClip = std::max(m_iClip - 5, 0);
+	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY, pev->origin);
+	WRITE_BYTE(TE_EXPLOSION);
+	WRITE_COORD(pev->origin.x);
+	WRITE_COORD(pev->origin.y);
+	WRITE_COORD(pev->origin.z);
+	WRITE_SHORT(MODEL_INDEX("sprites/ef_wondercannon_bomb_set.spr"));
+	WRITE_BYTE(2);
+	WRITE_BYTE(20);
+	WRITE_BYTE(TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NOSOUND);
+	MESSAGE_END();
 
-#ifndef CLIENT_DLL
-	UTIL_MakeVectors(m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle);
-	Vector vecSrc = m_pPlayer->GetGunPosition() + gpGlobals->v_forward * 10;
-	CGungnirProjectile2* pEnt = static_cast<CGungnirProjectile2*>(CBaseEntity::Create("gungnir_projectile2", vecSrc, m_pPlayer->pev->v_angle, ENT(m_pPlayer->pev)));
-	if (pEnt)
-	{
-		pEnt->Init(gpGlobals->v_forward * 1500, GetDamage_ProjectileA(), GetDamage_ProjectileB(), 110, m_pPlayer->m_iTeam);
-	}
-#endif
-
-	m_flNextPrimaryAttack = m_flNextSecondaryAttack = m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.58;
-	PLAYBACK_EVENT_FULL(1, m_pPlayer->edict(), m_usFire, 0, (float*)&g_vecZero, (float*)&g_vecZero, 3/*0*/, 0, 3, 0, FALSE, FALSE);
-
-#ifndef CLIENT_DLL
-	if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
-		m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
-#endif
+	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY, pev->origin);
+	WRITE_BYTE(TE_EXPLOSION);
+	WRITE_COORD(pev->origin.x);
+	WRITE_COORD(pev->origin.y);
+	WRITE_COORD(pev->origin.z);
+	WRITE_SHORT(MODEL_INDEX("sprites/ef_wondercannon_bomb_set.spr"));
+	WRITE_BYTE(2);
+	WRITE_BYTE(20);
+	WRITE_BYTE(TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NOSOUND);
+	MESSAGE_END();
 }
 
-void CGungnir2::ShootSpear()
+void CTwinAxesSummon::DoBombExp(bool IsManual)
 {
-#ifndef CLIENT_DLL
-	UTIL_MakeVectors(m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle);
-	Vector vecSrcA = m_pPlayer->GetGunPosition() + gpGlobals->v_forward * 10 + gpGlobals->v_right * 5;
-	Vector vecSrcB = m_pPlayer->GetGunPosition() + gpGlobals->v_forward * 10 + -gpGlobals->v_right * (-5);
-	CTwinSummlonExp* pEnt = static_cast<CTwinSummlonExp*>(CBaseEntity::Create("twinsummlonexp", vecSrcA, m_pPlayer->pev->v_angle, ENT(m_pPlayer->pev)));
-	if (pEnt)
-	{
-		pEnt->Init(gpGlobals->v_forward * 2000, GetDamage_SpearA(), GetDamage_SpearB(), GetDamage_SpearC(), 110, m_pPlayer->m_iTeam);
-	}
-#endif
-
-	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 3.12;
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 3.13;
-	m_iClip = std::max(m_iClip - 5, 0);
-
-	PLAYBACK_EVENT_FULL(1, m_pPlayer->edict(), m_usFire, 0, (float*)&g_vecZero, (float*)&g_vecZero, 4 /*0*/, 0, 4, 0, FALSE, FALSE);
-
-#ifndef CLIENT_DLL
-	if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
-		m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
-#endif
+	
 }
 
-void CGungnir2::SecondaryAttack()
+float CTwinAxesSummon::GetDamage() const
 {
-	if (phs3 <= 0.0 && m_iClip > 0)
-	{
-		if (phs2 == -1)
-			phs2 = gpGlobals->time;
+	float flDamage = 1.0f;
 
-		m_flNextPrimaryAttack = m_flNextSecondaryAttack = m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 9999.0f;
-	}
+	flDamage = 110.0f;
+	if (g_pModRunning->DamageTrack() == DT_ZB)
+		flDamage = 1900.0f;
+	else if (g_pModRunning->DamageTrack() == DT_ZBS)
+		flDamage = 39400.0f;
+	
+	return flDamage;
 }
 
-void CGungnir2::ItemPostFrame()
+void EXPORT CTwinAxesSummon::MineThink(void)
 {
-	if (phs4 > 0.0f && gpGlobals->time > phs4)
+	pev->nextthink = gpGlobals->time + 0.01f;
+
+	if (!m_pOwner)
 	{
-		m_pPlayer->pev->weaponmodel = MAKE_STRING(P_Model);
-		phs4 = -1;
+		Remove();
 		return;
 	}
 
-	if (phs2 <= 0.0f)
+	if (m_pOwner->m_bIsZombie || !m_pOwner->IsAlive())
 	{
-		if (phs3 > 0.0f)
-		{
-			if (this->m_pPlayer->pev->button & IN_ATTACK && this->m_iClip > 0)
-			{
-				if (gpGlobals->time > phs3)
-				{
-					this->SendWeaponAnim(ANIM_SHOOT_LOOP, UseDecrement() != FALSE); // 4
-					phs3 = gpGlobals->time + 1.1f;
-					EMIT_SOUND_DYN(this->edict(), CHAN_WEAPON, "weapons/gungnir_shoot_loop.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
-					return CBasePlayerWeapon::ItemPostFrame();
-				}
-			}
-			else
-			{
-				this->SendWeaponAnim(ANIM_SHOOT_END, UseDecrement() != FALSE); // 5
-				phs3 = -1;
-				m_flNextPrimaryAttack = m_flNextSecondaryAttack = m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.4f;
-				EMIT_SOUND_DYN(this->edict(), CHAN_WEAPON, "weapons/gungnir_shoot_end.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
-				ClearEffect();
-				PLAYBACK_EVENT_FULL(1, m_pPlayer->edict(), m_usFire, 0, (float*)&g_vecZero, (float*)&g_vecZero, 2 /*0*/, 0, 2, 0, FALSE, FALSE);
-				phs12 = -1;
-			}
-		}
+		Remove();
+		return;
 	}
-	else
+
+	CBasePlayerWeapon* pWeapon = (CBasePlayerWeapon*)m_pOwner->m_rgpPlayerItems[KNIFE_SLOT];
+
+	if (!pWeapon)
 	{
-		if (this->m_pPlayer->pev->button & IN_ATTACK2) // 0x800
-		{
-			const int v16 = m_pPlayer->pev->weaponanim;
-			if (gpGlobals->time > phs2 + 0.64999998)
-			{
-				if (gpGlobals->time - phs2 >= 0.64999998 + 2.03)
-				{
-					if (v16 != ANIM_CHARGE_LOOP) // 9
-					{
-						SendWeaponAnim(ANIM_CHARGE_LOOP, UseDecrement() != FALSE);
-						EMIT_SOUND_DYN(this->edict(), CHAN_WEAPON, "weapons/gungnir_charge_loop.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
-						return CBasePlayerWeapon::ItemPostFrame();
-					}
-				}
-			}
-			else if (v16 != ANIM_SHOOT_B_CHARGE) // 7
-			{
-				SendWeaponAnim(ANIM_SHOOT_B_CHARGE, UseDecrement() != FALSE);
-				Q_strcpy(m_pPlayer->m_szAnimExtention, "gungnir");
-					
-				m_pPlayer->pev->weaponmodel = MAKE_STRING("models/p_gungnirB.mdl");
-				return CBasePlayerWeapon::ItemPostFrame();
-			}
-		}
-		else
-		{
-			if (gpGlobals->time - phs2 < 0.64999998)
-			{
-#ifndef CLIENT_DLL
-				m_pPlayer->SetAnimation(PLAYER_ATTACK1); //5
-#endif
-				SendWeaponAnim(ANIM_SHOOT_B, UseDecrement() != FALSE); // 6
-				ShootProjectile();
-				phs2 = -1;
-				EMIT_SOUND_DYN(this->edict(), CHAN_WEAPON, "weapons/gungnir_shoot_b.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
-
-				return CBasePlayerWeapon::ItemPostFrame();
-			}
-			else if (gpGlobals->time - phs2 >= 0.64999998 + 2.03)
-			{
-#ifndef CLIENT_DLL
-				m_pPlayer->SetAnimation(PLAYER_ATTACK1); //5
-#endif
-				SendWeaponAnim(ANIM_CHARGE_SHOOT, UseDecrement() != FALSE); // 8
-				ShootSpear();
-				phs2 = -1;
-				Q_strcpy(m_pPlayer->m_szAnimExtention, "m249");
-				m_pPlayer->pev->weaponmodel = MAKE_STRING("models/null.mdl");
-				EMIT_SOUND_DYN(this->edict(), CHAN_WEAPON, "weapons/gungnir_charge_shoot1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
-				phs4 = gpGlobals->time + fminf(3.1199999, 0.2);
-					
-				return CBasePlayerWeapon::ItemPostFrame();
-			}
-			else if (gpGlobals->time - phs2 >= 0.64999998 + 2.03)
-			{
-				phs4 = gpGlobals->time + fminf(3.1199999, 0.2);
-				EMIT_SOUND_DYN(this->edict(), CHAN_WEAPON, "weapons/gungnir_charge_shoot2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
-			}
-
-			else if (m_pPlayer->pev->weaponanim != ANIM_SHOOT_B_CHARGE) // 7
-			{
-				SendWeaponAnim(ANIM_SHOOT_B_CHARGE, UseDecrement() != FALSE); // 7
-					
-				return CBasePlayerWeapon::ItemPostFrame();
-			}
-		}
+		Remove();
+		return;
 	}
-	return CBasePlayerWeapon::ItemPostFrame();
-}
-
-void CGungnir2::CreateEffect()
-{
-#ifndef CLIENT_DLL
-	for (size_t i = 0; i < 3; ++i)
-	{
-		CBeam* pBeam = CBeam::BeamCreate(Beam_SPR, 30);
-		pBeam->SetColor(255, 255, 255);
-		pBeam->SetScrollRate(30);
-		pBeam->SetBrightness(0);
-		pBeam->SetNoise(20);
-		pev->effects |= EF_NODRAW;
-
-		phs5_6_7[i] = pBeam;
-	}
-#endif
-}
-
-void CGungnir2::DestroyEffect()
-{
-#ifndef CLIENT_DLL
-	for (CBeam* p : phs5_6_7)
-	{
-		if (p)
-			p->SUB_Remove();
-	}
-#endif
-}
-
-void CGungnir2::PrimaryAttack_FindTargets()
-{
-	const float flRadius = 320;
-
-	phs9_10_11.clear();
-#ifndef CLIENT_DLL
+	
 	CBaseEntity* pEntity = NULL;
-	while ((pEntity = UTIL_FindEntityInSphere(pEntity, m_pPlayer->pev->origin, flRadius)) != nullptr)
+
+	if (pev->flags & FL_ONGROUND)
 	{
-		if (PrimaryAttack_CheckTargetAvailable(pEntity, m_pPlayer->pev->v_angle))
+		if (m_iState == 2)
 		{
-			EHANDLE eh;
-			eh.Set(pEntity->edict());
-			phs9_10_11.push_back(eh);
-		}
-	}
-#endif
-}
-
-bool CGungnir2::PrimaryAttack_CheckTargetAvailable(CBaseEntity* a2, Vector vecAngleDirection)
-{
-	const float flRadius = 320;
-
-	if (!a2->IsAlive())
-		return false;
-
-#ifndef CLIENT_DLL
-	if (g_pGameRules->PlayerRelationship(m_pPlayer, a2) == GR_TEAMMATE)
-		return false;
-#endif
-
-	if (a2->pev == m_pPlayer->pev)
-		return false;
-
-	Vector vecSrc = m_pPlayer->GetGunPosition();
-	Vector vecDelta = (a2->Center() - vecSrc).Normalize();
-
-	UTIL_MakeVectors(vecAngleDirection);
-
-	if (DotProduct(gpGlobals->v_forward, vecDelta) < 0.5)
-		return false;
-
-	return true;
-}
-
-void CGungnir2::PrimaryAttack_InstantDamage()
-{
-	if (phs9_10_11.empty())
-	{
-		ClearEffect();
-		if (!phs5_6_7.empty())
-		{
-				// ???
-		}
-		return;
-	}
-		
-	size_t v8 = 0;
-	for (CBaseEntity* pEntity : phs9_10_11)
-	{
-		if (v8 >= 3)
-			break;
-		if (!pEntity)
-			continue;
-		Vector vecDirection = (pEntity->pev->origin - m_pPlayer->pev->origin).Normalize();
-
-		TraceResult tr;
-		UTIL_TraceLine(m_pPlayer->pev->origin, pEntity->pev->origin, missile, ENT(m_pPlayer->pev), &tr);
-
-		ClearMultiDamage();
-		pEntity->TraceAttack(m_pPlayer->pev, GetDamage_PrimaryAttack_Instant(), vecDirection, &tr, DMG_BULLET);
-		ApplyMultiDamage(m_pPlayer->pev, m_pPlayer->pev);
-
-		if (v8 < 3)
-		{
-#ifndef CLIENT_DLL
-			CBeam* pBeam = phs5_6_7[v8];
-			if (pBeam)
+			if (gpGlobals->time - tWorldTime8 < 1.0f)
 			{
-				pBeam->EntsInit(ENTINDEX(m_pPlayer->edict()), ENTINDEX(pEntity->edict()));
-				pBeam->SetType(BEAM_ENTS);
-				pBeam->SetStartEntity(ENTINDEX(m_pPlayer->edict()));
-				pBeam->SetEndEntity(ENTINDEX(pEntity->edict()));
-				pBeam->SetStartAttachment(1);
-				pBeam->SetEndAttachment(0);
-				pBeam->RelinkBeam();
-				pBeam->SetBrightness(230);
-				pBeam->pev->effects &= ~EF_NODRAW;
-
+				tDelta8 += gpGlobals->time - tWorldTime8;
 			}
 
-			MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pEntity->pev->origin);
-			WRITE_BYTE(TE_EXPLOSION);
-			WRITE_COORD(pEntity->pev->origin.x);
-			WRITE_COORD(pEntity->pev->origin.y);
-			WRITE_COORD(pEntity->pev->origin.z);
-			WRITE_SHORT(MODEL_INDEX("sprites/ef_gungnir_aexplo.spr"));
-			WRITE_BYTE(10);
-			WRITE_BYTE(30);
-			WRITE_BYTE(TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NOSOUND);
-			MESSAGE_END();
-#endif
-			++v8;
-		}
-	}
-}
+			if (tNextAttack8 > 0.3f || (gpGlobals->time - tWorldTime8 > 0.3f) || tDelta8 > 0.3f)	//可以多射一次
+			{
+				tNextAttack8 = 0.0f;
+				tDelta8 = 0.0f;
 
-void CGungnir2::ClearEffect()
-{
-#ifndef CLIENT_DLL
-	for (CBeam* pBeam : phs5_6_7)
-	{
-		if (pBeam)
-		{
-			pBeam->SetBrightness(0);
-			pev->effects |= EF_NODRAW; // 0x80
+				if (m_iTimeSummon != 28)
+				{
+					m_iTimeSummon++;
+				}
+
+				if (m_iTimeSummon == 28)
+				{
+					m_iState = 3;
+				}
+
+				
+
+				while ((pEntity = UTIL_FindEntityInSphere(pEntity, pev->origin, 79.37 * 1.5)) != NULL)
+				{
+					if (pEntity == m_pOwner)
+						continue;
+
+					if (pEntity->IsDormant())
+						continue;
+
+					if (pEntity->pev->takedamage == DAMAGE_NO)
+						continue;
+
+					if (g_pGameRules->PlayerRelationship(m_pOwner, pEntity) == GR_TEAMMATE)
+						continue;
+
+					pEntity->TakeDamage(pev, m_pOwner->pev, GetDamage(), DMG_BULLET | DMG_CRITICAL);
+
+					return;
+				}
+
+			}
+			tWorldTime8 = gpGlobals->time;
+
 		}
+		else if (m_iState == 3)
+		{
+			if (gpGlobals->time - tWorldTime7 < 1.0f)
+			{
+				tDelta7 += gpGlobals->time - tWorldTime7;
+			}
+
+			if (tNextAttack7 > 0.5f || (gpGlobals->time - tWorldTime7 > 0.5f) || tDelta7 > 0.5f)	//可以多射一次
+			{
+				tNextAttack7 = 0.0f;
+				tDelta7 = 0.0f;
+
+				pev->sequence = 4;
+
+				if (m_iTimeSummonLife != 10)
+					m_iTimeSummonLife++;
+
+				if(m_iTimeSummonLife == 10)
+					Remove();
+			}
+			tWorldTime7 = gpGlobals->time;			
+		}
+
+		if (m_flNextAnim != 0 && m_flNextAnim < gpGlobals->time)
+		{
+			pev->sequence = 3;
+			//play model & spr
+
+			MESSAGE_BEGIN(MSG_ALL, gmsgMPToCL, NULL, this->pev);
+			WRITE_BYTE(18);
+			WRITE_BYTE(m_iType ? 2 : 0);
+			WRITE_SHORT(this->entindex());
+			MESSAGE_END();
+
+			m_iState = 2;
+			m_flNextAnim = 0;
+		}
+
+		if (!m_iState)
+		{
+			pev->sequence = 2;
+			ResetSequenceInfo();
+
+			MESSAGE_BEGIN(MSG_ALL, gmsgMPToCL, NULL, this->pev);
+			WRITE_BYTE(18);
+			WRITE_BYTE(m_iType ? 3 : 1);
+			WRITE_SHORT(this->entindex());
+			MESSAGE_END();
+
+			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/dgaxe_skill2_exp.wav", VOL_NORM, ATTN_NORM);
+
+			m_flNextAnim = gpGlobals->time + 0.2f;
+
+			m_iState = 1;
+		}	
+
 	}
-#endif
-	phs9_10_11.clear();
 }

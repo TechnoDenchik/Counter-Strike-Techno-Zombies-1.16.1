@@ -96,6 +96,10 @@ int g_iRShell, g_iPShell, g_iBlackSmoke, g_iShotgunShell;
 	DECLARE_EVENT(FireStarchaserar);
 	DECLARE_EVENT(FireBALROG3);
 	DECLARE_EVENT(Fire2BALROG3);
+	DECLARE_EVENT(FireBuffAUG);
+
+	DECLARE_EVENT(EgonFire);
+	DECLARE_EVENT(EgonStop);
 	
 /*
 ======================
@@ -190,4 +194,8 @@ void Game_HookEvents( void )
 	HOOK_EVENT(balrog3, FireBALROG3);
 	HOOK_EVENT(2balrog3, Fire2BALROG3);
 	HOOK_EVENT(2starchaserar, FireStarchaserar);
+	HOOK_EVENT(buffaug, FireBuffAUG);
+
+	HOOK_EVENT(egon_fire, EgonFire);
+	HOOK_EVENT(egon_stop, EgonStop);
 }

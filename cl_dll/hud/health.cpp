@@ -200,7 +200,6 @@ int CHudHealth::VidInit(void)
 	m_vAttackPos[ATK_LEFT ].x = ScreenWidth  / 2 - SPR_Width ( m_hSprite, 3 ) * 3;
 	m_vAttackPos[ATK_LEFT ].y = ScreenHeight / 2 - SPR_Height( m_hSprite, 3 ) / 2;
 
-
 	m_HUD_dmg_bio = gHUD.GetSpriteIndex( "dmg_bio" ) + 1;
 	m_HUD_cross = gHUD.GetSpriteIndex( "cross" );
 
@@ -301,7 +300,9 @@ int CHudHealth:: MsgFunc_ScoreAttrib(const char *pszName,  int iSize, void *pbuf
 	g_PlayerExtraInfo[index].dead   = !!(flags & PLAYER_DEAD);
 	g_PlayerExtraInfo[index].has_c4 = !!(flags & PLAYER_HAS_C4);
 	g_PlayerExtraInfo[index].vip    = !!(flags & PLAYER_VIP);
+	g_PlayerExtraInfo[index].hero = !!(flags & PLAYER_HERO);
 	g_PlayerExtraInfo[index].zombie = !!(flags & PLAYER_ZOMBIE);
+	g_PlayerExtraInfo[index].mutant = !!(flags & PLAYER_MUTANT);
 	return 1;
 }
 

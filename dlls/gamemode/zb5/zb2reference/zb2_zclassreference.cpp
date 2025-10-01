@@ -21,6 +21,13 @@
 #include "zb2_zclass_bancheereference.h"
 #include "zb2_zclass_stamperreference.h"
 
+#include "newclass/zb3_zclass_akshaR.h"
+#include "newclass/zb3_zclass_boomerR.h"
+#include "newclass/zb3_zclass_boosterR.h"
+#include "newclass/zb3_zclass_chinaR.h"
+#include "newclass/zb3_zclass_flyR.h"
+#include "newclass/zb3_zclass_residentR.h"
+
 #include "zb5_zclass_meatwall.h"
 #include "zb5_zclass_deathknight.h"
 #include "zb5_zclass_spider.h"
@@ -47,6 +54,12 @@ const std::pair<const char *, std::shared_ptr<CBaseZombieClass_ZB2R>(*)(CBasePla
 	{ "meatwall", MakeZombieClass <CZombieClass_MeatWall> },
 	{ "deathknight", MakeZombieClass <CZombieClass_DeathKnight> },
 	{ "spider", MakeZombieClass <CZombieClass_Spider> },
+	{ "aksha", MakeZombieClass <CZombieClass_AkshaR> },
+	{ "boomer", MakeZombieClass <CZombieClass_BoomerR> },
+	{ "booster", MakeZombieClass <CZombieClass_BoosterR> },
+	{ "china", MakeZombieClass <CZombieClass_ChinaR> },
+	{ "fly", MakeZombieClass <CZombieClass_FlyR> },
+	{ "resident", MakeZombieClass <CZombieClass_ResidentR> },
 };
 constexpr auto NUM_ZCLASSES = std::extent<decltype(g_FindList)>::value;
 
@@ -108,6 +121,30 @@ std::shared_ptr<CBaseZombieClass_ZB2R> ZombieClassFactoryR(CBasePlayer* player, 
 	else if (!stricmp(name, "spider"))
 	{
 		return g_FindList[11].second(player, lv);
+	}
+	else if (!stricmp(name, "aksha"))
+	{
+		return g_FindList[12].second(player, lv);
+	}
+	else if (!stricmp(name, "boomer"))
+	{
+		return g_FindList[13].second(player, lv);
+	}
+	else if (!stricmp(name, "booster"))
+	{
+		return g_FindList[14].second(player, lv);
+	}
+	else if (!stricmp(name, "china"))
+	{
+		return g_FindList[15].second(player, lv);
+	}
+	else if (!stricmp(name, "fly"))
+	{
+		return g_FindList[16].second(player, lv);
+	}
+	else if (!stricmp(name, "resident"))
+	{
+		return g_FindList[17].second(player, lv);
 	}
 
 	//return g_FindList[0].second(player, lv);

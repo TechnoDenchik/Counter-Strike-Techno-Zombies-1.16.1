@@ -2119,43 +2119,7 @@ Vector CBaseEntity::FireBullets3(Vector vecSrc, Vector vecDirShooting, float vec
 			pEntity->TraceAttack(pevAttacker, iCurrentDamage, vecDir, &tr, (DMG_BULLET | DMG_NEVERGIB));
 			iCurrentDamage *= flDamageModifier;
 
-			if (pEntity->IsAlive())
-			{
-				if (pEntity->IsBSPModel())
-					continue;
-
-				if (pEntity->pev->solid == SOLID_TRIGGER)
-					continue;
-
-				if (pEntity->pev->solid == SOLID_NOT)
-					continue;
-
-				if (pEntity->pev == pevAttacker)
-					continue;
-
-				if (g_pModRunning->DamageTrack() == DT_ZB)
-				{
-					MESSAGE_BEGIN(MSG_ONE, gmsgHitDamageMsgZB3, nullptr, pevAttacker);
-					WRITE_BYTE(ZB3_HIT);
-					MESSAGE_END();
-					
-					MESSAGE_BEGIN(MSG_ONE, gmsgHitDamageMsgZB5, nullptr, pevAttacker);
-					WRITE_BYTE(ZB3_HIT);
-					MESSAGE_END();
-				}
-				else if (g_pModRunning->DamageTrack() == DT_ZBS)
-				{
-					MESSAGE_BEGIN(MSG_ONE, gmsgHitDamageMsgZBS, nullptr, pevAttacker);
-					WRITE_BYTE(ZB3_HIT);
-					MESSAGE_END();
-				}
-				else if (g_pModRunning->DamageTrack() == DT_ZSH)
-				{
-					MESSAGE_BEGIN(MSG_ONE, gmsgHitDamageMsgZSH, nullptr, pevAttacker);
-					WRITE_BYTE(ZB3_HIT);
-					MESSAGE_END();
-				}
-			}
+		
 		}
 		else
 			iPenetration = 0;

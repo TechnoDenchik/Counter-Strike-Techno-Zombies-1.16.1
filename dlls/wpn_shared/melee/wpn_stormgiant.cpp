@@ -56,6 +56,7 @@ void CStormGiant::Spawn(void)
 void CStormGiant::Precache(void)
 {
 	PRECACHE_MODEL("models/v_stormgiant.mdl");
+	PRECACHE_MODEL("models/p_stormgiant.mdl");
 #ifdef ENABLE_SHIELD
 	PRECACHE_MODEL("models/shield/v_shield_knife.mdl");
 #endif

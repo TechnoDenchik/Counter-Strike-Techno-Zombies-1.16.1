@@ -43,6 +43,7 @@ void CBalrog3::Spawn(void)
 void CBalrog3::Precache(void)
 {
 	PRECACHE_MODEL("models/v_balrog3.mdl");
+	PRECACHE_MODEL("models/p_balrog3.mdl");
 	PRECACHE_MODEL("models/w_balrog3.mdl");
 	PRECACHE_MODEL("sprites/balrog5stack.spr");
 

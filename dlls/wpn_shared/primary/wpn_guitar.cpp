@@ -40,6 +40,7 @@ void CGuitar::Spawn(void)
 void CGuitar::Precache(void)
 {
 	PRECACHE_MODEL("models/v_guitar.mdl");
+	PRECACHE_MODEL("models/p_guitar.mdl");
 	PRECACHE_MODEL("models/w_guitar.mdl");
 
 	PRECACHE_SOUND("weapons/gt.wav");

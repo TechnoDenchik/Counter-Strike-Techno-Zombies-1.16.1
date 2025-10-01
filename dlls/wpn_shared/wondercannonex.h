@@ -65,8 +65,15 @@ public:
 	int iShellOn;
 	int WonderAmmo;
 	int WonderExp;
+	int WonderBomb;
 	bool m_fireuse2;
+	bool m_firebomb;
+	bool m_firebombinit;
 	int m_iSwing2;
+
+	duration_t tNextAttack11;
+	time_point_t tWorldTime11;
+	duration_t tDelta11;
 
 private:
 	duration_t tNextAttack3;
@@ -80,9 +87,104 @@ private:
 	duration_t tNextAttack5;
 	time_point_t tWorldTime5;
 	duration_t tDelta5;
+
+	duration_t tNextAttack6;
+	time_point_t tWorldTime6;
+	duration_t tDelta6;
+
+	float phs2;	// secondary attack start time
+	float phs3; // primary attack start time
+	float phs4;
+	float phs5;// spear attack end time... cannot switch weapon?
+	float phs12;
+	float phs13;
+	float phs14;
+
 	std::vector<EHANDLE> phs9_10_11;
 	std::array<CBeam*, 5> phs5_6_7;
 	unsigned short m_usFireWonderCannon;
 	unsigned short m_usFire2WonderCannon;
 };
+
+class CWonderCannonExMine : public CGrenade
+{
+public:
+	CWonderCannonExMine()
+	{
+		m_iState = 0;
+		m_iSequence = 0;
+		m_flNextAnim = 0;
+	}
+
+	static CWonderCannonExMine* Create(int iType, const Vector& vecOrigin, const Vector& vecAngles, edict_t* pentOwner);
+
+	void Spawn(void);
+	void Precache(void);
+	void EXPORT MineThink();
+	void Init(CBasePlayer* pOwner, Vector vecVelocity);
+	void Remove();
+	void GetSprite();
+	void GetModel();
+	void Explode(bool IsManual);
+	void BombExp(bool IsManual, CBasePlayer* m_pPlayer);
+	void DoBombExp(bool IsManual);
+	float GetDamage(bool IsManual) const;
+public:
+
+	CBasePlayer* m_pOwner;
+	CWonderCannonEx* m_pWeapon;
+	int m_iState;
+	int m_iType;
+private:
+	int m_iExp[2];
+	int m_iSequence;
+	int m_iLifeModel;
+	time_point_t m_flNextAnim;
+
+	duration_t tNextAttack7;
+	time_point_t tWorldTime7;
+	duration_t tDelta7;
+
+	duration_t tNextAttack8;
+	time_point_t tWorldTime8;
+	duration_t tDelta8;
+
+	bool hasmodel;
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #endif

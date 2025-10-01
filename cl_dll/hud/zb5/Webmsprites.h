@@ -20,39 +20,25 @@ public:
 		skin = evoskin;
 	}
 
-	void SetName(char* names)
+	void SetName(int names)
 	{
-		named = names;
+		m_iPlayerNum = names;
 	}
 
 	duration_t tNextsecond1;
 	time_point_t timesecond1;
 	duration_t tDeltasecond1;
 
-	time_point_t timetx1;
+	signed barstring = -150;
 
 protected:
 	int skin;
-	char* named;
-
-	SharedTexture m_pCurTexture;
+	int m_iPlayerNum = 0;
+	int m_iPlayerNum2;
+	bool m_pCurTexture;
 	SharedTexture stringtext;
 	SharedTexture stringtext2;
 	SharedTexture stringtext3;
 	SharedTexture stringtext4;
-	float m_flDisplayTime;
-};
-
-class CHudWebm2 : public IBaseHudSub
-{
-public:
-	int VidInit(void) override;
-	int Draw(float time) override;
-
-	void Settext();
-
-protected:
-	SharedTexture m_pCurTexture;
-	SharedTexture stringtext;
 	float m_flDisplayTime;
 };

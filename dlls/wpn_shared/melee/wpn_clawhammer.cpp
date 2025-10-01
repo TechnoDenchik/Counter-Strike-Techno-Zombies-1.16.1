@@ -56,6 +56,7 @@ void CKnifeClawHammer::Spawn(void)
 void CKnifeClawHammer::Precache(void)
 {
 	PRECACHE_MODEL("models/v_zsh_clawhammer.mdl");
+	PRECACHE_MODEL("models/p_zsh_clawhammer.mdl");
 #ifdef ENABLE_SHIELD
 	PRECACHE_MODEL("models/shield/v_shield_knife.mdl");
 #endif

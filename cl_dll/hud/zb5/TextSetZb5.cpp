@@ -1438,7 +1438,6 @@ int CHudKillZB5::Draw(float time)
 	iX = ScreenWidth;
 	iY = ScreenHeight - 1.45;
 
-
 	double w = 4.5;
 
 	int h = 212;

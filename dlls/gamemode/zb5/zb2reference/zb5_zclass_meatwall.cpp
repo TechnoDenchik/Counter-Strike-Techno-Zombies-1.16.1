@@ -43,6 +43,7 @@ CZombieClass_MeatWall::CZombieClass_MeatWall(CBasePlayer *player, ZombieLevel iE
 	m_pPlayer->pev->rendermode = kRenderNormal;
 	m_pPlayer->ResetMaxSpeed();
 	m_pPlayer->GiveNamedItem("knife_zombi_meatwall");
+	m_pPlayer->GiveNamedItem("weapon_zombibombz");
 	
 	m_pPlayer->m_bIsZombieMeatWall = true;
 }

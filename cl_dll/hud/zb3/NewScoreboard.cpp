@@ -525,7 +525,7 @@ int CHudZB3ScoreBoard::Draw(float time)
 
 		 break;
 	}
-	
+
 	if ((gHUD.m_iHideHUDDisplay & HIDEHUD_HEALTH))
 		return 1;
 

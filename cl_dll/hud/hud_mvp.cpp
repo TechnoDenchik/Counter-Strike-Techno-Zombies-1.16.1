@@ -35,13 +35,13 @@ void CHudMVP::InitHUDData()
 	memset(m_wszGameTime, 0, sizeof(m_wszGameTime));
 	memset(m_wszTitle, 0, sizeof(m_wszTitle));
 
-	strcpy(m_wszLabel[0], "杀敌数");
-	strcpy(m_wszLabel[1], "助攻");
-	strcpy(m_wszLabel[2], "感染");
+	strcpy(m_wszLabel[0], "Murders");
+	strcpy(m_wszLabel[1], "Help");
+	strcpy(m_wszLabel[2], "Infections");
 
-	strcpy(m_szScoreType[0], "杀敌");
-	strcpy(m_szScoreType[1], "助攻");
-	strcpy(m_szScoreType[2], "感染");
+	strcpy(m_szScoreType[0], "Murders");
+	strcpy(m_szScoreType[1], "Help");
+	strcpy(m_szScoreType[2], "Infections");
 }
 
 int CHudMVP::MsgFunc_MVPInfo(const char* pszName, int iSize, void* pbuf)
@@ -104,7 +104,7 @@ void CHudMVP::UpdateData(int type, int bombhandler)
 	memset(m_szVictoryTitle, 0, sizeof(m_szVictoryTitle));
 	memset(m_wszGameTime, 0, sizeof(m_wszGameTime));
 	memset(m_wszTitle, 0, sizeof(m_wszTitle));
-
+	
 	switch (m_iType)
 	{
 	case 1:
@@ -112,44 +112,44 @@ void CHudMVP::UpdateData(int type, int bombhandler)
 		if (!IsZombieMod())
 		{
 			if (bombhandler)
-				sprintf(m_wszTitle, "玩家%s为本场的拆弹专家!", g_PlayerInfoList[bombhandler].name);
-			sprintf(m_szVictoryTitle, "T阵营 胜利");
+				sprintf(m_wszTitle, "Player %s Expert!", g_PlayerInfoList[bombhandler].name);
+			sprintf(m_szVictoryTitle, "Terrorists win!");
 		}
 		else
-			sprintf(m_szVictoryTitle, "僵尸胜利");
+			sprintf(m_szVictoryTitle, "Zombie win!");
 		break;
 	case 2:
 	case 4:
 		if (!IsZombieMod())
 		{
 			if (bombhandler)
-				sprintf(m_wszTitle, "玩家%s为本场的爆破高手!", g_PlayerInfoList[bombhandler].name);
-			sprintf(m_szVictoryTitle, "CT阵营 胜利");
+				sprintf(m_wszTitle, "Player %s Expert!", g_PlayerInfoList[bombhandler].name);
+			sprintf(m_szVictoryTitle, "Counter-Terrorists win!");
 		}
 		else
-			sprintf(m_szVictoryTitle, "人类胜利");
+			sprintf(m_szVictoryTitle, "Human win!");
 		break;
 	default:
 		break;
 	}
 
-	snprintf(m_wszGameTime, sizeof(m_wszGameTime), "当前关卡进行时间： %d:%02d", m_iRoundTime / 60, m_iRoundTime % 60);
+	snprintf(m_wszGameTime, sizeof(m_wszGameTime), "Time has passed： %d:%02d", m_iRoundTime / 60, m_iRoundTime % 60);
 
 	if (!bombhandler)
 	{
 		bool bIsZbWin = IsZombieMod() && (m_iType == 1);
 		if (m_MVPData[0][0].iIndex && m_MVPData[0][0].iData > 0 && m_MVPData[0][0].iData >= m_MVPData[1][0].iData && m_MVPData[0][0].iData >= m_MVPData[2][0].iData)
-			snprintf(m_wszTitle, sizeof(m_wszGameTime), "玩家%s为本场的杀敌王牌", g_PlayerInfoList[m_MVPData[0][0].iIndex].name);
+			snprintf(m_wszTitle, sizeof(m_wszGameTime), "MVP!", g_PlayerInfoList[m_MVPData[0][0].iIndex].name);
 		else if (m_MVPData[1][0].iIndex && m_MVPData[1][0].iData > 0 && m_MVPData[1][0].iData >= m_MVPData[2][0].iData)
-			snprintf(m_wszTitle, sizeof(m_wszGameTime), "玩家%s为本场的助攻王牌", g_PlayerInfoList[m_MVPData[1][0].iIndex].name);
+			snprintf(m_wszTitle, sizeof(m_wszGameTime), "The best assistant!", g_PlayerInfoList[m_MVPData[1][0].iIndex].name);
 		else if (bIsZbWin && m_MVPData[2][0].iIndex && m_MVPData[2][0].iData > 0)
-			snprintf(m_wszTitle, sizeof(m_wszGameTime), "玩家%s为本场的僵尸王牌!", g_PlayerInfoList[m_MVPData[2][0].iIndex].name);
+			snprintf(m_wszTitle, sizeof(m_wszGameTime), "Most infections!", g_PlayerInfoList[m_MVPData[2][0].iIndex].name);
 	}
 
 	if (IsZombieMod())
-		strcpy(m_wszLabel[0], "击毙僵尸");
+		strcpy(m_wszLabel[0], "Killed zombies");
 	else
-		strcpy(m_wszLabel[0], "杀敌数");
+		strcpy(m_wszLabel[0], "Frags");
 }
 
 int CHudMVP::VidInit()
@@ -178,6 +178,8 @@ int CHudMVP::Draw(float flTime)
 	int iX = ScreenWidth / 2 - iWidthTop / 2;
 	int iY = iStartY + iHeightTop;
 
+	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
+
 	m_pPopupboardBG->Draw2DQuadScaled(iX, iY - iHeightTop, iX + iWidthTop, iY + iHeightTop * m_iRow - 45);
 	m_pPopupboardBG->Draw2DQuadScaled(iX, iY - iHeightTop, iX + iWidthTop, iY + iHeightTop * m_iRow - 45);
 
@@ -202,7 +204,7 @@ int CHudMVP::Draw(float flTime)
 			r = 140, g = 180, b = 220;
 
 		//g_FontBold.SetWidth(25);
-		DrawUtils::DrawHudString(iX + 20, iY + 25, ScreenWidth, m_szVictoryTitle, r, g, b);
+		DrawUtils::DrawHudString(iX + 20, iY + 25, ScreenWidth, m_szVictoryTitle, r, g, b, 1.0f);
 	}
 
 	iY += 30;
@@ -214,10 +216,10 @@ int CHudMVP::Draw(float flTime)
 		r = 80, g = 120, b = 160;
 
 	if (m_wszTitle[0])
-		DrawUtils::DrawHudString(iX + 20, iY + 30, ScreenWidth, m_wszTitle, r, g, b);
+		DrawUtils::DrawHudString(iX + 20, iY + 30, ScreenWidth, m_wszTitle, r, g, b, 1.0f);
 
 	if (m_wszGameTime[0])
-		DrawUtils::DrawHudString(iX + iWidthTop - 20 - 160, iY + 30, ScreenWidth, m_wszGameTime, r, g, b);
+		DrawUtils::DrawHudString(iX + iWidthTop - 20 - 160, iY + 30, ScreenWidth, m_wszGameTime, r, g, b, 1.0f);
 
 	iY = iStartY + iHeightTop;
 
@@ -226,7 +228,7 @@ int CHudMVP::Draw(float flTime)
 		iX = ScreenWidth / 2 - iWidthTop / 2 + 35;
 
 		//g_FontBold.SetWidth(18);
-		DrawUtils::DrawHudString(iX, iY - 8 + offsetY, ScreenWidth, m_wszLabel[i], 255, 255, 255);
+		DrawUtils::DrawHudString(iX, iY - 8 + offsetY, ScreenWidth, m_wszLabel[i], 255, 255, 255, 1.0f);
 
 		for (int j = 0; j < 5; j++)
 		{
@@ -243,11 +245,11 @@ int CHudMVP::Draw(float flTime)
 			if (gEngfuncs.GetLocalPlayer()->index == index)
 				m_pPopupboard->Draw2DQuadScaled(iX - 5, iY + 5 + 19 * j, iX + iWidthTop - 85, iY + 5 + 19 * j + 18);
 
-			DrawUtils::DrawHudString(iX, iY + 16 + offsetY + 19 * j, 250, g_PlayerInfoList[index].name, r, g, b);
+			DrawUtils::DrawHudString(iX, iY + 16 + offsetY + 19 * j, 250, g_PlayerInfoList[index].name, r, g, b,1.0f);
 
 			static char szScore[32];
 			sprintf(szScore, "%d %s", m_MVPData[i][j].iData, m_szScoreType[i]);
-			DrawUtils::DrawHudString(ScreenWidth / 2 + iWidthTop / 2 - 35 - 70, iY + 16 + offsetY + 19 * j, 250, szScore, r, g, b);
+			DrawUtils::DrawHudString(ScreenWidth / 2 + iWidthTop / 2 - 35 - 70, iY + 16 + offsetY + 19 * j, 250, szScore, r, g, b, 1.0f);
 		}
 		iY += 122;
 	}

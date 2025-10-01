@@ -39,6 +39,9 @@
 #include "ammo.h"
 #include "gamemode/interface/interface_const.h"
 
+#include "vgui_controls/controls.h"
+#include "vgui/ILocalize.h"
+
 enum WeaponIdType
 {
 	WEAPON_NONE,
@@ -329,8 +332,7 @@ WEAPON* WeaponsResource :: GetNextActivePos( int iSlot, int iSlotPos )
 	return p;
 }
 
-
-int giBucketHeight, giBucketWidth, giABHeight, giABWidth; // Ammo Bar width and height
+int giBucketHeight, giBucketWidth, giABHeight, giABWidth, g_iSelectionWidth, g_iSelectionHeight; // Ammo Bar width and height
 
 HSPRITE ghsprBuckets;					// Sprite for top row of weapons menu
 
@@ -542,6 +544,11 @@ int CHudAmmo::VidInit(void)
 	if (!m_iWeaponBG)
 		m_iWeaponBG = R_LoadTextureUnique("resource/hud/hud_weapon_bg_bottom");
 
+	if (!m_iWeaponList)
+		m_iWeaponList = R_LoadTextureUnique("resource/hud/weapon_list_new");
+
+	if (!m_iWeapon_OffBG)
+		m_iWeapon_OffBG = R_LoadTextureUnique("resource/hud/hud_weapon_off_bg");
 
 
 	// If we've already loaded weapons, let's get new sprites
@@ -1316,7 +1323,7 @@ int CHudAmmo::Draw(float flTime)
 		return 1;
 
 	DrawWList(flTime);
-	gHR.DrawAmmoHistory( flTime );
+	gHR.DrawNEWHudAmmoHistory( flTime );
 
 	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
 	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
@@ -1339,6 +1346,10 @@ int CHudAmmo::Draw(float flTime)
 		return 0;
 
 	WEAPON *pw = m_pWeapon;
+
+	DrawWpnList(flTime);
+
+	DrawNEWHudCurrentWpn(flTime);
        
 	if ((pw->iAmmoType < 0) && (pw->iAmmo2Type < 0) && (pw->iAmmo3Type < 0) && (pw->iAmmoGrenadeType < 0))
 		return 0;
@@ -2016,8 +2027,171 @@ void DrawAmmoBar(WEAPON *p, int x, int y, int width, int height)
 	}
 }
 
+int CHudAmmo::DrawWpnList(float flTime)
+{
+	int r, g, b, x, y, a, i;
 
 
+	a = 128; //!!!
+	x = ScreenWidth - g_iSelectionWidth * 1.1; //!!!;
+	y = ScreenHeight - g_iSelectionHeight * 7;
+
+	// Draw all of the buckets
+	for (i = 0; i < MAX_WEAPON_SLOTS; i++)
+	{
+		// If this is the active slot, draw the bigger pictures,
+		// otherwise just draw boxes
+
+		WEAPON* p = gWR.GetFirstPos(i);
+		for (int iPos = 0; iPos < MAX_WEAPON_POSITIONS; iPos++)
+		{
+			p = gWR.GetWeaponSlot(i, iPos);
+
+			if (!p || !p->iId)
+				continue;
+
+
+			// if active, then we must have ammo.
+			if (gWR.HasAmmo(p))
+			{
+				DrawUtils::UnpackRGB(r, g, b, RGB_WHITE);
+				DrawUtils::ScaleColors(r, g, b, 192);
+			}
+			else
+			{
+				DrawUtils::UnpackRGB(r, g, b, RGB_REDISH);
+				DrawUtils::ScaleColors(r, g, b, 128);
+			}
+
+			if (p == m_pWeapon)
+			{
+				SPR_Set(p->hActive, r, g, b);
+				SPR_DrawAdditive(0, x, y, &p->rcActive);
+
+				SPR_Set(gHUD.GetSprite(m_HUD_selection), r, g, b);
+				SPR_DrawAdditive(0, x, y, &gHUD.GetSpriteRect(m_HUD_selection));
+			}
+			else
+			{
+				// Draw Weapon if Red if no ammo
+				SPR_Set(p->hInactive, r, g, b);
+				SPR_DrawAdditive(0, x, y, &p->rcInactive);
+			}
+
+
+			// Draw Ammo Bar
+
+			DrawAmmoBar(p, x + giABWidth / 2, y, giABWidth, giABHeight);
+
+			x -= p->rcActive.right - p->rcActive.left - 5;
+		}
+		x = ScreenWidth - g_iSelectionWidth * 1.1;
+		y += g_iSelectionHeight * 1.2;
+	}
+
+	/*{
+		// Draw Row of weapons.
+		for (i = 0; i < MAX_WEAPON_SLOTS; i++)
+		{
+			y = giBucketHeight + 10;
+			DrawUtils::UnpackRGB(r, g, b, RGB_WHITE);
+
+			for (int iPos = 0; iPos < MAX_WEAPON_POSITIONS; iPos++)
+			{
+				WEAPON* p = gWR.GetWeaponSlot(i, iPos);
+
+				if (!p || !p->iId)
+					continue;
+
+				if (gWR.HasAmmo(p))
+				{
+					DrawUtils::UnpackRGB(r, g, b, RGB_WHITE);
+					a = 128;
+				}
+				else
+				{
+					DrawUtils::UnpackRGB(r, g, b, RGB_REDISH);
+					a = 96;
+				}
+
+				FillRGBA(x, y, giBucketWidth, giBucketHeight, r, g, b, a);
+
+				y += giBucketHeight + 5;
+			}
+
+
+			}
+		}
+	}*/
+
+	return 1;
+
+}
+
+
+int CHudAmmo::DrawNEWHudCurrentWpn(float flTime)
+{
+	int r, g, b, x, y, a, i;
+	wrect_t rcSelect = gHUD.GetSpriteRect(m_iWeaponSelect);
+	int iSelectionWidth = rcSelect.right - rcSelect.left;
+	int iSelectionHeight = rcSelect.top - rcSelect.bottom;
+
+	//int iH = m_iWeaponList->h();
+	//int iW = m_iWeaponList->w();
+
+	int iH = m_iWeapon_OffBG->h();
+	int iW = m_iWeapon_OffBG->w();
+
+	//wpn is 170w 45h  newslection is 170w 61h  list is 170w 22h
+	a = 128;
+	int iX = ScreenWidth - 5;	//x2
+	int iY = ScreenHeight - 93;	//y2
+
+	if (m_pWeapon)
+	{
+		m_iWeapon_OffBG->Draw2DQuadScaled(iX - iW, iY - iH, iX, iY);
+
+		SPR_Set(m_pWeapon->hInactive, 255, 255, 255);
+		iW = m_pWeapon->rcInactive.right - m_pWeapon->rcInactive.left;
+		iH = m_pWeapon->rcInactive.bottom - m_pWeapon->rcInactive.top;
+		SPR_DrawAdditive(0, iX - iW, iY - iH, &m_pWeapon->rcInactive);
+
+		int iLength, iHeight;
+		iX = ScreenWidth - 5 - m_iWeapon_OffBG->w();
+		iY = ScreenHeight - 93 - m_iWeapon_OffBG->h();
+
+		gEngfuncs.pfnDrawSetTextColor(1.0f, 1.0f, 1.0f);
+
+		const char* szModifiedWpnName = m_pWeapon->szName;
+		char szWeaponInfo[64];
+
+		// strip the monster_* or weapon_* from the inflictor's classname
+		if (!strncmp(szModifiedWpnName, "weapon_", 7))
+			szModifiedWpnName += 7;
+
+		else if (!strncmp(szModifiedWpnName, "knife_", 6))
+			szModifiedWpnName += 6;
+
+		else if (!strncmp(szModifiedWpnName, "func_", 5))
+			szModifiedWpnName += 5;
+
+		char szModifiedWpnName2[64];
+		strcpy(szModifiedWpnName2, szModifiedWpnName); 
+
+		char SzWpnNameCn[64];
+		char SzText[64]; 
+
+		sprintf(SzText, "#CSTZ_%s", szModifiedWpnName2);
+		strcpy(SzWpnNameCn, gHUD.m_TextMessage.BufferedLocaliseTextString(SzText));
+	
+		sprintf(szWeaponInfo, "%d %s", m_pWeapon->iSlot + 1, SzWpnNameCn);
+
+		DrawUtils::DrawHudString(iX, iY + 1, ScreenWidth, szWeaponInfo, 255, 255, 255, 1.0f);
+	}
+
+	return 1;
+
+}
 
 //
 // Draw Weapon Menu

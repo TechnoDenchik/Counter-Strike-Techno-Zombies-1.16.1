@@ -184,6 +184,10 @@ extern unsigned int	uiInputFgColor;
 extern unsigned int	uiColorWhite;
 extern unsigned int	uiColorDkGrey;
 extern unsigned int	uiColorBlack;
+extern unsigned int	uiColorRed;
+extern unsigned int	uiColorGreen;
+extern unsigned int	uiColorBlue;
+extern unsigned int	uiColorCyan;
 
 // TODO: Move it under namespace?
 

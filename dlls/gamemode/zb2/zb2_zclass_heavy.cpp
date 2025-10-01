@@ -41,6 +41,7 @@ CZombieClass_Heavy::CZombieClass_Heavy(CBasePlayer *player, ZombieLevel iEvoluti
 	m_pPlayer->pev->rendermode = kRenderNormal;
 	m_pPlayer->ResetMaxSpeed();
 	m_pPlayer->GiveNamedItem("Knife_Zombi_heavy");
+	m_pPlayer->GiveNamedItem("weapon_zombibombz");
 	m_pPlayer->m_bIsZombieHeavy = true;
 }
 

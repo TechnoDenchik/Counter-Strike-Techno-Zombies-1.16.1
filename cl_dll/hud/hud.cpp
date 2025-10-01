@@ -36,10 +36,13 @@
 #include "vgui_parser.h"
 #include "rain.h"
 
+#include "fog.h"
+
 #include "camera.h"
 
 #include "cs_wpn/bte_weapons.h"
 #include "gamemode/mods_const.h"
+#include "vgui2/CBaseViewport.h"
 
 
 extern client_sprite_t *GetSpriteList(client_sprite_t *pList, const char *psz, int iRes, int iCount);
@@ -261,6 +264,7 @@ void CHud :: Init( void )
 	m_ZB3.Init();
 	m_ZB5.Init();
 	m_ZSH.Init();
+	m_PR.Init();
 	m_CLS.Init();
 	m_WPI.Init();
 	m_gd.Init();
@@ -285,12 +289,15 @@ void CHud :: Init( void )
 	m_HeadName.Init();
 	m_NewAlarm.Init();
 	m_TwinAxes.Init();
+	m_HeadIcon.Init();
+	util.Init();
+	m_MVP.Init();
 
 	// all things that have own background and must be drawn last
 	m_ProgressBar.Init();
 	m_Menu.Init();
 	m_Scoreboard.Init();
-	
+	gFog.Init();
 
 	InitRain();
 
@@ -493,8 +500,14 @@ void CHud :: VidInit( void )
 	m_Radar.VidInit();
 	m_SpectatorGui.VidInit();*/
 
+	
+
 	for( HUDLIST *pList = m_pHudList; pList; pList = pList->pNext )
 		pList->p->VidInit();
+
+	gFog.VidInit();
+
+	util.VidInit();
 
 	if( firstinit && gEngfuncs.CheckParm( "-firsttime", NULL ) )
 	{

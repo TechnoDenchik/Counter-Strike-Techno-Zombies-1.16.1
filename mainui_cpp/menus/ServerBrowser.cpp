@@ -219,8 +219,6 @@ public:
 
 	CMenuPicButton Join, Join1;
 	CMenuPicButton Create, Create1;
-	CMenuPicButton Config, Config1;
-	CMenuPicButton Adv, Adv1;
 	CMenuPicButton Refresh, Refresh1;
 	CMenuPicButton Info, Info1;
 	CMenuPicButton Exit, Exit1;
@@ -465,45 +463,23 @@ void CMenuServerBrowser::_Init( void )
 	AddItem( background );
 	AddItem( banner );
 
-	/*Join.SetNameAndStatus(L("GameUI_StartGame"), L(""));
-	Join.onChanged = VoidCb(&CMenuServerBrowser::JoinGame);
-	Join.onReleased = msgBox.MakeOpenEvent();
-	Join.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		Join.SetGrayed(true);
-	Join.SetCoord(80, 250);*/
-
 	Create.SetNameAndStatus(L("GameUI_GameMenu_CreateServer"), L(""));
+	Create.SetCharSize(QM_BOLDFONT);
 	Create.iFlags |= QMF_NOTIFY;
 	Create.onActivated = UI_CreateGame_Menu;
 	Create.SetCoord(80, 250);
 
-	Config.SetNameAndStatus(L("GameUI_Game"), L(""));
-	Config.onActivated = UI_GameOptions_Menu;
-	Config.iFlags |= QMF_NOTIFY;
-	Config.SetCoord(80, 300);
-
-	Adv.SetNameAndStatus(L("GameUI_ServerSettings"), L(""));
-	Adv.onActivated = UI_AdvUserOptions_Menu;
-	Adv.iFlags |= QMF_NOTIFY;
-	Adv.SetCoord(80, 350);
-
-	/*Info.SetNameAndStatus(L("GameUI_StartGame"), L(""));
-	Info.onActivated = CEventCallback::NoopCb;
-	Info.iFlags |= QMF_NOTIFY;
-	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
-		Info.SetGrayed(true);
-	Info.SetCoord(80, 250);*/
-
 	Refresh.SetNameAndStatus(L("CstzUI_Refresh"), L(""));
+	Refresh.SetCharSize(QM_BOLDFONT);
 	Refresh.onActivated = VoidCb(&CMenuServerBrowser::RefreshList);
 	Refresh.iFlags |= QMF_NOTIFY;
-	Refresh.SetCoord(80, 400);
+	Refresh.SetCoord(80, 300);
 
 	Exit.SetNameAndStatus(L("GameUI_Cancel"), L(""));
+	Exit.SetCharSize(QM_BOLDFONT);
 	Exit.onActivated = VoidCb(&CMenuServerBrowser::Hide);
 	Exit.iFlags |= QMF_NOTIFY;
-	Exit.SetCoord(80, 450);
+	Exit.SetCoord(80, 350);
 
 	msgBox.SetMessage( "Join a network game will exit any current game, OK to exit?" );
 	msgBox.SetPositiveButton( "Ok", PC_OK );
@@ -577,8 +553,6 @@ void CMenuServerBrowser::_Init( void )
 
 	AddItem(Join);
 	AddItem(Create);
-	AddItem(Config);
-	AddItem(Adv);
 	//AddItem(Info);
 	AddItem(Refresh);
 	AddItem(Exit);

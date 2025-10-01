@@ -5306,7 +5306,9 @@ void CBasePlayer::Reset()
 	m_iDeaths = 0;
 	m_iAccount.Reset();
 	m_iAccount.UpdateHUD(this);
-
+	m_iRoundKill = 0;
+	m_iRoundAssist = 0;
+	m_iRoundInfect = 0;
 	m_bNotKilled = false;
 
 	RemoveShield();
@@ -6370,28 +6372,7 @@ void CBasePlayer::UpdateClientData()
 			{
 				CClientFog *pFog = (CClientFog *)pEntity;
 
-				int r = pFog->pev->rendercolor[0];
-				int g = pFog->pev->rendercolor[1];
-				int b = pFog->pev->rendercolor[2];
-
-				union
-				{
-					float f;
-					char b[4];
-
-				} density;
-
-				density.f = pFog->m_fDensity;
-
-				MESSAGE_BEGIN(MSG_ONE, gmsgFog, NULL, pev);
-					WRITE_BYTE(r);
-					WRITE_BYTE(g);
-					WRITE_BYTE(b);
-					WRITE_BYTE(density.b[0]);
-					WRITE_BYTE(density.b[1]);
-					WRITE_BYTE(density.b[2]);
-					WRITE_BYTE(density.b[3]);
-				MESSAGE_END();
+				pFog->UpdateClientMsg(pev);
 			}
 
 			mp->InitHUD(this);

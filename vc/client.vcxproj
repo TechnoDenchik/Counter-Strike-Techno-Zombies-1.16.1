@@ -39,6 +39,7 @@
     <ClCompile Include="..\cl_dll\events\event_balrog1.cpp" />
     <ClCompile Include="..\cl_dll\events\event_balrog3.cpp" />
     <ClCompile Include="..\cl_dll\events\event_bow.cpp" />
+    <ClCompile Include="..\cl_dll\events\event_buffaug.cpp" />
     <ClCompile Include="..\cl_dll\events\event_buffm4a1.cpp" />
     <ClCompile Include="..\cl_dll\events\event_cannon.cpp" />
     <ClCompile Include="..\cl_dll\events\event_chainsaw.cpp" />
@@ -47,6 +48,7 @@
     <ClCompile Include="..\cl_dll\events\event_deagle.cpp" />
     <ClCompile Include="..\cl_dll\events\event_deagled.cpp" />
     <ClCompile Include="..\cl_dll\events\event_decal_reset.cpp" />
+    <ClCompile Include="..\cl_dll\events\event_egon.cpp" />
     <ClCompile Include="..\cl_dll\events\event_elite_left.cpp" />
     <ClCompile Include="..\cl_dll\events\event_elite_right.cpp" />
     <ClCompile Include="..\cl_dll\events\event_famas.cpp" />
@@ -106,6 +108,7 @@
     <ClCompile Include="..\cl_dll\events\ev_cs16.cpp" />
     <ClCompile Include="..\cl_dll\events\hl_events.cpp" />
     <ClCompile Include="..\cl_dll\ev_common.cpp" />
+    <ClCompile Include="..\cl_dll\fog.cpp" />
     <ClCompile Include="..\cl_dll\hud\ammo.cpp" />
     <ClCompile Include="..\cl_dll\hud\ammohistory.cpp" />
     <ClCompile Include="..\cl_dll\hud\ammo_secondary.cpp" />
@@ -114,9 +117,10 @@
     <ClCompile Include="..\cl_dll\hud\flashlight.cpp" />
     <ClCompile Include="..\cl_dll\hud\followicon.cpp" />
     <ClCompile Include="..\cl_dll\hud\gd\gd.cpp" />
-    <ClCompile Include="..\cl_dll\hud\gd\lvupdate.cpp" />
+    <ClCompile Include="..\cl_dll\hud\gd\RespawnBar.cpp" />
+    <ClCompile Include="..\cl_dll\hud\gd\WeaponChange.cpp" />
     <ClCompile Include="..\cl_dll\hud\gd\GDScoreboard.cpp" />
-    <ClCompile Include="..\cl_dll\hud\gd\upweaponhud.cpp" />
+    <ClCompile Include="..\cl_dll\hud\gd\FinalAttack.cpp" />
     <ClCompile Include="..\cl_dll\hud\gd\Winhud.cpp" />
     <ClCompile Include="..\cl_dll\hud\geiger.cpp" />
     <ClCompile Include="..\cl_dll\hud\headname.cpp" />
@@ -126,7 +130,9 @@
     <ClCompile Include="..\cl_dll\hud\hud2\NewAlarm.cpp" />
     <ClCompile Include="..\cl_dll\hud\hud2\NewDeathInfo.cpp" />
     <ClCompile Include="..\cl_dll\hud\hud2\NewFontManager.cpp" />
+    <ClCompile Include="..\cl_dll\hud\hud_HeadIcon.cpp" />
     <ClCompile Include="..\cl_dll\hud\hud_msg.cpp" />
+    <ClCompile Include="..\cl_dll\hud\hud_mvp.cpp" />
     <ClCompile Include="..\cl_dll\hud\hud_redraw.cpp" />
     <ClCompile Include="..\cl_dll\hud\hud_sifiammo.cpp" />
     <ClCompile Include="..\cl_dll\hud\hud_spectator.cpp" />
@@ -145,6 +151,10 @@
     <ClCompile Include="..\cl_dll\hud\original\Classic.cpp" />
     <ClCompile Include="..\cl_dll\hud\original\OrigWinhud.cpp" />
     <ClCompile Include="..\cl_dll\hud\original\TextOrig.cpp" />
+    <ClCompile Include="..\cl_dll\hud\pr\PrTextset.cpp" />
+    <ClCompile Include="..\cl_dll\hud\pr\PrWinhud.cpp" />
+    <ClCompile Include="..\cl_dll\hud\pr\pr.cpp" />
+    <ClCompile Include="..\cl_dll\hud\pr\pr_skill.cpp" />
     <ClCompile Include="..\cl_dll\hud\radar.cpp" />
     <ClCompile Include="..\cl_dll\hud\radio.cpp" />
     <ClCompile Include="..\cl_dll\hud\retina.cpp" />
@@ -158,9 +168,6 @@
     <ClCompile Include="..\cl_dll\hud\text_message.cpp" />
     <ClCompile Include="..\cl_dll\hud\timer.cpp" />
     <ClCompile Include="..\cl_dll\hud\train.cpp" />
-    <ClCompile Include="..\cl_dll\hud\vgui2menu\Buymenu.cpp" />
-    <ClCompile Include="..\cl_dll\hud\vgui2menu\Classmenu.cpp" />
-    <ClCompile Include="..\cl_dll\hud\vgui2menu\Tabmenu.cpp" />
     <ClCompile Include="..\cl_dll\hud\weapons\epic\Arbalest.cpp" />
     <ClCompile Include="..\cl_dll\hud\weapons\epic\QuantumHorizon.cpp" />
     <ClCompile Include="..\cl_dll\hud\weapons\epic\TwinShadowAxes.cpp" />
@@ -219,6 +226,8 @@
     <ClCompile Include="..\cl_dll\vgui2\vgui_int.cpp" />
     <ClCompile Include="..\cl_dll\vgui_parser.cpp" />
     <ClCompile Include="..\cl_dll\view.cpp" />
+    <ClCompile Include="..\cl_dll\webm_util.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\hl\weapon_egon.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_dragonsword.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_dualsword.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_katana.cpp" />
@@ -227,15 +236,21 @@
     <ClCompile Include="..\dlls\wpn_shared\knife_twin_axes.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_twin_axesex.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_aksha.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_banchee.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_boomer.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_booster.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_china.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_deathknight.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_deimos.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_female.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_fly.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_ganimed.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_heal.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_heavy.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_meatwall.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_pc.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_resident.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_spider.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_stamper.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\melee\wpn_balrog9.cpp" />
@@ -250,6 +265,7 @@
     <ClCompile Include="..\dlls\wpn_shared\primary\wpn_balrog3.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\primary\wpn_balrog5.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\primary\wpn_balrog7.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_buffaug.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\primary\wpn_ethereal.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\primary\wpn_guitar.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\primary\wpn_m134hero.cpp" />
@@ -450,7 +466,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_twinsummon.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_ump45.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -555,15 +570,18 @@
     <ClInclude Include="..\cl_dll\cs_wpn\bte_weapons.h" />
     <ClInclude Include="..\cl_dll\cs_wpn\wpn_shared.h" />
     <ClInclude Include="..\cl_dll\enginecallback.h" />
+    <ClInclude Include="..\cl_dll\fog.h" />
     <ClInclude Include="..\cl_dll\hud\classes\Militia.h" />
     <ClInclude Include="..\cl_dll\hud\followicon.h" />
     <ClInclude Include="..\cl_dll\hud\gd\gd.h" />
-    <ClInclude Include="..\cl_dll\hud\gd\lvupdate.h" />
+    <ClInclude Include="..\cl_dll\hud\gd\RespawnBar.h" />
+    <ClInclude Include="..\cl_dll\hud\gd\WeaponChange.h" />
     <ClInclude Include="..\cl_dll\hud\gd\GDScoreboard.h" />
-    <ClInclude Include="..\cl_dll\hud\gd\upweaponhud.h" />
+    <ClInclude Include="..\cl_dll\hud\gd\FinalAttack.h" />
     <ClInclude Include="..\cl_dll\hud\gd\Winhud.h" />
     <ClInclude Include="..\cl_dll\hud\hud2\NewAlarm.h" />
     <ClInclude Include="..\cl_dll\hud\hud2\NewFontManager.h" />
+    <ClInclude Include="..\cl_dll\hud\hud_mvp.h" />
     <ClInclude Include="..\cl_dll\hud\hud_sub.h" />
     <ClInclude Include="..\cl_dll\hud\interface\interface.h" />
     <ClInclude Include="..\cl_dll\hud\interface\interface_used.h" />
@@ -574,13 +592,14 @@
     <ClInclude Include="..\cl_dll\hud\original\Classic.h" />
     <ClInclude Include="..\cl_dll\hud\original\OrigWinhud.h" />
     <ClInclude Include="..\cl_dll\hud\original\TextOrig.h" />
+    <ClInclude Include="..\cl_dll\hud\pr\PrTextset.h" />
+    <ClInclude Include="..\cl_dll\hud\pr\PrWinhud.h" />
+    <ClInclude Include="..\cl_dll\hud\pr\pr.h" />
+    <ClInclude Include="..\cl_dll\hud\pr\pr_skill.h" />
     <ClInclude Include="..\cl_dll\hud\radar.h" />
     <ClInclude Include="..\cl_dll\hud\retina.h" />
     <ClInclude Include="..\cl_dll\hud\scenariostatus.h" />
     <ClInclude Include="..\cl_dll\hud\scoreboard.h" />
-    <ClInclude Include="..\cl_dll\hud\vgui2menu\Buymenu.h" />
-    <ClInclude Include="..\cl_dll\hud\vgui2menu\Classmenu.h" />
-    <ClInclude Include="..\cl_dll\hud\vgui2menu\Tabmenu.h" />
     <ClInclude Include="..\cl_dll\hud\weapons\epic\Arbalest.h" />
     <ClInclude Include="..\cl_dll\hud\weapons\epic\QuantumHorizon.h" />
     <ClInclude Include="..\cl_dll\hud\weapons\epic\TwinShadowAxes.h" />
@@ -632,6 +651,7 @@
     <ClInclude Include="..\cl_dll\vgui2\Viewport\ICSViewPortMsgs.h" />
     <ClInclude Include="..\cl_dll\vgui2\Viewport\IViewPort.h" />
     <ClInclude Include="..\cl_dll\vgui2\Viewport\IViewPortMsgs.h" />
+    <ClInclude Include="..\cl_dll\webm_util.h" />
     <ClInclude Include="..\common2\bspfile.h" />
     <ClInclude Include="..\common2\cl_entity.h" />
     <ClInclude Include="..\common2\com_model.h" />
@@ -643,11 +663,13 @@
     <ClInclude Include="..\common2\render_api.h" />
     <ClInclude Include="..\dlls\gamemode\gd\gd_const.h" />
     <ClInclude Include="..\dlls\gamemode\interface\interface_const.h" />
+    <ClInclude Include="..\dlls\gamemode\playroom\playroom_const.h" />
     <ClInclude Include="..\dlls\gamemode\zb1\zb1_const.h" />
     <ClInclude Include="..\dlls\gamemode\zb2\zb2_const.h" />
     <ClInclude Include="..\dlls\gamemode\zb3\zb3_const.h" />
     <ClInclude Include="..\dlls\gamemode\zb5\zb5_const.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\zsh_const.h" />
+    <ClInclude Include="..\dlls\wpn_shared\hl\weapon_egon.h" />
     <ClInclude Include="..\dlls\wpn_shared\knife_shelter_axe.h" />
     <ClInclude Include="..\dlls\wpn_shared\knife_twin_axes.h" />
     <ClInclude Include="..\dlls\wpn_shared\knife_twin_axesex.h" />
@@ -663,6 +685,7 @@
     <ClInclude Include="..\dlls\wpn_shared\primary\wpn_balrog3.h" />
     <ClInclude Include="..\dlls\wpn_shared\primary\wpn_balrog5.h" />
     <ClInclude Include="..\dlls\wpn_shared\primary\wpn_balrog7.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_buffaug.h" />
     <ClInclude Include="..\dlls\wpn_shared\primary\wpn_ethereal.h" />
     <ClInclude Include="..\dlls\wpn_shared\primary\wpn_guitar.h" />
     <ClInclude Include="..\dlls\wpn_shared\primary\wpn_m134hero.h" />
@@ -845,7 +868,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>E:\CSTZ\</OutDir>
+    <OutDir>K:\CSTZ\</OutDir>
     <TargetName>client</TargetName>
     <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>..\vgui2_support\SourceSDK\lib\public;$(VC_LibraryPath_x86);$(WindowsSdk_71A_LibraryPath_x86);</LibraryPath>

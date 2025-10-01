@@ -41,13 +41,15 @@ public:
 	typedef CMenuFramework BaseClass;
 	CMenuOptions() : CMenuFramework("CMenuOptions") { }
 
-	CMenuPicButton KeyBoard, Keyboard1;
-	CMenuPicButton Mouse, Mouse1;
-	CMenuPicButton Profile1, Profile;
-	CMenuPicButton Audio1, Audio;
-	CMenuPicButton Video1, Video;
-	CMenuPicButton Exit1, Exit;
-	
+	CMenuPicButton Profile;
+	CMenuPicButton Ethernet;
+	CMenuPicButton Advanced;
+	CMenuPicButton KeyBoard;
+	CMenuPicButton Mouse;
+	CMenuPicButton Audio;
+	CMenuPicButton Video;
+	CMenuPicButton Exit;
+
 };
 
 static CMenuOptions	uiOptions;
@@ -64,37 +66,62 @@ void CMenuOptions::_Init( void )
 	AddItem( background );
 	AddItem( banner );
 
+	Profile.SetNameAndStatus(L("GameUI_Profile"), L(""));
+	Profile.onActivated = UI_PlayerSetup_Menu;
+	Profile.iFlags |= QMF_NOTIFY;
+	Profile.colorBase = uiColorCyan;
+	Profile.SetCharSize(QM_BOLDFONT);
+	Profile.SetCoord(80, 250);
+
+	Ethernet.SetNameAndStatus(L("GameUI_Ethernet"), L(""));
+	Ethernet.onActivated = UI_GameOptions_Menu;
+	Ethernet.iFlags |= QMF_NOTIFY;
+	Ethernet.colorBase = uiColorCyan;
+	Ethernet.SetCharSize(QM_BOLDFONT);
+	Ethernet.SetCoord(80, 300);
+
+	Advanced.SetNameAndStatus(L("GameUI_AdvancedNoEllipsis"), L(""));
+	Advanced.onActivated = UI_AdvUserOptions_Menu;
+	Advanced.iFlags |= QMF_NOTIFY;
+	Advanced.colorBase = uiColorCyan;
+	Advanced.SetCharSize(QM_BOLDFONT);
+	Advanced.SetCoord(80, 350);
+
 	KeyBoard.SetNameAndStatus(L("GameUI_Keyboard"), L(""));
 	KeyBoard.onActivated = UI_Controls_Menu;
 	KeyBoard.iFlags |= QMF_NOTIFY;
-	KeyBoard.SetCoord(80, 300);
+	KeyBoard.colorBase = uiColorCyan;
+	KeyBoard.SetCharSize(QM_BOLDFONT);
+	KeyBoard.SetCoord(80, 400);
 
 	Mouse.SetNameAndStatus(L("GameUI_Mouse"), L(""));
 	Mouse.onActivated = UI_MouseControls_Menu;
 	Mouse.iFlags |= QMF_NOTIFY;
-	Mouse.SetCoord(80, 350);
-
-	Profile.SetNameAndStatus(L("GameUI_Profile"), L(""));
-	Profile.onActivated = UI_PlayerSetup_Menu;
-	Profile.iFlags |= QMF_NOTIFY;
-	Profile.SetCoord(80, 400);
+	Mouse.colorBase = uiColorCyan;
+	Mouse.SetCharSize(QM_BOLDFONT);
+	Mouse.SetCoord(80, 450);
 	
 	Audio.SetNameAndStatus(L("GameUI_Audio"), L(""));
 	Audio.onActivated = UI_Audio_Menu;
 	Audio.iFlags |= QMF_NOTIFY;
-	Audio.SetCoord(80, 450);
+	Audio.colorBase = uiColorCyan;
+	Audio.SetCharSize(QM_BOLDFONT);
+	Audio.SetCoord(80, 500);
 
 	Video.SetNameAndStatus(L("GameUI_Video"), L(""));
 	Video.onActivated = UI_Video_Menu;
 	Video.iFlags |= QMF_NOTIFY;
-	Video.SetCoord(80, 500);
+	Video.colorBase = uiColorCyan;
+	Video.SetCharSize(QM_BOLDFONT);
+	Video.SetCoord(80, 550);
 
 	Exit.SetNameAndStatus(L("GameUI_Close"), L(""));
 	Exit.onActivated = VoidCb(&CMenuOptions::Hide);
 	Exit.iFlags |= QMF_NOTIFY;
-	Exit.SetCoord(80, 550);
+	Exit.colorBase = uiColorCyan;
+	Exit.SetCharSize(QM_BOLDFONT);
+	Exit.SetCoord(80, 600);
 
-	
 	msgBox.SetMessage("It is recomended to enable client movement prediction.\nPress OK to enable it now or enable it later in ^5(Multiplayer/Customize)");
 	msgBox.SetPositiveButton("Ok", PC_OK);
 	msgBox.SetNegativeButton("Cancel", PC_CANCEL);
@@ -117,10 +144,11 @@ void CMenuOptions::_Init( void )
 		}
 	);
 	msgBox.Link(this);
-
+	AddItem(Profile);
+	AddItem(Ethernet);
+	AddItem(Advanced);
 	AddItem(KeyBoard);
 	AddItem(Mouse);
-	AddItem(Profile);
 	AddItem(Audio);
 	AddItem(Video);
 	AddItem(Exit);

@@ -1082,7 +1082,7 @@ void CMapSet::DrawLine(Point p, const char** psz, size_t size, uint textColor, b
 	if (fillColor)
 	{
 		sz.w = headerSize.w;
-		UI_FillRect(p, sz, fillColor);
+		UI_FillRect(p, sz, uiColorWhite);
 	}
 
 	for (i = 0; i < size; i++, p.x += sz.w)
@@ -1121,7 +1121,7 @@ void CMapSet::DrawLine(Point p, const char** psz, size_t size, uint textColor, b
 			}
 		}
 
-		UI_DrawString(font, pt, sz, psz[i], textColor, m_scChSize,
+		UI_DrawString(font, pt, sz, psz[i], uiColorWhite, m_scChSize,
 			m_pModel->GetAlignmentForColumn(i), textflags);
 	}
 }
@@ -1135,7 +1135,7 @@ void CMapSet::DrawLine(Point p, int line, uint textColor, bool forceCol, uint fi
 
 	unsigned int newFillColor;
 	bool forceFillColor;
-	if (m_pModel->GetLineColor(line, newFillColor, forceFillColor))
+	if (m_pModel->GetLineColor(line, uiColorWhite, forceFillColor))
 	{
 		if (!fillColor || forceFillColor)
 			fillColor = newFillColor;
@@ -1144,7 +1144,7 @@ void CMapSet::DrawLine(Point p, int line, uint textColor, bool forceCol, uint fi
 	if (fillColor)
 	{
 		sz.w = headerSize.w;
-		UI_FillRect(p, sz, fillColor);
+		UI_FillRect(p, sz, uiColorWhite);
 	}
 
 	for (i = 0; i < m_pModel->GetColumns(); i++, p.x += sz.w)
@@ -1164,7 +1164,7 @@ void CMapSet::DrawLine(Point p, int line, uint textColor, bool forceCol, uint fi
 		if (!str /* && type != CELL_ITEM  */) // headers may be null, cells too
 			continue;
 
-		bool useCustomColors = m_pModel->GetCellColors(line, i, newFillColor, forceFillColor);
+		bool useCustomColors = m_pModel->GetCellColors(line, i, uiColorWhite, forceFillColor);
 
 		if (useCustomColors)
 		{
@@ -1172,13 +1172,13 @@ void CMapSet::DrawLine(Point p, int line, uint textColor, bool forceCol, uint fi
 			{
 				textflags |= ETF_FORCECOL;
 			}
-			textColor = newFillColor;
+			textColor = uiColorWhite;
 		}
 
 		switch (type)
 		{
 		case CELL_TEXT:
-			UI_DrawString(font, p, sz, str, textColor, m_scChSize, m_pModel->GetAlignmentForColumn(i),
+			UI_DrawString(font, p, sz, str, uiColorWhite, m_scChSize, m_pModel->GetAlignmentForColumn(i),
 				textflags | (m_pModel->IsCellTextWrapped(line, i) ? 0 : ETF_NOSIZELIMIT));
 			break;
 		case CELL_IMAGE_ADDITIVE:
@@ -1207,7 +1207,7 @@ void CMapSet::DrawLine(Point p, int line, uint textColor, bool forceCol, uint fi
 			if (useCustomColors)
 			{
 				int r, g, b, a;
-				UnpackRGBA(r, g, b, a, newFillColor);
+				UnpackRGBA(r, g, b, a, uiColorWhite);
 				EngFuncs::PIC_Set(pic, r, g, b, a);
 			}
 			else
@@ -1241,7 +1241,7 @@ void CMapSet::DrawLine(Point p, int line, uint textColor, bool forceCol, uint fi
 void CMapSet::Draw()
 {
 	int i, y;
-	int selColor = PackRGB(80, 56, 24);
+	int selColor = uiColorWhite;
 	int upFocus, downFocus, scrollbarFocus;
 
 	// HACKHACK: recalc iNumRows, to be not greater than iNumItems
@@ -1442,7 +1442,7 @@ void CMapSet::Draw()
 			}
 			else if (i == iHighlight)
 			{
-				fillColor = 0x80383838;
+				fillColor = uiColorWhite;
 			}
 		}
 

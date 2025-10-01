@@ -91,6 +91,8 @@ void CL_DecalRemoveAll( int textureIndex );
 int CL_DecalIndexFromName( const char *name );
 int CL_DecalIndex( int id );
 
+void CL_KillAttachedTentsFromEntity(int client);
+
 // Beams
 struct beam_s *CL_BeamLightning( const vec3_t start, const vec3_t end, int modelIndex, float life, float width, float amplitude, float brightness, float speed );
 struct beam_s *CL_BeamEnts( int startEnt, int endEnt, int modelIndex, float life, float width, float amplitude, float brightness, float speed, int startFrame, float framerate, float r, float g, float b );

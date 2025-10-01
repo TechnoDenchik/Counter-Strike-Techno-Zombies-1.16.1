@@ -1256,6 +1256,12 @@ CBaseEntity* CMod_ZombieShelter_coop::MakeResources()
 		//monster->pev->renderamt = 200;
 		//monster->pev->renderfx = 200;
 		UTIL_SetSize(monster->pev, VEC_HULL_MIN, VEC_HULL_MAX);
+
+		MESSAGE_BEGIN(MSG_ALL, gmsgHeadIcon);
+		WRITE_BYTE(14);
+		WRITE_SHORT(ENTINDEX(monster->edict()));
+		MESSAGE_END();
+
 	}
 
 	monster->m_pWoodStrategy.reset(new CResModStrategy_ZSH(monster, this));
@@ -1338,6 +1344,11 @@ CBaseEntity* CMod_ZombieShelter_coop::MakeResources2()
 			break;
 		}
 		SET_MODEL(monster->edict(), "models/shelter/item_hbeam.mdl");
+
+		MESSAGE_BEGIN(MSG_ALL, gmsgHeadIcon);
+		WRITE_BYTE(13);
+		WRITE_SHORT(ENTINDEX(monster->edict()));
+		MESSAGE_END();
 
 		//monster->pev->rendermode = kRenderTransAdd;
 		//monster->pev->renderamt = 200;

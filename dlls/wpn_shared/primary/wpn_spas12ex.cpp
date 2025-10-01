@@ -36,6 +36,7 @@ void CSpas12ex::Spawn(void)
 void CSpas12ex::Precache(void)
 {
 	PRECACHE_MODEL("models/v_spas12ex.mdl");
+	PRECACHE_MODEL("models/p_spas12ex.mdl");
 	PRECACHE_MODEL("models/w_spas12ex.mdl");
 
 	m_iShellId = m_iShell = PRECACHE_MODEL("models/shotgunshell.mdl");

@@ -3310,6 +3310,9 @@ void EXT_FUNC ClientCommand(edict_t *pEntity)
 
 			case Menu_ChooseTeam:
 			{
+				if (g_pModRunning->DamageTrack() == DT_BACK)
+					return;
+
 				if (!player->m_bVGUIMenus && !HandleMenu_ChooseTeam(player, slot))
 				{
 					if (player->m_iJoiningState == JOINED)
@@ -3573,6 +3576,9 @@ void EXT_FUNC ClientCommand(edict_t *pEntity)
 	}
 	else if (FStrEq(pcmd, "chooseteam"))
 	{
+		if (g_pModRunning->DamageTrack() == DT_BACK)
+			return;
+
 		if (player->m_iMenu == Menu_ChooseAppearance)
 		{
 			return;
@@ -3842,19 +3848,6 @@ void EXT_FUNC ClientCommand(edict_t *pEntity)
 				if (g_pModRunning->ClientCommand(player, "BTE_ZombieSkill1") || player->m_pModStrategy->ClientCommand("BTE_ZombieSkill1"))
 				{
 					// ...
-				}
-
-				if (player->m_pActiveItem != NULL && player->m_pActiveItem->m_iId == WEAPON_AUG)
-				{
-					player->DropPlayerItem("weapon_arbalest");
-
-					
-				#ifndef CLIENT_DLL
-					MESSAGE_BEGIN(MSG_ONE, gmsgArbalestMsg, NULL, player->pev);
-					WRITE_BYTE(WPN_ARBALEST);
-					WRITE_BYTE(0); 
-					MESSAGE_END();
-				#endif
 				}
 
 #ifdef ENABLE_SHIELD
@@ -4714,7 +4707,7 @@ const char *EXT_FUNC GetGameDescription()
 	if (g_bIsCzeroGame)
 		return "Condition Zero";
 
-	return "Counter-Strike";
+	return "Counter-Strike Techno Zombies";
 }
 
 void EXT_FUNC Sys_Error(const char *error_string)

@@ -121,12 +121,6 @@
     <Filter Include="cl_dll\hud\vgui2\weapons\overcoming">
       <UniqueIdentifier>{02ecc6cc-39f2-4803-993a-ff84a96781e0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="cl_dll\vgui2\cstz">
-      <UniqueIdentifier>{b625d599-b9d4-4591-a860-f4dd3f52d4be}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="cl_dll\vgui2\game_controls">
-      <UniqueIdentifier>{c8769fad-115d-4684-8d78-5463a1e6eec9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resources">
       <UniqueIdentifier>{c7b68013-2c6f-40ba-b1c2-a257914323a4}</UniqueIdentifier>
     </Filter>
@@ -189,6 +183,18 @@
     </Filter>
     <Filter Include="dlls\wpn_shared\Secondary\old">
       <UniqueIdentifier>{102c23f9-dcf2-4298-8239-0910d59ebd5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Melee\Zombie\new">
+      <UniqueIdentifier>{7cf09116-9517-479a-a130-d36c2551d843}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Primary\hl">
+      <UniqueIdentifier>{0987916b-0c6d-40ed-9c2f-e195d2acc872}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cl_dll\hud\pr">
+      <UniqueIdentifier>{272d3d17-47d3-47df-8784-51cab455ce53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\gamemode\playroom">
+      <UniqueIdentifier>{353523d0-b296-4990-bbdd-134d9d5e692b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -873,15 +879,6 @@
     <ClCompile Include="..\cl_dll\hud\hud2\NewFontManager.cpp">
       <Filter>cl_dll\hud\hud2</Filter>
     </ClCompile>
-    <ClCompile Include="..\cl_dll\hud\vgui2menu\Buymenu.cpp">
-      <Filter>cl_dll\hud\vgui2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\hud\vgui2menu\Classmenu.cpp">
-      <Filter>cl_dll\hud\vgui2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\hud\vgui2menu\Tabmenu.cpp">
-      <Filter>cl_dll\hud\vgui2</Filter>
-    </ClCompile>
     <ClCompile Include="..\cl_dll\vgui2\vgui_int.cpp">
       <Filter>cl_dll\vgui2</Filter>
     </ClCompile>
@@ -891,10 +888,10 @@
     <ClCompile Include="..\cl_dll\hud\gd\gd.cpp">
       <Filter>cl_dll\hud\gd</Filter>
     </ClCompile>
-    <ClCompile Include="..\cl_dll\hud\gd\lvupdate.cpp">
+    <ClCompile Include="..\cl_dll\hud\gd\WeaponChange.cpp">
       <Filter>cl_dll\hud\gd</Filter>
     </ClCompile>
-    <ClCompile Include="..\cl_dll\hud\gd\upweaponhud.cpp">
+    <ClCompile Include="..\cl_dll\hud\gd\FinalAttack.cpp">
       <Filter>cl_dll\hud\gd</Filter>
     </ClCompile>
     <ClCompile Include="..\cl_dll\hud\gd\Winhud.cpp">
@@ -1042,9 +1039,6 @@
       <Filter>dlls\wpn_shared\Melee</Filter>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\knife_twin_axesex.cpp">
-      <Filter>dlls\wpn_shared\Melee</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_twinsummon.cpp">
       <Filter>dlls\wpn_shared\Melee</Filter>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_knife.cpp">
@@ -1346,6 +1340,63 @@
     </ClCompile>
     <ClCompile Include="..\cl_dll\events\event_balrog3.cpp">
       <Filter>cl_dll\events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_buffaug.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_buffaug.cpp">
+      <Filter>cl_dll\events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_aksha.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_boomer.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_booster.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_china.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_fly.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_resident.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\fog.cpp">
+      <Filter>cl_dll</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\hud_HeadIcon.cpp">
+      <Filter>cl_dll\hud</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\hud_mvp.cpp">
+      <Filter>cl_dll\hud</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\hl\weapon_egon.cpp">
+      <Filter>dlls\wpn_shared\Primary\hl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_egon.cpp">
+      <Filter>cl_dll\events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\pr\PrTextset.cpp">
+      <Filter>cl_dll\hud\pr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\pr\PrWinhud.cpp">
+      <Filter>cl_dll\hud\pr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\pr\pr.cpp">
+      <Filter>cl_dll\hud\pr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\pr\pr_skill.cpp">
+      <Filter>cl_dll\hud\pr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\webm_util.cpp">
+      <Filter>cl_dll</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\gd\RespawnBar.cpp">
+      <Filter>cl_dll\hud\gd</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1655,15 +1706,6 @@
     <ClInclude Include="..\cl_dll\hud\hud2\NewFontManager.h">
       <Filter>cl_dll\hud\hud2</Filter>
     </ClInclude>
-    <ClInclude Include="..\cl_dll\hud\vgui2menu\Buymenu.h">
-      <Filter>cl_dll\hud\vgui2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\cl_dll\hud\vgui2menu\Classmenu.h">
-      <Filter>cl_dll\hud\vgui2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\cl_dll\hud\vgui2menu\Tabmenu.h">
-      <Filter>cl_dll\hud\vgui2</Filter>
-    </ClInclude>
     <ClInclude Include="..\cl_dll\vgui2\vgui_int.h">
       <Filter>cl_dll\vgui2</Filter>
     </ClInclude>
@@ -1673,13 +1715,13 @@
     <ClInclude Include="..\cl_dll\hud\gd\gd.h">
       <Filter>cl_dll\hud\gd\header</Filter>
     </ClInclude>
-    <ClInclude Include="..\cl_dll\hud\gd\lvupdate.h">
+    <ClInclude Include="..\cl_dll\hud\gd\WeaponChange.h">
       <Filter>cl_dll\hud\gd\header</Filter>
     </ClInclude>
     <ClInclude Include="..\cl_dll\hud\gd\GDScoreboard.h">
       <Filter>cl_dll\hud\gd\header</Filter>
     </ClInclude>
-    <ClInclude Include="..\cl_dll\hud\gd\upweaponhud.h">
+    <ClInclude Include="..\cl_dll\hud\gd\FinalAttack.h">
       <Filter>cl_dll\hud\gd\header</Filter>
     </ClInclude>
     <ClInclude Include="..\cl_dll\hud\gd\Winhud.h">
@@ -2059,6 +2101,39 @@
     </ClInclude>
     <ClInclude Include="..\dlls\wpn_shared\melee\wpn_thanatos9.h">
       <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_buffaug.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\fog.h">
+      <Filter>cl_dll</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\hud_mvp.h">
+      <Filter>cl_dll\hud</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\hl\weapon_egon.h">
+      <Filter>dlls\wpn_shared\Primary\hl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\pr\PrTextset.h">
+      <Filter>cl_dll\hud\pr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\pr\PrWinhud.h">
+      <Filter>cl_dll\hud\pr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\pr\pr.h">
+      <Filter>cl_dll\hud\pr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\pr\pr_skill.h">
+      <Filter>cl_dll\hud\pr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\playroom\playroom_const.h">
+      <Filter>dlls\gamemode\playroom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\webm_util.h">
+      <Filter>cl_dll</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\gd\RespawnBar.h">
+      <Filter>cl_dll\hud\gd\header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

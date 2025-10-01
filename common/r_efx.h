@@ -194,6 +194,8 @@ struct efx_api_s
 	short		( *R_LookupColor )				( unsigned char r, unsigned char g, unsigned char b );
 	void		( *R_DecalRemoveAll )			( int textureIndex ); //textureIndex points to the decal index in the array, not the actual texture index.
 	void		(*R_FireCustomDecal)( int textureIndex, int entity, int modelIndex, float *position, int flags, float scale );
+	TEMPENTITY* (*R_AttachTentToModel)			(int clientindex, int iAttachment, float life, int modelIndex, float framerate, int brightness, int rendermode, float scale, int frameMax, int flags, int eflags);
+
 };
 
 extern efx_api_t efx;

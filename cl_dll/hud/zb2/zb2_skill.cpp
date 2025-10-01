@@ -38,6 +38,26 @@ const char *  const CHudZB2_Skill::Config::ZOMBIE_SKILL_HUD_ICON_NEW[MAX_ZOMBIE_
 		"resource/zb5/zombieskill_chargeslash",
 		"resource/zb5/zombieskill_webshooter", 
 		"resource/zb5/zombieskill_webbomb",
+
+		"resource/zb3/zombieskill_charge",
+		"resource/zb3/zombieskill_discharge",
+		"resource/zb3/zombieskill_strengthrecovery",
+
+		"resource/zb3/zombieskill_zombiheal",
+		"resource/zb3/zombieskill_zombiguard",
+
+		"resource/zb3/zombieskill_booster",
+		"resource/zb3/zombieskill_jumpupm",
+
+		"resource/zb3/zombieskill_zombistiffen",
+		"resource/zb3/zombieskill_strengthrecovery",
+
+		"resource/zb3/zombieskill_glide",
+		"resource/zb3/zombieskill_dive",
+		"resource/zb3/zombieskill_zombicrazy",
+
+		"resource/zb3/zombieskill_zombipenetration",
+		"resource/zb3/zombieskill_jumpupm",
 };
 
 const char *  const CHudZB2_Skill::Config::ZOMBIE_CLASS_HUD_ICON_NEW[MAX_ZOMBIE_CLASS] =
@@ -52,9 +72,15 @@ const char *  const CHudZB2_Skill::Config::ZOMBIE_CLASS_HUD_ICON_NEW[MAX_ZOMBIE_
 		"resource/zb3/zombietype_deimos2zb", // ZOMBIE_CLASS_DEIMOS2,
 		"resource/zb3/zombietype_witchzb", // ZOMBIE_CLASS_BANCHEE,
 		"resource/zb3/zombietype_undertakerzb", // ZOMBIE_CLASS_STAMPER,
-		"resource/zb5/zombietype_meatwallzb", 
-		"resource/zb5/ZombieType_deathknightzb", 
-		"resource/zb5/zombietype_spiderzb", 
+		"resource/zb5/zombietype_meatwallzb", // ZOMBIE_CLASS_MEATWALL for mode zb5,
+		"resource/zb5/ZombieType_deathknightzb", // ZOMBIE_CLASS_DEATHKNIGHT for mode zb5,
+		"resource/zb5/zombietype_spiderzb", // ZOMBIE_CLASS_SPIDER for mode zb5,
+		"resource/zb3/zombietype_akshazb", // ZOMBIE_CLASS_AKSHA,
+		"resource/zb3/zombietype_boomerzb",// ZOMBIE_CLASS_BOOMER,
+		"resource/zb3/zombietype_boosterzb", // ZOMBIE_CLASS_BOOSTER,
+		"resource/zb3/zombietype_chinazb", // ZOMBIE_CLASS_CHINSEE,
+		"resource/zb3/zombietype_flyingzb",// ZOMBIE_CLASS_FLYING,
+		"resource/zb3/zombietype_residentzb",// ZOMBIE_CLASS_RESIDENT,
 };
 
 const char *  const CHudZB2_Skill::Config::ZOMBIE_ITEM_HUD_ICON[2][3] =

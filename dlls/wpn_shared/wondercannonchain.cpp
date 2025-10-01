@@ -8,8 +8,9 @@
 #include "gamemode/mods.h"
 #endif
 
-namespace sv {
-#define WONDERCANNON_CHAIN_DAMAGE_INTERVAL	0.3s
+#include "wondercannon.h"
+
+#define WONDERCANNON_CHAIN_DAMAGE_INTERVAL	0.3f
 #define WONDERCANNON_CHAIN_DISTANCE 39.37 * 3.5
 #define WONDERCANNON_TOTAL_EXP_COUNT	12
 #define WONDERCANNON_CSO_DAMAGEDATA	0
@@ -52,15 +53,14 @@ namespace sv {
 		SetThink(&CWonderCannonChain::OnThink);
 		
 		m_iTotalExpCount = m_iType ? WONDERCANNONEX_TOTAL_EXP_COUNT : WONDERCANNON_TOTAL_EXP_COUNT;
-		m_flNextDamage = gpGlobals->time + 0.1s;
-		pev->nextthink = gpGlobals->time + 0.1s;
-		m_tTimeRemove = gpGlobals->time + 5.0s;
+		m_flNextDamage = gpGlobals->time + 0.1f;
+		pev->nextthink = gpGlobals->time + 0.1f;
+		m_tTimeRemove = gpGlobals->time + 5.0f;
 	}
 
-	void CWonderCannonChain::Init(CBasePlayer* pOwner, CWonderCannon* pWeapon, CBaseEntity* pAttachedEnt, CUtlVector<CBaseEntity*>* pEnemyList)
+	void CWonderCannonChain::Init(CBasePlayer* pOwner, CBaseEntity* pAttachedEnt, CUtlVector<CBaseEntity*>* pEnemyList)
 	{
 		m_pAttachedEnt = pAttachedEnt;
-		m_pWeapon = pWeapon;
 		m_pOwner = pOwner;
 		m_iTeam = m_pOwner->m_iTeam;
 		m_pEnemyList = pEnemyList;
@@ -68,7 +68,7 @@ namespace sv {
 			m_pEnemyList->AddToTail(m_pAttachedEnt);
 
 		if (g_pGameRules->PlayerRelationship(m_pOwner, m_pAttachedEnt) == GR_TEAMMATE)
-			m_flNextDamage = invalid_time_point;
+			m_flNextDamage = 0;
 	}
 
 	void CWonderCannonChain::Precache()
@@ -94,7 +94,7 @@ namespace sv {
 
 	void CWonderCannonChain::OnThink()
 	{
-		pev->nextthink = gpGlobals->time + 0.1s;
+		pev->nextthink = gpGlobals->time + 0.1f;
 
 		if (!m_pOwner)
 		{
@@ -130,12 +130,6 @@ namespace sv {
 			Remove();
 			return;
 		}
-
-		if (pWeapon->m_iId != GetWeaponsId())
-		{
-			Remove();
-			return;
-		}	
 		
 		if (!m_pEnemyList->Count())
 		{
@@ -184,9 +178,9 @@ namespace sv {
 						WRITE_BYTE(0);
 						MESSAGE_END();
 
-						m_flNextDamage = gpGlobals->time + 0.1s;
+						m_flNextDamage = gpGlobals->time + 0.1f;
 						m_pAttachedEnt = pNewEntity;
-						m_tTimeRemove = gpGlobals->time + 5.0s;
+						m_tTimeRemove = gpGlobals->time + 5.0f;
 						pev->iuser1 = 1;
 						continue;
 					}
@@ -206,7 +200,7 @@ namespace sv {
 		}
 		
 
-		if (m_flNextDamage != invalid_time_point && m_flNextDamage < gpGlobals->time)
+		if (m_flNextDamage != 0 && m_flNextDamage < gpGlobals->time)
 		{
 			m_flNextDamage = gpGlobals->time + WONDERCANNON_CHAIN_DAMAGE_INTERVAL;
 
@@ -320,7 +314,7 @@ namespace sv {
 			if (m_iCount >= m_iExpTime)
 			{
 				SetThink(&CWonderCannonChain::Remove);
-				pev->nextthink = gpGlobals->time + 0.1s;
+				pev->nextthink = gpGlobals->time + 0.1f;
 				return;
 			}
 
@@ -406,28 +400,28 @@ namespace sv {
 		{
 			switch (iType)
 			{
-			case sv::CWonderCannonChain::EXPTYPE_BASE:
+			case CWonderCannonChain::EXPTYPE_BASE:
 				flDamage = 0.35;
 				if (g_pModRunning->DamageTrack() == DT_ZB)
 					flDamage = 19;
 				else if (g_pModRunning->DamageTrack() == DT_ZBS)
 					flDamage = 38;
 				break;
-			case sv::CWonderCannonChain::EXPTYPE_SINGLE:
+			case CWonderCannonChain::EXPTYPE_SINGLE:
 				flDamage = 0.5;
 				if (g_pModRunning->DamageTrack() == DT_ZB)
 					flDamage = 69;
 				else if (g_pModRunning->DamageTrack() == DT_ZBS)
 					flDamage = 101;
 				break;
-			case sv::CWonderCannonChain::EXPTYPE_MULTI:
+			case CWonderCannonChain::EXPTYPE_MULTI:
 				flDamage = 0.35;
 				if (g_pModRunning->DamageTrack() == DT_ZB)
 					flDamage = 37;
 				else if (g_pModRunning->DamageTrack() == DT_ZBS)
 					flDamage = 64;
 				break;
-			case sv::CWonderCannonChain::EXPTYPE_FINAL:
+			case CWonderCannonChain::EXPTYPE_FINAL:
 				flDamage = 0.35;
 				if (g_pModRunning->DamageTrack() == DT_ZB)
 					flDamage = 99;
@@ -442,28 +436,28 @@ namespace sv {
 		{
 			switch (iType)
 			{
-			case sv::CWonderCannonChain::EXPTYPE_BASE:
+			case CWonderCannonChain::EXPTYPE_BASE:
 				flDamage = 0.35;
 				if (g_pModRunning->DamageTrack() == DT_ZB)
 					flDamage = 13;
 				else if (g_pModRunning->DamageTrack() == DT_ZBS)
 					flDamage = 38;
 				break;
-			case sv::CWonderCannonChain::EXPTYPE_SINGLE:
+			case CWonderCannonChain::EXPTYPE_SINGLE:
 				flDamage = 0.5;
 				if (g_pModRunning->DamageTrack() == DT_ZB)
 					flDamage = 24;
 				else if (g_pModRunning->DamageTrack() == DT_ZBS)
 					flDamage = 39;
 				break;
-			case sv::CWonderCannonChain::EXPTYPE_MULTI:
+			case CWonderCannonChain::EXPTYPE_MULTI:
 				flDamage = 0.35;
 				if (g_pModRunning->DamageTrack() == DT_ZB)
 					flDamage = 16;
 				else if (g_pModRunning->DamageTrack() == DT_ZBS)
 					flDamage = 38;
 				break;
-			case sv::CWonderCannonChain::EXPTYPE_FINAL:
+			case CWonderCannonChain::EXPTYPE_FINAL:
 				flDamage = 0.35;
 				if (g_pModRunning->DamageTrack() == DT_ZB)
 					flDamage = 65;
@@ -477,4 +471,3 @@ namespace sv {
 #endif
 		return flDamage;
 	}
-}

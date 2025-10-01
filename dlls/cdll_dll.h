@@ -85,7 +85,9 @@
 #define PLAYER_DEAD (1<<0)
 #define PLAYER_HAS_C4 (1<<1)
 #define PLAYER_VIP (1<<2)
+#define PLAYER_HERO (1<<2)
 #define PLAYER_ZOMBIE (1<<3)
+#define PLAYER_MUTANT (1<<3)
 
 #define SIGNAL_BUY			(1<<0)
 #define SIGNAL_BOMB			(1<<1)

@@ -14,6 +14,27 @@
 #include "gamemode/mods.h"
 #endif
 
+enum
+{
+	HUMAN_SKILL_KNIFE2X,
+	HUMAN_SKILL_HEADSHOT,
+	ZOMBIE_SKILL_HEAL,
+	ZOMBIE_SKILL_HEAL_HEAD,
+	CANNON_FLAME_BURN,
+	HUNTBOW_DMGREITERATION,
+	HUNTBOW_MARKZOMBIE,
+	TELEPORT_MARKEF,
+	HOLYBOMB_BURN,
+	LANCE_HIT,
+	ZOMBIE_SKILL_PILE,
+	ZSHELTER_HOME,
+	ZSHELTER_RESMEAT,
+	ZSHELTER_RESWOOD,
+	ZSHELTER_BUYZONE,
+	ZSHELTER_ZOMBIE,
+	WPN_VOID_SCANAIM,
+};
+
 enum blackhole_anim
 {
 	BLACKHOLE_START,
@@ -531,11 +552,6 @@ void CVoidpistol::ItemPostFrame()
 			{
 				if (FVisible(vecPlayerOrigin) == TRUE)
 				{
-
-
-
-
-
 					if (g_pGameRules->PlayerRelationship(m_pPlayer, pEntity) != GR_TEAMMATE)
 					{
 						if (!IsModeCEnabled(m_iCharging))
@@ -550,6 +566,13 @@ void CVoidpistol::ItemPostFrame()
 							m_flNextSecondaryAttack = m_flNextPrimaryAttack = 0.7f;
 							m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.8f;
 							pev->iuser1 = 0;
+
+							MESSAGE_BEGIN(MSG_ALL, gmsgHeadIcon);
+							WRITE_BYTE(7);
+							WRITE_SHORT(ENTINDEX(pEntity->edict()));
+							WRITE_BYTE(pev->iuser1);
+							MESSAGE_END();
+
 							return CBasePlayerWeapon::ItemPostFrame();
 						}
 						else
@@ -1121,6 +1144,11 @@ void CVoidpistol::WeaponIdle(void)
 		case VOIDPISTOL_MODEB:
 		{
 			SendWeaponAnim(VOIDPISTOL_IDLEB, UseDecrement() != FALSE); break;
+			MESSAGE_BEGIN(MSG_ALL, gmsgHeadIcon);
+			WRITE_BYTE(HUNTBOW_MARKZOMBIE);
+			WRITE_SHORT(ENTINDEX(edict()));
+			WRITE_BYTE(pev->iuser1);
+			MESSAGE_END();
 		}
 		}
 	}

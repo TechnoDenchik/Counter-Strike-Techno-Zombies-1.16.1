@@ -164,37 +164,33 @@ static void Sys_LoadEngine( void )
 	
 	if (DirIsExist("Counter-Strike-TZ"))
 	{
-				if (DirIsExist("Counter-Strike-TZ/media"))
-				{
-					HANDLE Mutex = CheckInstance(NamedMutex);
 
-					if (!Mutex)
-					{
-						ReleaseMutex(Mutex);
-						TechnoEngine_Warning("Игра запущена!");
-						HWND hWnd = FindWindow(0, "Counter-Strike T:Z");
-						SetForegroundWindow(hWnd);
-						return 1;
-					}
-					else
-					{
-						if ((hEngine = dlmount(TECHNOENGINELIB)) == NULL)
-						{
-							TechnoEngine_Error("Системе не удалось обнаружить модуль "TECHNOENGINELIB" в директории игры. Error:0x000027t", dlerror());
-						}
+		HANDLE Mutex = CheckInstance(NamedMutex);
 
-						if ((TechnoEngine_Main = (pfnInit)dlsym(hEngine, "Host_Main")) == NULL)
-						{
-							TechnoEngine_Error("Точка входа в функции $@Sys_start(void),$@Sys_unloadEndine(void) не выполнена. Error:0x000127t"TECHNOENGINELIB"", dlerror());
-						}
+		//if (!Mutex)
+		//{
+			//ReleaseMutex(Mutex);
+			//TechnoEngine_Warning("Игра запущена!");
+			//HWND hWnd = FindWindow(0, "Counter-Strike T:Z");
+		//	SetForegroundWindow(hWnd);
+			//return 1;
+	//	}
+	//	else
+		//{
+			if ((hEngine = dlmount(TECHNOENGINELIB)) == NULL)
+			{
+				TechnoEngine_Error("Системе не удалось обнаружить модуль "TECHNOENGINELIB" в директории игры. Error:0x000027t", dlerror());
+			}
 
-						TechnoEngine_Shutdown = (pfnShutdown)dlsym(hEngine, "Host_Shutdown");
-					}
-				}
-				else
-				{
-					TechnoEngine_Warning2("Папка медиаплеера Counter-Strike-TZ/media не обнаружена Error:0x000427g", dlerror());
-				}
+			if ((TechnoEngine_Main = (pfnInit)dlsym(hEngine, "Host_Main")) == NULL)
+			{
+				TechnoEngine_Error("Точка входа в функции $@Sys_start(void),$@Sys_unloadEndine(void) не выполнена. Error:0x000127t"TECHNOENGINELIB"", dlerror());
+			}
+
+			TechnoEngine_Shutdown = (pfnShutdown)dlsym(hEngine, "Host_Shutdown");
+	//	}
+
+
 	}
 	else
 	{

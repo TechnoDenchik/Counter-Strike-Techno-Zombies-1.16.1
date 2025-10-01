@@ -48,6 +48,7 @@ void CM134Hero::Spawn(void)
 void CM134Hero::Precache(void)
 {
 	PRECACHE_MODEL("models/v_m134hero.mdl");
+	PRECACHE_MODEL("models/p_m134hero.mdl");
 	PRECACHE_MODEL("models/w_m134hero.mdl");
 
 	PRECACHE_SOUND("weapons/m134hero_draw.wav");

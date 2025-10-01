@@ -76,7 +76,10 @@ bool CPlayerModStrategy_Default::CanPlayerBuy(bool display)
 	{
 		if (display)
 		{
-			ClientPrint(player->pev, HUD_PRINTCENTER, "#Cant_buy", UTIL_dtos1(buyTime));
+			MESSAGE_BEGIN(MSG_ONE, gmsgOriginalMsgCantBuy, NULL, player->pev);
+			WRITE_BYTE(ORIG_CANT_BUY);
+			WRITE_BYTE(buyTime);
+			MESSAGE_END();
 		}
 
 		return false;
@@ -86,7 +89,9 @@ bool CPlayerModStrategy_Default::CanPlayerBuy(bool display)
 	{
 		if (display)
 		{
-			ClientPrint(player->pev, HUD_PRINTCENTER, "#CT_cant_buy");
+			MESSAGE_BEGIN(MSG_ONE, gmsgOriginalMsgCantBuy, NULL, player->pev);
+			WRITE_BYTE(ORIG_CANT_BUY_CT);
+			MESSAGE_END();		
 		}
 
 		return false;
@@ -96,7 +101,9 @@ bool CPlayerModStrategy_Default::CanPlayerBuy(bool display)
 	{
 		if (display)
 		{
-			ClientPrint(player->pev, HUD_PRINTCENTER, "#Terrorist_cant_buy");
+			MESSAGE_BEGIN(MSG_ONE, gmsgOriginalMsgCantBuy, NULL, player->pev);
+			WRITE_BYTE(ORIG_CANT_BUY_T);
+			MESSAGE_END();
 		}
 
 		return false;
@@ -146,7 +153,6 @@ void CPlayerModStrategy_Default::Pain(int m_LastHitGroup, bool HasArmour)
 
 void CPlayerModStrategy_Default::DeathSound()
 {
-	// temporarily using pain sounds for death sounds
 	switch (RANDOM_LONG(1, 4))
 	{
 	case 1: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "player/die1.wav", VOL_NORM, ATTN_NORM); break;
@@ -167,23 +173,35 @@ void CPlayerModStrategy_Default::GiveDefaultItems()
 	case CT:
 		if (m_pPlayer->m_bIsZombie == false)
 		{
-			MESSAGE_BEGIN(MSG_ONE, gmsgZB3InventorySet, nullptr, m_pPlayer->pev);
-			WRITE_BYTE(WPN_INVENTORY);
-			MESSAGE_END();
-			//m_pPlayer->GiveNamedItem("weapon_knife");
-			//m_pPlayer->GiveNamedItem("weapon_usp");
-			//m_pPlayer->GiveAmmo(m_pPlayer->m_bIsVIP ? 12 : 24, "45acp", MAX_AMMO_45ACP);
+			if (g_pModRunning->DamageTrack() == DT_ZB)
+			{
+				MESSAGE_BEGIN(MSG_ONE, gmsgZB3InventorySet, nullptr, m_pPlayer->pev);
+				WRITE_BYTE(WPN_INVENTORY);
+				MESSAGE_END();
+			}
+			else
+			{
+				m_pPlayer->GiveNamedItem("weapon_knife");
+				m_pPlayer->GiveNamedItem("weapon_usp");
+				m_pPlayer->GiveAmmo(m_pPlayer->m_bIsVIP ? 12 : 24, "45acp", MAX_AMMO_45ACP);
+			}	
 		}
 		break;
 	case TERRORIST:
 		if (m_pPlayer->m_bIsZombie == false)
 		{
-			MESSAGE_BEGIN(MSG_ONE, gmsgZB3InventorySet, nullptr, m_pPlayer->pev);
-			WRITE_BYTE(WPN_INVENTORY);
-			MESSAGE_END();
-			//m_pPlayer->GiveNamedItem("weapon_knife");
-			//m_pPlayer->GiveNamedItem("weapon_glock18");
-			//m_pPlayer->GiveAmmo(40, "9mm", MAX_AMMO_9MM);
+			if (g_pModRunning->DamageTrack() == DT_ZB)
+			{
+				MESSAGE_BEGIN(MSG_ONE, gmsgZB3InventorySet, nullptr, m_pPlayer->pev);
+				WRITE_BYTE(WPN_INVENTORY);
+				MESSAGE_END();
+			}
+			else
+			{
+				m_pPlayer->GiveNamedItem("weapon_knife");
+				m_pPlayer->GiveNamedItem("weapon_glock18");
+				m_pPlayer->GiveAmmo(40, "9mm", MAX_AMMO_9MM);
+			}
 		}
 		break;
 	default:
@@ -203,7 +221,6 @@ void CPlayerModStrategy_Zombie::DeathSound()
 
 float CPlayerModStrategy_Zombie::AdjustDamageTaken(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType)
 {
-	// grenade damage 5x in zb mode
 	if (g_pModRunning->DamageTrack() == DT_ZB && !Q_strcmp(STRING(pevInflictor->classname), "grenade"))
 	{
 		if (bitsDamageType & DMG_EXPLOSION)
@@ -219,7 +236,6 @@ float CPlayerModStrategy_Zombie::AdjustDamageTaken(entvars_t *pevInflictor, entv
 
 float CPlayerModStrategy_Zombie::AdjustDamageTaken2(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage2, int bitsDamageType2)
 {
-	// grenade damage 5x in zb mode
 	if (g_pModRunning->DamageTrack() == DT_ZB && !Q_strcmp(STRING(pevInflictor->classname), "grenade"))
 	{
 		if (bitsDamageType2 & DMG_EXPLOSION)
@@ -240,10 +256,6 @@ void CPlayerModStrategy_Zombie::GiveDefaultItems()
 	m_pPlayer->RemoveAllItems(FALSE);
 	m_pPlayer->m_bHasPrimary = false;
 
-//	m_pPlayer->GiveNamedItem("weapon_zombibomb");
-	//m_pPlayer->GiveNamedItem("knife_zombi");
-
-
 	if (!(m_pPlayer->m_flDisplayHistory & DHF_NIGHTVISION))
 	{
 		m_pPlayer->HintMessage("#Hint_use_nightvision");
@@ -252,5 +264,4 @@ void CPlayerModStrategy_Zombie::GiveDefaultItems()
 	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "items/equip_nvg.wav", VOL_NORM, ATTN_NORM);
 	m_pPlayer->m_bHasNightVision = true;
 	SendItemStatus(m_pPlayer);
-	
 }

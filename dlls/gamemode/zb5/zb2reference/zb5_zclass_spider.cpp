@@ -43,6 +43,7 @@ CZombieClass_Spider::CZombieClass_Spider(CBasePlayer *player, ZombieLevel iEvolu
 	m_pPlayer->pev->rendermode = kRenderNormal;
 	m_pPlayer->ResetMaxSpeed();
 	m_pPlayer->GiveNamedItem("knife_zombi_spider");
+	m_pPlayer->GiveNamedItem("weapon_zombibombz");
 
 	m_pPlayer->m_bIsZombieSpider = true;
 }

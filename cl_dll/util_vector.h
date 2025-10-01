@@ -79,7 +79,8 @@ public:
 	inline Vector operator-(const Vector& v) const	{ return Vector(x-v.x, y-v.y, z-v.z);	}
 	inline Vector operator*(float fl) const			{ return Vector(x*fl, y*fl, z*fl);		}
 	inline Vector operator/(float fl) const			{ return Vector(x/fl, y/fl, z/fl);		}
-	
+	inline Vector operator*=(float scalar)		    { return Vector(x *= scalar, y *= scalar, z *= scalar);  }
+
 	// Methods
 	inline void CopyToArray(float* rgfl) const		{ rgfl[0] = x, rgfl[1] = y, rgfl[2] = z; }
 	inline float Length(void) const					{ return (float)sqrt(x*x + y*y + z*z); }

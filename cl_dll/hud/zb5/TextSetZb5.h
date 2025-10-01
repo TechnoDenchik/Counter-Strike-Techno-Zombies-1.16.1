@@ -47,6 +47,7 @@ class CHudTextNum : public IBaseHudSub
 public:
 	int VidInit(void) override;
 	int Draw(float time) override;
+	int UpdateInit();
 
 	void evolution ( int evovalue)
 	{
@@ -57,9 +58,12 @@ public:
 	time_point_t timesecond;
 	duration_t tDeltasecond;
 
-	time_point_t timetx;
+	int timetx;
+	int numberframe;
 
 protected:
+
+	SharedTexture m_iTex2;
 
 	int evo;
 

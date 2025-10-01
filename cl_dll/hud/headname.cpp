@@ -19,6 +19,8 @@
 #include "csprite.h"
 #include "cvardef.h" 
 
+#include "gamemode/mods_const.h"
+
 int CHudHeadName::Init(void)
 {
 	gHUD.AddHudElem(this);
@@ -54,6 +56,9 @@ int CHudHeadName::Draw(float flTime)
 			continue;
 
 		if (g_PlayerExtraInfo[i].teamnumber != g_PlayerExtraInfo[gHUD.m_Scoreboard.m_iPlayerNum].teamnumber)
+			continue;
+
+		if (gHUD.m_iModRunning == MOD_DM)
 			continue;
 
 		if (i != gHUD.m_Scoreboard.m_iPlayerNum)

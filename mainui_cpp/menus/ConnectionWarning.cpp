@@ -9,10 +9,7 @@ enum EPresets { EPRESET_NORMAL = 0, EPRESET_DSL, EPRESET_SLOW, EPRESET_LAST };
 static class CMenuConnectionWarning : public CMenuBaseWindow
 {
 public:
-	CMenuConnectionWarning() : CMenuBaseWindow( "ConnectionWarning" )
-	{
-
-	}
+	CMenuConnectionWarning() : CMenuBaseWindow( "ConnectionWarning" ){}
 	void _Init() override;
 	void _VidInit() override;
 	const char *Key( int key, int down ) override;
@@ -28,10 +25,7 @@ private:
 
 const char *CMenuConnectionWarning::Key( int key, int down )
 {
-	if( down && UI::Key::IsEscape( key ) )
-	{
-	//	return uiSoundNull; // handled
-	}
+	if( down && UI::Key::IsEscape( key ) ){}
 
 	return CMenuBaseWindow::Key( key, down );
 }
@@ -44,22 +38,26 @@ void CMenuConnectionWarning::_Init()
 	background.colorBase = uiPromptBgColor;
 
 	normal.szName = "Normal internet connection";
+	normal.SetCharSize(QM_BOLDFONT);
 	normal.SetCoord( 20, 140 );
 	SET_EVENT( normal.onChanged,
 		((CMenuConnectionWarning*)pSelf->Parent())->WriteSettings( EPRESET_NORMAL ) );
 
 	dsl.szName = "DSL or PPTP with limited packet size";
+	dsl.SetCharSize(QM_BOLDFONT);
 	dsl.SetCoord( 20, 200 );
 	SET_EVENT( dsl.onChanged,
 		((CMenuConnectionWarning*)pSelf->Parent())->WriteSettings( EPRESET_DSL ) );
 
 	slowest.szName = "Slow connection mode (64kbps)";
+	slowest.SetCharSize(QM_BOLDFONT);
 	slowest.SetCoord( 20, 260 );
 	SET_EVENT( slowest.onChanged,
 		((CMenuConnectionWarning*)pSelf->Parent())->WriteSettings( EPRESET_SLOW ) );
 
 	done.SetPicture( PC_DONE );
 	done.szName = "Done";
+	done.SetCharSize(QM_BOLDFONT);
 	done.SetGrayed( true );
 	done.SetRect( 410, 320, UI_BUTTONS_WIDTH / 2, UI_BUTTONS_HEIGHT );
 	done.onActivated = VoidCb( &CMenuConnectionWarning::Hide );
@@ -67,6 +65,7 @@ void CMenuConnectionWarning::_Init()
 
 	options.SetPicture( PC_ADV_OPT );
 	options.szName = "Adv Options";
+	options.SetCharSize(QM_BOLDFONT);
 	SET_EVENT_MULTI( options.onActivated,
 	{
 		UI_GameOptions_Menu();
@@ -78,10 +77,12 @@ void CMenuConnectionWarning::_Init()
 	title.iFlags = QMF_INACTIVE|QMF_DROPSHADOW;
 	title.eTextAlignment = QM_CENTER;
 	title.szName = "Connection problem";
+	title.SetCharSize(QM_BOLDFONT);
 	title.SetRect( 0, 16, 640, 20 );
 
 	message.iFlags = QMF_INACTIVE;
 	message.szName = "Too many lost packets while connecting!\nPlease select network settings";
+	message.SetCharSize(QM_BOLDFONT);
 	message.SetRect( 20, 60, 600, 32 );
 
 	AddItem( background );

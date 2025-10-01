@@ -53,16 +53,19 @@ void UI_Video_Menu( void )
 		video.banner.SetPicture(ART_BANNER);
 
 		Graphic.SetNameAndStatus(L("CstzUI_VideoGraphic"), L(""));
+		Graphic.SetCharSize(QM_BOLDFONT);
 		Graphic.onActivated = UI_VidOptions_Menu;
 		Graphic.iFlags |= QMF_NOTIFY;
 		Graphic.SetCoord(80, 300);
 
 		VidoeMode.SetNameAndStatus(L("CstzUI_VideoModes"), L(""));
+		VidoeMode.SetCharSize(QM_BOLDFONT);
 		VidoeMode.onActivated = UI_VidModes_Menu;
 		VidoeMode.iFlags |= QMF_NOTIFY;
 		VidoeMode.SetCoord(80, 350);
 
 		Exit.SetNameAndStatus(L("GameUI_Close"), L(""));
+		Exit.SetCharSize(QM_BOLDFONT);
 		Exit.onActivated = VoidCb(&CMenuFramework::Hide);
 		Exit.iFlags |= QMF_NOTIFY;
 		Exit.SetCoord(80, 400);

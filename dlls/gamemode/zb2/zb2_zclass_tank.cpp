@@ -53,6 +53,7 @@ CZombieClass_Default::CZombieClass_Default(CBasePlayer *player, ZombieLevel iEvo
 	m_pPlayer->ResetMaxSpeed();
 	m_pPlayer->GiveNamedItem("knife_zombi");
 	m_pPlayer->GiveNamedItem("weapon_zombibombz");
+	m_pPlayer->GiveNamedItem("weapon_zombibombz");
 	m_pPlayer->m_bIsZombieTank = true;
 }
 

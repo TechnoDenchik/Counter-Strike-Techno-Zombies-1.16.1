@@ -22,6 +22,7 @@ GNU General Public License for more details.
 
 #include "gamemode/mods.h"
 #include "gamemode/zb1/zb1_zclass.h"
+
 #include "gamemode/zb5/zb1reference/zb1_zclassreference.h"
 
 CHuman_ZB1::CHuman_ZB1(CBasePlayer *player) : BasePlayerExtra(player)
@@ -139,45 +140,91 @@ void PlayerZombie_Precache()
 	PRECACHE_SOUND("zb5/spider_hurt2.wav");
 	PRECACHE_SOUND("zb5/spider_death1.wav");
 	PRECACHE_SOUND("zb5/spider_death2.wav");
-
 	PRECACHE_SOUND("zb5/zombi_heal_female.wav");
 	PRECACHE_SOUND("zb5/zombi_heal_meatwall.wav");
 	PRECACHE_SOUND("zb5/zombi_heal.wav");
-
 	PRECACHE_SOUND("zb3/zombi_heal.wav");
+	PRECACHE_SOUND("zb3/resident_death.wav");
+	PRECACHE_SOUND("zb3/resident_hurt1.wav");
+	PRECACHE_SOUND("zb3/resident_hurt2.wav");
+	PRECACHE_SOUND("zb3/resident_skill1.wav");
+	PRECACHE_SOUND("zb3/resident_skill2.wav");
+	PRECACHE_SOUND("zb3/resident_stab.wav");
+	PRECACHE_SOUND("zb3/resident_stab_miss.wav");
+	PRECACHE_SOUND("zb3/resident_tw.wav");
+	PRECACHE_SOUND("zb3/flyzombie_death1.wav");
+	PRECACHE_SOUND("zb3/flyzombie_death2.wav");
+	PRECACHE_SOUND("zb3/flyzombie_downhill_start.wav");
+	PRECACHE_SOUND("zb3/flyzombie_fly_idle.wav");
+	PRECACHE_SOUND("zb3/flyzombie_fly_start.wav");
+	PRECACHE_SOUND("zb3/flyzombie_hurt1.wav");
+	PRECACHE_SOUND("zb3/flyzombie_hurt2.wav");
+	PRECACHE_SOUND("zb3/zombi_chinese_death.wav");
+	PRECACHE_SOUND("zb3/zombi_chinese_hurt.wav");
+	PRECACHE_SOUND("zb3/zombi_chinese_jump.wav");
+	PRECACHE_SOUND("zb3/boosterzombie_booster.wav");
+	PRECACHE_SOUND("zb3/boosterzombie_death1.wav");
+	PRECACHE_SOUND("zb3/boosterzombie_death2.wav");
+	PRECACHE_SOUND("zb3/boosterzombie_hurt1.wav");
+	PRECACHE_SOUND("zb3/boosterzombie_hurt2.wav");
+	PRECACHE_SOUND("zb3/boosterzombie_stab.wav");
+	PRECACHE_SOUND("zb3/boomer_hurt1.wav");
+	PRECACHE_SOUND("zb3/boomer_hurt2.wav");
+	PRECACHE_SOUND("zb3/boomer_death.wav");
+	PRECACHE_SOUND("zb3/akshazombie_death1.wav");
+	PRECACHE_SOUND("zb3/akshazombie_death2.wav");
+	PRECACHE_SOUND("zb3/akshazombie_hurt1.wav");
+	PRECACHE_SOUND("zb3/akshazombie_hurt2.wav");
+	PRECACHE_SOUND("zb3/boomer_draw.wav");
+	PRECACHE_SOUND("zb3/boomer_skill.wav");
+	PRECACHE_SOUND("zombi/zombi_bomb_exp.wav");
+	PRECACHE_SOUND("zombi/zombi_bomb_bounce_1.wav");
+	PRECACHE_SOUND("zombi/zombi_bomb_bounce_2.wav");
+
+	PRECACHE_MODEL("models/v_zombibomb_trans.mdl");
+
+	PRECACHE_MODEL("models/v_zombibomb_aksha_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_boomer_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_booster_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_china_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_deathknight_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_deimos_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_fly_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_h_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_heal_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_meatwall.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_meatwall_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_pass_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_resident_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_revival_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_s_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_spider_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_teleport.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_teleport_host.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_undertaker.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_witch_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb-deimos.mdl");
+	PRECACHE_MODEL("models/v_zombibomb-deimos_host.mdl");
+	PRECACHE_MODEL("models/v_zombibomb-deimos2.mdl");
+	PRECACHE_MODEL("models/v_zombibombpc.mdl");
+
+	PRECACHE_MODEL("sprites/zb_meleeup.spr");
+	PRECACHE_MODEL("sprites/zb_skill_headshot.spr");
+	PRECACHE_MODEL("sprites/zombihealer.spr");
+	PRECACHE_MODEL("sprites/zombiheal_head.spr");
+	PRECACHE_MODEL("sprites/flame_burn01.spr");
+	PRECACHE_MODEL("sprites/dmgreiteration01.spr");
+	PRECACHE_MODEL("sprites/dmgreiteration02.spr");
+	PRECACHE_MODEL("sprites/dmgreiteration03.spr");
+	PRECACHE_MODEL("sprites/dmgreiteration04.spr");
+	PRECACHE_MODEL("sprites/dmgreiteration05.spr");
+	PRECACHE_MODEL("sprites/ef_teleportzombieout.spr");
+
+	PRECACHE_MODEL("sprites/ef_teleportzombie.spr");
+	PRECACHE_MODEL("sprites/holybomb_burn.spr");
+	PRECACHE_MODEL("sprites/ef_lance_hit.spr");
+	PRECACHE_MODEL("sprites/zbt_slow.spr");
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 CHuman_ZB1R::CHuman_ZB1R(CBasePlayer* player) : BasePlayerExtra(player)
 {

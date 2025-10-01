@@ -46,7 +46,7 @@ int CHudScenarioStatus::Draw(float fTime)
 	if (m_iFlags & HUD_ACTIVE)
 	{
 		int r, g, b;
-		DrawUtils::UnpackRGB(r, g, b, RGB_WHITE);
+		DrawUtils::UnpackRGB(r, g, b, RGB_YELLOWISH);
 
 		int x = gHUD.m_Timer.m_closestRight;
 		int y = ScreenHeight + (3 * gHUD.m_iFontHeight) / -2 - (m_rect.bottom - m_rect.top - gHUD.m_iFontHeight) / 2;
@@ -74,12 +74,12 @@ int CHudScenarioStatus::Draw(float fTime)
 	return 1;
 }
 
-int CHudScenarioStatus::MsgFunc_Scenario(const char *pszName, int iSize, void *pbuf)
+int CHudScenarioStatus::MsgFunc_Scenario(const char* pszName, int iSize, void* pbuf)
 {
 	BufferReader reader(pszName, pbuf, iSize);
 
 	bool wasActive = m_iFlags & HUD_ACTIVE;
-	const char *spriteName;
+	const char* spriteName;
 	int sprIndex;
 	int alpha;
 

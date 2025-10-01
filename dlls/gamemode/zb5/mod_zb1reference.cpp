@@ -54,11 +54,14 @@ void CMod_ZombiR::CheckMapConditions()
 	{
 		REMOVE_ENTITY(fog->edict());
 	}
+
 	CClientFog *newfog = GetClassPtr<CClientFog>(nullptr);
 	MAKE_STRING_CLASS("env_fog", newfog->pev);
 	newfog->Spawn();
-	newfog->m_fDensity = 0.0016f;
-	newfog->pev->rendercolor = { 0,0,0 };
+	newfog->m_fDensity = 2000.16f;
+	newfog->pev->rendercolor = { 128,128,128 };
+	newfog->UpdateClientMsg();
+	newfog->m_fBlendTime = 1;
 
 	// light
 	LIGHT_STYLE(0, "g"); // previous one is "f"
@@ -200,15 +203,14 @@ void CMod_ZombiR::HumanWin()
 	for(CBasePlayer *player : moe::range::PlayersList())
 		CLIENT_COMMAND(player->edict(), "spk zb3/win_human\n");
 
-	MESSAGE_BEGIN(MSG_ALL, gmsgZB2Msg, NULL);
-	WRITE_BYTE(ZB2_MESSAGE_WINHUDHM);
-	MESSAGE_END();
-
 	TerminateRound(5, WINSTATUS_CTS);
 	RoundEndScore(WINSTATUS_CTS);
-
+	EndRoundMessage("#0", ROUND_CTS_WIN);
 	++m_iNumCTWins;
 	UpdateTeamScores();
+
+
+
 }
 
 void CMod_ZombiR::ZombieWin()
@@ -216,13 +218,9 @@ void CMod_ZombiR::ZombieWin()
 	for(CBasePlayer *player : moe::range::PlayersList())
 		CLIENT_COMMAND(player->edict(), "spk zb3/win_zombi\n");
 
-	MESSAGE_BEGIN(MSG_ALL, gmsgZB2Msg, NULL);
-	WRITE_BYTE(ZB2_MESSAGE_WINHUDZB);
-	MESSAGE_END();
-
 	TerminateRound(5, WINSTATUS_TERRORISTS);
 	RoundEndScore(WINSTATUS_TERRORISTS);
-
+	EndRoundMessage("#0", ROUND_TERRORISTS_WIN);
 	++m_iNumTerroristWins;
 	UpdateTeamScores();
 }
@@ -454,6 +452,7 @@ void CMod_ZombiR::HumanInfectionByZombie(CBasePlayer *player, CBasePlayer *attac
 	player->m_iDeaths += 1;
 	player->AddPoints(0, FALSE);
 	attacker->AddPoints(1, FALSE);
+	attacker->m_iRoundInfect++;
 }
 
 void CMod_ZombiR::InfectionSound()
@@ -491,6 +490,10 @@ void CMod_ZombiR::RestartRound()
 
 	CVAR_SET_FLOAT("mp_autoteambalance", 0.0f);
 	
+	MESSAGE_BEGIN(MSG_ALL, gmsgResetRound, nullptr);
+	WRITE_BYTE(m_iTotalRoundsPlayed);
+	MESSAGE_END();
+
 	IBaseMod::RestartRound();
 	m_bTCantBuy = false;
 }

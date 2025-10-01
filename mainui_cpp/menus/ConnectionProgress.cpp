@@ -58,6 +58,7 @@ public:
 	void HandlePrecache( void )
 	{
 		SetCommonText( L("CstzUI_MainPrecache") );
+		commonProgress.SetCharSize(QM_BOLDFONT);
 		commonProgress.LinkCvar( "scr_loading", 0, 100 );
 		m_iState = STATE_CONNECTING;
 	}
@@ -96,7 +97,10 @@ public:
 		}
 		else
 		{
-			snprintf( sTitleString, sizeof( sTitleString ) - 1, L("CstzUI_MainCon %s..."), pszName );
+			if (!EngFuncs::GetCvarFloat("cl_background") == 1)
+			{
+				snprintf(sTitleString, sizeof(sTitleString) - 1, L("CstzUI_MainCon %s..."), pszName);
+			}
 		}
 
 		commonProgress.SetValue( 0 );
@@ -184,6 +188,7 @@ void CMenuConnectionProgress::HandleDisconnect( void )
 	
 //	SetCommonText( L("CstzUI_MainDiscon2") );
 	SetNameAndStatus(L("CstzUI_MainDiscon2"), L(""));
+	SetCharSize(QM_BOLDFONT);
 	m_iState = STATE_NONE;
 	VidInit();
 }
@@ -209,6 +214,7 @@ void CMenuConnectionProgress::_Init( void )
 
 	consoleButton.SetPicture( PC_CONSOLE );
 	consoleButton.szName = "Console";
+	consoleButton.SetCharSize(QM_BOLDFONT);
 	SET_EVENT_MULTI( consoleButton.onActivated,
 	{
 		CMenuConnectionProgress *parent = (CMenuConnectionProgress *)pSelf->Parent();
@@ -222,6 +228,7 @@ void CMenuConnectionProgress::_Init( void )
 
 
 	disconnectButton.SetNameAndStatus(L("GameUI_GameMenu_Disconnect"), L(""));
+	disconnectButton.SetCharSize(QM_BOLDFONT);
 	disconnectButton.onActivated = VoidCb(&CMenuConnectionProgress::Disconnect);
 	disconnectButton.iFlags |= QMF_NOTIFY;
 	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
@@ -229,6 +236,7 @@ void CMenuConnectionProgress::_Init( void )
 	disconnectButton.bEnableTransitions = false;
 	
 	dialog.SetNameAndStatus(L("CstzUI_MainDiscon"), L(""));
+	dialog.SetCharSize(QM_BOLDFONT);
 	dialog.Link( this );
 	dialog.onPositive = VoidCb( &CMenuConnectionProgress::Disconnect );
 
@@ -237,6 +245,7 @@ void CMenuConnectionProgress::_Init( void )
 	title.szName = sTitleString;
 
 	skipButton.szName = "Skip";
+	skipButton.SetCharSize(QM_BOLDFONT);
 	skipButton.onActivated.SetCommand( TRUE, "http_skip\n" );
 	skipButton.bEnableTransitions = false;
 
@@ -326,7 +335,6 @@ void CMenuConnectionProgress::Draw( void )
 	CMenuBaseWindow::Draw();
 }
 
-
 void UI_ConnectionProgress_f( void )
 {
 	if( !strcmp( EngFuncs::CmdArgv(1), "disconnect" ) )
@@ -388,13 +396,16 @@ void UI_ConnectionProgress_f( void )
 		uiConnectionProgress.Show();
 	}
 
-	else if( !strcmp( EngFuncs::CmdArgv(1), "serverinfo" ) )
+	else if (!strcmp(EngFuncs::CmdArgv(1), "serverinfo"))
 	{
-		if( EngFuncs::CmdArgc() > 2 )
-			uiConnectionProgress.SetServer( EngFuncs::CmdArgv(2) );
-		uiConnectionProgress.m_iState = STATE_CONNECTING;
-		uiConnectionProgress.SetCommonText( "Parsing server info..." );
-		uiConnectionProgress.Show();
+		if (!EngFuncs::GetCvarFloat("cl_background") == 1)
+		{
+			if (EngFuncs::CmdArgc() > 2)
+				uiConnectionProgress.SetServer(EngFuncs::CmdArgv(2));
+			uiConnectionProgress.m_iState = STATE_CONNECTING;
+			uiConnectionProgress.SetCommonText("Parsing server info...");
+			uiConnectionProgress.Show();
+		}
 	}
 
 	uiConnectionProgress.VidInit();

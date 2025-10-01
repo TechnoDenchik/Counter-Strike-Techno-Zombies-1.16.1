@@ -26,6 +26,7 @@
 #define ART_Matt		"gfx/shell/MusicPack/mattlevine_01"
 #define ART_Meechy		"gfx/shell/MusicPack/meechydarko_01"
 #define ART_Mord		"gfx/shell/MusicPack/mordfustang_01"
+#define ART_TRFN		"gfx/shell/MusicPack/trfn_1"
 
 class CMenuMusic : public CMenuFramework
 {
@@ -183,6 +184,15 @@ void CMenuMusic::exits()
 			if (!CL_IsActive())
 			EngFuncs::PlayBackgroundTrack("Music/mordfustang_01/mainmenu", "Music/mordfustang_01/mainmenu");
 		}
+		else if (musicset == 13)
+		{
+			testImage.iFlags = QMF_INACTIVE;
+			testImage.SetRect(560, 425, 240, 240);
+			testImage.SetPicture(ART_TRFN);
+			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+			if (!CL_IsActive())
+				EngFuncs::PlayBackgroundTrack("Music/trfn_1/mainmenu", "Music/trfn_1/mainmenu");
+				}
 	CMenuFramework::exits();
 }
 
@@ -201,11 +211,13 @@ void CMenuMusic::_Init( void )
 		"Knock2 — dashstar",
 		"Matt Levine—Drifter",
 		"Meechy Darko",
-		"Mord Fustang"
+		"Mord Fustang",
+		"TRFN feat. Siadou"
 	};
 
 	static CStringArrayModel music(MusicStr, ARRAYSIZE(MusicStr));
 	musicpack.SetNameAndStatus(L("CstzUI_musicpack"), L("CstzUI_musicpacktext"));
+	musicpack.SetCharSize(QM_BOLDFONT);
 	musicpack.Setup(&music);
 	musicpack.font = QM_SMALLFONT;
 	musicpack.LinkCvar("menu_musicpack", CMenuEditable::CVAR_VALUE);
@@ -298,9 +310,16 @@ void CMenuMusic::_Init( void )
 		testImage.SetPicture(ART_Mord);
 		testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 		break;
+	case 13:
+		testImage.iFlags = QMF_INACTIVE;
+		testImage.SetRect(560, 425, 240, 240);
+		testImage.SetPicture(ART_TRFN);
+		testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+		break;
 	}
 
 	exit.SetNameAndStatus(L("GameUI_Close"), L(""));
+	exit.SetCharSize(QM_BOLDFONT);
 	exit.onActivated = VoidCb(&CMenuMusic::Hide);
 	exit.iFlags |= QMF_NOTIFY;
 	exit.SetCoord(620, 675);
@@ -332,6 +351,7 @@ void UI_Music_Precache( void )
 	EngFuncs::PIC_Load( ART_Matt );
 	EngFuncs::PIC_Load( ART_Meechy );
 	EngFuncs::PIC_Load( ART_Mord );
+	EngFuncs::PIC_Load( ART_TRFN );
 }
 
 void UI_Music_Menu( void )

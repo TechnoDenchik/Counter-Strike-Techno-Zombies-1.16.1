@@ -621,6 +621,9 @@ public:
 	int m_iClientHideHUD;
 	int m_iFOV;
 	int m_iClientFOV;
+	int m_iRoundKill;
+	int m_iRoundAssist;
+	int m_iRoundInfect;
 	int m_iNumSpawns;
 	CBaseEntity *m_pObserver;
 	CBasePlayerItem *m_rgpPlayerItems[MAX_ITEM_TYPES];
@@ -715,24 +718,27 @@ public:
 	bool m_bIsZombieBanchee;
 	bool m_bIsZombieStamp;
 	bool m_bIsZombieRecovery;
-	bool m_bIsZombieFlying;
 
 	bool m_bIsZombieMeatWall;
 	bool m_bIsZombieDeathKnight;
 	bool m_bIsZombieSpider;
 
-
-
+	bool m_bIsZombieAksha;
+	bool m_bIsZombieBoomer;
+	bool m_bIsZombieBooster;
+	bool m_bIsZombieChina;
+	bool m_bIsZombieFlying;
+	bool m_bIsZombieResident;
 
 	//skills
 	bool m_bIsSkillHeadK2x;
 	bool m_bIsSkillHeal;
 
-
-
 	bool m_bSpawnProtection; // pack bools
 	
 	bool m_bEvolutionProtected;
+	int evolvl;
+	int m_iHumanMoraleLevel;
 	bool m_bEvolutionProtectedH;
 	ZombieLevel m_iZombieLevel;
 	float m_flTimeSpawnProctionExpires;

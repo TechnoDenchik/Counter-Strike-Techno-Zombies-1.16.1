@@ -763,18 +763,21 @@ void CMenuPlayerSetup::_Init( void )
 	banner.SetPicture(ART_BANNER);
 
 	name.SetNameAndStatus(L("CstzUI_NickName"), L("CstzUI_NickName"));
+	name.SetCharSize(QM_BOLDFONT);
 	name.iMaxLength = 32;
 	name.LinkCvar( "name" );
 	name.SetRect( 320, 260, 256, 36 );
 
 	crosshairView.SetRect( 320, 370, 96, 96 );
 	crosshairView.SetNameAndStatus(L("CstzUI_Crosshair_preview"), L("CstzUI_Crosshair_preview"));
+	crosshairView.SetCharSize(QM_BOLDFONT);
 	crosshairView.hWhite = EngFuncs::PIC_Load("*white");
 
 	static CStringArrayModel modelSizes( g_szCrosshairAvailSizes, ARRAYSIZE(g_szCrosshairAvailSizes));
 
 	crosshairSize.SetRect( 480, 345, 256, 26 );
 	crosshairSize.SetNameAndStatus(L("CstzUI_Crosshair_size"), L("CstzUI_Crosshair_size"));
+	crosshairSize.SetCharSize(QM_BOLDFONT);
 	crosshairSize.Setup(&modelSizes);
 	crosshairSize.onChanged = CMenuEditable::WriteCvarCb;
 	crosshairSize.LinkCvar("cl_crosshair_size", CMenuEditable::CVAR_STRING);
@@ -783,6 +786,7 @@ void CMenuPlayerSetup::_Init( void )
 	static CStringArrayModel modelColors( g_szCrosshairAvailColors, ARRAYSIZE( g_szCrosshairAvailColors ));
 	crosshairColor.SetRect( 480, 415, 256, 26 );
 	crosshairColor.SetNameAndStatus(L("CstzUI_Crosshair_color"), L("CstzUI_Crosshair_color"));
+	crosshairColor.SetCharSize(QM_BOLDFONT);
 	crosshairColor.Setup(&modelColors);
 	crosshairColor.onChanged = CMenuEditable::WriteCvarCb;
 	crosshairColor.font = QM_SMALLFONT;
@@ -790,6 +794,7 @@ void CMenuPlayerSetup::_Init( void )
 	static CStringArrayModel modelTypes(g_szCrosshairTypes, ARRAYSIZE(g_szCrosshairTypes));
 	crosshairType.SetRect(480, 485, 256, 26);
 	crosshairType.SetNameAndStatus(L("CstzUI_Crosshair_type"), L("CstzUI_Crosshair_type"));
+	crosshairType.SetCharSize(QM_BOLDFONT);
 	crosshairType.Setup(&modelTypes);
 	
 	crosshairType.LinkCvar("cl_crosshair_type", CMenuEditable::CVAR_VALUE);
@@ -797,17 +802,21 @@ void CMenuPlayerSetup::_Init( void )
 
 	crosshairTranslucent.SetCoord( 320, 540 );
 	crosshairTranslucent.SetNameAndStatus(L("CstzUI_Translucent"), L("CstzUI_Translucent"));
+	crosshairTranslucent.SetCharSize(QM_BOLDFONT);
 	crosshairTranslucent.LinkCvar( "cl_crosshair_translucent" );
 
 	uirenderworld.SetCoord(320, 580);
 	uirenderworld.SetNameAndStatus(L("CstzUI_uirender"), L("CstzUI_uirender2"));
+	uirenderworld.SetCharSize(QM_BOLDFONT);
 	uirenderworld.LinkCvar("ui_renderworld");
 
 	msgBox.SetMessage(L("CstzUI_SetMessage"));
+	msgBox.SetCharSize(QM_BOLDFONT);
 	msgBox.Link( this );
 
 	static CStringArrayModel model(playerinfor, ARRAYSIZE(playerinfor));
 	playerinfo.SetNameAndStatus(L("CstzUI_PlayerInfo"), L("CstzUI_PlayerInfo2"));
+	playerinfo.SetCharSize(QM_BOLDFONT);
 	playerinfo.Setup(&model);
 	playerinfo.onChanged = CMenuEditable::WriteCvarCb;
 	playerinfo.font = QM_SMALLFONT;
@@ -816,6 +825,7 @@ void CMenuPlayerSetup::_Init( void )
 
 	static CStringArrayModel modelhit(hitstyle, ARRAYSIZE(hitstyle));
 	hitindicator.SetNameAndStatus(L("CstzUI_HitIndicator"), L("CstzUI_HitIndicator2"));
+	hitindicator.SetCharSize(QM_BOLDFONT);
 	hitindicator.Setup(&modelhit);
 	hitindicator.font = QM_SMALLFONT;
 	hitindicator.LinkCvar("hud_hitstyle", CMenuEditable::CVAR_VALUE);
@@ -829,6 +839,7 @@ void CMenuPlayerSetup::_Init( void )
 	AddItem( background );
 	
 	Exit.SetNameAndStatus(L("GameUI_Apply"), L(""));
+	Exit.SetCharSize(QM_BOLDFONT);
 	Exit.onActivated = VoidCb(&CMenuPlayerSetup::SaveAndPopMenu);
 	Exit.iFlags |= QMF_NOTIFY;
 	Exit.SetCoord(80, 250);

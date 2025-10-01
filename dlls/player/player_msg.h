@@ -102,7 +102,7 @@ extern int gmsgBotProgress;
 extern int gmsgBrass;
 extern int gmsgFog;
 extern int gmsgShowTimer;
-
+extern int gmsgHeadIcon;
 extern int gmsgZBSTip;
 extern int gmsgZBSLevel;
 extern int gmsgZBSMsgLevel;
@@ -120,7 +120,7 @@ extern int gmsgZB3UsedMsg;
 extern int gmsgZB3UsedMsg2;
 extern int gmsgZB3InventorySet;
 extern int gmsgZB3SetHero;
-
+extern int gmsgMVPInfo;
 extern int gmsgZB5Msg;
 extern int gmsgZB5RenMsg;
 extern int gmsgZB5UsedMsg;
@@ -162,6 +162,7 @@ extern int gmsgOriginalMsg11;
 extern int gmsgOriginalMsg12;
 extern int gmsgOriginalMsg13;
 extern int gmsgOriginalMsgMusic;
+extern int gmsgOriginalMsgCantBuy;
 extern int gmsgTwinAxesMsg;
 extern int gmsgQuantumMsg;
 extern int gmsgArbalestMsg;

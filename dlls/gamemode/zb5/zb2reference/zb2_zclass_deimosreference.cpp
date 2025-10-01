@@ -41,6 +41,7 @@ CZombieClass_DeimosR::CZombieClass_DeimosR(CBasePlayer *player, ZombieLevel iEvo
 	m_pPlayer->pev->rendermode = kRenderNormal;
 	m_pPlayer->ResetMaxSpeed();
 	m_pPlayer->GiveNamedItem("Knife_Zombi_deimos");
+	m_pPlayer->GiveNamedItem("weapon_zombibombz");
 	m_pPlayer->m_bIsZombieDeimos = true;
 }
 

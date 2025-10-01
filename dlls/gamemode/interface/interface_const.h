@@ -28,6 +28,9 @@ enum INTMessage : byte
 	ZB5_USED_MSG,
 	ZB5_USED_MSG2,
 	ZB3_HIT,
+	ORIG_CANT_BUY,
+	ORIG_CANT_BUY_CT,
+	ORIG_CANT_BUY_T,
 };
 
 enum INTWeaponMsg : byte

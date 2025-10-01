@@ -103,6 +103,13 @@ protected:
 	void BecomeGanimed(ZombieLevel iEvolutionLevel);
 	void BecomeBanchee(ZombieLevel iEvolutionLevel);
 	void BecomeStamper(ZombieLevel iEvolutionLevel);
+	void BecomeAksha(ZombieLevel iEvolutionLevel);
+	void BecomeBoomer(ZombieLevel iEvolutionLevel);
+	void BecomeBooster(ZombieLevel iEvolutionLevel);
+	void BecomeChina(ZombieLevel iEvolutionLevel);
+	void BecomeFly(ZombieLevel iEvolutionLevel);
+	void BecomeResident(ZombieLevel iEvolutionLevel);
+
 	void BecomeHuman() override;
 	virtual void Event_OnInfection(CBasePlayer *victim, CBasePlayer *attacker);
 	virtual void Event_AdjustHumanDamage(CBasePlayer *attacker, float &flDamage);

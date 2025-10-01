@@ -9,7 +9,6 @@
 #include "Action.h"
 #include "YesNoMessageBox.h"
 #include "MessageBox.h"
-#include "Table.h"
 #include "SpinControl.h"
 #include "StringArrayModel.h"
 
@@ -100,9 +99,6 @@ public:
 	int	m_iNumItems;
 };
 
-#define MAX_GAMEMODES 9
-static const char* g_szGameModeCodes[MAX_GAMEMODES] = {"none", "dm", "tdm", "gd", "zb1", "zb3","zb5", "zbs", "zsh_pve"};
-
 class CMenuCreateGame : public CMenuFramework
 {
 public:
@@ -127,6 +123,8 @@ public:
 	bool modezb5;
 	bool modezbs;
 	bool modezsh;
+
+	int botnumber;
 
 	int stringmaplist;
 	int stringmaplist2;
@@ -228,8 +226,6 @@ class CMenuVidPreview : public
 	CMenuYesNoMessageBox nomode;
 
 	CMenuMessageBox message;
-
-	CMenuTable        mapsList;
 	CMenuMapListModel mapsListModel;
 
 	CMenuPicButton Inventory;
@@ -291,6 +287,7 @@ void CMenuCreateGame::Begin( )
 
 			EngFuncs::ClientCmd(TRUE, cmd);
 			EngFuncs::CvarSetValue("maxplayers", atoi(maxClients.GetBuffer()));
+			EngFuncs::CvarSetValue("bot_quota", atoi(botNum.GetBuffer()));
 
 			if (assault.bChecked == true)
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map cs_assault", atoi(maxClients.GetBuffer()));
@@ -461,6 +458,23 @@ void CMenuCreateGame::ResetMode(const char *value)
 		modezbs = false;
 		modezsh = false;
 
+		botNum.iMaxLength = 3;
+		botNum.bNumbersOnly = true;
+		botNum.SetNameAndStatus(L("GameUI_Bots"), L(""));
+		botNum.UpdateCvar();
+		botNum.onCvarGet = botNum.onChanged;
+		SET_EVENT_MULTI(botNum.onChanged,
+			{
+				CMenuField * self = (CMenuField*)pSelf;
+				const char* buf = self->GetBuffer();
+				uiCreateGame.botnumber = atoi(buf);
+				if (uiCreateGame.botnumber <= 0)
+					self->SetBuffer("");
+				else if (uiCreateGame.botnumber > 9)
+					self->SetBuffer("9");
+			});
+		botNum.onCvarGet = botNum.onChanged;
+
 		classic.bChecked = true;
 		dm.bChecked = false;
 		tdm.bChecked = false;
@@ -510,15 +524,8 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetTorn.Hide();
 		MapSetDarkSnow.Hide();
 
-		uparrow.Show();
-		downarrow.Show();
-
 		mapnightmare.Hide();
 		MapSetNightMare.Hide();
-
-		nightmare.Hide();
-		textmap28.Hide();
-
 		mapnightmare2.Hide();
 		MapSetNightMare2.Hide();
 		mapnightmare3.Hide();
@@ -532,7 +539,8 @@ void CMenuCreateGame::ResetMode(const char *value)
 		maptrap.Hide();
 		MapSetTrap.Hide();
 
-		
+		nightmare.Hide();
+		textmap28.Hide();
 
 		nightmare2.Hide();
 		textmap29.Hide();
@@ -558,6 +566,7 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetSnailCity.Hide();
 		mapsnailcity.Hide();
 
+		nightmare.bChecked = false;
 		nightmare2.bChecked = false;
 		nightmare3.bChecked = false;
 		lastclue.bChecked = false;
@@ -647,6 +656,11 @@ void CMenuCreateGame::ResetMode(const char *value)
 			mirage.Show();
 			gressia.Show();
 			ruin.Show();
+
+			mapnightmare.Hide();
+			MapSetNightMare.Hide();
+			nightmare.Hide();
+			textmap28.Hide();
 
 			bigtree.Hide();
 			dustmini.Hide();
@@ -752,6 +766,11 @@ void CMenuCreateGame::ResetMode(const char *value)
 			gressia.Hide();
 			ruin.Hide();
 
+			mapnightmare.Hide();
+			MapSetNightMare.Hide();
+			nightmare.Hide();
+			textmap28.Hide();
+
 			bigtree.Show();
 			dustmini.Show();
 			cs747.Show();
@@ -856,7 +875,10 @@ void CMenuCreateGame::ResetMode(const char *value)
 			gressia.Hide();
 			ruin.Hide();
 
-
+			mapnightmare.Hide();
+			MapSetNightMare.Hide();
+			nightmare.Hide();
+			textmap28.Hide();
 
 			bigtree.Hide();
 			dustmini.Hide();
@@ -915,6 +937,23 @@ void CMenuCreateGame::ResetMode(const char *value)
 		modezbs = false;
 		modezsh = false;
 
+		botNum.iMaxLength = 3;
+		botNum.bNumbersOnly = true;
+		botNum.SetNameAndStatus(L("GameUI_Bots"), L(""));
+		botNum.UpdateCvar();
+		botNum.onCvarGet = botNum.onChanged;
+		SET_EVENT_MULTI(botNum.onChanged,
+			{
+				CMenuField * self = (CMenuField*)pSelf;
+				const char* buf = self->GetBuffer();
+				uiCreateGame.botnumber = atoi(buf);
+				if (uiCreateGame.botnumber <= 0)
+					self->SetBuffer("");
+				else if (uiCreateGame.botnumber > 11)
+					self->SetBuffer("11");
+			});
+		botNum.onCvarGet = botNum.onChanged;
+
 		classic.bChecked = false;
 		dm.bChecked = true;
 		tdm.bChecked = false;
@@ -964,15 +1003,8 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetTorn.Hide();
 		MapSetDarkSnow.Hide();
 
-		uparrow.Show();
-		downarrow.Show();
-
 		mapnightmare.Hide();
 		MapSetNightMare.Hide();
-		nightmare.Hide();
-		textmap28.Hide();
-		nightmare.bChecked = false;
-
 		mapnightmare2.Hide();
 		MapSetNightMare2.Hide();
 		mapnightmare3.Hide();
@@ -986,7 +1018,8 @@ void CMenuCreateGame::ResetMode(const char *value)
 		maptrap.Hide();
 		MapSetTrap.Hide();
 
-
+		nightmare.Hide();
+		textmap28.Hide();
 
 		nightmare2.Hide();
 		textmap29.Hide();
@@ -1006,6 +1039,7 @@ void CMenuCreateGame::ResetMode(const char *value)
 		trap.Hide();
 		textmap34.Hide();
 
+		nightmare.bChecked = false;
 		nightmare2.bChecked = false;
 		nightmare3.bChecked = false;
 		lastclue.bChecked = false;
@@ -1102,6 +1136,11 @@ void CMenuCreateGame::ResetMode(const char *value)
 			mirage.Show();
 			gressia.Show();
 			ruin.Show();
+
+			mapnightmare.Hide();
+			MapSetNightMare.Hide();
+			nightmare.Hide();
+			textmap28.Hide();
 
 			bigtree.Hide();
 			dustmini.Hide();
@@ -1207,6 +1246,11 @@ void CMenuCreateGame::ResetMode(const char *value)
 			gressia.Hide();
 			ruin.Hide();
 
+			mapnightmare.Hide();
+			MapSetNightMare.Hide();
+			nightmare.Hide();
+			textmap28.Hide();
+
 			bigtree.Show();
 			dustmini.Show();
 			cs747.Show();
@@ -1311,7 +1355,10 @@ void CMenuCreateGame::ResetMode(const char *value)
 			gressia.Hide();
 			ruin.Hide();
 
-
+			mapnightmare.Hide();
+			MapSetNightMare.Hide();
+			nightmare.Hide();
+			textmap28.Hide();
 
 			bigtree.Hide();
 			dustmini.Hide();
@@ -1370,6 +1417,23 @@ void CMenuCreateGame::ResetMode(const char *value)
 		modezbs = false;
 		modezsh = false;
 
+		botNum.iMaxLength = 3;
+		botNum.bNumbersOnly = true;
+		botNum.SetNameAndStatus(L("GameUI_Bots"), L(""));
+		botNum.UpdateCvar();
+		botNum.onCvarGet = botNum.onChanged;
+		SET_EVENT_MULTI(botNum.onChanged,
+			{
+				CMenuField * self = (CMenuField*)pSelf;
+				const char* buf = self->GetBuffer();
+				uiCreateGame.botnumber = atoi(buf);
+				if (uiCreateGame.botnumber <= 0)
+					self->SetBuffer("");
+				else if (uiCreateGame.botnumber > 11)
+					self->SetBuffer("11");
+			});
+		botNum.onCvarGet = botNum.onChanged;
+
 		classic.bChecked = false;
 		dm.bChecked = false;
 		tdm.bChecked = true;
@@ -1419,15 +1483,8 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetTorn.Hide();
 		MapSetDarkSnow.Hide();
 
-		uparrow.Show();
-		downarrow.Show();
-
 		mapnightmare.Hide();
 		MapSetNightMare.Hide();
-		nightmare.Hide();
-		textmap28.Hide();
-		nightmare.bChecked = false;
-
 		mapnightmare2.Hide();
 		MapSetNightMare2.Hide();
 		mapnightmare3.Hide();
@@ -1441,7 +1498,8 @@ void CMenuCreateGame::ResetMode(const char *value)
 		maptrap.Hide();
 		MapSetTrap.Hide();
 
-
+		nightmare.Hide();
+		textmap28.Hide();
 
 		nightmare2.Hide();
 		textmap29.Hide();
@@ -1461,6 +1519,7 @@ void CMenuCreateGame::ResetMode(const char *value)
 		trap.Hide();
 		textmap34.Hide();
 
+		nightmare.bChecked = false;
 		nightmare2.bChecked = false;
 		nightmare3.bChecked = false;
 		lastclue.bChecked = false;
@@ -1557,6 +1616,11 @@ void CMenuCreateGame::ResetMode(const char *value)
 			mirage.Show();
 			gressia.Show();
 			ruin.Show();
+
+			mapnightmare.Hide();
+			MapSetNightMare.Hide();
+			nightmare.Hide();
+			textmap28.Hide();
 
 			bigtree.Hide();
 			dustmini.Hide();
@@ -1662,6 +1726,11 @@ void CMenuCreateGame::ResetMode(const char *value)
 			gressia.Hide();
 			ruin.Hide();
 
+			mapnightmare.Hide();
+			MapSetNightMare.Hide();
+			nightmare.Hide();
+			textmap28.Hide();
+
 			bigtree.Show();
 			dustmini.Show();
 			cs747.Show();
@@ -1766,7 +1835,10 @@ void CMenuCreateGame::ResetMode(const char *value)
 			gressia.Hide();
 			ruin.Hide();
 
-
+			mapnightmare.Hide();
+			MapSetNightMare.Hide();
+			nightmare.Hide();
+			textmap28.Hide();
 
 			bigtree.Hide();
 			dustmini.Hide();
@@ -1825,6 +1897,23 @@ void CMenuCreateGame::ResetMode(const char *value)
 		modezbs = false;
 		modezsh = false;
 
+		botNum.iMaxLength = 3;
+		botNum.bNumbersOnly = true;
+		botNum.SetNameAndStatus(L("GameUI_Bots"), L(""));
+		botNum.UpdateCvar();
+		botNum.onCvarGet = botNum.onChanged;
+		SET_EVENT_MULTI(botNum.onChanged,
+			{
+				CMenuField * self = (CMenuField*)pSelf;
+				const char* buf = self->GetBuffer();
+				uiCreateGame.botnumber = atoi(buf);
+				if (uiCreateGame.botnumber <= 0)
+					self->SetBuffer("");
+				else if (uiCreateGame.botnumber > 11)
+					self->SetBuffer("11");
+			});
+		botNum.onCvarGet = botNum.onChanged;
+
 		classic.bChecked = false;
 		dm.bChecked = false;
 		tdm.bChecked = false;
@@ -1874,15 +1963,8 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetTorn.Hide();
 		MapSetDarkSnow.Hide();
 
-		uparrow.Show();
-		downarrow.Show();
-
 		mapnightmare.Hide();
 		MapSetNightMare.Hide();
-		nightmare.Hide();
-		textmap28.Hide();
-		nightmare.bChecked = false;
-
 		mapnightmare2.Hide();
 		MapSetNightMare2.Hide();
 		mapnightmare3.Hide();
@@ -1896,7 +1978,8 @@ void CMenuCreateGame::ResetMode(const char *value)
 		maptrap.Hide();
 		MapSetTrap.Hide();
 
-
+		nightmare.Hide();
+		textmap28.Hide();
 
 		nightmare2.Hide();
 		textmap29.Hide();
@@ -1916,146 +1999,7 @@ void CMenuCreateGame::ResetMode(const char *value)
 		trap.Hide();
 		textmap34.Hide();
 
-		nightmare2.bChecked = false;
-		nightmare3.bChecked = false;
-		lastclue.bChecked = false;
-		lostcity.bChecked = false;
-		panic.bChecked = false;
-		trap.bChecked = false;
-
-		snailcity.Hide();
-		textmap35.Hide();
-
-		MapSetSnailCity.Hide();
-		mapsnailcity.Hide();
-		snailcity.bChecked = false;
-
-		MapSetBigTree.Hide();
-		MapSetDustMini.Hide();
-		MapSet747.Hide();
-		MapSetEstate.Hide();
-		MapSetHavana.Hide();
-		MapSetMilitia.Hide();
-		MapSetOffice.Hide();
-		MapSetSiege.Hide();
-		MapSetAngelCity.Hide();
-		MapSetAssault.Hide();
-		MapSetItaly.Hide();
-		MapSetVertigo.Hide();
-		MapSetInferno.Hide();
-		MapSetNuke.Hide();
-		MapSetDust.Hide();
-		MapSetMirage.Hide();
-		MapSetGressia.Hide();
-		MapSetRuin.Hide();
-	}
-	else if (value == "zb1")
-	{
-		zc.LinkCvar("mp_gamemode");
-		EngFuncs::CvarSetString("mp_gamemode", value);
-		ischecksetmode = true;
-
-		modenone = false;
-		modedm = false;
-		modetdm = false;
-		modegd = false;
-		modezb1 = true;
-		modezb3 = false;
-		modezb5 = false;
-		modezbs = false;
-		modezsh = false;
-
-		classic.bChecked = false;
-		dm.bChecked = false;
-		tdm.bChecked = false;
-		gd.bChecked = false;
-		zc.bChecked = true;
-		zh.bChecked = false;
-		zevo.bChecked = false;
-		sz.bChecked = false;
-		zsh.bChecked = false;
-
-		assault.bChecked = false;
-		vertigo.bChecked = false;
-		nuke.bChecked = false;
-		dust2.bChecked = false;
-		italy.bChecked = false;
-		mirage.bChecked = false;
-		inferno.bChecked = false;
-		gressia.bChecked = false;
-		ruin.bChecked = false;
-		bigtree.bChecked = false;
-		dustmini.bChecked = false;
-		cs747.bChecked = false;
-		estate.bChecked = false;
-		havana.bChecked = false;
-		militia.bChecked = false;
-		office.bChecked = false;
-		siege.bChecked = false;
-		angelcity.bChecked = false;
-
-		aztec.bChecked = false;
-		cbble.bChecked = false;
-		chateau.bChecked = false;
-		prodigy.bChecked = false;
-		rats.bChecked = false;
-		santorini.bChecked = false;
-		skyscraper.bChecked = false;
-		torn.bChecked = false;
-		darksnow.bChecked = false;
-
-		MapSetAztec.Hide();
-		MapSetCbble.Hide();
-		MapSetChateau.Hide();
-		MapSetProdigy.Hide();
-		MapSetRats.Hide();
-		MapSetSantorini.Hide();
-		MapSetSkyScraper.Hide();
-		MapSetTorn.Hide();
-		MapSetDarkSnow.Hide();
-
-		uparrow.Show();
-		downarrow.Show();
-
-		mapnightmare.Hide();
-		MapSetNightMare.Hide();
-		nightmare.Hide();
-		textmap28.Hide();
 		nightmare.bChecked = false;
-
-		mapnightmare2.Hide();
-		MapSetNightMare2.Hide();
-		mapnightmare3.Hide();
-		MapSetNightMare3.Hide();
-		maplastclue.Hide();
-		MapSetLastClue.Hide();
-		maplostcity.Hide();
-		MapSetLostCity.Hide();
-		mappanic.Hide();
-		MapSetPanic.Hide();
-		maptrap.Hide();
-		MapSetTrap.Hide();
-
-
-
-		nightmare2.Hide();
-		textmap29.Hide();
-
-		nightmare3.Hide();
-		textmap30.Hide();
-
-		lastclue.Hide();
-		textmap31.Hide();
-
-		lostcity.Hide();
-		textmap32.Hide();
-
-		panic.Hide();
-		textmap33.Hide();
-
-		trap.Hide();
-		textmap34.Hide();
-
 		nightmare2.bChecked = false;
 		nightmare3.bChecked = false;
 		lastclue.bChecked = false;
@@ -2152,6 +2096,11 @@ void CMenuCreateGame::ResetMode(const char *value)
 			mirage.Show();
 			gressia.Show();
 			ruin.Show();
+
+			mapnightmare.Hide();
+			MapSetNightMare.Hide();
+			nightmare.Hide();
+			textmap28.Hide();
 
 			bigtree.Hide();
 			dustmini.Hide();
@@ -2256,6 +2205,11 @@ void CMenuCreateGame::ResetMode(const char *value)
 			mirage.Hide();
 			gressia.Hide();
 			ruin.Hide();
+
+			mapnightmare.Hide();
+			MapSetNightMare.Hide();
+			nightmare.Hide();
+			textmap28.Hide();
 
 			bigtree.Show();
 			dustmini.Show();
@@ -2364,6 +2318,487 @@ void CMenuCreateGame::ResetMode(const char *value)
 			mapnightmare.Hide();
 			MapSetNightMare.Hide();
 			nightmare.Hide();
+			textmap28.Hide();
+
+			bigtree.Hide();
+			dustmini.Hide();
+			cs747.Hide();
+			estate.Hide();
+			havana.Hide();
+			militia.Hide();
+			office.Hide();
+			siege.Hide();
+			angelcity.Hide();
+
+			mapbigtree.Hide();
+			mapdustmini.Hide();
+			mapcs747.Hide();
+			mapestate.Hide();
+			maphavana.Hide();
+			mapmilitia.Hide();
+			mapoffice.Hide();
+			mapsiege.Hide();
+			mapangelcity.Hide();
+
+			aztec.Show();
+			cbble.Show();
+			chateau.Show();
+			prodigy.Show();
+			rats.Show();
+			santorini.Show();
+			skyscraper.Show();
+			torn.Show();
+			darksnow.Show();
+
+			mapaztec.Show();
+			mapcbble.Show();
+			mapchateau.Show();
+			mapprodigy.Show();
+			maprats.Show();
+			mapsantorini.Show();
+			mapskyscraper.Show();
+			maptorn.Show();
+			mapdarksnow.Show();
+		}
+	}
+	else if (value == "zb1")
+	{
+		zc.LinkCvar("mp_gamemode");
+		EngFuncs::CvarSetString("mp_gamemode", value);
+		ischecksetmode = true;
+
+		modenone = false;
+		modedm = false;
+		modetdm = false;
+		modegd = false;
+		modezb1 = true;
+		modezb3 = false;
+		modezb5 = false;
+		modezbs = false;
+		modezsh = false;
+
+		botNum.iMaxLength = 3;
+		botNum.bNumbersOnly = true;
+		botNum.SetNameAndStatus(L("GameUI_Bots"), L(""));
+		botNum.UpdateCvar();
+		botNum.onCvarGet = botNum.onChanged;
+		SET_EVENT_MULTI(botNum.onChanged,
+			{
+				CMenuField * self = (CMenuField*)pSelf;
+				const char* buf = self->GetBuffer();
+				uiCreateGame.botnumber = atoi(buf);
+				if (uiCreateGame.botnumber <= 0)
+					self->SetBuffer("");
+				else if (uiCreateGame.botnumber > 11)
+					self->SetBuffer("11");
+			});
+		botNum.onCvarGet = botNum.onChanged;
+
+		classic.bChecked = false;
+		dm.bChecked = false;
+		tdm.bChecked = false;
+		gd.bChecked = false;
+		zc.bChecked = true;
+		zh.bChecked = false;
+		zevo.bChecked = false;
+		sz.bChecked = false;
+		zsh.bChecked = false;
+
+		assault.bChecked = false;
+		vertigo.bChecked = false;
+		nuke.bChecked = false;
+		dust2.bChecked = false;
+		italy.bChecked = false;
+		mirage.bChecked = false;
+		inferno.bChecked = false;
+		gressia.bChecked = false;
+		ruin.bChecked = false;
+		bigtree.bChecked = false;
+		dustmini.bChecked = false;
+		cs747.bChecked = false;
+		estate.bChecked = false;
+		havana.bChecked = false;
+		militia.bChecked = false;
+		office.bChecked = false;
+		siege.bChecked = false;
+		angelcity.bChecked = false;
+
+		aztec.bChecked = false;
+		cbble.bChecked = false;
+		chateau.bChecked = false;
+		prodigy.bChecked = false;
+		rats.bChecked = false;
+		santorini.bChecked = false;
+		skyscraper.bChecked = false;
+		torn.bChecked = false;
+		darksnow.bChecked = false;
+
+		MapSetAztec.Hide();
+		MapSetCbble.Hide();
+		MapSetChateau.Hide();
+		MapSetProdigy.Hide();
+		MapSetRats.Hide();
+		MapSetSantorini.Hide();
+		MapSetSkyScraper.Hide();
+		MapSetTorn.Hide();
+		MapSetDarkSnow.Hide();
+
+		mapnightmare.Hide();
+		MapSetNightMare.Hide();
+		mapnightmare2.Hide();
+		MapSetNightMare2.Hide();
+		mapnightmare3.Hide();
+		MapSetNightMare3.Hide();
+		maplastclue.Hide();
+		MapSetLastClue.Hide();
+		maplostcity.Hide();
+		MapSetLostCity.Hide();
+		mappanic.Hide();
+		MapSetPanic.Hide();
+		maptrap.Hide();
+		MapSetTrap.Hide();
+
+		nightmare.Hide();
+		textmap28.Hide();
+
+		nightmare2.Hide();
+		textmap29.Hide();
+
+		nightmare3.Hide();
+		textmap30.Hide();
+
+		lastclue.Hide();
+		textmap31.Hide();
+
+		lostcity.Hide();
+		textmap32.Hide();
+
+		panic.Hide();
+		textmap33.Hide();
+
+		trap.Hide();
+		textmap34.Hide();
+
+		nightmare.bChecked = false;
+		nightmare2.bChecked = false;
+		nightmare3.bChecked = false;
+		lastclue.bChecked = false;
+		lostcity.bChecked = false;
+		panic.bChecked = false;
+		trap.bChecked = false;
+
+		snailcity.Hide();
+		textmap35.Hide();
+
+		MapSetSnailCity.Hide();
+		mapsnailcity.Hide();
+		snailcity.bChecked = false;
+
+		MapSetBigTree.Hide();
+		MapSetDustMini.Hide();
+		MapSet747.Hide();
+		MapSetEstate.Hide();
+		MapSetHavana.Hide();
+		MapSetMilitia.Hide();
+		MapSetOffice.Hide();
+		MapSetSiege.Hide();
+		MapSetAngelCity.Hide();
+		MapSetAssault.Hide();
+		MapSetItaly.Hide();
+		MapSetVertigo.Hide();
+		MapSetInferno.Hide();
+		MapSetNuke.Hide();
+		MapSetDust.Hide();
+		MapSetMirage.Hide();
+		MapSetGressia.Hide();
+		MapSetRuin.Hide();
+
+		if (stringmaplist == 1)
+		{
+			textmap.SetNameAndStatus(L("Assault"), L(""));
+			textmap2.SetNameAndStatus(L("Italy"), L(""));
+			textmap3.SetNameAndStatus(L("Vertigo"), L(""));
+
+			textmap4.SetNameAndStatus(L("Inferno"), L(""));
+			textmap5.SetNameAndStatus(L("Nuke"), L(""));
+			textmap6.SetNameAndStatus(L("Dust II"), L(""));
+
+			textmap7.SetNameAndStatus(L("Mirage"), L(""));
+			textmap8.SetNameAndStatus(L("Greesia"), L(""));
+			textmap9.SetNameAndStatus(L("Ruin"), L(""));
+
+			textmap.Show();
+			textmap2.Show();
+			textmap3.Show();
+			textmap4.Show();
+			textmap5.Show();
+			textmap6.Show();
+			textmap7.Show();
+			textmap8.Show();
+			textmap9.Show();
+
+			textmap10.Hide();
+			textmap11.Hide();
+			textmap12.Hide();
+			textmap13.Hide();
+			textmap14.Hide();
+			textmap15.Hide();
+			textmap16.Hide();
+			textmap17.Hide();
+			textmap18.Hide();
+
+			textmap19.Hide();
+			textmap20.Hide();
+			textmap21.Hide();
+			textmap22.Hide();
+			textmap23.Hide();
+			textmap24.Hide();
+			textmap25.Hide();
+			textmap26.Hide();
+			textmap27.Hide();
+
+			mapassault.Show();
+			mapitaly.Show();
+			mapvertigo.Show();
+			mapinferno.Show();
+			mapnuke.Show();
+			mapdust.Show();
+			mapmirage.Show();
+			mapgressia.Show();
+			mapruin.Show();
+
+			assault.Show();
+			vertigo.Show();
+			italy.Show();
+			nuke.Show();
+			dust2.Show();
+			inferno.Show();
+			mirage.Show();
+			gressia.Show();
+			ruin.Show();
+
+			mapnightmare.Hide();
+			MapSetNightMare.Hide();
+			nightmare.Hide();
+			textmap28.Hide();
+
+			bigtree.Hide();
+			dustmini.Hide();
+			cs747.Hide();
+			estate.Hide();
+			havana.Hide();
+			militia.Hide();
+			office.Hide();
+			siege.Hide();
+			angelcity.Hide();
+
+			mapbigtree.Hide();
+			mapdustmini.Hide();
+			mapcs747.Hide();
+			mapestate.Hide();
+			maphavana.Hide();
+			mapmilitia.Hide();
+			mapoffice.Hide();
+			mapsiege.Hide();
+			mapangelcity.Hide();
+
+			aztec.Hide();
+			cbble.Hide();
+			chateau.Hide();
+			prodigy.Hide();
+			rats.Hide();
+			santorini.Hide();
+			skyscraper.Hide();
+			torn.Hide();
+			darksnow.Hide();
+
+			mapaztec.Hide();
+			mapcbble.Hide();
+			mapchateau.Hide();
+			mapprodigy.Hide();
+			maprats.Hide();
+			mapsantorini.Hide();
+			mapskyscraper.Hide();
+			maptorn.Hide();
+			mapdarksnow.Hide();
+		}
+		else if (stringmaplist == 2)
+		{
+			textmap10.SetNameAndStatus(L("BigTree"), L(""));
+			textmap11.SetNameAndStatus(L("Dust EX"), L(""));
+			textmap12.SetNameAndStatus(L("747"), L(""));
+
+			textmap13.SetNameAndStatus(L("Estate"), L(""));
+			textmap14.SetNameAndStatus(L("Havana"), L(""));
+			textmap15.SetNameAndStatus(L("Militia"), L(""));
+
+			textmap16.SetNameAndStatus(L("Office"), L(""));
+			textmap17.SetNameAndStatus(L("Siege"), L(""));
+			textmap18.SetNameAndStatus(L("Angel City"), L(""));
+
+			textmap.Hide();
+			textmap2.Hide();
+			textmap3.Hide();
+			textmap4.Hide();
+			textmap5.Hide();
+			textmap6.Hide();
+			textmap7.Hide();
+			textmap8.Hide();
+			textmap9.Hide();
+
+			textmap10.Show();
+			textmap11.Show();
+			textmap12.Show();
+			textmap13.Show();
+			textmap14.Show();
+			textmap15.Show();
+			textmap16.Show();
+			textmap17.Show();
+			textmap18.Show();
+
+			textmap19.Hide();
+			textmap20.Hide();
+			textmap21.Hide();
+			textmap22.Hide();
+			textmap23.Hide();
+			textmap24.Hide();
+			textmap25.Hide();
+			textmap26.Hide();
+			textmap27.Hide();
+
+			mapassault.Hide();
+			mapitaly.Hide();
+			mapvertigo.Hide();
+			mapinferno.Hide();
+			mapnuke.Hide();
+			mapdust.Hide();
+			mapmirage.Hide();
+			mapgressia.Hide();
+			mapruin.Hide();
+
+			assault.Hide();
+			vertigo.Hide();
+			italy.Hide();
+			nuke.Hide();
+			dust2.Hide();
+			inferno.Hide();
+			mirage.Hide();
+			gressia.Hide();
+			ruin.Hide();
+
+			mapnightmare.Hide();
+			MapSetNightMare.Hide();
+			nightmare.Hide();
+			textmap28.Hide();
+
+			bigtree.Show();
+			dustmini.Show();
+			cs747.Show();
+			estate.Show();
+			havana.Show();
+			militia.Show();
+			office.Show();
+			siege.Show();
+			angelcity.Show();
+
+			mapbigtree.Show();
+			mapdustmini.Show();
+			mapcs747.Show();
+			mapestate.Show();
+			maphavana.Show();
+			mapmilitia.Show();
+			mapoffice.Show();
+			mapsiege.Show();
+			mapangelcity.Show();
+
+			aztec.Hide();
+			cbble.Hide();
+			chateau.Hide();
+			prodigy.Hide();
+			rats.Hide();
+			santorini.Hide();
+			skyscraper.Hide();
+			torn.Hide();
+			darksnow.Hide();
+
+			mapaztec.Hide();
+			mapcbble.Hide();
+			mapchateau.Hide();
+			mapprodigy.Hide();
+			maprats.Hide();
+			mapsantorini.Hide();
+			mapskyscraper.Hide();
+			maptorn.Hide();
+			mapdarksnow.Hide();
+		}
+		else if (stringmaplist == 3)
+		{
+			textmap19.SetNameAndStatus(L("Aztec"), L(""));
+			textmap20.SetNameAndStatus(L("CobbleStone"), L(""));
+			textmap21.SetNameAndStatus(L("ChateAu"), L(""));
+
+			textmap22.SetNameAndStatus(L("Prodigy"), L(""));
+			textmap23.SetNameAndStatus(L("Rats"), L(""));
+			textmap24.SetNameAndStatus(L("Santorini"), L(""));
+
+			textmap25.SetNameAndStatus(L("SkyScraper"), L(""));
+			textmap26.SetNameAndStatus(L("Torn"), L(""));
+			textmap27.SetNameAndStatus(L("DarkSnow"), L(""));
+
+			textmap.Hide();
+			textmap2.Hide();
+			textmap3.Hide();
+			textmap4.Hide();
+			textmap5.Hide();
+			textmap6.Hide();
+			textmap7.Hide();
+			textmap8.Hide();
+			textmap9.Hide();
+
+			textmap10.Hide();
+			textmap11.Hide();
+			textmap12.Hide();
+			textmap13.Hide();
+			textmap14.Hide();
+			textmap15.Hide();
+			textmap16.Hide();
+			textmap17.Hide();
+			textmap18.Hide();
+
+			textmap19.Show();
+			textmap20.Show();
+			textmap21.Show();
+			textmap22.Show();
+			textmap23.Show();
+			textmap24.Show();
+			textmap25.Show();
+			textmap26.Show();
+			textmap27.Show();
+
+			mapassault.Hide();
+			mapitaly.Hide();
+			mapvertigo.Hide();
+			mapinferno.Hide();
+			mapnuke.Hide();
+			mapdust.Hide();
+			mapmirage.Hide();
+			mapgressia.Hide();
+			mapruin.Hide();
+
+			assault.Hide();
+			vertigo.Hide();
+			italy.Hide();
+			nuke.Hide();
+			dust2.Hide();
+			inferno.Hide();
+			mirage.Hide();
+			gressia.Hide();
+			ruin.Hide();
+
+			mapnightmare.Hide();
+			MapSetNightMare.Hide();
+			nightmare.Hide();
+			textmap28.Hide();
 
 			bigtree.Hide();
 			dustmini.Hide();
@@ -2422,6 +2857,23 @@ void CMenuCreateGame::ResetMode(const char *value)
 		modezbs = false;
 		modezsh = false;
 
+		botNum.iMaxLength = 3;
+		botNum.bNumbersOnly = true;
+		botNum.SetNameAndStatus(L("GameUI_Bots"), L(""));
+		botNum.UpdateCvar();
+		botNum.onCvarGet = botNum.onChanged;
+		SET_EVENT_MULTI(botNum.onChanged,
+			{
+				CMenuField * self = (CMenuField*)pSelf;
+				const char* buf = self->GetBuffer();
+				uiCreateGame.botnumber = atoi(buf);
+				if (uiCreateGame.botnumber <= 0)
+					self->SetBuffer("");
+				else if (uiCreateGame.botnumber > 11)
+					self->SetBuffer("11");
+			});
+		botNum.onCvarGet = botNum.onChanged;
+
 		classic.bChecked = false;
 		dm.bChecked = false;
 		tdm.bChecked = false;
@@ -2461,14 +2913,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 		torn.bChecked = false;
 		darksnow.bChecked = false;
 
-		uparrow.Show();
-		downarrow.Show();
-
-		mapnightmare.Hide();
-		MapSetNightMare.Hide();
-		nightmare.Hide();
-		nightmare.bChecked = false;
-
 		mapnightmare2.Hide();
 		MapSetNightMare2.Hide();
 		mapnightmare3.Hide();
@@ -2481,8 +2925,11 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetPanic.Hide();
 		maptrap.Hide();
 		MapSetTrap.Hide();
+		mapnightmare.Hide();
+		MapSetNightMare.Hide();
 
-
+		nightmare.Hide();
+		textmap28.Hide();
 
 		nightmare2.Hide();
 		textmap29.Hide();
@@ -2502,6 +2949,7 @@ void CMenuCreateGame::ResetMode(const char *value)
 		trap.Hide();
 		textmap34.Hide();
 
+		nightmare.bChecked = false;
 		nightmare2.bChecked = false;
 		nightmare3.bChecked = false;
 		lastclue.bChecked = false;
@@ -2711,6 +3159,7 @@ void CMenuCreateGame::ResetMode(const char *value)
 			mapnightmare.Hide();
 			MapSetNightMare.Hide();
 			nightmare.Hide();
+			textmap28.Hide();
 
 			assault.Hide();
 			vertigo.Hide();
@@ -2829,6 +3278,7 @@ void CMenuCreateGame::ResetMode(const char *value)
 			mapnightmare.Hide();
 			MapSetNightMare.Hide();
 			nightmare.Hide();
+			textmap28.Hide();
 
 			bigtree.Hide();
 			dustmini.Hide();
@@ -2887,6 +3337,23 @@ void CMenuCreateGame::ResetMode(const char *value)
 		modezbs = false;
 		modezsh = false;
 
+		botNum.iMaxLength = 3;
+		botNum.bNumbersOnly = true;
+		botNum.SetNameAndStatus(L("GameUI_Bots"), L(""));
+		botNum.UpdateCvar();
+		botNum.onCvarGet = botNum.onChanged;
+		SET_EVENT_MULTI(botNum.onChanged,
+			{
+				CMenuField * self = (CMenuField*)pSelf;
+				const char* buf = self->GetBuffer();
+				uiCreateGame.botnumber = atoi(buf);
+				if (uiCreateGame.botnumber <= 0)
+					self->SetBuffer("");
+				else if (uiCreateGame.botnumber > 11)
+					self->SetBuffer("11");
+			});
+		botNum.onCvarGet = botNum.onChanged;
+
 		classic.bChecked = false;
 		dm.bChecked = false;
 		tdm.bChecked = false;
@@ -2925,9 +3392,6 @@ void CMenuCreateGame::ResetMode(const char *value)
 		skyscraper.bChecked = false;
 		torn.bChecked = false;
 		darksnow.bChecked = false;
-
-		uparrow.Show();
-		downarrow.Show();
 
 		mapnightmare.Hide();
 		MapSetNightMare.Hide();
@@ -3174,6 +3638,7 @@ void CMenuCreateGame::ResetMode(const char *value)
 			mapnightmare.Hide();
 			MapSetNightMare.Hide();
 			nightmare.Hide();
+			textmap28.Hide();
 
 			assault.Hide();
 			vertigo.Hide();
@@ -3292,6 +3757,7 @@ void CMenuCreateGame::ResetMode(const char *value)
 			mapnightmare.Hide();
 			MapSetNightMare.Hide();
 			nightmare.Hide();
+			textmap28.Hide();
 
 			bigtree.Hide();
 			dustmini.Hide();
@@ -3349,6 +3815,23 @@ void CMenuCreateGame::ResetMode(const char *value)
 		modezb5 = false;
 		modezbs = true;
 		modezsh = false;
+
+		botNum.iMaxLength = 3;
+		botNum.bNumbersOnly = true;
+		botNum.SetNameAndStatus(L("GameUI_Bots"), L(""));
+		botNum.UpdateCvar();
+		botNum.onCvarGet = botNum.onChanged;
+		SET_EVENT_MULTI(botNum.onChanged,
+			{
+				CMenuField * self = (CMenuField*)pSelf;
+				const char* buf = self->GetBuffer();
+				uiCreateGame.botnumber = atoi(buf);
+				if (uiCreateGame.botnumber <= 0)
+					self->SetBuffer("");
+				else if (uiCreateGame.botnumber > 0)
+					self->SetBuffer("0");
+			});
+		botNum.onCvarGet = botNum.onChanged;
 
 		classic.bChecked = false;
 		dm.bChecked = false;
@@ -3586,6 +4069,23 @@ void CMenuCreateGame::ResetMode(const char *value)
 		modezb5 = false;
 		modezbs = false;
 		modezsh = true;
+
+		botNum.iMaxLength = 3;
+		botNum.bNumbersOnly = true;
+		botNum.SetNameAndStatus(L("GameUI_Bots"), L(""));
+		botNum.UpdateCvar();
+		botNum.onCvarGet = botNum.onChanged;
+		SET_EVENT_MULTI(botNum.onChanged,
+			{
+				CMenuField * self = (CMenuField*)pSelf;
+				const char* buf = self->GetBuffer();
+				uiCreateGame.botnumber = atoi(buf);
+				if (uiCreateGame.botnumber <= 0)
+					self->SetBuffer("");
+				else if (uiCreateGame.botnumber > 0)
+					self->SetBuffer("0");
+			});
+		botNum.onCvarGet = botNum.onChanged;
 
 		classic.bChecked = false;
 		dm.bChecked = false;
@@ -5153,7 +5653,6 @@ void CMenuCreateGame::ResetMap( int value)
 		MapSetPanic.Hide();
 		MapSetTrap.Show();
 	}
-
 	else if (value == 35)//snailcity
 	{
 		ischecksetmap = true;
@@ -5196,11 +5695,16 @@ void CMenuCreateGame::ResetMap( int value)
 		MapSetTrap.Hide();
 		MapSetSnailCity.Show();
 	}
-
 	else
 	{
+		botNum.Hide();
+
 		if (stringmaplist == 1)
 		{
+
+			uparrow.Hide();
+			downarrow.Show();
+
 			textmap.SetNameAndStatus(L("Assault"), L(""));
 			textmap2.SetNameAndStatus(L("Italy"), L(""));
 			textmap3.SetNameAndStatus(L("Vertigo"), L(""));
@@ -5313,6 +5817,9 @@ void CMenuCreateGame::ResetMap( int value)
 		}
 		else if (stringmaplist == 2)
 		{
+			uparrow.Show();
+			downarrow.Show();
+
 			textmap10.SetNameAndStatus(L("BigTree"), L(""));
 			textmap11.SetNameAndStatus(L("Dust EX"), L(""));
 			textmap12.SetNameAndStatus(L("747"), L(""));
@@ -5421,6 +5928,9 @@ void CMenuCreateGame::ResetMap( int value)
 		}
 		else if (stringmaplist == 3)
 		{
+			uparrow.Show();
+			downarrow.Hide();
+
 			textmap19.SetNameAndStatus(L("Aztec"), L(""));
 			textmap20.SetNameAndStatus(L("CobbleStone"), L(""));
 			textmap21.SetNameAndStatus(L("ChateAu"), L(""));
@@ -5482,8 +5992,6 @@ void CMenuCreateGame::ResetMap( int value)
 			mirage.Hide();
 			gressia.Hide();
 			ruin.Hide();
-
-
 
 			bigtree.Hide();
 			dustmini.Hide();
@@ -5553,8 +6061,6 @@ void CMenuCreateGame::ResetMap( int value)
 			MapSetTrap.Hide();
 			trap.Hide();
 		}
-
-		botNum.Show();
 
 		ischecksetmap = false;
 		assault.bChecked = false;
@@ -5628,19 +6134,8 @@ void CMenuCreateGame::_Init( void )
 	ResetMap(0);
 	ResetMode(0);
 	stringmaplist = 1;
-
-	static const char* g_szGameModeNames[MAX_GAMEMODES] =
-	{
-		L("CstzUI_Mod_classic"),
-		L("CstzUI_Mod_dm"),
-		L("CstzUI_Mod_tdm"),
-		L("CstzUI_Mod_gdm"),
-		L("CstzUI_Mod_zbm"),
-		L("CstzUI_Mod_zbh"),
-		L("CstzUI_Mod_zbe"),
-		L("CstzUI_Mod_scen"),
-		L("CstzUI_Mod_zsh")
-	};
+	botnumber = 0;
+	botNum.LinkCvar("bot_quota");
 
 	uiStatic.needMapListUpdate = true;
 	banner.SetPicture( ART_BANNER );
@@ -5656,8 +6151,6 @@ void CMenuCreateGame::_Init( void )
 
 	nomode.SetMessage(L("CstzUI_NoMode"));
 	nomode.Link(this);
-
-	AddItem( background );
 
 	mapassault.iFlags = QMF_NOTIFY;
 	mapassault.SetRect(160, 225, 256, 124);
@@ -6457,6 +6950,7 @@ void CMenuCreateGame::_Init( void )
 	MapSetSnailCity.SetCharSize(QM_SMALLFONT);
 	MapSetSnailCity.SetModel(&mapsListModel);
 	MapSetSnailCity.SetRect(160, 193, 252, 154);
+	MapSetSnailCity.colorBase = uiColorWhite;
 
 	snailcity.SetNameAndStatus(L(""), L(""));
 	snailcity.iFlags |= QMF_NOTIFY;
@@ -6467,67 +6961,400 @@ void CMenuCreateGame::_Init( void )
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
 
-
-
-
-
 	classic.SetNameAndStatus(L("CstzUI_Mod_classic"), L(""));
 	classic.iFlags |= QMF_NOTIFY;
 	classic.SetCoord(1025, 230);
 	SET_EVENT_MULTI(classic.onChanged,
 		{
+			switch (uiCreateGame.stringmaplist)
+			{
+			case 1:
+				uiCreateGame.uparrow.Hide();
+				uiCreateGame.downarrow.Show();
+				break;
+			case 2:
+				uiCreateGame.uparrow.Show();
+				uiCreateGame.downarrow.Show();
+				break;
+			case 3:
+				uiCreateGame.uparrow.Show();
+				uiCreateGame.downarrow.Hide();
+				break;
+			}
+
 			uiCreateGame.botNum.Show();
 			uiCreateGame.ResetMode("none");
+			uiCreateGame.botNum.LinkCvar("bot_quota");
+
+			uiCreateGame.nightmare2.bChecked = false;
+			uiCreateGame.nightmare3.bChecked = false;
+			uiCreateGame.lastclue.bChecked = false;
+			uiCreateGame.lostcity.bChecked = false;
+			uiCreateGame.panic.bChecked = false;
+			uiCreateGame.trap.bChecked = false;
+
+			uiCreateGame.assault.bChecked = false;
+			uiCreateGame.vertigo.bChecked = false;
+			uiCreateGame.nuke.bChecked = false;
+			uiCreateGame.dust2.bChecked = false;
+			uiCreateGame.italy.bChecked = false;
+			uiCreateGame.mirage.bChecked = false;
+			uiCreateGame.inferno.bChecked = false;
+			uiCreateGame.gressia.bChecked = false;
+			uiCreateGame.ruin.bChecked = false;
+			uiCreateGame.bigtree.bChecked = false;
+			uiCreateGame.dustmini.bChecked = false;
+			uiCreateGame.cs747.bChecked = false;
+			uiCreateGame.estate.bChecked = false;
+			uiCreateGame.havana.bChecked = false;
+			uiCreateGame.militia.bChecked = false;
+			uiCreateGame.office.bChecked = false;
+			uiCreateGame.siege.bChecked = false;
+			uiCreateGame.angelcity.bChecked = false;
+
+			uiCreateGame.aztec.bChecked = false;
+			uiCreateGame.cbble.bChecked = false;
+			uiCreateGame.chateau.bChecked = false;
+			uiCreateGame.prodigy.bChecked = false;
+			uiCreateGame.rats.bChecked = false;
+			uiCreateGame.santorini.bChecked = false;
+			uiCreateGame.skyscraper.bChecked = false;
+			uiCreateGame.torn.bChecked = false;
+			uiCreateGame.darksnow.bChecked = false;
+			uiCreateGame.ischecksetmap = false;
+
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
 
 	dm.SetNameAndStatus(L("CstzUI_Mod_dm"), L(""));
 	dm.iFlags |= QMF_NOTIFY;
 	dm.SetCoord(1025, 270);
+	dm.colorBase = uiColorGreen;
 	SET_EVENT_MULTI(dm.onChanged,
 		{
+			switch (uiCreateGame.stringmaplist)
+			{
+			case 1:
+				uiCreateGame.uparrow.Hide();
+				uiCreateGame.downarrow.Show();
+				break;
+			case 2:
+				uiCreateGame.uparrow.Show();
+				uiCreateGame.downarrow.Show();
+				break;
+			case 3:
+				uiCreateGame.uparrow.Show();
+				uiCreateGame.downarrow.Hide();
+				break;
+			}
+
 			uiCreateGame.botNum.Show();
 			uiCreateGame.ResetMode("dm");
+			uiCreateGame.botNum.LinkCvar("bot_quota");
+
+			uiCreateGame.nightmare2.bChecked = false;
+			uiCreateGame.nightmare3.bChecked = false;
+			uiCreateGame.lastclue.bChecked = false;
+			uiCreateGame.lostcity.bChecked = false;
+			uiCreateGame.panic.bChecked = false;
+			uiCreateGame.trap.bChecked = false;
+
+			uiCreateGame.assault.bChecked = false;
+			uiCreateGame.vertigo.bChecked = false;
+			uiCreateGame.nuke.bChecked = false;
+			uiCreateGame.dust2.bChecked = false;
+			uiCreateGame.italy.bChecked = false;
+			uiCreateGame.mirage.bChecked = false;
+			uiCreateGame.inferno.bChecked = false;
+			uiCreateGame.gressia.bChecked = false;
+			uiCreateGame.ruin.bChecked = false;
+			uiCreateGame.bigtree.bChecked = false;
+			uiCreateGame.dustmini.bChecked = false;
+			uiCreateGame.cs747.bChecked = false;
+			uiCreateGame.estate.bChecked = false;
+			uiCreateGame.havana.bChecked = false;
+			uiCreateGame.militia.bChecked = false;
+			uiCreateGame.office.bChecked = false;
+			uiCreateGame.siege.bChecked = false;
+			uiCreateGame.angelcity.bChecked = false;
+
+			uiCreateGame.aztec.bChecked = false;
+			uiCreateGame.cbble.bChecked = false;
+			uiCreateGame.chateau.bChecked = false;
+			uiCreateGame.prodigy.bChecked = false;
+			uiCreateGame.rats.bChecked = false;
+			uiCreateGame.santorini.bChecked = false;
+			uiCreateGame.skyscraper.bChecked = false;
+			uiCreateGame.torn.bChecked = false;
+			uiCreateGame.darksnow.bChecked = false;
+			uiCreateGame.ischecksetmap = false;
+
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
 
 	tdm.SetNameAndStatus(L("CstzUI_Mod_tdm"), L(""));
 	tdm.iFlags |= QMF_NOTIFY;
 	tdm.SetCoord(1025, 310);
+	tdm.colorBase = uiColorGreen;
 	SET_EVENT_MULTI(tdm.onChanged,
 		{
+			switch (uiCreateGame.stringmaplist)
+			{
+			case 1:
+				uiCreateGame.uparrow.Hide();
+				uiCreateGame.downarrow.Show();
+				break;
+			case 2:
+				uiCreateGame.uparrow.Show();
+				uiCreateGame.downarrow.Show();
+				break;
+			case 3:
+				uiCreateGame.uparrow.Show();
+				uiCreateGame.downarrow.Hide();
+				break;
+			}
+
 			uiCreateGame.botNum.Show();
 			uiCreateGame.ResetMode("tdm");
+			uiCreateGame.botNum.LinkCvar("bot_quota");
+
+			uiCreateGame.nightmare2.bChecked = false;
+			uiCreateGame.nightmare3.bChecked = false;
+			uiCreateGame.lastclue.bChecked = false;
+			uiCreateGame.lostcity.bChecked = false;
+			uiCreateGame.panic.bChecked = false;
+			uiCreateGame.trap.bChecked = false;
+
+			uiCreateGame.assault.bChecked = false;
+			uiCreateGame.vertigo.bChecked = false;
+			uiCreateGame.nuke.bChecked = false;
+			uiCreateGame.dust2.bChecked = false;
+			uiCreateGame.italy.bChecked = false;
+			uiCreateGame.mirage.bChecked = false;
+			uiCreateGame.inferno.bChecked = false;
+			uiCreateGame.gressia.bChecked = false;
+			uiCreateGame.ruin.bChecked = false;
+			uiCreateGame.bigtree.bChecked = false;
+			uiCreateGame.dustmini.bChecked = false;
+			uiCreateGame.cs747.bChecked = false;
+			uiCreateGame.estate.bChecked = false;
+			uiCreateGame.havana.bChecked = false;
+			uiCreateGame.militia.bChecked = false;
+			uiCreateGame.office.bChecked = false;
+			uiCreateGame.siege.bChecked = false;
+			uiCreateGame.angelcity.bChecked = false;
+
+			uiCreateGame.aztec.bChecked = false;
+			uiCreateGame.cbble.bChecked = false;
+			uiCreateGame.chateau.bChecked = false;
+			uiCreateGame.prodigy.bChecked = false;
+			uiCreateGame.rats.bChecked = false;
+			uiCreateGame.santorini.bChecked = false;
+			uiCreateGame.skyscraper.bChecked = false;
+			uiCreateGame.torn.bChecked = false;
+			uiCreateGame.darksnow.bChecked = false;
+			uiCreateGame.ischecksetmap = false;
+
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
 
 	gd.SetNameAndStatus(L("CstzUI_Mod_gdm"), L(""));
 	gd.iFlags |= QMF_NOTIFY;
 	gd.SetCoord(1025, 350);
+	gd.colorBase = uiColorGreen;
 	SET_EVENT_MULTI(gd.onChanged,
 		{
+			switch (uiCreateGame.stringmaplist)
+			{
+			case 1:
+				uiCreateGame.uparrow.Hide();
+				uiCreateGame.downarrow.Show();
+				break;
+			case 2:
+				uiCreateGame.uparrow.Show();
+				uiCreateGame.downarrow.Show();
+				break;
+			case 3:
+				uiCreateGame.uparrow.Show();
+				uiCreateGame.downarrow.Hide();
+				break;
+			}
+
 			uiCreateGame.botNum.Show();
 			uiCreateGame.ResetMode("gd");
+			uiCreateGame.botNum.LinkCvar("bot_quota");
+
+			uiCreateGame.nightmare2.bChecked = false;
+			uiCreateGame.nightmare3.bChecked = false;
+			uiCreateGame.lastclue.bChecked = false;
+			uiCreateGame.lostcity.bChecked = false;
+			uiCreateGame.panic.bChecked = false;
+			uiCreateGame.trap.bChecked = false;
+
+			uiCreateGame.assault.bChecked = false;
+			uiCreateGame.vertigo.bChecked = false;
+			uiCreateGame.nuke.bChecked = false;
+			uiCreateGame.dust2.bChecked = false;
+			uiCreateGame.italy.bChecked = false;
+			uiCreateGame.mirage.bChecked = false;
+			uiCreateGame.inferno.bChecked = false;
+			uiCreateGame.gressia.bChecked = false;
+			uiCreateGame.ruin.bChecked = false;
+			uiCreateGame.bigtree.bChecked = false;
+			uiCreateGame.dustmini.bChecked = false;
+			uiCreateGame.cs747.bChecked = false;
+			uiCreateGame.estate.bChecked = false;
+			uiCreateGame.havana.bChecked = false;
+			uiCreateGame.militia.bChecked = false;
+			uiCreateGame.office.bChecked = false;
+			uiCreateGame.siege.bChecked = false;
+			uiCreateGame.angelcity.bChecked = false;
+
+			uiCreateGame.aztec.bChecked = false;
+			uiCreateGame.cbble.bChecked = false;
+			uiCreateGame.chateau.bChecked = false;
+			uiCreateGame.prodigy.bChecked = false;
+			uiCreateGame.rats.bChecked = false;
+			uiCreateGame.santorini.bChecked = false;
+			uiCreateGame.skyscraper.bChecked = false;
+			uiCreateGame.torn.bChecked = false;
+			uiCreateGame.darksnow.bChecked = false;
+			uiCreateGame.ischecksetmap = false;
+
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
 
 	zc.SetNameAndStatus(L("CstzUI_Mod_zbm"), L(""));
 	zc.iFlags |= QMF_NOTIFY;
 	zc.SetCoord(1025, 400);
+	zc.colorBase = uiColorRed;
+	zc.SetCharSize(QM_BOLDFONT);
 	SET_EVENT_MULTI(zc.onChanged,
 		{
+			switch (uiCreateGame.stringmaplist)
+			{
+			case 1:
+				uiCreateGame.uparrow.Hide();
+				uiCreateGame.downarrow.Show();
+				break;
+			case 2:
+				uiCreateGame.uparrow.Show();
+				uiCreateGame.downarrow.Show();
+				break;
+			case 3:
+				uiCreateGame.uparrow.Show();
+				uiCreateGame.downarrow.Hide();
+				break;
+			}
+
 			uiCreateGame.botNum.Show();
 			uiCreateGame.ResetMode("zb1");
+			uiCreateGame.botNum.LinkCvar("bot_quota");
+
+			uiCreateGame.nightmare2.bChecked = false;
+			uiCreateGame.nightmare3.bChecked = false;
+			uiCreateGame.lastclue.bChecked = false;
+			uiCreateGame.lostcity.bChecked = false;
+			uiCreateGame.panic.bChecked = false;
+			uiCreateGame.trap.bChecked = false;
+
+			uiCreateGame.assault.bChecked = false;
+			uiCreateGame.vertigo.bChecked = false;
+			uiCreateGame.nuke.bChecked = false;
+			uiCreateGame.dust2.bChecked = false;
+			uiCreateGame.italy.bChecked = false;
+			uiCreateGame.mirage.bChecked = false;
+			uiCreateGame.inferno.bChecked = false;
+			uiCreateGame.gressia.bChecked = false;
+			uiCreateGame.ruin.bChecked = false;
+			uiCreateGame.bigtree.bChecked = false;
+			uiCreateGame.dustmini.bChecked = false;
+			uiCreateGame.cs747.bChecked = false;
+			uiCreateGame.estate.bChecked = false;
+			uiCreateGame.havana.bChecked = false;
+			uiCreateGame.militia.bChecked = false;
+			uiCreateGame.office.bChecked = false;
+			uiCreateGame.siege.bChecked = false;
+			uiCreateGame.angelcity.bChecked = false;
+
+			uiCreateGame.aztec.bChecked = false;
+			uiCreateGame.cbble.bChecked = false;
+			uiCreateGame.chateau.bChecked = false;
+			uiCreateGame.prodigy.bChecked = false;
+			uiCreateGame.rats.bChecked = false;
+			uiCreateGame.santorini.bChecked = false;
+			uiCreateGame.skyscraper.bChecked = false;
+			uiCreateGame.torn.bChecked = false;
+			uiCreateGame.darksnow.bChecked = false;
+			uiCreateGame.ischecksetmap = false;
+
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
 
 	zh.SetNameAndStatus(L("CstzUI_Mod_zbh"), L(""));
 	zh.iFlags |= QMF_NOTIFY;
 	zh.SetCoord(1025, 440);
+	zh.colorBase = uiColorRed;
+	zh.SetCharSize(QM_BOLDFONT);
 	SET_EVENT_MULTI(zh.onChanged,
 		{
+			switch (uiCreateGame.stringmaplist)
+			{
+			case 1:
+				uiCreateGame.uparrow.Hide();
+				uiCreateGame.downarrow.Show();
+				break;
+			case 2:
+				uiCreateGame.uparrow.Show();
+				uiCreateGame.downarrow.Show();
+				break;
+			case 3:
+				uiCreateGame.uparrow.Show();
+				uiCreateGame.downarrow.Hide();
+				break;
+			}
+
 			uiCreateGame.botNum.Show();
 			uiCreateGame.ResetMode("zb3");
+			uiCreateGame.botNum.LinkCvar("bot_quota");
+
+			uiCreateGame.nightmare2.bChecked = false;
+			uiCreateGame.nightmare3.bChecked = false;
+			uiCreateGame.lastclue.bChecked = false;
+			uiCreateGame.lostcity.bChecked = false;
+			uiCreateGame.panic.bChecked = false;
+			uiCreateGame.trap.bChecked = false;
+
+			uiCreateGame.assault.bChecked = false;
+			uiCreateGame.vertigo.bChecked = false;
+			uiCreateGame.nuke.bChecked = false;
+			uiCreateGame.dust2.bChecked = false;
+			uiCreateGame.italy.bChecked = false;
+			uiCreateGame.mirage.bChecked = false;
+			uiCreateGame.inferno.bChecked = false;
+			uiCreateGame.gressia.bChecked = false;
+			uiCreateGame.ruin.bChecked = false;
+			uiCreateGame.bigtree.bChecked = false;
+			uiCreateGame.dustmini.bChecked = false;
+			uiCreateGame.cs747.bChecked = false;
+			uiCreateGame.estate.bChecked = false;
+			uiCreateGame.havana.bChecked = false;
+			uiCreateGame.militia.bChecked = false;
+			uiCreateGame.office.bChecked = false;
+			uiCreateGame.siege.bChecked = false;
+			uiCreateGame.angelcity.bChecked = false;
+
+			uiCreateGame.aztec.bChecked = false;
+			uiCreateGame.cbble.bChecked = false;
+			uiCreateGame.chateau.bChecked = false;
+			uiCreateGame.prodigy.bChecked = false;
+			uiCreateGame.rats.bChecked = false;
+			uiCreateGame.santorini.bChecked = false;
+			uiCreateGame.skyscraper.bChecked = false;
+			uiCreateGame.torn.bChecked = false;
+			uiCreateGame.darksnow.bChecked = false;
+			uiCreateGame.ischecksetmap = false;
+
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
 
@@ -6535,42 +7362,185 @@ void CMenuCreateGame::_Init( void )
 	zevo.SetNameAndStatus(L("CstzUI_Mod_zbe"), L(""));
 	zevo.iFlags |= QMF_NOTIFY;
 	zevo.SetCoord(1025, 480);
+	zevo.colorBase = uiColorRed;
+	zevo.SetCharSize(QM_BOLDFONT);
 	SET_EVENT_MULTI(zevo.onChanged,
 		{
+			switch (uiCreateGame.stringmaplist)
+			{
+			case 1:
+				uiCreateGame.uparrow.Hide();
+				uiCreateGame.downarrow.Show();
+				break;
+			case 2:
+				uiCreateGame.uparrow.Show();
+				uiCreateGame.downarrow.Show();
+				break;
+			case 3:
+				uiCreateGame.uparrow.Show();
+				uiCreateGame.downarrow.Hide();
+				break;
+			}
+
 			uiCreateGame.botNum.Show();
 			uiCreateGame.ResetMode("zb5");
+			uiCreateGame.botNum.LinkCvar("bot_quota");
+
+			uiCreateGame.nightmare2.bChecked = false;
+			uiCreateGame.nightmare3.bChecked = false;
+			uiCreateGame.lastclue.bChecked = false;
+			uiCreateGame.lostcity.bChecked = false;
+			uiCreateGame.panic.bChecked = false;
+			uiCreateGame.trap.bChecked = false;
+
+			uiCreateGame.assault.bChecked = false;
+			uiCreateGame.vertigo.bChecked = false;
+			uiCreateGame.nuke.bChecked = false;
+			uiCreateGame.dust2.bChecked = false;
+			uiCreateGame.italy.bChecked = false;
+			uiCreateGame.mirage.bChecked = false;
+			uiCreateGame.inferno.bChecked = false;
+			uiCreateGame.gressia.bChecked = false;
+			uiCreateGame.ruin.bChecked = false;
+			uiCreateGame.bigtree.bChecked = false;
+			uiCreateGame.dustmini.bChecked = false;
+			uiCreateGame.cs747.bChecked = false;
+			uiCreateGame.estate.bChecked = false;
+			uiCreateGame.havana.bChecked = false;
+			uiCreateGame.militia.bChecked = false;
+			uiCreateGame.office.bChecked = false;
+			uiCreateGame.siege.bChecked = false;
+			uiCreateGame.angelcity.bChecked = false;
+
+			uiCreateGame.aztec.bChecked = false;
+			uiCreateGame.cbble.bChecked = false;
+			uiCreateGame.chateau.bChecked = false;
+			uiCreateGame.prodigy.bChecked = false;
+			uiCreateGame.rats.bChecked = false;
+			uiCreateGame.santorini.bChecked = false;
+			uiCreateGame.skyscraper.bChecked = false;
+			uiCreateGame.torn.bChecked = false;
+			uiCreateGame.darksnow.bChecked = false;
+			uiCreateGame.ischecksetmap = false;
+
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
 
 	sz.SetNameAndStatus(L("CstzUI_Mod_scen"), L(""));
 	sz.iFlags |= QMF_NOTIFY;
+	sz.colorBase = uiColorRed;
+	sz.SetCharSize(QM_BOLDFONT);
 	sz.SetCoord(1025, 520);
 	SET_EVENT_MULTI(sz.onChanged,
 		{
 			uiCreateGame.botNum.Hide();
+			uiCreateGame.botNum.LinkCvar("bot_quota");
 			uiCreateGame.ResetMode("zbs");
+
+			uiCreateGame.nightmare2.bChecked = false;
+			uiCreateGame.nightmare3.bChecked = false;
+			uiCreateGame.lastclue.bChecked = false;
+			uiCreateGame.lostcity.bChecked = false;
+			uiCreateGame.panic.bChecked = false;
+			uiCreateGame.trap.bChecked = false;
+
+			uiCreateGame.assault.bChecked = false;
+			uiCreateGame.vertigo.bChecked = false;
+			uiCreateGame.nuke.bChecked = false;
+			uiCreateGame.dust2.bChecked = false;
+			uiCreateGame.italy.bChecked = false;
+			uiCreateGame.mirage.bChecked = false;
+			uiCreateGame.inferno.bChecked = false;
+			uiCreateGame.gressia.bChecked = false;
+			uiCreateGame.ruin.bChecked = false;
+			uiCreateGame.bigtree.bChecked = false;
+			uiCreateGame.dustmini.bChecked = false;
+			uiCreateGame.cs747.bChecked = false;
+			uiCreateGame.estate.bChecked = false;
+			uiCreateGame.havana.bChecked = false;
+			uiCreateGame.militia.bChecked = false;
+			uiCreateGame.office.bChecked = false;
+			uiCreateGame.siege.bChecked = false;
+			uiCreateGame.angelcity.bChecked = false;
+
+			uiCreateGame.aztec.bChecked = false;
+			uiCreateGame.cbble.bChecked = false;
+			uiCreateGame.chateau.bChecked = false;
+			uiCreateGame.prodigy.bChecked = false;
+			uiCreateGame.rats.bChecked = false;
+			uiCreateGame.santorini.bChecked = false;
+			uiCreateGame.skyscraper.bChecked = false;
+			uiCreateGame.torn.bChecked = false;
+			uiCreateGame.darksnow.bChecked = false;
+			uiCreateGame.ischecksetmap = false;
+
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
 
 	zsh.SetNameAndStatus(L("CstzUI_Mod_zsh"), L(""));
 	zsh.iFlags |= QMF_NOTIFY;
 	zsh.SetCoord(1025, 560);
+	zsh.colorBase = uiColorRed;
+	zsh.SetCharSize(QM_BOLDFONT);
 	SET_EVENT_MULTI(zsh.onChanged,
 		{
 			uiCreateGame.ResetMap(0);
+			uiCreateGame.botNum.LinkCvar("bot_quota");
 			uiCreateGame.botNum.Hide();
 			uiCreateGame.ResetMode("zsh_pve");
+
+			uiCreateGame.nightmare2.bChecked = false;
+			uiCreateGame.nightmare3.bChecked = false;
+			uiCreateGame.lastclue.bChecked = false;
+			uiCreateGame.lostcity.bChecked = false;
+			uiCreateGame.panic.bChecked = false;
+			uiCreateGame.trap.bChecked = false;
+
+			uiCreateGame.assault.bChecked = false;
+			uiCreateGame.vertigo.bChecked = false;
+			uiCreateGame.nuke.bChecked = false;
+			uiCreateGame.dust2.bChecked = false;
+			uiCreateGame.italy.bChecked = false;
+			uiCreateGame.mirage.bChecked = false;
+			uiCreateGame.inferno.bChecked = false;
+			uiCreateGame.gressia.bChecked = false;
+			uiCreateGame.ruin.bChecked = false;
+			uiCreateGame.bigtree.bChecked = false;
+			uiCreateGame.dustmini.bChecked = false;
+			uiCreateGame.cs747.bChecked = false;
+			uiCreateGame.estate.bChecked = false;
+			uiCreateGame.havana.bChecked = false;
+			uiCreateGame.militia.bChecked = false;
+			uiCreateGame.office.bChecked = false;
+			uiCreateGame.siege.bChecked = false;
+			uiCreateGame.angelcity.bChecked = false;
+
+			uiCreateGame.aztec.bChecked = false;
+			uiCreateGame.cbble.bChecked = false;
+			uiCreateGame.chateau.bChecked = false;
+			uiCreateGame.prodigy.bChecked = false;
+			uiCreateGame.rats.bChecked = false;
+			uiCreateGame.santorini.bChecked = false;
+			uiCreateGame.skyscraper.bChecked = false;
+			uiCreateGame.torn.bChecked = false;
+			uiCreateGame.darksnow.bChecked = false;
+			uiCreateGame.ischecksetmap = false;
+
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
 	
 	Adv.SetNameAndStatus(L("GameUI_ServerSettings"), L(""));
 	Adv.onActivated = UI_AdvServerOptions_Menu;
 	Adv.iFlags |= QMF_NOTIFY;
+	Adv.colorBase = uiInputFgColor;
+	Adv.SetCharSize(QM_BOLDFONT);
 	Adv.SetCoord(160, 660);
 
 	Inventory.SetNameAndStatus(L("CstzUI_Inventory"), L(""));
 	Inventory.onActivated = UI_Inventory_Menu;
 	Inventory.iFlags |= QMF_NOTIFY;
+	Inventory.colorBase = uiInputFgColor;
+	Inventory.SetCharSize(QM_BOLDFONT);
 	Inventory.SetCoord(460, 660);
 
 	playbutton.iFlags = QMF_NOTIFY;
@@ -6592,10 +7562,13 @@ void CMenuCreateGame::_Init( void )
 			if (uiCreateGame.stringmaplist != 1)
 			{
 				uiCreateGame.stringmaplist--;
+				uiCreateGame.downarrow.Show();
 				uiCreateGame.ResetMap(0);
 			}
 			else
 			{
+				uiCreateGame.uparrow.Hide();
+				uiCreateGame.downarrow.Show();
 				EngFuncs::PlayLocalSound("media/launch_deny2.wav");
 			}
 		});
@@ -6609,18 +7582,16 @@ void CMenuCreateGame::_Init( void )
 			if (uiCreateGame.stringmaplist != 3)
 			{
 				uiCreateGame.stringmaplist++;
+				uiCreateGame.uparrow.Show();
 				uiCreateGame.ResetMap(0);
 			}
 			else
 			{
+				uiCreateGame.uparrow.Show();
+				uiCreateGame.downarrow.Hide();
 				EngFuncs::PlayLocalSound("media/launch_deny2.wav");
 			}
 		});
-
-	mapsList.SetCharSize( QM_SMALLFONT );
-	mapsList.SetupColumn( 0, L("GameUI_Map"), 0.5f ); // Map
-	mapsList.SetupColumn( 1, L("Title"), 0.5f ); // Title
-	mapsList.SetModel( &mapsListModel );
 
 	hostName.szName = L("GameUI_ServerName");
 	hostName.iMaxLength = 28;
@@ -6649,24 +7620,6 @@ void CMenuCreateGame::_Init( void )
 	password.bHideInput = true;
 	password.LinkCvar( "sv_password" );
 
-	botNum.iMaxLength = 3;
-	botNum.bNumbersOnly = true;
-	botNum.SetNameAndStatus(L("GameUI_Bots"), L(""));
-	botNum.LinkCvar("bot_quota");
-	botNum.UpdateCvar();
-	botNum.onCvarGet = botNum.onChanged;
-	SET_EVENT_MULTI(botNum.onChanged,
-		{
-			CMenuField *self = (CMenuField*)pSelf;
-			const char *buf = self->GetBuffer();
-			int players = atoi(buf);
-			if (players <= 0)
-				self->SetBuffer("");
-			else if (players > 32)
-				self->SetBuffer("32");
-		});
-	botNum.onCvarGet = botNum.onChanged;
-
 	msgBox.onPositive = VoidCb(&CMenuCreateGame::Begin);
 	msgBox.SetMessage(L("Starting a new game will exit any current game, OK to exit?") );
 	msgBox.Link( this );
@@ -6674,8 +7627,11 @@ void CMenuCreateGame::_Init( void )
 	Exit.SetNameAndStatus(L("GameUI_Cancel"), L(""));
 	Exit.onActivated = VoidCb(&CMenuCreateGame::Hide);
 	Exit.iFlags |= QMF_NOTIFY;
+	Exit.colorBase = uiColorRed;
+	Exit.SetCharSize(QM_BOLDFONT);
 	Exit.SetCoord(1098, 715);
 
+	AddItem( background );
 	AddItem( mapassault );
 	AddItem( mapitaly );
 	AddItem( mapvertigo );
@@ -6707,33 +7663,33 @@ void CMenuCreateGame::_Init( void )
 	AddItem( mapdarksnow );
 	AddItem( mapnightmare );
 
-	AddItem(mapnightmare2);
-	AddItem(mapnightmare3);
-	AddItem(maplastclue);
-	AddItem(maplostcity);
-	AddItem(mappanic);
-	AddItem(maptrap);
-	AddItem(mapsnailcity);
+	AddItem( mapnightmare2 );
+	AddItem( mapnightmare3 );
+	AddItem( maplastclue );
+	AddItem( maplostcity );
+	AddItem( mappanic );
+	AddItem( maptrap );
+	AddItem( mapsnailcity );
 
-	AddItem(MapSetAztec);
-	AddItem(MapSetCbble);
-	AddItem(MapSetChateau);
-	AddItem(MapSetProdigy);
-	AddItem(MapSetRats);
-	AddItem(MapSetSantorini);
-	AddItem(MapSetSkyScraper);
-	AddItem(MapSetTorn);
-	AddItem(MapSetDarkSnow);
+	AddItem( MapSetAztec );
+	AddItem( MapSetCbble );
+	AddItem( MapSetChateau );
+	AddItem( MapSetProdigy );
+	AddItem( MapSetRats );
+	AddItem( MapSetSantorini );
+	AddItem( MapSetSkyScraper );
+	AddItem( MapSetTorn );
+	AddItem( MapSetDarkSnow );
 
-	AddItem(MapSetNightMare);
-	AddItem(MapSetNightMare2);
-	AddItem(MapSetNightMare3);
-	AddItem(MapSetLastClue);
-	AddItem(MapSetLostCity);
-	AddItem(MapSetPanic);
-	AddItem(MapSetTrap);
+	AddItem( MapSetNightMare );
+	AddItem( MapSetNightMare2 );
+	AddItem( MapSetNightMare3 );
+	AddItem( MapSetLastClue );
+	AddItem( MapSetLostCity );
+	AddItem( MapSetPanic );
+	AddItem( MapSetTrap );
 	
-	AddItem(MapSetSnailCity);
+	AddItem( MapSetSnailCity );
 
 	AddItem( MapSetVertigo );
 	AddItem( MapSetAssault );
@@ -6776,12 +7732,12 @@ void CMenuCreateGame::_Init( void )
 	AddItem( darksnow );
 
 	AddItem( nightmare );
-	AddItem(nightmare2);
-	AddItem(nightmare3);
-	AddItem(lastclue);
-	AddItem(lostcity);
-	AddItem(panic);
-	AddItem(trap);
+	AddItem( nightmare2 );
+	AddItem( nightmare3 );
+	AddItem( lastclue );
+	AddItem( lostcity );
+	AddItem( panic );
+	AddItem( trap );
 	AddItem( snailcity );
 
 	AddItem( bigtree );
@@ -6805,46 +7761,46 @@ void CMenuCreateGame::_Init( void )
 	AddItem( zsh );
 
 	AddItem( textmap );
-	AddItem(textmap2);
-	AddItem(textmap3);
-	AddItem(textmap4);
-	AddItem(textmap5);
-	AddItem(textmap6);
-	AddItem(textmap7);
-	AddItem(textmap8);
-	AddItem(textmap9);
+	AddItem( textmap2 );
+	AddItem( textmap3 );
+	AddItem( textmap4 );
+	AddItem( textmap5 );
+	AddItem( textmap6 );
+	AddItem( textmap7 );
+	AddItem( textmap8 );
+	AddItem( textmap9 );
 
-	AddItem(textmap10);
-	AddItem(textmap11);
-	AddItem(textmap12);
-	AddItem(textmap13);
-	AddItem(textmap14);
-	AddItem(textmap15);
-	AddItem(textmap16);
-	AddItem(textmap17);
-	AddItem(textmap18);
+	AddItem( textmap10 );
+	AddItem( textmap11 );
+	AddItem( textmap12 );
+	AddItem( textmap13 );
+	AddItem( textmap14 );
+	AddItem( textmap15 );
+	AddItem( textmap16 );
+	AddItem( textmap17 );
+	AddItem( textmap18 );
 
-	AddItem(textmap19);
-	AddItem(textmap20);
-	AddItem(textmap21);
-	AddItem(textmap22);
-	AddItem(textmap23);
-	AddItem(textmap24);
-	AddItem(textmap25);
-	AddItem(textmap26);
-	AddItem(textmap27);
+	AddItem( textmap19 );
+	AddItem( textmap20 );
+	AddItem( textmap21 );
+	AddItem( textmap22 );
+	AddItem( textmap23 );
+	AddItem( textmap24 );
+	AddItem( textmap25 );
+	AddItem( textmap26 );
+	AddItem( textmap27 );
 
-	AddItem(textmap28);
+	AddItem( textmap28 );
 
-	AddItem(textmap29);
-	AddItem(textmap30);
-	AddItem(textmap31);
-	AddItem(textmap32);
-	AddItem(textmap33);
-	AddItem(textmap34);
-	AddItem(textmap35);
+	AddItem( textmap29 );
+	AddItem( textmap30 );
+	AddItem( textmap31 );
+	AddItem( textmap32 );
+	AddItem( textmap33 );
+	AddItem( textmap34 );
+	AddItem( textmap35 );
 
-	AddItem(Inventory);
+	AddItem( Inventory );
 
 	AddItem( playbutton );
 	AddItem( uparrow );
@@ -6867,8 +7823,6 @@ void CMenuCreateGame::_VidInit()
 	else nat.Show();
 
 	hltv.SetCoord( 72, 635 );
-
-	mapsList.SetRect( 590, 230, -200, 465 );
 	
 	hostName.SetRect( 160, 160, 205, 32 );
 	maxClients.SetRect( 390, 160, 205, 32 );
@@ -6877,6 +7831,7 @@ void CMenuCreateGame::_VidInit()
 
 	if (stringmaplist == 1)
 	{
+		uparrow.Hide();
 		textmap.SetNameAndStatus(L("Assault"), L(""));
 		textmap2.SetNameAndStatus(L("Italy"), L(""));
 		textmap3.SetNameAndStatus(L("Vertigo"), L(""));
@@ -6891,76 +7846,111 @@ void CMenuCreateGame::_VidInit()
 
 		uiCreateGame.textmap.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap.SetCoord(248, 310);
+		textmap.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap2.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap2.SetCoord(565, 310);
+		textmap2.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap3.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap3.SetCoord(845, 310);
+		textmap3.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap4.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap4.SetCoord(248, 450);
+		textmap4.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap5.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap5.SetCoord(560, 450);
+		textmap5.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap6.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap6.SetCoord(855, 450);
+		textmap6.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap7.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap7.SetCoord(248, 592);
+		textmap7.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap8.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap8.SetCoord(550, 592);
+		textmap8.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap9.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap9.SetCoord(865, 592);
+		textmap9.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap10.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap10.SetCoord(248, 310);
+		textmap10.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap11.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap11.SetCoord(552, 310);
+		textmap11.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap12.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap12.SetCoord(865, 310);
+		textmap12.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap13.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap13.SetCoord(248, 450);
+		textmap13.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap14.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap14.SetCoord(550, 450);
+		textmap14.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap15.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap15.SetCoord(855, 450);
+		textmap15.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap16.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap16.SetCoord(248, 592);
+		textmap16.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap17.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap17.SetCoord(560, 592);
+		textmap17.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap18.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap18.SetCoord(835, 592);
+		textmap18.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap19.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap19.SetCoord(251, 310);
+		textmap19.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap20.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap20.SetCoord(525, 310);
+		textmap20.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap21.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap21.SetCoord(842, 310);
+		textmap21.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap22.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap22.SetCoord(248, 450);
+		textmap22.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap23.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap23.SetCoord(565, 450);
+		textmap23.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap24.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap24.SetCoord(845, 450);
+		textmap24.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap25.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap25.SetCoord(228, 592);
+		textmap25.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap26.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap26.SetCoord(565, 592);
+		textmap26.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap27.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap27.SetCoord(840, 592);
+		textmap27.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap28.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap28.SetCoord(241, 310);
+		textmap28.SetCharSize(QM_BOLDFONT);
 
 
 		uiCreateGame.textmap29.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap29.SetCoord(525, 310);
+		textmap29.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap30.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap30.SetCoord(842, 310);
+		textmap30.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap31.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap31.SetCoord(248, 450);
+		textmap31.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap32.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap32.SetCoord(565, 450);
+		textmap32.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap33.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap33.SetCoord(845, 450);
+		textmap33.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap34.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap34.SetCoord(228, 592);
+		textmap34.SetCharSize(QM_BOLDFONT);
 		uiCreateGame.textmap35.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap35.SetCoord(248, 310);
+		textmap35.SetCharSize(QM_BOLDFONT);
 
 		textmap.Show();
 		textmap2.Show();
@@ -7333,8 +8323,52 @@ void UI_CreateGame_Menu( void )
 	if ( gMenu.m_gameinfo.gamemode == GAME_SINGLEPLAYER_ONLY )
 		return;
 
+	if (uiCreateGame.stringmaplist == 1)
+	{
+		uiCreateGame.uparrow.Hide();
+	}
+
 	uiCreateGame.Show();
 
 	uiCreateGame.ResetMode(0);
+	uiCreateGame.botNum.Hide();
+
+	uiCreateGame.nightmare2.bChecked = false;
+	uiCreateGame.nightmare3.bChecked = false;
+	uiCreateGame.lastclue.bChecked = false;
+	uiCreateGame.lostcity.bChecked = false;
+	uiCreateGame.panic.bChecked = false;
+	uiCreateGame.trap.bChecked = false;
+
+	uiCreateGame.assault.bChecked = false;
+	uiCreateGame.vertigo.bChecked = false;
+	uiCreateGame.nuke.bChecked = false;
+	uiCreateGame.dust2.bChecked = false;
+	uiCreateGame.italy.bChecked = false;
+	uiCreateGame.mirage.bChecked = false;
+	uiCreateGame.inferno.bChecked = false;
+	uiCreateGame.gressia.bChecked = false;
+	uiCreateGame.ruin.bChecked = false;
+	uiCreateGame.bigtree.bChecked = false;
+	uiCreateGame.dustmini.bChecked = false;
+	uiCreateGame.cs747.bChecked = false;
+	uiCreateGame.estate.bChecked = false;
+	uiCreateGame.havana.bChecked = false;
+	uiCreateGame.militia.bChecked = false;
+	uiCreateGame.office.bChecked = false;
+	uiCreateGame.siege.bChecked = false;
+	uiCreateGame.angelcity.bChecked = false;
+
+	uiCreateGame.aztec.bChecked = false;
+	uiCreateGame.cbble.bChecked = false;
+	uiCreateGame.chateau.bChecked = false;
+	uiCreateGame.prodigy.bChecked = false;
+	uiCreateGame.rats.bChecked = false;
+	uiCreateGame.santorini.bChecked = false;
+	uiCreateGame.skyscraper.bChecked = false;
+	uiCreateGame.torn.bChecked = false;
+	uiCreateGame.darksnow.bChecked = false;
+	uiCreateGame.ischecksetmode = false;
+	uiCreateGame.ischecksetmap = false;
 }
 ADD_MENU( menu_creategame, UI_CreateGame_Precache, UI_CreateGame_Menu );

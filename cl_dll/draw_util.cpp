@@ -319,6 +319,89 @@ int DrawUtils::DrawHudNumber2(int x, int y, int iNumber, int r, int g, int b)
 	return ResX;
 }
 
+int DrawUtils::DrawNEWHudNumber(int type, int iX, int iY, int number, int r, int g, int b, int a, int iDrawZero, int maxsize, int widthplus)
+{
+	if (maxsize <= 0)
+	{
+		maxsize = 1;
+
+		for (int num = 10; (number / num) > 0; num *= 10)
+			maxsize++;
+	}
+
+	if (maxsize > 255)
+		maxsize = 255;
+
+	int index = !type ? gHUD.m_NEWHUD_number_0 : gHUD.m_NEWHUD_dollar_number_0;
+	int width = !type ? gHUD.m_NEWHUD_iFontWidth : gHUD.m_NEWHUD_iFontWidth_Dollar;
+
+	int color = 100 * a / 255;
+	ScaleColors(r, g, b, a);
+
+	bool bShouldDraw = false;
+
+	for (int i = 0; i < maxsize; i++)
+	{
+		int div = 1;
+		for (int j = 0; j < maxsize - i; j++)
+			div *= 10;
+
+		int iNum = (number % div * 10) / div;
+
+		if (iNum)
+			bShouldDraw = true;
+
+		if (!iDrawZero && !iNum && !bShouldDraw && i != maxsize - 1)
+			continue;
+
+		if (!iNum && !bShouldDraw)
+			SPR_Set(gHUD.GetSprite(index), color, color, color);
+		else
+			SPR_Set(gHUD.GetSprite(index + iNum), r, g, b);
+
+		SPR_DrawAdditive(0, iX, iY, &gHUD.GetSpriteRect(index + iNum));
+		iX += width + widthplus;
+	}
+	return iX;
+}
+
+int DrawUtils::GetNEWHudNumberWidth(int type, int number, int iDrawZero, int maxsize, int widthplus)
+{
+	if (maxsize <= 0)
+	{
+		maxsize = 1;
+
+		for (int num = 10; (number / num) > 0; num *= 10)
+			maxsize++;
+	}
+
+	if (maxsize > 255)
+		maxsize = 255;
+
+	int iW = 0;
+	int width = !type ? gHUD.m_NEWHUD_iFontWidth : gHUD.m_NEWHUD_iFontWidth_Dollar;
+
+	bool bShouldDraw = false;
+
+	for (int i = 0; i < maxsize; i++)
+	{
+		int div = 1;
+		for (int j = 0; j < maxsize - i; j++)
+			div *= 10;
+
+		int iNum = (number % div * 10) / div;
+
+		if (iNum)
+			bShouldDraw = true;
+
+		if (!iDrawZero && !iNum && !bShouldDraw && i != maxsize - 1)
+			continue;
+
+		iW += width + widthplus;
+	}
+	return iW;
+}
+
 void DrawUtils::Draw2DQuad(float x1, float y1, float x2, float y2)
 {
 	gEngfuncs.pTriAPI->Begin(TRI_QUADS);

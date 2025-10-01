@@ -154,6 +154,12 @@ public:
 		WRITE_SHORT(5);
 		WRITE_SHORT(-1);
 		MESSAGE_END();
+
+		MESSAGE_BEGIN(MSG_ALL, gmsgHeadIcon);
+		WRITE_BYTE(2);
+		WRITE_SHORT(ENTINDEX(m_pPlayer->edict()));
+		MESSAGE_END();
+
 	}
 
 	void OnSkillEnd() override
@@ -190,6 +196,11 @@ public:
 		WRITE_BYTE(ZOMBIE_SKILL_KNIFE2X);
 		WRITE_SHORT(10);
 		WRITE_SHORT(-1);
+		MESSAGE_END();
+
+		MESSAGE_BEGIN(MSG_ALL, gmsgHeadIcon);
+		WRITE_BYTE(1);
+		WRITE_SHORT(ENTINDEX(m_pPlayer->edict()));
 		MESSAGE_END();
 	}
 

@@ -804,6 +804,30 @@ void IdleState::OnUpdate(CCSBot *me)
 			}
 			break;
 		}
+
+		case CCSBotManager::SCENARIO_ZOMBIEMOD_INFETCION:
+		{
+			if (!me->m_bIsZombie)
+			{
+				float flChance = RANDOM_FLOAT(0, 100.0f);
+				if (flChance < 20.0f && UTIL_FindEntityByClassname(nullptr, "supplyboxR") != nullptr)
+				{
+					me->RushToSupplyBox();
+					return;
+				}
+				else if (flChance < 95.0f)
+				{
+					//auto area = TheNavAreaGrid.GetNavAreaByID(MapMgr_GetRandomAreaID());
+					//if (area != NULL && me->GetTask() != CCSBot::MOVE_TO_SAFE_AREA && !me->IsDefending())
+					//{
+					//	me->SetTask(CCSBot::MOVE_TO_SAFE_AREA);
+					//	me->MoveTo(area->GetCenter());
+					//	me->PrintIfWatched("Moving to safe area!\n");
+					//	return;
+					//}
+				}
+			}
+		}
 		// deathmatch
 		default:
 		{

@@ -53,15 +53,15 @@ void EV_WonderCannonFireEffect(vec3_t vecSrc, vec3_t vecForward, vec3_t vecVeloc
 	int i;
 	int ran;
 	float c, s;
+
+	cl_entity_t* local = gEngfuncs.GetLocalPlayer();
 	for (i = 0; i < 12; i++)
 	{
 		ent = gEngfuncs.pEfxAPI->R_DefaultSprite(vecSrc, iModel, 30);
 		if (!ent)
 			break;
 		ent->flags |= FTENT_CLIENTCUSTOM | FTENT_COLLIDEALL;
-		//ent->entity.angles.x = gEngfuncs.pfnRandomFloat(-512.0, 511.0);
-	//	ent->entity.angles.y = gEngfuncs.pfnRandomFloat(-256.0, 255.0);
-		//ent->entity.angles.z = gEngfuncs.pfnRandomFloat(-256.0, 255.0);
+		
 		ent->flags |= FTENT_ROTATE;
 		ent->entity.curstate.scale = 0.01;
 		ent->entity.baseline.fuser1 = 0.1;	// CSO: baseline.fuser2
@@ -80,21 +80,10 @@ void EV_WonderCannonFireEffect(vec3_t vecSrc, vec3_t vecForward, vec3_t vecVeloc
 		ent->entity.curstate.rendermode = kRenderTransAdd;
 		ent->entity.curstate.renderamt = 150;
 		ent->entity.curstate.renderfx = kRenderFxFadeSlow;
-		//ran = 10 * gEngfuncs.pfnRandomLong(0, 4) - 2;
-		//c = cos(ran * M_PI / 180);
-		//s = sin(ran * M_PI / 180);
+
 		ent->entity.origin = vecSrc;
-		//ent->entity.baseline.origin.x = (c * vecForward.x - s * vecForward.y) * gEngfuncs.pfnRandomLong(130, 400);
-		//ent->entity.baseline.origin.y = (s * vecForward.x + c * vecForward.y) * gEngfuncs.pfnRandomLong(130, 400);
-		//ent->entity.baseline.origin.z = vecForward.z * gEngfuncs.pfnRandomLong(30, 200);
-
-		if (vecVelocity)
-		{
-			ent->entity.baseline.origin.x += vecVelocity.x - 2.3;
-			ent->entity.baseline.origin.y += vecVelocity.y - 2.3;
-			ent->entity.baseline.origin.z += vecVelocity.z - 2.3;
-		}
-
+		ent->entity.angles = local->curstate.angles;
+	
 		ent->clientIndex = idx;
 	}
 }
@@ -211,12 +200,14 @@ void EV_FireWonderCannon( event_args_t *args )
 	Vector vSpread( args->fparam1, args->fparam2, 0.0f );
 	//gEngfuncs.pEventAPI->EV_FindModelIndex("models/v_wondercannon.mdl");
 
-	cl_entity_t *ent = gEngfuncs.GetViewModel();
+	cl_entity_s *ent = gEngfuncs.GetViewModel();
+
+	vec3_t origin2 = ent->attachment[0];
 
 	if (EV_IsLocal(idx))
-		EV_WonderCannonFireEffect(ent->attachment[0], origin, velocity, idx, 0);
+		EV_WonderCannonFireEffect(origin2, origin2, velocity, idx, 0);
 	else
-		EV_WonderCannonFireEffect(vecSrc + 40.0 * forward, forward, velocity, idx, 0);
+		EV_WonderCannonFireEffect(origin2, origin2, velocity, idx, 0);
 }
 
 void EV_Fire2WonderCannon(event_args_t* args)

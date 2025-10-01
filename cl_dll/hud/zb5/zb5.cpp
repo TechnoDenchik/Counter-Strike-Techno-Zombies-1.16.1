@@ -176,15 +176,15 @@ int CHudZB5::MsgFunc_ZB5ExternEvo(const char* pszName, int iSize, void* pbuf)
 	BufferReader buf(pszName, pbuf, iSize);
 	auto type = static_cast<ZB5MessageType>(buf.ReadByte());
 	int evlv = buf.ReadByte();
-	char* name = buf.ReadString();
+	int name = buf.ReadByte();
 
 	switch (type)
 	{
 	case ZB5_EXTERN:
 	{
 		pimpl->get<CHudWebm>().renaining(evlv);
-		pimpl->get<CHudWebm>().Settext();
 		pimpl->get<CHudWebm>().SetName(name);
+		pimpl->get<CHudWebm>().Settext();
 		break;
 	}
 	}

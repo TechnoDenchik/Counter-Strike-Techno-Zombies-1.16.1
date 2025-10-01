@@ -56,6 +56,7 @@ void CKnifeNataKnifed::Spawn(void)
 void CKnifeNataKnifed::Precache(void)
 {
 	PRECACHE_MODEL("models/v_nataknifed.mdl");
+	PRECACHE_MODEL("models/p_nataknifed.mdl");
 #ifdef ENABLE_SHIELD
 	PRECACHE_MODEL("models/shield/v_shield_knife.mdl");
 #endif

@@ -32,6 +32,13 @@ GNU General Public License for more details.
 #include "zb2_zclass_banchee.h"
 #include "zb2_zclass_stamper.h"
 
+#include "newclass/zb3_zclass_aksha.h"
+#include "newclass/zb3_zclass_boomer.h"
+#include "newclass/zb3_zclass_booster.h"
+#include "newclass/zb3_zclass_china.h"
+#include "newclass/zb3_zclass_fly.h"
+#include "newclass/zb3_zclass_resident.h"
+
 #include <random>
 
 template<class T>
@@ -51,6 +58,12 @@ const std::pair<const char *, std::shared_ptr<CBaseZombieClass_ZB2>(*)(CBasePlay
 	{ "ganimed", MakeZombieClass <CZombieClass_Ganimed> },
 	{ "banchee", MakeZombieClass <CZombieClass_Banchee> },
 	{ "stamper", MakeZombieClass <CZombieClass_Stamper> },
+	{ "aksha", MakeZombieClass <CZombieClass_Aksha> },
+	{ "boomer", MakeZombieClass <CZombieClass_Boomer> },
+	{ "booster", MakeZombieClass <CZombieClass_Booster> },
+	{ "china", MakeZombieClass <CZombieClass_China> },
+	{ "fly", MakeZombieClass <CZombieClass_Fly> },
+	{ "resident", MakeZombieClass <CZombieClass_Resident> },
 };
 constexpr auto NUM_ZCLASSES = std::extent<decltype(g_FindList)>::value;
 
@@ -101,7 +114,30 @@ std::shared_ptr<CBaseZombieClass_ZB2> ZombieClassFactory(CBasePlayer* player, Zo
 	{
 		return g_FindList[8].second(player, lv);		
 	}
-
+	else if (!stricmp(name, "aksha"))
+	{
+		return g_FindList[9].second(player, lv);
+	}
+	else if (!stricmp(name, "boomer"))
+	{
+		return g_FindList[10].second(player, lv);
+	}
+	else if (!stricmp(name, "booster"))
+	{
+		return g_FindList[11].second(player, lv);
+	}
+	else if (!stricmp(name, "china"))
+	{
+		return g_FindList[12].second(player, lv);
+	}
+	else if (!stricmp(name, "fly"))
+	{
+		return g_FindList[13].second(player, lv);
+	}
+	else if (!stricmp(name, "resident"))
+	{
+		return g_FindList[14].second(player, lv);
+	}
 	//return g_FindList[0].second(player, lv);
 }
 

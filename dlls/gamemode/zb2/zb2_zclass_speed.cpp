@@ -53,6 +53,7 @@ CZombieClass_Speed::CZombieClass_Speed(CBasePlayer *player, ZombieLevel iEvoluti
 	m_pPlayer->pev->rendermode = kRenderNormal;
 	m_pPlayer->ResetMaxSpeed();
 	m_pPlayer->GiveNamedItem("Knife_Zombi_female");
+	m_pPlayer->GiveNamedItem("weapon_zombibombz");
 	m_pPlayer->m_bIsZombieFemale = true;
 }
 

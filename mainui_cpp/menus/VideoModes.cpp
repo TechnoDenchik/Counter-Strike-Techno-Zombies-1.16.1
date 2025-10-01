@@ -201,6 +201,7 @@ void CMenuVidModes::_Init( void )
 	vidList.SetModel( &vidListModel );
 
 	windowed.SetNameAndStatus(L("CstzUI_VideoWind"), L("CstzUI_VideoWind") );
+	windowed.SetCharSize(QM_BOLDFONT);
 	windowed.SetCoord( 360, 620 );
 	SET_EVENT_MULTI( windowed.onChanged,
 	{
@@ -215,6 +216,7 @@ void CMenuVidModes::_Init( void )
 	});
 
 	vsync.SetNameAndStatus(L("CstzUI_VideoSync"), L("CstzUI_VideoSync") );
+	vsync.SetCharSize(QM_BOLDFONT);
 	vsync.SetCoord( 360, 670 );
 	vsync.LinkCvar( "gl_swapInterval" );
 
@@ -223,23 +225,26 @@ void CMenuVidModes::_Init( void )
 	testModeMsgBox.onNegative = VoidCb( &CMenuVidModes::RevertChanges );
 	testModeMsgBox.Link( this );
 
+	FPSmax.SetCharSize(QM_BOLDFONT);
 	FPSmax.szName = L("FPS limit");
 	FPSmax.szStatusText = "Cap your game frame rate";
 	FPSmax.Setup(60, 1000, 40);
 	FPSmax.LinkCvar("fps_max", CMenuEditable::CVAR_VALUE);
 
 	Apply.SetNameAndStatus(L("GameUI_Apply"), L(""));
+	Apply.SetCharSize(QM_BOLDFONT);
 	Apply.onActivated = VoidCb(&CMenuVidModes::SetConfig);
 	Apply.iFlags |= QMF_NOTIFY;
 	Apply.SetCoord(80, 250);
 
 	Exit.SetNameAndStatus(L("GameUI_GameMenu_Quit"), L(""));
+	Exit.SetCharSize(QM_BOLDFONT);
 	Exit.onActivated = VoidCb(&CMenuVidModes::Hide);
 	Exit.iFlags |= QMF_NOTIFY;
 	Exit.SetCoord(80, 300);
 
 	AddItem( background );
-	AddItem(FPSmax);
+	AddItem( FPSmax );
 	AddItem( banner );
 	AddItem( windowed );
 	AddItem( vsync );

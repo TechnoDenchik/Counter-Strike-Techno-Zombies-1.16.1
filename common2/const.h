@@ -121,10 +121,14 @@
 #define EF_NOSHADOW			(1<<28)	// ignore shadow for this entity
 #define EF_MERGE_VISIBILITY		(1<<29)	// this entity allowed to merge vis (e.g. env_sky or portal camera)
 #define EF_REQUEST_PHS		(1<<30)	// This entity requested phs bitvector instead of pvsbitvector in AddToFullPack calls
+#define EF_NOCULL		(1<<8)	// Entity won't cull front face
 // g-cont. one reserved bit here for me
 
 // entity flags
 #define EFLAG_SLERP			1	// do studio interpolation of this entity
+
+#define EFLAG_DEPTH_CHANGED		(1<<1)	// prevent model from poking into walls
+#define EFLAG_AFTER_VIEWMODEL		(1<<2)	// draw after view model
 
 //
 // temp entity events
@@ -717,6 +721,10 @@
 #define TE_BOUNCE_NULL		0
 #define TE_BOUNCE_SHELL		1
 #define TE_BOUNCE_SHOTSHELL		2
+
+#define TE_KILLENTITYATTACHMENTS	135	// will expire all TENTS attached to a ent.
+
+#define TE_TEMPSPRITE				132
 
 // Rendering constants
 enum

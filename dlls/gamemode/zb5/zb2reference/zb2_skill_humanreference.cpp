@@ -22,6 +22,11 @@ void HumanSkill_PrecacheR()
 	PRECACHE_SOUND("zb3/speedup.wav");
 	PRECACHE_SOUND("zb3/human_breath_male.wav");
 	PRECACHE_SOUND("zb3/speedup_heartbeat.wav");
+	PRECACHE_MODEL("sprites/zb5_death_effect.spr");
+	PRECACHE_MODEL("sprites/zb_meleeup.spr");
+	PRECACHE_MODEL("sprites/zb_skill_headshot.spr");
+	PRECACHE_MODEL("sprites/zb5_itemdrop_effect.spr");
+
 }
 
 class SprintSkillR : protected CZombieSkill_BaseR
@@ -142,6 +147,11 @@ public:
 		WRITE_SHORT(5);
 		WRITE_SHORT(-1);
 		MESSAGE_END();
+
+		MESSAGE_BEGIN(MSG_ALL, gmsgHeadIcon);
+		WRITE_BYTE(2);
+		WRITE_SHORT(ENTINDEX(m_pPlayer->edict()));
+		MESSAGE_END();
 	}
 
 	void OnSkillEnd() override
@@ -178,6 +188,11 @@ public:
 		WRITE_BYTE(ZOMBIE_SKILL_KNIFE2X);
 		WRITE_SHORT(10);
 		WRITE_SHORT(-1);
+		MESSAGE_END();
+
+		MESSAGE_BEGIN(MSG_ALL, gmsgHeadIcon);
+		WRITE_BYTE(1);
+		WRITE_SHORT(ENTINDEX(m_pPlayer->edict()));
 		MESSAGE_END();
 	}
 

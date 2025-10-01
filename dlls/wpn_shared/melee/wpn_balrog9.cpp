@@ -61,6 +61,7 @@ void CKnifeBalrog9::Spawn(void)
 void CKnifeBalrog9::Precache(void)
 {
 	PRECACHE_MODEL("models/v_balrog9.mdl");
+	PRECACHE_MODEL("models/p_balrog9.mdl");
 #ifdef ENABLE_SHIELD
 	PRECACHE_MODEL("models/shield/v_shield_knife.mdl");
 #endif

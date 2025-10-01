@@ -26,11 +26,13 @@ public:
 	void UpdateGameMode(CBasePlayer *pPlayer) override;
 	void InstallPlayerModStrategy(CBasePlayer *player) override;
 	void PlayerKilled(CBasePlayer *pVictim, entvars_t *pKiller, entvars_t *pInflictor) override;
-
+	void RemoveGuns() override;
+	void Think() override;
 	class PlayerModStrategy;
 
 private:
 	EventDispatcher<void(CBasePlayer *pVictim, CBasePlayer *pKiller, entvars_t *pInflictor)> m_eventPlayerKilled;
+	float m_flDeadTime;
 };
 
 #endif //PROJECT_MOD_GD_H

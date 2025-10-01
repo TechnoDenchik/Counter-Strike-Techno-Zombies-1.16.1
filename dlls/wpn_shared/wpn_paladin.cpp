@@ -43,6 +43,7 @@ void CAK47Paladin::Spawn(void)
 void CAK47Paladin::Precache(void)
 {
 	PRECACHE_MODEL("models/v_buffak.mdl");
+	PRECACHE_MODEL("models/p_buffak.mdl");
 	PRECACHE_MODEL("models/w_buffak.mdl");
 	PRECACHE_MODEL("sprites/ef_buffak_hit.spr");
 	PRECACHE_MODEL("sprites/muzzleflash40.spr");

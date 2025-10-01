@@ -69,7 +69,6 @@ void CKnife_Zombi::Precache(void)
 	PRECACHE_SOUND("zb3/zombi_attack_1.wav");
 	PRECACHE_SOUND("zb3/zombi_attack_2.wav");
 	PRECACHE_SOUND("zb3/zombi_attack_3.wav");
-
 	
 	PRECACHE_SOUND("zb3/zombi_swing_1.wav");
 	PRECACHE_SOUND("zb3/zombi_swing_2.wav");

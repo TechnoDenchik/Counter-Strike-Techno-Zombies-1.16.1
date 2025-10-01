@@ -38,6 +38,7 @@ void CPoisonGun::Spawn(void)
 void CPoisonGun::Precache(void)
 {
 	PRECACHE_MODEL("models/v_poisongun.mdl");
+	PRECACHE_MODEL("models/p_poisongun.mdl");
 	PRECACHE_MODEL("models/w_poisongun.mdl");
 
 	PRECACHE_SOUND("weapons/poisongun-1.wav");

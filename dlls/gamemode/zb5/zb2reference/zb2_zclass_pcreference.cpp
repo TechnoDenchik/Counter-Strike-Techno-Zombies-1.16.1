@@ -41,6 +41,7 @@ CZombieClass_PsychoR::CZombieClass_PsychoR(CBasePlayer *player, ZombieLevel iEvo
 	m_pPlayer->pev->rendermode = kRenderNormal;
 	m_pPlayer->ResetMaxSpeed();
 	m_pPlayer->GiveNamedItem("Knife_Zombi_psycho");
+	m_pPlayer->GiveNamedItem("weapon_zombibombz");
 	m_pPlayer->m_bIsZombiePc = true;
 }
 

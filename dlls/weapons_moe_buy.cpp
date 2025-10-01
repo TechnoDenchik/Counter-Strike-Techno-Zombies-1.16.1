@@ -54,6 +54,7 @@ static MoEWeaponBuyInfo_s g_MoEWeaponBuyInfo[] = {
 	{ "weapon_mp7a1c", "MP7A1", 2150, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 
 	{ "weapon_m14ebr", "M14 EBR", 3100, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_buffaug", "BuffAug", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_xm8c", "XM8", 3250, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_scarl", "Scar", 3250, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_tar21", "TAR-21", 3600, PRIMARY_WEAPON_SLOT, UNASSIGNED },
@@ -127,6 +128,7 @@ static MoEWeaponBuyInfo_s g_MoEWeaponBuyInfo2[] = {
 	{ "weapon_mp7a1c", "MP7A1", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 
 	{ "weapon_m14ebr", "M14 EBR", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_buffaug", "BuffAug", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_xm8c", "XM8", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_scarl", "Scar", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_tar21", "TAR-21", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
@@ -146,7 +148,7 @@ static MoEWeaponBuyInfo_s g_MoEWeaponBuyInfo2[] = {
 	{ "weapon_arbalest", "Arbalest", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_wondercannon", "Heaven Splitter", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_wondercannonex", "Asura Hell Splitter", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
-
+	{ "weapon_egon", "Egon Gun : HL", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_shelteraxe", "ShelterAxe", 0, KNIFE_SLOT, UNASSIGNED },
 	{ "weapon_voidpistol", "VoidPistol", 0, PISTOL_SLOT, UNASSIGNED },
 	{ "weapon_voidpistolex", "VoidPistolEx", 0, PISTOL_SLOT, UNASSIGNED },
@@ -180,6 +182,7 @@ static MoEWeaponBuyInfo_s g_MoEWeaponBuyInfo2[] = {
 	{ "weapon_ethereal", "Ethereal", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_spas12ex", "SPAS-12 EX", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_violingun", "Violin Gun", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_zombibombz", "Zombie Bomb", 0, GRENADE_SLOT, TERRORIST },
 };
 
 static MoEWeaponBuyInfo_s g_MoEWeaponBuyInfo3[] = {
@@ -199,6 +202,7 @@ static MoEWeaponBuyInfo_s g_MoEWeaponBuyInfo3[] = {
 	{ "weapon_mp7a1c", "MP7A1", 2150, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 
 	{ "weapon_m14ebr", "M14 EBR", 3100, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_buffaug", "BuffAug", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_xm8c", "XM8", 3250, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_scarl", "Scar", 3250, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_tar21", "TAR-21", 3600, PRIMARY_WEAPON_SLOT, UNASSIGNED },

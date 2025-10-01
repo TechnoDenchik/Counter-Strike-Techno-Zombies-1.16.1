@@ -57,6 +57,7 @@ void CKnifeDualKatana::Spawn(void)
 void CKnifeDualKatana::Precache(void)
 {
 	PRECACHE_MODEL("models/v_katanad.mdl");
+	PRECACHE_MODEL("models/p_katanad.mdl");
 #ifdef ENABLE_SHIELD
 	PRECACHE_MODEL("models/shield/v_shield_knife.mdl");
 #endif

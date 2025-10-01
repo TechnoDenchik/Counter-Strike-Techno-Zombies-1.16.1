@@ -423,6 +423,9 @@ public:
 	int m_iSwing15;
 	bool has_disconnected;
 	bool zbstriggeruse;
+
+	enum EGON_FIRESTATE { FIRE_OFF, FIRE_CHARGE };
+	int m_fireState;
 };
 
 #include "cbase/cbase_memory.h"
@@ -759,10 +762,12 @@ class CClientFog : public CBaseEntity
 public:
 	void Spawn(void);
 	void KeyValue(KeyValueData *pkvd);
+	void UpdateClientMsg(entvars_t* target = nullptr);
 
 public:
 	int m_iStartDist, m_iEndDist;
 	float m_fDensity;
+	float m_fBlendTime;
 };
 
 class CClientFog2 : public CBaseEntity

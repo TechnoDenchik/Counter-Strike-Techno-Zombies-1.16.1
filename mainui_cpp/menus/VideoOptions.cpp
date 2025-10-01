@@ -98,11 +98,7 @@ const char* CMenuVidOptions::Key(int key, int down)
 	return CMenuFramework::Key(key, down);
 }
 
-void CMenuVidOptions::Restore()
-{
-	//FPSmax.DiscardChanges();
-	//FPSmax.UpdateEditable();
-}
+void CMenuVidOptions::Restore(){}
 
 void CMenuVidOptions::SaveAndPopMenu( void )
 {
@@ -177,8 +173,8 @@ void CMenuVidOptions::_Init( void )
 	testImage.SetRect( 590, 225, 480, 450 );
 	testImage.SetPicture( ART_GAMMA );
 
-
 	Apply.SetNameAndStatus(L("GameUI_Apply"), L(""));
+	Apply.SetCharSize(QM_BOLDFONT);
 	Apply.onActivated = VoidCb(&CMenuVidOptions::SaveAndPopMenu);
 	Apply.iFlags |= QMF_NOTIFY;
 	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
@@ -186,12 +182,14 @@ void CMenuVidOptions::_Init( void )
 	Apply.SetCoord(72, 435);
 
 	screenSize.SetNameAndStatus( L("CstzUI_VideoScreen"), L("CstzUI_VideoScreen2"));
+	screenSize.SetCharSize(QM_BOLDFONT);
 	screenSize.SetCoord( 72, 280 );
 	screenSize.Setup( 30, 120, 10 );
 	screenSize.LinkCvar( "viewsize" );
 	screenSize.onChanged = CMenuEditable::WriteCvarCb;
 
 	gammaIntensity.SetNameAndStatus(L("CstzUI_VideoGamma"), L("CstzUI_VideoGamma"));
+	gammaIntensity.SetCharSize(QM_BOLDFONT);
 	gammaIntensity.SetCoord( 72, 340 );
 	gammaIntensity.Setup( 0.0, 1.0, 0.025 );
 	gammaIntensity.onChanged = VoidCb( &CMenuVidOptions::GammaUpdate );
@@ -201,7 +199,7 @@ void CMenuVidOptions::_Init( void )
 	glareReduction.SetCoord( 72, 400 );
 	if( UI_IsXashFWGS() )
 	{
-		glareReduction.SetNameAndStatus( L("CstzUI_VideoGlare2"), L("CstzUI_VideoGlare") );
+		glareReduction.SetNameAndStatus( L("CstzUI_VideoGlare2"), L("CstzUI_VideoGlare") );	
 		glareReduction.Setup( 100, 300, 15 );
 		glareReduction.LinkCvar( "r_flaresize" );
 	}
@@ -213,12 +211,14 @@ void CMenuVidOptions::_Init( void )
 	}
 
 	bump.SetNameAndStatus(L("CstzUI_VideoBump"), L("CstzUI_VideoBump"));
+	bump.SetCharSize(QM_BOLDFONT);
 	bump.SetCoord( 72, 515 );
 	bump.LinkCvar( "r_bump" );
 	if( !EngFuncs::GetCvarFloat( "r_vbo" ) )
 		bump.SetGrayed( true );
 
 	vbo.SetNameAndStatus(L("CstzUI_VideoVbo"), L("CstzUI_VideoVbo"));
+	vbo.SetCharSize(QM_BOLDFONT);
 	vbo.SetCoord( 72, 565 );
 	vbo.LinkCvar( "r_vbo" );
 	vbo.onChanged = CMenuCheckBox::BitMaskCb;
@@ -227,31 +227,28 @@ void CMenuVidOptions::_Init( void )
 	vbo.iMask = QMF_GRAYED;
 
 	fastSky.SetNameAndStatus(L("CstzUI_VideoSky"), L("CstzUI_VideoSky"));
+	fastSky.SetCharSize(QM_BOLDFONT);
 	fastSky.SetCoord( 72, 615 );
 	fastSky.LinkCvar( "r_fastsky" );
 
 	hiTextures.SetNameAndStatus(L("CstzUI_VideoHires"), L("CstzUI_VideoHires"));
+	hiTextures.SetCharSize(QM_BOLDFONT);
 	hiTextures.SetCoord( 72, 665 );
 	hiTextures.LinkCvar( "host_allow_materials" );
 
 	anisatropic.SetNameAndStatus(L("CstzUI_GLAnys"), L("CstzUI_GLAnys2"));
+	anisatropic.SetCharSize(QM_BOLDFONT);
 	anisatropic.Setup(1.0, 16.0, 2.0);
 	anisatropic.onChanged = CMenuEditable::WriteCvarCb;
 	anisatropic.SetCoord(320, 280);
 	anisatropic.LinkCvar("gl_anisotropy");
 
 	qualitygraphics.SetNameAndStatus(L("CstzUI_GLGraph"), L("CstzUI_GLGraph2"));
+	qualitygraphics.SetCharSize(QM_BOLDFONT);
 	qualitygraphics.Setup(0.1, 2.5, 0.1);
 	qualitygraphics.onChanged = CMenuEditable::WriteCvarCb;
 	qualitygraphics.SetCoord(320, 340);
 	qualitygraphics.LinkCvar("gl_texture_lodbias");
-
-	//FPSmax.SetNameAndStatus(L("CstzUI_GLGraph"), L("CstzUI_GLGraph2"));
-
-
-
-	//maxFPS.iFlags |= QMF_NOTIFY;
-
 	
 	AddItem( background );
 	AddItem( banner );
@@ -272,7 +269,6 @@ void CMenuVidOptions::_VidInit()
 {
 	outlineWidth = 2;
 	UI_ScaleCoords( NULL, NULL, &outlineWidth, NULL );
-	
 }
 
 /*

@@ -39,6 +39,7 @@ void CBalrog7::Spawn(void)
 void CBalrog7::Precache(void)
 {
 	PRECACHE_MODEL("models/v_balrog7.mdl");
+	PRECACHE_MODEL("models/p_balrog7.mdl");
 	PRECACHE_MODEL("models/w_balrog7.mdl");
 
 	PRECACHE_SOUND("weapons/balrog7_clipin1.wav");

@@ -163,17 +163,17 @@ int CHudTimer::Draw(float fTime)
 
 	int x6 = ScreenWidth / 2;
 	int y6 = ScreenHeight / 1.04;
+
 	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
 	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
 
-	if(gHUD.m_iModRunning != MOD_ZSH)
+	if(gHUD.m_iModRunning != MOD_ZSH && gHUD.m_iModRunning != MOD_BACKUI)
 	{ 
-	m_pTexture_Black->Bind();
-	DrawUtils::Draw2DQuadScaled(x4 - 70, y4, x4 + 70, y4 + 40);
+		m_pTexture_Black->Bind();
+		DrawUtils::Draw2DQuadScaled(x4 - 70, y4, x4 + 70, y4 + 40);
 
-	m_colon->Bind();
-	DrawUtils::Draw2DQuadScaled(x6 - 5, y6, x6 + 5, y6 + 23);
-
+		m_colon->Bind();
+		DrawUtils::Draw2DQuadScaled(x6 - 5, y6, x6 + 5, y6 + 23);
 	}
 	gEngfuncs.pTriAPI->Color4ub(r, g, b, 255);
 
@@ -303,13 +303,11 @@ int CHudTimer::Draw(float fTime)
 				break;
 								
 			}
-			
 		}
-		
-		
 		break;
 	case MOD_DM:
 	case MOD_TDM:
+	case MOD_GD:
 
 		if (minutes < 10)
 		{
@@ -367,8 +365,6 @@ int CHudTimer::Draw(float fTime)
 		}
 		break;
 	}
-	
-
 	return 1;
 }
 
@@ -420,7 +416,7 @@ int CHudProgressBar::VidInit()
 int CHudProgressBar::Draw(float flTime)
 {
 	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
-	// allow only 0.0..1.0
+
 	if ((m_fPercent < 0.0f) || (m_fPercent > 1.0f))
 	{
 		m_iFlags = 0;

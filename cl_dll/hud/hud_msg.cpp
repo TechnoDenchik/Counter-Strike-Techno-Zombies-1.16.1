@@ -27,6 +27,7 @@
 #include "StudioModelRenderer.h"
 #include "GameStudioModelRenderer.h"
 #include "com_weapons.h"
+#include "vgui2/CBaseViewport.h"
 
 #include <cstring>
 
@@ -225,7 +226,6 @@ int CHud :: MsgFunc_GameMode(const char *pszName, int iSize, void *pbuf )
 	default:
 		break;
 	}
-
 	return 1;
 }
 

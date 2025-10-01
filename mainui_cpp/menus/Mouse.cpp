@@ -84,9 +84,7 @@ void CMouseControls::PitchInvert()
 	}
 }
 
-void CMouseControls::ToggleLookCheckboxes( bool write )
-{
-}
+void CMouseControls::ToggleLookCheckboxes( bool write ){}
 
 void CMouseControls::SaveAndPopMenu()
 {
@@ -115,15 +113,18 @@ void CMouseControls::_Init( void )
 	banner.SetPicture( ART_BANNER );
 
 	invertMouse.SetNameAndStatus(L("GameUI_MouseLook"), L(""));
+	invertMouse.SetCharSize(QM_BOLDFONT);
 	invertMouse.iFlags |= QMF_NOTIFY;
 	invertMouse.onChanged = VoidCb( &CMouseControls::PitchInvert );
 	invertMouse.SetCoord( 72, 300 );
 
 	lookFilter.SetNameAndStatus(L("GameUI_MouseFilter"), L(""));
+	lookFilter.SetCharSize(QM_BOLDFONT);
 	lookFilter.iFlags |= QMF_NOTIFY;
 	lookFilter.SetCoord( 72, 350 );
 
 	console.SetNameAndStatus(L("GameUI_Console"), L(""));
+	console.SetCharSize(QM_BOLDFONT);
 	console.iFlags |= QMF_NOTIFY;
 	console.SetCoord(72, 400);
 
@@ -132,6 +133,7 @@ void CMouseControls::_Init( void )
 	sensitivity.SetCoord( 72, 500 );
 
 	Apply.SetNameAndStatus(L("GameUI_Apply"), L(""));
+	Apply.SetCharSize(QM_BOLDFONT);
 	Apply.onActivated = VoidCb(&CMouseControls::SaveAndPopMenu);
 	Apply.iFlags |= QMF_NOTIFY;
 	Apply.SetCoord(72, 550);

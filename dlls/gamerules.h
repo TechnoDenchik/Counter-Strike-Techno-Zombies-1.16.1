@@ -600,13 +600,13 @@ void SV_Career_Restart_f();
 void SV_Career_EndRound_f();
 void SV_CareerAddTask_f();
 void SV_CareerMatchLimit_f();
+void EndRoundMessage(const char* sentence, int event);
 #ifdef CLIENT_DLL
 extern void Broadcast(const char *sentence, int pitch = 100);
 #else
 void Broadcast(const char *sentence);
 #endif
 const char * GetTeam(int teamNo);
-void EndRoundMessage(const char *sentence, int event);
 void ReadMultiplayCvars(CCstrikeTechnoZombies *mp);
 void DestroyMapCycle(mapcycle_t *cycle);
 

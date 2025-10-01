@@ -74,7 +74,12 @@ unsigned int		uiInputFgColor      = 0xFF555555;	// 85,  85,  85,  255	// field, 
 unsigned int		uiColorWhite        = 0xFFFFFFFF;	// 255, 255, 255, 255	// useful for bitmaps
 unsigned int		uiColorDkGrey       = 0x80404040;	// 64,  64,  64,  255	// shadow and grayed items
 unsigned int		uiColorBlack        = 0x80000000;	//  0,   0,   0,  255	// some controls background
+unsigned int		uiColorRed			= 0xFFFF0000;	//  0,   0,   0,  255	// some controls background
 unsigned int		uiColorConsole      = 0xFFF0B418;	// just for reference
+
+unsigned int		uiColorGreen		= 0xFF00FF00;
+unsigned int		uiColorBlue			= 0xFF0000FF;
+unsigned int		uiColorCyan			= 0xFF00FFFF;
 
 // color presets (this is nasty hack to allow color presets to part of text)
 const unsigned int g_iColorTable[8] =
@@ -581,44 +586,27 @@ bool UI_StartBackGroundMap( void )
 {
 	static bool	first = TRUE;
 
-	if( !first ) return FALSE;
+	if (!first) return FALSE;
 
 	first = FALSE;
 
-	
 	// some map is already running
-	if( !uiStatic.bgmapcount || CL_IsActive() || gpGlobals->demoplayback )
+	if (!uiStatic.bgmapcount || CL_IsActive() || gpGlobals->demoplayback)
 		return FALSE;
 
-	int bgmapid = EngFuncs::RandomLong( 0, uiStatic.bgmapcount - 1 );
-	
+	int bgmapid = EngFuncs::RandomLong(0, uiStatic.bgmapcount - 1);
+
 	char cmd[128];
-	sprintf( cmd, "maps/%s.bsp", uiStatic.bgmaps[bgmapid] );
-	if( !EngFuncs::FileExists( cmd, TRUE )) return FALSE;
+	sprintf(cmd, "maps/%s.bsp", uiStatic.bgmaps[bgmapid]);
+	if (!EngFuncs::FileExists(cmd)) return FALSE;
 
-	sprintf( cmd, "map_background %s\n", uiStatic.bgmaps[bgmapid] );
-	EngFuncs::ClientCmd( FALSE, cmd );
+	sprintf(cmd, "map_background %s\n", uiStatic.bgmaps[bgmapid]);
+	EngFuncs::ClientCmd(FALSE, cmd);
 
-
-	if (uiStatic.enterSound > 0.0f && uiStatic.enterSound <= gpGlobals->time)
-	{
-		EngFuncs::PlayLocalSound(uiStartGame);
-		uiStatic.enterSound = -1;
-	}
-
-
-
-	EngFuncs::CvarSetValue("deathmatch", 1.0f);	// start deathmatch as default
-	EngFuncs::CvarSetValue("sv_nat", EngFuncs::GetCvarFloat("public"));
-	
-		EngFuncs::WriteServerConfig(EngFuncs::GetCvarString("lservercfgfile"));
-
-		char cmd1[128], cmd2[256];
-		sprintf(cmd1, "exec %s\n", EngFuncs::GetCvarString("lservercfgfile"));
-
-		// hack: wait three frames allowing server to completely shutdown, reapply maxplayers and start new map
-		EngFuncs::ClientCmd(FALSE, cmd1);
-
+	EngFuncs::CvarSetString("mp_gamemode", "background");
+	EngFuncs::CvarSetValue("public", 0);
+	EngFuncs::CvarSetValue("maxplayers", 1);
+	EngFuncs::CvarSetValue("mp_roundtime", 99);
 
 	return TRUE;
 }
@@ -820,6 +808,10 @@ void UI_UpdateMenu( float flTime )
 				{
 					EngFuncs::PlayBackgroundTrack("Music/mordfustang_01/mainmenu", "Music/mordfustang_01/mainmenu");
 				}
+				else if (musicset == 13)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/trfn_1/mainmenu", "Music/trfn_1/mainmenu");
+				}
 			}
 			first = FALSE;
 		}
@@ -937,7 +929,6 @@ void windowStack_t::MouseEvent( int x, int y )
 	}
 
 }
-
 
 bool g_bCursorDown;
 float cursorDY;

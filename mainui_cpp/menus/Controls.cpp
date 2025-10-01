@@ -382,20 +382,21 @@ void CMenuControls::_Init( void )
 
 	keysList.SetRect( 360, 230, -20, 465 );
 	keysList.SetModel( &keysListModel );
+	keysList.SetCharSize(QM_BOLDFONT);
 	keysList.SetupColumn( 0, L("GameUI_Action"), 0.50f );
 	keysList.SetupColumn( 1, L("GameUI_KeyButton"), 0.25f );
 	keysList.SetupColumn( 2, L("GameUI_Alternate"), 0.25f );
 
 	msgBox1.SetMessage(L("Press a key or button"));
+	msgBox1.SetCharSize(QM_BOLDFONT);
 
 	msgBox2.SetMessage(L("GameUI_KeyboardSettingsText"));
+	msgBox2.SetCharSize(QM_BOLDFONT);
 	msgBox2.onPositive = VoidCb( &CMenuControls::ResetKeysList );
 	msgBox2.Link( this );
 
-	AddItem( background );
-	AddItem( banner );
-
 	Apply.SetNameAndStatus(L("GameUI_Apply"), L(""));
+	Apply.SetCharSize(QM_BOLDFONT);
 	Apply.onActivated = VoidCb(&CMenuControls::SaveAndPopMenu) ;
 	Apply.iFlags |= QMF_NOTIFY;
 	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
@@ -403,6 +404,7 @@ void CMenuControls::_Init( void )
 	Apply.SetCoord(80, 300);
 
 	Default.SetNameAndStatus(L("GameUI_UseDefaults"), L(""));
+	Default.SetCharSize(QM_BOLDFONT);
 	Default.onActivated = msgBox2.MakeOpenEvent();
 	Default.iFlags |= QMF_NOTIFY;
 	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
@@ -410,12 +412,15 @@ void CMenuControls::_Init( void )
 	Default.SetCoord(80, 350);
 
 	Exit.SetNameAndStatus(L("GameUI_Cancel"), L(""));
+	Exit.SetCharSize(QM_BOLDFONT);
 	Exit.onActivated = VoidCb(&CMenuControls::Cancel);
 	Exit.iFlags |= QMF_NOTIFY;
 	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
 		Exit.SetGrayed(true);
 	Exit.SetCoord(80, 400);
 
+	AddItem( background );
+	AddItem( banner );
 	AddItem( keysList );
 	AddItem( Default );
 	AddItem( Apply );

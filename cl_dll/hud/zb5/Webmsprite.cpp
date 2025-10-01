@@ -113,232 +113,80 @@ int CHudWebm::Draw(float time)
 	if (!m_pCurTexture)
 		return 1;
 
-	int x = ScreenWidth / 1.995;
-	int y = ScreenHeight / 1.4;
-	int y2 = ScreenHeight / 1.4;
+	if (time > m_flDisplayTime + 8.00f)
+	{
+		m_pCurTexture = false;
+		return 1;
+	}
+
+	int x = ScreenWidth / 12.995;
+	int y = ScreenHeight / 3.5;
+
+	int x2 = ScreenWidth / 15.295;
+	int y2 = ScreenHeight / 3.0;
+
+	int x3 = ScreenWidth / 8.395;
+	int y3 = ScreenHeight / 3.220;
 
 	const float flScale = 0.0f;
 
-
-
-	//w - горизонталь(ширина)
-	//h - вертикаль(высота)
-	//start -		//end - 1940.18
-	int w = 1940.18;  int w2 = 335;
-	int h = 668;	  int h2 = 38;
-
-	int w3 = 335;  int w4 = 335;
-	int h3 = 38;     int h4 = 38;
-
-	int w5 = 335;  int w6 = 335;
-	int h5 = 38;	 int h6 = 38;
-
-	int w7 = 335;  int w8 = 335;
-	int h7 = 38;	 int h8 = 38;
-
-	int w9 = 335;  int w10 = 335;
-	int h9 = 38;	 int h10 = 38;
-
-	int w11 = 335;  int w12 = 335;
-	int h11 = 38;	 int h12 = 38;
-
-	int w13 = 335;  int w14 = 335;
-	int h13 = 38;	 int h14 = 38;
-
-	int w15 = 335;  int w16 = 335;
-	int h15 = 38;	 int h16 = 38;
-
-	int w17 = 335;  int w18 = 335;
-	int h17 = 38;	 int h18 = 38;
-
-	int w19 = 335;  int w20 = 335;
-	int h19 = 38;	 int h20 = 38;
-
-	int w21 = 335;  int w22 = 335;
-	int h21 = 38;	 int h22 = 38;
-
-	int w23 = 335;  int w24 = 335;
-	int h23 = 38;	 int h24 = 38;
-
-	int w25 = 335;  int w26 = 335;
-	int h25 = 38;	 int h26 = 38; 
-
-	int w27 = 335;  int w28 = 335;
-	int h27 = 38;	 int h28 = 38;
-
-	int w29 = 335;  int w30 = 335;
-	int h29 = 38;	 int h30 = 38;
-
 	char szbuffer[64];
 	int id = gEngfuncs.GetLocalPlayer()->index;
+
 	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
 	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
 
-	if (gHUD.m_flTime - timesecond1 < 1.0f)
+	if (barstring < 150)
 	{
-		tDeltasecond1 += gHUD.m_flTime - timesecond1;
+		barstring++;
+		barstring++;
+		barstring++;
+		barstring++;
+		barstring++;
+		barstring++;
 	}
-	if (tNextsecond1 > 0.024f || (gHUD.m_flTime - timesecond1 > 0.024f) || tDeltasecond1 > 0.024f)
+
+	if (skin == 1)
 	{
-		tNextsecond1 = 0.0f;
-		tDeltasecond1 = 0.0f;
+		stringtext->Bind();
+		DrawUtils::Draw2DQuadScaled(x - 300 / 2, y - 38, x + barstring, y + 74);
 
-		if (timetx1 < 30)
+		if (barstring == 150)
 		{
-			timetx1++;
-		}
-	}
-	timesecond1 = gHUD.m_flTime;
-
-	if (timetx1 > 1)
-	{
-		if (skin == 1)
-		{
-			
-			stringtext->Bind();
-			DrawUtils::Draw2DQuadScaled(x - 600 / 2, y - 38, x + 600 / 2, y - 8);
-
 			stringtext2->Bind();
-			DrawUtils::Draw2DQuadScaled(x - 600 / 2, y - 38, x + 600 / 2, y - 8);
-			
-		}
-		else if (skin == 2)
-		{
-			
-			stringtext->Bind();
-			DrawUtils::Draw2DQuadScaled(x - 300 / 2, y - 38, x + 300 / 2, y + 58);
+			DrawUtils::Draw2DQuadScaled(x2 - 200 / 2, y2 - 38, x2 + 200 / 2, y2 + 8);
 
+			sprintf(szbuffer, g_PlayerInfoList[m_iPlayerNum].name);
+			DrawUtils::DrawHudString(x3 - 190, y3 - 32, ScreenWidth, szbuffer, 255, 255, 255, flScale);
+		}
+	}
+	else if (skin == 2)
+	{
+		stringtext->Bind();
+		DrawUtils::Draw2DQuadScaled(x - 300 / 2, y - 38, x + barstring, y + 74);
+
+		if (barstring == 150)
+		{
 			stringtext3->Bind();
-			DrawUtils::Draw2DQuadScaled(x - 100 / 2, y - 38, x + 100 / 2, y + 28);
-			
+			DrawUtils::Draw2DQuadScaled(x2 - 200 / 2, y2 - 38, x2 + 200 / 2, y2 + 8);
 
-			//sprintf(szbuffer, g_PlayerInfoList[id].name);
-			//DrawUtils::DrawHudString(x - 190, y2 - 32, ScreenWidth, szbuffer, 255, 255, 255, flScale);
+			sprintf(szbuffer, g_PlayerInfoList[m_iPlayerNum].name);
+			DrawUtils::DrawHudString(x3 - 190, y3 - 32, ScreenWidth, szbuffer, 255, 255, 255, flScale);
 		}
-		else if (skin == 3)
+	}
+	else if (skin == 3)
+	{
+		stringtext->Bind();
+		DrawUtils::Draw2DQuadScaled(x - 300 / 2, y - 38, x + barstring, y + 74);
+
+		if (barstring == 150)
 		{
-			stringtext->Bind();
-			DrawUtils::Draw2DQuadScaled(x - 600 / 2, y - 38, x + 600 / 2, y - 8);
-
 			stringtext4->Bind();
-			DrawUtils::Draw2DQuadScaled(x - 600 / 2, y - 38, x + 600 / 2, y - 8);
+			DrawUtils::Draw2DQuadScaled(x2 - 200 / 2, y2 - 38, x2 + 200 / 2, y2 + 8);
+
+			sprintf(szbuffer, g_PlayerInfoList[m_iPlayerNum].name);
+			DrawUtils::DrawHudString(x3 - 190, y3 - 32, ScreenWidth, szbuffer, 255, 255, 255, flScale);
 		}
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
-	}
-	else if (timetx1 == 2)
-	{
-
 	}
 
 	return 1;
@@ -346,51 +194,7 @@ int CHudWebm::Draw(float time)
 
 void CHudWebm::Settext()
 {
-	m_pCurTexture = stringtext;
-	m_flDisplayTime = gHUD.m_flTime;
-}
-
-int CHudWebm2::VidInit(void)
-{
-	if (!stringtext)
-		stringtext = R_LoadTextureShared("resource/hud/zb3/hud_string_bg", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	return 1;
-}
-
-int CHudWebm2::Draw(float time)
-{
-	if (!m_pCurTexture)
-		return 1;
-
-	if (time > m_flDisplayTime + 3.00f)
-	{
-		m_pCurTexture = nullptr;
-		return 1;
-	}
-
-	int x = ScreenWidth / 1.995;
-	int y = ScreenHeight / 1.4;
-	int y2 = ScreenHeight / 1.4;
-
-	const float flScale = 0.0f;
-	const int r = 153, g = 97, b = 7;
-
-	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
-	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255 * std::min(5.0f - (time - m_flDisplayTime), 1.0f));
-
-	stringtext->Bind();
-	DrawUtils::Draw2DQuadScaled(x - 600 / 2, y - 38, x + 600 / 2, y - 8);
-
-	char szbuffer[64];
-	sprintf(szbuffer, "Навык снова можно будет использовать в следующем раунде");
-
-	DrawUtils::DrawHudString(x - 210, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
-
-	return 1;
-}
-
-void CHudWebm2::Settext()
-{
-	m_pCurTexture = stringtext;
+	barstring = -150;
+	m_pCurTexture = true;
 	m_flDisplayTime = gHUD.m_flTime;
 }

@@ -42,6 +42,7 @@ CZombieClass_DeathKnight::CZombieClass_DeathKnight(CBasePlayer *player, ZombieLe
 	m_pPlayer->pev->rendermode = kRenderNormal;
 	m_pPlayer->ResetMaxSpeed();
 	m_pPlayer->GiveNamedItem("knife_zombi_deathknight");
+	m_pPlayer->GiveNamedItem("weapon_zombibombz");
 	
 	m_pPlayer->m_bIsZombieDeathKnight = true;
 }

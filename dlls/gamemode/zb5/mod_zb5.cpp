@@ -51,22 +51,24 @@ bool CPlayerModStrategy_ZB5::ClientCommand2(const char* pcmd)
 		{
 			if (m_pPlayer->m_bEvolutionProtected == true)
 			{
-				m_pPlayer->m_bEvolutionProtected = false;
-				evolvl = 0;
-
-				MESSAGE_BEGIN(MSG_ONE, gmsgZB5Evolution, nullptr, m_pPlayer->edict());
+				MESSAGE_BEGIN(MSG_ALL, gmsgZB5Evolution, nullptr);
 				WRITE_BYTE(ZB5_MESSAGE_EVOLUTION);
-				WRITE_BYTE(evolvl);
+				WRITE_BYTE(m_pPlayer->evolvl);
 				MESSAGE_END();
+
+				m_pPlayer->m_bEvolutionProtected = false;
+				m_pPlayer->evolvl = 0;
 
 			}
 		}
-		else
+		else if(!m_pPlayer->m_bIsZombie)
 		{
 			if (m_pPlayer->m_bEvolutionProtectedH == true)
 			{
+				m_pPlayer->m_iHumanMoraleLevel --;
+				m_pPlayer->m_iHumanMoraleLevel --;
+				m_pPlayer->m_iHumanMoraleLevel --;
 				m_Morale.UpdateHUD(m_pPlayer);
-				m_Morale.GetMoraleLevel() - 3;
 
 				CLIENT_COMMAND(m_pPlayer->edict(), "spk zb5/human_ability.wav\n");
 
@@ -262,6 +264,7 @@ void CPlayerModStrategy_ZB5::BecomeHuman()
 {
 	auto sp = std::make_shared<CHuman_ZB5>(m_pPlayer);
 
+	m_pPlayer->m_iHumanMoraleLevel = m_pPlayer->evolvl; 
 	m_pPlayer->m_bIsZombieTank = false;
 	m_pPlayer->m_bIsZombieFemale = false;
 	m_pPlayer->m_bIsZombieHeavy = false;
@@ -294,22 +297,23 @@ void CPlayerModStrategy_ZB5::Event_OnInfection(CBasePlayer * victim, CBasePlayer
 
 	if (victim->m_bIsVIP)
 	{
-		if (evolvl < 10)
+		victim->m_iHumanMoraleLevel = victim->evolvl;
+		if (m_pPlayer->evolvl < 10)
 		{
-			if (evolvl < 8)
+			if (m_pPlayer->evolvl < 8)
 			{
-				evolvl += 4;
+				m_pPlayer->evolvl += 4;
 				m_pPlayer->m_bEvolutionProtected = false;
 			}
-			else if (evolvl < 10)
+			else if (m_pPlayer->evolvl < 10)
 			{
-				evolvl += 2;
+				m_pPlayer->evolvl += 2;
 				m_pPlayer->m_bEvolutionProtected = false;
 			}
 
 			MESSAGE_BEGIN(MSG_ONE, gmsgZB5Evolution, nullptr, m_pPlayer->edict());
 			WRITE_BYTE(ZB5_MESSAGE_EVOLUTION);
-			WRITE_BYTE(evolvl);
+			WRITE_BYTE(m_pPlayer->evolvl);
 			MESSAGE_END();
 
 			CLIENT_COMMAND(m_pPlayer->edict(), "spk zb5/level_up.wav\n");
@@ -323,21 +327,21 @@ void CPlayerModStrategy_ZB5::Event_OnInfection(CBasePlayer * victim, CBasePlayer
 	}
 	else
 	{
-		if (evolvl < 9)
+		if (m_pPlayer->evolvl < 9)
 		{
-			evolvl += 3;
+			m_pPlayer->evolvl += 3;
 			m_pPlayer->m_bEvolutionProtected = false;
 
 			MESSAGE_BEGIN(MSG_ONE, gmsgZB5Evolution, nullptr, m_pPlayer->edict());
 			WRITE_BYTE(ZB5_MESSAGE_EVOLUTION); // type, reserved.
-			WRITE_BYTE(evolvl);
+			WRITE_BYTE(m_pPlayer->evolvl);
 			MESSAGE_END();
 			
 			CLIENT_COMMAND(m_pPlayer->edict(), "spk zb5/level_up.wav\n");
 		}
-		else if (evolvl < 10)
+		else if (m_pPlayer->evolvl > 8)
 		{
-			evolvl += 1;
+			m_pPlayer->evolvl += 1;
 			m_pPlayer->m_bEvolutionProtected = true;
 		}
 		m_flRagePercent += m_pPlayer->m_iZombieLevel == ZOMBIE_LEVEL_HOST ? 40 : 20;
@@ -349,7 +353,7 @@ void CPlayerModStrategy_ZB5::UpdatePlayerEvolutionHUD()
 {
 	MESSAGE_BEGIN(MSG_ONE, gmsgZB5Evolution, nullptr, m_pPlayer->edict());
 	WRITE_BYTE(ZB5_MESSAGE_EVOLUTION); // type, reserved.
-	WRITE_BYTE(evolvl);
+	WRITE_BYTE(m_pPlayer->evolvl);
 	MESSAGE_END();
 }
 
@@ -409,6 +413,25 @@ void CPlayerModStrategy_ZB5::OnThink()
 			m_pPlayer->pev->max_health = m_pPlayer->pev->health = health;
 			m_pPlayer->pev->armorvalue = armor;
 
+			if (m_pPlayer->evolvl < 9)
+			{
+				m_pPlayer->m_bEvolutionProtected = false;
+
+				MESSAGE_BEGIN(MSG_ONE, gmsgZB5Evolution, nullptr, m_pPlayer->edict());
+				WRITE_BYTE(ZB5_MESSAGE_EVOLUTION); // type, reserved.
+				WRITE_BYTE(m_pPlayer->evolvl);
+				MESSAGE_END();
+			}
+			else if (m_pPlayer->evolvl > 8)
+			{
+				MESSAGE_BEGIN(MSG_ONE, gmsgZB5Evolution, nullptr, m_pPlayer->edict());
+				WRITE_BYTE(ZB5_MESSAGE_EVOLUTION); // type, reserved.
+				WRITE_BYTE(m_pPlayer->evolvl);
+				MESSAGE_END();
+
+				m_pPlayer->m_bEvolutionProtected = true;
+			}
+
 			for (CBasePlayer *dest : moe::range::PlayersList())
 			{
 				SetScoreAttrib(dest, m_pPlayer);
@@ -441,18 +464,27 @@ void CPlayerModStrategy_ZB5::Event_OnRoundStart()
 	m_Morale.UpdateHUD(m_pPlayer);
 	m_pPlayer->m_bEvolutionProtected = false;
 	m_pModZB5->kills = 0;
+
+	if (m_pPlayer->m_iHumanMoraleLevel > 2)
+	{
+		m_pPlayer->m_bEvolutionProtectedH = true;
+	}
+	else
+	{
+		m_pPlayer->m_bEvolutionProtectedH = false;
+	}
 }
 
 void CZB3HumanMoraleR::UpdateHUD(CBasePlayer *player) const
 {
 	MESSAGE_BEGIN(MSG_ONE, gmsgZB5Evolution, nullptr, player->pev);
 	WRITE_BYTE(ZB5_MESSAGE_EVOLUTION);
-	WRITE_BYTE(GetMoraleLevel());
+	WRITE_BYTE(player->m_iHumanMoraleLevel);
 	MESSAGE_END();
 
-	if (GetMoraleLevel() < 3)
+	if (player->m_iHumanMoraleLevel < 3)
 	{
-		player->m_bEvolutionProtected = false;
+		player->m_bEvolutionProtectedH = false;
 	}
 }
 
@@ -487,20 +519,22 @@ void CPlayerModStrategy_ZB5::addevofrombox(CBaseEntity* pOther)
 {
 	CBasePlayer* m_pPlayer = static_cast<CBasePlayer*>(pOther);
 
-	if (evolvl < 9)
+	if (m_pPlayer->evolvl < 9)
 	{
-		evolvl += 3;
+		m_pPlayer->evolvl++;
+		m_pPlayer->evolvl++;
+		m_pPlayer->evolvl++;
 		m_pPlayer->m_bEvolutionProtected = false;
 	}
-	else if (evolvl < 10)
+	else if (m_pPlayer->evolvl < 10)
 	{
-		evolvl += 1;
+		m_pPlayer->evolvl ++;
 		m_pPlayer->m_bEvolutionProtected = true;
 	}
 
 	MESSAGE_BEGIN(MSG_ONE, gmsgZB5Evolution, nullptr, m_pPlayer->edict());
 	WRITE_BYTE(ZB5_MESSAGE_EVOLUTION);
-	WRITE_BYTE(evolvl);
+	WRITE_BYTE(m_pPlayer->evolvl);
 	MESSAGE_END();
 }
 
@@ -523,12 +557,16 @@ void CMod_ZombieEvolution::PlayerKilled(CBasePlayer * pVictim, entvars_t * pKill
 		if (!pAttacker->IsPlayer())
 			return;
 
-		if (m_Morale.LevelUp())
-			m_Morale.UpdateHUD(pAttacker);
+		if (pAttacker->m_iHumanMoraleLevel < 10)
+		{
+			pAttacker->m_iHumanMoraleLevel += 2;
+		}
+
+		m_Morale.UpdateHUD(pAttacker);
 
 		MakeEvoboxThink(pVictim->pev->origin, pVictim->pev->angles);
 
-		if(m_Morale.GetMoraleLevel() > 2)
+		if(pAttacker->m_iHumanMoraleLevel > 2)
 		{
 			pAttacker->m_bEvolutionProtectedH = true;
 		}
@@ -542,6 +580,11 @@ void CMod_ZombieEvolution::PlayerKilled(CBasePlayer * pVictim, entvars_t * pKill
 		MESSAGE_BEGIN(MSG_ONE, gmsgZB5Msg, nullptr, pAttacker->edict());
 		WRITE_BYTE(ZB5_MESSAGE_KILL);
 		WRITE_BYTE(kills);
+		MESSAGE_END();
+
+		MESSAGE_BEGIN(MSG_ALL, gmsgHeadIcon);
+		WRITE_BYTE(18);
+		WRITE_SHORT(ENTINDEX(pKiller2->edict()));
 		MESSAGE_END();
 
 		CLIENT_COMMAND(pAttacker->edict(), "spk zb5/level_up.wav\n");

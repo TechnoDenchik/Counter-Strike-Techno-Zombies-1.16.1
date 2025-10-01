@@ -387,7 +387,7 @@ rserr_t R_ChangeDisplaySettings(int width, int height, qboolean fullscreen)
 	fullscreen = false;
 #endif
 
-	MsgDev(D_INFO, "R_ChangeDisplaySettings: Настройка видеорежима на %dx%d %s\n", width, height, fullscreen ? "fullscreen" : "windowed");
+	//MsgDev(D_INFO, "R_ChangeDisplaySettings: Настройка видеорежима на %dx%d %s\n", width, height, fullscreen ? "fullscreen" : "windowed");
 	R_SaveVideoMode(width, height);
 
 	// check our desktop attributes

@@ -1030,6 +1030,8 @@ TEMPENTITY *GAME_EXPORT CL_TempModel( const vec3_t pos, const vec3_t dir, const 
 	pTemp->entity.curstate.rendermode = kRenderNormal;
 	pTemp->entity.baseline.renderamt = 255;
 	pTemp->die = cl.time + life;
+	pTemp->entity.curstate.framerate = 2;
+	pTemp->entity.curstate.sequence = 1;
 
 	return pTemp;
 }
@@ -1151,7 +1153,7 @@ void GAME_EXPORT CL_Sprite_Explode( TEMPENTITY *pTemp, float scale, int flags )
 	}
 
 	pTemp->entity.curstate.renderfx = kRenderFxNone;
-	pTemp->entity.baseline.origin[2] = 8;
+	//pTemp->entity.baseline.origin[2] = 8;
 	pTemp->entity.origin[2] += 10;
 	pTemp->entity.curstate.scale = scale;
 }
@@ -2294,6 +2296,23 @@ void CL_ParseTempEntity( sizebuf_t *msg )
 		scale = (float)(BF_ReadByte( &buf ) * 0.1f);
 		CL_UserTracerParticle( pos, pos2, life, color, scale, 0, NULL );
 		break;
+
+	case TE_KILLENTITYATTACHMENTS:
+		entityIndex = BF_ReadShort(&buf);	// playernum
+		CL_KillAttachedTentsFromEntity(entityIndex);
+		break;
+	case TE_TEMPSPRITE:
+		pos[0] = BF_ReadCoord(&buf);
+		pos[1] = BF_ReadCoord(&buf);
+		pos[2] = BF_ReadCoord(&buf);
+
+		modelIndex = BF_ReadShort(&buf);
+		scale = BF_ReadByte(&buf) / 10.0;
+		brightness = BF_ReadByte(&buf) / 255.0;
+		frameRate = BF_ReadByte(&buf);
+
+		//R_TempSprite2(pos, vec3_origin, scale, modelIndex, kRenderTransAdd, kRenderFxNone, brightness, 0.0, FTENT_SPRANIMATE, frameRate);
+		break;
 	default:
 		MsgDev( D_ERROR, "ParseTempEntity: illegible TE message %i\n", type );
 		break;
@@ -2572,6 +2591,70 @@ void CL_UpdateFlashlight( cl_entity_t *pEnt )
 	dl->color.b = bound( 0, 255 * falloff, 255 );
 	dl->radius = 72;
 }
+
+/*
+==============
+CL_KillAttachedTentsFromEntity
+
+Detach entity from entity
+==============
+*/
+void GAME_EXPORT CL_KillAttachedTentsFromEntity(int entity)
+{
+	int	i;
+
+	for (i = 0; i < GI->max_tents; i++)
+	{
+		TEMPENTITY* pTemp = &cl_tempents[i];
+
+		if (pTemp->flags & FTENT_PLYRATTACHMENT)
+		{
+			// this TEMPENTITY is entity attached.
+			// if it is attached to this entity, set it to die instantly.
+			if (pTemp->clientIndex == entity)
+			{
+				pTemp->die = cl.time; // good enough, it will die on next tent update. 
+			}
+		}
+	}
+}
+
+/*TEMPENTITY* R_TempSprite2(vec3_t pos, vec3_t dir, float scale, int modelIndex, int rendermode, int renderfx, float brightness, float life, int flags, float framerate)
+{
+	TEMPENTITY* pTemp = CL_TempEntAlloc(pos, Mod_Handle(modelIndex));
+
+	if (!pTemp)
+	{
+		MsgDev(D_INFO, "No temp ent.\n");
+		return NULL;
+	}
+
+	int frameCount;
+	Mod_GetFrames(modelIndex, &frameCount);
+
+	if (pTemp)
+	{
+		pTemp->entity.curstate.rendermode = rendermode;
+		pTemp->entity.curstate.renderfx = renderfx;
+		pTemp->entity.curstate.rendercolor.r = pTemp->entity.curstate.rendercolor.g = pTemp->entity.curstate.rendercolor.b = 255;
+		pTemp->frameMax = frameCount;
+		pTemp->entity.curstate.framerate = framerate;
+		pTemp->entity.curstate.renderamt = pTemp->entity.baseline.renderamt = brightness * 255.0;
+		pTemp->flags |= flags;
+		pTemp->entity.curstate.eflags |= EF_NOCULL;
+		pTemp->entity.curstate.scale = scale;
+		//pTemp->entity.baseline.origin = dir;
+		//pTemp->entity.origin = pos;
+		pTemp->entity.curstate.frame = 0;
+
+		if (life)
+			pTemp->die = cl.time + life * 0.1;
+		else
+			pTemp->die = cl.time + 1.0 + frameCount / 10.0f;
+	}
+
+	return pTemp;
+}*/
 
 /*
 ================

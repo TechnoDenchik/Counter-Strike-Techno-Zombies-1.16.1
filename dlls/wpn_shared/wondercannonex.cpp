@@ -48,12 +48,14 @@ void CWonderCannonEx::Spawn(void)
 	WonderAmmo = 3;
 	m_fireuse2 = false;
 	WonderExp = 0;
+	phs13 = 3;
 	FallInit();
 }
 
 void CWonderCannonEx::Precache(void)
 {
 	PRECACHE_MODEL("models/v_wondercannonex.mdl");
+	PRECACHE_MODEL("models/p_wondercannonex.mdl");
 	PRECACHE_MODEL("models/w_wondercannonex.mdl");
 
 	PRECACHE_MODEL("models/s_wondercannonex.mdl");
@@ -118,6 +120,11 @@ BOOL CWonderCannonEx::Deploy(void)
 	m_flAccuracy = 0.2;
 	m_iShotsFired = 0;
 	iShellOn = 1;
+	phs2 = -1;
+	phs3 = -1;
+	phs4 = -1;
+	phs12 = -1;
+	phs13 = 3;
 	return DefaultDeploy("models/v_wondercannonex.mdl", "models/p_wondercannonex.mdl", ANIM_DRAW, "ak47", UseDecrement() != FALSE);
 }
 
@@ -125,8 +132,11 @@ void CWonderCannonEx::Holster(int skiplocal)
 {
 	ClearEffect();
 	DestroyEffect();
-
-	// clear target list ?
+	phs2 = -1;
+	phs3 = -1;
+	phs4 = -1;
+	phs12 = -1;
+	phs13 = 3;
 	return CBasePlayerWeapon::Holster(skiplocal);
 }
 
@@ -149,6 +159,12 @@ void CWonderCannonEx::PrimaryAttack_FindTargets()
 			continue;
 
 		if (pEntity->pev->solid == SOLID_NOT)
+			continue;
+
+		if (pEntity->IsDormant())
+			continue;
+
+		if (!pEntity->IsPlayer() && pEntity->Classify() != CLASS_PLAYER_ALLY)
 			continue;
 
 		if (PrimaryAttack_CheckTargetAvailable(pEntity, m_pPlayer->pev->v_angle))
@@ -175,6 +191,12 @@ bool CWonderCannonEx::PrimaryAttack_CheckTargetAvailable(CBaseEntity* a2, Vector
 		return false;
 
 	if (a2->pev->solid == SOLID_NOT)
+		return false;
+#ifndef CLIENT_DLL
+	if (a2->IsDormant())
+		return false;
+#endif
+	if (!a2->IsPlayer() && a2->Classify() != CLASS_PLAYER_ALLY)
 		return false;
 
 #ifndef CLIENT_DLL
@@ -241,6 +263,12 @@ void CWonderCannonEx::Getsprite()
 			continue;
 
 		if (pEntity->pev->solid == SOLID_NOT)
+			continue;
+
+		if (pEntity->IsDormant())
+			continue;
+
+		if (!pEntity->IsPlayer() && pEntity->Classify() != CLASS_PLAYER_ALLY)
 			continue;
 
 		if (PrimaryAttack_CheckTargetAvailable(pEntity, m_pPlayer->pev->v_angle))
@@ -445,12 +473,100 @@ void CWonderCannonEx::PrimaryAttack(void)
 		WonderCannonFire(0.04 + (0.07) * m_flAccuracy, 0.5, FALSE);
 	else
 		WonderCannonFire((0.0275), 0.5, FALSE);
+
+	if (phs2 > 0.0f)
+		phs2 = -1.0f; // 0xBF800000
+	bool v6 = gpGlobals->time > phs12 + 1.0f;
+
 	PrimaryAttack_FindTargets();
 }
 
 void CWonderCannonEx::SecondaryAttack(void)
 {
-	
+#ifndef CLIENT_DLL
+
+	CBaseEntity* sp = UTIL_FindEntityByClassname(nullptr, "wondercannonex_mine");
+
+	if (sp)
+	{
+		CWonderCannonExMine* bomb = dynamic_cast<CWonderCannonExMine*>(sp);
+		if (bomb)
+		{
+			if (WonderBomb == 3)
+			{
+				phs14 = 3;
+				m_firebomb = true;
+				SendWeaponAnim(ANIM_BMODE_ON, UseDecrement() != FALSE);
+				m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 3.0;
+				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 3.0f;
+			}
+		}
+	}
+#endif
+
+	if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] > 0)
+	{
+
+		if (phs2 > 0.0f)
+			phs2 = -1.0f; // 0xBF800000
+
+		if (gpGlobals->time - tWorldTime6 < 99.0f)
+		{
+			tDelta6 += gpGlobals->time - tWorldTime6;
+		}
+
+		if (tNextAttack6 > 0.5f || (gpGlobals->time - tWorldTime6 > 0.5f) || tDelta6 > 0.5f)
+		{
+			tNextAttack6 = 0.0f;
+			tDelta6 = 0.0f;
+
+			phs13--;
+
+			static int iLastCountDown = -1;
+			int iCountDown = phs13;
+
+			if (iCountDown > 0)
+			{
+				if (iCountDown != iLastCountDown)
+				{
+					iLastCountDown = iCountDown;
+
+					if (iCountDown == 2)
+					{
+						EMIT_SOUND_DYN(ENT(pev), CHAN_ITEM, "weapons/wondercannon_cmod_charging.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+					}
+
+					if (iCountDown < 2)
+					{
+						if (phs3 == -1.0f)
+						{
+
+							SendWeaponAnim(ANIM_CMODE_START, UseDecrement() != FALSE);
+							phs3 = gpGlobals->time + 0.43;
+							m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 99999.0;
+							m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 99999.0;
+						}
+
+						bool v6 = gpGlobals->time > +1.0f;
+						int flags;
+#ifdef CLIENT_WEAPONS
+						flags = FEV_NOTHOST;
+#else
+						flags = 0;
+#endif
+
+						if (v6)
+							phs12 = v6 = gpGlobals->time;
+						m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.12f;
+
+						m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.9f;
+
+					}
+				}
+			}
+		}
+		tWorldTime6 = gpGlobals->time;
+	}
 }
 
 void CWonderCannonEx::WonderCannonFire(float flSpread, float flCycleTime, BOOL fUseAutoAim)
@@ -602,6 +718,7 @@ void CWonderCannonEx::Reload(void)
 		m_flAccuracy = 0.2;
 		m_iShotsFired = 0;
 		m_bDelayFire = false;
+		phs13 = 3;
 	}
 }
 
@@ -665,6 +782,105 @@ void CWonderCannonEx::ItemPostFrame()
 			}
 		}
 		tWorldTime3 = gpGlobals->time;
+	}
+
+
+	if (m_firebomb == true)
+	{
+		if (gpGlobals->time - tWorldTime11 < 1.0f)
+		{
+			tDelta11 += gpGlobals->time - tWorldTime11;
+		}
+
+		if (tNextAttack11 > 1.0f || (gpGlobals->time - tWorldTime11 > 1.0f) || tDelta11 > 1.0f)	//可以多射一次
+		{
+			tNextAttack11 = 0.0f;
+			tDelta11 = 0.0f;
+
+			phs14--;
+
+			static int iLastCountDown = -1;
+			int iCountDown = phs14;
+
+			if (iCountDown > 0)
+			{
+				if (iCountDown != iLastCountDown)
+				{
+					iLastCountDown = iCountDown;
+
+					if (iCountDown == 1)
+					{
+						m_firebombinit = true;
+					}
+				}
+			}
+		}
+
+		tWorldTime11 = gpGlobals->time;
+	}
+
+	if (m_firebombinit == true)
+	{
+#ifndef CLIENT_DLL
+
+		CBaseEntity* sp = UTIL_FindEntityByClassname(nullptr, "wondercannonex_mine");
+
+		if (sp)
+		{
+			CWonderCannonExMine* bomb = dynamic_cast<CWonderCannonExMine*>(sp);
+			if (bomb)
+			{
+				bomb->BombExp(false, m_pPlayer);
+			}
+		}
+
+		WonderBomb = 0;
+#endif
+	}
+
+
+	if (phs4 > 0.0f && gpGlobals->time > phs4)
+	{
+		phs4 = -1;
+
+		return;
+	}
+
+	if (phs2 <= 0.0f)
+	{
+		if (phs3 > 0.0f)
+		{
+			if (this->m_pPlayer->pev->button & IN_ATTACK2 && this->m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] > 0)
+			{
+				if (gpGlobals->time > phs3)
+				{
+					this->SendWeaponAnim(ANIM_CMODE_IDLE, UseDecrement() != FALSE); // 4
+					phs3 = gpGlobals->time + 10.0f;
+
+					return CBasePlayerWeapon::ItemPostFrame();
+				}
+			}
+			else
+			{
+				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/wondercannon_comd_shoot.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+				this->SendWeaponAnim(ANIM_CMODE_SHOOT, UseDecrement() != FALSE); // 5
+				m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType]--;
+				phs3 = -1;
+				m_flNextPrimaryAttack = m_flNextSecondaryAttack = m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.7f;
+				phs12 = -1;
+				phs13 = 3;
+
+				Vector vecSrc = m_pPlayer->GetGunPosition() + gpGlobals->v_forward * 10;
+#ifndef CLIENT_DLL
+				CWonderCannonExMine* pEnt = static_cast<CWonderCannonExMine*>(CBaseEntity::Create("wondercannonex_mine", vecSrc, pev->angles, ENT(m_pPlayer->pev)));
+				if (pEnt)
+				{
+					pEnt->Init(m_pPlayer, gpGlobals->v_forward * 700);
+				}
+#endif
+				WonderBomb++;
+			}
+		}
 	}
 
 	return CBasePlayerWeapon::ItemPostFrame();

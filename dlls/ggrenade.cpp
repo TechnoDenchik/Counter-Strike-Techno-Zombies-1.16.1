@@ -793,17 +793,31 @@ void CGrenade::SlideTouch(CBaseEntity *pOther)
 
 void CGrenade::BounceSound()
 {
-	if (pev->dmg > 50.0f)
+	if (!Q_strcmp(STRING(pev->classname), "weapon_zombibombz"))
 	{
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/he_bounce-1.wav", 0.25, ATTN_NORM);
-		return;
-	}
+		if (pev->dmg > 50.0f)
+		{
+			EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/he_bounce-1.wav", 0.25, ATTN_NORM);
+			return;
+		}
 
-	switch (RANDOM_LONG(0, 2))
+		switch (RANDOM_LONG(0, 2))
+		{
+		case 0:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/grenade_hit1.wav", 0.25, ATTN_NORM); break;
+		case 1:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/grenade_hit2.wav", 0.25, ATTN_NORM); break;
+		case 2:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/grenade_hit3.wav", 0.25, ATTN_NORM); break;
+		}
+
+	}
+	else
 	{
-	case 0:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/grenade_hit1.wav", 0.25, ATTN_NORM); break;
-	case 1:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/grenade_hit2.wav", 0.25, ATTN_NORM); break;
-	case 2:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/grenade_hit3.wav", 0.25, ATTN_NORM); break;
+		if (pev->dmg > 50.0f)
+		{
+			EMIT_SOUND(ENT(pev), CHAN_VOICE, "zombi/zombi_bomb_bounce_2-1.wav", 0.25, ATTN_NORM);
+			return;
+		}
+
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, "zombi/zombi_bomb_bounce_1.wav", 0.25, ATTN_NORM);
 	}
 }
 
@@ -1261,7 +1275,7 @@ void CGrenade::ZombieBombKnockback(Vector vecSrc, entvars_t* pevInflictor, entva
 	TraceResult tr;
 	float flAdjustedDamage, falloff;
 	Vector vecSpot;
-	float flRadius = 350.0;
+	float flRadius = 450.0;
 	float flDamage, flMul;
 	int bInWater = (UTIL_PointContents(vecSrc) == CONTENTS_WATER);
 	Vector vecVelocityAdd;

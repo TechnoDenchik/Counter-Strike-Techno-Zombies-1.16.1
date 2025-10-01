@@ -37,6 +37,7 @@ void CBalrog11::Spawn(void)
 void CBalrog11::Precache(void)
 {
 	PRECACHE_MODEL("models/v_balrog11.mdl");
+	PRECACHE_MODEL("models/p_balrog11.mdl");
 	PRECACHE_MODEL("models/w_balrog11.mdl");
 
 	m_iShellId = m_iShell = PRECACHE_MODEL("models/shotgunshell.mdl");

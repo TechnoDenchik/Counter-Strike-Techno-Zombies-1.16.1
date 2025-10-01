@@ -347,6 +347,14 @@
 							DrawUtils::DrawHudStringReverse(x + (iStartW / 2) - 5 - 220, y + offsetY, 0, szBuf, r, g, b, flScale);
 						}
 					}
+					else if (g_PlayerExtraInfo[id].mutant)
+					{
+						if (gHUD.m_Health.m_iHealth > 0)
+						{
+							sprintf(szBuf, "Мутант");
+							DrawUtils::DrawHudStringReverse(x + (iStartW / 2) - 5 - 220, y + offsetY, 0, szBuf, r, g, b, flScale);
+						}
+					}
 				}
 				if (gHUD.m_iModRunning == MOD_ZSH)
 				{
@@ -375,6 +383,12 @@
 						sprintf(szBuf, "Герой");
 					else
 						sprintf(szBuf, "VIP");
+					DrawUtils::DrawHudStringReverse(x + (iStartW / 2) - 5 - 220, y + offsetY, 0, szBuf, r, g, b, flScale);
+				}
+				else if (g_PlayerExtraInfo[id].hero)
+				{
+					if (gHUD.m_iModRunning == MOD_ZB3 || gHUD.m_iModRunning == MOD_ZB5)
+						sprintf(szBuf, "Герой");
 					DrawUtils::DrawHudStringReverse(x + (iStartW / 2) - 5 - 220, y + offsetY, 0, szBuf, r, g, b, flScale);
 				}
 

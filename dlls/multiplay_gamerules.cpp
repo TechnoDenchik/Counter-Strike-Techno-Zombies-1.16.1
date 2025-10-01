@@ -17,6 +17,7 @@
 
 #include "debug.h"
 
+
 #include "pm_shared.h"
 #include "utllinkedlist.h"
 #include "gamemode/interface/interface_const.h"
@@ -64,7 +65,7 @@
 #include "gamerules.h"
 #include "career_tasks.h"
 #include "maprules.h"
-
+#include "gamemode/mods.h"
 #include <ctype.h>
 
 /*
@@ -76,6 +77,14 @@ cvar_t *sv_clienttrace = NULL;
 
 CCStrikeGameMgrHelper g_GameMgrHelper;
 CCstrikeTechnoZombies*g_pMPGameRules = NULL;
+struct _PlayerData
+{
+	int index;
+	int iData;
+};
+
+typedef std::vector<_PlayerData> _PlayerDataList;
+
 //Think
 bool IsBotSpeaking()
 {
@@ -330,12 +339,114 @@ const char * GetTeam(int teamNo)
 	return "";
 }
 
+
+
+bool PlayerSortFunc(const _PlayerData& v1, const _PlayerData& v2)
+{
+	if (v1.iData > v2.iData)
+		return true;
+	else if (v1.iData == v2.iData)
+		return v1.index < v2.index;
+	else
+		return false;
+}
+
+void EndRoundMVPMessage(int iType)
+{
+	MESSAGE_BEGIN(MSG_ALL, gmsgMVPInfo);
+	WRITE_BYTE(iType);
+
+	int iCount;
+	_PlayerDataList killList;
+	_PlayerDataList assistList;
+	_PlayerDataList infectList;
+
+	for (int i = 1; i < gpGlobals->maxClients; i++)
+	{
+		CBasePlayer* pPlayer = (CBasePlayer*)UTIL_PlayerByIndex(i);
+
+		if (!pPlayer || FNullEnt(pPlayer->pev) || !pPlayer->IsPlayer() || pPlayer->IsDormant())
+			continue;
+
+		_PlayerData tempData;
+
+		tempData.index = i;
+		tempData.iData = pPlayer->m_iRoundKill;
+		killList.push_back(tempData);
+
+		tempData.iData = pPlayer->m_iRoundAssist;
+		assistList.push_back(tempData);
+
+		tempData.iData = pPlayer->m_iRoundInfect;
+		infectList.push_back(tempData);
+	}
+
+	std::sort(killList.begin(), killList.end(), PlayerSortFunc);
+	std::sort(assistList.begin(), assistList.end(), PlayerSortFunc);
+	std::sort(infectList.begin(), infectList.end(), PlayerSortFunc);
+
+	iCount = 0;
+
+	WRITE_BYTE(min(killList.size(), 5));
+
+	for (_PlayerDataList::const_iterator iter = killList.begin(); iter != killList.end(); ++iter)
+	{
+		if (++iCount > 5)
+			break;
+
+		WRITE_BYTE(iter->index);
+		WRITE_BYTE(iter->iData);
+	}
+
+	iCount = 0;
+
+	WRITE_BYTE(min(assistList.size(), 5));
+
+	for (_PlayerDataList::const_iterator iter = assistList.begin(); iter != assistList.end(); ++iter)
+	{
+		if (++iCount > 5)
+			break;
+
+		WRITE_BYTE(iter->index);
+		WRITE_BYTE(iter->iData);
+	}
+
+	if (g_pModRunning->DamageTrack() == DT_ZB)
+	{
+		iCount = 0;
+
+		WRITE_BYTE(min(infectList.size(), 5));
+
+		for (_PlayerDataList::const_iterator iter = infectList.begin(); iter != infectList.end(); ++iter)
+		{
+			if (++iCount > 5)
+				break;
+
+			WRITE_BYTE(iter->index);
+			WRITE_BYTE(iter->iData);
+		}
+	}
+	WRITE_SHORT((int)(gpGlobals->time - g_pGameRules->m_fRoundCount));
+	MESSAGE_END();
+}
+
+
+
+
+
+
 void EndRoundMessage(const char *sentence, int event)
 {
 	CCstrikeTechnoZombies *mp = g_pGameRules;
 	const char *team = NULL;
 	const char *message = &(sentence[1]);
 	int teamTriggered = 1;
+
+	const char* mod_str = CVAR_GET_STRING("mp_gamemode");
+	if (!strcmp(mod_str, "zb3") || !strcmp(mod_str, "zb5"))
+	{
+		EndRoundMVPMessage(event == ROUND_CTS_WIN ? 2 : 1);
+	}
 
 	UTIL_ClientPrintAll(HUD_PRINTCENTER, sentence);
 
@@ -2087,6 +2198,10 @@ void CCstrikeTechnoZombies::RestartRound()
 			player->RoundRespawn();
 		}
 
+		player->m_iRoundKill = 0;
+		player->m_iRoundAssist = 0;
+		player->m_iRoundInfect = 0;
+
 		// Gooseman : The following code fixes the HUD icon bug
 		// by removing the C4 and DEFUSER icons from the HUD regardless
 		// for EVERY player (regardless of what team they're on)
@@ -3755,6 +3870,9 @@ void CCstrikeTechnoZombies::PlayerThink(CBasePlayer *pPlayer)
 
 	if (pPlayer->m_iMenu != Menu_ChooseTeam && pPlayer->m_iJoiningState == SHOWTEAMSELECT)
 	{
+		if (g_pModRunning->DamageTrack() == DT_BACK)
+			return;
+
 		int team = MENU_SLOT_TEAM_UNDEFINED;
 
 		if (!Q_stricmp(humans_join_team.string, "T"))
@@ -3929,6 +4047,7 @@ void CCstrikeTechnoZombies::PlayerKilled(CBasePlayer *pVictim, entvars_t *pKille
 			killer->AddAccount(PAYBACK_FOR_KILLED_TEAMMATES);
 			killer->m_iTeamKills++;
 			killer->m_bJustKilledTeammate = true;
+			killer->m_iRoundKill--;
 
 			ClientPrint(killer->pev, HUD_PRINTCENTER, "#Killed_Teammate");
 			ClientPrint(killer->pev, HUD_PRINTCONSOLE, "#Game_teammate_kills", UTIL_dtos1(killer->m_iTeamKills));
@@ -3979,6 +4098,7 @@ void CCstrikeTechnoZombies::PlayerKilled(CBasePlayer *pVictim, entvars_t *pKille
 				killer->m_flDisplayHistory |= DHF_ENEMY_KILLED;
 				killer->HintMessage("#Hint_win_round_by_killing_enemy");
 			}
+			killer->m_iRoundKill++;
 		}
 
 		FireTargets("game_playerkill", peKiller, peKiller, USE_TOGGLE, 0);

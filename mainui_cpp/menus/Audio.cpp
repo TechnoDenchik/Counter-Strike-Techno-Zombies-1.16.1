@@ -91,33 +91,37 @@ void CMenuAudio::_Init( void )
 	banner.SetPicture(ART_BANNER);
 
 	soundVolume.SetNameAndStatus(L("GameUI_SoundEffectVolume"), "Set master volume level" );
+	soundVolume.SetCharSize(QM_BOLDFONT);
 	soundVolume.Setup( 0.00, 2.0, 0.0001 );
 	soundVolume.onChanged = CMenuEditable::WriteCvarCb;
 	soundVolume.SetCoord( 320, 280 );
 
 	musicVolume.SetNameAndStatus(L("GameUI_MP3Volume"), "Set background music volume level" );
+	musicVolume.SetCharSize(QM_BOLDFONT);
 	musicVolume.Setup( 0.00, 2.0, 0.001 );
 	musicVolume.onChanged = CMenuEditable::WriteCvarCb;
 	musicVolume.SetCoord( 320, 340 );
 
 	getmusicmenu.SetNameAndStatus(L("CstzUI_musicpackb"), L(""));
+	getmusicmenu.SetCharSize(QM_BOLDFONT);
 	getmusicmenu.onActivated = UI_Music_Menu;
 	getmusicmenu.iFlags |= QMF_NOTIFY;
 	getmusicmenu.SetCoord(320, 380);
 
 	muteFocusLost.SetNameAndStatus(L("CstzUI_MuteGame"), L("CstzUI_MuteGame2") );
+	muteFocusLost.SetCharSize(QM_BOLDFONT);
 	muteFocusLost.onChanged = CMenuEditable::WriteCvarCb;
 	muteFocusLost.SetCoord( 320, 470 );
 
-	AddItem( background );
-	AddItem( getmusicmenu );
-	AddItem( banner );
-
 	exit.SetNameAndStatus(L("GameUI_Close"), L(""));
+	exit.SetCharSize(QM_BOLDFONT);
 	exit.onActivated = VoidCb(( & CMenuAudio::SaveAndPopMenu) );
 	exit.iFlags |= QMF_NOTIFY;
 	exit.SetCoord(80, 250);
 
+	AddItem( background );
+	AddItem( getmusicmenu );
+	AddItem( banner );
 	AddItem( soundVolume );
 	AddItem( musicVolume );
 	AddItem( exit );

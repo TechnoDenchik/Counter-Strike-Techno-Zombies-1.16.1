@@ -56,6 +56,7 @@ void CSnakeSword::Spawn(void)
 void CSnakeSword::Precache(void)
 {
 	PRECACHE_MODEL("models/v_snakesword.mdl");
+	PRECACHE_MODEL("models/p_snakesword.mdl");
 #ifdef ENABLE_SHIELD
 	PRECACHE_MODEL("models/shield/v_shield_knife.mdl");
 #endif

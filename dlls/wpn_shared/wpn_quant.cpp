@@ -64,7 +64,7 @@ void CQuantum::Spawn(void)
 void CQuantum::Precache(void)
 {
 	PRECACHE_MODEL("models/v_revivegun.mdl");
-
+	PRECACHE_MODEL("models/p_revivegun.mdl");
 	PRECACHE_MODEL("models/w_revivegun.mdl");
 
 	PRECACHE_SOUND("weapons/revivegun_clipin1.wav");

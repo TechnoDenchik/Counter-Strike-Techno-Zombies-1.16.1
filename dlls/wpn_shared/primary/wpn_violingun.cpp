@@ -40,6 +40,7 @@ void CViolinGun::Spawn(void)
 void CViolinGun::Precache(void)
 {
 	PRECACHE_MODEL("models/v_violingun.mdl");
+	PRECACHE_MODEL("models/p_violingun.mdl");
 	PRECACHE_MODEL("models/w_violingun.mdl");
 
 	PRECACHE_SOUND("weapons/violingun_clipin.wav");

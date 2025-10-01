@@ -560,15 +560,11 @@ void CBasePlayerItem::DefaultTouch(CBaseEntity *pOther)
 	CBasePlayer *pPlayer = static_cast<CBasePlayer *>(pOther);
 
 
-	if (pPlayer->m_bIsZombie && m_iId != WEAPON_KNIFE)
-	{
-		return;
-	}
-
 	if (pPlayer->m_bIsZombie && m_iId != WEAPON_KNIFE && Q_strcmp(STRING(pev->classname), "weapon_zombibombz"))
 	{
 		return;
 	}
+
 	// can I have this?
 	if (!g_pGameRules->CanHavePlayerItem(pPlayer, this))
 	{

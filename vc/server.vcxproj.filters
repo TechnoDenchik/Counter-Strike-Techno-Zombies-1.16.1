@@ -241,6 +241,21 @@
     <Filter Include="dlls\wpn_shared\Secondary\old">
       <UniqueIdentifier>{dac6a570-1943-4181-b0e6-a9ac550e1775}</UniqueIdentifier>
     </Filter>
+    <Filter Include="dlls\gamemode\zb2\Class\Zombie\new">
+      <UniqueIdentifier>{8472bccf-ea9d-437c-8a48-60fae2658b23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\gamemode\zb5\Reference\zb2\new">
+      <UniqueIdentifier>{6322d612-1a10-4b72-826f-effbb769b3f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Melee\Zombie\new">
+      <UniqueIdentifier>{09d22148-92d0-4005-9b68-34fdae009840}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Primary\hl">
+      <UniqueIdentifier>{d3dc5c64-067c-4463-b274-0bfc0d01d475}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\gamemode\BackUI">
+      <UniqueIdentifier>{405e0029-94ad-4f02-b3f1-1c44008afffc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\dlls\h_export.cpp">
@@ -1289,6 +1304,78 @@
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\primary\wpn_ethereal.cpp">
       <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_buffaug.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_aksha.cpp">
+      <Filter>dlls\gamemode\zb2\Class\Zombie\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_boomer.cpp">
+      <Filter>dlls\gamemode\zb2\Class\Zombie\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_booster.cpp">
+      <Filter>dlls\gamemode\zb2\Class\Zombie\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_china.cpp">
+      <Filter>dlls\gamemode\zb2\Class\Zombie\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_fly.cpp">
+      <Filter>dlls\gamemode\zb2\Class\Zombie\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_resident.cpp">
+      <Filter>dlls\gamemode\zb2\Class\Zombie\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_akshaR.cpp">
+      <Filter>dlls\gamemode\zb5\Reference\zb2\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_boomerR.cpp">
+      <Filter>dlls\gamemode\zb5\Reference\zb2\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_boosterR.cpp">
+      <Filter>dlls\gamemode\zb5\Reference\zb2\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_chinaR.cpp">
+      <Filter>dlls\gamemode\zb5\Reference\zb2\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_flyR.cpp">
+      <Filter>dlls\gamemode\zb5\Reference\zb2\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_residentR.cpp">
+      <Filter>dlls\gamemode\zb5\Reference\zb2\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_aksha.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_boomer.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_booster.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_china.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_fly.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_resident.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wondercannonchain.cpp">
+      <Filter>dlls\wpn_shared\Primary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wondercannonmine.cpp">
+      <Filter>dlls\wpn_shared\Primary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\hl\weapon_egon.cpp">
+      <Filter>dlls\wpn_shared\Primary\hl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\backui\mod_backui.cpp">
+      <Filter>dlls\gamemode\BackUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\bot\states\cs_bot_supplybox_rush.cpp">
+      <Filter>dlls\bot\states</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2383,6 +2470,51 @@
     </ClInclude>
     <ClInclude Include="..\dlls\wpn_shared\primary\wpn_ethereal.h">
       <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_buffaug.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_aksha.h">
+      <Filter>dlls\gamemode\zb2\Class\Zombie\new</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_boomer.h">
+      <Filter>dlls\gamemode\zb2\Class\Zombie\new</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_booster.h">
+      <Filter>dlls\gamemode\zb2\Class\Zombie\new</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_china.h">
+      <Filter>dlls\gamemode\zb2\Class\Zombie\new</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_fly.h">
+      <Filter>dlls\gamemode\zb2\Class\Zombie\new</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_resident.h">
+      <Filter>dlls\gamemode\zb2\Class\Zombie\new</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_akshaR.h">
+      <Filter>dlls\gamemode\zb5\Reference\zb2\new</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_boomerR.h">
+      <Filter>dlls\gamemode\zb5\Reference\zb2\new</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_boosterR.h">
+      <Filter>dlls\gamemode\zb5\Reference\zb2\new</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_chinaR.h">
+      <Filter>dlls\gamemode\zb5\Reference\zb2\new</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_flyR.h">
+      <Filter>dlls\gamemode\zb5\Reference\zb2\new</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_residentR.h">
+      <Filter>dlls\gamemode\zb5\Reference\zb2\new</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\hl\weapon_egon.h">
+      <Filter>dlls\wpn_shared\Primary\hl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\backui\mod_backui.h">
+      <Filter>dlls\gamemode\BackUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

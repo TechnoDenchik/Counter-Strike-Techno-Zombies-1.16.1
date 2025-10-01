@@ -35,6 +35,7 @@
 
 #include <assert.h>
 #include <string.h>
+#include <set>
 
 #include "wrect.h"
 #include "cl_dll.h"
@@ -139,6 +140,7 @@ struct HUDLIST {
 #include "zb3/zb3.h"
 #include "zb5/zb5.h"
 #include "zsh/zsh.h"
+#include "pr/pr.h"
 #include "gd/gd.h"
 #include "original/mod_base.h"
 #include "legacy/hud_scoreboard_legacy.h"
@@ -152,7 +154,8 @@ struct HUDLIST {
 #include "Original/Classic.h"
 #include "interface/interface.h"
 #include "weapons/weapon_int.h"
-
+#include "hud_mvp.h"
+#include "webm_util.h"
 
 //
 //-----------------------------------------------------
@@ -176,6 +179,12 @@ public:
 	void CalcCrosshairColor();
 
 	int DrawWList(float flTime);
+
+	int DrawNEWHudWList(float flTime);
+	int DrawWpnList(float flTime);
+	int DrawNEWHudCurrentWpn(float flTime);
+	int DrawNEWHudAmmo(float flTime);
+
 	CHudMsgFunc(CurWeapon);
 	CHudMsgFunc(WeaponList);
 	CHudMsgFunc(AmmoX);
@@ -255,6 +264,10 @@ public:
 	cvar_t *m_pHud_DrawHistory_Time;
 
 	cvar_t *cl_crosshair_type;
+
+	int m_iWeaponSelect;
+	UniqueTexture m_iWeaponList;
+	UniqueTexture m_iWeapon_OffBG;
 };
 
 //
@@ -582,6 +595,8 @@ public:
 
 	CHudMsgFunc(ResetRound);
 
+	char SzTextAlarm[64];
+	char SzTextRibbon[64];
 public:
 
 	//NewAlarm From Sme
@@ -675,46 +690,31 @@ CHudDeathInfo& HudDeathInfo(void);
 class CHudDeathNotice : public CHudBase
 {
 public:
-	int Init( void );
+	int Init(void);
 	void Reset(void);
-	void InitHUDData( void );
-	int VidInit( void );
+	void InitHUDData(void);
+	int VidInit(void);
 	void Shutdown(void);
-	int Draw( float time );
-
-	int DrawNewAlarm(float time);
-	void headshots();
-	void crazy();
-	void excellent();
-	void knife();
-	void incredible();
-	void cantbelieve();
-
+	int Draw(float flTime);
 	CHudMsgFunc(DeathMsg);
 
 private:
-	
 	int m_HUD_d_skull;  // sprite index of skull icon
 	int m_HUD_d_headshot;
-	cvar_t *hud_deathnotice_time;
+	cvar_t* hud_deathnotice_time;
 
 	int m_killNums, m_multiKills;
 	int m_iconIndex;
 	bool m_showIcon, m_showKill;
 	float m_killEffectTime, m_killIconTime;
-protected:
 
-	SharedTexture ribbon_headshot;
-	SharedTexture ribbon_crazy;
-	SharedTexture ribbon_excellent;
-	SharedTexture ribbon_knife;
-	SharedTexture ribbon_incredible;
-	SharedTexture ribbon_cantbelieve;
-	SharedTexture m_pCurTexture;
-	float m_flDisplayTime;
 private:
-	int m_killBg[3];
-	int m_deathBg[3];
+	SharedTexture m_killBg[3];
+	SharedTexture m_deathBg[3];
+	SharedTexture m_csgo_defaultBg[3];
+	SharedTexture m_csgo_killBg[3];
+	SharedTexture m_NewHud_deathBg[3];
+	SharedTexture m_NewHud_killBg[3];
 	int m_KM_Number0;
 	int m_KM_Number1;
 	int m_KM_Number2;
@@ -1398,6 +1398,31 @@ private:
 	int current_style;
 };
 
+class CHudHeadIcon : public CHudBase
+{
+public:
+	int Init(void);
+	int VidInit(void);
+	int Draw(float flTime);
+	void Reset(void);
+	void Shutdown();
+	void R_AttachTentToPlayer(int client, int modelIndex, vec3_t offset, float life, int additive, int flags, float scale, int rendermode = 0, float framerate = 1.0);
+	void R_AttachTentToEntity(int entity, int modelIndex, vec3_t offset, float life, int additive, int flags, float scale, int rendermode = 0, float framerate = 1.0);
+	CHudMsgFunc(HeadIcon);
+
+private:
+	SharedTexture m_pTexture_Zombie_s;
+	SharedTexture m_iTex[5];
+	int frame;
+	int i;
+
+	duration_t tNextsecond1;
+	time_point_t timesecond1;
+	duration_t tDeltasecond1;
+
+	time_point_t timetx1;
+};
+
 class CHud
 {
 public:
@@ -1411,6 +1436,8 @@ public:
 	int Redraw( float flTime, int intermission );
 	int UpdateClientData( client_data_t *cdata, float time );
 	void AddHudElem(CHudBase *p);
+
+	int MsgFunc_MPToCL(const char* pszName, int iSize, void* pbuf);
 
 	inline float GetSensitivity() { return m_flMouseSensitivity; }
 	inline HSPRITE GetSprite( int index )
@@ -1562,7 +1589,12 @@ public:
 	CHudZB3 m_ZB3;
 	CHudZB5 m_ZB5;
 	CHudZSH m_ZSH;
+	CHudPR m_PR;
 	CHudMoeTouch m_MoeTouch;
+	CHudMVP m_MVP;
+	CHudHeadIcon m_HeadIcon;
+
+	WebmUtils util;
 	//CHudInterface m_HudInterface;
 	// user messages
 	CHudMsgFunc(Damage);
@@ -1574,6 +1606,10 @@ public:
 	CHudMsgFunc(SetFOV);
 	CHudMsgFunc(Concuss);
 	CHudMsgFunc(ShadowIdx);
+
+	std::set<int> m_setBanWeapon;
+	std::set<int> m_setBanKnife;
+	std::set<int> m_setBanGrenade;
 
 	// Screen information
 	SCREENINFO	m_scrinfo;
@@ -1591,6 +1627,8 @@ public:
 	int m_NEWHUD_dollar_number_0;
 	int m_iWeaponGet;
 	int m_NEWHUD_hPlus;
+
+
 
 	int m_iZlevel;
 	float m_flZombieSelectTime;
