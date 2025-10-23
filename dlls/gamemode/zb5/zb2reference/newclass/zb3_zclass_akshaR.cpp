@@ -43,7 +43,7 @@ CZombieClass_AkshaR::CZombieClass_AkshaR(CBasePlayer *player, ZombieLevel iEvolu
 	m_pPlayer->pev->renderfx = kRenderFxNone;
 	m_pPlayer->pev->rendermode = kRenderNormal;
 	m_pPlayer->GiveNamedItem("Knife_Zombi_aksha");
-	m_pPlayer->GiveNamedItem("weapon_zombibombz");
+	m_pPlayer->GiveNamedItem("weapon_zombibomb_aksha");
 	m_pPlayer->ResetMaxSpeed();
 	m_pPlayer->m_bIsZombieAksha = true;
 }

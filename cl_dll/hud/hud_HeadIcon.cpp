@@ -22,22 +22,25 @@
 #include "draw_util.h"
 #include "calcscreen.h"
 #include "com_model.h"
-
 #include "events.h"
 #include "r_efx.h"
 
 #include "gamemode/mods_const.h"
+#include "gamemode/interface/interface_const.h"
 
 extern engine_studio_api_t IEngineStudio;
 
 DECLARE_MESSAGE(m_HeadIcon, HeadIcon)
+DECLARE_MESSAGE(m_HeadIcon, MPToCL)
+
 #define MAXPLAYER 32
+
 enum
 {
 	HUMAN_SKILL_KNIFE2X,
 	HUMAN_SKILL_HEADSHOT,
 	ZOMBIE_SKILL_HEAL,
-	ZOMBIE_SKILL_HEAL_HEAD,	
+	ZOMBIE_SKILL_HEAL_HEAD,
 	CANNON_FLAME_BURN,
 	HUNTBOW_DMGREITERATION,
 	HUNTBOW_MARKZOMBIE,
@@ -52,6 +55,10 @@ enum
 	ZSHELTER_ZOMBIE,
 	WPN_VOID_SCANAIM,
 	ZOMBIE_DEATH,
+	ZOMBIE_DEBUFF,
+	ZOMBIE_RESPAWN,
+	ARBALEST_HIT,
+	WONDERCANNON_HIT,
 };
 
 struct CHudHeadIconItem
@@ -69,6 +76,7 @@ int CHudHeadIcon:: Init( void )
 	gHUD.AddHudElem( this );
 	m_iFlags |= HUD_DRAW;
 	HOOK_MESSAGE(HeadIcon);
+	HOOK_MESSAGE(MPToCL);
 
 	return 1;
 }
@@ -152,7 +160,7 @@ int CHudHeadIcon:: Draw( float flTime )
 						int textlen = DrawUtils::HudStringLen(szBuffer);
 						int r, g, b;
 						DrawUtils::UnpackRGB(r, g, b, RGB_YELLOWISH);
-						DrawUtils::DrawHudString(xyScreen[0] - textlen * 0.5f, xyScreen[1] + 25, gHUD.m_scrinfo.iWidth, szBuffer, r, g, b);
+						DrawUtils::DrawHudString(xyScreen[0] - textlen * 0.5f, xyScreen[1] + 25, gHUD.m_scrinfo.iWidth, szBuffer, r, g, b, 255);
 					}
 				}
 				else
@@ -201,7 +209,7 @@ int CHudHeadIcon:: Draw( float flTime )
 						int textlen = DrawUtils::HudStringLen(szBuffer);
 						int r, g, b;
 						DrawUtils::UnpackRGB(r, g, b, RGB_YELLOWISH);
-						DrawUtils::DrawHudString(xyScreen[0] - textlen * 0.5f, xyScreen[1] + 25, gHUD.m_scrinfo.iWidth, szBuffer, r, g, b);
+						DrawUtils::DrawHudString(xyScreen[0] - textlen * 0.5f, xyScreen[1] + 25, gHUD.m_scrinfo.iWidth, szBuffer, r, g, b, 255);
 					}
 				}
 				else
@@ -234,7 +242,7 @@ int CHudHeadIcon:: Draw( float flTime )
 						int textlen = DrawUtils::HudStringLen(szBuffer);
 						int r, g, b;
 						DrawUtils::UnpackRGB(r, g, b, RGB_YELLOWISH);
-						DrawUtils::DrawHudString(xyScreen[0] - textlen * 0.5f, xyScreen[1] + 25, gHUD.m_scrinfo.iWidth, szBuffer, r, g, b);
+						DrawUtils::DrawHudString(xyScreen[0] - textlen * 0.5f, xyScreen[1] + 25, gHUD.m_scrinfo.iWidth, szBuffer, r, g, b, 255);
 					}
 				}
 				else
@@ -261,7 +269,7 @@ int CHudHeadIcon:: Draw( float flTime )
 						int textlen = DrawUtils::HudStringLen(szBuffer);
 						int r, g, b;
 						DrawUtils::UnpackRGB(r, g, b, RGB_YELLOWISH);
-						DrawUtils::DrawHudString(xyScreen[0] - textlen * 0.5f, xyScreen[1] + 25, gHUD.m_scrinfo.iWidth, szBuffer, r, g, b);
+						DrawUtils::DrawHudString(xyScreen[0] - textlen * 0.5f, xyScreen[1] + 25, gHUD.m_scrinfo.iWidth, szBuffer, r, g, b, 255);
 					}
 				}
 				else
@@ -288,7 +296,7 @@ int CHudHeadIcon:: Draw( float flTime )
 						int textlen = DrawUtils::HudStringLen(szBuffer);
 						int r, g, b;
 						DrawUtils::UnpackRGB(r, g, b, RGB_YELLOWISH);
-						DrawUtils::DrawHudString(xyScreen[0] - textlen * 0.5f, xyScreen[1] + 25, gHUD.m_scrinfo.iWidth, szBuffer, r, g, b);
+						DrawUtils::DrawHudString(xyScreen[0] - textlen * 0.5f, xyScreen[1] + 25, gHUD.m_scrinfo.iWidth, szBuffer, r, g, b, 255);
 					}
 				}
 				else
@@ -369,7 +377,7 @@ int CHudHeadIcon::MsgFunc_HeadIcon( const char *pszName, int iSize, void *pbuf )
 	case ZOMBIE_DEATH:
 	{
 		R_AttachTentToPlayer(rgIconList[i].iPlayer, gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/zb5_death_effect.spr"),
-			Vector(0.0, 0.0, 25.0), 1.0, TRUE, flags, 1.0, kRenderTransAdd, 10.0);
+			Vector(0.0, 0.0, 25.0), 0.1, TRUE, flags, 0.5, kRenderTransAdd, 15.0);
 		break;
 	}
 	case CANNON_FLAME_BURN:
@@ -427,11 +435,561 @@ int CHudHeadIcon::MsgFunc_HeadIcon( const char *pszName, int iSize, void *pbuf )
 			Vector(0.0, 0.0, 40.0), 3.0, TRUE, flags, 1.0, kRenderTransAdd, 1.0);
 		break;
 	}
+
+	case ZOMBIE_DEBUFF:
+	{
+		R_AttachTentToPlayer(rgIconList[i].iPlayer, gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/ef_sbmine_debuff.spr"),
+			Vector(0.0, 0.0, 40.0), 0.5, TRUE, flags, 0.5, kRenderTransAdd, 2.0);
+		break;
+	}
+	case ZOMBIE_RESPAWN:
+	{
+		R_AttachTentToPlayer(rgIconList[i].iPlayer, gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/deathres_zombie.spr"),
+			Vector(0.0, 0.0, 0.0), 1.5, TRUE, flags, 0.7, kRenderTransAdd, 10.0);
+		break;
+	}
+	case ARBALEST_HIT:
+	{
+		R_AttachTentToPlayer(rgIconList[i].iPlayer, gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/ef_halogun_shootB_hit.spr"),
+			Vector(0.0, 0.0, 0.0), 0.2, TRUE, flags, 0.3, kRenderTransAdd, 25.0);
+		break;
+	}
 	}
 
 	return 1;
 }
 
+
+
+
+
+
+int CHudHeadIcon::MsgFunc_MPToCL(const char* pszName, int iSize, void* pbuf)
+{
+	if ((gHUD.m_iHideHUDDisplay & HIDEHUD_ALL))
+		return 1;
+
+	m_iFlags |= HUD_DRAW;
+
+	int iType;
+	BufferReader reader(pszName, pbuf, iSize);
+	int arg1;
+	int arg2;
+	Vector pos;
+	iType = reader.ReadByte();
+
+	switch (iType)
+	{
+	case 0:
+	{
+		int iBanType = reader.ReadByte();
+		int iSlot = iBanType / 10; // 1-wpn,2-knife,3-grenad
+		int iDataType = iBanType % 10; // 0-all, 1-add, 2-remove
+		int length = reader.ReadByte();
+		if (iSlot == 1) {
+			if (iDataType == 0) {
+				gHUD.m_setBanWeapon.clear();
+			}
+			for (int i = 0; i < length; i++)
+			{
+				int id = reader.ReadShort();
+				if (iDataType <= 1)
+					gHUD.m_setBanWeapon.insert(id);
+				else if (iDataType == 2)
+					gHUD.m_setBanWeapon.erase(id);
+			}
+		}
+		else if (iSlot == 2) {
+			if (iDataType == 0) {
+				gHUD.m_setBanKnife.clear();
+			}
+			for (int i = 0; i < length; i++)
+			{
+				int id = reader.ReadByte();
+				if (iDataType <= 1)
+					gHUD.m_setBanKnife.insert(id);
+				else if (iDataType == 2)
+					gHUD.m_setBanKnife.erase(id);
+			}
+		}
+		else if (iSlot == 3) {
+			if (iDataType == 0) {
+				gHUD.m_setBanGrenade.clear();
+			}
+			for (int i = 0; i < length; i++)
+			{
+				int id = reader.ReadByte();
+				if (iDataType <= 1)
+					gHUD.m_setBanGrenade.insert(id);
+				else if (iDataType == 2)
+					gHUD.m_setBanGrenade.erase(id);
+			}
+		}
+		break;
+	}
+	case 1:
+	{
+		//CBasePlayerWeapon* pActiveBTEWeapon = BTEClientWeapons().GetActiveWeaponEntity();
+		//if (pActiveBTEWeapon)
+		//{
+			//switch (pActiveBTEWeapon->m_iId)
+			//{
+				//case WEAPON_M95TIGER:
+				//case WEAPON_M3DRAGON:
+				//case WEAPON_M3DRAGONM:
+				//case WEAPON_KRONOS12:
+				//	pActiveBTEWeapon->pev->iuser1 = reader.ReadByte();
+			//default:
+			//	break;
+			//}
+		//}
+
+		break;
+	}
+	case 2:
+	{
+		pos.x = reader.ReadCoord();
+		pos.y = reader.ReadCoord();
+		pos.z = reader.ReadCoord();
+		arg1 = reader.ReadShort();
+		arg2 = reader.ReadByte();
+		//CreateBalrog11CannonSingleProjectile(NULL, pos, arg1, arg2);
+		break;
+	}
+	case 3:
+	{
+		pos.x = reader.ReadCoord();
+		pos.y = reader.ReadCoord();
+		pos.z = reader.ReadCoord();
+		arg1 = reader.ReadShort();
+		arg2 = reader.ReadByte();
+		//CreateFollowEnt(NULL, pos, arg1, arg2);
+		break;
+	}
+	case 4:
+	{
+		arg1 = reader.ReadShort();
+		arg2 = reader.ReadByte();
+
+		//CreateAttachedEntitiesToPlayer(arg1, arg2);
+
+		break;
+
+	}
+	case 7:
+	{
+		pos.x = reader.ReadCoord();
+		pos.y = reader.ReadCoord();
+		pos.z = reader.ReadCoord();
+
+		bool bEnabled = reader.ReadByte() != 0;
+		float flLife = reader.ReadByte() * 0.1;
+		int iType = reader.ReadByte();
+
+		//gHUD.m_FollowItem.SetIconItem(iType, pos, bEnabled, flLife);
+
+		break;
+	}
+	case 15:
+		switch (reader.ReadByte())
+		{
+		case 1:
+			gEngfuncs.pfnPlaySoundByNameAtPitch("zombi/TD_Buff.wav", 1.0, 100);
+			break;
+		case 2:
+			gEngfuncs.pfnPlaySoundByNameAtPitch("zombi/siren_scream.wav", 1.0, 100);
+			break;
+		case 44:
+			gEngfuncs.pfnPlaySoundByNameAtLocation("weapons/sgmissile_reload.wav", VOL_NORM, gHUD.m_vecOrigin);
+			break;
+		case 80:
+			gEngfuncs.pfnPlaySoundByNameAtLocation("weapons/divinetitan_charge.wav", VOL_NORM, gHUD.m_vecOrigin);
+			break;
+		case 81:
+			gEngfuncs.pfnPlaySoundByNameAtLocation("weapons/bunkerbuster_gauge.wav", VOL_NORM, gHUD.m_vecOrigin);
+			break;
+		}
+
+		break;
+	case 16:
+		arg1 = reader.ReadShort();
+		arg2 = reader.ReadByte();
+
+		switch (arg2)
+		{
+			/*case WINGGUN_WING:
+			{
+				int bOn = reader.ReadByte();
+
+				if (bOn)
+				{
+					if (!iWingGunEffect[arg1])
+						iWingGunEffect[arg1] = AttachTentToEntity(arg1, gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/ef_winggun_idle.spr"),
+							Vector(0.0, 0.0, 50.0), 15.0, TRUE, FTENT_PERSIST | FTENT_SPRANIMATELOOP, 0.5, kRenderTransAdd, 30.0);
+				}
+				else
+				{
+					if (iWingGunEffect[arg1])
+					{
+						iWingGunEffect[arg1]->die = gHUD.m_flTime;
+						iWingGunEffect[arg1] = nullptr;
+					}
+				}
+
+				break;
+			}
+			case HOLYFIST_GLITCH_RING:
+			{
+				if (iHolyFistRingEffect[arg1])
+				{
+					iHolyFistRingEffect[arg1]->die = gHUD.m_flTime;
+					iHolyFistRingEffect[arg1] = nullptr;
+					break;
+				}
+
+				if (!iHolyFistRingEffect[arg1])
+					iHolyFistRingEffect[arg1] = AttachTentToEntity(arg1, gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/terminator_ring.spr"),
+						Vector(0.0, 0.0, 0.0), 5.0, TRUE, FTENT_PERSIST | FTENT_SPRANIMATELOOP, 0.7, kRenderTransAdd, 1.0);
+				break;
+			}*/
+		default:
+			break;
+		}
+		break;
+	case 17:
+	{
+		arg1 = reader.ReadByte();
+		arg2 = reader.ReadByte();
+
+
+		cl_entity_t* pPlayer = gEngfuncs.GetEntityByIndex(arg1);
+
+
+		break;
+	}
+	case 18:
+	{
+		arg1 = reader.ReadByte();
+		arg2 = reader.ReadShort();
+
+		switch (arg1)
+		{
+		case 0:
+		{
+			TEMPENTITY* pEnt = gEngfuncs.pEfxAPI->R_TempCustomModel({ 0, 0, 10 }, { 0, 0, 0 }, { 0, 0, 0 }, 999, gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/ef_wondercannon_bomb_set.spr"), 0, 15, false, 255, kRenderTransAdd, arg2, 0, false, 0, 0.2, 21, FTENT_PERSIST | FTENT_SPRANIMATELOOP | FTENT_PLYRATTACHMENT);
+			break;
+		}
+		case 1:
+		{
+			TEMPENTITY* pEnt = gEngfuncs.pEfxAPI->R_TempCustomModel({ 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 999, gEngfuncs.pEventAPI->EV_FindModelIndex("models/ef_wondercannon_area.mdl"), 0, 1.0, false, 255, kRenderTransAdd, arg2, 0, false, 0, 1.0, 200, FTENT_PERSIST | FTENT_PLYRATTACHMENT);
+			break;
+		}
+		case 2:
+		{
+			TEMPENTITY* pEnt = gEngfuncs.pEfxAPI->R_TempCustomModel({ 0, 0, 10 }, { 0, 0, 0 }, { 0, 0, 0 }, 999, gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/ef_wondercannonex_bomb_set.spr"), 0, 15, false, 255, kRenderTransAdd, arg2, 0, false, 0, 0.2, 21, FTENT_PERSIST | FTENT_SPRANIMATELOOP | FTENT_PLYRATTACHMENT);
+			break;
+		}
+		case 3:
+		{
+			TEMPENTITY* pEnt = gEngfuncs.pEfxAPI->R_TempCustomModel({ 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 999, gEngfuncs.pEventAPI->EV_FindModelIndex("models/ef_wondercannonex_area.mdl"), 0, 1.0, false, 255, kRenderTransAdd, arg2, 0, false, 0, 1.0, 200, FTENT_PERSIST | FTENT_PLYRATTACHMENT);
+			break;
+		}
+		default:
+			break;
+		}
+
+		break;
+	}
+	case 19:
+	{
+		arg1 = reader.ReadShort();
+		arg2 = reader.ReadShort();
+		int arg3 = reader.ReadByte();
+
+		cl_entity_t* pEnt = gEngfuncs.GetEntityByIndex(arg1);
+		cl_entity_t* pLinkEnt = gEngfuncs.GetEntityByIndex(arg2);
+
+		vec3_t vecBeamStart, vecBeamEnd;
+		vecBeamStart = pEnt->origin;
+		vecBeamEnd = pLinkEnt->origin;
+
+		int iBeamIndex;
+
+		if (arg3)
+			iBeamIndex = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/ef_wondercannonex_chain.spr");
+		else
+			iBeamIndex = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/ef_wondercannon_chain.spr");
+
+		BEAM* pBeam = gEngfuncs.pEfxAPI->R_BeamPoints_Stretch(vecBeamStart, vecBeamEnd, iBeamIndex, 1.0, 30.0, 255, 0, 30.0, 255, 255, 255);
+
+		if (pBeam)
+		{
+			pBeam->startEntity = arg1;
+			pBeam->endEntity = arg2;
+			pBeam->flags = FBEAM_STARTENTITY | FBEAM_ENDENTITY;
+		}
+
+		break;
+	}
+	case 20:
+	{
+		arg1 = reader.ReadShort();
+
+		//m_SniperScope.SetKronosTime(arg1);
+		break;
+	}
+	case 21:
+	{
+		arg1 = reader.ReadByte();
+		arg2 = reader.ReadByte();
+		int arg3 = reader.ReadByte();
+		//m_SniperScope.SetLockOnData(arg1, arg2, arg3);
+		break;
+	}
+	case 22:
+	{
+		//m_SniperScope.ClearAllLockOnData();
+		break;
+	}
+	case 23:
+	{
+		int length = reader.ReadByte();
+
+		for (int i = 0; i < length; i++)
+		{
+			arg1 = reader.ReadShort();
+			arg2 = reader.ReadByte();
+			//	m_SniperScope.InsertPatrolDroneData(i, arg1, arg2);
+		}
+
+		//	m_SniperScope.SetPatrolDroneDeployTime();
+		break;
+	}
+	case 24:
+	{
+		int Slot = reader.ReadByte();
+		arg1 = reader.ReadShort();
+		arg2 = reader.ReadByte();
+		//	m_SniperScope.InsertPatrolDroneData(Slot, arg1, arg2);
+		break;
+	}
+	case 25:
+	{
+		//bloodhunter
+		arg1 = reader.ReadByte();
+		arg2 = reader.ReadByte();
+		//CBasePlayerWeapon* pActiveBTEWeapon = BTEClientWeapons().GetActiveWeaponEntity();
+		//if (pActiveBTEWeapon)
+		//{
+			//if (pActiveBTEWeapon->m_iId == WEAPON_BLOODHUNTER)
+			//{
+				//if (arg1 < 3)	//iAnim
+				//{
+					//if (!g_flBloodhunterAnimTime)
+					//	g_flBloodhunterAnimTime = gHUD.m_flTime;
+					//g_iBloodhunterSecAnim = 19 + arg2;
+				//}
+				//else
+				//{
+					//g_flBloodhunterAnimTime = 0.0;
+					//g_iBloodhunterSecAnim = 0;
+			//	}
+		//	}
+		//	else
+		//	{
+			//	g_flBloodhunterAnimTime = 0.0;
+			//	g_iBloodhunterSecAnim = 0;
+		//	}
+		//}
+			break;
+		//}
+	case 26:
+	{
+		//bloodhunter
+		arg1 = reader.ReadByte();
+		//g_iBloodhunterState = arg1;
+		break;
+	}
+	case 27:
+	{
+		//mgsm
+		float arg3 = reader.ReadCoord();
+		float arg4 = reader.ReadShort();
+		//m_SniperScope.SetMGSMAmmo(arg3, arg4);
+		break;
+	}
+	case 28:
+	{
+		arg1 = reader.ReadByte();
+		arg2 = reader.ReadByte();
+		//CBasePlayerWeapon* pActiveBTEWeapon = BTEClientWeapons().GetActiveWeaponEntity();
+		//if (pActiveBTEWeapon)
+		//{
+			/*if (pActiveBTEWeapon->m_iId == WEAPON_MGSM)
+			{
+				if (arg1)	//iWpnState
+				{
+					//if (!g_flMGSMAnimTime)
+					g_flMGSMAnimTime = gHUD.m_flTime;
+					g_iMGSMSecAnim = arg2;
+				}
+				else
+				{
+					g_flMGSMAnimTime = 0.0;
+					g_iMGSMSecAnim = 0;
+				}
+			}
+			else
+			{
+				g_flMGSMAnimTime = 0.0;
+				g_iMGSMSecAnim = 0;
+			}*/
+		//}
+		break;
+	}
+	case 29:
+	{
+		//bunkerbuster
+		arg2 = reader.ReadByte();
+		float arg3 = reader.ReadCoord();
+		float arg4 = reader.ReadCoord();
+
+		//m_SniperScope.InsertBunkerBusterData(arg2, arg3, arg4);
+		break;
+	}
+	case 30:
+	{
+		float arg3 = reader.ReadCoord();
+
+		//m_SniperScope.InsertBunkerBusterData2(arg3);
+		break;
+	}
+	case 31:
+	{
+		//g_iM1887xmasAnim = -1;
+		//g_flM1887xmasAnimTime = 0.0;
+		break;
+	}
+	case 32:
+	{
+		arg1 = reader.ReadByte();
+		switch (arg1)
+		{
+		case 0:
+		{
+			//buffng7
+			arg2 = reader.ReadByte();
+			//g_iBUFFNG7State = arg2;
+			break;
+		}
+		case 1:
+		{
+			//m95tiger
+			arg2 = reader.ReadByte();
+			//g_iM95TigerState = arg2;
+			break;
+		}
+		default:
+			break;
+		}
+		break;
+	}
+	case 33:
+	{
+		int iDidHit = reader.ReadByte();
+		int iType = reader.ReadByte();
+
+		//EV_DragonTailFX(iDidHit, iType);
+
+		break;
+	}
+	case 34:
+	{
+		pos.x = reader.ReadCoord();
+		pos.y = reader.ReadCoord();
+		pos.z = reader.ReadCoord();
+		//	EV_Crow9FX(pos);
+
+		break;
+	}
+	case 35:
+	{
+		arg1 = reader.ReadByte();
+
+		pos.x = reader.ReadCoord();
+		pos.y = reader.ReadCoord();
+		pos.z = reader.ReadCoord();
+
+		//	EV_Explosion(arg1, pos);
+		break;
+	}
+	case 36:
+	{
+		pos.x = reader.ReadCoord();
+		pos.y = reader.ReadCoord();
+		pos.z = reader.ReadCoord();
+
+		gEngfuncs.pEfxAPI->R_SparkEffect(pos, 8, -200, 200);
+		break;
+	}
+	case 37:
+	{
+		arg1 = reader.ReadByte();
+		arg2 = reader.ReadByte();
+		int arg3 = reader.ReadByte();
+		//	m_SniperScope.SetHaloGunAmmo(arg1, arg2, arg3);
+		break;
+	}
+	case 38:
+	{
+		arg1 = reader.ReadByte();
+		arg2 = reader.ReadByte();
+
+		switch (arg1)
+		{
+			//case 3: bReviveGunRetinaOn = arg2 ? true : false; break;
+			//case 2: bReviveGunLoopRetinaOn = arg2 ? true : false; break;
+			//case 1: bHaloGunHitRetinaOn = arg2 ? true : false; break;
+			//case 0: bHaloGunLoopRetinaOn = arg2 ? true : false; break;
+		default:
+			break;
+		}
+
+
+		break;
+	}
+	case 44:
+	{
+		arg1 = reader.ReadByte();
+
+		//	g_iSPKnifeAmmo = arg1;
+
+		break;
+	}
+	case 42:
+	{
+		arg1 = reader.ReadShort();
+		pos.x = reader.ReadCoord();
+		pos.y = reader.ReadCoord();
+		pos.z = reader.ReadCoord();
+
+		R_AttachTentToEntity(arg1, gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/flame_burn01.spr"),
+			pos, reader.ReadShort() * 0.1, TRUE, FTENT_FADEOUT | FTENT_SPRANIMATE | FTENT_PERSIST | FTENT_PLYRATTACHMENT | FTENT_SPRANIMATELOOP, 0.3, kRenderTransAdd, 1.0);
+
+		break;
+	}
+	case 79:	// stop sound
+		arg1 = reader.ReadShort();
+		arg2 = reader.ReadShort();
+
+		gEngfuncs.pEventAPI->EV_StopSound(arg1, arg2, reader.ReadString());
+
+		break;
+
+	}
+	}
+	return 1;
+}
 
 void CHudHeadIcon::R_AttachTentToEntity(int entity, int modelIndex, vec3_t offset, float life, int additive, int flags, float scale, int rendermode, float framerate)
 {

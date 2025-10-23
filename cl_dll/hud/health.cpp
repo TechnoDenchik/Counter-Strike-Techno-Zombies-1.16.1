@@ -1,4 +1,4 @@
-/* =================================================================================== *
+﻿/* =================================================================================== *
 	  * =================== TechnoSoftware & Valve Developing =================== *
  * =================================================================================== */
 
@@ -237,14 +237,23 @@ int CHudHealth::VidInit(void)
 
 int CHudHealth:: MsgFunc_Health(const char *pszName,  int iSize, void *pbuf )
 {
-	BufferReader reader( pszName, pbuf, iSize );
+	BufferReader reader(pszName, pbuf, iSize);
 	int x = m_iHealth;
+
 	if (iSize == 2)
 	{
-		x = reader.ReadShort();
+		// 🔴 ИСПРАВЛЕНИЕ: Чтение unsigned short вместо short
+		unsigned short usHealth = reader.ReadShort();
+		x = (int)usHealth;
+	}
+	else if (iSize == 4)
+	{
+		// 🔴 ДОБАВЛЕНИЕ: Поддержка 4-байтных значений
+		x = reader.ReadLong();
 	}
 	else
 	{
+		// 1-байтное значение
 		x = reader.ReadByte();
 	}
 
@@ -823,12 +832,12 @@ int CHudHealth::MsgFunc_Battery(const char* pszName, int iSize, void* pbuf)
 	BufferReader reader(pszName, pbuf, iSize);
 
 	m_iFlags |= HUD_DRAW;
-	int x = reader.ReadShort();
+	unsigned short armor = reader.ReadShort();
 
-	if (x != m_iBat)
+	if (armor != m_iBat)
 	{
 		m_fFade = FADE_TIME;
-		m_iBat = x;
+		m_iBat = armor;
 	}
 
 	return 1;

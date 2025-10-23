@@ -114,10 +114,6 @@ void CZombieClass_DefaultR::DeathSound_Zombie()
 		case 2: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_death_2.wav", VOL_NORM, ATTN_NORM); break;
 		default:break;
 	}
-	MESSAGE_BEGIN(MSG_ALL, gmsgHeadIcon);
-	WRITE_BYTE(18);
-	WRITE_SHORT(ENTINDEX(m_pPlayer->edict()));
-	MESSAGE_END();
 }
 
 void CZombieClass_DefaultR::OnThink()

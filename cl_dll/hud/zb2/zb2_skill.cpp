@@ -131,6 +131,11 @@ void CHudZB2_Skill::Reset(void)
 
 int CHudZB2_Skill::Draw(float time)
 {
+	int idx = gEngfuncs.GetLocalPlayer()->index;
+
+	if (g_PlayerExtraInfo[idx].dead)
+		return 1;
+
 	int iHeight = gHUD.GetSpriteRect(m_HUD_zombirecovery).bottom - gHUD.GetSpriteRect(m_HUD_zombirecovery).top;
 	int x = 0; // iWidth / 2;
 	int y = ScreenHeight - gHUD.m_iFontHeight * 3 / 2 - iHeight;
@@ -326,7 +331,7 @@ void CHudZB2_Skill::DrawSkillBoardNew(float time) const
 		m_pTexture_skillslotkeybg->Bind();
 		DrawUtils::Draw2DQuadScaled(x - 3, y - 3, x + m_pTexture_skillslotkeybg->w(), y + m_pTexture_skillslotkeybg->h());
 
-		DrawUtils::TextMessageDrawChar(x + 7, y, SkillKey, 100, 100, 100);
+		DrawUtils::TextMessageDrawChar(x + 7, y, SkillKey, 100, 100, 100, 255);
 
 		SkillKey = SkillKey == 'G' ? '5' : SkillKey + 1;
 		x += 58;

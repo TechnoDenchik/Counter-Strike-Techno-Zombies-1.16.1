@@ -1294,7 +1294,7 @@ void CSprite::ExpandThink(void)
 	}
 	else
 	{
-		pev->nextthink = gpGlobals->time + 0.1;
+		//pev->nextthink = gpGlobals->time + 0.1;
 		m_lastTime = gpGlobals->time;
 	}
 }

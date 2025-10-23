@@ -28,7 +28,7 @@ int CHudZB5Morale::VidInit(void)
 int CHudZB5Morale::Draw(float time)
 {
 	int idx = IS_FIRSTPERSON_SPEC ? g_iUser2 : gEngfuncs.GetLocalPlayer()->index;
-	if (g_PlayerExtraInfo[idx].zombie)
+	if (g_PlayerExtraInfo[idx].zombie && g_PlayerExtraInfo[idx].mutant)
 
 		return 0;
 
@@ -99,7 +99,7 @@ int CHudZB5Morale::Draw(float time)
 	// text
 	char szBuffer[64];
 	sprintf(szBuffer, "ATT : %d %%", 100 + iMorale * 10);
-	DrawUtils::DrawHudString(ScreenWidth / 2 - 40, ScreenHeight - 170, ScreenWidth, szBuffer, r, g, b);
+	DrawUtils::DrawHudString(ScreenWidth / 2 - 40, ScreenHeight - 170, ScreenWidth, szBuffer, r, g, b, 255);
 
 	return 1;
 }

@@ -48,7 +48,7 @@ CZombieClass_ResidentR::CZombieClass_ResidentR(CBasePlayer *player, ZombieLevel 
 	m_pPlayer->pev->rendermode = kRenderNormal;
 	m_pPlayer->ResetMaxSpeed();
 	m_pPlayer->GiveNamedItem("Knife_Zombi_resident");
-	m_pPlayer->GiveNamedItem("weapon_zombibombz");
+	m_pPlayer->GiveNamedItem("weapon_zombibomb_resident");
 	m_pPlayer->m_bIsZombieResident = true;
 }
 

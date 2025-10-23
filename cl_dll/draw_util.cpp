@@ -4,7 +4,7 @@
 #include "triangleapi.h"
 #include <string.h>
 
-float DrawUtils::color[3];
+float DrawUtils::color[4];
 
 #define IsColorString( p )	( p && *( p ) == '^' && *(( p ) + 1) && *(( p ) + 1) >= '0' && *(( p ) + 1 ) <= '9' )
 #define ColorIndex( c )	((( c ) - '0' ) & 7 )
@@ -23,7 +23,7 @@ static byte g_color_table[][4] =
 };
 
 
-int DrawUtils::DrawHudString(int xpos, int ypos, int iMaxX, const char* str, int r, int g, int b, float scale, bool drawing)
+int DrawUtils::DrawHudString(int xpos, int ypos, int iMaxX, const char* str, int r, int g, int b, int a, float scale, bool drawing)
 {
 	if (!str)
 		return 1;
@@ -69,13 +69,13 @@ int DrawUtils::DrawHudString(int xpos, int ypos, int iMaxX, const char* str, int
 			continue;
 		}
 
-		xpos += TextMessageDrawChar(xpos, ypos, *szIt, r, g, b, scale);
+		xpos += TextMessageDrawChar(xpos, ypos, *szIt, r, g, b, a, scale);
 	}
 
 	return xpos;
 }
 
-int DrawUtils::DrawHudString2(int xpos, int ypos, int iMaxX, const char* str, int r, int g, int b, float scale, bool drawing)
+int DrawUtils::DrawHudString2(int xpos, int ypos, int iMaxX, const char* str, int r, int g, int b, int a, float scale, bool drawing)
 {
 	if (!str)
 		return 1;
@@ -121,13 +121,13 @@ int DrawUtils::DrawHudString2(int xpos, int ypos, int iMaxX, const char* str, in
 			continue;
 		}
 
-		xpos += TextMessageDrawChar(xpos, ypos, *szIt, r, g, b, scale);
+		xpos += TextMessageDrawChar(xpos, ypos, *szIt, r, g, b, a, scale);
 	}
 
 	return xpos;
 }
 
-int DrawUtils::DrawHudStringReverse(int xpos, int ypos, int iMinX, const char* szString, int r, int g, int b, float scale, bool drawing)
+int DrawUtils::DrawHudStringReverse(int xpos, int ypos, int iMinX, const char* szString, int r, int g, int b, int a, float scale, bool drawing)
 {
 	// iterate throug the string in reverse
 	for (signed int i = strlen(szString); i >= 0; i--)
@@ -173,7 +173,7 @@ int DrawUtils::DrawHudStringReverse(int xpos, int ypos, int iMinX, const char* s
 			}
 		}
 
-		TextMessageDrawChar(xpos, ypos, szString[i], r, g, b, scale);
+		TextMessageDrawChar(xpos, ypos, szString[i], r, g, b, a, scale);
 	}
 
 	return xpos;

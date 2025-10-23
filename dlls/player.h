@@ -738,7 +738,10 @@ public:
 	
 	bool m_bEvolutionProtected;
 	int evolvl;
+	float evolvprogress;
+
 	int m_iHumanMoraleLevel;
+	float m_iHumanMoraleLevelProgress;
 	bool m_bEvolutionProtectedH;
 	ZombieLevel m_iZombieLevel;
 	float m_flTimeSpawnProctionExpires;

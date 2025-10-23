@@ -22,7 +22,7 @@
 #include "events.h"
 #include "r_efx.h"
 #include "gamemode/mods_const.h"
-
+#include "extdll.h"
 #include "util.h"
 #include "cbase.h"
 #include "weapons.h"
@@ -92,7 +92,7 @@ void CreateBalrog11CannonSingleProjectile(TEMPENTITY* prev, vec3_t origin, int i
 TEMPENTITY* AttachTentToEntity(int entity, int modelIndex, vec3_t offset, float life, int additive, int flags, float scale, int rendermode, float framerate);
 //void EnableWallHack(int enable, int iTarget);
 void EV_DragonTailFX(int iDidHit, int iType);
-void EV_Crow9FX(Vector angle);
+void EV_Crow9FX( Vector angle);
 void EV_SPR3(struct tempent_s* ent, float frametime, float currenttime);
 void EV_Explosion(int type, Vector pos);
 
@@ -248,7 +248,7 @@ int CHud::MsgFunc_MPToCL(const char* pszName, int iSize, void* pbuf)
 		float flLife = reader.ReadByte() * 0.1;
 		int iType = reader.ReadByte();
 
-		//gHUD.m_FollowItem.SetIconItem(iType, pos, bEnabled, flLife);
+		gHUD.m_FollowItem.SetIconItem(iType, pos, bEnabled, flLife);
 
 		break;
 	}
@@ -397,7 +397,7 @@ int CHud::MsgFunc_MPToCL(const char* pszName, int iSize, void* pbuf)
 	{
 		arg1 = reader.ReadShort();
 
-		//m_SniperScope.SetKronosTime(arg1);
+		m_SniperScope.SetKronosTime(arg1);
 		break;
 	}
 	case 21:
@@ -405,12 +405,12 @@ int CHud::MsgFunc_MPToCL(const char* pszName, int iSize, void* pbuf)
 		arg1 = reader.ReadByte();
 		arg2 = reader.ReadByte();
 		int arg3 = reader.ReadByte();
-	//	m_SniperScope.SetLockOnData(arg1, arg2, arg3);
+		m_SniperScope.SetLockOnData(arg1, arg2, arg3);
 		break;
 	}
 	case 22:
 	{
-		//m_SniperScope.ClearAllLockOnData();
+		m_SniperScope.ClearAllLockOnData();
 		break;
 	}
 	case 23:
@@ -421,10 +421,10 @@ int CHud::MsgFunc_MPToCL(const char* pszName, int iSize, void* pbuf)
 		{
 			arg1 = reader.ReadShort();
 			arg2 = reader.ReadByte();
-			//m_SniperScope.InsertPatrolDroneData(i, arg1, arg2);
+			m_SniperScope.InsertPatrolDroneData(i, arg1, arg2);
 		}
 		
-		//m_SniperScope.SetPatrolDroneDeployTime();
+		m_SniperScope.SetPatrolDroneDeployTime();
 		break;
 	}
 	case 24:
@@ -432,7 +432,7 @@ int CHud::MsgFunc_MPToCL(const char* pszName, int iSize, void* pbuf)
 		int Slot = reader.ReadByte();
 		arg1 = reader.ReadShort();
 		arg2 = reader.ReadByte();
-		//m_SniperScope.InsertPatrolDroneData(Slot, arg1, arg2);
+		m_SniperScope.InsertPatrolDroneData(Slot, arg1, arg2);
 		break;
 	}
 	case 25:
@@ -477,7 +477,7 @@ int CHud::MsgFunc_MPToCL(const char* pszName, int iSize, void* pbuf)
 		//mgsm
 		float arg3 = reader.ReadCoord();
 		float arg4 = reader.ReadShort();
-		//m_SniperScope.SetMGSMAmmo(arg3, arg4);
+		m_SniperScope.SetMGSMAmmo(arg3, arg4);
 		break;
 	}
 	case 28:
@@ -516,14 +516,14 @@ int CHud::MsgFunc_MPToCL(const char* pszName, int iSize, void* pbuf)
 		float arg3 = reader.ReadCoord();
 		float arg4 = reader.ReadCoord();
 
-		//m_SniperScope.InsertBunkerBusterData(arg2,arg3, arg4);
+		m_SniperScope.InsertBunkerBusterData(arg2,arg3, arg4);
 		break;
 	}
 	case 30:
 	{
 		float arg3 = reader.ReadCoord();
 
-		//m_SniperScope.InsertBunkerBusterData2(arg3);
+		m_SniperScope.InsertBunkerBusterData2(arg3);
 		break;
 	}
 	case 31:
@@ -599,7 +599,7 @@ int CHud::MsgFunc_MPToCL(const char* pszName, int iSize, void* pbuf)
 		arg1 = reader.ReadByte();
 		arg2 = reader.ReadByte();
 		int arg3 = reader.ReadByte();
-		//m_SniperScope.SetHaloGunAmmo(arg1, arg2, arg3);
+		m_SniperScope.SetHaloGunAmmo(arg1, arg2, arg3);
 		break;
 	}
 	case 38:
@@ -972,6 +972,12 @@ void CreateAttachedEntitiesToPlayer(int entity, int type)
 	{
 		R_AttachTentToEntity(entity, gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/zombiheal_head.spr"),
 			Vector(0.0, 0.0, 25.0), 1.0, TRUE, flags, 1.0, kRenderTransAdd, 10.0);
+		break;
+	}
+	case CANNON_FLAME_BURN:
+	{
+		R_AttachTentToEntity(entity, gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/flame_burn01.spr"),
+			Vector(Com_RandomFloat(-5.0, 5.0), Com_RandomFloat(-5.0, 5.0), 0.0), 3, TRUE, flags, 0.3, kRenderTransAdd, 10.0);
 		break;
 	}
 	case HOLYBOMB_BURN:

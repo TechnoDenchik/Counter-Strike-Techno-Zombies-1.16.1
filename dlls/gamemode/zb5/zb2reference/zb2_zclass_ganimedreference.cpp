@@ -43,7 +43,7 @@ CZombieClass_GanimedR::CZombieClass_GanimedR(CBasePlayer *player, ZombieLevel iE
 	m_pPlayer->pev->rendermode = kRenderNormal;
 	m_pPlayer->ResetMaxSpeed();
 	m_pPlayer->GiveNamedItem("Knife_Zombi_ganimed");
-	m_pPlayer->GiveNamedItem("weapon_zombibombz");
+	m_pPlayer->GiveNamedItem("weapon_zombibomb_ganimed");
 	m_pPlayer->m_bIsZombieGanimed = true;
 }
 

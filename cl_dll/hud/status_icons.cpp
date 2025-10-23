@@ -117,7 +117,7 @@ int CHudStatusIcons::Draw( float flTime )
 		m_bDrawStroke = true;
 
 		sprintf(szTitle, "Навыки");
-		DrawUtils::DrawHudStringReverse(x2 + 25, y2 + 43.5, 0, szTitle, 140, 92, 3, flScale);
+		DrawUtils::DrawHudStringReverse(x2 + 25, y2 + 43.5, 0, szTitle, 140, 92, 3, 255, flScale);
 
 		if (buyzones == false)
 		{
@@ -126,7 +126,7 @@ int CHudStatusIcons::Draw( float flTime )
 			b_iconbuild->Bind();
 			DrawUtils::Draw2DQuadScaled(x3 - 25, y3 - 3.5, x3 + 25, y3 + 42);
 			sprintf(szTitle, "Стройка");
-			DrawUtils::DrawHudStringReverse(x3 + 25, x3 + 7.0, 0, szTitle, 140, 92, 3, flScale);
+			DrawUtils::DrawHudStringReverse(x3 + 25, x3 + 7.0, 0, szTitle, 140, 92, 3, 255, flScale);
 		}
 	}
 	else
@@ -144,7 +144,7 @@ int CHudStatusIcons::Draw( float flTime )
 					b_iconimage->Bind();
 					DrawUtils::Draw2DQuadScaled(x4 - 30, y4 - 3.5, x4 + 30, y4 + 42);
 					sprintf(szTitle, "Магазин");
-					DrawUtils::DrawHudStringReverse(x4 + 25, y4 + 40.0, 0, szTitle, 0, 200, 0, flScale);
+					DrawUtils::DrawHudStringReverse(x4 + 25, y4 + 40.0, 0, szTitle, 0, 200, 0, 255, flScale);
 				}
 			}
 		}

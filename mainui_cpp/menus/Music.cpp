@@ -27,6 +27,8 @@
 #define ART_Meechy		"gfx/shell/MusicPack/meechydarko_01"
 #define ART_Mord		"gfx/shell/MusicPack/mordfustang_01"
 #define ART_TRFN		"gfx/shell/MusicPack/trfn_1"
+#define ART_Laurashigihara		"gfx/shell/MusicPack/laurashigihara_01"
+#define ART_Twerl		"gfx/shell/MusicPack/twerl_01"
 
 class CMenuMusic : public CMenuFramework
 {
@@ -74,7 +76,7 @@ void CMenuMusic::exits()
 			testImage.SetPicture(ART_CSGO);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
-			EngFuncs::PlayBackgroundTrack("Music/valve_01/mainmenu", "Music/valve_01/mainmenu");
+				EngFuncs::PlayBackgroundTrack("Music/valve_01/mainmenu", "Music/valve_01/mainmenu");
 		}
 		else if (musicset == 1)
 		{
@@ -83,7 +85,7 @@ void CMenuMusic::exits()
 			testImage.SetPicture(ART_CS2);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
-			EngFuncs::PlayBackgroundTrack("Music/valve_cs2_01/mainmenu", "Music/valve_cs2_01/mainmenu");
+				EngFuncs::PlayBackgroundTrack("Music/valve_cs2_01/mainmenu", "Music/valve_cs2_01/mainmenu");
 		}
 		else if (musicset == 2)
 		{
@@ -92,7 +94,7 @@ void CMenuMusic::exits()
 			testImage.SetPicture(ART_RADCAT);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
-			EngFuncs::PlayBackgroundTrack("Music/radcat_01/mainmenu", "Music/radcat_01/mainmenu");
+				EngFuncs::PlayBackgroundTrack("Music/radcat_01/mainmenu", "Music/radcat_01/mainmenu");
 		}
 		else if (musicset == 3)
 		{
@@ -101,7 +103,7 @@ void CMenuMusic::exits()
 			testImage.SetPicture(ART_KLIKSPHILIP);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
-			EngFuncs::PlayBackgroundTrack("Music/3kliksphilip_01/mainmenu", "Music/3kliksphilip_01/mainmenu");
+				EngFuncs::PlayBackgroundTrack("Music/3kliksphilip_01/mainmenu", "Music/3kliksphilip_01/mainmenu");
 		}
 		else if (musicset == 4)
 		{
@@ -110,7 +112,7 @@ void CMenuMusic::exits()
 			testImage.SetPicture(ART_BBNO);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
-			EngFuncs::PlayBackgroundTrack("Music/bbnos_01/mainmenu", "Music/bbnos_01/mainmenu");
+				EngFuncs::PlayBackgroundTrack("Music/bbnos_01/mainmenu", "Music/bbnos_01/mainmenu");
 		}
 		else if (musicset == 5)
 		{
@@ -119,7 +121,7 @@ void CMenuMusic::exits()
 			testImage.SetPicture(ART_Chipzel);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
-			EngFuncs::PlayBackgroundTrack("Music/chipzel_01/mainmenu", "Music/chipzel_01/mainmenu");
+				EngFuncs::PlayBackgroundTrack("Music/chipzel_01/mainmenu", "Music/chipzel_01/mainmenu");
 		}
 		else if (musicset == 6)
 		{
@@ -128,7 +130,7 @@ void CMenuMusic::exits()
 			testImage.SetPicture(ART_DRYDEN);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
-			EngFuncs::PlayBackgroundTrack("Music/dryden_01/mainmenu", "Music/dryden_01/mainmenu");
+				EngFuncs::PlayBackgroundTrack("Music/dryden_01/mainmenu", "Music/dryden_01/mainmenu");
 		}
 		else if (musicset == 7)
 		{
@@ -137,7 +139,7 @@ void CMenuMusic::exits()
 			testImage.SetPicture(ART_Freaky);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
-			EngFuncs::PlayBackgroundTrack("Music/freakydna_01/mainmenu", "Music/freakydna_01/mainmenu");
+				EngFuncs::PlayBackgroundTrack("Music/freakydna_01/mainmenu", "Music/freakydna_01/mainmenu");
 		}
 		else if (musicset == 8)
 		{
@@ -146,7 +148,7 @@ void CMenuMusic::exits()
 			testImage.SetPicture(ART_ISOxo);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
-			EngFuncs::PlayBackgroundTrack("Music/isoxo_01/mainmenu", "Music/isoxo_01/mainmenu");
+				EngFuncs::PlayBackgroundTrack("Music/isoxo_01/mainmenu", "Music/isoxo_01/mainmenu");
 		}
 		else if (musicset == 9)
 		{
@@ -155,7 +157,7 @@ void CMenuMusic::exits()
 			testImage.SetPicture(ART_Knock2);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
-			EngFuncs::PlayBackgroundTrack("Music/knock2_01/mainmenu", "Music/knock2_01/mainmenu");
+				EngFuncs::PlayBackgroundTrack("Music/knock2_01/mainmenu", "Music/knock2_01/mainmenu");
 		}
 		else if (musicset == 10)
 		{
@@ -164,7 +166,7 @@ void CMenuMusic::exits()
 			testImage.SetPicture(ART_Matt);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
-			EngFuncs::PlayBackgroundTrack("Music/mattlevine_01/mainmenu", "Music/mattlevine_01/mainmenu");
+				EngFuncs::PlayBackgroundTrack("Music/mattlevine_01/mainmenu", "Music/mattlevine_01/mainmenu");
 		}
 		else if (musicset == 11)
 		{
@@ -173,7 +175,7 @@ void CMenuMusic::exits()
 			testImage.SetPicture(ART_Meechy);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
-			EngFuncs::PlayBackgroundTrack("Music/meechydarko_01/mainmenu", "Music/meechydarko_01/mainmenu");
+				EngFuncs::PlayBackgroundTrack("Music/meechydarko_01/mainmenu", "Music/meechydarko_01/mainmenu");
 		}
 		else if (musicset == 12)
 		{
@@ -182,7 +184,7 @@ void CMenuMusic::exits()
 			testImage.SetPicture(ART_Mord);
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
-			EngFuncs::PlayBackgroundTrack("Music/mordfustang_01/mainmenu", "Music/mordfustang_01/mainmenu");
+				EngFuncs::PlayBackgroundTrack("Music/mordfustang_01/mainmenu", "Music/mordfustang_01/mainmenu");
 		}
 		else if (musicset == 13)
 		{
@@ -192,7 +194,25 @@ void CMenuMusic::exits()
 			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 			if (!CL_IsActive())
 				EngFuncs::PlayBackgroundTrack("Music/trfn_1/mainmenu", "Music/trfn_1/mainmenu");
-				}
+		}
+		else if (musicset == 14)
+		{
+			testImage.iFlags = QMF_INACTIVE;
+			testImage.SetRect(560, 425, 240, 240);
+			testImage.SetPicture(ART_Laurashigihara);
+			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+			if (!CL_IsActive())
+				EngFuncs::PlayBackgroundTrack("Music/laurashigihara_01/mainmenu", "Music/laurashigihara_01/mainmenu");
+		}
+		else if (musicset == 15)
+		{
+			testImage.iFlags = QMF_INACTIVE;
+			testImage.SetRect(560, 425, 240, 240);
+			testImage.SetPicture(ART_Twerl);
+			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+			if (!CL_IsActive())
+				EngFuncs::PlayBackgroundTrack("Music/twerl_01/mainmenu", "Music/twerl_01/mainmenu");
+		}
 	CMenuFramework::exits();
 }
 
@@ -204,15 +224,18 @@ void CMenuMusic::_Init( void )
 		"CS:2", 
 		"RadCat", 
 		"3kliksphilip", 
-		"bbno$—u mad!", 
+		"Bbno$—u mad!", 
 		"Chipzel—Yellow Magic", 
-		"DRYDEN","Freaky DNA—Vici",
-		"ISOxo—inhuman",
-		"Knock2 — dashstar",
+		"DRYDEN",
+		"Freaky DNA—Vici",
+		"ISOxo—Inhuman",
+		"Knock2 — Dashstar",
 		"Matt Levine—Drifter",
 		"Meechy Darko",
 		"Mord Fustang",
-		"TRFN feat. Siadou"
+		"TRFN feat. Siadou",
+		"Laura Shigihara",
+		"TWERL & Ekko"
 	};
 
 	static CStringArrayModel music(MusicStr, ARRAYSIZE(MusicStr));
@@ -316,6 +339,18 @@ void CMenuMusic::_Init( void )
 		testImage.SetPicture(ART_TRFN);
 		testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 		break;
+	case 14:
+		testImage.iFlags = QMF_INACTIVE;
+		testImage.SetRect(560, 425, 240, 240);
+		testImage.SetPicture(ART_Laurashigihara);
+		testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+		break;
+	case 15:
+		testImage.iFlags = QMF_INACTIVE;
+		testImage.SetRect(560, 425, 240, 240);
+		testImage.SetPicture(ART_Twerl);
+		testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+		break;
 	}
 
 	exit.SetNameAndStatus(L("GameUI_Close"), L(""));
@@ -352,6 +387,8 @@ void UI_Music_Precache( void )
 	EngFuncs::PIC_Load( ART_Meechy );
 	EngFuncs::PIC_Load( ART_Mord );
 	EngFuncs::PIC_Load( ART_TRFN );
+	EngFuncs::PIC_Load( ART_Laurashigihara );
+	EngFuncs::PIC_Load( ART_Twerl );
 }
 
 void UI_Music_Menu( void )

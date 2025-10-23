@@ -611,38 +611,6 @@ void FS_MapFileBase( const char *in, char *out )
 	if( pstr )
 		start = pstr + 5 - in;
 
-	/*pstr = Q_strstr(in, "orig/");
-	if (pstr)
-		start = pstr + 5 - in;
-
-	pstr = Q_strstr(in, "dm/");
-	if (pstr)
-		start = pstr + 5 - in;
-
-	pstr = Q_strstr(in, "tdm/");
-	if (pstr)
-		start = pstr + 5 - in;
-
-	pstr = Q_strstr(in, "gdm/");
-	if (pstr)
-		start = pstr + 5 - in;
-
-	pstr = Q_strstr(in, "zb2/");
-	if (pstr)
-		start = pstr + 5 - in;
-
-	pstr = Q_strstr(in, "zb3/");
-	if (pstr)
-		start = pstr + 5 - in;
-
-	pstr = Q_strstr(in, "zsh/");
-	if (pstr)
-		start = pstr + 5 - in;
-
-	pstr = Q_strstr(in, "zs/");
-	if (pstr)
-		start = pstr + 5 - in;*/
-
 	// length of new sting
 	len = end - start + 1;
 
@@ -1863,130 +1831,210 @@ void FS_Init( void )
 
 	FS_InitMemory();
 
-	Cmd_AddCommand( "fs_rescan", FS_Rescan_f, "rescan filesystem search paths" );
-	Cmd_AddCommand( "fs_path", FS_Path_f, "show filesystem search paths" );
-	Cmd_AddCommand( "fs_clearpaths", FS_ClearPaths_f, "clear filesystem search paths" );
-	Cmd_AddCommand( "crc32", FS_Crc32_f, "print crc32 of for file" );
-	Cmd_AddCommand( "md5", FS_MD5_f, "print md5 of for file" );
+	Cmd_AddCommand("fs_rescan", FS_Rescan_f, "rescan filesystem search paths");
+	Cmd_AddCommand("fs_path", FS_Path_f, "show filesystem search paths");
+	Cmd_AddCommand("fs_clearpaths", FS_ClearPaths_f, "clear filesystem search paths");
+	Cmd_AddCommand("crc32", FS_Crc32_f, "print crc32 of for file");
+	Cmd_AddCommand("md5", FS_MD5_f, "print md5 of for file");
 
 #ifndef _WIN32
-	if( Sys_CheckParm( "-casesensitive" ) )
+	if (Sys_CheckParm("-casesensitive"))
 		fs_caseinsensitive = false;
 #endif
 
 #ifndef _WIN32
-	if( !fs_caseinsensitive )
+	if (!fs_caseinsensitive)
 	{
-		if( host.rodir[0] && !Q_strcmp( host.rodir, host.rootdir ) )
+		if (host.rodir[0] && !Q_strcmp(host.rodir, host.rootdir))
 		{
-			Sys_Error( "RoDir and default rootdir can't point to same directory!" );
+			Sys_Error("RoDir and default rootdir can't point to same directory!");
 		}
 	}
 	else
 #endif
 	{
-		if( host.rodir[0] && !Q_stricmp( host.rodir, host.rootdir ) )
+		if (host.rodir[0] && !Q_stricmp(host.rodir, host.rootdir))
 		{
-			Sys_Error( "RoDir and default rootdir can't point to same directory!" );
+			Sys_Error("RoDir and default rootdir can't point to same directory!");
 		}
 	}
 
 	// ignore commandlineoption "-game" for other stuff
-	if( host.type != HOST_UNKNOWN )
+	if (host.type != HOST_UNKNOWN)
 	{
 		SI.numgames = 0;
 
-		if( !Sys_GetParmFromCmdLine( "-game", gs_basedir ))
-			Q_strcpy( gs_basedir, SI.ModuleName ); // default dir
+		if (!Sys_GetParmFromCmdLine("-game", gs_basedir))
+			Q_strcpy(gs_basedir, SI.ModuleName); // default dir
 
-		if( FS_CheckNastyPath( gs_basedir, true ))
+		// Проверка безопасности пути
+		if (FS_CheckNastyPath(gs_basedir, true))
 		{
-			MsgDev( D_ERROR, "FS_Init: invalid game directory \"%s\"\n", gs_basedir );
-			Q_strcpy( gs_basedir, SI.ModuleName ); // default dir
+			MsgDev(D_ERROR, "FS_Init: invalid game directory \"%s\"\n", gs_basedir);
+			Q_strcpy(gs_basedir, SI.ModuleName); // default dir
 		}
 
-		if( host.rodir[0] )
+		// Обработка read-only директорий
+		if (host.rodir[0])
 		{
 			// add readonly directories first
-			stringlistinit( &dirs );
-			listdirectory( &dirs, host.rodir, false );
-			stringlistsort( &dirs );
+			stringlistinit(&dirs);
 
-			for( i = 0; i < dirs.numstrings; i++ )
+			// Проверяем существование read-only директории
+			if (FS_SysFolderExists(host.rodir))
 			{
-				// skip unneeded
-				if( !Q_strcmp( dirs.strings[i], "." ) || (!Q_strcmp( dirs.strings[i], ".." ) && !fs_ext_path) )
-					continue;
+				listdirectory(&dirs, host.rodir, false);
+				stringlistsort(&dirs);
 
-				// check if it is folder, not file
-				if( !FS_SysFolderExists( va( "%s/%s", host.rodir, dirs.strings[i] )))
-					continue;
+				for (i = 0; i < dirs.numstrings; i++)
+				{
+					// skip unneeded
+					if (!Q_strcmp(dirs.strings[i], ".") || (!Q_strcmp(dirs.strings[i], "..") && !fs_ext_path))
+						continue;
 
-				// magic here is that dirs.strings don't contain full path
-				// so code below checks and creates folders in current directory(host.rootdir)
-				if( !FS_SysFolderExists( dirs.strings[i] ) )
-					_mkdir( dirs.strings[i] );
+					// check if it is folder, not file
+					char fullPath[MAX_SYSPATH];
+					Q_snprintf(fullPath, sizeof(fullPath), "%s/%s", host.rodir, dirs.strings[i]);
+
+					if (!FS_SysFolderExists(fullPath))
+						continue;
+
+					// magic here is that dirs.strings don't contain full path
+					// so code below checks and creates folders in current directory(host.rootdir)
+					if (!FS_SysFolderExists(dirs.strings[i]))
+					{
+						// Создаем директорию с проверкой ошибок
+						if (_mkdir(dirs.strings[i]) != 0)
+						{
+							// Игнорируем ошибку если директория уже существует
+							if (errno != EEXIST)
+							{
+								MsgDev(D_WARN, "FS_Init: failed to create directory '%s': %s\n",
+									dirs.strings[i], strerror(errno));
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				MsgDev(D_WARN, "FS_Init: read-only directory '%s' not found\n", host.rodir);
 			}
 
-			stringlistfreecontents( &dirs );
+			stringlistfreecontents(&dirs);
 		}
 
-		stringlistinit( &dirs );
-		listdirectory( &dirs, "./", false );
-		stringlistsort( &dirs );
+		// Поиск игровых директорий
+		stringlistinit(&dirs);
 
-		MsgDev( D_NOTE, "%d gamedirs found\n", dirs.numstrings );
+		// Проверяем текущую директорию перед поиском
+		if (FS_SysFolderExists("./"))
+		{
+			listdirectory(&dirs, "./", false);
+			stringlistsort(&dirs);
+		}
+		else
+		{
+			MsgDev(D_ERROR, "FS_Init: current directory not accessible\n");
+		}
+
+		MsgDev(D_NOTE, "%d gamedirs found\n", dirs.numstrings);
 
 #ifndef _WIN32
-		if( dirs.maxstrings == 0 )
+		if (dirs.numstrings == 0)
 		{
 			char cwd[1024];
-			getcwd(cwd, 1023);
-			cwd[1023] = 0;
-			MsgDev( D_ERROR, "No gamedirs found, cwd is is \"%s\"\n", cwd);
+			if (getcwd(cwd, sizeof(cwd) - 1) != NULL)
+			{
+				cwd[sizeof(cwd) - 1] = 0;
+				MsgDev(D_ERROR, "No gamedirs found, cwd is \"%s\"\n", cwd);
+			}
+			else
+			{
+				MsgDev(D_ERROR, "No gamedirs found, cannot get current directory\n");
+			}
 		}
 #endif
 
 		// validate directories
-		for( i = 0; i < dirs.numstrings; i++ )
+		hasDefaultDir = false;
+		int selectedGameIndex = -1;
+
+		for (i = 0; i < dirs.numstrings; i++)
 		{
-			if( !Q_stricmp( SI.ModuleName, dirs.strings[i] ))
+			if (!Q_stricmp(SI.ModuleName, dirs.strings[i]))
 				hasDefaultDir = true;
 
-			if( !Q_stricmp( gs_basedir, dirs.strings[i] ))
+			if (!Q_stricmp(gs_basedir, dirs.strings[i]))
+			{
+				selectedGameIndex = i;
 				break;
+			}
 		}
 
-		if( i == dirs.numstrings )
+		// Если выбранная игра не найдена, используем дефолтную
+		if (selectedGameIndex == -1)
 		{
-			MsgDev( D_INFO, "FS_Init: game directory \"%s\" not exist\n", gs_basedir );
-			if( hasDefaultDir ) Q_strncpy( gs_basedir, SI.ModuleName, sizeof( gs_basedir )); // default dir
+			MsgDev(D_INFO, "FS_Init: game directory \"%s\" not found\n", gs_basedir);
+			if (hasDefaultDir)
+			{
+				Q_strncpy(gs_basedir, SI.ModuleName, sizeof(gs_basedir)); // default dir
+				MsgDev(D_INFO, "FS_Init: using default directory \"%s\"\n", gs_basedir);
+			}
+			else
+			{
+				MsgDev(D_ERROR, "FS_Init: no valid game directory found!\n");
+				// Можно добавить аварийное завершение или создание дефолтной директории
+			}
 		}
 
 		// build list of game directories here
-		FS_AddGameDirectory( "./", 0 );
+		FS_AddGameDirectory("./", 0);
 
-		for( i = 0; i < dirs.numstrings; i++ )
+		// Ограничиваем количество игр чтобы не выйти за границы массива
+		int maxGames = min(dirs.numstrings, MAX_MODS - 1);
+
+		for (i = 0; i < dirs.numstrings && SI.numgames < maxGames; i++)
 		{
 			// skip unneeded
-			if( !Q_strcmp( dirs.strings[i], "." ) || (!Q_strcmp( dirs.strings[i], ".." ) && !fs_ext_path) )
+			if (!Q_strcmp(dirs.strings[i], ".") || (!Q_strcmp(dirs.strings[i], "..") && !fs_ext_path))
 				continue;
 
 			// check if it is folder, not file
-			if( !FS_SysFolderExists( dirs.strings[i] ) )
+			if (!FS_SysFolderExists(dirs.strings[i]))
 				continue;
 
-			if( !SI.games[SI.numgames] )
-				SI.games[SI.numgames] = (gameinfo_t *)Mem_Alloc( fs_mempool, sizeof( gameinfo_t ));
+			// Выделяем память для информации об игре
+			if (!SI.games[SI.numgames])
+			{
+				SI.games[SI.numgames] = (gameinfo_t*)Mem_Alloc(fs_mempool, sizeof(gameinfo_t));
+				if (!SI.games[SI.numgames])
+				{
+					MsgDev(D_ERROR, "FS_Init: out of memory for game info\n");
+					break;
+				}
+				// Инициализируем структуру нулями
+				memset(SI.games[SI.numgames], 0, sizeof(gameinfo_t));
+			}
 
-			if( FS_ParseGameInfo( dirs.strings[i], SI.games[SI.numgames] ))
+			if (FS_ParseGameInfo(dirs.strings[i], SI.games[SI.numgames]))
+			{
 				SI.numgames++; // added
+				MsgDev(D_INFO, "FS_Init: added game '%s'\n", dirs.strings[i]);
+			}
+			else
+			{
+				MsgDev(D_WARN, "FS_Init: failed to parse game info for '%s'\n", dirs.strings[i]);
+				// Освобождаем память если парсинг не удался
+				Mem_Free(SI.games[SI.numgames]);
+				SI.games[SI.numgames] = NULL;
+			}
 		}
 
-		stringlistfreecontents( &dirs );
+		stringlistfreecontents(&dirs);
 	}
 
-	MsgDev( D_NOTE, "FS_Init: done\n" );
+	MsgDev(D_NOTE, "FS_Init: done, %d games registered\n", SI.numgames);
 }
 
 void FS_AllowDirectPaths( qboolean enable )

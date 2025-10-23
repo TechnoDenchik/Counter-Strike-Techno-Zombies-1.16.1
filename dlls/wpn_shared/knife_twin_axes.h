@@ -43,9 +43,9 @@ public:
 	void PrimaryAttack() override;
 	void SecondaryAttack() override;
 #ifndef CLIENT_DLL
-	hit_result_t KnifeAttack1(Vector vecSrc, Vector vecDir, float flDamage, float flRadius, float flAngleDegrees, int bitsDamageType,
-		entvars_t* pevInflictor, entvars_t* pevAttacker, BOOL iAnim);
-#endif // !CLIENT_DLL
+	BOOL KnifeAttack1(Vector vecSrc, Vector vecDir, float flDamage, float flRadius, float flAngleDegrees, int bitsDamageType,
+		entvars_t* pevInflictor, entvars_t* pevAttacker);
+#endif
 	BOOL UseDecrement() override {
 #ifdef CLIENT_WEAPONS
 		return TRUE;
@@ -54,6 +54,11 @@ public:
 #endif
 	}
 	void WeaponIdle() override;
+
+	float m_flNextSBarUpdateTime;
+	float m_flStatusBarDisappearDelay;
+
+	bool swing;
 	bool setkombo;
 	bool setammo;
 	bool setskin;

@@ -1,4 +1,4 @@
-//========= Copyright ? 1996-2002, Valve LLC, All rights reserved. ============
+﻿//========= Copyright ? 1996-2002, Valve LLC, All rights reserved. ============
 //
 // Purpose:
 //
@@ -45,6 +45,8 @@ extern "C"
 #include "com_model.h"
 #include "kbutton.h"
 #include "input.h"
+
+#include "fog.h"
 
 #ifndef M_PI
 #define M_PI		3.14159265358979323846	// matches value in gcc v2 math.h
@@ -1769,6 +1771,8 @@ void DLLEXPORT V_CalcRefdef( struct ref_params_s *pparams )
 	{
 		V_CalcNormalRefdef ( pparams );
 	}
+
+	gFog.V_CalcRefdef(pparams);
 }
 
 /*

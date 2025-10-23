@@ -802,7 +802,7 @@ void CVoidpistolEx::VoidpistolFireB(float flSpread, duration_t flCycleTime, BOOL
 
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0f;
 #endif
-		//m_pPlayer->pev->effects |= EF_MUZZLEFLASH;
+		m_pPlayer->pev->effects |= EF_MUZZLEFLASH;
 		PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usFireVoidpistolEx, 0, (float*)&g_vecZero, (float*)&g_vecZero, 2.0, 0.0, 0, 0, IsModeCEnabled(m_iCharging), FALSE);
 
 		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + flCycleTime;
@@ -970,7 +970,7 @@ void CVoidpistolEx::VoidpistolFireA(float flSpread, duration_t flCycleTime, BOOL
 	}
 
 	m_iClip--;
-	//m_pPlayer->pev->effects |= EF_MUZZLEFLASH;
+	m_pPlayer->pev->effects |= EF_MUZZLEFLASH;
 	SetPlayerShieldAnim();
 #ifndef CLIENT_DLL
 	m_pPlayer->SetAnimation(PLAYER_ATTACK1);

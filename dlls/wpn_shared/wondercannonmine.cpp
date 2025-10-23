@@ -10,13 +10,13 @@
 #include "wondercannon.h"
 #include "wondercannonex.h"
 
-LINK_ENTITY_TO_CLASS(wondercannon_mine, CWonderCannonMine)
+LINK_ENTITY_TO_CLASS(weapon_wondercannon_mine, CWonderCannonMine)
 
 #define WONDERCANNON_MINE_EXP_RADIUS	39.37 * 5
 
-CWonderCannonMine* CWonderCannonMine::Create(int iType, const Vector& vecOrigin, const Vector& vecAngles, edict_t* pentOwner)
+CWonderCannonMine* CWonderCannonMine::Create(const Vector& vecOrigin, const Vector& vecAngles, edict_t* pentOwner)
 {
-	edict_t* pent = CREATE_NAMED_ENTITY(MAKE_STRING("wondercannon_mine"));
+	edict_t* pent = CREATE_NAMED_ENTITY(MAKE_STRING("weapon_wondercannon_mine"));
 
 	if (FNullEnt(pent))
 	{
@@ -28,7 +28,6 @@ CWonderCannonMine* CWonderCannonMine::Create(int iType, const Vector& vecOrigin,
 
 	if (pMine)
 	{
-		pMine->m_iType = iType;
 		pMine->pev->owner = pentOwner;
 		pMine->pev->origin = vecOrigin;
 		pMine->pev->angles = vecAngles;
@@ -51,13 +50,14 @@ void CWonderCannonMine::Spawn(void)
 	pev->movetype = MOVETYPE_TOSS;
 	pev->frame = 0;
 
-	pev->classname = MAKE_STRING("wondercannon_mine");
+	pev->classname = MAKE_STRING("weapon_wondercannon_mine");
 	pev->nextthink = gpGlobals->time + 0.01f;
 	SetThink(&CWonderCannonMine::MineThink);
 }
 
-void CWonderCannonMine::Init(CBasePlayer* pOwner, Vector vecVelocity)
+void CWonderCannonMine::Init(CBasePlayer* pOwner, Vector vecVelocity, CWonderCannon* pWeapon)
 {
+	m_pWeapon = pWeapon;
 	m_pOwner = pOwner;
 	m_iTeam = m_pOwner->m_iTeam;
 	pev->velocity = std::move(vecVelocity);
@@ -78,11 +78,6 @@ void CWonderCannonMine::Precache(void)
 
 void CWonderCannonMine::Remove()
 {
-	MESSAGE_BEGIN(MSG_ALL, SVC_TEMPENTITY, pev->origin);
-	WRITE_BYTE(TE_KILLENTITYATTACHMENTS);
-	WRITE_SHORT(entindex());
-	MESSAGE_END();
-
 	SetThink(nullptr);
 	pev->effects |= EF_NODRAW; // 0x80u
 	return UTIL_Remove(this);
@@ -175,9 +170,9 @@ void CWonderCannonMine::Explode(bool IsManual)
 
 }
 
-void CWonderCannonMine::BombExp(bool IsManual, CBasePlayer* m_pPlayer)
+void CWonderCannonMine::BombExp(bool IsManual, edict_t* pentOwner, CWonderCannon* pWeapon)
 {
-	if (m_pPlayer != m_pOwner)
+	if (pentOwner != pev->owner)
 		return;
 
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
@@ -449,13 +444,13 @@ void EXPORT CWonderCannonMine::MineThink(void)
 
 
 
-LINK_ENTITY_TO_CLASS(wondercannonex_mine, CWonderCannonExMine)
+LINK_ENTITY_TO_CLASS(weapon_wondercannonex_mine, CWonderCannonExMine)
 
 #define WONDERCANNONEX_MINE_EXP_RADIUS	39.37 * 6.5
 
 CWonderCannonExMine* CWonderCannonExMine::Create(int iType, const Vector& vecOrigin, const Vector& vecAngles, edict_t* pentOwner)
 {
-	edict_t* pent = CREATE_NAMED_ENTITY(MAKE_STRING("wondercannonex_mine"));
+	edict_t* pent = CREATE_NAMED_ENTITY(MAKE_STRING("weapon_wondercannonex_mine"));
 
 	if (FNullEnt(pent))
 	{
@@ -490,7 +485,7 @@ void CWonderCannonExMine::Spawn(void)
 	pev->movetype = MOVETYPE_TOSS;
 	pev->frame = 0;
 
-	pev->classname = MAKE_STRING("wondercannonex_mine");
+	pev->classname = MAKE_STRING("weapon_wondercannonex_mine");
 	pev->nextthink = gpGlobals->time + 0.01f;
 	SetThink(&CWonderCannonExMine::MineThink);
 }
@@ -517,11 +512,6 @@ void CWonderCannonExMine::Precache(void)
 
 void CWonderCannonExMine::Remove()
 {
-	MESSAGE_BEGIN(MSG_ALL, SVC_TEMPENTITY, pev->origin);
-	WRITE_BYTE(TE_KILLENTITYATTACHMENTS);
-	WRITE_SHORT(entindex());
-	MESSAGE_END();
-
 	SetThink(nullptr);
 	pev->effects |= EF_NODRAW; // 0x80u
 	return UTIL_Remove(this);

@@ -34,7 +34,7 @@ CZombieClass_DeathKnight::CZombieClass_DeathKnight(CBasePlayer *player, ZombieLe
 	Q_snprintf(szModelPath, sizeof(szModelPath), "models/player/%s/%s.mdl", szModel, szModel);
 	m_pPlayer->SetNewPlayerModel(szModelPath);
 
-	m_pPlayer->pev->health = m_pPlayer->pev->max_health = 31800.0f;
+	m_pPlayer->pev->health = m_pPlayer->pev->max_health = 50000.0f;
 	m_pPlayer->pev->armortype = ARMOR_TYPE_HELMET;
 	m_pPlayer->pev->armorvalue = 30000;
 	m_pPlayer->pev->gravity = 0.78f;
@@ -42,7 +42,7 @@ CZombieClass_DeathKnight::CZombieClass_DeathKnight(CBasePlayer *player, ZombieLe
 	m_pPlayer->pev->rendermode = kRenderNormal;
 	m_pPlayer->ResetMaxSpeed();
 	m_pPlayer->GiveNamedItem("knife_zombi_deathknight");
-	m_pPlayer->GiveNamedItem("weapon_zombibombz");
+	m_pPlayer->GiveNamedItem("weapon_zombibomb_deathknight");
 	
 	m_pPlayer->m_bIsZombieDeathKnight = true;
 }
@@ -104,16 +104,6 @@ void CZombieClass_DeathKnight::DeathSound_Zombie()
 		case 2: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_AUTO, "zb5/deathknight_death2.wav", VOL_NORM, ATTN_NORM); break;
 		default:break;
 	}
-	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
-	WRITE_BYTE(TE_EXPLOSION);
-	WRITE_COORD(m_pPlayer->pev->origin.x);
-	WRITE_COORD(m_pPlayer->pev->origin.y);
-	WRITE_COORD(m_pPlayer->pev->origin.z);
-	WRITE_SHORT(MODEL_INDEX("sprites/deathres_zombie.spr"));
-	WRITE_BYTE(8);
-	WRITE_BYTE(40);
-	WRITE_BYTE(TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOSOUND);
-	MESSAGE_END();
 }
 
 void CZombieClass_DeathKnight::OnThink()
@@ -121,7 +111,6 @@ void CZombieClass_DeathKnight::OnThink()
 	Zombie_HealthRecoveryThink();
 	return CZombieClass_DeathKnight::OnThink();
 }
-
 
 void CZombieClass_DeathKnight::Zombie_HealthRecoveryThink()
 {

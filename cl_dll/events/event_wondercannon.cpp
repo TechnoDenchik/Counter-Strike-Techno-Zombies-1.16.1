@@ -204,10 +204,10 @@ void EV_FireWonderCannon( event_args_t *args )
 
 	vec3_t origin2 = ent->attachment[0];
 
-	if (EV_IsLocal(idx))
-		EV_WonderCannonFireEffect(origin2, origin2, velocity, idx, 0);
-	else
-		EV_WonderCannonFireEffect(origin2, origin2, velocity, idx, 0);
+	//if (EV_IsLocal(idx))
+	//	EV_WonderCannonFireEffect(origin2, origin2, velocity, idx, 0);
+	//else
+	//	EV_WonderCannonFireEffect(origin2, origin2, velocity, idx, 0);
 }
 
 void EV_Fire2WonderCannon(event_args_t* args)

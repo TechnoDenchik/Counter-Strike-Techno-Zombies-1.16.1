@@ -90,6 +90,14 @@ public:
 		pev->nextthink = gpGlobals->time;
 	}
 
+	inline void AnimateAndDie2(float framerate, float dietime)
+	{
+		SetThink(&CSprite::AnimateUntilDead);
+		pev->framerate = framerate;
+		pev->dmgtime = gpGlobals->time + dietime;
+		pev->nextthink = gpGlobals->time;
+	}
+
 public:
 	void EXPORT AnimateThink(void);
 	void EXPORT ExpandThink(void);

@@ -108,6 +108,7 @@ int gmsgBrass = 0;
 int gmsgFog = 0;
 int gmsgShowTimer = 0;
 int gmsgHeadIcon = 0;
+int gmsgSpecialCrossHair = 0;
 int gmsgZBSTip = 0;
 int gmsgZBSLevel = 0;
 int gmsgZBSMsgLevel = 0;
@@ -131,9 +132,10 @@ int gmsgZB5SetHero = 0;
 int gmsgZB5ExternEvo;
 int gmsgZB5InventorySet = 0;
 int gmsgZB5Evolution = 0;
-
+int gmsgZB5UpdateEvoLv = 0;
 int gmsgZB5GetLocationBox = 0;
 int gmsgZB5GetLocationBoxK = 0;
+int gmsgZB5RespawnBar = 0;
 
 int gmsgOriginalMsg = 0;
 int gmsgOriginalMsg2 = 0;
@@ -272,6 +274,7 @@ void LinkUserMessages()
 	gmsgShowTimer = REG_USER_MSG("ShowTimer", 0);
 	gmsgHudTextArgs = REG_USER_MSG("HudTextArgs", -1);
 	gmsgHeadIcon = REG_USER_MSG("HeadIcon", -1);
+	gmsgSpecialCrossHair = REG_USER_MSG("SpecialCrossHair", -1);
 	gmsgZBSTip = REG_USER_MSG("ZBSTip", -1);
 	gmsgZBSLevel = REG_USER_MSG("ZBSLevel", -1);
 	gmsgZBSMsgLevel = REG_USER_MSG("ZBSMsgLevel", -1);
@@ -308,8 +311,10 @@ void LinkUserMessages()
 	gmsgZB5SetHero = REG_USER_MSG("ZB5Hero", -1);
 	gmsgZB5ExternEvo = REG_USER_MSG("ZB5ExternEvo", -1);
 	gmsgZB5Evolution = REG_USER_MSG("ZB5Evolevel", -1);
+	gmsgZB5UpdateEvoLv = REG_USER_MSG("ZB5UpdateEvoLv", -1);
 	gmsgZB5GetLocationBox = REG_USER_MSG("ZB5Getlocationbox", -1);
 	gmsgZB5GetLocationBoxK = REG_USER_MSG("ZB5GetlocationboxK", -1);
+	gmsgZB5RespawnBar = REG_USER_MSG("ZB5RespawnBar", -1);
 
 	gmsgOriginalMsg = REG_USER_MSG("StartGame", -1);
 	gmsgOriginalMsg2 = REG_USER_MSG("BombPlant", -1);
@@ -436,7 +441,7 @@ void SetScoreAttrib(CBasePlayer *dest, CBasePlayer *src)
 		state |= PLAYER_VIP;
 
 	if (src->m_bIsHero)
-		state |= PLAYER_ZOMBIE;
+		state |= PLAYER_HERO;
 
 	if (src->m_bIsZombie)
 		state |= PLAYER_ZOMBIE;

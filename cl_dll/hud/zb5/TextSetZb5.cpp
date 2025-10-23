@@ -150,7 +150,7 @@ int CHudTextZB5::Draw(float time)
 		sprintf(szbuffer, "Навык снова можно будет использовать через: %d секунд", times);
 	}
 
-	DrawUtils::DrawHudString(x - 190, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+	DrawUtils::DrawHudString(x - 190, y2 - 32, ScreenWidth, szbuffer, r, g, b, 255, flScale);
 
 	return 1;
 }
@@ -195,7 +195,7 @@ int CHudText2ZB5::Draw(float time)
 	char szbuffer[64];
 	sprintf(szbuffer, "Навык снова можно будет использовать в следующем раунде");
 
-	DrawUtils::DrawHudString(x - 210, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+	DrawUtils::DrawHudString(x - 210, y2 - 32, ScreenWidth, szbuffer, r, g, b, 255, flScale);
 
 	return 1;
 }
@@ -542,7 +542,7 @@ int CHudTextNum::Draw(float time)
 	}
 	timesecond = gHUD.m_flTime;
 
-	if (g_PlayerExtraInfo[idx].zombie)
+	if (g_PlayerExtraInfo[idx].zombie && !g_PlayerExtraInfo[idx].dead)
 	{
 		gEngfuncs.pTriAPI->Color4ub(255, 0, 0, 255);
 
@@ -878,7 +878,7 @@ int CHudTextNum::Draw(float time)
 
 		levelzombiebg->Draw2DQuadScaled(iX3, iY3 - iH3, iX3 + iW3, iY3 - iH3 + iH3);
 	}
-	else
+	else if(!g_PlayerExtraInfo[idx].dead)
 	{
 		gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
 
@@ -1213,7 +1213,7 @@ int CHudTextNum::Draw(float time)
 		levelhumanbg->Draw2DQuadScaled(iX2, iY2 - iH2, iX2 + iW2, iY2 - iH2 + iH2);
 	}
 
-	if (g_PlayerExtraInfo[idx].zombie)
+	if (g_PlayerExtraInfo[idx].zombie && !g_PlayerExtraInfo[idx].dead)
 	{
 		if(evo < 10)
 		{
@@ -1244,7 +1244,7 @@ int CHudTextNum::Draw(float time)
 			iconmaxlvz->Draw2DQuadScaled(iX12, iY12 - iH12, iX12 + iW12, iY12 - iH12 + iH12);
 		}
 	}
-	else
+	else if(!g_PlayerExtraInfo[idx].dead)
 	{
 		if (evo < 10)
 		{

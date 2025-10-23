@@ -31,7 +31,12 @@ public:
 	CHudMsgFunc(ZB3Inventory);
 	CHudMsgFunc(HitDamageMsgZB3);
 
+	int DrawHeroIcon();
+
 protected:
+
+	UniqueTexture m_iHero;
+
 	class impl_t;
 	impl_t *pimpl;
 };

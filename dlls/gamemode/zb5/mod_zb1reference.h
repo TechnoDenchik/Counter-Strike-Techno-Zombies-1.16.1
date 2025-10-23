@@ -31,7 +31,6 @@ public: // CHalfLifeMultiplay
 	BOOL ClientConnected(edict_t *pEntity, const char *pszName, const char *pszAddress, char *szRejectReason) override;
 	void ClientDisconnected(edict_t *pClient) override;
 	BOOL FPlayerCanTakeDamage(CBasePlayer *pPlayer, CBaseEntity *pAttacker) override;
-	void CheckWinConditions() override;
 	int IPointsForKill(CBasePlayer *pAttacker, CBasePlayer *pKilled) override;
 	void PlayerKilled(CBasePlayer *pVictim, entvars_t *pKiller, entvars_t *pInflictor) override;
 	
@@ -50,8 +49,8 @@ protected:
 	void TeamCheck();
 	void InfectionSound();
 
-	void HumanWin();
-	void ZombieWin();
+	virtual void HumanWin();
+	virtual void ZombieWin();
 
 	BOOL FInfectionStarted();
 
@@ -61,6 +60,7 @@ protected:
 	}
 
 public:
+	int izombiewins;
 	EventDispatcher<void(CBasePlayer *who, ZombieLevel iEvolutionLevel)> m_eventBecomeZombie;
 };
 

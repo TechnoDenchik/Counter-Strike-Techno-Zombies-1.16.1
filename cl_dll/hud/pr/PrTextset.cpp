@@ -90,7 +90,7 @@ int CHudTextPR::Draw(float time)
 		sprintf(szbuffer, "Время до появления зомби: %d секунда", times);
 	}
 
-	DrawUtils::DrawHudString(x - 110, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+	DrawUtils::DrawHudString(x - 110, y2 - 32, ScreenWidth, szbuffer, r, g, b, 255, flScale);
 
 	return 1;
 }

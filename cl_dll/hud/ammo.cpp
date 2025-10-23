@@ -29,6 +29,7 @@
 #include "parsemsg.h"
 #include "pm_shared.h"
 #include "triangleapi.h"
+#include "com_model.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -553,6 +554,9 @@ int CHudAmmo::VidInit(void)
 
 	// If we've already loaded weapons, let's get new sprites
 	gWR.LoadAllWeaponSprites();
+
+	m_flLastBuffHit = 0.0;
+	m_hBuffHit = SPR_Load("sprites/ishot.spr");
 
 	if (ScreenWidth >= 640)
 	{
@@ -1324,6 +1328,33 @@ int CHudAmmo::Draw(float flTime)
 
 	DrawWList(flTime);
 	gHR.DrawNEWHudAmmoHistory( flTime );
+
+	if (m_flLastBuffHit > flTime)
+	{
+		//SPR_Set(m_hBuffHit, 255, 0, 0);
+		//SPR_DrawAdditive(0, ScreenWidth / 2 - m_iBuffHitWidth / 2, ScreenHeight / 2 - m_iBuffHitHeight / 2, NULL);
+
+		int iWidth = ScreenWidth * 0.05f;
+		int iX = (ScreenWidth - iWidth) / 2;
+		int iY = (ScreenHeight - iWidth) / 2;
+
+		gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
+		model_t* buffHit = (struct model_s*)gEngfuncs.GetSpritePointer(m_hBuffHit);
+		gEngfuncs.pTriAPI->SpriteTexture(buffHit, 0);
+
+		gEngfuncs.pTriAPI->Begin(TRI_QUADS);
+		gEngfuncs.pTriAPI->TexCoord2f(0, 0);
+		gEngfuncs.pTriAPI->Vertex3f(iX * gHUD.m_flScale, iY * gHUD.m_flScale, 0);
+		gEngfuncs.pTriAPI->TexCoord2f(1, 0);
+		gEngfuncs.pTriAPI->Vertex3f((iX + iWidth) * gHUD.m_flScale, iY * gHUD.m_flScale, 0);
+		gEngfuncs.pTriAPI->TexCoord2f(1, 1);
+		gEngfuncs.pTriAPI->Vertex3f((iX + iWidth) * gHUD.m_flScale, (iY + iWidth) * gHUD.m_flScale, 0);
+		gEngfuncs.pTriAPI->TexCoord2f(0, 1);
+		gEngfuncs.pTriAPI->Vertex3f(iX * gHUD.m_flScale, (iY + iWidth) * gHUD.m_flScale, 0);
+
+
+		gEngfuncs.pTriAPI->End();
+	}
 
 	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
 	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
@@ -2186,7 +2217,7 @@ int CHudAmmo::DrawNEWHudCurrentWpn(float flTime)
 	
 		sprintf(szWeaponInfo, "%d %s", m_pWeapon->iSlot + 1, SzWpnNameCn);
 
-		DrawUtils::DrawHudString(iX, iY + 1, ScreenWidth, szWeaponInfo, 255, 255, 255, 1.0f);
+		DrawUtils::DrawHudString(iX, iY + 1, ScreenWidth, szWeaponInfo, 255, 255, 255, 255, 1.0f);
 	}
 
 	return 1;

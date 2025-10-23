@@ -95,7 +95,7 @@ int CHudZB3Morale::Draw(float time)
 	// text
 	char szBuffer[64];
 	sprintf(szBuffer, "ATT : %d %%", 100 + iMorale * 10);
-	DrawUtils::DrawHudString(ScreenWidth / 2 - 40, ScreenHeight - 170, ScreenWidth, szBuffer, r, g, b);
+	DrawUtils::DrawHudString(ScreenWidth / 2 - 40, ScreenHeight - 170, ScreenWidth, szBuffer, r, g, b, 255, 255);
 
 	return 1;
 }

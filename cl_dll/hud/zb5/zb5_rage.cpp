@@ -40,7 +40,7 @@ int CHudZB5Rage::VidInit(void)
 int CHudZB5Rage::Draw(float time)
 {
 	int idx = IS_FIRSTPERSON_SPEC ? g_iUser2 : gEngfuncs.GetLocalPlayer()->index;
-	if (!g_PlayerExtraInfo[idx].zombie)
+	if (!g_PlayerExtraInfo[idx].zombie && g_PlayerExtraInfo[idx].mutant)
 		return 0;
 
 	int iX = ScreenWidth / 2 - gEngfuncs.pfnSPR_Width(gHUD.GetSprite(m_iRageBG), 0) / 2;

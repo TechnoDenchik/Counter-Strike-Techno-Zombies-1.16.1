@@ -209,6 +209,7 @@ void PlayerZombie_Precache()
 	PRECACHE_MODEL("models/v_zombibombpc.mdl");
 
 	PRECACHE_MODEL("sprites/zb_meleeup.spr");
+	PRECACHE_MODEL("sprites/deathres_zombie.spr");
 	PRECACHE_MODEL("sprites/zb_skill_headshot.spr");
 	PRECACHE_MODEL("sprites/zombihealer.spr");
 	PRECACHE_MODEL("sprites/zombiheal_head.spr");
@@ -234,7 +235,7 @@ CHuman_ZB1R::CHuman_ZB1R(CBasePlayer* player) : BasePlayerExtra(player)
 	m_pPlayer->pev->gravity = 0.86f;
 	m_pPlayer->m_iKevlar = ARMOR_TYPE_HELMET;
 	m_pPlayer->pev->armorvalue = 500;
-	m_pPlayer->pev->maxspeed = 450;
+	m_pPlayer->pev->maxspeed = 650;
 }
 
 //void CBasePlayer::MakeZombie(ZombieLevel iEvolutionLevel)
@@ -254,6 +255,13 @@ CZombie_ZB1R::CZombie_ZB1R(CBasePlayer* player, ZombieLevel iEvolutionLevel) : B
 	m_pPlayer->m_bIsZombieMeatWall = false;
 	m_pPlayer->m_bIsZombieDeathKnight = false;
 	m_pPlayer->m_bIsZombieSpider = false;
+
+	m_pPlayer->m_bIsZombieAksha = false;
+	m_pPlayer->m_bIsZombieBoomer = false;
+	m_pPlayer->m_bIsZombieBooster = false;
+	m_pPlayer->m_bIsZombieChina = false;
+	m_pPlayer->m_bIsZombieFlying = false;
+	m_pPlayer->m_bIsZombieResident = false;
 
 	m_pPlayer->m_bNotKilled = false;
 

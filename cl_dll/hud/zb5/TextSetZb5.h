@@ -184,9 +184,9 @@ public:
 	time_point_t timesecond2;
 	duration_t tDeltasecond2;
 
-	void ikills(int killz)
+	void ikills(int kills)
 	{
-		kill = killz;
+		kill = kills;
 	}
 
 protected:

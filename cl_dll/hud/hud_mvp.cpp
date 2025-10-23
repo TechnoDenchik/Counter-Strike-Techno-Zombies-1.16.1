@@ -204,7 +204,7 @@ int CHudMVP::Draw(float flTime)
 			r = 140, g = 180, b = 220;
 
 		//g_FontBold.SetWidth(25);
-		DrawUtils::DrawHudString(iX + 20, iY + 25, ScreenWidth, m_szVictoryTitle, r, g, b, 1.0f);
+		DrawUtils::DrawHudString(iX + 20, iY + 25, ScreenWidth, m_szVictoryTitle, r, g, b, 255, 1.0f);
 	}
 
 	iY += 30;
@@ -216,10 +216,10 @@ int CHudMVP::Draw(float flTime)
 		r = 80, g = 120, b = 160;
 
 	if (m_wszTitle[0])
-		DrawUtils::DrawHudString(iX + 20, iY + 30, ScreenWidth, m_wszTitle, r, g, b, 1.0f);
+		DrawUtils::DrawHudString(iX + 20, iY + 30, ScreenWidth, m_wszTitle, r, g, b, 255, 1.0f);
 
 	if (m_wszGameTime[0])
-		DrawUtils::DrawHudString(iX + iWidthTop - 20 - 160, iY + 30, ScreenWidth, m_wszGameTime, r, g, b, 1.0f);
+		DrawUtils::DrawHudString(iX + iWidthTop - 20 - 160, iY + 30, ScreenWidth, m_wszGameTime, r, g, b, 255, 1.0f);
 
 	iY = iStartY + iHeightTop;
 
@@ -228,7 +228,7 @@ int CHudMVP::Draw(float flTime)
 		iX = ScreenWidth / 2 - iWidthTop / 2 + 35;
 
 		//g_FontBold.SetWidth(18);
-		DrawUtils::DrawHudString(iX, iY - 8 + offsetY, ScreenWidth, m_wszLabel[i], 255, 255, 255, 1.0f);
+		DrawUtils::DrawHudString(iX, iY - 8 + offsetY, ScreenWidth, m_wszLabel[i], 255, 255, 255, 255, 1.0f);
 
 		for (int j = 0; j < 5; j++)
 		{
@@ -245,11 +245,11 @@ int CHudMVP::Draw(float flTime)
 			if (gEngfuncs.GetLocalPlayer()->index == index)
 				m_pPopupboard->Draw2DQuadScaled(iX - 5, iY + 5 + 19 * j, iX + iWidthTop - 85, iY + 5 + 19 * j + 18);
 
-			DrawUtils::DrawHudString(iX, iY + 16 + offsetY + 19 * j, 250, g_PlayerInfoList[index].name, r, g, b,1.0f);
+			DrawUtils::DrawHudString(iX, iY + 16 + offsetY + 19 * j, 250, g_PlayerInfoList[index].name, r, g, b, 255, 1.0f);
 
 			static char szScore[32];
 			sprintf(szScore, "%d %s", m_MVPData[i][j].iData, m_szScoreType[i]);
-			DrawUtils::DrawHudString(ScreenWidth / 2 + iWidthTop / 2 - 35 - 70, iY + 16 + offsetY + 19 * j, 250, szScore, r, g, b, 1.0f);
+			DrawUtils::DrawHudString(ScreenWidth / 2 + iWidthTop / 2 - 35 - 70, iY + 16 + offsetY + 19 * j, 250, szScore, r, g, b, 255, 1.0f);
 		}
 		iY += 122;
 	}

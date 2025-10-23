@@ -114,7 +114,7 @@ int CHudMOTD :: Draw( float fTime )
 
 		// find where to start drawing the line
 		if( (ypos > ROW_RANGE_MIN) && (ypos + LINE_HEIGHT <= ypos_r + height) )
-			DrawUtils::DrawHudString( xpos, ypos, xmax, ch, 255, 180, 0 );
+			DrawUtils::DrawHudString( xpos, ypos, xmax, ch, 255, 180, 0, 255);
 
 		ypos += LINE_HEIGHT;
 

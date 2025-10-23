@@ -34,6 +34,7 @@ CMod_ZombieMod2R::CMod_ZombieMod2R() // precache
 	PRECACHE_SOUND("zb3/zombi_evolution.wav");
 	PRECACHE_SOUND("zb3/zombi_evolution_female.wav");
 	
+	PRECACHE_MODEL("sprites/zb5_itemdrop_effect.spr");
 
 	ZombieSkill_PrecacheR();
 	HumanSkill_PrecacheR();
@@ -383,13 +384,13 @@ bool CPlayerModStrategy_ZB2R::ClientCommand(const char* pcmd)
 		return true;
 	}
 
-	else if (!Q_stricmp(pcmd, "CST_ClassDeathKnight") /* && m_pPlayer->m_bIsZombie*/)
+	else if (!Q_stricmp(pcmd, "CST_ClassDeathKnight")  && m_pPlayer->m_bIsZombie)
 	{
 		BecomeDeathknight(ZOMBIE_LEVEL_HOST);
 		return true;
 	}
 
-	else if (!Q_stricmp(pcmd, "CST_ClassSpider") && m_pPlayer->m_bIsZombie)
+	else if (!Q_stricmp(pcmd, "CST_ClassSpider") )
 	{
 		BecomeSpider(ZOMBIE_LEVEL_HOST);
 		return true;
@@ -605,6 +606,8 @@ void CPlayerModStrategy_ZB2R::BecomeTank(ZombieLevel iEvolutionLevel)
 {
 	auto sp = ZombieClassFactoryR(m_pPlayer, iEvolutionLevel, "tank");
 
+	m_pPlayer->m_bIsVIP = false;
+	m_pPlayer->m_bIsZombie = true;
 	m_pPlayer->m_bIsZombieTank = true;
 	m_pPlayer->m_bIsZombieFemale = false;
 	m_pPlayer->m_bIsZombieHeavy = false;
@@ -640,6 +643,8 @@ void CPlayerModStrategy_ZB2R::BecomeSpeed(ZombieLevel iEvolutionLevel)
 {
 	auto sp = ZombieClassFactoryR(m_pPlayer, iEvolutionLevel, "speed");
 
+	m_pPlayer->m_bIsVIP = false;
+	m_pPlayer->m_bIsZombie = true;
 	m_pPlayer->m_bIsZombieTank = false;
 	m_pPlayer->m_bIsZombieFemale = true;
 	m_pPlayer->m_bIsZombieHeavy = false;
@@ -675,6 +680,8 @@ void CPlayerModStrategy_ZB2R::BecomeHeavy(ZombieLevel iEvolutionLevel)
 {
 	auto sp = ZombieClassFactoryR(m_pPlayer, iEvolutionLevel, "heavy");
 
+	m_pPlayer->m_bIsVIP = false;
+	m_pPlayer->m_bIsZombie = true;
 	m_pPlayer->m_bIsZombieTank = false;
 	m_pPlayer->m_bIsZombieFemale = false;
 	m_pPlayer->m_bIsZombieHeavy = true;
@@ -710,6 +717,8 @@ void CPlayerModStrategy_ZB2R::BecomeHeal(ZombieLevel iEvolutionLevel)
 {
 	auto sp = ZombieClassFactoryR(m_pPlayer, iEvolutionLevel, "heal");
 
+	m_pPlayer->m_bIsVIP = false;
+	m_pPlayer->m_bIsZombie = true;
 	m_pPlayer->m_bIsZombieTank = false;
 	m_pPlayer->m_bIsZombieFemale = false;
 	m_pPlayer->m_bIsZombieHeavy = false;
@@ -745,6 +754,8 @@ void CPlayerModStrategy_ZB2R::BecomePsycho(ZombieLevel iEvolutionLevel)
 {
 	auto sp = ZombieClassFactoryR(m_pPlayer, iEvolutionLevel, "psycho");
 
+	m_pPlayer->m_bIsVIP = false;
+	m_pPlayer->m_bIsZombie = true;
 	m_pPlayer->m_bIsZombieTank = false;
 	m_pPlayer->m_bIsZombieFemale = false;
 	m_pPlayer->m_bIsZombieHeavy = false;
@@ -780,6 +791,8 @@ void CPlayerModStrategy_ZB2R::BecomeDeimos(ZombieLevel iEvolutionLevel)
 {
 	auto sp = ZombieClassFactoryR(m_pPlayer, iEvolutionLevel, "deimos");
 
+	m_pPlayer->m_bIsVIP = false;
+	m_pPlayer->m_bIsZombie = true;
 	m_pPlayer->m_bIsZombieTank = false;
 	m_pPlayer->m_bIsZombieFemale = false;
 	m_pPlayer->m_bIsZombieHeavy = false;
@@ -815,6 +828,8 @@ void CPlayerModStrategy_ZB2R::BecomeGanimed(ZombieLevel iEvolutionLevel)
 {
 	auto sp = ZombieClassFactoryR(m_pPlayer, iEvolutionLevel, "ganimed");
 
+	m_pPlayer->m_bIsVIP = false;
+	m_pPlayer->m_bIsZombie = true;
 	m_pPlayer->m_bIsZombieTank = false;
 	m_pPlayer->m_bIsZombieFemale = false;
 	m_pPlayer->m_bIsZombieHeavy = false;
@@ -850,6 +865,8 @@ void CPlayerModStrategy_ZB2R::BecomeBanchee(ZombieLevel iEvolutionLevel)
 {
 	auto sp = ZombieClassFactoryR(m_pPlayer, iEvolutionLevel, "banchee");
 
+	m_pPlayer->m_bIsVIP = false;
+	m_pPlayer->m_bIsZombie = true;
 	m_pPlayer->m_bIsZombieTank = false;
 	m_pPlayer->m_bIsZombieFemale = false;
 	m_pPlayer->m_bIsZombieHeavy = false;
@@ -885,6 +902,8 @@ void CPlayerModStrategy_ZB2R::BecomeStamper(ZombieLevel iEvolutionLevel)
 {
 	auto sp = ZombieClassFactoryR(m_pPlayer, iEvolutionLevel, "stamper");
 
+	m_pPlayer->m_bIsVIP = false;
+	m_pPlayer->m_bIsZombie = true;
 	m_pPlayer->m_bIsZombieTank = false;
 	m_pPlayer->m_bIsZombieFemale = false;
 	m_pPlayer->m_bIsZombieHeavy = false;
@@ -920,6 +939,8 @@ void CPlayerModStrategy_ZB2R::BecomeAksha(ZombieLevel iEvolutionLevel)
 {
 	auto sp = ZombieClassFactoryR(m_pPlayer, iEvolutionLevel, "aksha");
 
+	m_pPlayer->m_bIsVIP = false;
+	m_pPlayer->m_bIsZombie = true;
 	m_pPlayer->m_bIsZombieTank = false;
 	m_pPlayer->m_bIsZombieFemale = false;
 	m_pPlayer->m_bIsZombieHeavy = false;
@@ -937,6 +958,10 @@ void CPlayerModStrategy_ZB2R::BecomeAksha(ZombieLevel iEvolutionLevel)
 	m_pPlayer->m_bIsZombieFlying = false;
 	m_pPlayer->m_bIsZombieResident = false;
 
+	m_pPlayer->m_bIsZombieMeatWall = false;
+	m_pPlayer->m_bIsZombieDeathKnight = false;
+	m_pPlayer->m_bIsZombieSpider = false;
+
 	m_pCharacter_ZB2 = sp;
 	m_pCharacter = sp;
 
@@ -951,6 +976,8 @@ void CPlayerModStrategy_ZB2R::BecomeBoomer(ZombieLevel iEvolutionLevel)
 {
 	auto sp = ZombieClassFactoryR(m_pPlayer, iEvolutionLevel, "boomer");
 
+	m_pPlayer->m_bIsVIP = false;
+	m_pPlayer->m_bIsZombie = true;
 	m_pPlayer->m_bIsZombieTank = false;
 	m_pPlayer->m_bIsZombieFemale = false;
 	m_pPlayer->m_bIsZombieHeavy = false;
@@ -968,6 +995,10 @@ void CPlayerModStrategy_ZB2R::BecomeBoomer(ZombieLevel iEvolutionLevel)
 	m_pPlayer->m_bIsZombieFlying = false;
 	m_pPlayer->m_bIsZombieResident = false;
 
+	m_pPlayer->m_bIsZombieMeatWall = false;
+	m_pPlayer->m_bIsZombieDeathKnight = false;
+	m_pPlayer->m_bIsZombieSpider = false;
+
 	m_pCharacter_ZB2 = sp;
 	m_pCharacter = sp;
 
@@ -982,6 +1013,8 @@ void CPlayerModStrategy_ZB2R::BecomeBooster(ZombieLevel iEvolutionLevel)
 {
 	auto sp = ZombieClassFactoryR(m_pPlayer, iEvolutionLevel, "booster");
 
+	m_pPlayer->m_bIsVIP = false;
+	m_pPlayer->m_bIsZombie = true;
 	m_pPlayer->m_bIsZombieTank = false;
 	m_pPlayer->m_bIsZombieFemale = false;
 	m_pPlayer->m_bIsZombieHeavy = false;
@@ -999,6 +1032,10 @@ void CPlayerModStrategy_ZB2R::BecomeBooster(ZombieLevel iEvolutionLevel)
 	m_pPlayer->m_bIsZombieFlying = false;
 	m_pPlayer->m_bIsZombieResident = false;
 
+	m_pPlayer->m_bIsZombieMeatWall = false;
+	m_pPlayer->m_bIsZombieDeathKnight = false;
+	m_pPlayer->m_bIsZombieSpider = false;
+
 	m_pCharacter_ZB2 = sp;
 	m_pCharacter = sp;
 
@@ -1013,6 +1050,8 @@ void CPlayerModStrategy_ZB2R::BecomeChina(ZombieLevel iEvolutionLevel)
 {
 	auto sp = ZombieClassFactoryR(m_pPlayer, iEvolutionLevel, "china");
 
+	m_pPlayer->m_bIsVIP = false;
+	m_pPlayer->m_bIsZombie = true;
 	m_pPlayer->m_bIsZombieTank = false;
 	m_pPlayer->m_bIsZombieFemale = false;
 	m_pPlayer->m_bIsZombieHeavy = false;
@@ -1030,6 +1069,10 @@ void CPlayerModStrategy_ZB2R::BecomeChina(ZombieLevel iEvolutionLevel)
 	m_pPlayer->m_bIsZombieFlying = false;
 	m_pPlayer->m_bIsZombieResident = false;
 
+	m_pPlayer->m_bIsZombieMeatWall = false;
+	m_pPlayer->m_bIsZombieDeathKnight = false;
+	m_pPlayer->m_bIsZombieSpider = false;
+
 	m_pCharacter_ZB2 = sp;
 	m_pCharacter = sp;
 
@@ -1044,6 +1087,8 @@ void CPlayerModStrategy_ZB2R::BecomeFly(ZombieLevel iEvolutionLevel)
 {
 	auto sp = ZombieClassFactoryR(m_pPlayer, iEvolutionLevel, "fly");
 
+	m_pPlayer->m_bIsVIP = false;
+	m_pPlayer->m_bIsZombie = true;
 	m_pPlayer->m_bIsZombieTank = false;
 	m_pPlayer->m_bIsZombieFemale = false;
 	m_pPlayer->m_bIsZombieHeavy = false;
@@ -1061,6 +1106,10 @@ void CPlayerModStrategy_ZB2R::BecomeFly(ZombieLevel iEvolutionLevel)
 	m_pPlayer->m_bIsZombieFlying = true;
 	m_pPlayer->m_bIsZombieResident = false;
 
+	m_pPlayer->m_bIsZombieMeatWall = false;
+	m_pPlayer->m_bIsZombieDeathKnight = false;
+	m_pPlayer->m_bIsZombieSpider = false;
+
 	m_pCharacter_ZB2 = sp;
 	m_pCharacter = sp;
 
@@ -1075,6 +1124,8 @@ void CPlayerModStrategy_ZB2R::BecomeResident(ZombieLevel iEvolutionLevel)
 {
 	auto sp = ZombieClassFactoryR(m_pPlayer, iEvolutionLevel, "resident");
 
+	m_pPlayer->m_bIsVIP = false;
+	m_pPlayer->m_bIsZombie = true;
 	m_pPlayer->m_bIsZombieTank = false;
 	m_pPlayer->m_bIsZombieFemale = false;
 	m_pPlayer->m_bIsZombieHeavy = false;
@@ -1092,6 +1143,10 @@ void CPlayerModStrategy_ZB2R::BecomeResident(ZombieLevel iEvolutionLevel)
 	m_pPlayer->m_bIsZombieFlying = false;
 	m_pPlayer->m_bIsZombieResident = true;
 
+	m_pPlayer->m_bIsZombieMeatWall = false;
+	m_pPlayer->m_bIsZombieDeathKnight = false;
+	m_pPlayer->m_bIsZombieSpider = false;
+
 	m_pCharacter_ZB2 = sp;
 	m_pCharacter = sp;
 
@@ -1106,6 +1161,8 @@ void CPlayerModStrategy_ZB2R::BecomeMeatwall(ZombieLevel iEvolutionLevel)
 {
 	auto sp = ZombieClassFactoryR(m_pPlayer, iEvolutionLevel, "meatwall");
 
+	m_pPlayer->m_bIsVIP = false;
+	m_pPlayer->m_bIsZombie = true;
 	m_pPlayer->m_bIsZombieTank = false;
 	m_pPlayer->m_bIsZombieFemale = false;
 	m_pPlayer->m_bIsZombieHeavy = false;
@@ -1135,6 +1192,7 @@ void CPlayerModStrategy_ZB2R::BecomeMeatwall(ZombieLevel iEvolutionLevel)
 
 	m_iZombieInfections = 0;
 	UpdatePlayerEvolutionHUD();
+	SetScoreAttrib(m_pPlayer, m_pPlayer);
 
 	int killer_index = 0;
 
@@ -1142,7 +1200,7 @@ void CPlayerModStrategy_ZB2R::BecomeMeatwall(ZombieLevel iEvolutionLevel)
 
 	MESSAGE_BEGIN(MSG_ALL, gmsgZB5ExternEvo, NULL);
 	WRITE_BYTE(ZB5_EXTERN);
-	WRITE_BYTE(2);
+	WRITE_BYTE(1);
 	WRITE_BYTE(killer_index);
 	MESSAGE_END();
 
@@ -1170,6 +1228,8 @@ void CPlayerModStrategy_ZB2R::BecomeDeathknight(ZombieLevel iEvolutionLevel)
 {
 	auto sp = ZombieClassFactoryR(m_pPlayer, iEvolutionLevel, "deathknight");
 
+	m_pPlayer->m_bIsVIP = false;
+	m_pPlayer->m_bIsZombie = true;
 	m_pPlayer->m_bIsZombieTank = false;
 	m_pPlayer->m_bIsZombieFemale = false;
 	m_pPlayer->m_bIsZombieHeavy = false;
@@ -1179,6 +1239,13 @@ void CPlayerModStrategy_ZB2R::BecomeDeathknight(ZombieLevel iEvolutionLevel)
 	m_pPlayer->m_bIsZombieGanimed = false;
 	m_pPlayer->m_bIsZombieBanchee = false;
 	m_pPlayer->m_bIsZombieStamp = false;
+
+	m_pPlayer->m_bIsZombieAksha = false,
+	m_pPlayer->m_bIsZombieBoomer = false,
+	m_pPlayer->m_bIsZombieBooster = false,
+	m_pPlayer->m_bIsZombieChina = false,
+	m_pPlayer->m_bIsZombieFlying = false,
+	m_pPlayer->m_bIsZombieResident = false;
 
 	m_pPlayer->m_bIsZombieMeatWall = false;
 	m_pPlayer->m_bIsZombieDeathKnight = true;
@@ -1192,6 +1259,7 @@ void CPlayerModStrategy_ZB2R::BecomeDeathknight(ZombieLevel iEvolutionLevel)
 
 	m_iZombieInfections = 0;
 	UpdatePlayerEvolutionHUD();
+	SetScoreAttrib(m_pPlayer, m_pPlayer);
 
 	int killer_index = 0;
 
@@ -1224,6 +1292,8 @@ void CPlayerModStrategy_ZB2R::BecomeSpider(ZombieLevel iEvolutionLevel)
 {
 	auto sp = ZombieClassFactoryR(m_pPlayer, iEvolutionLevel, "spider");
 
+	m_pPlayer->m_bIsVIP = false;
+	m_pPlayer->m_bIsZombie = true;
 	m_pPlayer->m_bIsZombieTank = false;
 	m_pPlayer->m_bIsZombieFemale = false;
 	m_pPlayer->m_bIsZombieHeavy = false;
@@ -1233,6 +1303,13 @@ void CPlayerModStrategy_ZB2R::BecomeSpider(ZombieLevel iEvolutionLevel)
 	m_pPlayer->m_bIsZombieGanimed = false;
 	m_pPlayer->m_bIsZombieBanchee = false;
 	m_pPlayer->m_bIsZombieStamp = false;
+
+	m_pPlayer->m_bIsZombieAksha = false,
+	m_pPlayer->m_bIsZombieBoomer = false,
+	m_pPlayer->m_bIsZombieBooster = false,
+	m_pPlayer->m_bIsZombieChina = false,
+	m_pPlayer->m_bIsZombieFlying = false,
+	m_pPlayer->m_bIsZombieResident = false;
 
 	m_pPlayer->m_bIsZombieMeatWall = false;
 	m_pPlayer->m_bIsZombieDeathKnight = false;
@@ -1246,6 +1323,7 @@ void CPlayerModStrategy_ZB2R::BecomeSpider(ZombieLevel iEvolutionLevel)
 
 	m_iZombieInfections = 0;
 	UpdatePlayerEvolutionHUD();
+	SetScoreAttrib(m_pPlayer, m_pPlayer);
 
 	int killer_index = 0;
 
@@ -1253,7 +1331,7 @@ void CPlayerModStrategy_ZB2R::BecomeSpider(ZombieLevel iEvolutionLevel)
 
 	MESSAGE_BEGIN(MSG_ALL, gmsgZB5ExternEvo, NULL);
 	WRITE_BYTE(ZB5_EXTERN);
-	WRITE_BYTE(2);
+	WRITE_BYTE(3);
 	WRITE_BYTE(killer_index);
 	MESSAGE_END();
 
@@ -1281,6 +1359,9 @@ void CPlayerModStrategy_ZB2R::BecomeHuman()
 {
 	auto sp = std::make_shared<CHuman_ZB2R>(m_pPlayer);
 
+	m_pPlayer->m_bIsVIP = false;
+
+	m_pPlayer->m_bIsZombie = false;
 	m_pPlayer->m_bIsZombieTank = false;
 	m_pPlayer->m_bIsZombieFemale = false;
 	m_pPlayer->m_bIsZombieHeavy = false;
@@ -1294,6 +1375,13 @@ void CPlayerModStrategy_ZB2R::BecomeHuman()
 	m_pPlayer->m_bIsZombieMeatWall = false;
 	m_pPlayer->m_bIsZombieDeathKnight = false;
 	m_pPlayer->m_bIsZombieSpider = false;
+
+	m_pPlayer->m_bIsZombieAksha = false,
+	m_pPlayer->m_bIsZombieBoomer = false,
+	m_pPlayer->m_bIsZombieBooster = false,
+	m_pPlayer->m_bIsZombieChina = false,
+	m_pPlayer->m_bIsZombieFlying = false,
+	m_pPlayer->m_bIsZombieResident = false;
 
 	m_pCharacter_ZB2 = sp;
 	m_pCharacter = sp;
@@ -1315,9 +1403,9 @@ void CPlayerModStrategy_ZB2R::BecomeHero()
 
 	m_pPlayer->m_iHumanMoraleLevel = m_pPlayer->evolvl;
 
-	m_pPlayer->m_bIsHero = true;
 	m_pPlayer->m_bIsVIP = true;
 
+	m_pPlayer->m_bIsZombie = false;
 	m_pPlayer->m_bIsZombieTank = false;
 	m_pPlayer->m_bIsZombieFemale = false;
 	m_pPlayer->m_bIsZombieHeavy = false;
@@ -1332,11 +1420,20 @@ void CPlayerModStrategy_ZB2R::BecomeHero()
 	m_pPlayer->m_bIsZombieDeathKnight = false;
 	m_pPlayer->m_bIsZombieSpider = false;
 
+	m_pPlayer->m_bIsZombieAksha = false,
+	m_pPlayer->m_bIsZombieBoomer = false,
+	m_pPlayer->m_bIsZombieBooster = false,
+	m_pPlayer->m_bIsZombieChina = false,
+	m_pPlayer->m_bIsZombieFlying = false,
+	m_pPlayer->m_bIsZombieResident = false;
+
 	MESSAGE_BEGIN(MSG_ONE, gmsgZB5SetHero, nullptr, m_pPlayer->pev);
 	WRITE_BYTE(ZB5_GETHERO);
 	MESSAGE_END();
 
+	sp->InitHUD();
 	sp->ResetMaxSpeed();
+
 }
 
 void CPlayerModStrategy_ZB2R::Event_OnInfection(CBasePlayer *victim, CBasePlayer *attacker)

@@ -82,7 +82,7 @@ int CHudHeadName::Draw(float flTime)
 
 				int textlen = DrawUtils::HudStringLen(g_PlayerInfoList[i].name);
 
-				DrawUtils::DrawHudString(screen[0] - textlen * 0.5f, screen[1], gHUD.m_scrinfo.iWidth, g_PlayerInfoList[i].name, 150, 150, 150);
+				DrawUtils::DrawHudString(screen[0] - textlen * 0.5f, screen[1], gHUD.m_scrinfo.iWidth, g_PlayerInfoList[i].name, 150, 150, 150, 255);
 			}
 
 			if (gHUD.cl_headname->value == 2)

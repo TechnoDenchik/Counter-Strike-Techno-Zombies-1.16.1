@@ -47,7 +47,7 @@ CZombieClass_FlyR::CZombieClass_FlyR(CBasePlayer *player, ZombieLevel iEvolution
 	m_pPlayer->pev->rendermode = kRenderNormal;
 	m_pPlayer->ResetMaxSpeed();
 	m_pPlayer->GiveNamedItem("Knife_Zombi_fly");
-	m_pPlayer->GiveNamedItem("weapon_zombibombz");
+	m_pPlayer->GiveNamedItem("weapon_zombibomb_fly");
 	m_pPlayer->m_bIsZombieFlying = true;
 }
 

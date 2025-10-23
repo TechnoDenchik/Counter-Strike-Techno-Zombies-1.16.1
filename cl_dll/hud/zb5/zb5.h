@@ -22,8 +22,16 @@ public:
 	CHudMsgFunc(ZB5Getlocationbox);
 	CHudMsgFunc(ZB5GetlocationboxK);
 	CHudMsgFunc(ZB5ExternEvo);
+	CHudMsgFunc(ZB5UpdateEvoLv);
 	CHudMsgFunc(HitDamageMsgZB5);
+	CHudMsgFunc(ZB5RespawnBar);
+
+	int DrawHeroIcon();
+
 protected:
+
+	UniqueTexture m_iHero;
+
 	class impl_t;
 	impl_t *pimpl;
 };

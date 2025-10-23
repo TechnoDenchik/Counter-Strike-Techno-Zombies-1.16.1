@@ -6995,11 +6995,8 @@ void CBasePlayer::DropPlayerItem(const char *pszItemName)
 		pszItemName = NULL;
 	}
 
-	if (m_bIsVIP || !m_pModStrategy->CanDropWeapon(pszItemName))
+	if (!m_pModStrategy->CanDropWeapon(pszItemName))
 	{
-		MESSAGE_BEGIN(MSG_ONE, gmsgOriginalMsg11, NULL, pev);
-		WRITE_BYTE(ORIG_WDROP_MSG);
-		MESSAGE_END();
 		return;
 	}
 	else if (!pszItemName && HasShield())

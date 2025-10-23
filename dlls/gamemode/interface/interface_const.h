@@ -41,3 +41,4 @@ enum INTWeaponMsg : byte
 };
 
 #endif
+

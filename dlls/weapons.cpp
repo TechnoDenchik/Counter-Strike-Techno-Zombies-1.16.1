@@ -560,7 +560,24 @@ void CBasePlayerItem::DefaultTouch(CBaseEntity *pOther)
 	CBasePlayer *pPlayer = static_cast<CBasePlayer *>(pOther);
 
 
-	if (pPlayer->m_bIsZombie && m_iId != WEAPON_KNIFE && Q_strcmp(STRING(pev->classname), "weapon_zombibombz"))
+	if (pPlayer->m_bIsZombie && m_iId != WEAPON_KNIFE && Q_strcmp(STRING(pev->classname), "weapon_zombibombz")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_aksha")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_boomer")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_booster")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_china")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_deathknight")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_deimos")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_fly")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_ganimed")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_heal")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_heavy")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_meatwall")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_pc")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_resident")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_speed")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_spider")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_stamper")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_banchee"))
 	{
 		return;
 	}

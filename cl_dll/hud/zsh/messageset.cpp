@@ -94,7 +94,7 @@ int CHudTextZSH::Draw(float time)
 		sprintf(szbuffer, "Время до начала игры: %d секунда", times);
 	}
 
-	DrawUtils::DrawHudString(x - 110, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+	DrawUtils::DrawHudString(x - 110, y2 - 32, ScreenWidth, szbuffer, r, g, b, 255, flScale);
 
 	return 1;
 }
@@ -136,7 +136,7 @@ int CHudTextDayZSH::Draw(float time)
 	
 	stringtext->Bind();
 	DrawUtils::Draw2DQuadScaled(x - 500 / 2, y - 38, x + 500 / 2, y - 8);
-	DrawUtils::DrawHudString(x - 10, y - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+	DrawUtils::DrawHudString(x - 10, y - 32, ScreenWidth, szbuffer, r, g, b, 255, flScale);
 
 	
 	return 1;

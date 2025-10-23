@@ -74,16 +74,18 @@ private:
 	time_point_t tWorldTime4;
 	duration_t tDelta4;
 
-
 	duration_t tNextAttack5;
 	time_point_t tWorldTime5;
 	duration_t tDelta5;
+
+	duration_t tNextAttack6;
+	time_point_t tWorldTime6;
+	duration_t tDelta6;
 
 	float phs2;	// secondary attack start time
 	float phs3; // primary attack start time
 	float phs4;
 	float phs5;// spear attack end time... cannot switch weapon?
-
 
 	std::vector<EHANDLE> phs9_10_11;
 	std::array<CBeam*, 5> phs5_6_7;

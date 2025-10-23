@@ -46,7 +46,7 @@ CZombieClass_BoosterR::CZombieClass_BoosterR(CBasePlayer *player, ZombieLevel iE
 	m_pPlayer->pev->rendermode = kRenderNormal;
 	m_pPlayer->ResetMaxSpeed();
 	m_pPlayer->GiveNamedItem("Knife_Zombi_booster");
-	m_pPlayer->GiveNamedItem("weapon_zombibombz");
+	m_pPlayer->GiveNamedItem("weapon_zombibomb_booster");
 	m_pPlayer->m_bIsZombieBooster = true;
 }
 

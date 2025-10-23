@@ -37,6 +37,7 @@ extern "C"
 {
 #include "pmtrace.h"
 #include "pm_shared.h"
+#include "pm_defs.h"
 }
 
 cl_enginefunc_t gEngfuncs = { };
@@ -46,6 +47,8 @@ CHud gHUD;
 
 int g_iXash = 0; // indicates a buildnum
 int g_iMobileAPIVersion = 0;
+vec3_t g_velocity;
+vec3_t g_vecOrigin, g_vecEyePos, g_vecEye, g_vecVAngles;
 long g_iDamage[MAX_CLIENTS + 1];
 long g_iDamageTotal[MAX_CLIENTS + 1];
 double g_flDamageInAll;
@@ -157,6 +160,9 @@ char DLLEXPORT HUD_PlayerMoveTexture( char *name )
 
 void DLLEXPORT HUD_PlayerMove( struct playermove_s *ppmove, int server )
 {
+
+	VectorCopy(ppmove->velocity, g_velocity);
+
 	PM_Move( ppmove, server );
 }
 

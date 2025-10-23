@@ -52,6 +52,8 @@ struct beam_s
 	float		speed;
 	float		frameRate;
 	float		frame;
+	float		extra;
+	float		extra2;
 	int			segments;
 	int			startEntity;
 	int			endEntity;

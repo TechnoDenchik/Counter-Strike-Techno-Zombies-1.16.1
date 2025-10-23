@@ -1211,14 +1211,7 @@ static void Mod_LoadDeluxemap( void )
 	}
 
 	Q_snprintf( path, sizeof( path ), "maps/%s.dlit", modelname );
-	/*Q_snprintf(path, sizeof(path), "orig/%s.dlit", modelname);
-	Q_snprintf(path, sizeof(path), "dm/%s.dlit", modelname);
-	Q_snprintf(path, sizeof(path), "tdm/%s.dlit", modelname);
-	Q_snprintf(path, sizeof(path), "gdm/%s.dlit", modelname);
-	Q_snprintf(path, sizeof(path), "zb2/%s.dlit", modelname);
-	Q_snprintf(path, sizeof(path), "zb3/%s.dlit", modelname);
-	Q_snprintf(path, sizeof(path), "zsh/%s.dlit", modelname);
-	Q_snprintf(path, sizeof(path), "zs/%s.dlit", modelname);*/
+	
 	// make sure that deluxemap is actual
 	if( !COM_CompareFileTime( path, loadmodel->name, &iCompare ))
 	{

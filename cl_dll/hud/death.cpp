@@ -495,7 +495,7 @@
 				}
 			}
 
-			if (!strcmp(killedwith, "d_knife") && !g_PlayerExtraInfo[killer].zombie)
+			if (!strcmp(killedwith, "d_knife") && !g_PlayerExtraInfo[killer].zombie && !g_PlayerExtraInfo[killer].mutant)
 			{
 				if (killer == idx)
 				{
@@ -519,7 +519,7 @@
 					m_iconIndex = 2;
 					m_killIconTime = gHUD.m_flTime + KILLICON_DISPLAY_TIME;
 				}
-				if (!strcmp(killedwith, "d_knife") && g_PlayerExtraInfo[killer].zombie)
+				if (!strcmp(killedwith, "d_knife") && g_PlayerExtraInfo[killer].zombie && g_PlayerExtraInfo[killer].mutant)
 				{
 					if (local)
 					{
@@ -737,41 +737,30 @@
 
 		if (rgDeathNoticeList[i].bNonPlayerKill)
 		{
-			ConsolePrint(rgDeathNoticeList[i].szKiller);
-			ConsolePrint(" killed a ");
-			ConsolePrint(rgDeathNoticeList[i].szVictim);
-			ConsolePrint("\n");
+			
 		}
 		else
 		{
 			// record the death notice in the console
 			if (rgDeathNoticeList[i].bSuicide)
 			{
-				ConsolePrint(rgDeathNoticeList[i].szVictim);
+			
 
 				if (!strncmp(killedwith, "d_world", sizeof(killedwith)))
 				{
-					ConsolePrint(" died");
+				
 				}
 				else
 				{
-					ConsolePrint(" killed self");
+					
 				}
 			}
 			else if (rgDeathNoticeList[i].bTeamKill)
 			{
-				ConsolePrint(rgDeathNoticeList[i].szKiller);
-				ConsolePrint(" killed his teammate ");
-				ConsolePrint(rgDeathNoticeList[i].szVictim);
+			
 			}
 			else
 			{
-				if (headshot)
-					ConsolePrint("*** ");
-				ConsolePrint(rgDeathNoticeList[i].szKiller);
-				ConsolePrint(" killed ");
-				ConsolePrint(rgDeathNoticeList[i].szVictim);
-
 				float fDamageHighest = 0.0f;
 				bool local = false;
 
@@ -812,7 +801,7 @@
 					}
 					g_PlayerExtraInfoEx[j].totaldmg[victim] = 0.0f;
 
-					if (gHUD.IsZombieMod() && g_PlayerExtraInfo[j].zombie)
+					if (gHUD.IsZombieMod() && g_PlayerExtraInfo[j].zombie && g_PlayerExtraInfo[j].mutant)
 					{
 						for (int k = 1; k <= 2; k++)
 						{
@@ -824,8 +813,7 @@
 
 								if (local)
 								{
-									//if (g_PlayerExtraInfo[killer].zombie && !g_PlayerExtraInfo[victim].zombie)
-									if (g_PlayerExtraInfo[killer].zombie && !g_PlayerExtraInfo[victim].zombie)
+									if (g_PlayerExtraInfo[killer].zombie && g_PlayerExtraInfo[killer].mutant && !g_PlayerExtraInfo[victim].zombie && !g_PlayerExtraInfo[victim].mutant)
 									{
 										NewAlarm().SetAlarm(ALARM_ZOMBIEBOMB);
 										//g_ZombieScore.assist_infection++;
@@ -979,16 +967,8 @@
 
 			if (*killedwith && (*killedwith > 13) && strncmp(killedwith, "d_world", sizeof(killedwith)) && !rgDeathNoticeList[i].bTeamKill)
 			{
-				if (headshot)
-					ConsolePrint(" with a headshot from ");
-				else
-					ConsolePrint(" with ");
-
-				ConsolePrint(killedwith + 2); // skip over the "d_" part
+			
 			}
-
-			if (headshot) ConsolePrint(" ***");
-			ConsolePrint("\n");
 		}
 
 		return 1;

@@ -87,5 +87,4 @@ void HumanSkill_PrecacheR();
 
 std::shared_ptr<CBaseZombieClass_ZB2R> ZombieClassFactoryR(CBasePlayer *player, ZombieLevel lv, const char *name = nullptr);
 
-
 #endif

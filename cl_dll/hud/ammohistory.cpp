@@ -293,7 +293,7 @@
 					gEngfuncs.pfnDrawConsoleStringLen(SzWpnNameCn, &iLength, &iHeight);
 					gEngfuncs.pfnDrawConsoleString(xpos, ypos + abs(iH - iHeight) / 2, 0);
 
-					DrawUtils::DrawHudString(xpos, ypos + abs(iH - iHeight) / 2, ScreenWidth, szWeaponInfo, 255, 255, 255, 1.0f);
+					DrawUtils::DrawHudString(xpos, ypos + abs(iH - iHeight) / 2, ScreenWidth, szWeaponInfo, 255, 255, 255, min((int)scale, 255), 1.0f);
 				}
 			}
 		}

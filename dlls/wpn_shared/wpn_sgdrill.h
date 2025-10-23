@@ -55,7 +55,7 @@ public:
 	int m_iShell;
 
 private:
-	unsigned short m_usFireSgdrill;
+	unsigned short m_usFireSgDrill;
 };
 
 #endif

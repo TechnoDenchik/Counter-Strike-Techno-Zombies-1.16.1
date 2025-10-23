@@ -171,10 +171,12 @@ public:
 #ifdef CLIENT_DLL
 	virtual void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) {}
 	virtual int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) { return 1; }
+	virtual int TakeSprite(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage) { return 1; }
 	virtual int TakeHealth(float flHealth, int bitsDamageType) { return 1; }
 #else 
 	virtual void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 	virtual int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
+	virtual int TakeSprite(entvars_t* pevInflictor, entvars_t* pevAttacker, int number);
 	virtual int TakeDamage2(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage2, int bitsDamageType2);
 	virtual int TakeHealth(float flHealth, int bitsDamageType);
 #endif
@@ -263,6 +265,7 @@ public:
 	void UpdateOnRemove(void);
 	int ShouldToggle(USE_TYPE useType, BOOL currentState);
 	void FireBullets(ULONG cShots, Vector vecSrc, Vector vecDirShooting, Vector vecSpread, float flDistance, int iBulletType, int iTracerFreq = 4, int iDamage = 0, entvars_t *pevAttacker = NULL);
+	void FireBullets2(ULONG cShots, Vector vecSrc, Vector vecDirShooting, Vector vecSpread, float flDistance, int iBulletType, int iTracerFreq = 4, int iDamage = 0, entvars_t* pevAttacker = NULL, int iWeaponType = 0);
 	Vector FireBullets3(Vector vecSrc, Vector vecDirShooting, float flSpread, float flDistance, int iPenetration, int iBulletType, int iDamage, float flRangeModifier, entvars_t *pevAttacker, bool bPistol, int shared_rand = 0);
 
 

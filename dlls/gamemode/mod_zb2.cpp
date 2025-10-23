@@ -1061,7 +1061,6 @@ void CPlayerModStrategy_ZB2::BecomeHero()
 	auto sp = std::make_shared<CHero_ZB1>(m_pPlayer);
 
 	m_pPlayer->m_bIsHero = true;
-	m_pPlayer->m_bIsVIP = true;
 
 	MESSAGE_BEGIN(MSG_ONE, gmsgZB3InventorySet, nullptr, m_pPlayer->pev);
 	WRITE_BYTE(WPN_INVENTORY);

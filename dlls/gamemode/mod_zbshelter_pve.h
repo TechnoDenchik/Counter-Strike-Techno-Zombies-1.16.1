@@ -189,6 +189,9 @@ public:
 	EventDispatcher<void(CBasePlayer* attacker2, float&)> m_eventAdjustDamage2;
 	EventDispatcher<void(CBasePlayer* attacker3, float&)> m_eventAdjustDamage3;
 	EventDispatcher<void(CBasePlayer* attacker4, float&)> m_eventAdjustDamage4;
+
+	EventDispatcher<void(CBasePlayer* builder)> m_eventBuildGenerator;
+
 	EventDispatcher<void(CWood* victim, CBaseEntity* attacker)> m_eventWoodKilled;
 	EventDispatcher<void(CMeat* victim, CBaseEntity* attacker2)> m_eventMeatKilled;
 

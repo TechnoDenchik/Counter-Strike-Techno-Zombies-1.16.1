@@ -7,535 +7,195 @@
 #include "cbase.h"
 #include "player.h"
 #include "weapons.h"
-#include "wpn_nataknifed.h"
-
 #ifndef CLIENT_DLL
 #include "gamemode/mods.h"
 #endif
 
+#include "weapons/WeaponTemplate.hpp"
+#include "weapons/KnifeAttack.h"
+
 #define KNIFE_BODYHIT_VOLUME 128
 #define KNIFE_WALLHIT_VOLUME 512
 
-LINK_ENTITY_TO_CLASS(knife_nataknifed, CKnifeNataKnifed)
-
-enum knife_e
-{
-	KNIFE_IDLE,
-	KNIFE_ATTACK1HIT,
-	KNIFE_ATTACK2HIT,
-	KNIFE_DRAW,
-	KNIFE_STABHIT,
-	KNIFE_STABMISS,
-	KNIFE_MIDATTACK1HIT,
-	KNIFE_MIDATTACK2HIT
-};
-
-enum knife_shield_e
-{
-	KNIFE_SHIELD_IDLE,
-	KNIFE_SHIELD_SLASH,
-	KNIFE_SHIELD_ATTACKHIT,
-	KNIFE_SHIELD_DRAW,
-	KNIFE_SHIELD_UPIDLE,
-	KNIFE_SHIELD_UP,
-	KNIFE_SHIELD_DOWN
-};
-
-void CKnifeNataKnifed::Spawn(void)
-{
-	Precache();
-	m_iId = WEAPON_KNIFE;
-	SET_MODEL(ENT(pev), "models/w_knife.mdl");
-
-	m_iClip = WEAPON_NOCLIP;
-	m_iWeaponState &= ~WPNSTATE_SHIELD_DRAWN;
-
-	FallInit();
-}
-
-void CKnifeNataKnifed::Precache(void)
-{
-	PRECACHE_MODEL("models/v_nataknifed.mdl");
-	PRECACHE_MODEL("models/p_nataknifed.mdl");
-#ifdef ENABLE_SHIELD
-	PRECACHE_MODEL("models/shield/v_shield_knife.mdl");
-#endif
-	PRECACHE_MODEL("models/w_knife.mdl");
-
-	PRECACHE_SOUND("weapons/.wav");
-	
-
-	m_usKnife = PRECACHE_EVENT(1, "events/knife.sc");
-}
-
-int CKnifeNataKnifed::GetItemInfo(ItemInfo *p)
-{
-	p->pszName = STRING(pev->classname);
-	p->pszAmmo1 = NULL;
-	p->iMaxAmmo1 = -1;
-	p->pszAmmo2 = NULL;
-	p->iMaxAmmo2 = -1;
-	p->pszAmmo3 = NULL;
-	p->iMaxAmmo3 = -1;
-	p->pszAmmoGrenade = NULL;
-	p->iMaxAmmoGrenade = -1;
-	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 2;
-	p->iPosition = 1;
-	p->iId = WEAPON_KNIFE;
-	p->iFlags = 0;
-	p->iWeight = KNIFE_WEIGHT;
-
-	return 1;
-}
-
-BOOL CKnifeNataKnifed::Deploy(void)
-{
-	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/knife_deploy1.wav", 0.3, 2.4);
-
-	m_fMaxSpeed = 250;
-	m_iSwing = 0;
-	m_iWeaponState &= ~WPNSTATE_SHIELD_DRAWN;
-	m_pPlayer->m_bShieldDrawn = false;
-#ifdef ENABLE_SHIELD
-	if (m_pPlayer->HasShield() != false)
-		return DefaultDeploy("models/shield/v_shield_knife.mdl", "models/shield/p_shield_knife.mdl", KNIFE_SHIELD_DRAW, "shieldknife", UseDecrement() != FALSE);
-	else
-#endif
-		return DefaultDeploy("models/v_nataknifed.mdl", "models/p_nataknifed.mdl", KNIFE_DRAW, "knife", UseDecrement() != FALSE);
-}
-
-void CKnifeNataKnifed::Holster(int skiplocal)
-{
-	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
-}
-
-void CKnifeNataKnifed::WeaponAnimation(int iAnimation)
-{
-	int flags;
-#ifdef CLIENT_WEAPONS
-	flags = FEV_NOTHOST;
-#else
-	flags = 0;
-#endif
-
-	PLAYBACK_EVENT_FULL(flags, ENT(m_pPlayer->pev), m_usKnife, 0, (float *)&g_vecZero, (float *)&g_vecZero, 0, 0, iAnimation, 2, 3, 4);
-}
-
-void NFindHullIntersection(const Vector &vecSrc, TraceResult &tr, float *pflMins, float *pfkMaxs, edict_t *pEntity)
-{
-	TraceResult trTemp;
-	float flDistance = 1000000;
-	float *pflMinMaxs[2] = { pflMins, pfkMaxs };
-	Vector vecHullEnd = tr.vecEndPos;
-
-	vecHullEnd = vecSrc + ((vecHullEnd - vecSrc) * 2);
-	TRACE_LINE(vecSrc, vecHullEnd, dont_ignore_monsters, pEntity, &trTemp);
-
-	if (trTemp.flFraction < 1)
+	class CKnifeNataKnifeDX : public LinkWeaponTemplate<CKnifeNataKnifeDX,
+		TGeneralData,
+		BuildTGetItemInfoFromCSW<WEAPON_KNIFE>::template type,
+		TWeaponIdleDefault,
+		TDeployDefault
+	>
 	{
-		tr = trTemp;
-		return;
-	}
+	public:
+		static constexpr const char* ClassName = "knife_nataknifed";
+		static constexpr const char* V_Model = "models/v_nataknifed.mdl";
+		static constexpr const char* P_Model = "models/p_nataknifed.mdl";
+		static constexpr const char* W_Model = "models/w_knife.mdl";
 
-	for (int i = 0; i < 2; i++)
-	{
-		for (int j = 0; j < 2; j++)
+		static constexpr int MaxClip = -1;
+		static constexpr auto ItemSlot = KNIFE_SLOT;
+		static constexpr const char* AnimExtension = "knife";
+		KnockbackData KnockBack = { .0f, .0f, .0f, .0f, 0.65f };
+
+	public:
+
+		enum
 		{
-			for (int k = 0; k < 2; k++)
-			{
-				Vector vecEnd;
-				vecEnd.x = vecHullEnd.x + pflMinMaxs[i][0];
-				vecEnd.y = vecHullEnd.y + pflMinMaxs[j][1];
-				vecEnd.z = vecHullEnd.z + pflMinMaxs[k][2];
-
-				TRACE_LINE(vecSrc, vecEnd, dont_ignore_monsters, pEntity, &trTemp);
-
-				if (trTemp.flFraction < 1)
-				{
-					float flThisDistance = (trTemp.vecEndPos - vecSrc).Length();
-
-					if (flThisDistance < flDistance)
-					{
-						tr = trTemp;
-						flDistance = flThisDistance;
-					}
-				}
-			}
-		}
-	}
-}
-
-void CKnifeNataKnifed::PrimaryAttack(void)
-{
-	Swing(TRUE);
-}
-
-void CKnifeNataKnifed::SetPlayerShieldAnim(void)
-{
-	if (m_pPlayer->HasShield() == true)
-	{
-		if (m_iWeaponState & WPNSTATE_SHIELD_DRAWN)
-			strcpy(m_pPlayer->m_szAnimExtention, "shield");
-		else
-			strcpy(m_pPlayer->m_szAnimExtention, "shieldknife");
-	}
-}
-
-void CKnifeNataKnifed::ResetPlayerShieldAnim(void)
-{
-	if (m_pPlayer->HasShield() == true)
-	{
-		if (m_iWeaponState & WPNSTATE_SHIELD_DRAWN)
-			strcpy(m_pPlayer->m_szAnimExtention, "shieldknife");
-	}
-}
-
-bool CKnifeNataKnifed::ShieldSecondaryFire(int up_anim, int down_anim)
-{
-	if (m_pPlayer->HasShield() == false)
-		return false;
-
-	if (m_iWeaponState & WPNSTATE_SHIELD_DRAWN)
-	{
-		m_iWeaponState &= ~WPNSTATE_SHIELD_DRAWN;
-		SendWeaponAnim(down_anim, UseDecrement() != FALSE);
-		strcpy(m_pPlayer->m_szAnimExtention, "shieldknife");
-		m_fMaxSpeed = 250;
-		m_pPlayer->m_bShieldDrawn = false;
-	}
-	else
-	{
-		m_iWeaponState |= WPNSTATE_SHIELD_DRAWN;
-		SendWeaponAnim(up_anim, UseDecrement() != FALSE);
-		strcpy(m_pPlayer->m_szAnimExtention, "shielded");
-		m_fMaxSpeed = 180;
-		m_pPlayer->m_bShieldDrawn = true;
-	}
-
-#ifndef CLIENT_DLL
-	m_pPlayer->UpdateShieldCrosshair((m_iWeaponState & WPNSTATE_SHIELD_DRAWN) == 0);
-	m_pPlayer->ResetMaxSpeed();
-#endif
-	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.4;
-	m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.4;
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.6;
-	return true;
-}
-
-void CKnifeNataKnifed::SecondaryAttack(void)
-{
-	if (ShieldSecondaryFire(KNIFE_SHIELD_UP, KNIFE_SHIELD_DOWN) == true)
-		return;
-
-	Stab(TRUE);
-	pev->nextthink = UTIL_WeaponTimeBase() + 0.35;
-}
-
-void CKnifeNataKnifed::Smack(void)
-{
-	DecalGunshot(&m_trHit, BULLET_PLAYER_CROWBAR, false, m_pPlayer->pev, false);
-}
-
-void CKnifeNataKnifed::SwingAgain(void)
-{
-	Swing(FALSE);
-}
-
-void CKnifeNataKnifed::WeaponIdle(void)
-{
-	ResetEmptySound();
- 	m_pPlayer->GetAutoaimVector(AUTOAIM_10DEGREES);
-
-	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase())
-		return;
-
-	if (m_pPlayer->m_bShieldDrawn != true)
-	{
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 20;
-		SendWeaponAnim(KNIFE_IDLE, UseDecrement() != FALSE);
-	}
-}
-
-int CKnifeNataKnifed::Swing(int fFirst)
-{
-	BOOL fDidHit = FALSE;
-	UTIL_MakeVectors(m_pPlayer->pev->v_angle);
-	Vector vecSrc = m_pPlayer->GetGunPosition();
-	Vector vecEnd = vecSrc + gpGlobals->v_forward * 48;
-
-	TraceResult tr;
-	UTIL_TraceLine(vecSrc, vecEnd, dont_ignore_monsters, ENT(m_pPlayer->pev), &tr);
-
-	if (tr.flFraction >= 1)
-	{
-		UTIL_TraceHull(vecSrc, vecEnd, dont_ignore_monsters, head_hull, ENT(m_pPlayer->pev), &tr);
-
-		if (tr.flFraction < 1)
+			ANIM_IDLE1 = 0,
+			ANIM_DRAW,
+			ANIM_SLASH1,
+			ANIM_SLASH2,
+			ANIM_STAB,
+			ANIM_STAB2,
+			ANIM_STAB_MISS,
+			ANIM_STAB_MISS2,
+		};
+		void Precache() override
 		{
-			CBaseEntity *pHit = CBaseEntity::Instance(tr.pHit);
+			Base::Precache();
 
-			if (!pHit || pHit->IsBSPModel())
-				FindHullIntersection(vecSrc, tr, VEC_DUCK_HULL_MIN, VEC_DUCK_HULL_MAX, ENT(m_pPlayer->pev));
-
-			vecEnd = tr.vecEndPos;
-		}
-	}
-
-	if (tr.flFraction >= 1)
-	{
-		if (fFirst)
-		{
-			if (m_pPlayer->HasShield() == false)
-			{
-				switch ((m_iSwing++) % 2)
-				{
-					case 0: SendWeaponAnim(KNIFE_MIDATTACK1HIT, UseDecrement() != FALSE); break;
-					case 1: SendWeaponAnim(KNIFE_MIDATTACK2HIT, UseDecrement() != FALSE); break;
-				}
-
-				m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.35;
-				m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.5;
-			}
-			else
-			{
-				SendWeaponAnim(KNIFE_SHIELD_ATTACKHIT, UseDecrement() != FALSE);
-
-				m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 1.0;
-				m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1.2;
-			}
-
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 2;
-
-			if (RANDOM_LONG(0, 1))
-				EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/knife_slash1.wav", VOL_NORM, ATTN_NORM, 0, 94);
-			else
-				EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/knife_slash2.wav", VOL_NORM, ATTN_NORM, 0, 94);
-
-#ifndef CLIENT_DLL
-			m_pPlayer->SetAnimation(PLAYER_ATTACK1);
-#endif
-		}
-	}
-	else
-	{
-		fDidHit = TRUE;
-
-		if (m_pPlayer->HasShield() == false)
-		{
-			switch ((m_iSwing++) % 2)
-			{
-				case 0: SendWeaponAnim(KNIFE_MIDATTACK1HIT, UseDecrement() != FALSE); break;
-				case 1: SendWeaponAnim(KNIFE_MIDATTACK2HIT, UseDecrement() != FALSE); break;
-			}
-
-			m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.4;
-			m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.5;
-		}
-		else
-		{
-			SendWeaponAnim(KNIFE_SHIELD_ATTACKHIT, UseDecrement() != FALSE);
-
-			m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 1.0;
-			m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1.2;
+			PRECACHE_SOUND("weapons/nata_draw.wav");
+			PRECACHE_SOUND("weapons/nata_wall.wav");
+			PRECACHE_SOUND("weapons/nata_slash.wav");
+			PRECACHE_SOUND("weapons/nata_stab.wav");
+			PRECACHE_SOUND("weapons/nata_hit_1.wav");
+			PRECACHE_SOUND("weapons/nata_hit_2.wav");
 		}
 
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 2;
-
-		CBaseEntity *pEntity = CBaseEntity::Instance(tr.pHit);
-		SetPlayerShieldAnim();
-
-#ifndef CLIENT_DLL
-		m_pPlayer->SetAnimation(PLAYER_ATTACK1);
-#endif
-		ClearMultiDamage();
-		if (pEntity)
+		BOOL Deploy() override
 		{
-			float flDamage = 15;
-			if (m_flNextPrimaryAttack + 0.4 < UTIL_WeaponTimeBase())
-				flDamage = 20;
+			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/nata_draw.wav", 0.3, 2.4);
 
+			m_fMaxSpeed = 250;
+			m_iSwing = 0;
+			m_iWeaponState &= ~WPNSTATE_SHIELD_DRAWN;
+			m_pPlayer->m_bShieldDrawn = false;
+			return Base::Deploy();
+		}
+
+		float GetMaxSpeed() override { return m_fMaxSpeed; }
+		void PrimaryAttack() override;
+		void SecondaryAttack() override;
+		BOOL CanDrop() override { return false; }
+
+	public:
+		float GetPrimaryAttackDamage() const
+		{
+			float flDamage = 17;
 #ifndef CLIENT_DLL
 			if (g_pModRunning->DamageTrack() == DT_ZB)
 				flDamage *= 9.5f;
 			else if (g_pModRunning->DamageTrack() == DT_ZBS)
 				flDamage *= 5.5f;
 #endif
-
-			pEntity->TraceAttack(m_pPlayer->pev, flDamage, gpGlobals->v_forward, &tr, DMG_NEVERGIB | DMG_BULLET);
+			return flDamage;
 		}
-		ApplyMultiDamage(m_pPlayer->pev, m_pPlayer->pev);
-
-		float flVol = 1;
-#ifndef CLIENT_DLL
-		int fHitWorld = TRUE;
-#endif
-		if (pEntity)
+		float GetSecondaryAttackDamage() const
 		{
-			if (pEntity->Classify() != CLASS_NONE && pEntity->Classify() != CLASS_MACHINE)
-			{
-				switch (RANDOM_LONG(0, 3))
-				{
-					case 0: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/knife_hit1.wav", VOL_NORM, ATTN_NORM); break;
-					case 1: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/knife_hit2.wav", VOL_NORM, ATTN_NORM); break;
-					case 2: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/knife_hit3.wav", VOL_NORM, ATTN_NORM); break;
-					case 3: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/knife_hit4.wav", VOL_NORM, ATTN_NORM); break;
-				}
-
-				m_pPlayer->m_iWeaponVolume = KNIFE_BODYHIT_VOLUME;
-
-				if (!pEntity->IsAlive())
-					return TRUE;
-
-				flVol = 0.1;
+			float flDamage = 110;
 #ifndef CLIENT_DLL
-				fHitWorld = FALSE;
+			if (g_pModRunning->DamageTrack() == DT_ZB)
+				flDamage *= 9.5f;
+			else if (g_pModRunning->DamageTrack() == DT_ZBS)
+				flDamage *= 5.5f;
 #endif
-			}
+			return flDamage;
 		}
+	};
 
-#ifndef CLIENT_DLL
-		if (fHitWorld)
-		{
-			TEXTURETYPE_PlaySound(&tr, vecSrc, vecSrc + (vecEnd - vecSrc) * 2, BULLET_PLAYER_CROWBAR);
-			EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/knife_hitwall1.wav", VOL_NORM, ATTN_NORM, 0, 98 + RANDOM_LONG(0, 3));
-		}
-#endif
+	LINK_ENTITY_TO_CLASS(knife_nataknifed, CKnifeNataKnifeDX)
 
-		m_trHit = tr;
-		m_pPlayer->m_iWeaponVolume = flVol * KNIFE_WALLHIT_VOLUME;
-
-		SetThink(&CKnifeNataKnifed::Smack);
-		pev->nextthink = UTIL_WeaponTimeBase() + 0.2;
-		SetPlayerShieldAnim();
-	}
-
-	return fDidHit;
-}
-
-int CKnifeNataKnifed::Stab(int fFirst)
-{
-	BOOL fDidHit = FALSE;
-	UTIL_MakeVectors(m_pPlayer->pev->v_angle);
-	Vector vecSrc = m_pPlayer->GetGunPosition();
-	Vector vecEnd = vecSrc + gpGlobals->v_forward * 32;
-
-	TraceResult tr;
-	UTIL_TraceLine(vecSrc, vecEnd, dont_ignore_monsters, ENT(m_pPlayer->pev), &tr);
-
-	if (tr.flFraction >= 1)
+		void CKnifeNataKnifeDX::PrimaryAttack(void)
 	{
-		UTIL_TraceHull(vecSrc, vecEnd, dont_ignore_monsters, head_hull, ENT(m_pPlayer->pev), &tr);
-
-		if (tr.flFraction < 1)
-		{
-			CBaseEntity *pHit = CBaseEntity::Instance(tr.pHit);
-
-			if (!pHit || pHit->IsBSPModel())
-				FindHullIntersection(vecSrc, tr, VEC_DUCK_HULL_MIN, VEC_DUCK_HULL_MAX, ENT(m_pPlayer->pev));
-
-			vecEnd = tr.vecEndPos;
-		}
-	}
-
-	if (tr.flFraction >= 1)
-	{
-		if (fFirst)
-		{
-			SendWeaponAnim(KNIFE_STABMISS, UseDecrement() != FALSE);
-
-			m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 1;
-			m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1;
-
-			if (RANDOM_LONG(0, 1))
-				EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/knife_slash1.wav", VOL_NORM, ATTN_NORM, 0, 94);
-			else
-				EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/knife_slash2.wav", VOL_NORM, ATTN_NORM, 0, 94);
-#ifndef CLIENT_DLL
-			m_pPlayer->SetAnimation(PLAYER_ATTACK1);
-#endif
-		}
-	}
-	else
-	{
-		fDidHit = TRUE;
-
-#ifndef CLIENT_DLL
-		SendWeaponAnim(KNIFE_STABHIT, UseDecrement() != FALSE);
-#endif
-		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 1.1;
-		m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1.1;
-
-		CBaseEntity *pEntity = CBaseEntity::Instance(tr.pHit);
-
+		BOOL fDidHit = FALSE;
+		UTIL_MakeVectors(m_pPlayer->pev->v_angle);
+		Vector vecSrc = m_pPlayer->GetGunPosition();
 #ifndef CLIENT_DLL
 		m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 #endif
-		float flDamage = 65.0;
+		m_iSwing++;
+		if (m_iSwing & 1)
+			SendWeaponAnim(ANIM_SLASH1, UseDecrement() != FALSE);
+		else
+			SendWeaponAnim(ANIM_SLASH2, UseDecrement() != FALSE);
 
-		if (pEntity && pEntity->IsPlayer())
+#ifndef CLIENT_DLL
+		switch (KnifeAttack(vecSrc, gpGlobals->v_forward, GetPrimaryAttackDamage(), 50, DMG_NEVERGIB | DMG_BULLET, m_pPlayer->pev, m_pPlayer->pev))
 		{
-			Vector2D vec2LOS;
-			Vector vecForward = gpGlobals->v_forward;
-
-			// ???
-			UTIL_MakeVectors(pEntity->pev->angles);
-
-			vec2LOS = vecForward.Make2D();
-			vec2LOS = vec2LOS.Normalize();
-
-			if (DotProduct(vec2LOS, gpGlobals->v_forward.Make2D()) > 0.8)
-				flDamage *= 3.0;
+		case HIT_NONE:
+		{
+			EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/nata_slash.wav", VOL_NORM, ATTN_NORM, 0, 94);
+			break;
 		}
-
-#ifndef CLIENT_DLL
-		if (g_pModRunning->DamageTrack() == DT_ZB)
-			flDamage *= 9.5f;
-		else if(g_pModRunning->DamageTrack() == DT_ZBS)
-			flDamage *= 5.5f;
-#endif
-
-		UTIL_MakeVectors(m_pPlayer->pev->v_angle);
-		ClearMultiDamage();
-		if (pEntity)
-			pEntity->TraceAttack(m_pPlayer->pev, flDamage, gpGlobals->v_forward, &tr, DMG_NEVERGIB | DMG_BULLET);
-		ApplyMultiDamage(m_pPlayer->pev, m_pPlayer->pev);
-
-		float flVol = 1;
-#ifndef CLIENT_DLL
-		int fHitWorld = TRUE;
-#endif
-		if (pEntity)
+		case HIT_PLAYER:
 		{
-			if (pEntity->Classify() != CLASS_NONE && pEntity->Classify() != CLASS_MACHINE)
-			{
-				EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/knife_stab.wav", VOL_NORM, ATTN_NORM);
-				m_pPlayer->m_iWeaponVolume = KNIFE_BODYHIT_VOLUME;
-
-				if (!pEntity->IsAlive())
-					return TRUE;
-
-				flVol = 0.1;
-#ifndef CLIENT_DLL
-				fHitWorld = FALSE;
-#endif
-			}
+			if (m_iSwing & 1)
+				EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/nata_hit_1.wav", VOL_NORM, ATTN_NORM, 0, 94);
+			else
+				EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/nata_hit_2.wav", VOL_NORM, ATTN_NORM, 0, 94);
+			m_pPlayer->m_iWeaponVolume = KNIFE_BODYHIT_VOLUME;
+			fDidHit = TRUE;
+			break;
 		}
-
-#ifndef CLIENT_DLL
-		if (fHitWorld)
+		case HIT_WALL:
 		{
-			TEXTURETYPE_PlaySound(&tr, vecSrc, vecSrc + (vecEnd - vecSrc) * 2, BULLET_PLAYER_CROWBAR);
-			EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/knife_hitwall1.wav", VOL_NORM, ATTN_NORM, 0, 98 + RANDOM_LONG(0, 3));
+			EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/nata_wall.wav", VOL_NORM, ATTN_NORM, 0, 94);
+			m_pPlayer->m_iWeaponVolume = KNIFE_WALLHIT_VOLUME * 0.5f;
+			fDidHit = TRUE;
+			break;
+		}
 		}
 #endif
 
-		m_trHit = tr;
-		m_pPlayer->m_iWeaponVolume = flVol * KNIFE_WALLHIT_VOLUME;
-
-		SetThink(&CKnifeNataKnifed::Smack);
-		pev->nextthink = UTIL_WeaponTimeBase() + 0.2;
+		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.37f;
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 2.0f;
 	}
 
-	return fDidHit;
-}
+	void CKnifeNataKnifeDX::SecondaryAttack(void)
+	{
+		BOOL fDidHit = FALSE;
+		UTIL_MakeVectors(m_pPlayer->pev->v_angle);
+		Vector vecSrc = m_pPlayer->GetGunPosition();
+#ifndef CLIENT_DLL
+		m_pPlayer->SetAnimation(PLAYER_ATTACK1);
+#endif
+		m_iSwing++;
+		if (m_iSwing & 1)
+			SendWeaponAnim(ANIM_STAB_MISS, UseDecrement() != FALSE);
+		else
+			SendWeaponAnim(ANIM_STAB_MISS2, UseDecrement() != FALSE);
+
+#ifndef CLIENT_DLL
+		switch (KnifeAttack(vecSrc, gpGlobals->v_forward, GetSecondaryAttackDamage(), 55, DMG_NEVERGIB | DMG_BULLET, m_pPlayer->pev, m_pPlayer->pev))
+		{
+		case HIT_NONE:
+		{
+			EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/nata_slash.wav", VOL_NORM, ATTN_NORM, 0, 94);
+			break;
+		}
+		case HIT_PLAYER:
+		{
+			EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/nata_stab.wav", VOL_NORM, ATTN_NORM, 0, 94);
+			m_pPlayer->m_iWeaponVolume = KNIFE_BODYHIT_VOLUME;
+			if (m_iSwing & 1)
+				SendWeaponAnim(ANIM_STAB, UseDecrement() != FALSE);
+			else
+				SendWeaponAnim(ANIM_STAB2, UseDecrement() != FALSE);
+			fDidHit = TRUE;
+			break;
+		}
+		case HIT_WALL:
+		{
+			EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/nata_wall.wav", VOL_NORM, ATTN_NORM, 0, 94);
+			m_pPlayer->m_iWeaponVolume = KNIFE_WALLHIT_VOLUME * 0.1f;
+			if (m_iSwing & 1)
+				SendWeaponAnim(ANIM_STAB, UseDecrement() != FALSE);
+			else
+				SendWeaponAnim(ANIM_STAB2, UseDecrement() != FALSE);
+			fDidHit = TRUE;
+			break;
+		}
+		}
+#endif
+
+		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1.724f;
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 2.3f;
+	}

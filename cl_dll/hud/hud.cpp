@@ -163,6 +163,7 @@ void CHud :: Init( void )
 	HOOK_COMMAND( "evdev_mouseclose", MouseSucksClose );
 #endif
 	
+
 	HOOK_MESSAGE( Logo );
 	HOOK_MESSAGE( ResetHUD );
 	HOOK_MESSAGE( GameMode );
@@ -292,6 +293,7 @@ void CHud :: Init( void )
 	m_HeadIcon.Init();
 	util.Init();
 	m_MVP.Init();
+	m_SpecialCrossHair.Init();
 
 	// all things that have own background and must be drawn last
 	m_ProgressBar.Init();

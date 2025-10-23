@@ -94,7 +94,7 @@ int CHudInfoShelterIcon::Draw(float time)
 					int textlen = DrawUtils::HudStringLen(szBuffer);
 					int r, g, b;
 					DrawUtils::UnpackRGB(r, g, b, RGB_YELLOWISH);
-					DrawUtils::DrawHudString(xyScreen[0] - textlen * 0.5f, xyScreen[1] + 25, gHUD.m_scrinfo.iWidth, szBuffer, r, g, b);
+					DrawUtils::DrawHudString(xyScreen[0] - textlen * 0.5f, xyScreen[1] + 25, gHUD.m_scrinfo.iWidth, szBuffer, r, g, b, 255);
 				}
 			}
 		}
@@ -260,7 +260,7 @@ int CHudInfoMetalIcon::Draw(float time)
 					int textlen = DrawUtils::HudStringLen(szBuffer);
 					int r, g, b;
 					DrawUtils::UnpackRGB(r, g, b, RGB_YELLOWISH);
-					DrawUtils::DrawHudString(xyScreen[0] - textlen * 0.5f, xyScreen[1] + 25, gHUD.m_scrinfo.iWidth, szBuffer, r, g, b);
+					DrawUtils::DrawHudString(xyScreen[0] - textlen * 0.5f, xyScreen[1] + 25, gHUD.m_scrinfo.iWidth, szBuffer, r, g, b, 255);
 
 					//}
 				}
@@ -325,7 +325,7 @@ int CHudInfoZombieIcon::Draw(float time)
 					int textlen = DrawUtils::HudStringLen(szBuffer);
 					int r, g, b;
 					DrawUtils::UnpackRGB(r, g, b, RGB_YELLOWISH);
-					DrawUtils::DrawHudString(xyScreen[0] - textlen * 0.5f, xyScreen[1] + 25, gHUD.m_scrinfo.iWidth, szBuffer, r, g, b);
+					DrawUtils::DrawHudString(xyScreen[0] - textlen * 0.5f, xyScreen[1] + 25, gHUD.m_scrinfo.iWidth, szBuffer, r, g, b, 255);
 
 					//}
 				}

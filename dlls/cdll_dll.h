@@ -87,7 +87,7 @@
 #define PLAYER_VIP (1<<2)
 #define PLAYER_HERO (1<<2)
 #define PLAYER_ZOMBIE (1<<3)
-#define PLAYER_MUTANT (1<<3)
+#define PLAYER_MUTANT (1<<4)
 
 #define SIGNAL_BUY			(1<<0)
 #define SIGNAL_BOMB			(1<<1)
@@ -116,7 +116,7 @@
 #define MENU_KEY_0			(1<<9)
 
 #define MAX_AMMO_TYPES			32		// ???
-#define MAX_AMMO_SLOTS			32		// not really slots
+#define MAX_AMMO_SLOTS			64		// not really slots
 
 #define HUD_PRINTNOTIFY			1
 #define HUD_PRINTCONSOLE		2

@@ -265,6 +265,15 @@ public:
 
 	cvar_t *cl_crosshair_type;
 
+	HSPRITE m_hBuffHit;
+
+	float m_flLastHitTime, m_flLastBuffHit;
+
+	inline void HitForBuff(float flTime)
+	{
+		m_flLastBuffHit = flTime + 0.1;
+	}
+
 	int m_iWeaponSelect;
 	UniqueTexture m_iWeaponList;
 	UniqueTexture m_iWeapon_OffBG;
@@ -1409,7 +1418,7 @@ public:
 	void R_AttachTentToPlayer(int client, int modelIndex, vec3_t offset, float life, int additive, int flags, float scale, int rendermode = 0, float framerate = 1.0);
 	void R_AttachTentToEntity(int entity, int modelIndex, vec3_t offset, float life, int additive, int flags, float scale, int rendermode = 0, float framerate = 1.0);
 	CHudMsgFunc(HeadIcon);
-
+	CHudMsgFunc(MPToCL);
 private:
 	SharedTexture m_pTexture_Zombie_s;
 	SharedTexture m_iTex[5];
@@ -1421,6 +1430,26 @@ private:
 	duration_t tDeltasecond1;
 
 	time_point_t timetx1;
+};
+
+class CHudSpecialCrossHair : public CHudBase
+{
+public:
+	int Init(void);
+	int VidInit(void);
+	int Draw(float flTime);
+	void Reset(void);
+	void Shutdown();
+	void DrawHuntbowCrossHair(float x, float y, float wide, float height, int iType);
+	CHudMsgFunc(SpecialCrossHair);
+
+private:
+	float wide, height;
+	int iType;
+	int iStoredType;
+	int iWeapon;
+	int DisplayTime;
+	SharedTexture m_pCurTexture[16];
 };
 
 class CHud
@@ -1436,8 +1465,6 @@ public:
 	int Redraw( float flTime, int intermission );
 	int UpdateClientData( client_data_t *cdata, float time );
 	void AddHudElem(CHudBase *p);
-
-	int MsgFunc_MPToCL(const char* pszName, int iSize, void* pbuf);
 
 	inline float GetSensitivity() { return m_flMouseSensitivity; }
 	inline HSPRITE GetSprite( int index )
@@ -1593,6 +1620,7 @@ public:
 	CHudMoeTouch m_MoeTouch;
 	CHudMVP m_MVP;
 	CHudHeadIcon m_HeadIcon;
+	CHudSpecialCrossHair	m_SpecialCrossHair;
 
 	WebmUtils util;
 	//CHudInterface m_HudInterface;
@@ -1662,6 +1690,7 @@ private:
 
 extern CHud gHUD;
 extern cvar_t *sensitivity;
+extern vec3_t g_velocity;
 extern long g_iDamage[MAX_CLIENTS + 1];
 extern long g_iDamageTotal[MAX_CLIENTS + 1];
 extern double g_flDamageInAll;

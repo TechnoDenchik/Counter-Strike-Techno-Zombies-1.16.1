@@ -384,11 +384,32 @@ void CMod_ZombieHero::CheckWinConditions()
 		return;
 
 	moe::range::PlayersList list;
-	auto iAliveHuman = std::count_if(list.begin(), list.end(), [](CBasePlayer *player) { return player->m_iTeam == TEAM_CT && !player->m_bIsZombie && player->IsAlive(); });
-	auto iAliveZombie = std::count_if(list.begin(), list.end(), [](CBasePlayer *player) { return player->m_iTeam == TEAM_TERRORIST && player->m_bIsZombie && !(!player->IsAlive() && player->m_bHeadshotKilled); });
 
-	if (!iAliveHuman)
+	// Считаем живых людей (CT + не зомби + живые)
+	auto iAliveHuman = std::count_if(list.begin(), list.end(),
+		[](CBasePlayer* player) {
+			return player &&
+				player->IsAlive() &&
+				player->m_iTeam == TEAM_CT &&
+				!player->m_bIsZombie;
+		});
+
+	// Считаем живых зомби (T + зомби + живые)
+	auto iAliveZombie = std::count_if(list.begin(), list.end(),
+		[](CBasePlayer* player) {
+			return player &&
+				player->IsAlive() &&
+				player->m_iTeam == TEAM_TERRORIST &&
+				player->m_bIsZombie;
+		});
+
+	// Проверяем условия победы
+	if (iAliveHuman == 0 && iAliveZombie > 0)
+	{
 		ZombieWin();
-	else if (!iAliveZombie)
+	}
+	else if (iAliveZombie == 0 && iAliveHuman > 0)
+	{
 		HumanWin();
+	}
 }

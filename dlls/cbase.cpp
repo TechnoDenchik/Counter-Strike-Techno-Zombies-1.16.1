@@ -684,6 +684,16 @@ int CBaseEntity::TakeHealth(float flHealth, int bitsDamageType)
 	return 1;
 }
 
+int CBaseEntity::TakeSprite(entvars_t* pevInflictor, entvars_t* pevAttacker, int number)
+{
+	MESSAGE_BEGIN(MSG_ALL, gmsgHeadIcon);
+	WRITE_BYTE(number);
+	WRITE_SHORT(ENTINDEX(edict()));
+	MESSAGE_END();
+
+	return 1;
+}
+
 int CBaseEntity::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType)
 {
 	if (!pev->takedamage)

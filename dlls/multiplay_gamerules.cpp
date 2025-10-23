@@ -77,12 +77,12 @@ cvar_t *sv_clienttrace = NULL;
 
 CCStrikeGameMgrHelper g_GameMgrHelper;
 CCstrikeTechnoZombies*g_pMPGameRules = NULL;
+
 struct _PlayerData
 {
 	int index;
 	int iData;
 };
-
 typedef std::vector<_PlayerData> _PlayerDataList;
 
 //Think
@@ -339,8 +339,6 @@ const char * GetTeam(int teamNo)
 	return "";
 }
 
-
-
 bool PlayerSortFunc(const _PlayerData& v1, const _PlayerData& v2)
 {
 	if (v1.iData > v2.iData)
@@ -361,32 +359,43 @@ void EndRoundMVPMessage(int iType)
 	_PlayerDataList assistList;
 	_PlayerDataList infectList;
 
-	for (int i = 1; i < gpGlobals->maxClients; i++)
+	// Исправленный цикл по игрокам
+	for (int i = 1; i <= gpGlobals->maxClients; i++)
 	{
 		CBasePlayer* pPlayer = (CBasePlayer*)UTIL_PlayerByIndex(i);
 
-		if (!pPlayer || FNullEnt(pPlayer->pev) || !pPlayer->IsPlayer() || pPlayer->IsDormant())
+		// Улучшенная проверка игрока
+		if (!pPlayer || FNullEnt(pPlayer->edict()) || !pPlayer->IsPlayer())
 			continue;
 
-		_PlayerData tempData;
+		// Проверяем, что игрок подключен и активен
+		if (pPlayer->pev->flags & FL_DORMANT)
+			continue;
 
-		tempData.index = i;
-		tempData.iData = pPlayer->m_iRoundKill;
-		killList.push_back(tempData);
+		// Для каждого списка создаем отдельные объекты
+		_PlayerData killData;
+		killData.index = i;
+		killData.iData = pPlayer->m_iRoundKill;
+		killList.push_back(killData);
 
-		tempData.iData = pPlayer->m_iRoundAssist;
-		assistList.push_back(tempData);
+		_PlayerData assistData;
+		assistData.index = i;
+		assistData.iData = pPlayer->m_iRoundAssist;
+		assistList.push_back(assistData);
 
-		tempData.iData = pPlayer->m_iRoundInfect;
-		infectList.push_back(tempData);
+		_PlayerData infectData;
+		infectData.index = i;
+		infectData.iData = pPlayer->m_iRoundInfect;
+		infectList.push_back(infectData);
 	}
 
+	// Сортируем списки (предполагая, что PlayerSortFunc сортирует по убыванию iData)
 	std::sort(killList.begin(), killList.end(), PlayerSortFunc);
 	std::sort(assistList.begin(), assistList.end(), PlayerSortFunc);
 	std::sort(infectList.begin(), infectList.end(), PlayerSortFunc);
 
+	// Отправляем данные об убийствах
 	iCount = 0;
-
 	WRITE_BYTE(min(killList.size(), 5));
 
 	for (_PlayerDataList::const_iterator iter = killList.begin(); iter != killList.end(); ++iter)
@@ -398,8 +407,8 @@ void EndRoundMVPMessage(int iType)
 		WRITE_BYTE(iter->iData);
 	}
 
+	// Отправляем данные об ассистах
 	iCount = 0;
-
 	WRITE_BYTE(min(assistList.size(), 5));
 
 	for (_PlayerDataList::const_iterator iter = assistList.begin(); iter != assistList.end(); ++iter)
@@ -411,10 +420,10 @@ void EndRoundMVPMessage(int iType)
 		WRITE_BYTE(iter->iData);
 	}
 
+	// Отправляем данные о заражениях (только для Zombie Mod)
 	if (g_pModRunning->DamageTrack() == DT_ZB)
 	{
 		iCount = 0;
-
 		WRITE_BYTE(min(infectList.size(), 5));
 
 		for (_PlayerDataList::const_iterator iter = infectList.begin(); iter != infectList.end(); ++iter)
@@ -426,6 +435,12 @@ void EndRoundMVPMessage(int iType)
 			WRITE_BYTE(iter->iData);
 		}
 	}
+	else
+	{
+		// Если не ZB мод, отправляем 0 для совместимости
+		WRITE_BYTE(0);
+	}
+
 	WRITE_SHORT((int)(gpGlobals->time - g_pGameRules->m_fRoundCount));
 	MESSAGE_END();
 }
@@ -443,12 +458,10 @@ void EndRoundMessage(const char *sentence, int event)
 	int teamTriggered = 1;
 
 	const char* mod_str = CVAR_GET_STRING("mp_gamemode");
-	if (!strcmp(mod_str, "zb3") || !strcmp(mod_str, "zb5"))
+	if ( !strcmp(mod_str, "zb1") || !strcmp(mod_str, "zb3") || !strcmp(mod_str, "zb5"))
 	{
 		EndRoundMVPMessage(event == ROUND_CTS_WIN ? 2 : 1);
 	}
-
-	UTIL_ClientPrintAll(HUD_PRINTCENTER, sentence);
 
 	switch (event)
 	{

@@ -163,7 +163,7 @@ convar_t* touch_joy_texture;
 #define TO_SCRN_Y(x) (scr_height->integer * (x))
 #define TO_SCRN_X(x) (scr_width->integer * (x))
 
-int pfnDrawCharacter(int x, int y, int number, int r, int g, int b);
+int pfnDrawCharacter(int x, int y, int number, int r, int g, int b, int a);
 static void IN_TouchCheckCoords(float* x1, float* y1, float* x2, float* y2);
 
 void Touch_WriteConfig(void)

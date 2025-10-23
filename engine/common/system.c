@@ -811,7 +811,6 @@ Sys_Quit2
 */
 void Sys_Quit( void )
 {
-	MsgDev( D_INFO, "Shutting down...\n" );
 	Host_Shutdown();
 	if( host.crashed )
 		exit( 127 );

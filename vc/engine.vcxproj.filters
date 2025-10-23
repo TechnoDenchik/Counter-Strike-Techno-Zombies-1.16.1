@@ -201,6 +201,9 @@
     <ClInclude Include="resource2.h">
       <Filter>Resources</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\common\mod_extend_seq.h">
+      <Filter>engine\common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\engine\client\gl_warp.c">
@@ -613,6 +616,9 @@
     </ClCompile>
     <ClCompile Include="..\engine\platform\win32\sys_win.c">
       <Filter>engine\platform\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\common\mod_extend_seq.cpp">
+      <Filter>engine\common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

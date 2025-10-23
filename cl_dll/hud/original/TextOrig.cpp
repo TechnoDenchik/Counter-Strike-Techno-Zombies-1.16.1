@@ -70,7 +70,7 @@ int CHudGameStart::Draw(float time)
 	char szbuffer[64];
 	sprintf(szbuffer, "Игра началась!");
 
-	DrawUtils::DrawHudString(x - 50, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+	DrawUtils::DrawHudString(x - 50, y2 - 32, ScreenWidth, szbuffer, r, g, b, 255, flScale);
 
 	return 1;
 }
@@ -115,7 +115,7 @@ int CHudBombPlant::Draw(float time)
 	char szbuffer[64];
 	sprintf(szbuffer, "Бомба установлена");
 
-	DrawUtils::DrawHudString(x - 50, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+	DrawUtils::DrawHudString(x - 50, y2 - 32, ScreenWidth, szbuffer, r, g, b, 255, flScale);
 
 	return 1;
 }
@@ -160,7 +160,7 @@ int CHudBombDefuse::Draw(float time)
 	char szbuffer[64];
 	sprintf(szbuffer, "Бомба обезврежена");
 
-	DrawUtils::DrawHudString(x - 50, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+	DrawUtils::DrawHudString(x - 50, y2 - 32, ScreenWidth, szbuffer, r, g, b, 255, flScale);
 
 	return 1;
 }
@@ -205,7 +205,7 @@ int CHudRoundDraw::Draw(float time)
 	char szbuffer[64];
 	sprintf(szbuffer, "Раунд закончился ничьёй");
 
-	DrawUtils::DrawHudString(x - 50, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+	DrawUtils::DrawHudString(x - 50, y2 - 32, ScreenWidth, szbuffer, r, g, b, 255, flScale);
 
 	return 1;
 }
@@ -250,7 +250,7 @@ int CHudBombnozone::Draw(float time)
 	char szbuffer[64];
 	sprintf(szbuffer, "Бомба должна находится в зоне закладки");
 
-	DrawUtils::DrawHudString(x - 140, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+	DrawUtils::DrawHudString(x - 140, y2 - 32, ScreenWidth, szbuffer, r, g, b, 255, flScale);
 
 	return 1;
 }
@@ -295,7 +295,7 @@ int CHudBombnoground::Draw(float time)
 	char szbuffer[64];
 	sprintf(szbuffer, "Бомба должна находится на земле");
 
-	DrawUtils::DrawHudString(x - 130, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+	DrawUtils::DrawHudString(x - 130, y2 - 32, ScreenWidth, szbuffer, r, g, b, 255, flScale);
 
 	return 1;
 }
@@ -340,7 +340,7 @@ int CHudBombgive::Draw(float time)
 	char szbuffer[64];
 	sprintf(szbuffer, "Вы подобрали бомбу");
 
-	DrawUtils::DrawHudString(x - 65, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+	DrawUtils::DrawHudString(x - 65, y2 - 32, ScreenWidth, szbuffer, r, g, b, 255, flScale);
 
 	return 1;
 }
@@ -385,7 +385,7 @@ int CHudBombdrop::Draw(float time)
 	char szbuffer[64];
 	sprintf(szbuffer, "Вы выбросили бомбу");
 
-	DrawUtils::DrawHudString(x - 65, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+	DrawUtils::DrawHudString(x - 65, y2 - 32, ScreenWidth, szbuffer, r, g, b, 255, flScale);
 
 	return 1;
 }
@@ -430,7 +430,7 @@ int CHudWPNDrop::Draw(float time)
 	char szbuffer[64];
 	sprintf(szbuffer, "Это оружие нельзя выбрсить");
 
-	DrawUtils::DrawHudString(x - 100, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+	DrawUtils::DrawHudString(x - 100, y2 - 32, ScreenWidth, szbuffer, r, g, b, 255, flScale);
 
 	return 1;
 }
@@ -775,7 +775,7 @@ int CHudCantBuy::Draw(float time)
 	else
 		sprintf(szbuffer, "Время на закупку вышло");
 	
-	DrawUtils::DrawHudString(x - 100, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+	DrawUtils::DrawHudString(x - 100, y2 - 32, ScreenWidth, szbuffer, r, g, b, 255, flScale);
 
 	return 1;
 }

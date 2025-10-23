@@ -150,7 +150,7 @@ int CHudTextZB3::Draw(float time)
 		sprintf(szbuffer, "Навык снова можно будет использовать через: %d секунд", times);
 	}
 
-	DrawUtils::DrawHudString(x - 190, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+	DrawUtils::DrawHudString(x - 190, y2 - 32, ScreenWidth, szbuffer, r, g, b, 255, flScale);
 
 	return 1;
 }
@@ -195,7 +195,7 @@ int CHudText2ZB3::Draw(float time)
 	char szbuffer[64];
 	sprintf(szbuffer, "Навык снова можно будет использовать в следующем раунде");
 
-	DrawUtils::DrawHudString(x - 210, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+	DrawUtils::DrawHudString(x - 210, y2 - 32, ScreenWidth, szbuffer, r, g, b, 255, flScale);
 
 	return 1;
 }

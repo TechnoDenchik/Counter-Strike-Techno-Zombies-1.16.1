@@ -20,7 +20,9 @@
 #include <vector>
 #include <array>
 #include "weapons/KnifeAttack.h"
+
 class CBeam;
+class CSprite;
 
 class CWonderCannon : public CBasePlayerWeapon
 {
@@ -36,8 +38,6 @@ public:
 	void SecondaryAttack() override;
 	void Reload() override;
 	void ItemPostFrame() override;
-	void ClearEffect();
-	void Getsprite();
 	void Holster(int skiplocal) override;
 	void WeaponIdle() override;
 	BOOL UseDecrement() override {
@@ -54,24 +54,16 @@ public:
 	WeaponBuyAmmoConfig GetBuyAmmoConfig() override { return { "ammo_WonderCannonAmmo"}; }
 #endif
 public:
-	void DestroyEffect();
-	void PrimaryAttack_FindTargets();
-	bool PrimaryAttack_CheckTargetAvailable(CBaseEntity* a2, Vector vecDirection);
-	void RadiusDamage2();
 	void WonderCannonFire(float flSpread, float flCycleTime, BOOL fUseAutoAim);
 	void WonderCannonFire2(float flSpread, float flCycleTime, BOOL fUseAutoAim);
 	int ExtractAmmo(CBasePlayerWeapon* pWeapon) override;
-#ifndef CLIENT_DLL
-	hit_result_t KnifeAttack1(Vector vecSrc, Vector vecDir, float flDamage, float flRadius, float flAngleDegrees, int bitsDamageType,
-		entvars_t* pevInflictor, entvars_t* pevAttacker, BOOL iAnim);
-#endif
+	void OnHitTarget(CBaseEntity* pHit);
+
 	int m_iSwing;
 	int m_iShell;
 	int iShellOn;
 	int WonderAmmo;
-	int WonderExp;
 	int WonderBomb;
-	bool m_fireuse2;
 	bool m_firebomb;
 	bool m_firebombinit;
 	int m_iSwing2;
@@ -81,23 +73,12 @@ public:
 	duration_t tDelta11;
 
 private:
-	duration_t tNextAttack3;
-	time_point_t tWorldTime3;
-	duration_t tDelta3;
-
-	duration_t tNextAttack4;
-	time_point_t tWorldTime4;
-	duration_t tDelta4;
-
-	duration_t tNextAttack5;
-	time_point_t tWorldTime5;
-	duration_t tDelta5;
 
 	duration_t tNextAttack6;
 	time_point_t tWorldTime6;
 	duration_t tDelta6;
 
-
+	CWonderCannon* m_pWeapon;
 
 	float phs2;	// secondary attack start time
 	float phs3; // primary attack start time
@@ -107,11 +88,12 @@ private:
 	float phs13;
 	float phs14;
 
-	std::vector<EHANDLE> phs9_10_11;
-	std::array<CBeam*, 5> phs5_6_7;
+	CSprite* m_pEyeGlow;
+
 	unsigned short m_usFireWonderCannon;
 	unsigned short m_usFire2WonderCannon;
-	CUtlVector<CBaseEntity*>* pEnemyList2;
+
+	CUtlVector<CBaseEntity*>* enemyList = new CUtlVector<CBaseEntity*>();
 };
 
 
@@ -179,17 +161,17 @@ public:
 		m_flNextAnim = 0;
 	}
 
-	static CWonderCannonMine* Create(int iType, const Vector& vecOrigin, const Vector& vecAngles, edict_t* pentOwner);
+	static CWonderCannonMine* Create(const Vector& vecOrigin, const Vector& vecAngles, edict_t* pentOwner);
 
 	void Spawn(void);
 	void Precache(void);
 	void EXPORT MineThink();
-	void Init(CBasePlayer* pOwner,Vector vecVelocity);
+	void Init(CBasePlayer* pOwner,Vector vecVelocity, CWonderCannon* pWeapon);
 	void Remove();
 	void GetSprite();
 	void GetModel();
 	void Explode(bool IsManual);
-	void BombExp(bool IsManual, CBasePlayer* m_pPlayer);
+	void BombExp(bool IsManual, edict_t* pentOwner, CWonderCannon* pWeapon);
 	void DoBombExp(bool IsManual);
 	float GetDamage(bool IsManual) const;
 public:

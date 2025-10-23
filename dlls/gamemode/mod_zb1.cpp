@@ -412,20 +412,47 @@ size_t CMod_Zombi::ZombieOriginNum()
 void CMod_Zombi::PickZombieOrigin()
 {
 	auto iNumZombies = ZombieOriginNum();
-	auto iNumPlayers = this->m_iNumTerrorist + this->m_iNumCT;
 
-	// build alive player list
+	// Создаем список живых игроков (не зомби, не спектаторы)
 	moe::range::PlayersList list;
-	std::vector<CBasePlayer *> players {list.begin(), list.end()};
-	players.erase(std::remove_if(players.begin(), players.end(), [](CBasePlayer *player) { return !player->IsAlive() || player->m_iTeam != TEAM_CT || player->m_bIsZombie; }), players.end());
+	std::vector<CBasePlayer*> players;
 
-	// randomize player list
-	std::shuffle(players.begin(), players.end(), std::random_device());
-
-	// pick them
-	for (size_t i = 0; i < iNumZombies; ++i)
+	for (CBasePlayer* player : list)
 	{
-		MakeZombie(players[i], ZOMBIE_LEVEL_ORIGIN);
+		if (player &&
+			player->IsAlive() &&
+			(player->m_iTeam == TEAM_CT || player->m_iTeam == TEAM_TERRORIST) &&
+			!player->m_bIsZombie)
+		{
+			players.push_back(player);
+		}
+	}
+
+	// Проверяем, есть ли кандидаты
+	if (players.empty())
+	{
+		return;
+	}
+
+	// Перемешиваем используя системное время для рандома
+	std::shuffle(players.begin(), players.end(),
+		std::default_random_engine(static_cast<unsigned>(gpGlobals->time)));
+
+	// Превращаем в зомби (не больше чем доступно игроков)
+	size_t zombiesToMake = std::min(static_cast<size_t>(iNumZombies), players.size());
+
+	for (size_t i = 0; i < zombiesToMake; ++i)
+	{
+		if (players[i] && players[i]->IsAlive())  // Двойная проверка
+		{
+			MakeZombie(players[i], ZOMBIE_LEVEL_ORIGIN);
+		}
+	}
+
+	// Если не хватило игроков для всех зомби
+	if (zombiesToMake < iNumZombies)
+	{
+
 	}
 
 	// sound effect
@@ -464,10 +491,9 @@ void CMod_Zombi::InfectionSound()
 
 void CMod_Zombi::RestartRound()
 {
-	for(CBasePlayer *player : moe::range::PlayersList())
+	for (CBasePlayer* player : moe::range::PlayersList())
 		player->m_bIsZombie = false,
 		player->m_bIsHero = false,
-		player->m_bIsZombie = false,
 		player->m_bIsZombieTank = false,
 		player->m_bIsZombieFemale = false,
 		player->m_bIsZombieHeavy = false,
@@ -476,7 +502,16 @@ void CMod_Zombi::RestartRound()
 		player->m_bIsZombieDeimos = false,
 		player->m_bIsZombieGanimed = false,
 		player->m_bIsZombieBanchee = false,
-		player->m_bIsZombieStamp = false;
+		player->m_bIsZombieStamp = false,
+		player->m_bIsZombieMeatWall = false,
+		player->m_bIsZombieDeathKnight = false,
+		player->m_bIsZombieSpider = false,
+		player->m_bIsZombieAksha = false,
+		player->m_bIsZombieBoomer = false,
+		player->m_bIsZombieBooster = false,
+		player->m_bIsZombieChina = false,
+		player->m_bIsZombieFlying = false,
+		player->m_bIsZombieResident = false;
 
 	TeamCheck();
 
@@ -513,7 +548,16 @@ void CMod_Zombi::PlayerSpawn(CBasePlayer *pPlayer)
 	pPlayer->m_bIsZombieDeimos = false;
 	pPlayer->m_bIsZombieGanimed = false;
 	pPlayer->m_bIsZombieBanchee = false;
-	pPlayer->m_bIsZombieStamp = false;
+	pPlayer->m_bIsZombieStamp = false,
+	pPlayer->m_bIsZombieMeatWall = false,
+	pPlayer->m_bIsZombieDeathKnight = false,
+	pPlayer->m_bIsZombieSpider = false,
+	pPlayer->m_bIsZombieAksha = false,
+	pPlayer->m_bIsZombieBoomer = false,
+	pPlayer->m_bIsZombieBooster = false,
+	pPlayer->m_bIsZombieChina = false,
+	pPlayer->m_bIsZombieFlying = false,
+	pPlayer->m_bIsZombieResident = false;
 
 	pPlayer->m_bNotKilled = false;
 	IBaseMod::PlayerSpawn(pPlayer);

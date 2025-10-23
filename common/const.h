@@ -580,6 +580,32 @@
 // byte ( color ) this is an index into an array of color vectors in the engine. (0 - )
 // byte ( length * 10 )
 
+
+#define	TE_BEAMPOINTS_STRETCH		128	// beam effect between two points
+// coord coord coord (start position) 
+// coord coord coord (end position) 
+// short (sprite index) 
+// byte (starting frame) 
+// byte (frame rate in 0.1's) 
+// byte (life in 0.1's) 
+// byte (line width in 0.1's) 
+// byte,byte,byte (color)
+// byte (brightness)
+
+#define	TE_BEAMPOINTS_TRACER		129	// flying beam
+// coord coord coord (start position) 
+// coord coord coord (end position)
+// short (sprite index) 
+// byte (starting frame) 
+// byte (frame rate in 0.1's) 
+// byte (life in 0.1's) 
+// byte (line width in 0.1's) 
+// byte (noise amplitude in 0.01's) 
+// byte,byte,byte (color)
+// byte (brightness)
+// byte (scroll speed in 0.1's)
+// byte (flags)
+
 #define MSG_BROADCAST		0	// unreliable to all
 #define MSG_ONE			1	// reliable to one (msg_entity)
 #define MSG_ALL			2	// reliable to all
@@ -704,7 +730,28 @@
 #define TE_BOUNCE_SHOTSHELL		2
 
 #define TE_TEMPSPRITE				132
-#define TE_KILLENTITYATTACHMENTS	135	// will expire all TENTS attached to a ent.
+
+#define TE_TEMPMODEL				133	// a customized model
+// coord, coord, coord (position)
+// angle, angle, angle (angles)
+// coord, coord, coord (velocity)
+// short (model index)
+// byte (life * 10)
+// short (sequence)
+// byte (framerate)
+// byte (fade out)
+// byte (brightness)
+// byte (rendermode)
+// short (player index)
+// byte (fade out speed)
+// byte (fade in)
+// byte (fade in speed)
+// byte (scale * 10)
+// short (frame max)
+// long (tempentity flags)
+
+#define TE_KILLENTITYATTACHMENTS	134	// will expire all TENTS attached to a ent.
+
 
 
 // Rendering constants

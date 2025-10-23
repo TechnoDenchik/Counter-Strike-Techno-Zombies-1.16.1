@@ -1669,7 +1669,7 @@ pfnDrawCharacter
 returns drawed chachter width (in real screen pixels)
 =============
 */
-int GAME_EXPORT pfnDrawCharacter( int x, int y, int number, int r, int g, int b )
+int GAME_EXPORT pfnDrawCharacter( int x, int y, int number, int r, int g, int b, int a)
 {
 	if( !cls.creditsFont.valid )
 		return 0;
@@ -1684,7 +1684,7 @@ int GAME_EXPORT pfnDrawCharacter( int x, int y, int number, int r, int g, int b 
 		return 0;
 
 	clgame.ds.adjust_size = true;
-	pfnPIC_Set( cls.creditsFont.hFontTexture, r, g, b, 255 );
+	pfnPIC_Set( cls.creditsFont.hFontTexture, r, g, b, a );
 	pfnPIC_DrawAdditive( x, y, -1, -1, &cls.creditsFont.fontRc[number] );
 	clgame.ds.adjust_size = false;
 
@@ -2791,12 +2791,12 @@ pfnVGUI2DrawCharacterAdditive
 
 =============
 */
-static int GAME_EXPORT pfnVGUI2DrawCharacterAdditive( int x, int y, int ch, int r, int g, int b, unsigned int font )
+static int GAME_EXPORT pfnVGUI2DrawCharacterAdditive( int x, int y, int ch, int r, int g, int b, int a, unsigned int font )
 {
 	if( !hud_utf8->integer )
 		ch = Con_UtfProcessChar( ch );
 
-	return pfnDrawCharacter( x, y, ch, r, g, b );
+	return pfnDrawCharacter( x, y, ch, r, g, b, a);
 }
 
 /*
@@ -2805,14 +2805,14 @@ pfnDrawString
 
 =============
 */
-static int GAME_EXPORT pfnDrawString( int x, int y, const char *str, int r, int g, int b )
+static int GAME_EXPORT pfnDrawString( int x, int y, const char *str, int r, int g, int b, int a)
 {
 	Con_UtfProcessChar(0);
 
 	// draw the string until we hit the null character or a newline character
 	for ( ; *str != 0 && *str != '\n'; str++ )
 	{
-		x += pfnVGUI2DrawCharacterAdditive( x, y, (unsigned char)*str, r, g, b, 0 );
+		x += pfnVGUI2DrawCharacterAdditive( x, y, (unsigned char)*str, r, g, b, a, 0 );
 	}
 
 	return x;
@@ -2824,13 +2824,13 @@ pfnDrawStringReverse
 
 =============
 */
-static int GAME_EXPORT pfnDrawStringReverse( int x, int y, const char *str, int r, int g, int b )
+static int GAME_EXPORT pfnDrawStringReverse( int x, int y, const char *str, int r, int g, int b, int a)
 {
 	// find the end of the string
 	char *szIt;
 	for( szIt = (char*)str; *szIt != 0; szIt++ )
 		x -= clgame.scrInfo.charWidths[ (unsigned char) *szIt ];
-	pfnDrawString( x, y, str, r, g, b );
+	pfnDrawString( x, y, str, r, g, b, a);
 	return x;
 }
 
@@ -3725,6 +3725,10 @@ static efx_api_t gEfxApi =
 	CL_LookupColor,
 	CL_DecalRemoveAll,
 	CL_FireCustomDecal,
+	CL_TempCustomModel,
+	CL_BeamPoints_Stretch,
+	CL_KillAttachedTentsFromEntity,
+	CL_BeamPoints_Tracer,
 };
 
 static event_api_t gEventApi =

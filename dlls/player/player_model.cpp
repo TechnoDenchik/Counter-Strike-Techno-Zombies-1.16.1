@@ -17,13 +17,7 @@
 	//{
 	//	// t   ct
 	//	{NULL, NULL},
-	//	{false, true, "buffclass19s1tr", "buffclass19s1ct"},
-	//	{true, false, "buffclass19s2tr", "buffclass19s2ct"},
-	//	{true, true, "buffclass19s3tr", "buffclass19s3ct"},
-	//	{true, false, "buffclass19s4tr", "buffclass19s4ct"},
-	//	{true, false, "buffclass20s2tr", "buffclass20s2ct"},
-	//	{false, true, "buffclass20s3tr", "buffclass20s3ct"},
-	//	{true, true, "buffclass20s4tr", "buffclass20s4ct"},
+	//
 	//};
 
 	static AppearanceInfo gPlayerAppearance[] =
@@ -37,6 +31,13 @@
 		{false, false, "rb", "sozo"},
 		{true, false, "jpngirl01", "magui"},
 		{true, true, "ritsuka", "natasha"},
+		{false, true, "buffclass19s1tr", "buffclass19s1ct"},
+		{true, false, "buffclass19s2tr", "buffclass19s2ct"},
+		{true, true, "buffclass19s3tr", "buffclass19s3ct"},
+		{true, false, "buffclass19s4tr", "buffclass19s4ct"},
+		{true, false, "buffclass20s2tr", "buffclass20s2ct"},
+		{false, true, "buffclass20s3tr", "buffclass20s3ct"},
+		{true, true, "buffclass20s4tr", "buffclass20s4ct"},
 	};
 
 	constexpr auto NUM_APPEARANCES = std::extent<decltype(gPlayerAppearance)>::value;

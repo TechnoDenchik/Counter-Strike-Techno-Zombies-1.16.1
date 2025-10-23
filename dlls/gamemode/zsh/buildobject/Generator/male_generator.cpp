@@ -12,10 +12,49 @@
 
 LINK_ENTITY_TO_CLASS(generatormale, CGeneratorMale);
 
+CGeneratorMale* CGeneratorMale::Create(const Vector& vecOrigin, const Vector& vecAngles, edict_t* pentOwner)
+{
+	edict_t* pent = CREATE_NAMED_ENTITY(MAKE_STRING("generatormale"));
+
+	if (FNullEnt(pent))
+	{
+		ALERT(at_console, "NULL Ent in Create!\n");
+		return NULL;
+	}
+
+	CGeneratorMale* pMine = (CGeneratorMale*)Instance(pent);
+
+	if (pMine)
+	{
+		pMine->pev->owner = pentOwner;
+		pMine->pev->origin = vecOrigin;
+		pMine->pev->angles = vecAngles;
+		pMine->Spawn();
+	}
+
+	return pMine;
+}
+
 void CGeneratorMale::Precache()
 {
 	PRECACHE_MODEL("models/zsh_deadcity/zsh_generator_1.mdl");
+	PRECACHE_SOUND("zsh/build2.wav");
 }
+
+void CGeneratorMale::Init(CBasePlayer* pOwner, Vector vecVelocity)
+{
+	m_pOwner = pOwner;
+	m_iTeam = m_pOwner->m_iTeam;
+	pev->velocity = std::move(vecVelocity);
+}
+
+void CGeneratorMale::Remove()
+{
+	SetThink(nullptr);
+	pev->effects |= EF_NODRAW; // 0x80u
+	return UTIL_Remove(this);
+}
+
 
 void CGeneratorMale::Spawn()
 {
@@ -30,32 +69,22 @@ void CGeneratorMale::Spawn()
 	AddEntityHashValue(pev, STRING(pev->classname), CLASSNAME);
 
 	SET_MODEL(edict(), "models/zsh_deadcity/zsh_generator_1.mdl");
-
 	
 	SetThink(&CGeneratorMale::GeneratorThink);
+	
+	UTIL_SetOrigin(pev, pev->origin);
 
-	UTIL_MakeVectors(pev->v_angle);
+	pev->angles = g_vecZero;
+	pev->gravity = 2.5;
+	pev->solid = SOLID_BBOX;
+	pev->movetype = MOVETYPE_TOSS;
 
-	UTIL_SetSize(spawns->pev, VEC_HULL_MIN, VEC_HULL_MAX);
-	m_flNextRadarTime = gpGlobals->time + RANDOM_FLOAT(0, 1);
-
-	pev->movetype = MOVETYPE_STEP;
-	pev->solid = SOLID_SLIDEBOX;
 	pev->takedamage = DAMAGE_YES;
-	pev->flags |= FL_MONSTER;
-	pev->deadflag = DEAD_NO;
 	pev->max_health = 100;
 	pev->health = pev->max_health;
-	pev->gravity = 1;
-	pev->view_ofs = VEC_VIEW;
-	pev->velocity = Vector(0, 0, 0);
-	pev->maxspeed = 160.0f;
 
 	if (pev->spawnflags & SF_MONSTER_HITMONSTERCLIP)
 		pev->flags |= FL_MONSTERCLIP;
-
-	if (pev->skin < 0)
-		pev->skin = 0;
 
 	UTIL_SetSize(pev, VEC_HULL_MIN, VEC_HULL_MAX);
 
@@ -86,12 +115,41 @@ void CGeneratorMale::GeneratorTouch(CBaseEntity* pOther)
 
 void CGeneratorMale::GeneratorThink()
 {
-	if (pev->deadflag != DEAD_DEAD && !(pev->effects & EF_NODRAW))
+	if (pev->flags & FL_ONGROUND)
 	{
-		if (m_flNextRadarTime <= gpGlobals->time)
+		if (m_iState == 2)
 		{
-			m_flNextRadarTime = gpGlobals->time + 1;
+			if (m_iState == 3)
+			{
+
+			}
+
+			if (m_flNextAnim != 0 && m_flNextAnim < gpGlobals->time)
+			{
+				pev->sequence = 1;
+
+				m_iState = 2;
+				m_flNextAnim = 0;
+			}
+
+			if (!m_iState)
+			{
+				pev->sequence = 0;
+				pev->frame = 0;
+				//ResetSequenceInfo();
+
+				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "zsh/build2.wav", VOL_NORM, ATTN_NORM);
+
+				m_flNextAnim = gpGlobals->time + 0.5f;
+
+				m_iState = 1;
+			}
 		}
+	}
+
+	if (m_flNextRadarTime <= gpGlobals->time)
+	{
+		m_flNextRadarTime = gpGlobals->time + 1;
 	}
 }
 
@@ -152,4 +210,3 @@ void CGeneratorMale::PlayDeadSound()
 {
 	 EMIT_SOUND(edict(), CHAN_VOICE, "zsh/crash.wav", VOL_NORM, ATTN_NORM);
 }
-

@@ -49,18 +49,23 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define ART_HIT14		"gfx/shell/Item/floatingdamage/option_skin14"
 #define ART_HIT15		"gfx/shell/Item/floatingdamage/option_skin15"
 #define ART_HIT16		"gfx/shell/Item/floatingdamage/option_skin16"
-#define ART_HIT17		"gfx/shell/Item/floatingdamage/option_skin18"
-
-#define ART_HIT18		"gfx/shell/Item/floatingdamage/option_skin19"
-#define ART_HIT19		"gfx/shell/Item/floatingdamage/option_skin20"
-#define ART_HIT20		"gfx/shell/Item/floatingdamage/option_skin21"
-#define ART_HIT21		"gfx/shell/Item/floatingdamage/option_skin22"
-#define ART_HIT22		"gfx/shell/Item/floatingdamage/option_skin23"
-#define ART_HIT23		"gfx/shell/Item/floatingdamage/option_skin24"
-#define ART_HIT24		"gfx/shell/Item/floatingdamage/option_skin26"
-#define ART_HIT25		"gfx/shell/Item/floatingdamage/option_skin27"
-#define ART_HIT26		"gfx/shell/Item/floatingdamage/option_skin29"
-#define ART_HIT27		"gfx/shell/Item/floatingdamage/option_skin17"
+#define ART_HIT17		"gfx/shell/Item/floatingdamage/option_skin17"
+#define ART_HIT18		"gfx/shell/Item/floatingdamage/option_skin18"
+#define ART_HIT19		"gfx/shell/Item/floatingdamage/option_skin19"
+#define ART_HIT20		"gfx/shell/Item/floatingdamage/option_skin20"
+#define ART_HIT21		"gfx/shell/Item/floatingdamage/option_skin21"
+#define ART_HIT22		"gfx/shell/Item/floatingdamage/option_skin22"
+#define ART_HIT23		"gfx/shell/Item/floatingdamage/option_skin23"
+#define ART_HIT24		"gfx/shell/Item/floatingdamage/option_skin24"
+#define ART_HIT25		"gfx/shell/Item/floatingdamage/option_skin26"
+#define ART_HIT26		"gfx/shell/Item/floatingdamage/option_skin27"
+#define ART_HIT27		"gfx/shell/Item/floatingdamage/option_skin28"
+#define ART_HIT28		"gfx/shell/Item/floatingdamage/option_skin29"
+#define ART_HIT29		"gfx/shell/Item/floatingdamage/option_skin30"
+#define ART_HIT30		"gfx/shell/Item/floatingdamage/option_skin31"
+#define ART_HIT31		"gfx/shell/Item/floatingdamage/option_skin32"
+#define ART_HIT32		"gfx/shell/Item/floatingdamage/option_skin33"
+#define ART_HIT33		"gfx/shell/Item/floatingdamage/option_skin34"
 
 #define ART_SYSTEM		"gfx/shell/Item/floatingdamage/option_system"
 #define MAX_PLAYERMODELS	100
@@ -566,7 +571,7 @@ void CMenuPlayerSetup::SetSkinHitIndicator()
 		hitindicatorid.SetPicture(ART_HIT14);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	}
-	else if (hitset ==16)
+	else if (hitset == 16)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT15);
@@ -584,70 +589,103 @@ void CMenuPlayerSetup::SetSkinHitIndicator()
 		hitindicatorid.SetPicture(ART_HIT17);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	}
-
-
 	else if (hitset == 19)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT18);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
-		}
+	}
 	else if (hitset == 20)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT19);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
-		}
+	}
 	else if (hitset == 21)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT20);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
-		}
+	}
 	else if (hitset == 22)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT21);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
-		}
+	}
 	else if (hitset == 23)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT22);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
-		}
+	}
 	else if (hitset == 24)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT23);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
-		}
+	}
 	else if (hitset == 25)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT24);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
-		}
+	}
 	else if (hitset == 26)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT25);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
-		}
+	}
 	else if (hitset == 27)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT26);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
-		}
+	}
 	else if (hitset == 28)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT27);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
-		}
-	
-} 
+	}
+	else if (hitset == 29)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT28);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 30)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT29);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 31)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT30);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 32)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT31);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 33)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT32);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 34)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT33);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+}
 
 void CMenuPlayerSetup::SaveAndPopMenu()
 {
@@ -740,12 +778,16 @@ void CMenuPlayerSetup::_Init( void )
 
 	static const char* hitstyle[] =
 	{
-		L("CstzUI_PlayerInfOff"),L("System"), L("Original"), L("Paint Brush"), L("Halloween"), L("Steel Wall (12th)")
-		, L("Christmas"), L("New Year"), L("Spring Flower"), L("CSO22 New Year")
-		, L("2022 Season 12"), L("2022 Season 13"), L("2022 Season 14"), L("Frosty")
-		, L("Black Neon"), L("2023 Season 15"), L("2023 Season 16"), L("2023 Season 17")
-		, L("2024 Season 18"), L("CSTUI_Hit19"), L("CSTUI_Hit20"), L("CSTUI_Hit21"), L("CSTUI_Hit22")
-		, L("CSTUI_Hit23"), L("CSTUI_Hit24"), L("CSTUI_Hit25"), L("CSTUI_Hit26"), L("CSTUI_Hit27"), L("CSTUI_Hit28")
+		L("CstzUI_PlayerInfOff"),L("CSTUI_System"), 
+		L("CSTUI_Hit1"), L("CSTUI_Hit2"), L("CSTUI_Hit3"), L("CSTUI_Hit4"),
+		L("CSTUI_Hit5"), L("CSTUI_Hit6"), L("CSTUI_Hit7"), L("CSTUI_Hit8"),
+		L("CSTUI_Hit9"), L("CSTUI_Hit10"), L("CSTUI_Hit11"), L("CSTUI_Hit12"),
+		L("CSTUI_Hit13"), L("CSTUI_Hit14"), L("CSTUI_Hit15"), L("CSTUI_Hit16"),
+		L("CSTUI_Hit17"), L("CSTUI_Hit18"), L("CSTUI_Hit19"), L("CSTUI_Hit20"), 
+		L("CSTUI_Hit21"), L("CSTUI_Hit22"), L("CSTUI_Hit23"), L("CSTUI_Hit24"), 
+		L("CSTUI_Hit25"), L("CSTUI_Hit26"), L("CSTUI_Hit27"), L("CSTUI_Hit28"),
+		L("CSTUI_Hit29"), L("CSTUI_Hit30"), L("CSTUI_Hit31"), L("CSTUI_Hit32"),
+		L("CSTUI_Hit33")
 	};
 
 	// disable playermodel preview for HLRally to prevent crash
@@ -1012,67 +1054,102 @@ void CMenuPlayerSetup::_VidInit(void)
 		hitindicatorid.SetPicture(ART_HIT17);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	}
-
 	else if (hitset == 19)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT18);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
-		}
+	}
 	else if (hitset == 20)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT19);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
-		}
+	}
 	else if (hitset == 21)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT20);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
-		}
+	}
 	else if (hitset == 22)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT21);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
-		}
+	}
 	else if (hitset == 23)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT22);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
-		}
+	}
 	else if (hitset == 24)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT23);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
-		}
+	}
 	else if (hitset == 25)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT24);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
-		}
+	}
 	else if (hitset == 26)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT25);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
-		}
+	}
 	else if (hitset == 27)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT26);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
-		}
+	}
 	else if (hitset == 28)
 	{
 		hitindicatorid.iFlags = QMF_INACTIVE;
 		hitindicatorid.SetPicture(ART_HIT27);
 		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
-		}
+	}
+	else if (hitset == 29)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT28);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 30)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT29);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 31)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT30);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 32)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT31);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 33)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT32);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 34)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT33);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
 }
 
 /*

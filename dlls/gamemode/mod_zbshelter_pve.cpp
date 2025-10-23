@@ -96,6 +96,25 @@ public:
 				}
 			}
 		);
+
+
+		m_listenerBuildGenerator = mp->m_eventBuildGenerator.subscribe(
+			[=](CBasePlayer* builder)
+			{
+				if (builder == m_pPlayer)
+				{
+					Vector vecSrc = builder->GetGunPosition() + gpGlobals->v_forward * 10;
+					CGeneratorMale* pEnt = static_cast<CGeneratorMale*>(CBaseEntity::Create("generatormale", vecSrc, builder->pev->angles, ENT(m_pPlayer->pev)));
+					if (pEnt)
+					{
+						pEnt->Init(m_pPlayer, gpGlobals->v_forward * 700);
+						mp->energy =+ 40;
+						updateres.UpdateHUDBar(m_pPlayer);
+					}
+				
+				}
+			}
+		);
 	}
 
 	int  ComputeMaxAmmo(const char* szAmmoClassName, int iOriginalMax) override { return 100; }
@@ -157,12 +176,15 @@ protected:
 	EventListener m_listenerMonsterKilled3;
 	EventListener m_listenerMonsterKilled4;
 
+	EventListener m_listenerBuildGenerator;
+
 	EventListener m_listenerAdjustDamage;
 	EventListener m_listenerAdjustDamage2;
 	EventListener m_listenerAdjustDamage3;	
 	EventListener m_listenerAdjustDamage4;
 	CMod_ZombieShelter_coop updateres;
 	CShelter *shelter;
+	CGeneratorMale *generator1;
 };
 
 class PlayerModStrategy_ZSH2 : public CPlayerModStrategy_Default
@@ -877,7 +899,7 @@ BOOL CMod_ZombieShelter_coop::HandleSkillsAliasCommands(CBasePlayer* pPlayer, co
 
 	else if (FStrEq(pszCommand, "generator"))
 	{
-		CreateGenerator();
+		m_eventBuildGenerator.dispatch(pPlayer);
 		bRetVal = TRUE;
 	}
 

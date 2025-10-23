@@ -8,13 +8,11 @@
 
 #include "knife_twin_axes.h"
 
-LINK_ENTITY_TO_CLASS(twinaxes_summon, CTwinAxesSummon)
-
-#define WONDERCANNON_MINE_EXP_RADIUS	39.37 * 5
+LINK_ENTITY_TO_CLASS(weapon_twinaxes_summon, CTwinAxesSummon)
 
 CTwinAxesSummon* CTwinAxesSummon::Create(int iType, const Vector& vecOrigin, const Vector& vecAngles, edict_t* pentOwner)
 {
-	edict_t* pent = CREATE_NAMED_ENTITY(MAKE_STRING("twinaxes_summon"));
+	edict_t* pent = CREATE_NAMED_ENTITY(MAKE_STRING("weapon_twinaxes_summon"));
 
 	if (FNullEnt(pent))
 	{
@@ -53,7 +51,7 @@ void CTwinAxesSummon::Spawn(void)
 	pev->renderfx = kRenderFxFadeSlow;
 
 	m_iRenderAmt = 255;
-	pev->classname = MAKE_STRING("twinaxes_summon");
+	pev->classname = MAKE_STRING("weapon_twinaxes_summon");
 	pev->nextthink = gpGlobals->time + 0.01f;
 	SetThink(&CTwinAxesSummon::MineThink);
 }
@@ -79,11 +77,6 @@ void CTwinAxesSummon::Precache(void)
 
 void CTwinAxesSummon::Remove()
 {
-	MESSAGE_BEGIN(MSG_ALL, SVC_TEMPENTITY, pev->origin);
-	WRITE_BYTE(TE_KILLENTITYATTACHMENTS);
-	WRITE_SHORT(entindex());
-	MESSAGE_END();
-
 	SetThink(nullptr);
 	pev->effects |= EF_NODRAW; // 0x80u
 	return UTIL_Remove(this);

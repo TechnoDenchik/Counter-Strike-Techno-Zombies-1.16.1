@@ -44,7 +44,7 @@ CZombieClass_HealR::CZombieClass_HealR(CBasePlayer *player, ZombieLevel iEvoluti
 	m_pPlayer->pev->rendermode = kRenderNormal;
 	m_pPlayer->ResetMaxSpeed();
 	m_pPlayer->GiveNamedItem("Knife_Zombi_heal");
-	m_pPlayer->GiveNamedItem("weapon_zombibombz");
+	m_pPlayer->GiveNamedItem("weapon_zombibomb_heal");
 	m_pPlayer->m_bIsZombieHeal = true;
 }
 

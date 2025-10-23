@@ -22,6 +22,7 @@ protected:
 	UniqueTexture countplayer;
 	UniqueTexture icontotalkill;
 	UniqueTexture iconkill;
+	UniqueTexture textbg;
 
 	UniqueTexture m_pBackground;
 	wrect_t m_rcTeamnumber[10];

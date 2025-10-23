@@ -40,7 +40,7 @@ CZombieClass_BancheeR::CZombieClass_BancheeR(CBasePlayer *player, ZombieLevel iE
 	m_pPlayer->pev->rendermode = kRenderNormal;
 	m_pPlayer->ResetMaxSpeed();
 	m_pPlayer->GiveNamedItem("Knife_Zombi_banchee");
-	m_pPlayer->GiveNamedItem("weapon_zombibombz");
+	m_pPlayer->GiveNamedItem("weapon_zombibomb_banchee");
 	m_pPlayer->m_bIsZombieBanchee = true;
 }
 

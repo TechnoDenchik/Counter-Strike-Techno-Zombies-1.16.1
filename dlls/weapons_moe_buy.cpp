@@ -73,11 +73,13 @@ static MoEWeaponBuyInfo_s g_MoEWeaponBuyInfo[] = {
 	{ "weapon_quantum", "QuantumHorizon", 8800, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_arbalest", "Arbalest", 6300, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_wondercannon", "Heaven Splitter", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
-	{ "weapon_wondercannonex", "Asura Hell Splitter", 8500, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_wondercannonex", "Asura Hell Splitter", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 
 	{ "weapon_shelteraxe", "ShelterAxe", 0, KNIFE_SLOT, UNASSIGNED },
 	{ "weapon_voidpistol", "VoidPistol", 3400, PISTOL_SLOT, UNASSIGNED },
 	{ "weapon_voidpistolex", "VoidPistolEx", 3300, PISTOL_SLOT, UNASSIGNED },
+
+	{ "weapon_desperado", "Python Desperado", 0, PISTOL_SLOT, UNASSIGNED },
 
 	{ "weapon_knife", "Seal Knife", 0, KNIFE_SLOT, UNASSIGNED },
 	{ "knife_skullaxe", "Skull-9", 0, KNIFE_SLOT, UNASSIGNED },
@@ -108,8 +110,38 @@ static MoEWeaponBuyInfo_s g_MoEWeaponBuyInfo[] = {
 	{ "weapon_ethereal", "Ethereal", 2450, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_spas12ex", "SPAS-12 EX", 2600, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_violingun", "Violin Gun", 3250, PRIMARY_WEAPON_SLOT, UNASSIGNED },
-};
+	{ "weapon_sbmine", "Sattelite Mine", 0, GRENADE_SLOT, UNASSIGNED },
 
+	{ "weapon_ak47dragon", "AK-47 Dragon", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_blaster", "Coil MG", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_broad", "Broad Divine", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_hk23", "HK-23", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_k3", "K3", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_m4a1dragon", "M4A1 Dragon", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_m60e4", "M60E4", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_mp5tiger", "MP5-Tiger", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_p90lapin", "P90-Lapin", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_pkm", "PKM", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_stunrifle", "Stun Rifle", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_tmpdragon", "TMP Dragon", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+
+	{ "weapon_huntbow", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+
+	{ "weapon_gatling", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_gatlingex", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+
+	{ "weapon_tbarrel", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_stg44", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_svdex", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+
+	{ "weapon_mg3xmas", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_mg3", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_m134xmas", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_m134ex", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_m95xmas", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_m2", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_janus7xmas", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+};
 
 static MoEWeaponBuyInfo_s g_MoEWeaponBuyInfo2[] = {
 	{ "weapon_infinity", "Infinity Black/Sliver", 0, PISTOL_SLOT, UNASSIGNED },
@@ -153,6 +185,8 @@ static MoEWeaponBuyInfo_s g_MoEWeaponBuyInfo2[] = {
 	{ "weapon_voidpistol", "VoidPistol", 0, PISTOL_SLOT, UNASSIGNED },
 	{ "weapon_voidpistolex", "VoidPistolEx", 0, PISTOL_SLOT, UNASSIGNED },
 
+	{ "weapon_desperado", "Python Desperado", 0, PISTOL_SLOT, UNASSIGNED },
+
 	{ "weapon_knife", "Seal Knife", 0, KNIFE_SLOT, UNASSIGNED },
 	{ "knife_skullaxe", "Skull-9", 0, KNIFE_SLOT, UNASSIGNED },
 	{ "knife_dragonsword", "Green Dragon Crescent Blade", 0, KNIFE_SLOT, UNASSIGNED },
@@ -183,6 +217,35 @@ static MoEWeaponBuyInfo_s g_MoEWeaponBuyInfo2[] = {
 	{ "weapon_spas12ex", "SPAS-12 EX", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_violingun", "Violin Gun", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_zombibombz", "Zombie Bomb", 0, GRENADE_SLOT, TERRORIST },
+	{ "weapon_sbmine", "Sattelite Mine", 0, GRENADE_SLOT, UNASSIGNED },
+
+	{ "weapon_ak47dragon", "AK-47 Dragon", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_blaster", "Coil MG", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_broad", "Broad Divine", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_hk23", "HK-23", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_k3", "K3", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_m4a1dragon", "M4A1 Dragon", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_m60e4", "M60E4", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_mp5tiger", "MP5-Tiger", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_p90lapin", "P90-Lapin", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_pkm", "PKM", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_stunrifle", "Stun Rifle", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_tmpdragon", "TMP Dragon", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+
+	{ "weapon_huntbow", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_gatling", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_gatlingex", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_tbarrel", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_stg44", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_svdex", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+
+	{ "weapon_mg3xmas", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_mg3", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_m134xmas", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_m134ex", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_m95xmas", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_m2", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_janus7xmas", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 };
 
 static MoEWeaponBuyInfo_s g_MoEWeaponBuyInfo3[] = {
@@ -227,6 +290,8 @@ static MoEWeaponBuyInfo_s g_MoEWeaponBuyInfo3[] = {
 	{ "weapon_voidpistol", "VoidPistol", 3400, PISTOL_SLOT, UNASSIGNED },
 	{ "weapon_voidpistolex", "VoidPistolEx", 3300, PISTOL_SLOT, UNASSIGNED },
 
+	{ "weapon_desperado", "Python Desperado", 0, PISTOL_SLOT, UNASSIGNED },
+
 	{ "weapon_balrog1", "Balrog 1", 600, PISTOL_SLOT, UNASSIGNED },
 
 	{ "weapon_balrog3", "Balrog 3", 2700, PRIMARY_WEAPON_SLOT, UNASSIGNED },
@@ -240,6 +305,36 @@ static MoEWeaponBuyInfo_s g_MoEWeaponBuyInfo3[] = {
 	{ "weapon_ethereal", "Ethereal", 2450, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_spas12ex", "SPAS-12 EX", 2600, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 	{ "weapon_violingun", "Violin Gun", 3250, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_sbmine", "Sattelite Mine", 0, GRENADE_SLOT, UNASSIGNED },
+
+	{ "weapon_ak47dragon", "AK-47 Dragon", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_blaster", "Coil MG", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_broad", "Broad Divine", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_hk23", "HK-23", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_k3", "K3", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_m4a1dragon", "M4A1 Dragon", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_m60e4", "M60E4", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_mp5tiger", "MP5-Tiger", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_p90lapin", "P90-Lapin", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_pkm", "PKM", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_stunrifle", "Stun Rifle", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_tmpdragon", "TMP Dragon", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+
+	{ "weapon_huntbow", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+
+	{ "weapon_gatling", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_gatlingex", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_tbarrel", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_stg44", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_svdex", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+
+	{ "weapon_mg3xmas", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_mg3", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_m134xmas", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_m134ex", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_m95xmas", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_m2", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
+	{ "weapon_janus7xmas", "FailNaught", 0, PRIMARY_WEAPON_SLOT, UNASSIGNED },
 };
 
 bool HasPlayerItem(CBasePlayer *pPlayer, const char *pszCheckItem)

@@ -527,6 +527,7 @@ typedef struct
 	void		**modules;
 	int		numModules;
 	int		initialized;
+	DWORD magic;           // Magic number для проверки
 } MEMORYMODULE, *PMEMORYMODULE;
 
 // Protection flags for memory pages (Executable, Readable, Writeable)
@@ -547,60 +548,235 @@ typedef BOOL (WINAPI *DllEntryProc)( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID
 #define GET_HEADER_DICTIONARY( module, idx )	&(module)->headers->OptionalHeader.DataDirectory[idx]
 #define CALCULATE_ADDRESS( base, offset )	(((DWORD)(base)) + (offset))
 
-static void CopySections( const byte *data, PIMAGE_NT_HEADERS old_headers, PMEMORYMODULE module )
+// Добавьте эти определения в начало файла или в заголовочный файл
+#define MAX_SECTION_SIZE (100 * 1024 * 1024) // 100MB максимум для секции
+#define IS_VALID_POINTER(ptr) ((ptr) != NULL && !IsBadReadPtr((ptr), sizeof(*(ptr))))
+#define IS_VALID_POINTER_RANGE(ptr, size) ((ptr) != NULL && !IsBadReadPtr((ptr), (size)))
+#define MAX_EXPORT_NAME_LENGTH 1024
+
+// Добавьте эти определения
+#define MAX_DLL_NAME_LENGTH 256
+#define MAX_FUNCTION_NAME_LENGTH 1024
+#define MAX_IMPORT_TABLE_SIZE (64 * 1024) // 64KB максимум для таблицы импорта
+
+// Добавьте в структуру MEMORYMODULE
+#define MEMORYMODULE_MAGIC 0x4D4F444D // "MODM"
+
+// Функции проверки
+static BOOL IsValidCodeBase(void* codeBase)
+{
+	if (!codeBase) return FALSE;
+
+	MEMORY_BASIC_INFORMATION mbi;
+	if (VirtualQuery(codeBase, &mbi, sizeof(mbi)) == 0)
+		return FALSE;
+
+	// Проверяем что память была выделена нами (MEM_COMMIT)
+	return (mbi.State == MEM_COMMIT && mbi.AllocationBase == codeBase);
+}
+
+static BOOL IsValidLibraryHandle(void* handle)
+{
+	if (!handle) return FALSE;
+
+#ifdef _WIN32
+	// Проверка HMODULE через GetModuleFileName
+	CHAR path[MAX_PATH];
+	DWORD length = GetModuleFileNameA((HMODULE)handle, path, sizeof(path));
+	return (length > 0 && length < sizeof(path));
+#else
+	// Для Linux можно проверить через dlsym
+	void* symbol = dlsym(handle, "dlsym"); // Любая известная функция
+	return (symbol != NULL);
+#endif
+}
+
+#define IS_VALID_CODE_POINTER(ptr) ((ptr) != NULL && !IsBadCodePtr( (FARPROC)(ptr) ))
+
+// Безопасная версия FreeSections
+static void FreeSections(PIMAGE_NT_HEADERS headers, MEMORYMODULE* module)
+{
+	if (!headers || !module || !module->codeBase)
+		return;
+
+	PIMAGE_SECTION_HEADER section = IMAGE_FIRST_SECTION(headers);
+
+	for (int i = 0; i < headers->FileHeader.NumberOfSections; i++, section++)
+	{
+		if (section->Misc.PhysicalAddress != 0)
+		{
+			void* sectionAddress = (void*)(uintptr_t)section->Misc.PhysicalAddress;
+
+			// Проверяем что адрес секции внутри нашего codeBase
+			if (sectionAddress >= module->codeBase &&
+				sectionAddress < (byte*)module->codeBase + headers->OptionalHeader.SizeOfImage)
+			{
+				// Освобождаем только если мы его выделяли
+				SIZE_T sectionSize = max(section->SizeOfRawData, section->Misc.VirtualSize);
+
+				// VirtualFree требует выравнивания по границе страницы
+				void* pageBase = (void*)((uintptr_t)sectionAddress & ~(4096 - 1));
+				SIZE_T pageSize = sectionSize + ((uintptr_t)sectionAddress - (uintptr_t)pageBase);
+
+				VirtualFree(pageBase, pageSize, MEM_DECOMMIT);
+			}
+
+			section->Misc.PhysicalAddress = 0;
+		}
+	}
+}
+
+// Безопасная версия CALCULATE_ADDRESS
+static void* SAFE_CALCULATE_ADDRESS(const void* base, DWORD offset, DWORD maxSize)
+{
+	if (!base || offset == 0 || offset > maxSize)
+		return NULL;
+
+	// Проверка на переполнение
+	if ((DWORD_PTR)base + offset < (DWORD_PTR)base)
+		return NULL;
+
+	return (byte*)base + offset;
+}
+
+static qboolean CopySections(const byte* data, PIMAGE_NT_HEADERS old_headers, PMEMORYMODULE module)
 {
 	int i, size;
-	byte *dest;
-	byte *codeBase = module->codeBase;
-	PIMAGE_SECTION_HEADER section = IMAGE_FIRST_SECTION( module->headers );
+	byte* dest;
+	byte* codeBase;
+	PIMAGE_SECTION_HEADER section;
 
-	for( i = 0; i < module->headers->FileHeader.NumberOfSections; i++, section++ )
+	// Проверка входных параметров
+	if (!data || !old_headers || !module || !module->headers || !module->codeBase)
 	{
-		if( section->SizeOfRawData == 0 )
+		SetLastError(ERROR_INVALID_PARAMETER);
+		return false;
+	}
+
+	codeBase = module->codeBase;
+	section = IMAGE_FIRST_SECTION(module->headers);
+
+	// Проверка количества секций
+	if (module->headers->FileHeader.NumberOfSections < 0 ||
+		module->headers->FileHeader.NumberOfSections > 1000) // Разумный предел
+	{
+		SetLastError(ERROR_INVALID_DATA);
+		return false;
+	}
+
+	for (i = 0; i < module->headers->FileHeader.NumberOfSections; i++, section++)
+	{
+		// Проверка валидности указателя секции
+		if (!IS_VALID_POINTER(section))
+		{
+			SetLastError(ERROR_INVALID_DATA);
+			return false;
+		}
+
+		if (section->SizeOfRawData == 0)
 		{
 			// section doesn't contain data in the dll itself, but may define
 			// uninitialized data
 			size = old_headers->OptionalHeader.SectionAlignment;
 
-			if( size > 0 )
+			if (size > 0)
 			{
-				dest = (byte *)VirtualAlloc((byte *)CALCULATE_ADDRESS(codeBase, section->VirtualAddress), size, MEM_COMMIT, PAGE_READWRITE );
-				section->Misc.PhysicalAddress = (DWORD)dest;
-				Q_memset( dest, 0, size );
+				// Проверка выравнивания
+				if (size > MAX_SECTION_SIZE) // Защита от слишком больших секций
+				{
+					SetLastError(ERROR_NOT_ENOUGH_MEMORY);
+					return false;
+				}
+
+				// Проверка виртуального адреса
+				if (section->VirtualAddress > module->headers->OptionalHeader.SizeOfImage)
+				{
+					SetLastError(ERROR_INVALID_DATA);
+					return false;
+				}
+
+				dest = (byte*)VirtualAlloc(
+					(byte*)CALCULATE_ADDRESS(codeBase, section->VirtualAddress),
+					size,
+					MEM_COMMIT,
+					PAGE_READWRITE
+				);
+
+				if (!dest)
+				{
+					// VirtualAlloc уже установил LastError
+					return false;
+				}
+
+				section->Misc.PhysicalAddress = (DWORD)(uintptr_t)dest; // Безопасное приведение
+				Q_memset(dest, 0, size);
 			}
 			// section is empty
 			continue;
 		}
 
-		// commit memory block and copy data from dll
-		dest = (byte *)VirtualAlloc((byte *)CALCULATE_ADDRESS(codeBase, section->VirtualAddress), section->SizeOfRawData, MEM_COMMIT, PAGE_READWRITE );
-		Q_memcpy( dest, (byte *)CALCULATE_ADDRESS(data, section->PointerToRawData), section->SizeOfRawData );
-		section->Misc.PhysicalAddress = (DWORD)dest;
-	}
-}
-
-static void FreeSections( PIMAGE_NT_HEADERS old_headers, PMEMORYMODULE module )
-{
-	int	i, size;
-	byte	*codeBase = module->codeBase;
-	PIMAGE_SECTION_HEADER section = IMAGE_FIRST_SECTION(module->headers);
-
-	for( i = 0; i < module->headers->FileHeader.NumberOfSections; i++, section++ )
-	{
-		if( section->SizeOfRawData == 0 )
+		// Проверка размера сырых данных
+		if (section->SizeOfRawData > MAX_SECTION_SIZE ||
+			section->SizeOfRawData < 0)
 		{
-			size = old_headers->OptionalHeader.SectionAlignment;
-			if( size > 0 )
-			{
-				VirtualFree( codeBase + section->VirtualAddress, size, MEM_DECOMMIT );
-				section->Misc.PhysicalAddress = 0;
-			}
-			continue;
+			SetLastError(ERROR_INVALID_DATA);
+			return false;
 		}
 
-		VirtualFree( codeBase + section->VirtualAddress, section->SizeOfRawData, MEM_DECOMMIT );
-		section->Misc.PhysicalAddress = 0;
+		// Проверка указателя на сырые данные
+		if (section->PointerToRawData >= old_headers->OptionalHeader.SizeOfHeaders ||
+			section->PointerToRawData + section->SizeOfRawData > old_headers->OptionalHeader.SizeOfImage)
+		{
+			SetLastError(ERROR_INVALID_DATA);
+			return false;
+		}
+
+		// Проверка виртуального адреса
+		if (section->VirtualAddress >= module->headers->OptionalHeader.SizeOfImage ||
+			section->VirtualAddress + section->SizeOfRawData > module->headers->OptionalHeader.SizeOfImage)
+		{
+			SetLastError(ERROR_INVALID_DATA);
+			return false;
+		}
+
+		// commit memory block and copy data from dll
+		dest = (byte*)VirtualAlloc(
+			(byte*)CALCULATE_ADDRESS(codeBase, section->VirtualAddress),
+			section->SizeOfRawData,
+			MEM_COMMIT,
+			PAGE_READWRITE
+		);
+
+		if (!dest)
+		{
+			// VirtualAlloc уже установил LastError
+			return false;
+		}
+
+		// Проверка что данные не выходят за границы
+		const byte* src = (byte*)CALCULATE_ADDRESS(data, section->PointerToRawData);
+		if (!IS_VALID_POINTER_RANGE(src, section->SizeOfRawData))
+		{
+			VirtualFree(dest, 0, MEM_RELEASE);
+			SetLastError(ERROR_INVALID_DATA);
+			return false;
+		}
+
+		// Копирование данных с проверкой
+		Q_memcpy(dest, src, section->SizeOfRawData);
+
+		// Проверка целостности после копирования (опционально)
+		if (Q_memcmp(dest, src, min(section->SizeOfRawData, 16)) != 0)
+		{
+			VirtualFree(dest, 0, MEM_RELEASE);
+			SetLastError(ERROR_CRC);
+			return false;
+		}
+
+		section->Misc.PhysicalAddress = (DWORD)(uintptr_t)dest; // Безопасное приведение
 	}
+
+	return true;
 }
 
 static void FinalizeSections( MEMORYMODULE *module )
@@ -694,164 +870,595 @@ static void PerformBaseRelocation( MEMORYMODULE *module, DWORD delta )
 	}
 }
 
-static FARPROC MemoryGetProcAddress( void *module, const char *name )
+static FARPROC MemoryGetProcAddress(void* module, const char* name)
 {
-	int	idx = -1;
-	DWORD	i, *nameRef;
-	WORD	*ordinal;
+	int idx = -1;
+	DWORD i;
+	DWORD* nameRef;
+	WORD* ordinal;
 	PIMAGE_EXPORT_DIRECTORY exports;
-	byte	*codeBase = ((PMEMORYMODULE)module)->codeBase;
-	PIMAGE_DATA_DIRECTORY directory = GET_HEADER_DICTIONARY((MEMORYMODULE *)module, IMAGE_DIRECTORY_ENTRY_EXPORT );
+	PMEMORYMODULE memModule;
+	byte* codeBase;
+	PIMAGE_DATA_DIRECTORY directory;
 
-	if( directory->Size == 0 )
+	// Проверка входных параметров
+	if (!module || !name || !name[0])
+	{
+		SetLastError(ERROR_INVALID_PARAMETER);
+		return NULL;
+	}
+
+	memModule = (PMEMORYMODULE)module;
+	if (!memModule->codeBase || !memModule->headers)
+	{
+		SetLastError(ERROR_INVALID_HANDLE);
+		return NULL;
+	}
+
+	codeBase = memModule->codeBase;
+	directory = GET_HEADER_DICTIONARY(memModule, IMAGE_DIRECTORY_ENTRY_EXPORT);
+
+	// Проверка директории экспорта
+	if (!directory || directory->Size == 0)
 	{
 		// no export table found
+		SetLastError(ERROR_PROC_NOT_FOUND);
 		return NULL;
 	}
 
-	exports = (PIMAGE_EXPORT_DIRECTORY)CALCULATE_ADDRESS( codeBase, directory->VirtualAddress );
+	// Проверка виртуального адреса директории экспорта
+	if (directory->VirtualAddress >= memModule->headers->OptionalHeader.SizeOfImage ||
+		directory->VirtualAddress + directory->Size > memModule->headers->OptionalHeader.SizeOfImage)
+	{
+		SetLastError(ERROR_INVALID_DATA);
+		return NULL;
+	}
 
-	if( exports->NumberOfNames == 0 || exports->NumberOfFunctions == 0 )
+	exports = (PIMAGE_EXPORT_DIRECTORY)SAFE_CALCULATE_ADDRESS(codeBase, directory->VirtualAddress, directory->Size);
+	if (!exports)
+	{
+		SetLastError(ERROR_INVALID_DATA);
+		return NULL;
+	}
+
+	// Проверка структуры экспорта
+	if (exports->NumberOfNames == 0 || exports->NumberOfFunctions == 0)
 	{
 		// DLL doesn't export anything
+		SetLastError(ERROR_PROC_NOT_FOUND);
 		return NULL;
 	}
 
-	// search function name in list of exported names
-	nameRef = (DWORD *)CALCULATE_ADDRESS( codeBase, exports->AddressOfNames );
-	ordinal = (WORD *)CALCULATE_ADDRESS( codeBase, exports->AddressOfNameOrdinals );
-
-	for( i = 0; i < exports->NumberOfNames; i++, nameRef++, ordinal++ )
+	// Проверка целостности данных экспорта
+	if (exports->NumberOfNames > 0x10000 || exports->NumberOfFunctions > 0x10000) // Разумный предел
 	{
-		// GetProcAddress case insensative ?????
-		if( !Q_stricmp( name, (const char *)CALCULATE_ADDRESS( codeBase, *nameRef )))
+		SetLastError(ERROR_INVALID_DATA);
+		return NULL;
+	}
+
+	// Проверка указателей на таблицы имен и ординалов
+	if (exports->AddressOfNames >= memModule->headers->OptionalHeader.SizeOfImage ||
+		exports->AddressOfNameOrdinals >= memModule->headers->OptionalHeader.SizeOfImage ||
+		exports->AddressOfFunctions >= memModule->headers->OptionalHeader.SizeOfImage)
+	{
+		SetLastError(ERROR_INVALID_DATA);
+		return NULL;
+	}
+
+	// Вычисление адресов таблиц с проверкой
+	nameRef = (DWORD*)SAFE_CALCULATE_ADDRESS(codeBase, exports->AddressOfNames,
+		exports->NumberOfNames * sizeof(DWORD));
+	ordinal = (WORD*)SAFE_CALCULATE_ADDRESS(codeBase, exports->AddressOfNameOrdinals,
+		exports->NumberOfNames * sizeof(WORD));
+
+	if (!nameRef || !ordinal)
+	{
+		SetLastError(ERROR_INVALID_DATA);
+		return NULL;
+	}
+
+	// Поиск имени функции в списке экспортируемых имен
+	for (i = 0; i < exports->NumberOfNames; i++)
+	{
+		const char* exportedName;
+
+		// Проверка текущего указателя имени
+		if (nameRef[i] >= memModule->headers->OptionalHeader.SizeOfImage)
 		{
-			idx = *ordinal;
+			continue; // Пропускаем поврежденные записи
+		}
+
+		exportedName = (const char*)SAFE_CALCULATE_ADDRESS(codeBase, nameRef[i], MAX_EXPORT_NAME_LENGTH);
+		if (!exportedName)
+		{
+			continue; // Пропускаем поврежденные записи
+		}
+
+		// Проверка что строка нуль-терминирована в разумных пределах
+		if (!IsValidString(exportedName, MAX_EXPORT_NAME_LENGTH))
+		{
+			continue;
+		}
+
+		// GetProcAddress case insensitive
+		if (!Q_stricmp(name, exportedName))
+		{
+			// Проверка ординала в допустимых пределах
+			if (i >= exports->NumberOfNames || ordinal[i] >= exports->NumberOfFunctions)
+			{
+				SetLastError(ERROR_INVALID_DATA);
+				return NULL;
+			}
+
+			idx = ordinal[i];
 			break;
 		}
 	}
 
-	if( idx == -1 )
+	if (idx == -1)
 	{
 		// exported symbol not found
+		SetLastError(ERROR_PROC_NOT_FOUND);
 		return NULL;
 	}
 
-	if((DWORD)idx > exports->NumberOfFunctions )
+	// Проверка индекса функции
+	if ((DWORD)idx >= exports->NumberOfFunctions)
 	{
 		// name <-> ordinal number don't match
+		SetLastError(ERROR_INVALID_DATA);
+		return NULL;
+	}
+
+	// Проверка таблицы адресов функций
+	DWORD* addressOfFunctions = (DWORD*)SAFE_CALCULATE_ADDRESS(codeBase, exports->AddressOfFunctions,
+		exports->NumberOfFunctions * sizeof(DWORD));
+	if (!addressOfFunctions)
+	{
+		SetLastError(ERROR_INVALID_DATA);
+		return NULL;
+	}
+
+	// Проверка конкретного адреса функции
+	DWORD functionRVA = addressOfFunctions[idx];
+	if (functionRVA == 0)
+	{
+		// Функция форвардена или не реализована
+		SetLastError(ERROR_PROC_NOT_FOUND);
+		return NULL;
+	}
+
+	// Проверка что адрес функции внутри образа
+	if (functionRVA >= memModule->headers->OptionalHeader.SizeOfImage)
+	{
+		SetLastError(ERROR_INVALID_DATA);
 		return NULL;
 	}
 
 	// addressOfFunctions contains the RVAs to the "real" functions
-	return (FARPROC)CALCULATE_ADDRESS( codeBase, *(DWORD *)CALCULATE_ADDRESS( codeBase, exports->AddressOfFunctions + (idx * 4)));
+	FARPROC result = (FARPROC)SAFE_CALCULATE_ADDRESS(codeBase, functionRVA,
+		memModule->headers->OptionalHeader.SizeOfImage - functionRVA);
+	if (!result)
+	{
+		SetLastError(ERROR_INVALID_DATA);
+		return NULL;
+	}
+
+	return result;
 }
 
-static int BuildImportTable( MEMORYMODULE *module )
+// Функция проверки валидности строки
+static BOOL IsValidString(const char* str, size_t maxLen)
 {
-	int	result=1;
-	byte	*codeBase = module->codeBase;
-	PIMAGE_DATA_DIRECTORY directory = GET_HEADER_DICTIONARY( module, IMAGE_DIRECTORY_ENTRY_IMPORT );
+	if (!str) return FALSE;
 
-	if( directory->Size > 0 )
+	for (size_t i = 0; i < maxLen; i++)
 	{
-		PIMAGE_IMPORT_DESCRIPTOR importDesc = (PIMAGE_IMPORT_DESCRIPTOR)CALCULATE_ADDRESS( codeBase, directory->VirtualAddress );
+		if (str[i] == '\0')
+			return TRUE; // Корректная нуль-терминированная строка
+		if (str[i] < 32 || str[i] > 126) // Проверка на печатные ASCII символы
+			return FALSE;
+	}
 
-		for( ; !IsBadReadPtr( importDesc, sizeof( IMAGE_IMPORT_DESCRIPTOR )) && importDesc->Name; importDesc++ )
+	return FALSE; // Слишком длинная строка или не нуль-терминирована
+}
+
+// Функция проверки подозрительных имен DLL
+static BOOL IsSuspiciousDllName(LPCSTR dllName)
+{
+	if (!dllName) return TRUE;
+
+	// Проверка на абсолютные пути
+	if (strchr(dllName, '\\') || strchr(dllName, '/') || strchr(dllName, ':'))
+		return TRUE;
+
+	// Проверка на попытку directory traversal
+	if (strstr(dllName, ".."))
+		return TRUE;
+
+	// Проверка расширения
+	const char* ext = strrchr(dllName, '.');
+	if (ext && _stricmp(ext, ".dll") != 0)
+		return TRUE;
+
+	return FALSE;
+}
+
+static int BuildImportTable(MEMORYMODULE* module)
+{
+	int result = 1;
+	byte* codeBase;
+	PIMAGE_DATA_DIRECTORY directory;
+	PIMAGE_IMPORT_DESCRIPTOR importDesc;
+
+	// Проверка входных параметров
+	if (!module || !module->codeBase || !module->headers)
+	{
+		MsgDev(D_ERROR, "BuildImportTable: invalid module parameter\n");
+		return 0;
+	}
+
+	codeBase = module->codeBase;
+	directory = GET_HEADER_DICTIONARY(module, IMAGE_DIRECTORY_ENTRY_IMPORT);
+
+	if (!directory || directory->Size == 0)
+	{
+		// No import table - это нормально для некоторых модулей
+		return 1;
+	}
+
+	// Проверка границ импортной директории
+	if (directory->VirtualAddress >= module->headers->OptionalHeader.SizeOfImage ||
+		directory->VirtualAddress + directory->Size > module->headers->OptionalHeader.SizeOfImage)
+	{
+		MsgDev(D_ERROR, "BuildImportTable: import directory outside image bounds\n");
+		return 0;
+	}
+
+	importDesc = (PIMAGE_IMPORT_DESCRIPTOR)SAFE_CALCULATE_ADDRESS(
+		codeBase,
+		directory->VirtualAddress,
+		directory->Size
+	);
+
+	if (!importDesc)
+	{
+		MsgDev(D_ERROR, "BuildImportTable: invalid import descriptor address\n");
+		return 0;
+	}
+
+	// Ограничение количества импортируемых DLL для защиты от бесконечного цикла
+	const int MAX_IMPORT_DLLS = 256;
+	int dllCount = 0;
+
+	for (; dllCount < MAX_IMPORT_DLLS; importDesc++, dllCount++)
+	{
+		// Проверка валидности дескриптора
+		if (!IS_VALID_POINTER_RANGE(importDesc, sizeof(IMAGE_IMPORT_DESCRIPTOR)) ||
+			IsBadReadPtr(importDesc, sizeof(IMAGE_IMPORT_DESCRIPTOR)))
 		{
-			DWORD	*thunkRef, *funcRef;
-			LPCSTR	libname;
-			void	*handle;
+			MsgDev(D_WARN, "BuildImportTable: invalid import descriptor at index %d\n", dllCount);
+			break;
+		}
 
-			libname = (LPCSTR)CALCULATE_ADDRESS( codeBase, importDesc->Name );
-			handle = Com_LoadLibraryExt( libname, false, true );
+		// Конец таблицы импорта
+		if (importDesc->Name == 0)
+			break;
 
-			if( handle == NULL )
+		// Проверка имени DLL
+		if (importDesc->Name >= module->headers->OptionalHeader.SizeOfImage)
+		{
+			MsgDev(D_ERROR, "BuildImportTable: invalid DLL name RVA\n");
+			result = 0;
+			break;
+		}
+
+		LPCSTR libname = (LPCSTR)SAFE_CALCULATE_ADDRESS(
+			codeBase,
+			importDesc->Name,
+			MAX_DLL_NAME_LENGTH
+		);
+
+		if (!libname || !IsValidString(libname, MAX_DLL_NAME_LENGTH))
+		{
+			MsgDev(D_ERROR, "BuildImportTable: invalid DLL name\n");
+			result = 0;
+			break;
+		}
+
+		// Проверка безопасности имени DLL
+		if (IsSuspiciousDllName(libname))
+		{
+			MsgDev(D_ERROR, "BuildImportTable: suspicious DLL name '%s'\n", libname);
+			result = 0;
+			break;
+		}
+
+		// Загрузка библиотеки
+		void* handle = Com_LoadLibraryExt(libname, false, true);
+		if (handle == NULL)
+		{
+			MsgDev(D_ERROR, "BuildImportTable: couldn't load library %s\n", libname);
+			result = 0;
+			break;
+		}
+
+		// Добавление в список загруженных модулей
+		void** newModules = (void**)Mem_Realloc(
+			host.mempool,
+			module->modules,
+			(module->numModules + 1) * sizeof(void*)
+		);
+
+		if (!newModules)
+		{
+			Com_FreeLibrary(handle);
+			MsgDev(D_ERROR, "BuildImportTable: out of memory for module list\n");
+			result = 0;
+			break;
+		}
+
+		module->modules = newModules;
+		module->modules[module->numModules++] = handle;
+
+		// Обработка таблицы импорта функций
+		DWORD* thunkRef, * funcRef;
+
+		if (importDesc->OriginalFirstThunk != 0)
+		{
+			thunkRef = (DWORD*)SAFE_CALCULATE_ADDRESS(
+				codeBase,
+				importDesc->OriginalFirstThunk,
+				MAX_IMPORT_TABLE_SIZE
+			);
+			funcRef = (DWORD*)SAFE_CALCULATE_ADDRESS(
+				codeBase,
+				importDesc->FirstThunk,
+				MAX_IMPORT_TABLE_SIZE
+			);
+		}
+		else
+		{
+			// no hint table
+			thunkRef = (DWORD*)SAFE_CALCULATE_ADDRESS(
+				codeBase,
+				importDesc->FirstThunk,
+				MAX_IMPORT_TABLE_SIZE
+			);
+			funcRef = thunkRef;
+		}
+
+		if (!thunkRef || !funcRef)
+		{
+			MsgDev(D_ERROR, "BuildImportTable: invalid import thunk table\n");
+			result = 0;
+			break;
+		}
+
+		// Ограничение количества импортируемых функций
+		const int MAX_IMPORT_FUNCTIONS = 4096;
+		int funcCount = 0;
+
+		for (; *thunkRef != 0 && funcCount < MAX_IMPORT_FUNCTIONS; thunkRef++, funcRef++, funcCount++)
+		{
+			// Проверка указателей
+			if (!IS_VALID_POINTER(thunkRef) || !IS_VALID_POINTER(funcRef))
 			{
-				MsgDev( D_ERROR, "couldn't load library %s\n", libname );
+				MsgDev(D_ERROR, "BuildImportTable: invalid thunk or func pointer\n");
 				result = 0;
 				break;
 			}
 
-			module->modules = (void *)Mem_Realloc( host.mempool, module->modules, (module->numModules + 1) * (sizeof( void* )));
-			module->modules[module->numModules++] = handle;
+			FARPROC procAddress = NULL;
 
-			if( importDesc->OriginalFirstThunk )
+			if (IMAGE_SNAP_BY_ORDINAL(*thunkRef))
 			{
-				thunkRef = (DWORD *)CALCULATE_ADDRESS( codeBase, importDesc->OriginalFirstThunk );
-				funcRef = (DWORD *)CALCULATE_ADDRESS( codeBase, importDesc->FirstThunk );
-			}
-			else
-			{
-				// no hint table
-				thunkRef = (DWORD *)CALCULATE_ADDRESS( codeBase, importDesc->FirstThunk );
-				funcRef = (DWORD *)CALCULATE_ADDRESS( codeBase, importDesc->FirstThunk );
-			}
-
-			for( ; *thunkRef; thunkRef++, funcRef++ )
-			{
-				if( IMAGE_SNAP_BY_ORDINAL( *thunkRef ))
+				// Импорт по ординалу
+				WORD ordinal = IMAGE_ORDINAL(*thunkRef);
+				if (ordinal == 0 || ordinal > 0xFFFF)
 				{
-					LPCSTR	funcName = (LPCSTR)IMAGE_ORDINAL( *thunkRef );
-					*funcRef = (DWORD)Com_GetProcAddress( handle, funcName );
-				}
-				else
-				{
-					PIMAGE_IMPORT_BY_NAME thunkData = (PIMAGE_IMPORT_BY_NAME)CALCULATE_ADDRESS( codeBase, *thunkRef );
-					LPCSTR	funcName = (LPCSTR)&thunkData->Name;
-					*funcRef = (DWORD)Com_GetProcAddress( handle, funcName );
-				}
-
-				if( *funcRef == 0 )
-				{
+					MsgDev(D_ERROR, "BuildImportTable: invalid ordinal %u\n", ordinal);
 					result = 0;
 					break;
 				}
+
+				procAddress = Com_GetProcAddress(handle, (LPCSTR)(uintptr_t)ordinal);
 			}
-			if( !result ) break;
+			else
+			{
+				// Импорт по имени
+				if (*thunkRef >= module->headers->OptionalHeader.SizeOfImage)
+				{
+					MsgDev(D_ERROR, "BuildImportTable: invalid import by name RVA\n");
+					result = 0;
+					break;
+				}
+
+				PIMAGE_IMPORT_BY_NAME thunkData = (PIMAGE_IMPORT_BY_NAME)SAFE_CALCULATE_ADDRESS(
+					codeBase,
+					*thunkRef,
+					sizeof(IMAGE_IMPORT_BY_NAME) + MAX_FUNCTION_NAME_LENGTH
+				);
+
+				if (!thunkData || !IsValidString((LPCSTR)&thunkData->Name, MAX_FUNCTION_NAME_LENGTH))
+				{
+					MsgDev(D_ERROR, "BuildImportTable: invalid function name\n");
+					result = 0;
+					break;
+				}
+
+				LPCSTR funcName = (LPCSTR)&thunkData->Name;
+				procAddress = Com_GetProcAddress(handle, funcName);
+			}
+
+			if (procAddress == NULL)
+			{
+				MsgDev(D_ERROR, "BuildImportTable: failed to get function address\n");
+				result = 0;
+				break;
+			}
+
+			// Запись адреса функции
+			*funcRef = (DWORD)(uintptr_t)procAddress;
 		}
+
+		if (funcCount >= MAX_IMPORT_FUNCTIONS)
+		{
+			MsgDev(D_WARN, "BuildImportTable: too many functions in import table for %s\n", libname);
+		}
+
+		if (!result)
+			break;
 	}
+
+	if (dllCount >= MAX_IMPORT_DLLS)
+	{
+		MsgDev(D_WARN, "BuildImportTable: import table too large, truncated\n");
+	}
+
 	return result;
 }
 
-static void MemoryFreeLibrary( void *hInstance )
+// Безопасная версия для работы с ординалами
+_inline WORD SafeImageOrdinal(DWORD thunk)
 {
-	MEMORYMODULE	*module = (MEMORYMODULE *)hInstance;
-
-	if( module != NULL )
+	if (IMAGE_SNAP_BY_ORDINAL(thunk))
 	{
-		int	i;
-	
-		if( module->initialized != 0 )
-		{
-			// notify library about detaching from process
-			DllEntryProc DllEntry = (DllEntryProc)CALCULATE_ADDRESS( module->codeBase, module->headers->OptionalHeader.AddressOfEntryPoint );
-			(*DllEntry)((HINSTANCE)module->codeBase, DLL_PROCESS_DETACH, 0 );
-			module->initialized = 0;
-		}
+		WORD ordinal = IMAGE_ORDINAL(thunk);
+		// Ординалы обычно начинаются с 1, 0 обычно невалиден
+		if (ordinal > 0 && ordinal <= 0xFFFF)
+			return ordinal;
+	}
+	return 0;
+}
 
-		if( module->modules != NULL )
+static void MemoryFreeLibrary(void* hInstance)
+{
+	MEMORYMODULE* module = (MEMORYMODULE*)hInstance;
+
+	// Проверка валидности указателя
+	if (module == NULL)
+		return;
+
+	// Проверка magic number или сигнатуры для избежания освобождения случайной памяти
+	if (module->magic != MEMORYMODULE_MAGIC)
+	{
+		MsgDev(D_ERROR, "MemoryFreeLibrary: invalid module magic number\n");
+		return;
+	}
+
+	// Сбрасываем magic number чтобы предотвратить повторное использование
+	module->magic = 0;
+
+	// Уведомление библиотеки об отключении от процесса
+	if (module->initialized != 0 && module->codeBase != NULL && module->headers != NULL)
+	{
+		// Проверка точки входа
+		if (module->headers->OptionalHeader.AddressOfEntryPoint != 0 &&
+			module->headers->OptionalHeader.AddressOfEntryPoint < module->headers->OptionalHeader.SizeOfImage)
 		{
-			// free previously opened libraries
-			for( i = 0; i < module->numModules; i++ )
+			DllEntryProc DllEntry = (DllEntryProc)SAFE_CALCULATE_ADDRESS(
+				module->codeBase,
+				module->headers->OptionalHeader.AddressOfEntryPoint,
+				module->headers->OptionalHeader.SizeOfImage - module->headers->OptionalHeader.AddressOfEntryPoint
+			);
+
+			if (DllEntry != NULL && IS_VALID_CODE_POINTER(DllEntry))
 			{
-				if( module->modules[i] != NULL )
+				__try
 				{
-					Com_FreeLibrary( module->modules[i] );
+					// Вызов точки входа с DLL_PROCESS_DETACH
+					BOOL result = (*DllEntry)((HINSTANCE)module->codeBase, DLL_PROCESS_DETACH, 0);
+					if (!result)
+					{
+						MsgDev(D_WARN, "MemoryFreeLibrary: DllEntry(PROCESS_DETACH) returned FALSE\n");
+					}
+				}
+				__except (EXCEPTION_EXECUTE_HANDLER)
+				{
+					MsgDev(D_ERROR, "MemoryFreeLibrary: exception in DllEntry(PROCESS_DETACH)\n");
 				}
 			}
-			Mem_Free( module->modules ); // Mem_Realloc end
+			else
+			{
+				MsgDev(D_WARN, "MemoryFreeLibrary: invalid DllEntry point\n");
+			}
 		}
+		module->initialized = 0;
+	}
 
-		FreeSections( module->headers, module );
-
-		if( module->codeBase != NULL )
+	// Освобождение ранее открытых библиотек
+	if (module->modules != NULL)
+	{
+		for (int i = 0; i < module->numModules; i++)
 		{
-			// release memory of library
-			VirtualFree( module->codeBase, 0, MEM_RELEASE );
+			if (module->modules[i] != NULL)
+			{
+				// Проверка что это валидный handle библиотеки
+				if (IsValidLibraryHandle(module->modules[i]))
+				{
+					Com_FreeLibrary(module->modules[i]);
+				}
+				else
+				{
+					MsgDev(D_WARN, "MemoryFreeLibrary: invalid library handle at index %d\n", i);
+				}
+				module->modules[i] = NULL;
+			}
 		}
 
-		HeapFree( GetProcessHeap(), 0, module );
+		// Освобождение массива модулей
+		Mem_Free(module->modules);
+		module->modules = NULL;
+		module->numModules = 0;
+	}
+
+	// Освобождение секций
+	if (module->headers != NULL)
+	{
+		FreeSections(module->headers, module);
+	}
+
+	// Освобождение памяти библиотеки
+	if (module->codeBase != NULL)
+	{
+		// Дополнительная проверка что это действительно выделенная нами память
+		if (IsValidCodeBase(module->codeBase))
+		{
+			SIZE_T regionSize = 0;
+
+			// Получаем реальный размер региона
+			MEMORY_BASIC_INFORMATION mbi;
+			if (VirtualQuery(module->codeBase, &mbi, sizeof(mbi)) != 0)
+			{
+				regionSize = mbi.RegionSize;
+			}
+
+			// Освобождаем память
+			if (!VirtualFree(module->codeBase, 0, MEM_RELEASE))
+			{
+				DWORD error = GetLastError();
+				MsgDev(D_ERROR, "MemoryFreeLibrary: VirtualFree failed with error %lu\n", error);
+			}
+		}
+		else
+		{
+			MsgDev(D_ERROR, "MemoryFreeLibrary: invalid codeBase pointer\n");
+		}
+		module->codeBase = NULL;
+	}
+
+	// Очистка оставшихся полей для безопасности
+	if (module->headers != NULL)
+	{
+		module->headers = NULL;
+	}
+
+	// Освобождение структуры модуля
+	if (!HeapFree(GetProcessHeap(), 0, module))
+	{
+		DWORD error = GetLastError();
+		MsgDev(D_ERROR, "MemoryFreeLibrary: HeapFree failed with error %lu\n", error);
 	}
 }
 

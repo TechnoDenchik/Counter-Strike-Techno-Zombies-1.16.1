@@ -7,6 +7,8 @@
 #include "hud_sub.h"
 #include "zb5/TextSetZb5.h"
 
+
+
 class CHudZB3ScoreBoard : public IBaseHudSub
 {
 public:
@@ -40,15 +42,22 @@ protected:
 	UniqueTexture countround;
 	UniqueTexture countkill;
 
-	
+	UniqueTexture m_iIcon_Speed;
+	UniqueTexture m_iIcon_Damage;
 
-	
+	SharedTexture m_iNum_Character;
+
+	wrect_t m_iNum_CharacterC[10];
 
 	UniqueTexture newscoreboarddm;
 	UniqueTexture iconkill;
 	UniqueTexture iconmy;
 	UniqueTexture whitebig;
 	UniqueTexture icononest;
+
+	UniqueTexture m_iColon_Bottom;
+	SharedTexture m_iNum_Bottom;
+	wrect_t m_iNum_BottomC[10];
 
 	SharedTexture m_pCurTexture;
 	UniqueTexture m_iCharacter;
@@ -126,7 +135,8 @@ protected:
 	SharedTexture m_pCurTexture63;
 
 	
-
+	float m_flPanicTime;
+	bool m_bPanicColorChange;
 	float m_flDisplayTime;	
 
 };

@@ -43,7 +43,7 @@ CZombieClass_ChinaR::CZombieClass_ChinaR(CBasePlayer *player, ZombieLevel iEvolu
 	m_pPlayer->pev->rendermode = kRenderNormal;
 	m_pPlayer->ResetMaxSpeed();
 	m_pPlayer->GiveNamedItem("Knife_Zombi_china");
-	m_pPlayer->GiveNamedItem("weapon_zombibombz");
+	m_pPlayer->GiveNamedItem("weapon_zombibomb_china");
 	m_pPlayer->m_bIsZombieChina = true;
 }
 

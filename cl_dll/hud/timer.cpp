@@ -428,7 +428,7 @@ int CHudProgressBar::Draw(float flTime)
 	{
 		int r, g, b;
 		DrawUtils::UnpackRGB(r, g, b, RGB_WHITE);
-		DrawUtils::DrawHudString(ScreenWidth / 4, ScreenHeight / 2, ScreenWidth, (char*)m_szLocalizedHeader, r, g, b);
+		DrawUtils::DrawHudString(ScreenWidth / 4, ScreenHeight / 2, ScreenWidth, (char*)m_szLocalizedHeader, r, g, b, 255);
 
 		DrawUtils::DrawRectangle(ScreenWidth / 4, ScreenHeight / 2 + gHUD.GetCharHeight(), ScreenWidth / 2, ScreenHeight / 30);
 		FillRGBA(ScreenWidth / 4 + 2, ScreenHeight / 2 + gHUD.GetCharHeight() + 2, m_fPercent * (ScreenWidth / 2 - 4), ScreenHeight / 30 - 4, 255, 140, 0, 255);

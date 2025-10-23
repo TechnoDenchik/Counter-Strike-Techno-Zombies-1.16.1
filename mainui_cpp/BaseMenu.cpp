@@ -812,6 +812,14 @@ void UI_UpdateMenu( float flTime )
 				{
 					EngFuncs::PlayBackgroundTrack("Music/trfn_1/mainmenu", "Music/trfn_1/mainmenu");
 				}
+				else if (musicset == 14)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/laurashigihara_01/mainmenu", "Music/laurashigihara_01/mainmenu");
+				}
+				else if (musicset == 15)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/twerl_01/mainmenu", "Music/twerl_01/mainmenu");
+				}
 			}
 			first = FALSE;
 		}

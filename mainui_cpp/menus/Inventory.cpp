@@ -247,6 +247,8 @@ void CMenuInventory::SetPistol(int value)
 {
 	set.LinkCvar("wpn_getpistol");
 	EngFuncs::CvarSetValue("wpn_getpistol", value);
+
+
 }
 
 void CMenuInventory::SetKnife(int value)
@@ -263,10 +265,756 @@ void CMenuInventory::SetGrenade(int value)
 
 void CMenuInventory::GetWp(int primary, int secondary, int melee, int grenade)
 {
-	SetGun(primary);
-	SetPistol(secondary);
-	SetKnife(melee);
-	SetGrenade(grenade);
+	switch (primary)
+	{
+	case 1:
+		uiInventory.wphalogun.Show();
+		uiInventory.wpwondercannonex.Hide();
+		uiInventory.wpwondercannon.Hide();
+		uiInventory.wprevivegun.Hide();
+		uiInventory.wpgungnir.Hide();
+		uiInventory.wpsgdrill.Hide();
+		uiInventory.wpcannon.Hide();
+		uiInventory.wppaladin.Hide();
+		uiInventory.wpbuffm4a1.Hide();
+		uiInventory.wpchainsaw.Hide();
+		uiInventory.wpstarchaserar.Hide();
+		uiInventory.wpbow.Hide();
+		uiInventory.wpthompson.Hide();
+		uiInventory.wptar21.Hide();
+		uiInventory.wpmp7a1.Hide();
+		uiInventory.wpmg3.Hide();
+		uiInventory.wpm1887.Hide();
+		uiInventory.wpm95.Hide();
+		uiInventory.wpm14ebr.Hide();
+		uiInventory.wpkriss.Hide();
+		uiInventory.wpscar.Hide();
+		uiInventory.wpwa2000.Hide();
+		uiInventory.wpxm8.Hide();
+		uiInventory.wpas50.Hide();
+		break;
+	case 2:
+		uiInventory.wphalogun.Hide();
+		uiInventory.wpwondercannonex.Show();
+		uiInventory.wpwondercannon.Hide();
+		uiInventory.wprevivegun.Hide();
+		uiInventory.wpgungnir.Hide();
+		uiInventory.wpsgdrill.Hide();
+		uiInventory.wpcannon.Hide();
+		uiInventory.wppaladin.Hide();
+		uiInventory.wpbuffm4a1.Hide();
+		uiInventory.wpchainsaw.Hide();
+		uiInventory.wpstarchaserar.Hide();
+		uiInventory.wpbow.Hide();
+		uiInventory.wpthompson.Hide();
+		uiInventory.wptar21.Hide();
+		uiInventory.wpmp7a1.Hide();
+		uiInventory.wpmg3.Hide();
+		uiInventory.wpm1887.Hide();
+		uiInventory.wpm95.Hide();
+		uiInventory.wpm14ebr.Hide();
+		uiInventory.wpkriss.Hide();
+		uiInventory.wpscar.Hide();
+		uiInventory.wpwa2000.Hide();
+		uiInventory.wpxm8.Hide();
+		uiInventory.wpas50.Hide();
+		break;
+	case 3:
+		uiInventory.wphalogun.Hide();
+		uiInventory.wpwondercannonex.Hide();
+		uiInventory.wpwondercannon.Show();
+		uiInventory.wprevivegun.Hide();
+		uiInventory.wpgungnir.Hide();
+		uiInventory.wpsgdrill.Hide();
+		uiInventory.wpcannon.Hide();
+		uiInventory.wppaladin.Hide();
+		uiInventory.wpbuffm4a1.Hide();
+		uiInventory.wpchainsaw.Hide();
+		uiInventory.wpstarchaserar.Hide();
+		uiInventory.wpbow.Hide();
+		uiInventory.wpthompson.Hide();
+		uiInventory.wptar21.Hide();
+		uiInventory.wpmp7a1.Hide();
+		uiInventory.wpmg3.Hide();
+		uiInventory.wpm1887.Hide();
+		uiInventory.wpm95.Hide();
+		uiInventory.wpm14ebr.Hide();
+		uiInventory.wpkriss.Hide();
+		uiInventory.wpscar.Hide();
+		uiInventory.wpwa2000.Hide();
+		uiInventory.wpxm8.Hide();
+		uiInventory.wpas50.Hide();
+		break;
+	case 4:
+		uiInventory.wphalogun.Hide();
+		uiInventory.wpwondercannonex.Hide();
+		uiInventory.wpwondercannon.Hide();
+		uiInventory.wprevivegun.Show();
+		uiInventory.wpgungnir.Hide();
+		uiInventory.wpsgdrill.Hide();
+		uiInventory.wpcannon.Hide();
+		uiInventory.wppaladin.Hide();
+		uiInventory.wpbuffm4a1.Hide();
+		uiInventory.wpchainsaw.Hide();
+		uiInventory.wpstarchaserar.Hide();
+		uiInventory.wpbow.Hide();
+		uiInventory.wpthompson.Hide();
+		uiInventory.wptar21.Hide();
+		uiInventory.wpmp7a1.Hide();
+		uiInventory.wpmg3.Hide();
+		uiInventory.wpm1887.Hide();
+		uiInventory.wpm95.Hide();
+		uiInventory.wpm14ebr.Hide();
+		uiInventory.wpkriss.Hide();
+		uiInventory.wpscar.Hide();
+		uiInventory.wpwa2000.Hide();
+		uiInventory.wpxm8.Hide();
+		uiInventory.wpas50.Hide();
+		break;
+	case 5:
+		uiInventory.wphalogun.Hide();
+		uiInventory.wpwondercannonex.Hide();
+		uiInventory.wpwondercannon.Hide();
+		uiInventory.wprevivegun.Hide();
+		uiInventory.wpgungnir.Show();
+		uiInventory.wpsgdrill.Hide();
+		uiInventory.wpcannon.Hide();
+		uiInventory.wppaladin.Hide();
+		uiInventory.wpbuffm4a1.Hide();
+		uiInventory.wpchainsaw.Hide();
+		uiInventory.wpstarchaserar.Hide();
+		uiInventory.wpbow.Hide();
+		uiInventory.wpthompson.Hide();
+		uiInventory.wptar21.Hide();
+		uiInventory.wpmp7a1.Hide();
+		uiInventory.wpmg3.Hide();
+		uiInventory.wpm1887.Hide();
+		uiInventory.wpm95.Hide();
+		uiInventory.wpm14ebr.Hide();
+		uiInventory.wpkriss.Hide();
+		uiInventory.wpscar.Hide();
+		uiInventory.wpwa2000.Hide();
+		uiInventory.wpxm8.Hide();
+		uiInventory.wpas50.Hide();
+		break;
+	case 6:
+		uiInventory.wphalogun.Hide();
+		uiInventory.wpwondercannonex.Hide();
+		uiInventory.wpwondercannon.Hide();
+		uiInventory.wprevivegun.Hide();
+		uiInventory.wpgungnir.Hide();
+		uiInventory.wpsgdrill.Show();
+		uiInventory.wpcannon.Hide();
+		uiInventory.wppaladin.Hide();
+		uiInventory.wpbuffm4a1.Hide();
+		uiInventory.wpchainsaw.Hide();
+		uiInventory.wpstarchaserar.Hide();
+		uiInventory.wpbow.Hide();
+		uiInventory.wpthompson.Hide();
+		uiInventory.wptar21.Hide();
+		uiInventory.wpmp7a1.Hide();
+		uiInventory.wpmg3.Hide();
+		uiInventory.wpm1887.Hide();
+		uiInventory.wpm95.Hide();
+		uiInventory.wpm14ebr.Hide();
+		uiInventory.wpkriss.Hide();
+		uiInventory.wpscar.Hide();
+		uiInventory.wpwa2000.Hide();
+		uiInventory.wpxm8.Hide();
+		uiInventory.wpas50.Hide();
+		break;
+	case 7:
+		uiInventory.wphalogun.Hide();
+		uiInventory.wpwondercannonex.Hide();
+		uiInventory.wpwondercannon.Hide();
+		uiInventory.wprevivegun.Hide();
+		uiInventory.wpgungnir.Hide();
+		uiInventory.wpsgdrill.Hide();
+		uiInventory.wpcannon.Show();
+		uiInventory.wppaladin.Hide();
+		uiInventory.wpbuffm4a1.Hide();
+		uiInventory.wpchainsaw.Hide();
+		uiInventory.wpstarchaserar.Hide();
+		uiInventory.wpbow.Hide();
+		uiInventory.wpthompson.Hide();
+		uiInventory.wptar21.Hide();
+		uiInventory.wpmp7a1.Hide();
+		uiInventory.wpmg3.Hide();
+		uiInventory.wpm1887.Hide();
+		uiInventory.wpm95.Hide();
+		uiInventory.wpm14ebr.Hide();
+		uiInventory.wpkriss.Hide();
+		uiInventory.wpscar.Hide();
+		uiInventory.wpwa2000.Hide();
+		uiInventory.wpxm8.Hide();
+		uiInventory.wpas50.Hide();
+		break;
+	case 8:
+		uiInventory.wphalogun.Hide();
+		uiInventory.wpwondercannonex.Hide();
+		uiInventory.wpwondercannon.Hide();
+		uiInventory.wprevivegun.Hide();
+		uiInventory.wpgungnir.Hide();
+		uiInventory.wpsgdrill.Hide();
+		uiInventory.wpcannon.Hide();
+		uiInventory.wppaladin.Show();
+		uiInventory.wpbuffm4a1.Hide();
+		uiInventory.wpchainsaw.Hide();
+		uiInventory.wpstarchaserar.Hide();
+		uiInventory.wpbow.Hide();
+		uiInventory.wpthompson.Hide();
+		uiInventory.wptar21.Hide();
+		uiInventory.wpmp7a1.Hide();
+		uiInventory.wpmg3.Hide();
+		uiInventory.wpm1887.Hide();
+		uiInventory.wpm95.Hide();
+		uiInventory.wpm14ebr.Hide();
+		uiInventory.wpkriss.Hide();
+		uiInventory.wpscar.Hide();
+		uiInventory.wpwa2000.Hide();
+		uiInventory.wpxm8.Hide();
+		uiInventory.wpas50.Hide();
+		break;
+	case 9:
+		uiInventory.wphalogun.Hide();
+		uiInventory.wpwondercannonex.Hide();
+		uiInventory.wpwondercannon.Hide();
+		uiInventory.wprevivegun.Hide();
+		uiInventory.wpgungnir.Hide();
+		uiInventory.wpsgdrill.Hide();
+		uiInventory.wpcannon.Hide();
+		uiInventory.wppaladin.Hide();
+		uiInventory.wpbuffm4a1.Show();
+		uiInventory.wpchainsaw.Hide();
+		uiInventory.wpstarchaserar.Hide();
+		uiInventory.wpbow.Hide();
+		uiInventory.wpthompson.Hide();
+		uiInventory.wptar21.Hide();
+		uiInventory.wpmp7a1.Hide();
+		uiInventory.wpmg3.Hide();
+		uiInventory.wpm1887.Hide();
+		uiInventory.wpm95.Hide();
+		uiInventory.wpm14ebr.Hide();
+		uiInventory.wpkriss.Hide();
+		uiInventory.wpscar.Hide();
+		uiInventory.wpwa2000.Hide();
+		uiInventory.wpxm8.Hide();
+		uiInventory.wpas50.Hide();
+		break;
+	case 10:
+		uiInventory.wphalogun.Hide();
+		uiInventory.wpwondercannonex.Hide();
+		uiInventory.wpwondercannon.Hide();
+		uiInventory.wprevivegun.Hide();
+		uiInventory.wpgungnir.Hide();
+		uiInventory.wpsgdrill.Hide();
+		uiInventory.wpcannon.Hide();
+		uiInventory.wppaladin.Hide();
+		uiInventory.wpbuffm4a1.Hide();
+		uiInventory.wpchainsaw.Show();
+		uiInventory.wpstarchaserar.Hide();
+		uiInventory.wpbow.Hide();
+		uiInventory.wpthompson.Hide();
+		uiInventory.wptar21.Hide();
+		uiInventory.wpmp7a1.Hide();
+		uiInventory.wpmg3.Hide();
+		uiInventory.wpm1887.Hide();
+		uiInventory.wpm95.Hide();
+		uiInventory.wpm14ebr.Hide();
+		uiInventory.wpkriss.Hide();
+		uiInventory.wpscar.Hide();
+		uiInventory.wpwa2000.Hide();
+		uiInventory.wpxm8.Hide();
+		uiInventory.wpas50.Hide();
+		break;
+	case 11:
+		uiInventory.wphalogun.Hide();
+		uiInventory.wpwondercannonex.Hide();
+		uiInventory.wpwondercannon.Hide();
+		uiInventory.wprevivegun.Hide();
+		uiInventory.wpgungnir.Hide();
+		uiInventory.wpsgdrill.Hide();
+		uiInventory.wpcannon.Hide();
+		uiInventory.wppaladin.Hide();
+		uiInventory.wpbuffm4a1.Hide();
+		uiInventory.wpchainsaw.Hide();
+		uiInventory.wpstarchaserar.Show();
+		uiInventory.wpbow.Hide();
+		uiInventory.wpthompson.Hide();
+		uiInventory.wptar21.Hide();
+		uiInventory.wpmp7a1.Hide();
+		uiInventory.wpmg3.Hide();
+		uiInventory.wpm1887.Hide();
+		uiInventory.wpm95.Hide();
+		uiInventory.wpm14ebr.Hide();
+		uiInventory.wpkriss.Hide();
+		uiInventory.wpscar.Hide();
+		uiInventory.wpwa2000.Hide();
+		uiInventory.wpxm8.Hide();
+		uiInventory.wpas50.Hide();
+		break;
+	case 12:
+		uiInventory.wphalogun.Hide();
+		uiInventory.wpwondercannonex.Hide();
+		uiInventory.wpwondercannon.Hide();
+		uiInventory.wprevivegun.Hide();
+		uiInventory.wpgungnir.Hide();
+		uiInventory.wpsgdrill.Hide();
+		uiInventory.wpcannon.Hide();
+		uiInventory.wppaladin.Hide();
+		uiInventory.wpbuffm4a1.Hide();
+		uiInventory.wpchainsaw.Hide();
+		uiInventory.wpstarchaserar.Hide();
+		uiInventory.wpbow.Show();
+		uiInventory.wpthompson.Hide();
+		uiInventory.wptar21.Hide();
+		uiInventory.wpmp7a1.Hide();
+		uiInventory.wpmg3.Hide();
+		uiInventory.wpm1887.Hide();
+		uiInventory.wpm95.Hide();
+		uiInventory.wpm14ebr.Hide();
+		uiInventory.wpkriss.Hide();
+		uiInventory.wpscar.Hide();
+		uiInventory.wpwa2000.Hide();
+		uiInventory.wpxm8.Hide();
+		uiInventory.wpas50.Hide();
+		break;
+	case 13:
+		uiInventory.wphalogun.Hide();
+		uiInventory.wpwondercannonex.Hide();
+		uiInventory.wpwondercannon.Hide();
+		uiInventory.wprevivegun.Hide();
+		uiInventory.wpgungnir.Hide();
+		uiInventory.wpsgdrill.Hide();
+		uiInventory.wpcannon.Hide();
+		uiInventory.wppaladin.Hide();
+		uiInventory.wpbuffm4a1.Hide();
+		uiInventory.wpchainsaw.Hide();
+		uiInventory.wpstarchaserar.Hide();
+		uiInventory.wpbow.Hide();
+		uiInventory.wpthompson.Show();
+		uiInventory.wptar21.Hide();
+		uiInventory.wpmp7a1.Hide();
+		uiInventory.wpmg3.Hide();
+		uiInventory.wpm1887.Hide();
+		uiInventory.wpm95.Hide();
+		uiInventory.wpm14ebr.Hide();
+		uiInventory.wpkriss.Hide();
+		uiInventory.wpscar.Hide();
+		uiInventory.wpwa2000.Hide();
+		uiInventory.wpxm8.Hide();
+		uiInventory.wpas50.Hide();
+		break;
+	case 14:
+		uiInventory.wphalogun.Hide();
+		uiInventory.wpwondercannonex.Hide();
+		uiInventory.wpwondercannon.Hide();
+		uiInventory.wprevivegun.Hide();
+		uiInventory.wpgungnir.Hide();
+		uiInventory.wpsgdrill.Hide();
+		uiInventory.wpcannon.Hide();
+		uiInventory.wppaladin.Hide();
+		uiInventory.wpbuffm4a1.Hide();
+		uiInventory.wpchainsaw.Hide();
+		uiInventory.wpstarchaserar.Hide();
+		uiInventory.wpbow.Hide();
+		uiInventory.wpthompson.Hide();
+		uiInventory.wptar21.Show();
+		uiInventory.wpmp7a1.Hide();
+		uiInventory.wpmg3.Hide();
+		uiInventory.wpm1887.Hide();
+		uiInventory.wpm95.Hide();
+		uiInventory.wpm14ebr.Hide();
+		uiInventory.wpkriss.Hide();
+		uiInventory.wpscar.Hide();
+		uiInventory.wpwa2000.Hide();
+		uiInventory.wpxm8.Hide();
+		uiInventory.wpas50.Hide();
+		break;
+	case 15:
+		uiInventory.wphalogun.Hide();
+		uiInventory.wpwondercannonex.Hide();
+		uiInventory.wpwondercannon.Hide();
+		uiInventory.wprevivegun.Hide();
+		uiInventory.wpgungnir.Hide();
+		uiInventory.wpsgdrill.Hide();
+		uiInventory.wpcannon.Hide();
+		uiInventory.wppaladin.Hide();
+		uiInventory.wpbuffm4a1.Hide();
+		uiInventory.wpchainsaw.Hide();
+		uiInventory.wpstarchaserar.Hide();
+		uiInventory.wpbow.Hide();
+		uiInventory.wpthompson.Hide();
+		uiInventory.wptar21.Hide();
+		uiInventory.wpmp7a1.Show();
+		uiInventory.wpmg3.Hide();
+		uiInventory.wpm1887.Hide();
+		uiInventory.wpm95.Hide();
+		uiInventory.wpm14ebr.Hide();
+		uiInventory.wpkriss.Hide();
+		uiInventory.wpscar.Hide();
+		uiInventory.wpwa2000.Hide();
+		uiInventory.wpxm8.Hide();
+		uiInventory.wpas50.Hide();
+		break;
+	case 16:
+		uiInventory.wphalogun.Hide();
+		uiInventory.wpwondercannonex.Hide();
+		uiInventory.wpwondercannon.Hide();
+		uiInventory.wprevivegun.Hide();
+		uiInventory.wpgungnir.Hide();
+		uiInventory.wpsgdrill.Hide();
+		uiInventory.wpcannon.Hide();
+		uiInventory.wppaladin.Hide();
+		uiInventory.wpbuffm4a1.Hide();
+		uiInventory.wpchainsaw.Hide();
+		uiInventory.wpstarchaserar.Hide();
+		uiInventory.wpbow.Hide();
+		uiInventory.wpthompson.Hide();
+		uiInventory.wptar21.Hide();
+		uiInventory.wpmp7a1.Hide();
+		uiInventory.wpmg3.Show();
+		uiInventory.wpm1887.Hide();
+		uiInventory.wpm95.Hide();
+		uiInventory.wpm14ebr.Hide();
+		uiInventory.wpkriss.Hide();
+		uiInventory.wpscar.Hide();
+		uiInventory.wpwa2000.Hide();
+		uiInventory.wpxm8.Hide();
+		uiInventory.wpas50.Hide();
+		break;
+	case 17:
+		uiInventory.wphalogun.Hide();
+		uiInventory.wpwondercannonex.Hide();
+		uiInventory.wpwondercannon.Hide();
+		uiInventory.wprevivegun.Hide();
+		uiInventory.wpgungnir.Hide();
+		uiInventory.wpsgdrill.Hide();
+		uiInventory.wpcannon.Hide();
+		uiInventory.wppaladin.Hide();
+		uiInventory.wpbuffm4a1.Hide();
+		uiInventory.wpchainsaw.Hide();
+		uiInventory.wpstarchaserar.Hide();
+		uiInventory.wpbow.Hide();
+		uiInventory.wpthompson.Hide();
+		uiInventory.wptar21.Hide();
+		uiInventory.wpmp7a1.Hide();
+		uiInventory.wpmg3.Hide();
+		uiInventory.wpm1887.Show();
+		uiInventory.wpm95.Hide();
+		uiInventory.wpm14ebr.Hide();
+		uiInventory.wpkriss.Hide();
+		uiInventory.wpscar.Hide();
+		uiInventory.wpwa2000.Hide();
+		uiInventory.wpxm8.Hide();
+		uiInventory.wpas50.Hide();
+		break;
+	case 18:
+		uiInventory.wphalogun.Hide();
+		uiInventory.wpwondercannonex.Hide();
+		uiInventory.wpwondercannon.Hide();
+		uiInventory.wprevivegun.Hide();
+		uiInventory.wpgungnir.Hide();
+		uiInventory.wpsgdrill.Hide();
+		uiInventory.wpcannon.Hide();
+		uiInventory.wppaladin.Hide();
+		uiInventory.wpbuffm4a1.Hide();
+		uiInventory.wpchainsaw.Hide();
+		uiInventory.wpstarchaserar.Hide();
+		uiInventory.wpbow.Hide();
+		uiInventory.wpthompson.Hide();
+		uiInventory.wptar21.Hide();
+		uiInventory.wpmp7a1.Hide();
+		uiInventory.wpmg3.Hide();
+		uiInventory.wpm1887.Hide();
+		uiInventory.wpm95.Show();
+		uiInventory.wpm14ebr.Hide();
+		uiInventory.wpkriss.Hide();
+		uiInventory.wpscar.Hide();
+		uiInventory.wpwa2000.Hide();
+		uiInventory.wpxm8.Hide();
+		uiInventory.wpas50.Hide();
+		break;
+	case 19:
+		uiInventory.wphalogun.Hide();
+		uiInventory.wpwondercannonex.Hide();
+		uiInventory.wpwondercannon.Hide();
+		uiInventory.wprevivegun.Hide();
+		uiInventory.wpgungnir.Hide();
+		uiInventory.wpsgdrill.Hide();
+		uiInventory.wpcannon.Hide();
+		uiInventory.wppaladin.Hide();
+		uiInventory.wpbuffm4a1.Hide();
+		uiInventory.wpchainsaw.Hide();
+		uiInventory.wpstarchaserar.Hide();
+		uiInventory.wpbow.Hide();
+		uiInventory.wpthompson.Hide();
+		uiInventory.wptar21.Hide();
+		uiInventory.wpmp7a1.Hide();
+		uiInventory.wpmg3.Hide();
+		uiInventory.wpm1887.Hide();
+		uiInventory.wpm95.Hide();
+		uiInventory.wpm14ebr.Show();
+		uiInventory.wpkriss.Hide();
+		uiInventory.wpscar.Hide();
+		uiInventory.wpwa2000.Hide();
+		uiInventory.wpxm8.Hide();
+		uiInventory.wpas50.Hide();
+		break;
+	case 20:
+		uiInventory.wphalogun.Hide();
+		uiInventory.wpwondercannonex.Hide();
+		uiInventory.wpwondercannon.Hide();
+		uiInventory.wprevivegun.Hide();
+		uiInventory.wpgungnir.Hide();
+		uiInventory.wpsgdrill.Hide();
+		uiInventory.wpcannon.Hide();
+		uiInventory.wppaladin.Hide();
+		uiInventory.wpbuffm4a1.Hide();
+		uiInventory.wpchainsaw.Hide();
+		uiInventory.wpstarchaserar.Hide();
+		uiInventory.wpbow.Hide();
+		uiInventory.wpthompson.Hide();
+		uiInventory.wptar21.Hide();
+		uiInventory.wpmp7a1.Hide();
+		uiInventory.wpmg3.Hide();
+		uiInventory.wpm1887.Hide();
+		uiInventory.wpm95.Hide();
+		uiInventory.wpm14ebr.Hide();
+		uiInventory.wpkriss.Show();
+		uiInventory.wpscar.Hide();
+		uiInventory.wpwa2000.Hide();
+		uiInventory.wpxm8.Hide();
+		uiInventory.wpas50.Hide();
+		break;
+	case 21:
+		uiInventory.wphalogun.Hide();
+		uiInventory.wpwondercannonex.Hide();
+		uiInventory.wpwondercannon.Hide();
+		uiInventory.wprevivegun.Hide();
+		uiInventory.wpgungnir.Hide();
+		uiInventory.wpsgdrill.Hide();
+		uiInventory.wpcannon.Hide();
+		uiInventory.wppaladin.Hide();
+		uiInventory.wpbuffm4a1.Hide();
+		uiInventory.wpchainsaw.Hide();
+		uiInventory.wpstarchaserar.Hide();
+		uiInventory.wpbow.Hide();
+		uiInventory.wpthompson.Hide();
+		uiInventory.wptar21.Hide();
+		uiInventory.wpmp7a1.Hide();
+		uiInventory.wpmg3.Hide();
+		uiInventory.wpm1887.Hide();
+		uiInventory.wpm95.Hide();
+		uiInventory.wpm14ebr.Hide();
+		uiInventory.wpkriss.Hide();
+		uiInventory.wpscar.Show();
+		uiInventory.wpwa2000.Hide();
+		uiInventory.wpxm8.Hide();
+		uiInventory.wpas50.Hide();
+		break;
+	case 22:
+		uiInventory.wphalogun.Hide();
+		uiInventory.wpwondercannonex.Hide();
+		uiInventory.wpwondercannon.Hide();
+		uiInventory.wprevivegun.Hide();
+		uiInventory.wpgungnir.Hide();
+		uiInventory.wpsgdrill.Hide();
+		uiInventory.wpcannon.Hide();
+		uiInventory.wppaladin.Hide();
+		uiInventory.wpbuffm4a1.Hide();
+		uiInventory.wpchainsaw.Hide();
+		uiInventory.wpstarchaserar.Hide();
+		uiInventory.wpbow.Hide();
+		uiInventory.wpthompson.Hide();
+		uiInventory.wptar21.Hide();
+		uiInventory.wpmp7a1.Hide();
+		uiInventory.wpmg3.Hide();
+		uiInventory.wpm1887.Hide();
+		uiInventory.wpm95.Hide();
+		uiInventory.wpm14ebr.Hide();
+		uiInventory.wpkriss.Hide();
+		uiInventory.wpscar.Hide();
+		uiInventory.wpwa2000.Show();
+		uiInventory.wpxm8.Hide();
+		uiInventory.wpas50.Hide();
+		break;
+	case 23:
+		uiInventory.wphalogun.Hide();
+		uiInventory.wpwondercannonex.Hide();
+		uiInventory.wpwondercannon.Hide();
+		uiInventory.wprevivegun.Hide();
+		uiInventory.wpgungnir.Hide();
+		uiInventory.wpsgdrill.Hide();
+		uiInventory.wpcannon.Hide();
+		uiInventory.wppaladin.Hide();
+		uiInventory.wpbuffm4a1.Hide();
+		uiInventory.wpchainsaw.Hide();
+		uiInventory.wpstarchaserar.Hide();
+		uiInventory.wpbow.Hide();
+		uiInventory.wpthompson.Hide();
+		uiInventory.wptar21.Hide();
+		uiInventory.wpmp7a1.Hide();
+		uiInventory.wpmg3.Hide();
+		uiInventory.wpm1887.Hide();
+		uiInventory.wpm95.Hide();
+		uiInventory.wpm14ebr.Hide();
+		uiInventory.wpkriss.Hide();
+		uiInventory.wpscar.Hide();
+		uiInventory.wpwa2000.Hide();
+		uiInventory.wpxm8.Show();
+		uiInventory.wpas50.Hide();
+		break;
+	case 24:
+		uiInventory.wphalogun.Hide();
+		uiInventory.wpwondercannonex.Hide();
+		uiInventory.wpwondercannon.Hide();
+		uiInventory.wprevivegun.Hide();
+		uiInventory.wpgungnir.Hide();
+		uiInventory.wpsgdrill.Hide();
+		uiInventory.wpcannon.Hide();
+		uiInventory.wppaladin.Hide();
+		uiInventory.wpbuffm4a1.Hide();
+		uiInventory.wpchainsaw.Hide();
+		uiInventory.wpstarchaserar.Hide();
+		uiInventory.wpbow.Hide();
+		uiInventory.wpthompson.Hide();
+		uiInventory.wptar21.Hide();
+		uiInventory.wpmp7a1.Hide();
+		uiInventory.wpmg3.Hide();
+		uiInventory.wpm1887.Hide();
+		uiInventory.wpm95.Hide();
+		uiInventory.wpm14ebr.Hide();
+		uiInventory.wpkriss.Hide();
+		uiInventory.wpscar.Hide();
+		uiInventory.wpwa2000.Hide();
+		uiInventory.wpxm8.Hide();
+		uiInventory.wpas50.Show();
+		break;
+	}
+
+	switch (secondary)
+	{
+	case 1:
+		uiInventory.wpvoidpistolex.Show();
+		uiInventory.wpvoidpistol.Hide();
+		uiInventory.wpinfinity.Hide();
+		uiInventory.wpinfinityex1.Hide();
+		uiInventory.wpinfinityex2.Hide();
+		uiInventory.wpinfinitysb.Hide();
+		uiInventory.wpinfinitysr.Hide();
+		uiInventory.wpinfinityss.Hide();
+		break;
+	case 2:
+		uiInventory.wpvoidpistolex.Hide();
+		uiInventory.wpvoidpistol.Show();
+		uiInventory.wpinfinity.Hide();
+		uiInventory.wpinfinityex1.Hide();
+		uiInventory.wpinfinityex2.Hide();
+		uiInventory.wpinfinitysb.Hide();
+		uiInventory.wpinfinitysr.Hide();
+		uiInventory.wpinfinityss.Hide();
+		break;
+	case 3:
+		uiInventory.wpvoidpistolex.Hide();
+		uiInventory.wpvoidpistol.Hide();
+		uiInventory.wpinfinity.Show();
+		uiInventory.wpinfinityex1.Hide();
+		uiInventory.wpinfinityex2.Hide();
+		uiInventory.wpinfinitysb.Hide();
+		uiInventory.wpinfinitysr.Hide();
+		uiInventory.wpinfinityss.Hide();
+		break;
+	case 4:
+		uiInventory.wpvoidpistolex.Hide();
+		uiInventory.wpvoidpistol.Hide();
+		uiInventory.wpinfinity.Hide();
+		uiInventory.wpinfinityex1.Show();
+		uiInventory.wpinfinityex2.Hide();
+		uiInventory.wpinfinitysb.Hide();
+		uiInventory.wpinfinitysr.Hide();
+		uiInventory.wpinfinityss.Hide();
+		break;
+	case 5:
+		uiInventory.wpvoidpistolex.Hide();
+		uiInventory.wpvoidpistol.Hide();
+		uiInventory.wpinfinity.Hide();
+		uiInventory.wpinfinityex1.Hide();
+		uiInventory.wpinfinityex2.Show();
+		uiInventory.wpinfinitysb.Hide();
+		uiInventory.wpinfinitysr.Hide();
+		uiInventory.wpinfinityss.Hide();
+		break;
+	case 6:
+		uiInventory.wpvoidpistolex.Hide();
+		uiInventory.wpvoidpistol.Hide();
+		uiInventory.wpinfinity.Hide();
+		uiInventory.wpinfinityex1.Hide();
+		uiInventory.wpinfinityex2.Hide();
+		uiInventory.wpinfinitysb.Show();
+		uiInventory.wpinfinitysr.Hide();
+		uiInventory.wpinfinityss.Hide();
+		break;
+	case 7:
+		uiInventory.wpvoidpistolex.Hide();
+		uiInventory.wpvoidpistol.Hide();
+		uiInventory.wpinfinity.Hide();
+		uiInventory.wpinfinityex1.Hide();
+		uiInventory.wpinfinityex2.Hide();
+		uiInventory.wpinfinitysb.Hide();
+		uiInventory.wpinfinitysr.Show();
+		uiInventory.wpinfinityss.Hide();
+		break;
+	case 8:
+		uiInventory.wpvoidpistolex.Hide();
+		uiInventory.wpvoidpistol.Hide();
+		uiInventory.wpinfinity.Hide();
+		uiInventory.wpinfinityex1.Hide();
+		uiInventory.wpinfinityex2.Hide();
+		uiInventory.wpinfinitysb.Hide();
+		uiInventory.wpinfinitysr.Hide();
+		uiInventory.wpinfinityss.Show();
+		break;
+	}
+
+	switch (melee)
+	{
+	case 1:
+		uiInventory.wptwinaxesex.Show();
+		uiInventory.wptwinaxes.Hide();
+		uiInventory.wpdragonsword.Hide();
+		uiInventory.wpdualsword.Hide();
+		uiInventory.wpskullaxe.Hide();
+		break;
+	case 2:
+		uiInventory.wptwinaxesex.Hide();
+		uiInventory.wptwinaxes.Show();
+		uiInventory.wpdragonsword.Hide();
+		uiInventory.wpdualsword.Hide();
+		uiInventory.wpskullaxe.Hide();
+		break;
+	case 3:
+		uiInventory.wptwinaxesex.Hide();
+		uiInventory.wptwinaxes.Hide();
+		uiInventory.wpdragonsword.Hide();
+		uiInventory.wpdualsword.Show();
+		uiInventory.wpskullaxe.Hide();
+		break;
+	case 4:
+		uiInventory.wptwinaxesex.Hide();
+		uiInventory.wptwinaxes.Hide();
+		uiInventory.wpdragonsword.Show();
+		uiInventory.wpdualsword.Hide();
+		uiInventory.wpskullaxe.Hide();
+		break;
+	case 5:
+		uiInventory.wptwinaxesex.Hide();
+		uiInventory.wptwinaxes.Hide();
+		uiInventory.wpdragonsword.Hide();
+		uiInventory.wpdualsword.Hide();
+		uiInventory.wpskullaxe.Show();
+		break;
+	}
 }
 
 void CMenuInventory::GetPage(int page)
@@ -775,8 +1523,9 @@ skullaxe,
 	wpskullaxe.SetPicture(ART_SKULLAXE);
 	wpskullaxe.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 
+						 //гооризонталь //y //ширина //высота
 	wphaloguntex.iFlags = QMF_NOTIFY;
-	wphaloguntex.SetRect(590, 237, 220, 55);
+	wphaloguntex.SetRect(600, 237, 200, 55);
 	wphaloguntex.SetPicture(ART_HALOGUN);
 	wphaloguntex.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	SET_EVENT_MULTI(wphaloguntex.onActivated,
@@ -812,7 +1561,7 @@ skullaxe,
 		});
 
 	wpwondercannonextex.iFlags = QMF_NOTIFY;
-	wpwondercannonextex.SetRect(590, 307, 220, 55);
+	wpwondercannonextex.SetRect(600, 307, 200, 55);
 	wpwondercannonextex.SetPicture(ART_WONDERCEX);
 	wpwondercannonextex.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	SET_EVENT_MULTI(wpwondercannonextex.onActivated,
@@ -848,7 +1597,7 @@ skullaxe,
 		});
 
 	wpwondercannontex.iFlags = QMF_NOTIFY;
-	wpwondercannontex.SetRect(590, 377, 220, 55);//y + 70
+	wpwondercannontex.SetRect(600, 377, 200, 55);//y + 70
 	wpwondercannontex.SetPicture(ART_WONDERC);
 	wpwondercannontex.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	SET_EVENT_MULTI(wpwondercannontex.onActivated,
@@ -920,7 +1669,7 @@ skullaxe,
 		});
 
 	wpgungnirtex.iFlags = QMF_NOTIFY;
-	wpgungnirtex.SetRect(590, 517, 220, 55);//y + 70
+	wpgungnirtex.SetRect(590, 520, 220, 50);//y + 70
 	wpgungnirtex.SetPicture(ART_GUNGNIR);
 	wpgungnirtex.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	SET_EVENT_MULTI(wpgungnirtex.onActivated,
@@ -956,7 +1705,7 @@ skullaxe,
 		});
 
 	wpsgdrilltex.iFlags = QMF_NOTIFY;
-	wpsgdrilltex.SetRect(590, 587, 220, 55);//y + 70
+	wpsgdrilltex.SetRect(600, 587, 200, 55);//y + 70
 	wpsgdrilltex.SetPicture(ART_SGDRILL);
 	wpsgdrilltex.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	SET_EVENT_MULTI(wpsgdrilltex.onActivated,
@@ -1028,7 +1777,7 @@ skullaxe,
 		});
 
 	wppaladintex.iFlags = QMF_NOTIFY;
-	wppaladintex.SetRect(790, 307, 220, 55);
+	wppaladintex.SetRect(800, 307, 200, 55);
 	wppaladintex.SetPicture(ART_PALADIN);
 	wppaladintex.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	SET_EVENT_MULTI(wppaladintex.onActivated,
@@ -1064,7 +1813,7 @@ skullaxe,
 		});
 
 	wpbuffm4a1tex.iFlags = QMF_NOTIFY;
-	wpbuffm4a1tex.SetRect(790, 377, 220, 55);//y + 70
+	wpbuffm4a1tex.SetRect(805, 377, 195, 55);//y + 70
 	wpbuffm4a1tex.SetPicture(ART_BUFFM4A1);
 	wpbuffm4a1tex.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	SET_EVENT_MULTI(wpbuffm4a1tex.onActivated,
@@ -1210,7 +1959,7 @@ skullaxe,
 
 
 	wpthompsontex.iFlags = QMF_NOTIFY;
-	wpthompsontex.SetRect(590, 237, 220, 55);
+	wpthompsontex.SetRect(600, 237, 200, 55);
 	wpthompsontex.SetPicture(ART_THOMPSON);
 	wpthompsontex.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	SET_EVENT_MULTI(wpthompsontex.onActivated,
@@ -1318,7 +2067,7 @@ skullaxe,
 		});
 
 	wpmg3tex.iFlags = QMF_NOTIFY;
-	wpmg3tex.SetRect(590, 447, 220, 55);//y + 70
+	wpmg3tex.SetRect(600, 447, 200, 55);//y + 70
 	wpmg3tex.SetPicture(ART_MG3);
 	wpmg3tex.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	SET_EVENT_MULTI(wpmg3tex.onActivated,
@@ -1354,7 +2103,7 @@ skullaxe,
 		});
 
 	wpm1887tex.iFlags = QMF_NOTIFY;
-	wpm1887tex.SetRect(590, 517, 220, 55);//y + 70
+	wpm1887tex.SetRect(600, 517, 200, 55);//y + 70
 	wpm1887tex.SetPicture(ART_M1887);
 	wpm1887tex.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	SET_EVENT_MULTI(wpm1887tex.onActivated,
@@ -1390,7 +2139,7 @@ skullaxe,
 		});
 
 	wpm95tex.iFlags = QMF_NOTIFY;
-	wpm95tex.SetRect(590, 587, 220, 55);//y + 70
+	wpm95tex.SetRect(610, 587, 180, 55);//y + 70
 	wpm95tex.SetPicture(ART_M95);
 	wpm95tex.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	SET_EVENT_MULTI(wpm95tex.onActivated,
@@ -1426,7 +2175,7 @@ skullaxe,
 		});
 
 	wpm14ebrtex.iFlags = QMF_NOTIFY;
-	wpm14ebrtex.SetRect(790, 237, 220, 55);
+	wpm14ebrtex.SetRect(800, 237, 200, 55);
 	wpm14ebrtex.SetPicture(ART_M14EBR);
 	wpm14ebrtex.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	SET_EVENT_MULTI(wpm14ebrtex.onActivated,
@@ -1462,7 +2211,7 @@ skullaxe,
 		});
 
 	wpkrisstex.iFlags = QMF_NOTIFY;
-	wpkrisstex.SetRect(790, 307, 220, 55);
+	wpkrisstex.SetRect(800, 307, 200, 55);
 	wpkrisstex.SetPicture(ART_KRISS);
 	wpkrisstex.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	SET_EVENT_MULTI(wpkrisstex.onActivated,
@@ -1498,7 +2247,7 @@ skullaxe,
 		});
 
 	wpscartex.iFlags = QMF_NOTIFY;
-	wpscartex.SetRect(790, 377, 220, 55);//y + 70
+	wpscartex.SetRect(800, 377, 200, 55);//y + 70
 	wpscartex.SetPicture(ART_SCAR);
 	wpscartex.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	SET_EVENT_MULTI(wpscartex.onActivated,
@@ -1534,7 +2283,7 @@ skullaxe,
 		});
 
 	wpwa2000tex.iFlags = QMF_NOTIFY;
-	wpwa2000tex.SetRect(790, 447, 220, 55);//y + 70
+	wpwa2000tex.SetRect(800, 447, 200, 55);//y + 70
 	wpwa2000tex.SetPicture(ART_WA2000);
 	wpwa2000tex.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	SET_EVENT_MULTI(wpwa2000tex.onActivated,
@@ -1606,7 +2355,7 @@ skullaxe,
 		});
 
 	wpas50tex.iFlags = QMF_NOTIFY;
-	wpas50tex.SetRect(790, 587, 220, 55);//y + 70
+	wpas50tex.SetRect(810, 587, 180, 55);//y + 70
 	wpas50tex.SetPicture(ART_AS50);
 	wpas50tex.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	SET_EVENT_MULTI(wpas50tex.onActivated,
@@ -1682,7 +2431,7 @@ skullaxe,
 		});
 
 	wpinfinitytex.iFlags = QMF_NOTIFY;
-	wpinfinitytex.SetRect(590, 377, 220, 55);//y + 70
+	wpinfinitytex.SetRect(610, 377, 180, 55);//y + 70
 	wpinfinitytex.SetPicture(ART_INFINITY);
 	wpinfinitytex.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	SET_EVENT_MULTI(wpinfinitytex.onActivated,
@@ -1701,7 +2450,7 @@ skullaxe,
 		});
 
 	wpinfinityex1tex.iFlags = QMF_NOTIFY;
-	wpinfinityex1tex.SetRect(590, 447, 220, 55);//y + 70
+	wpinfinityex1tex.SetRect(610, 447, 180, 55);//y + 70
 	wpinfinityex1tex.SetPicture(ART_INFINITYEX1);
 	wpinfinityex1tex.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	SET_EVENT_MULTI(wpinfinityex1tex.onActivated,
@@ -1720,7 +2469,7 @@ skullaxe,
 		});
 
 	wpinfinityex2tex.iFlags = QMF_NOTIFY;
-	wpinfinityex2tex.SetRect(590, 517, 220, 55);//y + 70
+	wpinfinityex2tex.SetRect(610, 517, 180, 55);//y + 70
 	wpinfinityex2tex.SetPicture(ART_INFINITYEX2);
 	wpinfinityex2tex.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	SET_EVENT_MULTI(wpinfinityex2tex.onActivated,
@@ -1739,7 +2488,7 @@ skullaxe,
 		});
 
 	wpinfinitysbtex.iFlags = QMF_NOTIFY;
-	wpinfinitysbtex.SetRect(590, 587, 220, 55);//y + 70
+	wpinfinitysbtex.SetRect(610, 587, 190, 55);//y + 70
 	wpinfinitysbtex.SetPicture(ART_INFINITYSB);
 	wpinfinitysbtex.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	SET_EVENT_MULTI(wpinfinitysbtex.onActivated,
@@ -1828,7 +2577,7 @@ skullaxe,
 		});
 
 	wpdualswordtex.iFlags = QMF_NOTIFY;
-	wpdualswordtex.SetRect(590, 377, 220, 55);//y + 70
+	wpdualswordtex.SetRect(610, 377, 190, 55);//y + 70
 	wpdualswordtex.SetPicture(ART_DUALSWORD);
 	wpdualswordtex.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	SET_EVENT_MULTI(wpdualswordtex.onActivated,
@@ -1844,7 +2593,7 @@ skullaxe,
 		});
 
 	wpdragonswordtex.iFlags = QMF_NOTIFY;
-	wpdragonswordtex.SetRect(590, 447, 220, 55);//y + 70
+	wpdragonswordtex.SetRect(600, 447, 200, 55);//y + 70
 	wpdragonswordtex.SetPicture(ART_DRAGONSWORD);
 	wpdragonswordtex.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	SET_EVENT_MULTI(wpdragonswordtex.onActivated,
@@ -1860,7 +2609,7 @@ skullaxe,
 		});
 
 	wpskullaxetex.iFlags = QMF_NOTIFY;
-	wpskullaxetex.SetRect(590, 517, 220, 55);//y + 70
+	wpskullaxetex.SetRect(590, 522, 220, 50);//y + 70
 	wpskullaxetex.SetPicture(ART_SKULLAXE);
 	wpskullaxetex.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	SET_EVENT_MULTI(wpskullaxetex.onActivated,
@@ -2168,46 +2917,14 @@ void CMenuInventory::_VidInit( )
 {
 	GetPage(1);
 
-	uiInventory.wphalogun.Hide();
-	uiInventory.wpwondercannonex.Hide();
-	uiInventory.wpwondercannon.Hide();
-	uiInventory.wprevivegun.Hide();
-	uiInventory.wpgungnir.Hide();
-	uiInventory.wpsgdrill.Hide();
-	uiInventory.wpcannon.Hide();
-	uiInventory.wppaladin.Hide();
-	uiInventory.wpbuffm4a1.Hide();
-	uiInventory.wpchainsaw.Hide();
-	uiInventory.wpstarchaserar.Hide();
-	uiInventory.wpbow.Hide();
+	int primary = EngFuncs::GetCvarFloat("wpn_getgun");
+	int secondary = EngFuncs::GetCvarFloat("wpn_getpistol");
+	int melee = EngFuncs::GetCvarFloat("wpn_getknife");
+	int grenade = EngFuncs::GetCvarFloat("wpn_getgrenade");
 
-	uiInventory.wpthompson.Hide();
-	uiInventory.wptar21.Hide();
-	uiInventory.wpmp7a1.Hide();
-	uiInventory.wpmg3.Hide();
-	uiInventory.wpm1887.Hide();
-	uiInventory.wpm95.Hide();
-	uiInventory.wpm14ebr.Hide();
-	uiInventory.wpkriss.Hide();
-	uiInventory.wpscar.Hide();
-	uiInventory.wpwa2000.Hide();
-	uiInventory.wpxm8.Hide();
-	uiInventory.wpas50.Hide();
+	GetWp(primary, secondary, melee, grenade);
 
-	uiInventory.wpvoidpistolex.Hide();
-	uiInventory.wpvoidpistol.Hide();
-	uiInventory.wpinfinity.Hide();
-	uiInventory.wpinfinityex1.Hide();
-	uiInventory.wpinfinityex2.Hide();
-	uiInventory.wpinfinitysb.Hide();
-	uiInventory.wpinfinitysr.Hide();
-	uiInventory.wpinfinityss.Hide();
-
-	uiInventory.wptwinaxesex.Hide();
-	uiInventory.wptwinaxes.Hide();
-	uiInventory.wpdragonsword.Hide();
-	uiInventory.wpdualsword.Hide();
-	uiInventory.wpskullaxe.Hide();
+	
 }
 
 void UI_Inventory_Precache(void)

@@ -103,6 +103,7 @@ extern int gmsgBrass;
 extern int gmsgFog;
 extern int gmsgShowTimer;
 extern int gmsgHeadIcon;
+extern int gmsgSpecialCrossHair;
 extern int gmsgZBSTip;
 extern int gmsgZBSLevel;
 extern int gmsgZBSMsgLevel;
@@ -129,8 +130,10 @@ extern int gmsgZB5InventorySet;
 extern int gmsgZB5SetHero;
 extern int gmsgZB5ExternEvo;
 extern int gmsgZB5Evolution;
+extern int gmsgZB5UpdateEvoLv;
 extern int gmsgZB5GetLocationBox;
 extern int gmsgZB5GetLocationBoxK;
+extern int gmsgZB5RespawnBar;
 
 extern int gmsgZSHMsg;
 extern int gmsgZSHMsgText;

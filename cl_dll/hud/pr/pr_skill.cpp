@@ -326,7 +326,7 @@ void CHudPR_Skill::DrawSkillBoardNew(float time) const
 		m_pTexture_skillslotkeybg->Bind();
 		DrawUtils::Draw2DQuadScaled(x - 3, y - 3, x + m_pTexture_skillslotkeybg->w(), y + m_pTexture_skillslotkeybg->h());
 
-		DrawUtils::TextMessageDrawChar(x + 7, y, SkillKey, 100, 100, 100);
+		DrawUtils::TextMessageDrawChar(x + 7, y, SkillKey, 100, 100, 100, 255);
 
 		SkillKey = SkillKey == 'G' ? '5' : SkillKey + 1;
 		x += 58;

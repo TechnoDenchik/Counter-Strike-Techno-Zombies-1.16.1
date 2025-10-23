@@ -366,9 +366,6 @@
 			{
 				if (iter.first.index == m_AlarmDefault[iAlarm].index)
 				{
-
-					gEngfuncs.Con_Printf("[Alarm] Local Player has %d(name: %s) alarm\n", iAlarm, m_AlarmDefault[iAlarm].szName);
-
 					return true;
 				}
 			}
@@ -379,9 +376,6 @@
 			{
 				if (iter.first.index == m_vecAlarmCustom[iAlarm].index)
 				{
-
-					gEngfuncs.Con_Printf("[Alarm] Local Player has %d(name: %s) alarm\n", iAlarm, m_vecAlarmCustom[iAlarm].szName);
-
 					return true;
 				}
 			}
@@ -480,19 +474,19 @@
 
 			int iLength, iHeight;
 			gEngfuncs.pfnDrawConsoleStringLen(SzWpnNameCn, &iLength, &iHeight);
-			DrawUtils::DrawHudString(iX - iLength / 2 + 2, iY + 10, ScreenWidth, SzWpnNameCn, r, g, b);
+			DrawUtils::DrawHudString(iX - iLength / 2 + 2, iY + 10, ScreenWidth, SzWpnNameCn, r, g, b, 255);
 
 
 			if (!frontelem.second)
 			{
-				DrawUtils::DrawHudString(iX - iLength / 2 + 2, iY + 10, ScreenWidth, SzTextRibbon, r, g, b);
-				DrawUtils::DrawHudString(iX - iLength / 2 + 2, iY + 10, ScreenWidth, SzTextAlarm, r, g, b);
+				DrawUtils::DrawHudString(iX - iLength / 2 + 2, iY + 10, ScreenWidth, SzTextRibbon, r, g, b, 255);
+				DrawUtils::DrawHudString(iX - iLength / 2 + 2, iY + 10, ScreenWidth, SzTextAlarm, r, g, b, 255);
 			}
 			else
 			{
 
-				DrawUtils::DrawHudString(iX - iLength / 2 + 2, iY + 10, ScreenWidth, SzTextAlarm, r, g, b);
-				DrawUtils::DrawHudString(iX - iLength / 2 + 2, iY + 10, ScreenWidth, SzTextAlarm, r, g, b);
+				DrawUtils::DrawHudString(iX - iLength / 2 + 2, iY + 10, ScreenWidth, SzTextAlarm, r, g, b, 255);
+				DrawUtils::DrawHudString(iX - iLength / 2 + 2, iY + 10, ScreenWidth, SzTextAlarm, r, g, b, 255);
 
 					//frontelem.first.m_wcsRibbonDesc
 			}

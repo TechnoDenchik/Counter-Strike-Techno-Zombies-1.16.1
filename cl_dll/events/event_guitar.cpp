@@ -154,7 +154,7 @@ void EV_FireGuitar( event_args_t *args )
 
 	cl_entity_t *ent = gEngfuncs.GetViewModel();
 
-	if (EV_IsLocal(idx))
+	/*if (EV_IsLocal(idx))
 		switch (gEngfuncs.pfnRandomLong(1,2))
 		{
 		case 1:
@@ -186,7 +186,7 @@ void EV_FireGuitar( event_args_t *args )
 		case 4:
 			EV_GuitarFireEffect(ent->attachment[3], origin, velocity, idx, 0);
 			break;
-		}
+		}*/
 
 		//EV_GuitarFireEffect(ent->attachment[0], origin, velocity, idx, 0);
 		//EV_GuitarFireEffect(vecSrc + 40.0 * forward, forward, velocity, idx, 0);

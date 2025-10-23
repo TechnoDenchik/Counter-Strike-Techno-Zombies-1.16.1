@@ -131,7 +131,7 @@ BOOL CQuantum::Deploy(void)
 	phs3 = -1;
 	phs4 = -1;
 	phs12 = -1;
-	CreateEffect();
+	
 	return DefaultDeploy("models/v_revivegun.mdl", "models/p_revivegun.mdl", QUANT_DRAW, "ak47", UseDecrement() != FALSE);
 }
 
@@ -158,6 +158,15 @@ void CQuantum::CreateEffect()
 		pBeam->SetBrightness(255);
 		pBeam->SetNoise(10);
 		pBeam->SetWidth(200);
+		pBeam->EntsInit(ENTINDEX(m_pPlayer->edict()), ENTINDEX(edict()));
+		pBeam->SetType(BEAM_ENTS);
+		pBeam->SetStartEntity(ENTINDEX(m_pPlayer->edict()));
+		pBeam->SetEndEntity(ENTINDEX(edict()));
+		pBeam->SetStartAttachment(0);
+		pBeam->SetEndAttachment(0);
+		pBeam->SetWidth(200);
+		pBeam->RelinkBeam();
+		pBeam->SetBrightness(255);
 		pev->effects |= EF_NODRAW;
 
 		phs12_13_14[i] = pBeam;
@@ -686,16 +695,7 @@ void CQuantum::RadiusDamage2()
 			CBeam* pBeam = phs12_13_14[v8];
 			if (pBeam)
 			{
-				pBeam->EntsInit(ENTINDEX(m_pPlayer->edict()), ENTINDEX(pEntity->edict()));
-				pBeam->SetType(BEAM_ENTS);
-				pBeam->SetStartEntity(ENTINDEX(m_pPlayer->edict()));
-				pBeam->SetEndEntity(ENTINDEX(pEntity->edict()));
-				pBeam->SetStartAttachment(0);
-				pBeam->SetEndAttachment(0);
-				pBeam->SetWidth(200);
-				pBeam->RelinkBeam();
-				pBeam->SetBrightness(255);
-				pBeam->pev->effects &= ~EF_NODRAW;
+			
 
 			}
 

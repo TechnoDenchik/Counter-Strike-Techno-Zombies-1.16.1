@@ -32,7 +32,7 @@ void EV_WonderCannonExFireEffect(vec3_t vecSrc, vec3_t vecForward, vec3_t vecVel
 	float c, s;
 	for (i = 0; i < 12; i++)
 	{
-		ent = gEngfuncs.pEfxAPI->R_DefaultSprite(vecSrc, iModel, 30);
+		ent = gEngfuncs.pEfxAPI->R_DefaultSprite(ent->entity.attachment[1], iModel, 30);
 		if (!ent)
 			break;
 		ent->flags |= FTENT_CLIENTCUSTOM | FTENT_COLLIDEALL;
@@ -130,8 +130,8 @@ void EV_FireWonderCannonEx( event_args_t *args )
 
 	cl_entity_t *ent = gEngfuncs.GetViewModel();
 
-	if (EV_IsLocal(idx))
-		EV_WonderCannonExFireEffect(ent->attachment[0], origin, velocity, idx, 0);
-	else
-		EV_WonderCannonExFireEffect(vecSrc + 40.0 * forward, forward, velocity, idx, 0);
+	//if (EV_IsLocal(idx))
+	//	EV_WonderCannonExFireEffect(ent->attachment[0], origin, velocity, idx, 0);
+	//else
+	//	EV_WonderCannonExFireEffect(vecSrc + 40.0 * forward, forward, velocity, idx, 0);
 }

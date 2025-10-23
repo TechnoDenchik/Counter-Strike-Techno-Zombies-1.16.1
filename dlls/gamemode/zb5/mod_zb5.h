@@ -21,8 +21,10 @@ public:
 	void RestartRound() override;
 	void PlayerKilled(CBasePlayer *pVictim, entvars_t *pKiller, entvars_t *pInflictor) override;
 	void CheckWinConditions() override;
-	
+	void UpdateTeamScores();
+
 	int kills;
+	int kills2;
 
 	const CZB3HumanMoraleR &HumanMorale() const { return m_Morale; }
 
@@ -67,10 +69,12 @@ private:
 	CZB3HumanMoraleR m_Morale;
 	const EventListener m_eventRoundStartListener;
 	
+	float m_flNextThink;
 	float m_flRagePercent;
 	float m_flDeadTime;
 	float m_flBackupMaxHealth;
 	float m_flBackupArmor;
+	bool m_bRespawnstart;
 };
 
 #endif

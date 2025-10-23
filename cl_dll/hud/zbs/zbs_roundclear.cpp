@@ -153,7 +153,7 @@ int CHudTextZBS::Draw(float time)
 		sprintf(szbuffer, "Время до начала раунда: %d секунда", times);
 	}
 
-	DrawUtils::DrawHudString(x - 117, y2 - 32, ScreenWidth, szbuffer, r, g, b, flScale);
+	DrawUtils::DrawHudString(x - 117, y2 - 32, ScreenWidth, szbuffer, r, g, b, 255, flScale);
 
 	return 1;
 }

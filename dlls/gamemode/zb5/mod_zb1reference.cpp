@@ -48,20 +48,28 @@ void CMod_ZombiR::CheckMapConditions()
 //	CVAR_SET_FLOAT("sv_skycolor_g", 150);
 //	CVAR_SET_FLOAT("sv_skycolor_b", 150);
 
-	// create fog, however it doesnt work...
-	CBaseEntity *fog = nullptr;
+// Удаляем существующий туман
+	CBaseEntity* fog = nullptr;
 	while ((fog = UTIL_FindEntityByClassname(fog, "env_fog")) != nullptr)
 	{
 		REMOVE_ENTITY(fog->edict());
 	}
 
-	CClientFog *newfog = GetClassPtr<CClientFog>(nullptr);
+	// Создаем новый туман
+	CClientFog* newfog = GetClassPtr<CClientFog>(nullptr);
 	MAKE_STRING_CLASS("env_fog", newfog->pev);
+
+	// Для env_fog позиция может быть не важна - это глобальный эффект
+	newfog->pev->origin = Vector(0, 0, 0);  // Или вообще не устанавливать
+
 	newfog->Spawn();
-	newfog->m_fDensity = 2000.16f;
-	newfog->pev->rendercolor = { 128,128,128 };
+
+	// Настраиваем параметры
+	newfog->m_fDensity = 0.5f;
+	newfog->pev->rendercolor = { 128, 128, 128 };
+	newfog->m_fBlendTime = 5.0f;
+
 	newfog->UpdateClientMsg();
-	newfog->m_fBlendTime = 1;
 
 	// light
 	LIGHT_STYLE(0, "g"); // previous one is "f"
@@ -99,7 +107,7 @@ void CMod_ZombiR::Think()
 {
 	int NumDeadCT, NumDeadTerrorist, NumAliveTerrorist, NumAliveCT;
 	InitializePlayerCounts(NumAliveTerrorist, NumAliveCT, NumDeadTerrorist, NumDeadCT);
-
+	
 	static int iLastCountDown = -1;
 	int iCountDown = static_cast<int>(gpGlobals->time - m_fRoundCount);
 
@@ -123,13 +131,11 @@ void CMod_ZombiR::Think()
 			{
 				for(CBasePlayer *player : moe::range::PlayersList())
 					CLIENT_COMMAND(player->edict(), "spk zb5/zombie_rise_start\n");
-
 			}
 			else if (iCountDown >= 11)
 			{
 				for(CBasePlayer *player : moe::range::PlayersList())
 					CLIENT_COMMAND(player->edict(), "spk %s\n", szCountDownSound[21 - iCountDown]);
-
 			}
 		}
 		else if (iCountDown == 21)
@@ -205,12 +211,9 @@ void CMod_ZombiR::HumanWin()
 
 	TerminateRound(5, WINSTATUS_CTS);
 	RoundEndScore(WINSTATUS_CTS);
-	EndRoundMessage("#0", ROUND_CTS_WIN);
+	EndRoundMessage("", ROUND_CTS_WIN);
 	++m_iNumCTWins;
 	UpdateTeamScores();
-
-
-
 }
 
 void CMod_ZombiR::ZombieWin()
@@ -220,33 +223,11 @@ void CMod_ZombiR::ZombieWin()
 
 	TerminateRound(5, WINSTATUS_TERRORISTS);
 	RoundEndScore(WINSTATUS_TERRORISTS);
-	EndRoundMessage("#0", ROUND_TERRORISTS_WIN);
+	EndRoundMessage("", ROUND_TERRORISTS_WIN);
+
 	++m_iNumTerroristWins;
+
 	UpdateTeamScores();
-}
-
-void CMod_ZombiR::CheckWinConditions()
-{
-	// If a winner has already been determined and game of started.. then get the heck out of here
-	if (m_bFirstConnected && m_iRoundWinStatus != WINNER_NONE)
-	{
-		return;
-	}
-
-	int NumDeadCT, NumDeadTerrorist, NumAliveTerrorist, NumAliveCT;
-	InitializePlayerCounts(NumAliveTerrorist, NumAliveCT, NumDeadTerrorist, NumDeadCT);
-
-	if (!FInfectionStarted())
-		return;
-	
-	if (!NumAliveTerrorist)
-	{
-		HumanWin();
-	}
-	else if (!NumAliveCT)
-	{
-		ZombieWin();
-	}
 }
 
 BOOL CMod_ZombiR::FInfectionStarted()
@@ -266,7 +247,7 @@ void CMod_ZombiR::RoundEndScore(int iWinStatus)
 		{
 			if (player->IsAlive() && !player->m_bIsZombie)
 			{
-				player->pev->frags += 1;
+				player->pev->frags += 3;
 
 				MESSAGE_BEGIN(MSG_BROADCAST, gmsgScoreInfo);
 				WRITE_BYTE(ENTINDEX(player->edict()));
@@ -410,20 +391,47 @@ size_t CMod_ZombiR::ZombieOriginNum()
 void CMod_ZombiR::PickZombieOrigin()
 {
 	auto iNumZombies = ZombieOriginNum();
-	auto iNumPlayers = this->m_iNumTerrorist + this->m_iNumCT;
 
-	// build alive player list
+	// Создаем список живых игроков (не зомби, не спектаторы)
 	moe::range::PlayersList list;
-	std::vector<CBasePlayer *> players {list.begin(), list.end()};
-	players.erase(std::remove_if(players.begin(), players.end(), [](CBasePlayer *player) { return !player->IsAlive() || player->m_iTeam != TEAM_CT || player->m_bIsZombie; }), players.end());
+	std::vector<CBasePlayer*> players;
 
-	// randomize player list
-	std::shuffle(players.begin(), players.end(), std::random_device());
-
-	// pick them
-	for (size_t i = 0; i < iNumZombies; ++i)
+	for (CBasePlayer* player : list)
 	{
-		MakeZombie(players[i], ZOMBIE_LEVEL_ORIGIN);
+		if (player &&
+			player->IsAlive() &&
+			(player->m_iTeam == TEAM_CT || player->m_iTeam == TEAM_TERRORIST) &&
+			!player->m_bIsZombie)
+		{
+			players.push_back(player);
+		}
+	}
+
+	// Проверяем, есть ли кандидаты
+	if (players.empty())
+	{
+		return;
+	}
+
+	// Перемешиваем используя системное время для рандома
+	std::shuffle(players.begin(), players.end(),
+		std::default_random_engine(static_cast<unsigned>(gpGlobals->time)));
+
+	// Превращаем в зомби (не больше чем доступно игроков)
+	size_t zombiesToMake = std::min(static_cast<size_t>(iNumZombies), players.size());
+
+	for (size_t i = 0; i < zombiesToMake; ++i)
+	{
+		if (players[i] && players[i]->IsAlive())  // Двойная проверка
+		{
+			MakeZombie(players[i], ZOMBIE_LEVEL_ORIGIN);
+		}
+	}
+
+	// Если не хватило игроков для всех зомби
+	if (zombiesToMake < iNumZombies)
+	{
+
 	}
 
 	// sound effect
@@ -447,7 +455,7 @@ void CMod_ZombiR::HumanInfectionByZombie(CBasePlayer *player, CBasePlayer *attac
 	DeathNotice(player, attacker->pev, attacker->pev);
 	SetScoreAttrib(player, player);
 	TeamCheck();
-	CheckWinConditions();
+	//CheckWinConditions();
 	
 	player->m_iDeaths += 1;
 	player->AddPoints(0, FALSE);
@@ -457,7 +465,6 @@ void CMod_ZombiR::HumanInfectionByZombie(CBasePlayer *player, CBasePlayer *attac
 
 void CMod_ZombiR::InfectionSound()
 {
-
 	for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
 	{
 		CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
@@ -465,9 +472,6 @@ void CMod_ZombiR::InfectionSound()
 			continue;
 		CLIENT_COMMAND(entity->edict(), "spk zb3/zombi_coming_%d\n", RANDOM_LONG(1, 2));
 	}
-
-	//for(CBasePlayer *player : moe::range::PlayersList())
-	//	CLIENT_COMMAND(player->edict(), "spk zb3/zombi_coming_%d\n", RANDOM_LONG(1, 2));
 }
 
 void CMod_ZombiR::RestartRound()
@@ -475,7 +479,6 @@ void CMod_ZombiR::RestartRound()
 	for(CBasePlayer *player : moe::range::PlayersList())
 		player->m_bIsZombie = false,
 		player->m_bIsHero = false,
-		player->m_bIsZombie = false,
 		player->m_bIsZombieTank = false,
 		player->m_bIsZombieFemale = false,
 		player->m_bIsZombieHeavy = false,
@@ -484,7 +487,17 @@ void CMod_ZombiR::RestartRound()
 		player->m_bIsZombieDeimos = false,
 		player->m_bIsZombieGanimed = false,
 		player->m_bIsZombieBanchee = false,
-		player->m_bIsZombieStamp = false;
+		player->m_bIsZombieStamp = false,
+		player->m_bIsZombieStamp = false,
+		player->m_bIsZombieMeatWall = false,
+		player->m_bIsZombieDeathKnight = false,
+		player->m_bIsZombieSpider = false,
+		player->m_bIsZombieAksha = false,
+		player->m_bIsZombieBoomer = false,
+		player->m_bIsZombieBooster = false,
+		player->m_bIsZombieChina = false,
+		player->m_bIsZombieFlying = false,
+		player->m_bIsZombieResident = false;
 
 	TeamCheck();
 
@@ -526,6 +539,15 @@ void CMod_ZombiR::PlayerSpawn(CBasePlayer *pPlayer)
 	pPlayer->m_bIsZombieGanimed = false;
 	pPlayer->m_bIsZombieBanchee = false;
 	pPlayer->m_bIsZombieStamp = false;
+	pPlayer->m_bIsZombieMeatWall = false,
+	pPlayer->m_bIsZombieDeathKnight = false,
+	pPlayer->m_bIsZombieSpider = false,
+	pPlayer->m_bIsZombieAksha = false,
+	pPlayer->m_bIsZombieBoomer = false,
+	pPlayer->m_bIsZombieBooster = false,
+	pPlayer->m_bIsZombieChina = false,
+	pPlayer->m_bIsZombieFlying = false,
+	pPlayer->m_bIsZombieResident = false;
 
 	pPlayer->m_bNotKilled = false;
 	IBaseMod::PlayerSpawn(pPlayer);
@@ -560,7 +582,7 @@ BOOL CMod_ZombiR::FPlayerCanTakeDamage(CBasePlayer *pPlayer, CBaseEntity *pAttac
 	{
 		if (pAttackerPlayer->m_bIsZombie && !pPlayer->m_bIsZombie)
 		{	
-			if(pPlayer->m_bIsHero)
+			if(pPlayer->m_bIsVIP)
 			{
 				iReturn = true;
 			}

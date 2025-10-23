@@ -61,14 +61,14 @@ void CSgdrill::Precache(void)
 	PRECACHE_SOUND("weapons/sgdrill_idle.wav");
 	PRECACHE_SOUND("weapons/sgdrill_draw.wav");
 
-	m_usFireSgdrill = PRECACHE_EVENT(1, "events/sgdrill.sc");
+	m_usFireSgDrill = PRECACHE_EVENT(1, "events/sgdrill.sc");
 }
 
 int CSgdrill::GetItemInfo(ItemInfo *p)
 {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "buckshot";
-	p->iMaxAmmo1 = 105;
+	p->iMaxAmmo1 = 400;
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
 	p->pszAmmo3 = NULL;
@@ -154,7 +154,7 @@ void CSgdrill::PrimaryAttack(void)
 	flags = 0;
 #endif
 
-	PLAYBACK_EVENT_FULL(flags, ENT(m_pPlayer->pev), m_usFireSgdrill, 0, (float *)&g_vecZero, (float *)&g_vecZero, m_vVecAiming.x, m_vVecAiming.y, 7, m_vVecAiming.x * 100, m_iClip != 0, FALSE);
+	PLAYBACK_EVENT_FULL(flags, ENT(m_pPlayer->pev), m_usFireSgDrill, 0, (float *)&g_vecZero, (float *)&g_vecZero, m_vVecAiming.x, m_vVecAiming.y, 7, m_vVecAiming.x * 100, m_iClip != 0, FALSE);
 
 	SendWeaponAnim(SGDRILL_FIRE, UseDecrement() != FALSE);
 	EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/sgdrill-1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
@@ -308,7 +308,7 @@ void CSgdrill::DelaySecondaryAttack()
 	Vector vecSrc = m_pPlayer->GetGunPosition();
 
 #ifndef CLIENT_DLL
-	KnifeAttack(vecSrc, gpGlobals->v_forward, GetSecondaryAttackDamage(), 155, 120, DMG_NEVERGIB | DMG_BULLET, m_pPlayer->pev, m_pPlayer->pev);
+	KnifeAttack(vecSrc, gpGlobals->v_forward, GetSecondaryAttackDamage(), 155, 90, DMG_NEVERGIB | DMG_BULLET, m_pPlayer->pev, m_pPlayer->pev);
 #endif
 	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1.1f;
 	SetThink(nullptr);

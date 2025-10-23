@@ -568,7 +568,7 @@ void CVoidpistol::ItemPostFrame()
 							pev->iuser1 = 0;
 
 							MESSAGE_BEGIN(MSG_ALL, gmsgHeadIcon);
-							WRITE_BYTE(7);
+							WRITE_BYTE(WPN_VOID_SCANAIM);
 							WRITE_SHORT(ENTINDEX(pEntity->edict()));
 							WRITE_BYTE(pev->iuser1);
 							MESSAGE_END();
@@ -1145,7 +1145,7 @@ void CVoidpistol::WeaponIdle(void)
 		{
 			SendWeaponAnim(VOIDPISTOL_IDLEB, UseDecrement() != FALSE); break;
 			MESSAGE_BEGIN(MSG_ALL, gmsgHeadIcon);
-			WRITE_BYTE(HUNTBOW_MARKZOMBIE);
+			WRITE_BYTE(WPN_VOID_SCANAIM);
 			WRITE_SHORT(ENTINDEX(edict()));
 			WRITE_BYTE(pev->iuser1);
 			MESSAGE_END();

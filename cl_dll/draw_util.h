@@ -63,13 +63,13 @@ public:
 		int r, int g, int b);
 
 	static int DrawHudString(int x, int y, int iMaxX, const char* szString,
-		int r, int g, int b, float scale = 0.0f, bool drawing = false);
+		int r, int g, int b, int a, float scale = 0.0f, bool drawing = false);
 
 	static int DrawHudString2(int x, int y, int iMaxX, const char* szString,
-		int r, int g, int b, float scale = 0.010f, bool drawing = false);
+		int r, int g, int b, int a, float scale = 0.010f, bool drawing = false);
 
 	static int DrawHudStringReverse(int xpos, int ypos, int iMinX, const char* szString,
-		int r, int g, int b, float scale = 0.0f, bool drawing = false);
+		int r, int g, int b, int a, float scale = 0.0f, bool drawing = false);
 
 	static int GetNEWHudNumberWidth(int type, int number, int iDrawZero, int maxsize, int widthplus = 0);
 
@@ -110,8 +110,8 @@ public:
 	{
 		if (gHUD.hud_textmode->value)
 		{
-			int ret = DrawHudString(x, y, 9999, (char*)string, color[0] * 255, color[1] * 255, color[2] * 255);
-			color[0] = color[1] = color[2] = 1.0f;
+			int ret = DrawHudString(x, y, 9999, (char*)string, color[0] * 255, color[1] * 255, color[2] * 255, color[3] * 255);
+			color[0] = color[1] = color[2] = color[3] = 1.0f;
 			return ret;
 		}
 		else
@@ -157,13 +157,13 @@ public:
 			gEngfuncs.pfnDrawConsoleStringLen(szIt, width, height);
 	}
 
-	static inline int TextMessageDrawChar(int x, int y, int number, int r, int g, int b, float scale = 0.0f)
+	static inline int TextMessageDrawChar(int x, int y, int number, int r, int g, int b, int a, float scale = 0.0f)
 	{
 		int ret;
 		if (scale && g_iMobileAPIVersion)
 			ret = gMobileAPI.pfnDrawScaledCharacter(x, y, number, r, g, b, scale) / gHUD.m_flScale;
 		else
-			ret = gEngfuncs.pfnDrawCharacter(x, y, number, r, g, b);
+			ret = gEngfuncs.pfnDrawCharacter(x, y, number, r, g, b, a);
 		return ret;
 	}
 
@@ -207,7 +207,7 @@ public:
 
 private:
 	// console string color
-	static float color[3];
+	static float color[4];
 };
 
 #endif // DRAW_UTIL_H

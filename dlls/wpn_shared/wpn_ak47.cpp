@@ -92,7 +92,6 @@ BOOL CAK47::Deploy(void)
 	m_iShotsFired = 0;
 	iShellOn = 1;
 	return DefaultDeploy("models/v_ak47.mdl", "models/p_ak47.mdl", AK47_DRAW, "ak47", UseDecrement() != FALSE);
-	EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/cs2_ak47/draw.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 }
 
 void CAK47::PrimaryAttack(void)

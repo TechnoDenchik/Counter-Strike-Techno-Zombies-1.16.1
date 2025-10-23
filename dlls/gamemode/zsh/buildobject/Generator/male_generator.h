@@ -9,6 +9,10 @@
 class CGeneratorMale : public CBaseEntity
 {
 public:
+
+	static CGeneratorMale* Create(const Vector& vecOrigin, const Vector& vecAngles, edict_t* pentOwner);
+	void Init(CBasePlayer* pOwner, Vector vecVelocity);
+	void Remove();
 	virtual void Spawn();
 	virtual void Precache();
 public:
@@ -19,6 +23,11 @@ public:
 	void PlayDeadSound();
 
 public:
+	CBasePlayer* m_pOwner;
+	time_point_t m_flNextAnim;
+
+	int m_iTeam;
+	int m_iState;
 	int m_iModel;
 	float m_flNextRadarTime;
 	int m_iGeneratorIndex;

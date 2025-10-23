@@ -10,6 +10,11 @@
 #include "eventscripts.h"
 #include "triangleapi.h"
 #include "player/player_const.h"
+extern "C"
+{
+#include "player/player_model.h"
+}
+
 #include "zb5/TextSetZb5.h"
 
 inline void BuildNumberRC(wrect_t(&rgrc)[10], int w, int h)
@@ -94,6 +99,21 @@ int CHudZB3ScoreBoard::VidInit(void)
 	if (!m_iCharacterBG_New_Bottom)
 		m_iCharacterBG_New_Bottom = R_LoadTextureUnique("resource/hud/hud_character_bg_new_bottom");
 
+	if (!m_iIcon_Speed)
+		m_iIcon_Speed = R_LoadTextureUnique("resource/hud/hud_icon_speed");
+
+	if (!m_iIcon_Damage)
+		m_iIcon_Damage = R_LoadTextureUnique("resource/hud/hud_icon_damage");
+
+	if (!m_iNum_Character)
+		m_iNum_Character = R_LoadTextureShared("resource/hud/hud_character_num");
+
+	if (!m_iNum_Bottom)
+		m_iNum_Bottom = R_LoadTextureShared("resource/hud/hud_sb_num_bottom");
+
+	if (!m_iColon_Bottom)
+		m_iColon_Bottom = R_LoadTextureUnique("resource/hud/hud_sb_num_bottom_colon");
+
 	R_InitTexture(newscoreboard, "resource/hud/hud_scoreboard_bg_gundeath");
     R_InitTexture(weaponboard, "resource/hud/zb3/weapon_list_new");
     R_InitTexture(ammoboard,"resource/hud/zb3/hud_weapon_bg");
@@ -127,6 +147,8 @@ int CHudZB3ScoreBoard::VidInit(void)
 	BuildNumberRC( m_rcToprecord3, 18, 22);
 	BuildNumberRC( m_rcroundmax, 11, 13);
 	BuildNumberRC( m_rcroundnumber, 11, 13);
+	BuildNumberRC( m_iNum_BottomC, 8, 12);
+	CHudScoreBoardLegacy::BuildNumberRC( m_iNum_CharacterC, 7, 16);
 
     return 1;
 }
@@ -218,7 +240,19 @@ int CHudZB3ScoreBoard::Draw(float time)
 	iX = ScreenWidth;
 	iY = ScreenHeight - 5;
 
+	int iSpeed;
+	
+	cl_entity_t* ent = gEngfuncs.GetEntityByIndex(idx);
+
+	int r, g, b;
+	int iX2, iY2;
+	int iH2 = m_iColon_Bottom->h();	//10
+	int iW2 = m_iColon_Bottom->w();	//3
+
+	//int bitsShowState = CPlayerClassManager::GetPlayerClass(gEngfuncs.GetLocalPlayer()->index).m_iBitsShowState;
+
 	int idx2 = gEngfuncs.GetLocalPlayer()->index;
+
 	if (!g_PlayerInfoList[idx2].model) {
 		return 1;
 	}
@@ -296,8 +330,93 @@ int CHudZB3ScoreBoard::Draw(float time)
 		DrawTexturedNumbersTopRightAligned(*countplayer, m_rcToprecord2, countHM, x5 + 77, y5, 1.0f);
 		DrawTexturedNumbersTopRightAligned(*countplayer2, m_rcToprecord2, countZB, x6 - 87, y5, 1.0f);
 
+		if (iMinutes * 60 + iSeconds > 20)
+		{
+			DrawUtils::UnpackRGB(r, g, b, RGB_WHITE);
+		}
+		else
+		{
+			m_flPanicTime += gHUD.m_flTimeDelta;
+			// add 0.1 sec, so it's not flicker fast
+			if (m_flPanicTime > ((float)iSeconds / 40.0f) + 0.1f)
+			{
+				m_flPanicTime = 0;
+				m_bPanicColorChange = !m_bPanicColorChange;
+			}
+			DrawUtils::UnpackRGB(r, g, b, m_bPanicColorChange ? RGB_WHITE : RGB_REDISH);
+		}
+
+		iX2 = ScreenWidth / 2 - 20;
+		iY2 = 60;
+		DrawUtils::ScaleColors(r, g, b, 255);
+
+		CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Bottom, m_iNum_BottomC, iMinutes, iX2, iY2, DHN_2DIGITS, 1, 1.0, r, g, b);
+
+		iX2 = ScreenWidth / 2 - 1;
+		m_iColon_Bottom->Draw2DQuadScaled(iX2, iY2, iX2 + iW2, iY2 + iH2, 0.0f, 0.0f, 1.0f, 1.0f, r, g, b);
+
+		CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Bottom, m_iNum_BottomC, iSeconds, iX2 + iW2 + 1, iY2, DHN_2DIGITS, 1, 1.0, r, g, b);
+
+		if (!g_PlayerExtraInfo[idx].dead)
+		{
+			iSpeed = g_velocity.Length();
+
+			iX = 120;
+			iY = iY - iH;
+			iW = m_iIcon_Speed->w();
+			iH = m_iIcon_Speed->h();
+			m_iIcon_Speed->Draw2DQuadScaled(iX, iY + 5, iX + iW, iY + 5 + iH);
+
+			iX = 180 - 30;
+
+			CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Character, m_iNum_CharacterC, iSpeed, iX, iY + 5, 0, 1, 1.0, 138, 193, 222);
+			iX = 120;
+			iY = iY + 5 + iH;
+			iW = m_iIcon_Damage->w();
+			iH = m_iIcon_Damage->h();
+			m_iIcon_Damage->Draw2DQuadScaled(iX, iY + 5, iX + iW, iY + 5 + iH);
+
+			iX = 180 - 30;
+
+			CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Character, m_iNum_CharacterC, g_iDamage[idx] ? g_iDamage[idx] : 0, iX, iY + 5, 0, 1, 1.0, 255, 214, 110);
+			CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Character, m_iNum_CharacterC, g_iDamageTotal[idx] ? g_iDamageTotal[idx] : 0, iX + 45, iY + 5, 0, 1, 1.0, 218, 120, 120);
+		}
 		 break;
 	 case MOD_ZB5:
+
+		 
+// if ((bitsShowState & SHOW_SPEED) && (bitsShowState & SHOW_DAMAGE))
+		 //{
+		// }
+		 /*else if (bitsShowState & SHOW_SPEED)
+		 {
+			 iX = 120;
+			 iY = iY - iH;
+			 iW = m_iIcon_Speed->w();
+			 iH = m_iIcon_Speed->h();
+			 m_iIcon_Speed->Draw2DQuadScaled(iX, iY + 5, iX + iW, iY + 5 + iH);
+
+			 iX = 180 - 30;
+
+			 CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Character, m_iNum_CharacterC, iSpeed, iX, iY + 5, 0, 1, 1.0, 138, 193, 222);
+		 }
+		 else if (bitsShowState & SHOW_DAMAGE)
+		 {
+			 iX = 120;
+			 iY = iY - iH;
+			 iW = m_iIcon_Damage->w();
+			 iH = m_iIcon_Damage->h();
+			 m_iIcon_Damage->Draw2DQuadScaled(iX, iY + 5, iX + iW, iY + 5 + iH);
+
+			 iX = 180 - 30;
+
+			 int idx = gEngfuncs.GetLocalPlayer()->index;
+			 cl_entity_t* ent = gEngfuncs.GetEntityByIndex(idx);
+
+			 CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Character, m_iNum_CharacterC, g_iDamage[idx] ? g_iDamage[idx] : 0, iX, iY + 5, 0, 1, 1.0, 255, 214, 110);
+			 CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Character, m_iNum_CharacterC, g_iDamageTotal[idx] ? g_iDamageTotal[idx] : 0, iX + 45, iY + 5, 0, 1, 1.0, 218, 120, 120);
+
+		 }*/
 
 		 gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
 		 gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
@@ -355,6 +474,57 @@ int CHudZB3ScoreBoard::Draw(float time)
 		 DrawTexturedNumbersTopRightAligned(*countplayer, m_rcToprecord2, countHM, x5 + 77, y5, 1.0f);
 		 DrawTexturedNumbersTopRightAligned(*countplayer2, m_rcToprecord2, countZB, x6 - 87, y5, 1.0f);
 
+		 if (iMinutes * 60 + iSeconds > 20)
+		 {
+			 DrawUtils::UnpackRGB(r, g, b, RGB_WHITE);
+		 }
+		 else
+		 {
+			 m_flPanicTime += gHUD.m_flTimeDelta;
+			 // add 0.1 sec, so it's not flicker fast
+			 if (m_flPanicTime > ((float)iSeconds / 40.0f) + 0.1f)
+			 {
+				 m_flPanicTime = 0;
+				 m_bPanicColorChange = !m_bPanicColorChange;
+			 }
+			 DrawUtils::UnpackRGB(r, g, b, m_bPanicColorChange ? RGB_WHITE : RGB_REDISH);
+		 }
+
+		 iX2 = ScreenWidth / 2 - 20;
+		 iY2 = 60;
+		 DrawUtils::ScaleColors(r, g, b, 255);
+
+		 CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Bottom, m_iNum_BottomC, iMinutes, iX2, iY2, DHN_2DIGITS, 1, 1.0, r, g, b);
+
+		 iX2 = ScreenWidth / 2 - 1;
+		 m_iColon_Bottom->Draw2DQuadScaled(iX2, iY2, iX2 + iW2, iY2 + iH2, 0.0f, 0.0f, 1.0f, 1.0f, r, g, b);
+
+		 CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Bottom, m_iNum_BottomC, iSeconds, iX2 + iW2 + 1, iY2, DHN_2DIGITS, 1, 1.0, r, g, b);
+
+		 if (!g_PlayerExtraInfo[idx].dead)
+		 {
+			 iSpeed = g_velocity.Length();
+
+			 iX = 120;
+			 iY = iY - iH;
+			 iW = m_iIcon_Speed->w();
+			 iH = m_iIcon_Speed->h();
+			 m_iIcon_Speed->Draw2DQuadScaled(iX, iY + 5, iX + iW, iY + 5 + iH);
+
+			 iX = 180 - 30;
+
+			 CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Character, m_iNum_CharacterC, iSpeed, iX, iY + 5, 0, 1, 1.0, 138, 193, 222);
+			 iX = 120;
+			 iY = iY + 5 + iH;
+			 iW = m_iIcon_Damage->w();
+			 iH = m_iIcon_Damage->h();
+			 m_iIcon_Damage->Draw2DQuadScaled(iX, iY + 5, iX + iW, iY + 5 + iH);
+
+			 iX = 180 - 30;
+
+			 CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Character, m_iNum_CharacterC, g_iDamage[idx] ? g_iDamage[idx] : 0, iX, iY + 5, 0, 1, 1.0, 255, 214, 110);
+			 CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Character, m_iNum_CharacterC, g_iDamageTotal[idx] ? g_iDamageTotal[idx] : 0, iX + 45, iY + 5, 0, 1, 1.0, 218, 120, 120);
+		 }
 		break;
 	 case MOD_NONE:
 
@@ -414,6 +584,33 @@ int CHudZB3ScoreBoard::Draw(float time)
 		DrawTexturedNumbersTopRightAligned(*countplayer, m_rcToprecord2, countHM, x5 + 77, y5, 1.0f);
 		DrawTexturedNumbersTopRightAligned(*countplayer2, m_rcToprecord2, countZB, x6 - 87, y5, 1.0f);
 
+		if (iMinutes * 60 + iSeconds > 20)
+		{
+			DrawUtils::UnpackRGB(r, g, b, RGB_WHITE);
+		}
+		else
+		{
+			m_flPanicTime += gHUD.m_flTimeDelta;
+			// add 0.1 sec, so it's not flicker fast
+			if (m_flPanicTime > ((float)iSeconds / 40.0f) + 0.1f)
+			{
+				m_flPanicTime = 0;
+				m_bPanicColorChange = !m_bPanicColorChange;
+			}
+			DrawUtils::UnpackRGB(r, g, b, m_bPanicColorChange ? RGB_WHITE : RGB_REDISH);
+		}
+
+		iX2 = ScreenWidth / 2 - 20;
+		iY2 = 60;
+		DrawUtils::ScaleColors(r, g, b, 255);
+
+		CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Bottom, m_iNum_BottomC, iMinutes, iX2, iY2, DHN_2DIGITS, 1, 1.0, r, g, b);
+
+		iX2 = ScreenWidth / 2 - 1;
+		m_iColon_Bottom->Draw2DQuadScaled(iX2, iY2, iX2 + iW2, iY2 + iH2, 0.0f, 0.0f, 1.0f, 1.0f, r, g, b);
+
+		CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Bottom, m_iNum_BottomC, iSeconds, iX2 + iW2 + 1, iY2, DHN_2DIGITS, 1, 1.0, r, g, b);
+
 		break;
 	 case MOD_DM: 
 		 
@@ -470,6 +667,58 @@ int CHudZB3ScoreBoard::Draw(float time)
 			 DrawTexturedNumbersTopRightAligned(*whitebig, m_rcToprecord3, scoreT, x3 - 78, y3 + 14, 1.0f);
 		 }
 
+		 if (iMinutes * 60 + iSeconds > 20)
+		 {
+			 DrawUtils::UnpackRGB(r, g, b, RGB_WHITE);
+		 }
+		 else
+		 {
+			 m_flPanicTime += gHUD.m_flTimeDelta;
+			 // add 0.1 sec, so it's not flicker fast
+			 if (m_flPanicTime > ((float)iSeconds / 40.0f) + 0.1f)
+			 {
+				 m_flPanicTime = 0;
+				 m_bPanicColorChange = !m_bPanicColorChange;
+			 }
+			 DrawUtils::UnpackRGB(r, g, b, m_bPanicColorChange ? RGB_WHITE : RGB_REDISH);
+		 }
+
+		 iX2 = ScreenWidth / 2 - 20;
+		 iY2 = 60;
+		 DrawUtils::ScaleColors(r, g, b, 255);
+
+		 CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Bottom, m_iNum_BottomC, iMinutes, iX2, iY2, DHN_2DIGITS, 1, 1.0, r, g, b);
+
+		 iX2 = ScreenWidth / 2 - 1;
+		 m_iColon_Bottom->Draw2DQuadScaled(iX2, iY2, iX2 + iW2, iY2 + iH2, 0.0f, 0.0f, 1.0f, 1.0f, r, g, b);
+
+		 CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Bottom, m_iNum_BottomC, iSeconds, iX2 + iW2 + 1, iY2, DHN_2DIGITS, 1, 1.0, r, g, b);
+
+		 if (!g_PlayerExtraInfo[idx].dead)
+		 {
+			 iSpeed = g_velocity.Length();
+
+			 iX = 120;
+			 iY = iY - iH;
+			 iW = m_iIcon_Speed->w();
+			 iH = m_iIcon_Speed->h();
+			 m_iIcon_Speed->Draw2DQuadScaled(iX, iY + 5, iX + iW, iY + 5 + iH);
+
+			 iX = 180 - 30;
+
+			 CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Character, m_iNum_CharacterC, iSpeed, iX, iY + 5, 0, 1, 1.0, 138, 193, 222);
+			 iX = 120;
+			 iY = iY + 5 + iH;
+			 iW = m_iIcon_Damage->w();
+			 iH = m_iIcon_Damage->h();
+			 m_iIcon_Damage->Draw2DQuadScaled(iX, iY + 5, iX + iW, iY + 5 + iH);
+
+			 iX = 180 - 30;
+
+			 CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Character, m_iNum_CharacterC, g_iDamage[idx] ? g_iDamage[idx] : 0, iX, iY + 5, 0, 1, 1.0, 255, 214, 110);
+			 CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Character, m_iNum_CharacterC, g_iDamageTotal[idx] ? g_iDamageTotal[idx] : 0, iX + 45, iY + 5, 0, 1, 1.0, 218, 120, 120);
+		 }
+
 		 break;
 	 case MOD_TDM:
 
@@ -523,19 +772,73 @@ int CHudZB3ScoreBoard::Draw(float time)
 		 DrawTexturedNumbersTopRightAligned(*countplayer, m_rcToprecord2, countHM, x5 + 77, y5, 1.0f);
 		 DrawTexturedNumbersTopRightAligned(*countplayer2, m_rcToprecord2, countZB, x6 - 87, y5, 1.0f);
 
+		 if (iMinutes * 60 + iSeconds > 20)
+		 {
+			 DrawUtils::UnpackRGB(r, g, b, RGB_WHITE);
+		 }
+		 else
+		 {
+			 m_flPanicTime += gHUD.m_flTimeDelta;
+			 // add 0.1 sec, so it's not flicker fast
+			 if (m_flPanicTime > ((float)iSeconds / 40.0f) + 0.1f)
+			 {
+				 m_flPanicTime = 0;
+				 m_bPanicColorChange = !m_bPanicColorChange;
+			 }
+			 DrawUtils::UnpackRGB(r, g, b, m_bPanicColorChange ? RGB_WHITE : RGB_REDISH);
+		 }
+
+		 iX2 = ScreenWidth / 2 - 20;
+		 iY2 = 60;
+		 DrawUtils::ScaleColors(r, g, b, 255);
+
+		 CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Bottom, m_iNum_BottomC, iMinutes, iX2, iY2, DHN_2DIGITS, 1, 1.0, r, g, b);
+
+		 iX2 = ScreenWidth / 2 - 1;
+		 m_iColon_Bottom->Draw2DQuadScaled(iX2, iY2, iX2 + iW2, iY2 + iH2, 0.0f, 0.0f, 1.0f, 1.0f, r, g, b);
+
+		 CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Bottom, m_iNum_BottomC, iSeconds, iX2 + iW2 + 1, iY2, DHN_2DIGITS, 1, 1.0, r, g, b);
+
+		 if (!g_PlayerExtraInfo[idx].dead)
+		 {
+			 iSpeed = g_velocity.Length();
+
+			 iX = 120;
+			 iY = iY - iH;
+			 iW = m_iIcon_Speed->w();
+			 iH = m_iIcon_Speed->h();
+			 m_iIcon_Speed->Draw2DQuadScaled(iX, iY + 5, iX + iW, iY + 5 + iH);
+
+			 iX = 180 - 30;
+
+			 CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Character, m_iNum_CharacterC, iSpeed, iX, iY + 5, 0, 1, 1.0, 138, 193, 222);
+			 iX = 120;
+			 iY = iY + 5 + iH;
+			 iW = m_iIcon_Damage->w();
+			 iH = m_iIcon_Damage->h();
+			 m_iIcon_Damage->Draw2DQuadScaled(iX, iY + 5, iX + iW, iY + 5 + iH);
+
+			 iX = 180 - 30;
+
+			 CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Character, m_iNum_CharacterC, g_iDamage[idx] ? g_iDamage[idx] : 0, iX, iY + 5, 0, 1, 1.0, 255, 214, 110);
+			 CHudScoreBoardLegacy::DrawTexturedNumbers(*m_iNum_Character, m_iNum_CharacterC, g_iDamageTotal[idx] ? g_iDamageTotal[idx] : 0, iX + 45, iY + 5, 0, 1, 1.0, 218, 120, 120);
+		 }
 		 break;
 	}
 
-	if ((gHUD.m_iHideHUDDisplay & HIDEHUD_HEALTH))
-		return 1;
+	if (gHUD.m_iHideHUDDisplay & HIDEHUD_ALL || gHUD.m_iHideHUDDisplay & HIDEHUD_HEALTH)
+		return 0;
+
+	if (gHUD.m_iIntermission || gEngfuncs.IsSpectateOnly())
+		return 0;
 
 	if (!(gHUD.m_iWeaponBits & (1 << (WEAPON_SUIT))))
-		return 1;
+		return 0;
 
 	if ((gHUD.m_iHideHUDDisplay & (HIDEHUD_WEAPONS | HIDEHUD_ALL)))
-		return 1;
+		return 0;
 
-	if (g_PlayerExtraInfo[idx].teamname != "SPECTATOR")
+	if (!g_PlayerExtraInfo[idx].dead)
 	{
 		if (m_iCharacter)
 		{
