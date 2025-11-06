@@ -87,10 +87,9 @@ void CZBSTriggerWin::TouchWin(CBaseEntity* pOther)
 		return;
 
 	CMod_ZombieScenario zbs;
-	zbs.HumanWin();
 	iswin = true;
+	zbs.HumanWin(iswin);
 	SetTouch(NULL);
-	
 }
 
 void CZBSTriggerWin::KeyValue(KeyValueData* pkvd)

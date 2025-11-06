@@ -43,7 +43,7 @@ public:
 	void WaitingSound();
 	void RoundStart();
 	void DeimosSpawn();
-	void HumanWin();
+	void HumanWin(bool finish);
 	void ZombieWin();
 	BOOL FRoundStarted();
 
@@ -66,7 +66,7 @@ public:
 	std::vector<CZombieSpawn *> m_vecZombieSpawns;
 	float m_flNextSpawnNPC;
 	float m_flTimeNextMakeSupplybox;
-
+	bool finished;
 	EventDispatcher<void(CBasePlayer *attacker, float &)> m_eventAdjustDamage;
 	EventDispatcher<void(CBasePlayer *attacker, float &)> m_eventAdjustDamage2;
 	EventDispatcher<void(CMonster *victim, CBaseEntity *attacker)> m_eventMonsterKilled;

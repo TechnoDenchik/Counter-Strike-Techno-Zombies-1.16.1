@@ -110,161 +110,165 @@ void CInventorySet::SetWeaponKit()
 	int Knife = CVAR_GET_FLOAT("wpn_getknife");
 	int Grenade = CVAR_GET_FLOAT("wpn_getgrenade");
 
-	if(Gun == 1)
-	{
-		ClientCmd("cstbuy weapon_arbalest");
-	}
-	else if(Gun == 2)
-	{
-		ClientCmd("cstbuy weapon_wondercannonex");
-	}
-	else if (Gun == 3)
-	{
-		ClientCmd("cstbuy weapon_wondercannon");
-	}
-	else if (Gun == 4)
-	{
-		ClientCmd("cstbuy weapon_quantum");
-	}
-	else if (Gun == 5)
-	{
-		ClientCmd("cstbuy weapon_gungnir");
-	}
-	else if (Gun == 6)
-	{
-		ClientCmd("cstbuy weapon_sgdrill");
-	}
-	else if (Gun == 7)
-	{
-		ClientCmd("cstbuy weapon_cannon");
-	}
-	else if (Gun == 8)
-	{
-		ClientCmd("cstbuy weapon_paladin");
-	}
-	else if (Gun == 9)
-	{
-		ClientCmd("cstbuy weapon_buffm4a1");
-	}
-	else if (Gun == 10)
-	{
-		ClientCmd("cstbuy weapon_chainsaw");
-	}
-	else if (Gun == 11)
-	{
-		ClientCmd("cstbuy weapon_starchaserar");
-	}
-	else if (Gun == 12)
-	{
-		ClientCmd("cstbuy weapon_bow");
-	}
-	else if (Gun == 13)
-	{
-		ClientCmd("cstbuy weapon_thompson");
-	}
-	else if (Gun == 14)
-	{
-		ClientCmd("cstbuy weapon_tar21");
-	}
-	else if (Gun == 15)
-	{
-		ClientCmd("cstbuy weapon_mp7a1c");
-	}
-	else if (Gun == 16)
-	{
-		ClientCmd("cstbuy weapon_mg3");
-	}
-	else if (Gun == 17)
-	{
-		ClientCmd("cstbuy weapon_m1887");
-	}
-	else if (Gun == 18)
-	{
-		ClientCmd("cstbuy weapon_m95");
-	}
-	else if (Gun == 19)
-	{
-		ClientCmd("cstbuy weapon_m14ebr");
-	}
-	else if (Gun == 20)
-	{
-		ClientCmd("cstbuy weapon_kriss");
-	}
-	else if (Gun == 21)
-	{
-		ClientCmd("cstbuy weapon_scarl");
-	}
-	else if (Gun == 22)
-	{
-		ClientCmd("cstbuy weapon_wa2000");
-	}
-	else if (Gun == 23)
-	{
-		ClientCmd("cstbuy weapon_xm8c");
-	}
-	else if (Gun == 24)
-	{
-		ClientCmd("cstbuy weapon_as50");
+
+	const char* PrimaryCommands[] = {
+	"", // WEAPON_NULL0
+
+	/*EPIC WEAPON*/
+	"cstbuy weapon_arbalest",           // WEAPON_HALOGUN (1)
+	"cstbuy weapon_wondercannonex",    // WEAPON_WONDERCANNONEX (2)
+	"cstbuy weapon_wondercannon",      // WEAPON_WONDERCANNON (3)
+	"cstbuy weapon_quantum",         // WEAPON_REVIVEGUN (4)
+	"cstbuy weapon_gungnir",           // WEAPON_GUNGNIR (5)
+
+	/*OVERCOMING WEAPON*/
+	"cstbuy weapon_huntbow",           // WEAPON_HUNTBOW (6)
+	"cstbuy weapon_sgdrill",           // WEAPON_SGDRILL (7)
+	"cstbuy weapon_cannon",            // WEAPON_CANNON (8)
+	"cstbuy weapon_paladin",           // WEAPON_PALADIN (9)
+	"cstbuy weapon_buffm4a1",          // WEAPON_BUFFM4A1 (10)
+	"cstbuy weapon_chainsaw",          // WEAPON_CHAINSAW (11)
+	"cstbuy weapon_gatling",           // WEAPON_GATLING (12)
+	"cstbuy weapon_gatlingex",         // WEAPON_GATLINGEX (13)
+	"cstbuy weapon_buffaug",           // WEAPON_BUFFAUG (14)
+
+	/*RARE WEAPON*/
+	"cstbuy weapon_starchaserar",      // WEAPON_STARCHASERAR (15)
+	"cstbuy weapon_balrog3",           // WEAPON_BALROG3 (16)
+	"cstbuy weapon_balrog5",           // WEAPON_BALROG5 (17)
+	"cstbuy weapon_balrog7",           // WEAPON_BALROG7 (18)
+	"cstbuy weapon_balrog11",          // WEAPON_BALROG11 (19)
+	"cstbuy weapon_ethereal",          // WEAPON_ETHEREAL (20)
+	"cstbuy weapon_stunrifle",         // WEAPON_STUNRIFLE (21)
+	"cstbuy weapon_bow",               // WEAPON_BOW (22)
+	"cstbuy weapon_plasmagun",         // WEAPON_PLASMAGUN (23)
+	"cstbuy weapon_poisongun",         // WEAPON_POISONGUN (24)
+
+	"cstbuy weapon_coilgun",           // WEAPON_COILGUN (25)
+	"cstbuy weapon_broad",             // WEAPON_BROAD (26)
+	"cstbuy weapon_svdex",             // WEAPON_SVDEX (27)
+	"cstbuy weapon_tbarrel",           // WEAPON_TBARREL (28)
+
+	"cstbuy weapon_kriss",             // WEAPON_KRISS (29)
+	"cstbuy weapon_scar",              // WEAPON_SCAR (30)
+	"cstbuy weapon_thompson",          // WEAPON_THOMPSON (31)
+	"cstbuy weapon_tar21",             // WEAPON_TAR21 (32)
+	"cstbuy weapon_mp7a1",             // WEAPON_MP7A1 (33)
+	"cstbuy weapon_m14ebr",            // WEAPON_M14EBR (34)
+	"cstbuy weapon_guitar",            // WEAPON_GUITAR (35)
+	"cstbuy weapon_janus7xmas",        // WEAPON_JANUS7XMAS (36)
+	"cstbuy weapon_k1a",               // WEAPON_K1A (37)
+	"cstbuy weapon_as50",              // WEAPON_AS50 (38)
+	"cstbuy weapon_wa2000",            // WEAPON_WA2000 (39)
+	"cstbuy weapon_m95xmas",           // WEAPON_M95XMAS (40)
+	"cstbuy weapon_m95",               // WEAPON_M95 (41)
+	"cstbuy weapon_m134ex",            // WEAPON_M134EX (42)
+	"cstbuy weapon_m134hero",          // WEAPON_M134HERO (43)
+	"cstbuy weapon_m134xmas",          // WEAPON_M134XMAS (44)
+	"cstbuy weapon_m1887",             // WEAPON_M1887 (45)
+	"cstbuy weapon_scarh",             // WEAPON_SCARH (46)
+	"cstbuy weapon_scarl",             // WEAPON_SCARL (47)
+	"cstbuy weapon_spas12ex",          // WEAPON_SPAS12EX (48)
+	"cstbuy weapon_stg44",             // WEAPON_STG44 (49)
+	"cstbuy weapon_violingun",         // WEAPON_VIOLINGUN (50)
+	"cstbuy weapon_hk23",              // WEAPON_HK23 (51)
+	"cstbuy weapon_k3",                // WEAPON_K3 (52)
+	"cstbuy weapon_m60e4",             // WEAPON_M60E4 (53)
+	"cstbuy weapon_mp5tiger",          // WEAPON_MP5TIGER (54)
+	"cstbuy weapon_pkm",               // WEAPON_PKM (55)
+
+	/*CLASSIC WEAPON*/
+	"cstbuy weapon_ak47dragon",        // WEAPON_AK47DRAGON (56)
+	"cstbuy weapon_m4a1dragon",        // WEAPON_M4A1DRAGON (57)
+	"cstbuy weapon_tmpdragon",         // WEAPON_TMPDRAGON (58)
+	"cstbuy weapon_p90lapin",          // WEAPON_P90LAPIN (59)
+	"cstbuy weapon_mg3",               // WEAPON_MG3 (60)
+	"cstbuy weapon_xm8",               // WEAPON_XM8 (61)
+	"cstbuy weapon_m2",                // WEAPON_M2 (62)
+	"cstbuy weapon_ak47",              // WEAPON_AK47 (63)
+	"cstbuy weapon_aug",               // WEAPON_AUG (64)
+	"cstbuy weapon_awp",               // WEAPON_AWP (65)
+	"cstbuy weapon_famas",             // WEAPON_FAMAS (66)
+	"cstbuy weapon_g3sg1",             // WEAPON_G3SG1 (67)
+	"cstbuy weapon_galil",             // WEAPON_GALIL (68)
+	"cstbuy weapon_m3",                // WEAPON_M3 (69)
+	"cstbuy weapon_m4a1",              // WEAPON_M4A1 (70)
+	"cstbuy weapon_m249",              // WEAPON_M249 (71)
+	"cstbuy weapon_mac10",             // WEAPON_MAC10 (72)
+	"cstbuy weapon_mp5",               // WEAPON_MP5 (73)
+	"cstbuy weapon_p90",               // WEAPON_P90 (74)
+	"cstbuy weapon_scout",             // WEAPON_SCOUT (75)
+	"cstbuy weapon_sg550",             // WEAPON_SG550 (76)
+	"cstbuy weapon_sg552",             // WEAPON_SG552 (77)
+	"cstbuy weapon_tmp",               // WEAPON_TMP (78)
+	"cstbuy weapon_ump45",             // WEAPON_UMP45 (79)
+	"cstbuy weapon_xm1014",            // WEAPON_XM1014 (80)
+	};
+
+	const char* SecondaryCommands[] = { // ÈÑÏĞÀÂËÅÍÎ: SecondaryCommands âìåñòî SecondaruCommands
+		"",
+		"cstbuy weapon_voidpistol",
+		"cstbuy weapon_voidpistolex",
+		"cstbuy weapon_desperado",
+		"cstbuy weapon_gunkata",
+		"cstbuy weapon_balrog1",
+		"cstbuy weapon_deagled",
+		"cstbuy weapon_infinity",
+		"cstbuy weapon_infinityex1",
+		"cstbuy weapon_infinityex2",
+		"cstbuy weapon_infinitysb",
+		"cstbuy weapon_infinitysr",
+		"cstbuy weapon_infinityss",
+		"cstbuy weapon_deagle",
+		"cstbuy weapon_elite",
+		"cstbuy weapon_fiveseven",
+		"cstbuy weapon_glock18",
+		"cstbuy weapon_usp",
+	};
+
+	const char* MeleeCommands[] = { // ÈÑÏĞÀÂËÅÍÎ: MeleeCommands âìåñòî MeeleCommands
+		"",
+		"cstbuy weapon_twinaxesex",
+		"cstbuy weapon_twinaxes",
+		"cstbuy knife_dualsword",
+		"cstbuy knife_stormgiant",
+		"cstbuy knife_balrog9",
+		"cstbuy knife_zsh_clawhammer",
+		"cstbuy knife_knifedragon",
+		"cstbuy knife_katanad",
+		"cstbuy knife_nataknifed",
+		"cstbuy knife_snakesword",
+		"cstbuy knife_thanatos9",
+		"cstbuy knife_dragonsword",
+		"cstbuy knife_katana",
+		"cstbuy knife_skullaxe",
+		"cstbuy weapon_knife",
+	};
+
+	const char* GrenadeCommands[] = {
+		"",
+		"cstbuy weapon_sbmine",
+		"cstbuy weapon_hegrenade",
+		"cstbuy weapon_flashbang",
+		"cstbuy weapon_smokegrenade",
+	};
+
+	// Âûäàåì òîëüêî âûáğàííîå îğóæèå
+	if (Gun >= 1 && Gun <= 79) {
+		ClientCmd(PrimaryCommands[Gun]);
 	}
 
-	if (Pistol == 1)
-	{
-		ClientCmd("cstbuy weapon_voidpistolex");
-	}
-	else if (Pistol == 2)
-	{
-		ClientCmd("cstbuy weapon_voidpistol");
-	}
-	else if (Pistol == 3)
-	{
-		ClientCmd("cstbuy weapon_infinity");
-	}
-	else if (Pistol == 4)
-	{
-		ClientCmd("cstbuy weapon_infinityex1");
-	}
-	else if (Pistol == 5)
-	{
-		ClientCmd("cstbuy weapon_infinityex2");
-	}
-	else if (Pistol == 6)
-	{
-		ClientCmd("cstbuy weapon_infinitysb");
-	}
-	else if (Pistol == 7)
-	{
-		ClientCmd("cstbuy weapon_infinitysr");
-	}
-	else if (Pistol == 8)
-	{
-		ClientCmd("cstbuy weapon_infinityss");
+	if (Pistol >= 1 && Pistol <= 17) {
+		ClientCmd(SecondaryCommands[Pistol]); // ÈÑÏĞÀÂËÅÍÎ: SecondaryCommands âìåñòî PrimaryCommands
 	}
 
-	if (Knife == 1)
-	{
-		ClientCmd("cstbuy weapon_twinaxesex");	
-	}
-	else if (Knife == 2)
-	{
-		ClientCmd("cstbuy weapon_twinaxes");
-	}
-	else if (Knife == 3)
-	{
-		ClientCmd("cstbuy knife_dualsword");
-	}
-	else if (Knife == 4)
-	{
-		ClientCmd("cstbuy knife_dragonsword");	
-	}
-	else if (Knife == 5)
-	{
-		ClientCmd("cstbuy knife_skullaxe");
+	if (Knife >= 1 && Knife <= 16) {
+		ClientCmd(MeleeCommands[Knife]); // ÈÑÏĞÀÂËÅÍÎ: MeleeCommands âìåñòî MeeleCommands
 	}
 
-	if (Grenade == 1);
-	{
-		ClientCmd("cstbuy weapon_sandalphone");
-	}	
+	if (Grenade >= 1 && Grenade <= 4) {
+		ClientCmd(GrenadeCommands[Grenade]);
+	}
 }
 
 int CHeroSet::VidInit(void)

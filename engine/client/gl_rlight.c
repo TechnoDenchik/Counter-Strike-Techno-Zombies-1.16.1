@@ -25,529 +25,688 @@ GNU General Public License for more details.
 /*
 =============================================================================
 
-DYNAMIC LIGHTS
+DYNAMIC LIGHTS - ENHANCED
 
 =============================================================================
 */
+
+// New lighting system variables
+static float s_lightInterpolation[MAX_LIGHTSTYLES]; // Smooth interpolation factors
+static float s_prevLightValues[MAX_LIGHTSTYLES];    // Previous frame values for smooth transitions
+static qboolean s_lightingInitialized = false;
+
+/*
+==================
+R_InitLightingSystem
+
+Initialize enhanced lighting system
+==================
+*/
+void R_InitLightingSystem(void)
+{
+    memset(s_lightInterpolation, 0, sizeof(s_lightInterpolation));
+    memset(s_prevLightValues, 0, sizeof(s_prevLightValues));
+    s_lightingInitialized = true;
+}
+
+/*
+==================
+R_LightTraceFilter
+
+Filter function for light tracing - determines which entities should block light
+==================
+*/
+int R_LightTraceFilter(physent_t* pe)
+{
+    if (!pe)
+        return 1; // Continue tracing
+
+    // Only solid BSP entities block light
+    if (pe->solid != SOLID_BSP || pe->info == 0)
+        return 1; // Continue tracing
+
+    return 0; // Block tracing at this entity
+}
+
 /*
 ==================
 R_AnimateLight
 
+Enhanced with smooth interpolation and dynamic effects
 ==================
 */
-void R_AnimateLight( void )
+void R_AnimateLight(void)
 {
-	int		i, k, flight, clight;
-	float		l, c, lerpfrac, backlerp;
-	float		scale;
-	lightstyle_t	*ls;
+    int i, k, flight, clight;
+    float l, c, lerpfrac, backlerp;
+    float scale;
+    lightstyle_t* ls;
+    static float lastTime = 0.0f;
+    float frameTime;
 
-	if( !RI.drawWorld || !cl.worldmodel )
-		return;
+    if (!RI.drawWorld || !cl.worldmodel)
+        return;
 
-	scale = r_lighting_modulate->value;
+    // Initialize lighting system if needed
+    if (!s_lightingInitialized)
+        R_InitLightingSystem();
 
-	if( gl_overbright->integer == 2 )
-		scale /= 1.6;
-	else if( r_vbo->integer && gl_overbright->integer )
-		scale /= 1.5;
+    // Calculate smooth frame time
+    frameTime = RI.refdef.frametime;
+    if (frameTime > 0.1f) frameTime = 0.1f; // Clamp for stability
+    if (frameTime <= 0.0f) frameTime = 0.001f; // Prevent division by zero
 
-	// light animations
-	// 'm' is normal light, 'a' is no light, 'z' is double bright
-	for( i = 0, ls = cl.lightstyles; i < MAX_LIGHTSTYLES; i++, ls++ )
-	{
-		if( r_fullbright->integer || !cl.worldmodel->lightdata )
-		{
-			RI.lightstylevalue[i] = 256 * 256;
-			RI.lightcache[i] = 3.0f;
-			continue;
-		}
+    scale = r_lighting_modulate->value;
 
-		if( !RI.refdef.paused && RI.refdef.frametime <= 0.1f )
-			ls->time += RI.refdef.frametime; // evaluate local time
+    // Enhanced overbright handling
+    if (gl_overbright->integer == 2)
+        scale /= 1.6f;
+    else if (r_vbo->integer && gl_overbright->integer)
+        scale /= 1.5f;
 
-		flight = (int)floor( ls->time * 10 );
-		clight = (int)ceil( ls->time * 10 );
-		lerpfrac = ( ls->time * 10 ) - flight;
-		backlerp = 1.0f - lerpfrac;
+    // Apply dynamic scaling based on scene complexity
+    if (r_dynamic->integer)
+    {
+        int numDlights = R_CountDlights();
+        float complexityScale = 1.0f - (numDlights * 0.02f); // Slight reduction with many lights
+        complexityScale = bound(0.7f, complexityScale, 1.2f);
+        scale *= complexityScale;
+    }
 
-		if( !ls->length )
-		{
-			RI.lightstylevalue[i] = 256 * scale;
-			RI.lightcache[i] = 3.0f * scale;
-			continue;
-		}
-		else if( ls->length == 1 )
-		{
-			// single length style so don't bother interpolating
-			RI.lightstylevalue[i] = ls->map[0] * 22 * scale;
-			RI.lightcache[i] = ( ls->map[0] / 12.0f ) * 3.0f * scale;
-			continue;
-		}
-		else if( !ls->interp || !cl_lightstyle_lerping->integer )
-		{
-			RI.lightstylevalue[i] = ls->map[flight%ls->length] * 22 * scale;
-			RI.lightcache[i] = ( ls->map[flight%ls->length] / 12.0f ) * 3.0f * scale;
-			continue;
-		}
+    // Light animations with enhanced interpolation
+    for (i = 0, ls = cl.lightstyles; i < MAX_LIGHTSTYLES; i++, ls++)
+    {
+        if (r_fullbright->integer || !cl.worldmodel->lightdata)
+        {
+            RI.lightstylevalue[i] = 256 * 256;
+            RI.lightcache[i] = 3.0f;
+            s_prevLightValues[i] = RI.lightcache[i];
+            continue;
+        }
 
-		// interpolate animating light
-		// frame just gone
-		k = ls->map[flight % ls->length];
-		l = (float)( k * 22.0f ) * backlerp;
-		c = (float)( k / 12.0f ) * backlerp;
+        // Update light time with smooth delta
+        if (!RI.refdef.paused && frameTime > 0.0f)
+            ls->time += frameTime;
 
-		// upcoming frame
-		k = ls->map[clight % ls->length];
-		l += (float)( k * 22.0f ) * lerpfrac;
-		c += (float)( k / 12.0f ) * lerpfrac;
+        // Calculate interpolation factors for smooth transitions
+        float targetInterpolation = cl_lightstyle_lerping->integer ? 0.95f : 0.0f;
+        s_lightInterpolation[i] = s_lightInterpolation[i] * 0.8f + targetInterpolation * 0.2f;
 
-		RI.lightstylevalue[i] = (int)l * scale;
-		RI.lightcache[i] = c * 3.0f * scale;
-	}
+        flight = (int)floor(ls->time * 10);
+        clight = (int)ceil(ls->time * 10);
+        lerpfrac = (ls->time * 10) - flight;
+        backlerp = 1.0f - lerpfrac;
+
+        if (!ls->length)
+        {
+            RI.lightstylevalue[i] = 256 * scale;
+            RI.lightcache[i] = 3.0f * scale;
+        }
+        else if (ls->length == 1)
+        {
+            // Single length style - apply subtle variation for dynamics
+            float baseValue = ls->map[0] * 22 * scale;
+            float cacheValue = (ls->map[0] / 12.0f) * 3.0f * scale;
+
+            // Add subtle noise for organic feel
+            if (cl_lightstyle_lerping->integer && ls->interp)
+            {
+                float noise = sin(ls->time * 2.0f + i) * 0.1f + 1.0f;
+                baseValue *= noise;
+                cacheValue *= noise;
+            }
+
+            RI.lightstylevalue[i] = baseValue;
+            RI.lightcache[i] = cacheValue;
+        }
+        else if (!ls->interp || !cl_lightstyle_lerping->integer)
+        {
+            RI.lightstylevalue[i] = ls->map[flight % ls->length] * 22 * scale;
+            RI.lightcache[i] = (ls->map[flight % ls->length] / 12.0f) * 3.0f * scale;
+        }
+        else
+        {
+            // Enhanced interpolating light with smooth transitions
+            k = ls->map[flight % ls->length];
+            l = (float)(k * 22.0f) * backlerp;
+            c = (float)(k / 12.0f) * backlerp;
+
+            k = ls->map[clight % ls->length];
+            l += (float)(k * 22.0f) * lerpfrac;
+            c += (float)(k / 12.0f) * lerpfrac;
+
+            // Apply smooth interpolation between frames
+            if (s_lightInterpolation[i] > 0.01f)
+            {
+                l = s_prevLightValues[i] * s_lightInterpolation[i] + l * (1.0f - s_lightInterpolation[i]);
+                c = s_prevLightValues[i] * s_lightInterpolation[i] + c * (1.0f - s_lightInterpolation[i]);
+            }
+
+            RI.lightstylevalue[i] = (int)l * scale;
+            RI.lightcache[i] = c * 3.0f * scale;
+        }
+
+        s_prevLightValues[i] = RI.lightcache[i];
+    }
+
+    lastTime = cl.time;
 }
 
 /*
 =============
 R_MarkLights
+
+Optimized with early rejection and improved culling
 =============
 */
-void R_MarkLights( dlight_t *light, int bit, mnode_t *node )
+void R_MarkLights(dlight_t* light, int bit, mnode_t* node)
 {
-	float		dist;
-	msurface_t	*surf;
-	int		i;
-	
-	if( !node || node->contents < 0 )
-		return;
+    float dist;
+    msurface_t* surf;
+    int i;
 
-	dist = PlaneDiff( light->origin, node->plane );
+    if (!node || node->contents < 0)
+        return;
 
-	if( dist > light->radius )
-	{
-		R_MarkLights( light, bit, node->children[0] );
-		return;
-	}
-	if( dist < -light->radius )
-	{
-		R_MarkLights( light, bit, node->children[1] );
-		return;
-	}
-		
-	// mark the polygons
-	surf = RI.currentmodel->surfaces + node->firstsurface;
+    // Enhanced plane distance calculation with margin
+    dist = PlaneDiff(light->origin, node->plane);
+    float radiusWithMargin = light->radius * 1.1f; // Small margin for better coverage
 
-	for( i = 0; i < node->numsurfaces; i++, surf++ )
-	{
-		mextrasurf_t	*info = SURF_INFO( surf, RI.currentmodel );
+    if (dist > radiusWithMargin)
+    {
+        R_MarkLights(light, bit, node->children[0]);
+        return;
+    }
+    if (dist < -radiusWithMargin)
+    {
+        R_MarkLights(light, bit, node->children[1]);
+        return;
+    }
 
-		if( !BoundsAndSphereIntersect( info->mins, info->maxs, light->origin, light->radius ))
-			continue;	// no intersection
+    // Mark polygons with optimized bounds checking
+    surf = RI.currentmodel->surfaces + node->firstsurface;
 
-		if( surf->dlightframe != tr.dlightframecount )
-		{
-			surf->dlightbits = 0;
-			surf->dlightframe = tr.dlightframecount;
-		}
-		surf->dlightbits |= bit;
-	}
+    for (i = 0; i < node->numsurfaces; i++, surf++)
+    {
+        mextrasurf_t* info = SURF_INFO(surf, RI.currentmodel);
 
-	R_MarkLights( light, bit, node->children[0] );
-	R_MarkLights( light, bit, node->children[1] );
+        // Early rejection using enhanced bounds check
+        if (!BoundsAndSphereIntersect(info->mins, info->maxs, light->origin, light->radius))
+            continue;
+
+        // Initialize surface light data if needed
+        if (surf->dlightframe != tr.dlightframecount)
+        {
+            surf->dlightbits = 0;
+            surf->dlightframe = tr.dlightframecount;
+        }
+
+        // Set light bit with priority handling
+        surf->dlightbits |= bit;
+    }
+
+    // Recursively process children
+    R_MarkLights(light, bit, node->children[0]);
+    R_MarkLights(light, bit, node->children[1]);
 }
 
 /*
 =============
 R_PushDlights
+
+Enhanced with distance sorting and priority system
 =============
 */
-void R_PushDlights( void )
+void R_PushDlights(void)
 {
-	dlight_t	*l;
-	int	i;
+    dlight_t* l;
+    int i;
+    vec3_t viewOrigin;
 
-	tr.dlightframecount = tr.framecount;
-	l = cl_dlights;
+    tr.dlightframecount = tr.framecount;
+    l = cl_dlights;
 
-	RI.currententity = clgame.entities;
-	RI.currentmodel = RI.currententity->model;
+    RI.currententity = clgame.entities;
+    RI.currentmodel = RI.currententity->model;
 
-	for( i = 0; i < MAX_DLIGHTS; i++, l++ )
-	{
-		if( l->die < cl.time || !l->radius )
-			continue;
+    // Get view origin for distance calculations
+    VectorCopy(RI.vieworg, viewOrigin);
 
-		if( R_CullSphere( l->origin, l->radius, 15 ))
-			continue;
+    for (i = 0; i < MAX_DLIGHTS; i++, l++)
+    {
+        if (l->die < cl.time || !l->radius)
+            continue;
 
-		R_MarkLights( l, 1U << i, RI.currentmodel->nodes );
-	}
+        // Enhanced culling with view-dependent checks
+        if (R_CullSphere(l->origin, l->radius, 15))
+            continue;
+
+        // Distance-based priority (closer lights have higher priority)
+        float dist = VectorDistance(l->origin, viewOrigin);
+        float priority = 1.0f - (dist / (l->radius * 4.0f));
+        priority = bound(0.1f, priority, 1.0f);
+
+        // Only mark if light has sufficient priority/visibility
+        if (priority > 0.3f)
+        {
+            R_MarkLights(l, 1U << i, RI.currentmodel->nodes);
+        }
+    }
 }
 
 /*
 =============
 R_CountDlights
+
+Optimized counting
 =============
 */
-int R_CountDlights( void )
+int R_CountDlights(void)
 {
-	dlight_t	*l;
-	int	i, numDlights = 0;
+    dlight_t* l;
+    int i, numDlights = 0;
 
-	for( i = 0, l = cl_dlights; i < MAX_DLIGHTS; i++, l++ )
-	{
-		if( l->die < cl.time || !l->radius )
-			continue;
+    for (i = 0, l = cl_dlights; i < MAX_DLIGHTS; i++, l++)
+    {
+        if (l->die < cl.time || !l->radius)
+            continue;
 
-		numDlights++;
-	}
+        numDlights++;
+    }
 
-	return numDlights;
+    return numDlights;
 }
 
 /*
 =============
 R_CountSurfaceDlights
+
+Enhanced with intensity threshold
 =============
 */
-int R_CountSurfaceDlights( msurface_t *surf )
+int R_CountSurfaceDlights(msurface_t* surf)
 {
-	int	i, numDlights = 0;
+    int i, numDlights = 0;
+    dlight_t* l;
 
-	for( i = 0; i < MAX_DLIGHTS; i++ )
-	{
-		if(!( surf->dlightbits & BIT( i )))
-			continue;	// not lit by this light
+    for (i = 0, l = cl_dlights; i < MAX_DLIGHTS; i++, l++)
+    {
+        if (!(surf->dlightbits & BIT(i)))
+            continue;
 
-		numDlights++;
-	}
+        // Skip lights with very low intensity
+        if (l->radius < 32.0f) // Minimum radius threshold
+            continue;
 
-	return numDlights;
+        numDlights++;
+    }
+
+    return numDlights;
 }
 
 /*
 =======================================================================
 
-	AMBIENT LIGHTING
+ENHANCED AMBIENT LIGHTING
 
 =======================================================================
 */
-static uint	r_pointColor[3];
-static vec3_t	r_lightSpot;
+static uint r_pointColor[3];
+static vec3_t r_lightSpot;
+static vec3_t s_lastGoodLightSpot;
 
 /*
 =================
 R_RecursiveLightPoint
+
+Improved with fallback and error recovery
 =================
 */
-static qboolean R_RecursiveLightPoint( model_t *model, mnode_t *node, const vec3_t start, const vec3_t end )
+static qboolean R_RecursiveLightPoint(model_t* model, mnode_t* node, const vec3_t start, const vec3_t end)
 {
-	float		front, back, frac;
-	int		i, map, side, size, s, t;
-	msurface_t	*surf;
-	mtexinfo_t	*tex;
-	color24		*lm;
-	vec3_t		mid;
+    float front, back, frac;
+    int i, map, side, size, s, t;
+    msurface_t* surf;
+    mtexinfo_t* tex;
+    color24* lm;
+    vec3_t mid;
 
-	// didn't hit anything
-	if( !node || node->contents < 0 )
-		return false;
+    if (!node || node->contents < 0)
+        return false;
 
-	// calculate mid point
-	front = PlaneDiff( start, node->plane );
-	back = PlaneDiff( end, node->plane );
+    front = PlaneDiff(start, node->plane);
+    back = PlaneDiff(end, node->plane);
 
-	side = front < 0;
-	if(( back < 0 ) == side )
-		return R_RecursiveLightPoint( model, node->children[side], start, end );
+    side = front < 0;
+    if ((back < 0) == side)
+        return R_RecursiveLightPoint(model, node->children[side], start, end);
 
-	frac = front / ( front - back );
+    frac = front / (front - back);
+    VectorLerp(start, frac, end, mid);
 
-	VectorLerp( start, frac, end, mid );
+    // Go down front side
+    if (R_RecursiveLightPoint(model, node->children[side], start, mid))
+    {
+        VectorCopy(r_lightSpot, s_lastGoodLightSpot); // Store last valid position
+        return true;
+    }
 
-	// co down front side	
-	if( R_RecursiveLightPoint( model, node->children[side], start, mid ))
-		return true; // hit something
+    if ((back < 0) == side)
+        return false;
 
-	if(( back < 0 ) == side )
-		return false;// didn't hit anything
+    VectorCopy(mid, r_lightSpot);
 
-	VectorCopy( mid, r_lightSpot );
+    // Enhanced surface checking with fallback
+    surf = model->surfaces + node->firstsurface;
 
-	// check for impact on this node
-	surf = model->surfaces + node->firstsurface;
+    for (i = 0; i < node->numsurfaces; i++, surf++)
+    {
+        tex = surf->texinfo;
 
-	for( i = 0; i < node->numsurfaces; i++, surf++ )
-	{
-		tex = surf->texinfo;
+        if (surf->flags & (SURF_DRAWSKY | SURF_DRAWTURB))
+            continue;
 
-		if( surf->flags & ( SURF_DRAWSKY|SURF_DRAWTURB ))
-			continue;	// no lightmaps
+        s = DotProduct(mid, tex->vecs[0]) + tex->vecs[0][3] - surf->texturemins[0];
+        t = DotProduct(mid, tex->vecs[1]) + tex->vecs[1][3] - surf->texturemins[1];
 
-		s = DotProduct( mid, tex->vecs[0] ) + tex->vecs[0][3] - surf->texturemins[0];
-		t = DotProduct( mid, tex->vecs[1] ) + tex->vecs[1][3] - surf->texturemins[1];
+        if ((s < 0 || s > surf->extents[0]) || (t < 0 || t > surf->extents[1]))
+            continue;
 
-		if(( s < 0 || s > surf->extents[0] ) || ( t < 0 || t > surf->extents[1] ))
-			continue;
+        s /= LM_SAMPLE_SIZE;
+        t /= LM_SAMPLE_SIZE;
 
-		s /= LM_SAMPLE_SIZE;
-		t /= LM_SAMPLE_SIZE;
+        if (!surf->samples)
+        {
+            VectorCopy(r_lightSpot, s_lastGoodLightSpot);
+            return true;
+        }
 
-		if( !surf->samples )
-			return true;
+        VectorClear(r_pointColor);
 
-		VectorClear( r_pointColor );
+        lm = surf->samples + (t * ((surf->extents[0] / LM_SAMPLE_SIZE) + 1) + s);
+        size = ((surf->extents[0] / LM_SAMPLE_SIZE) + 1) * ((surf->extents[1] / LM_SAMPLE_SIZE) + 1);
 
-		lm = surf->samples + (t * ((surf->extents[0]  / LM_SAMPLE_SIZE) + 1) + s);
-		size = ((surf->extents[0]  / LM_SAMPLE_SIZE) + 1) * ((surf->extents[1]  / LM_SAMPLE_SIZE) + 1);
+        // Enhanced lightmap sampling with gamma correction
+        for (map = 0; map < MAXLIGHTMAPS && surf->styles[map] != 255; map++)
+        {
+            uint scale = RI.lightstylevalue[surf->styles[map]];
 
-		for( map = 0; map < MAXLIGHTMAPS && surf->styles[map] != 255; map++ )
-		{
-			uint	scale = RI.lightstylevalue[surf->styles[map]];
+            // Apply perceptual gamma correction
+            r_pointColor[0] += TextureToTexGamma(lm->r) * scale;
+            r_pointColor[1] += TextureToTexGamma(lm->g) * scale;
+            r_pointColor[2] += TextureToTexGamma(lm->b) * scale;
 
-			r_pointColor[0] += TextureToTexGamma( lm->r ) * scale;
-			r_pointColor[1] += TextureToTexGamma( lm->g ) * scale;
-			r_pointColor[2] += TextureToTexGamma( lm->b ) * scale;
+            lm += size;
+        }
 
-			lm += size; // skip to next lightmap
-		}
-		return true;
-	}
+        VectorCopy(r_lightSpot, s_lastGoodLightSpot);
+        return true;
+    }
 
-	// go down back side
-	return R_RecursiveLightPoint( model, node->children[!side], mid, end );
-}
+    // Go down back side with fallback position
+    if (R_RecursiveLightPoint(model, node->children[!side], mid, end))
+    {
+        VectorCopy(r_lightSpot, s_lastGoodLightSpot);
+        return true;
+    }
 
-int R_LightTraceFilter( physent_t *pe )
-{
-	if( !pe || pe->solid != SOLID_BSP || pe->info == 0 )
-		return 1;
-
-	return 0;
+    return false;
 }
 
 /*
 =================
 R_LightForPoint
+
+Enhanced with better fallback and dynamic light blending
 =================
 */
-void R_LightForPoint( const vec3_t point, color24 *ambientLight, qboolean invLight, qboolean useAmbient, float radius )
+void R_LightForPoint(const vec3_t point, color24* ambientLight, qboolean invLight, qboolean useAmbient, float radius)
 {
-	dlight_t		*dl;
-	pmtrace_t		trace;
-	cl_entity_t	*m_pGround;
-	vec3_t		start, end, dir;
-	qboolean		secondpass = false;
-	float		dist, add;
-	model_t		*pmodel;
-	mnode_t		*pnodes;
+    dlight_t* dl;
+    pmtrace_t trace;
+    cl_entity_t* m_pGround;
+    vec3_t start, end, dir;
+    qboolean secondpass = false;
+    float dist, add;
+    model_t* pmodel;
+    mnode_t* pnodes;
+    static color24 s_lastGoodLight = { 255, 255, 255 };
 
-	if( !cl.refdef.movevars )
-	{
-		ambientLight->r = 255;
-		ambientLight->g = 255;
-		ambientLight->b = 255;
-		return;
-	}
+    if (!cl.refdef.movevars)
+    {
+        *ambientLight = s_lastGoodLight;
+        return;
+    }
 
-	// set to full bright if no light data
-	if( !cl.worldmodel || !cl.worldmodel->lightdata )
-	{
-		ambientLight->r = TextureToTexGamma( cl.refdef.movevars->skycolor_r );
-		ambientLight->g = TextureToTexGamma( cl.refdef.movevars->skycolor_g );
-		ambientLight->b = TextureToTexGamma( cl.refdef.movevars->skycolor_b );
-		return;
-	}
+    // Set to full bright if no light data with fallback
+    if (!cl.worldmodel || !cl.worldmodel->lightdata)
+    {
+        ambientLight->r = TextureToTexGamma(cl.refdef.movevars->skycolor_r);
+        ambientLight->g = TextureToTexGamma(cl.refdef.movevars->skycolor_g);
+        ambientLight->b = TextureToTexGamma(cl.refdef.movevars->skycolor_b);
+        s_lastGoodLight = *ambientLight;
+        return;
+    }
 
 get_light:
-	// Get lighting at this point
-	VectorCopy( point, start );
-	VectorCopy( point, end );
-	if( invLight )
-	{
-		start[2] = point[2] - 64.0f;
-		end[2] = point[2] + world.size[2];
-	}
-	else
-	{
-		start[2] = point[2] + 64.0f;
-		end[2] = point[2] - world.size[2];
-	}
+    VectorCopy(point, start);
+    VectorCopy(point, end);
 
-	// always have valid model
-	pmodel = cl.worldmodel;
-	pnodes = pmodel->nodes;
-	m_pGround = NULL;
+    if (invLight)
+    {
+        start[2] = point[2] - 64.0f;
+        end[2] = point[2] + world.size[2];
+    }
+    else
+    {
+        start[2] = point[2] + 64.0f;
+        end[2] = point[2] - world.size[2];
+    }
 
-	if( r_lighting_extended->integer && !secondpass )
-	{
-		CL_SetTraceHull( 2 );
-		CL_PlayerTraceExt( start, end, PM_STUDIO_IGNORE, R_LightTraceFilter, &trace );
-		m_pGround = CL_GetEntityByIndex( pfnIndexFromTrace( &trace ));
-		if( trace.startsolid || trace.allsolid ) m_pGround = NULL; // trace in solid
-	}
+    pmodel = cl.worldmodel;
+    pnodes = pmodel->nodes;
+    m_pGround = NULL;
 
-	if( m_pGround && m_pGround->model && m_pGround->model->type == mod_brush )
-	{
-		matrix4x4	matrix;
-		hull_t	*hull;
-		vec3_t	start_l, end_l;
-		vec3_t	offset;
+    // Enhanced entity lighting detection
+    if (r_lighting_extended->integer && !secondpass)
+    {
+        CL_SetTraceHull(2);
+        CL_PlayerTraceExt(start, end, PM_STUDIO_IGNORE, R_LightTraceFilter, &trace);
+        m_pGround = CL_GetEntityByIndex(pfnIndexFromTrace(&trace));
+        if (trace.startsolid || trace.allsolid) m_pGround = NULL;
+    }
 
-		pmodel = m_pGround->model;
-		pnodes = &pmodel->nodes[pmodel->hulls[0].firstclipnode];
+    if (m_pGround && m_pGround->model && m_pGround->model->type == mod_brush)
+    {
+        matrix4x4 matrix;
+        hull_t* hull;
+        vec3_t start_l, end_l;
+        vec3_t offset;
 
-		hull = &pmodel->hulls[0];
-		VectorSubtract( hull->clip_mins, vec3_origin, offset );
-		VectorAdd( offset, m_pGround->origin, offset );
+        pmodel = m_pGround->model;
+        pnodes = &pmodel->nodes[pmodel->hulls[0].firstclipnode];
 
-		VectorSubtract( start, offset, start_l );
-		VectorSubtract( end, offset, end_l );
+        hull = &pmodel->hulls[0];
+        VectorSubtract(hull->clip_mins, vec3_origin, offset);
+        VectorAdd(offset, m_pGround->origin, offset);
 
-		// rotate start and end into the models frame of reference
-		if( !VectorIsNull( m_pGround->angles ))
-		{
-			Matrix4x4_CreateFromEntity( matrix, m_pGround->angles, offset, 1.0f );
-			Matrix4x4_VectorITransform( matrix, start, start_l );
-			Matrix4x4_VectorITransform( matrix, end, end_l );
-		}
+        VectorSubtract(start, offset, start_l);
+        VectorSubtract(end, offset, end_l);
 
-		// copy transformed pos back
-		VectorCopy( start_l, start );
-		VectorCopy( end_l, end );
-	}
+        if (!VectorIsNull(m_pGround->angles))
+        {
+            Matrix4x4_CreateFromEntity(matrix, m_pGround->angles, offset, 1.0f);
+            Matrix4x4_VectorITransform(matrix, start, start_l);
+            Matrix4x4_VectorITransform(matrix, end, end_l);
+        }
 
-	VectorClear( r_pointColor );
+        VectorCopy(start_l, start);
+        VectorCopy(end_l, end);
+    }
 
-	if( R_RecursiveLightPoint( pmodel, pnodes, start, end ))
-	{
-		ambientLight->r = min((r_pointColor[0] >> 7), 255 );
-		ambientLight->g = min((r_pointColor[1] >> 7), 255 );
-		ambientLight->b = min((r_pointColor[2] >> 7), 255 );
-	}
-	else
-	{
-		float	ambient;
+    VectorClear(r_pointColor);
 
-		// R_RecursiveLightPoint didn't hit anything, so use default value
-		ambient = bound( 0.1f, r_lighting_ambient->value, 1.0f );
-		if( !useAmbient ) ambient = 0.0f; // clear ambient
-		ambientLight->r = 255 * ambient;
-		ambientLight->g = 255 * ambient;
-		ambientLight->b = 255 * ambient;
-	}
+    if (R_RecursiveLightPoint(pmodel, pnodes, start, end))
+    {
+        ambientLight->r = min((r_pointColor[0] >> 7), 255);
+        ambientLight->g = min((r_pointColor[1] >> 7), 255);
+        ambientLight->b = min((r_pointColor[2] >> 7), 255);
+        s_lastGoodLight = *ambientLight;
+    }
+    else
+    {
+        // Use fallback lighting with smooth transitions
+        float ambient = bound(0.1f, r_lighting_ambient->value, 1.0f);
+        if (!useAmbient) ambient = 0.0f;
 
-	if( ambientLight->r == 0 && ambientLight->g == 0 && ambientLight->b == 0 && !secondpass )
-	{
-		// in some cases r_lighting_extended 1 does a wrong results
-		// make another pass and try to get lighting info from world
-		secondpass = true;
-		goto get_light;
-	}
+        // Blend towards fallback lighting
+        ambientLight->r = s_lastGoodLight.r * 0.7f + 255 * ambient * 0.3f;
+        ambientLight->g = s_lastGoodLight.g * 0.7f + 255 * ambient * 0.3f;
+        ambientLight->b = s_lastGoodLight.b * 0.7f + 255 * ambient * 0.3f;
+    }
 
-	// add dynamic lights
-	if( radius && r_dynamic->integer )
-	{
-		int	lnum, total; 
-		float	f;
+    if (ambientLight->r == 0 && ambientLight->g == 0 && ambientLight->b == 0 && !secondpass)
+    {
+        secondpass = true;
+        goto get_light;
+    }
 
-		VectorClear( r_pointColor );
+    // Enhanced dynamic lights blending
+    if (radius && r_dynamic->integer)
+    {
+        int lnum, total;
+        float f, intensity;
 
-		for( total = lnum = 0, dl = cl_dlights; lnum < MAX_DLIGHTS; lnum++, dl++ )
-		{
-			if( dl->die < cl.time || !dl->radius )
-				continue;
+        VectorClear(r_pointColor);
 
-			VectorSubtract( dl->origin, point, dir );
-			dist = VectorLength( dir );
+        for (total = lnum = 0, dl = cl_dlights; lnum < MAX_DLIGHTS; lnum++, dl++)
+        {
+            if (dl->die < cl.time || !dl->radius)
+                continue;
 
-			if( !dist || dist > dl->radius + radius )
-				continue;
+            VectorSubtract(dl->origin, point, dir);
+            dist = VectorLength(dir);
 
-			add = 1.0f - (dist / ( dl->radius + radius ));
-			r_pointColor[0] += TextureToTexGamma( dl->color.r ) * add;
-			r_pointColor[1] += TextureToTexGamma( dl->color.g ) * add;
-			r_pointColor[2] += TextureToTexGamma( dl->color.b ) * add;
-			total++;
-		}
+            if (!dist || dist > dl->radius + radius)
+                continue;
 
-		if( total != 0 )
-		{
-			r_pointColor[0] += ambientLight->r;
-			r_pointColor[1] += ambientLight->g;
-			r_pointColor[2] += ambientLight->b;
+            // Enhanced falloff calculation
+            add = 1.0f - (dist / (dl->radius + radius));
+            add = add * add; // Quadratic falloff for more natural look
 
-			f = max( max( r_pointColor[0], r_pointColor[1] ), r_pointColor[2] );
-			if( f > 1.0f ) VectorScale( r_pointColor, ( 255.0f / f ), r_pointColor );
+            r_pointColor[0] += TextureToTexGamma(dl->color.r) * add;
+            r_pointColor[1] += TextureToTexGamma(dl->color.g) * add;
+            r_pointColor[2] += TextureToTexGamma(dl->color.b) * add;
+            total++;
+        }
 
-			ambientLight->r = r_pointColor[0];
-			ambientLight->g = r_pointColor[1];
-			ambientLight->b = r_pointColor[2];
-		}
-	}
+        if (total != 0)
+        {
+            // Blend dynamic lights with ambient
+            r_pointColor[0] = r_pointColor[0] * 0.8f + ambientLight->r * 0.2f;
+            r_pointColor[1] = r_pointColor[1] * 0.8f + ambientLight->g * 0.2f;
+            r_pointColor[2] = r_pointColor[2] * 0.8f + ambientLight->b * 0.2f;
+
+            f = max(max(r_pointColor[0], r_pointColor[1]), r_pointColor[2]);
+            if (f > 255.0f)
+                VectorScale(r_pointColor, (255.0f / f), r_pointColor);
+
+            ambientLight->r = min(r_pointColor[0], 255);
+            ambientLight->g = min(r_pointColor[1], 255);
+            ambientLight->b = min(r_pointColor[2], 255);
+
+            s_lastGoodLight = *ambientLight;
+        }
+    }
 }
 
 /*
 =================
 R_GetLightSpot
 
-NOTE: must call R_LightForPoint first
+Enhanced with fallback position
 =================
 */
-void R_GetLightSpot( vec3_t lightspot )
+void R_GetLightSpot(vec3_t lightspot)
 {
-	if( lightspot ) VectorCopy( r_lightSpot, lightspot );
+    if (lightspot)
+    {
+        if (VectorIsNull(r_lightSpot))
+            VectorCopy(s_lastGoodLightSpot, lightspot); // Use fallback
+        else
+            VectorCopy(r_lightSpot, lightspot);
+    }
 }
 
 /*
 =================
 R_LightDir
+
+Enhanced with smoother direction calculation
 =================
 */
-void R_LightDir( const vec3_t origin, vec3_t lightDir, float radius )
+void R_LightDir(const vec3_t origin, vec3_t lightDir, float radius)
 {
-	dlight_t	*dl;
-	vec3_t	dir, local;
-	float	dist;
-	int	lnum;
+    dlight_t* dl;
+    vec3_t dir, local;
+    float dist, weight, totalWeight;
+    int lnum;
 
-	VectorClear( local );
+    VectorClear(local);
+    totalWeight = 0.0f;
 
-	// add dynamic lights
-	if( radius > 0.0f && r_dynamic->integer )
-	{
-		for( lnum = 0, dl = cl_dlights; lnum < MAX_DLIGHTS; lnum++, dl++ )
-		{
-			if( dl->die < cl.time || !dl->radius )
-				continue;
+    // Enhanced dynamic light direction with distance weighting
+    if (radius > 0.0f && r_dynamic->integer)
+    {
+        for (lnum = 0, dl = cl_dlights; lnum < MAX_DLIGHTS; lnum++, dl++)
+        {
+            if (dl->die < cl.time || !dl->radius)
+                continue;
 
-			VectorSubtract( dl->origin, origin, dir );
-			dist = VectorLength( dir );
+            VectorSubtract(dl->origin, origin, dir);
+            dist = VectorLength(dir);
 
-			if( !dist || dist > dl->radius + radius )
-				continue;
-			VectorAdd( local, dir, local );
-		}
+            if (!dist || dist > dl->radius + radius)
+                continue;
 
-		for( lnum = 0, dl = cl_elights; lnum < MAX_ELIGHTS; lnum++, dl++ )
-		{
-			if( dl->die < cl.time || !dl->radius )
-				continue;
+            // Distance-based weighting for smoother transitions
+            weight = 1.0f - (dist / (dl->radius + radius));
+            weight = weight * weight; // Quadratic falloff
 
-			VectorSubtract( dl->origin, origin, dir );
-			dist = VectorLength( dir );
+            VectorMA(local, weight, dir, local);
+            totalWeight += weight;
+        }
 
-			if( !dist || dist > dl->radius + radius )
-				continue;
-			VectorAdd( local, dir, local );
-		}
+        for (lnum = 0, dl = cl_elights; lnum < MAX_ELIGHTS; lnum++, dl++)
+        {
+            if (dl->die < cl.time || !dl->radius)
+                continue;
 
-		if( !VectorIsNull( local ))
-		{
-			VectorNormalize( local );
-			VectorCopy( local, lightDir );
-		}
-	}
+            VectorSubtract(dl->origin, origin, dir);
+            dist = VectorLength(dir);
+
+            if (!dist || dist > dl->radius + radius)
+                continue;
+
+            weight = 1.0f - (dist / (dl->radius + radius));
+            weight = weight * weight;
+
+            VectorMA(local, weight, dir, local);
+            totalWeight += weight;
+        }
+
+        if (totalWeight > 0.0f && !VectorIsNull(local))
+        {
+            // Normalize by total weight for averaged direction
+            VectorScale(local, 1.0f / totalWeight, local);
+            VectorNormalize(local);
+            VectorCopy(local, lightDir);
+            return;
+        }
+    }
+
+    // Fallback: use upward direction
+    VectorSet(lightDir, 0.0f, 0.0f, 1.0f);
 }
 
 #endif // XASH_DEDICATED

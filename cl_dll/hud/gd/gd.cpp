@@ -33,6 +33,10 @@ int CHudGunDeath::MsgFunc_GDMsg(const char* pszName, int iSize, void* pbuf)
 	BufferReader buf(pszName, pbuf, iSize);
 
 	auto type = static_cast<GunDeath>(buf.ReadByte());
+
+	int time = buf.ReadByte();
+	float timeFloat = (float)time;
+
 	switch (type)
 	{
 		case GD_WEAPON_CHANGE:
@@ -47,7 +51,7 @@ int CHudGunDeath::MsgFunc_GDMsg(const char* pszName, int iSize, void* pbuf)
 		}
 		case GD_RESPAWN_BAR:
 		{
-			pimpl->get<CHudGDRespawnBar>().SetWebm();
+			pimpl->get<CHudGDRespawnBar>().StartRespawn(timeFloat);
 			break;
 		}
 	}

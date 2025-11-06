@@ -1282,8 +1282,6 @@ static qboolean FS_WriteGameInfo( const char *filepath, gameinfo_t *GameInfo )
 
 	if( Q_strlen( GameInfo->dll_path ))
 		FS_Printf( f, "dllpath\t\t\"%s\"\n", GameInfo->dll_path );
-	if( Q_strlen( GameInfo->game_dll ))
-		FS_Printf( f, "gamedll\t\t\"%s\"\n", GameInfo->game_dll );
 	if( Q_strlen( GameInfo->game_dll_linux ))
 		FS_Printf( f, "gamedll_linux\t\t\"%s\"\n", GameInfo->game_dll_linux );
 	if( Q_strlen( GameInfo->game_dll_osx ))
@@ -1375,12 +1373,12 @@ void FS_InitGameInfo( gameinfo_t *GameInfo, const char *gamedir )
 	VectorSet( GameInfo->client_maxs[3],  16,  16,  18 );
 
 	// setup default values
-	GameInfo->soundclip_dist = 9999;
+	GameInfo->soundclip_dist = 500;
 
 	GameInfo->max_edicts     = 9999; // default value if not specified
-	GameInfo->max_tents      = 9999;
-	GameInfo->max_beams      = 9999;
-	GameInfo->max_particles  = 9999;
+	GameInfo->max_tents      = 1024;
+	GameInfo->max_beams      = 512;
+	GameInfo->max_particles  = 1024;
 }
 
 void FS_ParseGenericGameInfo( gameinfo_t *GameInfo, const char *buf, const qboolean isGameInfo )
@@ -1411,12 +1409,6 @@ void FS_ParseGenericGameInfo( gameinfo_t *GameInfo, const char *buf, const qbool
 		else if( !Q_stricmp( token, isGameInfo ? "url_update" : "url_dl" ))
 		{
 			pfile = COM_ParseFile( pfile, GameInfo->update_url );
-		}
-		// valid for both
-		else if( !Q_stricmp( token, "gamedll" ))
-		{
-			pfile = COM_ParseFile( pfile, GameInfo->game_dll );
-			COM_FixSlashes( GameInfo->game_dll );
 		}
 		// valid for both
 		else if( !Q_stricmp( token, "gamedll_linux" ))
@@ -1790,12 +1782,12 @@ void FS_LoadGameInfo( const char *rootfolder )
 	}
 
 	SI.GameInfo = SI.games[i];
-	if( !Sys_GetParmFromCmdLine( "-dll", SI.gamedll ) )
+	if( !Sys_GetParmFromCmdLine( "-dll", SI.gamedll) )
 	{
 #ifdef XASH_INTERNAL_GAMELIBS
 		Q_strncpy( SI.gamedll, "server", sizeof( SI.gamedll ) );
 #elif defined(_WIN32)
-		Q_strncpy( SI.gamedll, GI->game_dll, sizeof( SI.gamedll ) );
+		Q_strncpy(SI.gamedll, GI->game_dll, sizeof(SI.gamedll) );
 #elif defined(__APPLE__)
 		Q_strncpy( SI.gamedll, GI->game_dll_osx, sizeof( SI.gamedll ) );
 #elif defined(__HAIKU__)

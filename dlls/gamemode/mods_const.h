@@ -39,6 +39,7 @@ enum GameMode_e : byte
 	MOD_ZB5 = 15,
 	MOD_PR = 16,
 	MOD_BACKUI = 17,
+	MOD_HIDDEN = 18,
 };
 
 enum DamageTrack_e : byte

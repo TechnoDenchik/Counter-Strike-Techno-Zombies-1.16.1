@@ -340,6 +340,16 @@ public:
 	void OnThink() override
 	{
 		
+		if (!m_pPlayer->IsAlive())
+		{
+			if (gpGlobals->time > m_flDeadTime + 3.0f)
+			{
+				m_pPlayer->RoundRespawn();
+
+				m_pPlayer->pev->max_health = 100;
+				m_pPlayer->pev->armorvalue = 100;
+			}
+		}
 
 		return CPlayerModStrategy_Default::OnThink();
 	}
@@ -347,6 +357,11 @@ public:
 	void OnKilled(entvars_t* pKiller, entvars_t* pInflictor) override
 	{
 		m_flDeadTime = gpGlobals->time;
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgGDMsg, nullptr, m_pPlayer->pev);
+		WRITE_BYTE(GD_RESPAWN_BAR);
+		WRITE_BYTE(3);
+		MESSAGE_END();
 
 		return CPlayerModStrategy_Default::OnKilled(pKiller, pInflictor);
 	}
@@ -402,10 +417,6 @@ void CMod_GunDeath::PlayerKilled(CBasePlayer *pVictim, entvars_t *pKiller, entva
 	CBasePlayer *pKillerPlayer = dynamic_ent_cast<CBasePlayer *>(pKiller);
 	if (pKillerPlayer)
 		m_eventPlayerKilled.dispatch(pVictim, pKillerPlayer, pInflictor);
-
-	MESSAGE_BEGIN(MSG_ONE, gmsgGDMsg, nullptr, pVictim->pev);
-	WRITE_BYTE(GD_RESPAWN_BAR);
-	MESSAGE_END();
 
 	CMod_TeamDeathMatch::PlayerKilled(pVictim, pKiller, pInflictor);
 	RemoveGuns();

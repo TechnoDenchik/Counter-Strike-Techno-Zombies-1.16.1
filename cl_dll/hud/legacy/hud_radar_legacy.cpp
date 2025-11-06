@@ -124,6 +124,13 @@ version.
 			m_iMapTitleBG = R_LoadTextureUnique("resource/hud/hud_maptitle_bg");
 
 		iMaxRadius = (m_hRadar.rect.right - m_hRadar.rect.left) / 2.0f;
+
+		// Добавьте проверку
+		if (iMaxRadius <= 0)
+		{
+			iMaxRadius = 64; // значение по умолчанию
+		}
+
 		return 1;
 	}
 
@@ -221,12 +228,19 @@ version.
 
 		if (pos.z > -diff && pos.z < diff)
 		{
-			DrawRadarDot(pos.x, pos.y, r, g, b, a);
+		
+
+			DrawRadarDot(0, 0, 0, 255, 0, 255); // Зеленая точка в центре
 		}
 		else if (pos.z <= -diff)
 		{
 			// higher than player
 			DrawT(pos.x, pos.y, r, g, b, a);
+			// Проверка валидности данных
+			if (gHUD.m_vecOrigin.Length() < 0.1f)
+			{
+				return; // Невалидная позиция игрока
+			}
 		}
 		else
 		{
@@ -311,22 +325,29 @@ version.
 		Vector2D diff = vObjectOrigin.Make2D() - vPlayerOrigin.Make2D();
 		const float RADAR_SCALE = 32.0f;
 
-		// Supply epsilon values to avoid divide-by-zero
-		if (diff.x == 0)
-			diff.x = 0.00001f;
-		if (diff.y == 0)
-			diff.y = 0.00001f;
+		// Убрать эпсилон значения - они могут вызывать смещения
+		// if (diff.x == 0) diff.x = 0.00001f;
+		// if (diff.y == 0) diff.y = 0.00001f;
 
+		if (diff.Length() < 0.1f)
+		{
+			return Vector(0, 0, 0); // Объект очень близко к игроку
+		}
+
+		// Правильное вычисление угла
 		float flOffset = DEG2RAD(vAngles.y - RAD2DEG(atan2(diff.y, diff.x)));
 
-		// this magic 32.0f just scales position on radar
+		// Ограничение радиуса
 		float iRadius = min(diff.Length() / RADAR_SCALE, (float)iMaxRadius);
 
-		int offset = gHUD.m_hudstyle->value == 2 ? m_iMapTitleBG->h() + 1 : 0;
-		// transform origin difference to radar source
-		Vector ret((float)(iRadius * sin(flOffset)),
+		int offset = (gHUD.m_hudstyle->value == 2) ? m_iMapTitleBG->h() + 1 : 0;
+
+		// Преобразование в координаты радара
+		Vector ret(
+			(float)(iRadius * sin(flOffset)),
 			(float)(iRadius * -cos(flOffset)) + float(offset),
-			(float)(vPlayerOrigin.z - vObjectOrigin.z));
+			(float)(vPlayerOrigin.z - vObjectOrigin.z)
+		);
 
 		return ret;
 	}
@@ -334,6 +355,8 @@ version.
 	void CHudRadarLegacy::DrawPlayerLocation()
 	{
 		DrawUtils::DrawConsoleString(30, 30, g_PlayerExtraInfo[gHUD.m_Scoreboard.m_iPlayerNum].location);
+
+	
 	}
 
 	int CHudRadarLegacy::Draw(float flTime)

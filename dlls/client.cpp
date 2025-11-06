@@ -56,6 +56,7 @@
 #include "hostage/hostage.h"
 #include "hostage/hostage_localnav.h"
 #include "gamemode/interface/interface_const.h"
+#include "gamemode/mod_hidden.h"
 #include "bot/cs_bot.h"
 #include "wpn_shared/wpn_arbalest.h"
 
@@ -4394,6 +4395,7 @@ void ClientPrecache()
 	PRECACHE_SOUND("player/pl_pain7.wav");
 
 	PlayerZombie_Precache();
+	PlayerJoker_Precache();
 	PlayerModel_Precache();
 
 	if (g_bIsCzeroGame)

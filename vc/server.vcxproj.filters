@@ -280,6 +280,18 @@
     <Filter Include="dlls\wpn_shared\Secondary\Epic">
       <UniqueIdentifier>{2a58aedc-3b9d-4e78-bdcb-4c01db855e8b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="dlls\gamemode\hidden">
+      <UniqueIdentifier>{63b1874e-1ee7-47a2-b9a6-8fe769272dda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\gamemode\hidden\Class">
+      <UniqueIdentifier>{20df4076-4c79-4e3f-b589-a5fea74142f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\gamemode\hidden\Entity">
+      <UniqueIdentifier>{112e0b85-6c2e-49bd-af59-709063f30480}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\mp_discord">
+      <UniqueIdentifier>{9d667649-d21a-4f4f-b693-740b60abd79b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\dlls\h_export.cpp">
@@ -1446,9 +1458,6 @@
     <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_tmpdragon.cpp">
       <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
     </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\primary\content_1\wpn_failnaught.cpp">
-      <Filter>dlls\wpn_shared\Primary\Epic</Filter>
-    </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_deagle.cpp">
       <Filter>dlls\wpn_shared\Secondary\Classic</Filter>
     </ClCompile>
@@ -1529,6 +1538,66 @@
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\primary\wpn_mg36.cpp">
       <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_1\wpn_failnaught.cpp">
+      <Filter>dlls\wpn_shared\Primary\Overcoming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\mod_hidden.cpp">
+      <Filter>dlls\gamemode\hidden</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\hidden\Class\hidden_class_joker.cpp">
+      <Filter>dlls\gamemode\hidden\Class</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\hidden\Class\hidden_class_human.cpp">
+      <Filter>dlls\gamemode\hidden\Class</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\hidden\Class\hidden_class_tratior.cpp">
+      <Filter>dlls\gamemode\hidden\Class</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\melee\knife_joker.cpp">
+      <Filter>dlls\wpn_shared\Melee</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\gamemode\hidden\Entity\supplyboxh.cpp">
+      <Filter>dlls\gamemode\hidden\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\achievement_manager.cpp">
+      <Filter>dlls\mp_discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\activity_manager.cpp">
+      <Filter>dlls\mp_discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\application_manager.cpp">
+      <Filter>dlls\mp_discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\core.cpp">
+      <Filter>dlls\mp_discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\image_manager.cpp">
+      <Filter>dlls\mp_discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\lobby_manager.cpp">
+      <Filter>dlls\mp_discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\network_manager.cpp">
+      <Filter>dlls\mp_discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\overlay_manager.cpp">
+      <Filter>dlls\mp_discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\relationship_manager.cpp">
+      <Filter>dlls\mp_discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\storage_manager.cpp">
+      <Filter>dlls\mp_discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\store_manager.cpp">
+      <Filter>dlls\mp_discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\user_manager.cpp">
+      <Filter>dlls\mp_discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\voice_manager.cpp">
+      <Filter>dlls\mp_discord</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2711,9 +2780,6 @@
     <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_tmpdragon.h">
       <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
     </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\primary\content_1\wpn_failnaught.h">
-      <Filter>dlls\wpn_shared\Primary\Epic</Filter>
-    </ClInclude>
     <ClInclude Include="..\dlls\wpn_shared\wpn_deagle.h">
       <Filter>dlls\wpn_shared\Secondary\Classic</Filter>
     </ClInclude>
@@ -2782,6 +2848,24 @@
     </ClInclude>
     <ClInclude Include="..\dlls\wpn_shared\primary\wpn_mg3xmas.h">
       <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_1\wpn_failnaught.h">
+      <Filter>dlls\wpn_shared\Primary\Overcoming</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\mod_hidden.h">
+      <Filter>dlls\gamemode\hidden</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\hidden\hidden_class.h">
+      <Filter>dlls\gamemode\hidden</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\hidden\hidden_const.h">
+      <Filter>dlls\gamemode\hidden</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\hidden\Entity\supplyboxh.h">
+      <Filter>dlls\gamemode\hidden\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\mp_discord_api.h">
+      <Filter>dlls</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

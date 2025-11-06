@@ -993,3 +993,12 @@ void CCSBot::OnBecomeZombie(ZombieLevel iEvolutionLevel)
 	StopAttacking();
 	Idle();
 }
+
+void CCSBot::OnBecomeJoker()
+{
+	CBasePlayer::OnBecomeJoker();
+
+	StopAiming();
+	StopAttacking();
+	Idle();
+}

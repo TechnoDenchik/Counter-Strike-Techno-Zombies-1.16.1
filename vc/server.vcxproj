@@ -11,6 +11,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\discord_game_sdk\cpp\achievement_manager.cpp" />
+    <ClCompile Include="..\discord_game_sdk\cpp\activity_manager.cpp" />
+    <ClCompile Include="..\discord_game_sdk\cpp\application_manager.cpp" />
+    <ClCompile Include="..\discord_game_sdk\cpp\core.cpp" />
+    <ClCompile Include="..\discord_game_sdk\cpp\image_manager.cpp" />
+    <ClCompile Include="..\discord_game_sdk\cpp\lobby_manager.cpp" />
+    <ClCompile Include="..\discord_game_sdk\cpp\network_manager.cpp" />
+    <ClCompile Include="..\discord_game_sdk\cpp\overlay_manager.cpp" />
+    <ClCompile Include="..\discord_game_sdk\cpp\relationship_manager.cpp" />
+    <ClCompile Include="..\discord_game_sdk\cpp\storage_manager.cpp" />
+    <ClCompile Include="..\discord_game_sdk\cpp\store_manager.cpp" />
+    <ClCompile Include="..\discord_game_sdk\cpp\user_manager.cpp" />
+    <ClCompile Include="..\discord_game_sdk\cpp\voice_manager.cpp" />
     <ClCompile Include="..\dlls\airtank.cpp" />
     <ClCompile Include="..\dlls\ammo.cpp" />
     <ClCompile Include="..\dlls\animating.cpp" />
@@ -159,10 +172,15 @@
     <ClCompile Include="..\dlls\func_tank.cpp" />
     <ClCompile Include="..\dlls\game.cpp" />
     <ClCompile Include="..\dlls\gamemode\backui\mod_backui.cpp" />
+    <ClCompile Include="..\dlls\gamemode\hidden\Class\hidden_class_human.cpp" />
+    <ClCompile Include="..\dlls\gamemode\hidden\Class\hidden_class_joker.cpp" />
+    <ClCompile Include="..\dlls\gamemode\hidden\Class\hidden_class_tratior.cpp" />
+    <ClCompile Include="..\dlls\gamemode\hidden\Entity\supplyboxh.cpp" />
     <ClCompile Include="..\dlls\gamemode\mods.cpp" />
     <ClCompile Include="..\dlls\gamemode\mod_base.cpp" />
     <ClCompile Include="..\dlls\gamemode\mod_dm.cpp" />
     <ClCompile Include="..\dlls\gamemode\mod_gd.cpp" />
+    <ClCompile Include="..\dlls\gamemode\mod_hidden.cpp" />
     <ClCompile Include="..\dlls\gamemode\mod_none.cpp" />
     <ClCompile Include="..\dlls\gamemode\mod_tdm.cpp" />
     <ClCompile Include="..\dlls\gamemode\mod_zb1.cpp" />
@@ -412,6 +430,7 @@
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_resident.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_spider.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_stamper.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\melee\knife_joker.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\melee\wpn_balrog9.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\melee\wpn_clawhammer.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\melee\wpn_dragonclaw.cpp" />
@@ -707,12 +726,16 @@
     <ClInclude Include="..\dlls\game.h" />
     <ClInclude Include="..\dlls\gamemode\backui\mod_backui.h" />
     <ClInclude Include="..\dlls\gamemode\gd\gd_const.h" />
+    <ClInclude Include="..\dlls\gamemode\hidden\Entity\supplyboxh.h" />
+    <ClInclude Include="..\dlls\gamemode\hidden\hidden_class.h" />
+    <ClInclude Include="..\dlls\gamemode\hidden\hidden_const.h" />
     <ClInclude Include="..\dlls\gamemode\interface\interface_const.h" />
     <ClInclude Include="..\dlls\gamemode\mods.h" />
     <ClInclude Include="..\dlls\gamemode\mods_const.h" />
     <ClInclude Include="..\dlls\gamemode\mod_base.h" />
     <ClInclude Include="..\dlls\gamemode\mod_dm.h" />
     <ClInclude Include="..\dlls\gamemode\mod_gd.h" />
+    <ClInclude Include="..\dlls\gamemode\mod_hidden.h" />
     <ClInclude Include="..\dlls\gamemode\mod_none.h" />
     <ClInclude Include="..\dlls\gamemode\mod_tdm.h" />
     <ClInclude Include="..\dlls\gamemode\mod_zb1.h" />
@@ -829,6 +852,7 @@
     <ClInclude Include="..\dlls\monsterevent.h" />
     <ClInclude Include="..\dlls\monsters.h" />
     <ClInclude Include="..\dlls\mortar.h" />
+    <ClInclude Include="..\dlls\mp_discord_api.h" />
     <ClInclude Include="..\dlls\nodes.h" />
     <ClInclude Include="..\dlls\observer.h" />
     <ClInclude Include="..\dlls\pathcorner.h" />
@@ -1117,11 +1141,11 @@
     <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <TargetName>mp</TargetName>
+    <TargetName>mp2</TargetName>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRules />
     <CodeAnalysisRuleAssemblies />
-    <OutDir>K:\CSTZ\Counter-Strike-TZ</OutDir>
+    <OutDir>K:\CSTZ</OutDir>
     <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -1168,7 +1192,7 @@
       <Message>Setup version from Git revision</Message>
     </PreBuildEvent>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)\..\;$(ProjectDir)\..\common2;$(ProjectDir)\..\dlls;$(ProjectDir)\..\engine2;$(ProjectDir)\..\public2;$(ProjectDir)\..\public2\tier1;$(ProjectDir)\..\game_shared2;$(ProjectDir)\..\pm_shared2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\;$(ProjectDir)\..\common2;$(ProjectDir)\..\dlls;$(ProjectDir)\..\engine2;$(ProjectDir)\..\public2;$(ProjectDir)\..\public2\tier1;$(ProjectDir)\..\game_shared2;$(ProjectDir)\..\pm_shared2;..\discord_game_sdk\cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
@@ -1188,6 +1212,8 @@
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
       <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>G:\CST-1.16.1\discord_game_sdk\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>discord_game_sdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>

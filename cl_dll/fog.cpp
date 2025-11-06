@@ -75,10 +75,16 @@ void CFog::SetGLFog(vec3_t& color)
 	}
 
 	BlendFog();
-	gEngfuncs.pTriAPI->FogParams(m_fogParams.density, m_iFogSkyBox);
-	gEngfuncs.pTriAPI->Fog(color, 0, 0, TRUE);
-}
 
+	// Устанавливаем параметры тумана правильно
+	gEngfuncs.pTriAPI->FogParams(m_fogParams.density, m_iFogSkyBox);
+
+	// Включаем туман с правильными дистанциями
+	gEngfuncs.pTriAPI->Fog(color, m_fogParams.startdist, m_fogParams.enddist, TRUE);
+
+	gEngfuncs.Con_Printf("SetGLFog: density=%.3f start=%.0f end=%.0f\n",
+		m_fogParams.density, m_fogParams.startdist, m_fogParams.enddist);
+}
 /*
 ====================
 V_CalcRefDef
@@ -194,16 +200,18 @@ int CFog::MsgFunc_Fog(const char* pszName, int iSize, void* pBuf)
 {
 	BufferReader reader(pszName, pBuf, iSize);
 
+	// Читаем цвет тумана
 	vec3_t fogcolor;
 	for (int i = 0; i < 3; i++)
 		fogcolor[i] = (float)reader.ReadByte() / 255.0f;
 
+	// Читаем density
 	union
 	{
 		char b[4];
 		float f;
-
 	} density;
+
 #ifdef XASH_BIG_ENDIAN
 	for (int i = 3; i >= 0; i--)
 		density.b[i] = reader.ReadByte();
@@ -212,15 +220,15 @@ int CFog::MsgFunc_Fog(const char* pszName, int iSize, void* pBuf)
 		density.b[i] = reader.ReadByte();
 #endif
 
-	
-	gEngfuncs.Con_Printf("FOG --- r:%d g:%d b:%d density:%f \n", fogcolor[0], fogcolor[1], fogcolor[2], density.f);
-	
-
-	int startdist = !density.f ? 0 : 1;
-	int enddist = !density.f ? 0 : min(1, 0.25f / density.f);
+	// Читаем дистанции (должны приходить с сервера)
+	float startdist = (float)reader.ReadShort();
+	float enddist = (float)reader.ReadShort();
 	float blendtime = reader.ReadByte() * 0.1f;
 
-	// If blending, copy current fog params to the blend state if we had any active
+	gEngfuncs.Con_Printf("FOG --- r:%.2f g:%.2f b:%.2f density:%.3f start:%.0f end:%.0f blend:%.1f\n",
+		fogcolor[0], fogcolor[1], fogcolor[2], density.f, startdist, enddist, blendtime);
+
+	// Если blending
 	if (blendtime > 0 && m_fogParams.enddist > 0 && m_fogParams.startdist > 0)
 	{
 		memcpy(&m_fogBlend1, &m_fogParams, sizeof(fog_params_t));
@@ -230,13 +238,12 @@ int CFog::MsgFunc_Fog(const char* pszName, int iSize, void* pBuf)
 		m_fogBlend2.enddist = enddist;
 		m_fogBlend2.density = density.f;
 
-		// Set times
 		m_fogChangeTime = gEngfuncs.GetClientTime();
 		m_fogBlendTime = blendtime;
 	}
 	else
 	{
-		// No blending, just set
+		// Нет blending, просто устанавливаем
 		memset(&m_fogBlend1, 0, sizeof(fog_params_t));
 		memset(&m_fogBlend2, 0, sizeof(fog_params_t));
 

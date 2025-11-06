@@ -33,6 +33,7 @@ GNU General Public License for more details.
 #include "mod_zbshelter_pve.h"
 #include "mod_gd.h"
 #include "backui/mod_backui.h"
+#include "mod_hidden.h"
 
 IBaseMod *g_pModRunning = nullptr;
 
@@ -55,6 +56,7 @@ std::pair<const char *, IBaseMod *(*)()> g_FindList[] = {
 	{ "zsh_pve", DefaultFactory<CMod_ZombieShelter_coop> },
 	{ "gd", DefaultFactory<CMod_GunDeath> },
 	{ "zb5", DefaultFactory<CMod_ZombieEvolution> },
+	{ "hidden", DefaultFactory<CMod_Hidden> },
 };
 
 void InstallBteMod(const char *name)

@@ -691,9 +691,11 @@ public:
 public:
 #ifdef CLIENT_DLL
 	virtual void OnBecomeZombie(ZombieLevel iEvolutionLevel) {}
+	virtual void OnBecomeJoker() {}
 	virtual bool Knockback(CBasePlayer *attacker, const KnockbackData &data) { return false; }
 #else
 	virtual void OnBecomeZombie(ZombieLevel iEvolutionLevel) {} // moved to mod_zb1.cpp -> CZombie_ZB1::CZombie_ZB1()
+	virtual void OnBecomeJoker() {}
 	virtual bool Knockback(CBasePlayer *attacker, const KnockbackData &data) { return m_pModStrategy->ApplyKnockback(attacker, data); }
 #endif
 
@@ -702,10 +704,11 @@ public:
 	void SpawnProtection_Check();
 	void SpawnProtection_Start(float flTime);
 	void SpawnProtection_End();
-bool m_bIsFemale;
+	bool m_bIsFemale;
+
 public:
 	bool m_bIsHero;
-
+	bool m_bIsTratior;
 	bool m_bIsZombieMod1;
 	bool m_bIsZombie;
 	bool m_bIsZombieTank;

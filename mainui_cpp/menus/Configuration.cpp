@@ -116,7 +116,12 @@ void CMenuOptions::_Init( void )
 	Video.SetCoord(80, 550);
 
 	Exit.SetNameAndStatus(L("GameUI_Close"), L(""));
-	Exit.onActivated = VoidCb(&CMenuOptions::Hide);
+	SET_EVENT_MULTI(Exit.onActivated,
+		{
+			uiOptions.Hide();
+			UI_InitMainMenu();
+		}
+	);
 	Exit.iFlags |= QMF_NOTIFY;
 	Exit.colorBase = uiColorCyan;
 	Exit.SetCharSize(QM_BOLDFONT);
@@ -169,12 +174,19 @@ void UI_Options_Precache( void )
 CMenuOptions::Menu
 =================
 */
+
+#include "discord_api.h"
+
+DiscordIntegration dsAPI3;
+
 void UI_Options_Menu( void )
 {
 	if (gMenu.m_gameinfo.gamemode == GAME_SINGLEPLAYER_ONLY)
 		return;
 
 	uiOptions.Show();
+
+	UI_InitSettings();
 
 	if (EngFuncs::GetCvarFloat("menu_mp_firsttime") && !EngFuncs::GetCvarFloat("cl_predict"))
 	{

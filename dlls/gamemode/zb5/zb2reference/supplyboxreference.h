@@ -12,13 +12,17 @@ public:
 
 public:
 	void SendPositionMsg();
+	void CreateSprite();
+	void UpdateSpritePosition();
+	void RemoveSprite();
 
 public:
+	CBaseEntity* m_pSprite;
 	float m_flNextRadarTime;
 	int m_iSupplyboxIndex;
 };
 
-#include "func_break.h" // CBreakable
+#include "func_break.h"
 
 class CSupSpawnR : public CPointEntity
 {

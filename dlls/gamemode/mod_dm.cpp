@@ -7,6 +7,7 @@
 #include "trains.h"
 #include "bmodels.h"
 
+#include "gd/gd_const.h"
 #include "mod_dm.h"
 
 class CMultiplayGameMgrHelper : public IVoiceGameMgrHelper
@@ -35,6 +36,16 @@ void CMod_DeathMatch::InstallPlayerModStrategy(CBasePlayer *player)
 		MyPlayerModStrategy(CBasePlayer *player) : CPlayerModStrategy_Default(player) {}
 		void CheckBuyZone() override { m_pPlayer->m_signals.Signal(SIGNAL_BUY); };
 		bool CanPlayerBuy(bool display) override { return true; }
+
+		void OnKilled(entvars_t* pKiller, entvars_t* pInflictor) override
+		{
+			MESSAGE_BEGIN(MSG_ONE, gmsgDMRespawnBar, nullptr, m_pPlayer->pev);
+			WRITE_BYTE(GD_RESPAWN_BAR);
+			WRITE_BYTE(3);
+			MESSAGE_END();
+
+			return CPlayerModStrategy_Default::OnKilled(pKiller, pInflictor);
+		}
 	};
 
 	std::unique_ptr<MyPlayerModStrategy> up(new MyPlayerModStrategy(player));
@@ -116,7 +127,7 @@ void CMod_DeathMatch::Think(void)
 		if (player->m_iTeam == TEAM_UNASSIGNED  || player->m_iTeam == TEAM_SPECTATOR)
 			continue;
 
-		if(gpGlobals->time < player->m_fDeadTime + 5.0f)
+		if(gpGlobals->time < player->m_fDeadTime + 3.0f)
 			continue;
 
 		player->RoundRespawn();

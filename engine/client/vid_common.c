@@ -919,66 +919,165 @@ void GL_RemoveCommands( void )
 	Cmd_RemoveCommand( "texturelist" );
 }
 
-#if defined( WIN32 ) && !defined( XASH_WINRT ) // win32 only, no ned for uwp
+// Конфигурируемый уровень DPI awareness
 typedef enum _XASH_DPI_AWARENESS
 {
 	XASH_DPI_UNAWARE = 0,
 	XASH_SYSTEM_DPI_AWARE = 1,
-	XASH_PER_MONITOR_DPI_AWARE = 2
+	XASH_PER_MONITOR_DPI_AWARE = 2,
+	XASH_PER_MONITOR_DPI_AWARE_V2 = 3 // Windows 10 1703+
 } XASH_DPI_AWARENESS;
 
-void Win_SetDPIAwareness( void )
+// Получение предпочтений из конфигурации
+static XASH_DPI_AWARENESS GetPreferredDPIAwareness(void)
 {
-	HMODULE hModule;
-	HRESULT ( __stdcall *pSetProcessDpiAwareness )( XASH_DPI_AWARENESS );
-	BOOL ( __stdcall *pSetProcessDPIAware )( void );
-	BOOL bSuccess = FALSE;
-
-	if( ( hModule = LoadLibrary( "shcore.dll" ) ) )
-	{
-		if( ( pSetProcessDpiAwareness = (void*)GetProcAddress( hModule, "SetProcessDpiAwareness" ) ) )
-		{
-			// I hope SDL don't handle WM_DPICHANGED message
-			HRESULT hResult = pSetProcessDpiAwareness( XASH_SYSTEM_DPI_AWARE );
-
-			if( hResult == S_OK )
-			{
-				MsgDev( D_NOTE, "SetDPIAwareness: Success\n" );
-				bSuccess = TRUE;
-			}
-			else if( hResult == E_INVALIDARG ) MsgDev( D_NOTE, "SetDPIAwareness: Invalid argument\n" );
-			else if( hResult == E_ACCESSDENIED ) MsgDev( D_NOTE, "SetDPIAwareness: Access Denied\n" );
-		}
-		else MsgDev( D_NOTE, "SetDPIAwareness: Can't get SetProcessDpiAwareness\n" );
-		FreeLibrary( hModule );
+	// Можно читать из config файла или переменной окружения
+	const char* dpi_pref = getenv("XASH_DPI_AWARENESS");
+	if (dpi_pref) {
+		if (!strcmp(dpi_pref, "per-monitor-v2")) return XASH_PER_MONITOR_DPI_AWARE_V2;
+		if (!strcmp(dpi_pref, "per-monitor")) return XASH_PER_MONITOR_DPI_AWARE;
+		if (!strcmp(dpi_pref, "system")) return XASH_SYSTEM_DPI_AWARE;
+		if (!strcmp(dpi_pref, "unaware")) return XASH_DPI_UNAWARE;
 	}
-	else MsgDev( D_NOTE, "SetDPIAwareness: Can't load shcore.dll\n" );
+	return XASH_SYSTEM_DPI_AWARE; // значение по умолчанию
+}
 
+typedef struct {
+	const char* name;
+	HRESULT value;
+} DPIError;
 
-	if( !bSuccess )
-	{
-		MsgDev( D_NOTE, "SetDPIAwareness: Trying SetProcessDPIAware...\n" );
+static const DPIError dpi_errors[] = {
+	{"S_OK", S_OK},
+	{"E_INVALIDARG", E_INVALIDARG},
+	{"E_ACCESSDENIED", E_ACCESSDENIED},
+	{"DPI_E_INVALID_DPI_AWARENESS_CONTEXT", 0x802A0001},
+	{NULL, 0}
+};
 
-		if( ( hModule = LoadLibrary( "user32.dll" ) ) )
-		{
-			if( ( pSetProcessDPIAware = ( void* )GetProcAddress( hModule, "SetProcessDPIAware" ) ) )
-			{
-				// I hope SDL don't handle WM_DPICHANGED message
-				BOOL hResult = pSetProcessDPIAware();
-
-				if( hResult )
-				{
-					MsgDev( D_NOTE, "SetDPIAwareness: Success\n" );
-					bSuccess = TRUE;
-				}
-				else MsgDev( D_NOTE, "SetDPIAwareness: fail\n" );
-			}
-			else MsgDev( D_NOTE, "SetDPIAwareness: Can't get SetProcessDPIAware\n" );
-			FreeLibrary( hModule );
+static const char* GetDPIErrorString(HRESULT hr)
+{
+	for (int i = 0; dpi_errors[i].name; i++) {
+		if (dpi_errors[i].value == hr) {
+			return dpi_errors[i].name;
 		}
-		else MsgDev( D_NOTE, "SetDPIAwareness: Can't load user32.dll\n" );
+	}
+	return "Unknown error";
+}
+
+BOOL Win_SetPerMonitorDPIAwareV2(void)
+{
+	HMODULE hUser32 = LoadLibrary("user32.dll");
+	if (!hUser32) return FALSE;
+
+	BOOL(__stdcall * pSetProcessDpiAwarenessContext)(HANDLE);
+	pSetProcessDpiAwarenessContext = (void*)GetProcAddress(hUser32, "SetProcessDpiAwarenessContext");
+
+	if (pSetProcessDpiAwarenessContext) {
+		// DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2
+		BOOL result = pSetProcessDpiAwarenessContext((HANDLE)-4);
+		FreeLibrary(hUser32);
+		return result;
+	}
+
+	FreeLibrary(hUser32);
+	return FALSE;
+}
+
+#if defined( WIN32 ) && !defined( XASH_WINRT )
+
+static struct {
+	int initialized;
+	int success;
+	XASH_DPI_AWARENESS level;
+} dpi_state = { 0, 0, XASH_SYSTEM_DPI_AWARE };
+
+static const char* DPILevelToString(XASH_DPI_AWARENESS level)
+{
+	switch (level) {
+	case XASH_DPI_UNAWARE: return "DPI_UNAWARE";
+	case XASH_SYSTEM_DPI_AWARE: return "SYSTEM_DPI_AWARE";
+	case XASH_PER_MONITOR_DPI_AWARE: return "PER_MONITOR_DPI_AWARE";
+	case XASH_PER_MONITOR_DPI_AWARE_V2: return "PER_MONITOR_DPI_AWARE_V2";
+	default: return "UNKNOWN";
 	}
 }
+
+void Win_SetDPIAwareness(void)
+{
+	if (dpi_state.initialized) return;
+	dpi_state.initialized = 1;
+
+	XASH_DPI_AWARENESS preferred = GetPreferredDPIAwareness();
+	BOOL bSuccess = FALSE;
+
+	// Попробовать Windows 10 Per-Monitor v2 сначала
+	if (preferred >= XASH_PER_MONITOR_DPI_AWARE_V2) {
+		bSuccess = Win_SetPerMonitorDPIAwareV2();
+		if (bSuccess) {
+			dpi_state.level = XASH_PER_MONITOR_DPI_AWARE_V2;
+			MsgDev(D_NOTE, "SetDPIAwareness: Per-Monitor v2 success\n");
+		}
+	}
+
+	// Оригинальная логика с улучшениями
+	if (!bSuccess && preferred >= XASH_SYSTEM_DPI_AWARE) {
+		HMODULE hModule;
+		HRESULT(__stdcall * pSetProcessDpiAwareness)(XASH_DPI_AWARENESS);
+
+		if ((hModule = LoadLibrary("shcore.dll"))) {
+			if ((pSetProcessDpiAwareness = (void*)GetProcAddress(hModule, "SetProcessDpiAwareness"))) {
+				XASH_DPI_AWARENESS target_level = (preferred > XASH_PER_MONITOR_DPI_AWARE) ?
+					XASH_PER_MONITOR_DPI_AWARE : preferred;
+
+				HRESULT hResult = pSetProcessDpiAwareness(target_level);
+
+				if (hResult == S_OK) {
+					MsgDev(D_NOTE, "SetDPIAwareness: %s success\n", DPILevelToString(target_level));
+					bSuccess = TRUE;
+					dpi_state.level = target_level;
+				}
+				else {
+					MsgDev(D_WARN, "SetDPIAwareness: %s failed: %s (0x%08X)\n",
+						DPILevelToString(target_level), GetDPIErrorString(hResult), hResult);
+				}
+			}
+			FreeLibrary(hModule);
+		}
+	}
+
+	// Fallback для старых Windows
+	if (!bSuccess && preferred >= XASH_SYSTEM_DPI_AWARE) {
+		HMODULE hModule;
+		BOOL(__stdcall * pSetProcessDPIAware)(void);
+
+		if ((hModule = LoadLibrary("user32.dll"))) {
+			if ((pSetProcessDPIAware = (void*)GetProcAddress(hModule, "SetProcessDPIAware"))) {
+				bSuccess = pSetProcessDPIAware();
+				if (bSuccess) {
+					MsgDev(D_NOTE, "SetDPIAwareness: SetProcessDPIAware success\n");
+					dpi_state.level = XASH_SYSTEM_DPI_AWARE;
+				}
+			}
+			FreeLibrary(hModule);
+		}
+	}
+
+	dpi_state.success = bSuccess;
+	if (!bSuccess) {
+		MsgDev(D_WARN, "SetDPIAwareness: All methods failed, running in DPI unaware mode\n");
+	}
+}
+
+// Функция для получения текущего статуса
+int Win_GetDPIAwarenessLevel(void)
+{
+	if (!dpi_state.initialized) {
+		Win_SetDPIAwareness();
+	}
+	return dpi_state.level;
+}
+
 #endif
 
 /*

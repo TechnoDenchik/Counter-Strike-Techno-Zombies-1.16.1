@@ -477,7 +477,12 @@ void CMenuServerBrowser::_Init( void )
 
 	Exit.SetNameAndStatus(L("GameUI_Cancel"), L(""));
 	Exit.SetCharSize(QM_BOLDFONT);
-	Exit.onActivated = VoidCb(&CMenuServerBrowser::Hide);
+	SET_EVENT_MULTI(Exit.onActivated,
+		{
+			uiServerBrowser.Hide();
+			UI_InitMainMenu();
+		}
+	);
 	Exit.iFlags |= QMF_NOTIFY;
 	Exit.SetCoord(80, 350);
 
@@ -626,6 +631,8 @@ void UI_ServerBrowser_Menu( void )
 		uiStatic.m_fDemosPlayed = true;
 	}
 
+	UI_Multiplayer();
+
 	uiServerBrowser.Show();
 }
 
@@ -634,6 +641,8 @@ void UI_InternetGames_Menu( void )
 	uiServerBrowser.SetLANOnly( true );
 
 	UI_ServerBrowser_Menu();
+
+	UI_Multiplayer();
 }
 
 void UI_LanGame_Menu( void )

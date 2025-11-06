@@ -134,6 +134,10 @@ extern int gmsgZB5UpdateEvoLv;
 extern int gmsgZB5GetLocationBox;
 extern int gmsgZB5GetLocationBoxK;
 extern int gmsgZB5RespawnBar;
+extern int gmsgHIDMsg;
+
+extern int gmsgDMRespawnBar;
+extern int gmsgTDMRespawnBar;
 
 extern int gmsgZSHMsg;
 extern int gmsgZSHMsgText;

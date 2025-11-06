@@ -39,6 +39,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "Scoreboard.h"
 #endif
 
+#include "discord_api.h"
+
 cvar_t		*ui_showmodels;
 cvar_t		*ui_show_window_stack;
 cvar_t		*ui_borderclip;
@@ -48,6 +50,8 @@ cvar_t		*ui_getconsole;
 uiStatic_t	uiStatic;
 static CMenuEntry	*s_pEntries = NULL;
 
+DiscordIntegration dsAPI;
+windowStack_t menu;
 
 const char* uiSoundIn = "media/launch_upmenu1.wav";
 const char* uiStartGame = "media/mm_success_lets_roll.wav";
@@ -93,6 +97,36 @@ const unsigned int g_iColorTable[8] =
 0xFFF0B418, // dialog or button letters color
 0xFFFFFFFF, // white
 };
+
+void UI_InitMainMenu(void)
+{
+	dsAPI.UpdatePresence("Main Menu", "TechnoSoftware");
+}
+
+void UI_Multiplayer(void)
+{
+	dsAPI.UpdatePresence("Multyplayer Menu", "TechnoSoftware");
+}
+
+void UI_InitSettings(void)
+{
+	dsAPI.UpdatePresence("Settings Menu", "TechnoSoftware");
+}
+
+void UI_InitPlay(const std::string& map, const std::string& mode, int players, int maxPlayers)
+{
+	dsAPI.UpdateInGame(map, mode, players, maxPlayers);
+}
+
+void UI_InitMap(void)
+{
+	dsAPI.UpdatePresence("Selection map", "TechnoSoftware");
+}
+
+void UI_InitCreate(void)
+{
+	dsAPI.UpdatePresence("Creating game...", "TechnoSoftware");
+}
 
 bool UI_IsXashFWGS( void )
 {
@@ -603,6 +637,8 @@ bool UI_StartBackGroundMap( void )
 	sprintf(cmd, "map_background %s\n", uiStatic.bgmaps[bgmapid]);
 	EngFuncs::ClientCmd(FALSE, cmd);
 
+	UI_InitMainMenu();
+
 	EngFuncs::CvarSetString("mp_gamemode", "background");
 	EngFuncs::CvarSetValue("public", 0);
 	EngFuncs::CvarSetValue("maxplayers", 1);
@@ -620,9 +656,57 @@ UI_CloseMenu
 */
 void UI_CloseMenu( void )
 {
+	const char* mapnamed = EngFuncs::GetCvarString("mapname");
+	const char* modnamed = EngFuncs::GetCvarString("mp_gamemode");
+
+	int numplayers = (int)EngFuncs::GetCvarFloat("bot_quota");
+	int maxplayers = (int)EngFuncs::GetCvarFloat("maxplayers");
+
+	if (strcmp(modnamed, "none") == 0)
+	{
+		UI_InitPlay(mapnamed, "Classic", numplayers, maxplayers);
+	}
+	else if (strcmp(modnamed, "dm") == 0)
+	{
+		UI_InitPlay(mapnamed, "Death Match", numplayers, maxplayers);
+	}
+	else if (strcmp(modnamed, "tdm") == 0)
+	{
+		UI_InitPlay(mapnamed, "Team Death Match", numplayers, maxplayers);
+	}
+	else if (strcmp(modnamed, "gd") == 0)
+	{
+		UI_InitPlay(mapnamed, "Gun Death", numplayers, maxplayers);
+	}
+	else if (strcmp(modnamed, "zb1") == 0)
+	{
+		UI_InitPlay(mapnamed, "Zombie Classic", numplayers, maxplayers);
+	}
+	else if (strcmp(modnamed, "zb3") == 0)
+	{
+		UI_InitPlay(mapnamed, "Zombie Hero", numplayers, maxplayers);
+	}
+	else if (strcmp(modnamed, "zb5") == 0)
+	{
+		UI_InitPlay(mapnamed, "Zombie Evolution", numplayers, maxplayers);
+	}
+	else if (strcmp(modnamed, "zbs") == 0)
+	{
+		UI_InitPlay(mapnamed, "Scenario Zombie", numplayers, maxplayers);
+	}
+	else if (strcmp(modnamed, "zsh_pve") == 0)
+	{
+		UI_InitPlay(mapnamed, "Zombie Shelter", numplayers, maxplayers);
+	}
+	else if (strcmp(modnamed, "hidden") == 0)
+	{
+		UI_InitPlay(mapnamed, "Hidden", numplayers, maxplayers);
+	}
+
 	uiStatic.menu.Close();
 	CMenuPicButton::ClearButtonStack();
 	EngFuncs::ClientCmd(1, "firstperson");
+
 	if( !uiStatic.client.IsActive() )
 		EngFuncs::KEY_SetDest( KEY_GAME );
 }
@@ -748,79 +832,83 @@ void UI_UpdateMenu( float flTime )
 		uiStatic.firstDraw = false;
 		static int first = TRUE;
                     
-		if( first )
+		if (first)
 		{
 			// if game was launched with commandline e.g. +map or +load ignore the music
 
 			int musicset = (int)EngFuncs::GetCvarFloat("menu_musicpack");
 
-			if (!CL_IsActive())
+			if (musicset == 0)
 			{
-				if (musicset == 0)
-				{
-					EngFuncs::PlayBackgroundTrack("Music/valve_01/mainmenu", "Music/valve_01/mainmenu");
-				}
-				else if (musicset == 1)
-				{				
-					EngFuncs::PlayBackgroundTrack("Music/valve_cs2_01/mainmenu", "Music/valve_cs2_01/mainmenu");
-				}
-				else if (musicset == 2)
-				{				
-					EngFuncs::PlayBackgroundTrack("Music/radcat_01/mainmenu", "Music/radcat_01/mainmenu");
-				}
-				else if (musicset == 3)
-				{					
-					EngFuncs::PlayBackgroundTrack("Music/3kliksphilip_01/mainmenu", "Music/3kliksphilip_01/mainmenu");
-				}
-				else if (musicset == 4)
-				{					
-					EngFuncs::PlayBackgroundTrack("Music/bbnos_01/mainmenu", "Music/bbnos_01/mainmenu");
-				}
-				else if (musicset == 5)
-				{				
-					EngFuncs::PlayBackgroundTrack("Music/chipzel_01/mainmenu", "Music/chipzel_01/mainmenu");
-				}
-				else if (musicset == 6)
-				{				
-					EngFuncs::PlayBackgroundTrack("Music/dryden_01/mainmenu", "Music/dryden_01/mainmenu");
-				}
-				else if (musicset == 7)
-				{					
-					EngFuncs::PlayBackgroundTrack("Music/freakydna_01/mainmenu", "Music/freakydna_01/mainmenu");
-				}
-				else if (musicset == 8)
-				{				
-					EngFuncs::PlayBackgroundTrack("Music/isoxo_01/mainmenu", "Music/isoxo_01/mainmenu");
-				}
-				else if (musicset == 9)
-				{				
-					EngFuncs::PlayBackgroundTrack("Music/knock2_01/mainmenu", "Music/knock2_01/mainmenu");
-				}
-				else if (musicset == 10)
-				{					
-					EngFuncs::PlayBackgroundTrack("Music/mattlevine_01/mainmenu", "Music/mattlevine_01/mainmenu");
-				}
-				else if (musicset == 11)
-				{					
-					EngFuncs::PlayBackgroundTrack("Music/meechydarko_01/mainmenu", "Music/meechydarko_01/mainmenu");
-				}
-				else if (musicset == 12)
-				{
-					EngFuncs::PlayBackgroundTrack("Music/mordfustang_01/mainmenu", "Music/mordfustang_01/mainmenu");
-				}
-				else if (musicset == 13)
-				{
-					EngFuncs::PlayBackgroundTrack("Music/trfn_1/mainmenu", "Music/trfn_1/mainmenu");
-				}
-				else if (musicset == 14)
-				{
-					EngFuncs::PlayBackgroundTrack("Music/laurashigihara_01/mainmenu", "Music/laurashigihara_01/mainmenu");
-				}
-				else if (musicset == 15)
-				{
-					EngFuncs::PlayBackgroundTrack("Music/twerl_01/mainmenu", "Music/twerl_01/mainmenu");
-				}
+				EngFuncs::PlayBackgroundTrack("Music/valve_01/mainmenu", "Music/valve_01/mainmenu");
 			}
+			else if (musicset == 1)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/valve_cs2_01/mainmenu", "Music/valve_cs2_01/mainmenu");
+			}
+			else if (musicset == 2)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/radcat_01/mainmenu", "Music/radcat_01/mainmenu");
+			}
+			else if (musicset == 3)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/3kliksphilip_01/mainmenu", "Music/3kliksphilip_01/mainmenu");
+			}
+			else if (musicset == 4)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/bbnos_01/mainmenu", "Music/bbnos_01/mainmenu");
+			}
+			else if (musicset == 5)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/chipzel_01/mainmenu", "Music/chipzel_01/mainmenu");
+			}
+			else if (musicset == 6)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/dryden_01/mainmenu", "Music/dryden_01/mainmenu");
+			}
+			else if (musicset == 7)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/freakydna_01/mainmenu", "Music/freakydna_01/mainmenu");
+			}
+			else if (musicset == 8)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/isoxo_01/mainmenu", "Music/isoxo_01/mainmenu");
+			}
+			else if (musicset == 9)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/knock2_01/mainmenu", "Music/knock2_01/mainmenu");
+			}
+			else if (musicset == 10)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/mattlevine_01/mainmenu", "Music/mattlevine_01/mainmenu");
+			}
+			else if (musicset == 11)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/meechydarko_01/mainmenu", "Music/meechydarko_01/mainmenu");
+			}
+			else if (musicset == 12)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/mordfustang_01/mainmenu", "Music/mordfustang_01/mainmenu");
+			}
+			else if (musicset == 13)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/trfn_1/mainmenu", "Music/trfn_1/mainmenu");
+			}
+			else if (musicset == 14)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/laurashigihara_01/mainmenu", "Music/laurashigihara_01/mainmenu");
+			}
+			else if (musicset == 15)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/twerl_01/mainmenu", "Music/twerl_01/mainmenu");
+			}
+			else if (musicset == 16)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/denzelcurry_01/mainmenu", "Music/denzelcurry_01/mainmenu");
+			}
+
+			//UI_InitMainMenu();
+
 			first = FALSE;
 		}
 	}
@@ -1013,6 +1101,7 @@ void UI_SetActiveMenu( int fActive )
 	{
 		EngFuncs::KEY_SetDest( KEY_MENU );
 		UI_Main_Menu();
+		UI_InitMainMenu();
 	}
 	else
 	{
@@ -1408,6 +1497,16 @@ UI_Init
 */
 void UI_Init( void )
 {
+
+	if (dsAPI.Initialize()) {
+		menu.discordInitialized = true;
+		menu.gameStartTime = std::time(nullptr);
+		std::cout << "Discord Rich Presence activated" << std::endl;
+	}
+	else {
+		std::cout << "Discord Rich Presence not available" << std::endl;
+	}
+
 	// register our cvars and commands
 	ui_showmodels = EngFuncs::CvarRegister( "ui_showmodels", "0", FCVAR_ARCHIVE );
 	ui_show_window_stack = EngFuncs::CvarRegister( "ui_show_window_stack", "0", FCVAR_ARCHIVE );

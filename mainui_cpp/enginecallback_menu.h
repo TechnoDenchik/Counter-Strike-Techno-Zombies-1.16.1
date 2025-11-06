@@ -300,7 +300,6 @@ public:
 	static int UtfMoveRight( const char *str, int pos, int length );
 };
 
-
 // built-in memory manager
 // NOTE: not recommeded to use, because object destruction may be after engine halts
 #define MALLOC( x )		EngFuncs::MemAlloc( x, __FILE__, __LINE__ )
@@ -313,5 +312,4 @@ public:
 #define Con_NPrintf (*EngFuncs::engfuncs.Con_NPrintf)
 #define Con_NXPrintf (*EngFuncs::engfuncs.Con_NXPrintf)
 #define Con_Printf (*EngFuncs::engfuncs.Con_Printf)
-
 #endif // ENGINECALLBACKS_H

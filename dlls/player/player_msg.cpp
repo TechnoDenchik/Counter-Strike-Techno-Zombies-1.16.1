@@ -136,6 +136,10 @@ int gmsgZB5UpdateEvoLv = 0;
 int gmsgZB5GetLocationBox = 0;
 int gmsgZB5GetLocationBoxK = 0;
 int gmsgZB5RespawnBar = 0;
+int gmsgHIDMsg = 0;
+
+int gmsgDMRespawnBar = 0;
+int gmsgTDMRespawnBar = 0;
 
 int gmsgOriginalMsg = 0;
 int gmsgOriginalMsg2 = 0;
@@ -315,6 +319,10 @@ void LinkUserMessages()
 	gmsgZB5GetLocationBox = REG_USER_MSG("ZB5Getlocationbox", -1);
 	gmsgZB5GetLocationBoxK = REG_USER_MSG("ZB5GetlocationboxK", -1);
 	gmsgZB5RespawnBar = REG_USER_MSG("ZB5RespawnBar", -1);
+	gmsgHIDMsg = REG_USER_MSG("HIDMsg", -1);
+
+	gmsgDMRespawnBar = REG_USER_MSG("RespawnBarDm", -1);
+	gmsgTDMRespawnBar = REG_USER_MSG("RespawnBarTdm", -1);
 
 	gmsgOriginalMsg = REG_USER_MSG("StartGame", -1);
 	gmsgOriginalMsg2 = REG_USER_MSG("BombPlant", -1);

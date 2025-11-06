@@ -28,6 +28,9 @@
     <Filter Include="Source Files\menus\dynamic">
       <UniqueIdentifier>{e7095df3-a1ea-4ed0-9b32-2c63905af416}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\discord">
+      <UniqueIdentifier>{12cd862e-476f-4e9c-8e25-9ac183af8b55}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\mainui_cpp\Primitive.h">
@@ -185,6 +188,9 @@
     </ClInclude>
     <ClInclude Include="resource3.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mainui_cpp\discord_api.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -397,6 +403,51 @@
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\Inventory.cpp">
       <Filter>Source Files\menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\achievement_manager.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\activity_manager.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\application_manager.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\core.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\image_manager.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\lobby_manager.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\network_manager.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\overlay_manager.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\relationship_manager.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\storage_manager.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\store_manager.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\types.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\user_manager.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\voice_manager.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mainui_cpp\discord_api.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

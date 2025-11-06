@@ -29,6 +29,7 @@
 #define ART_TRFN		"gfx/shell/MusicPack/trfn_1"
 #define ART_Laurashigihara		"gfx/shell/MusicPack/laurashigihara_01"
 #define ART_Twerl		"gfx/shell/MusicPack/twerl_01"
+#define ART_Denzel		"gfx/shell/MusicPack/denzelcurry_01"
 
 class CMenuMusic : public CMenuFramework
 {
@@ -213,6 +214,15 @@ void CMenuMusic::exits()
 			if (!CL_IsActive())
 				EngFuncs::PlayBackgroundTrack("Music/twerl_01/mainmenu", "Music/twerl_01/mainmenu");
 		}
+		else if (musicset == 16)
+		{
+			testImage.iFlags = QMF_INACTIVE;
+			testImage.SetRect(560, 425, 240, 240);
+			testImage.SetPicture(ART_Denzel);
+			testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+			if (!CL_IsActive())
+				EngFuncs::PlayBackgroundTrack("Music/denzelcurry_01/mainmenu", "Music/denzelcurry_01/mainmenu");
+				}
 	CMenuFramework::exits();
 }
 
@@ -235,7 +245,8 @@ void CMenuMusic::_Init( void )
 		"Mord Fustang",
 		"TRFN feat. Siadou",
 		"Laura Shigihara",
-		"TWERL & Ekko"
+		"TWERL & Ekko",
+		"Denzel Curry-Ultimate",
 	};
 
 	static CStringArrayModel music(MusicStr, ARRAYSIZE(MusicStr));
@@ -351,6 +362,12 @@ void CMenuMusic::_Init( void )
 		testImage.SetPicture(ART_Twerl);
 		testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 		break;
+	case 16:
+		testImage.iFlags = QMF_INACTIVE;
+		testImage.SetRect(560, 425, 240, 240);
+		testImage.SetPicture(ART_Denzel);
+		testImage.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+		break;
 	}
 
 	exit.SetNameAndStatus(L("GameUI_Close"), L(""));
@@ -389,6 +406,7 @@ void UI_Music_Precache( void )
 	EngFuncs::PIC_Load( ART_TRFN );
 	EngFuncs::PIC_Load( ART_Laurashigihara );
 	EngFuncs::PIC_Load( ART_Twerl );
+	EngFuncs::PIC_Load( ART_Denzel );
 }
 
 void UI_Music_Menu( void )

@@ -622,6 +622,47 @@ float SND_GetGainObscured( channel_t *ch, qboolean fplayersound, qboolean floopi
 	return gain;
 }
 
+static float SND_ApplyGainCompression(float gain, float dist_mult)
+{
+	const float COMP_THRESHOLD = 0.8f; // Когда начинать компрессию
+	const float MAX_GAIN = 2.0f;       // Максимальное усиление
+
+	if (gain <= COMP_THRESHOLD)
+		return gain;
+
+	// Плавное ограничение вместо резкого обрезания
+	float excess = gain - COMP_THRESHOLD;
+	float compressed = COMP_THRESHOLD + (excess / (1.0f + excess));
+
+	return min(compressed, MAX_GAIN);
+}
+
+// Плавное затухание вместо резкого обрезания
+static float SND_ApplyMinimumGain(float gain, float relative_dist)
+{
+	const float MIN_GAIN = 0.01f;      // Абсолютный минимум
+	const float FADE_START = 0.1f;     // Когда начинать плавное затухание
+
+	if (gain >= FADE_START)
+		return gain;
+
+	if (gain <= MIN_GAIN)
+		return 0.0f; // Полное затухание
+
+	// Плавное затухание от FADE_START до MIN_GAIN
+	float fade = (gain - MIN_GAIN) / (FADE_START - MIN_GAIN);
+	return fade * gain;
+}
+
+// Безопасное преобразование dB в gain
+static float SND_dB_To_Gain(float dB)
+{
+	if (dB >= 0.0f)
+		return powf(10.0f, dB / 20.0f);
+	else
+		return 1.0f / powf(10.0f, -dB / 20.0f);
+}
+
 /*
 =================
 SND_GetGain
@@ -634,67 +675,47 @@ where Y = -1 / ( (SND_GAIN_THRESH ^ SND_GAIN_POWER) * ( SND_GAIN_THRESH - 1 ))
 gain curve construction
 =================
 */
-float SND_GetGain( channel_t *ch, qboolean fplayersound, qboolean flooping, float dist )
+float SND_GetGain(channel_t* ch, qboolean fplayersound, qboolean flooping, float dist)
 {
-	float	gain = snd_gain->value;
+	float gain = snd_gain->value;
 
-	if( ch->dist_mult )
+	if (!ch->dist_mult || dist <= 0.0f)
+		return gain; // No distance attenuation
+
+	// Calculate basic distance attenuation (inverse square law)
+	float relative_dist = dist * ch->dist_mult;
+
+	// Apply environmental attenuation (foliage, etc.)
+	if (snd_foliage_db_loss->value > 0.0f)
 	{
-		// test additional attenuation
-		// at 30c, 14.7psi, 60% humidity, 1000Hz == 0.22dB / 100ft.
-		// dense foliage is roughly 2dB / 100ft
-		float additional_dB_loss = snd_foliage_db_loss->value * (dist / 1200);
-		float additional_dist_mult = pow( 10, additional_dB_loss / 20 );
-		float relative_dist = dist * ch->dist_mult * additional_dist_mult;
-
-		// hard code clamp gain to 10x normal (assumes volume and external clipping)
-		if( relative_dist > 0.1f )
-			gain *= ( 1.0f / relative_dist );
-		else gain *= 10.0f;
-
-		// if gain passess threshold, compress gain curve such that gain smoothly approaches 1.0
-		if( gain > SND_GAIN_COMP_THRESH )
-		{
-			float	snd_gain_comp_power = SND_GAIN_COMP_EXP_MAX;
-			int	sndlvl = DIST_MULT_TO_SNDLVL( ch->dist_mult );
-			float	Y;
-			
-			// decrease compression curve fit for higher sndlvl values
-			if( sndlvl > SND_DB_MED )
-			{
-				// snd_gain_power varies from max to min as sndlvl varies from 90 to 140
-				snd_gain_comp_power = RemapVal((float)sndlvl, SND_DB_MED, SND_DB_MAX, SND_GAIN_COMP_EXP_MAX, SND_GAIN_COMP_EXP_MIN );
-			}
-
-			// calculate crossover point
-			Y = -1.0f / ( pow( SND_GAIN_COMP_THRESH, snd_gain_comp_power ) * ( SND_GAIN_COMP_THRESH - 1 ));
-			
-			// calculate compressed gain
-			gain = 1.0f - 1.0f / (Y * pow( gain, snd_gain_comp_power ));
-			gain = gain * snd_gain_max->value;
-		}
-
-		if( gain < snd_gain_min->value )
-		{
-			// sounds less than snd_gain_min fall off to 0 in distance it took them to fall to snd_gain_min
-			gain = snd_gain_min->value * ( 2.0f - relative_dist * snd_gain_min->value );
-			if( gain <= 0.0f ) gain = 0.001f; // don't propagate 0 gain
-		}
+		float additional_dB_loss = snd_foliage_db_loss->value * (dist / 1200.0f);
+		float additional_dist_mult = powf(10.0f, additional_dB_loss / 20.0f);
+		relative_dist *= additional_dist_mult;
 	}
 
-	if( fplayersound )
+	// Basic inverse distance attenuation with clamp
+	if (relative_dist > 0.1f)
+		gain *= (1.0f / relative_dist);
+	else
+		gain *= 10.0f; // Max 10x boost for very close sounds
+
+	// Simplified compression - avoid extreme values
+	gain = SND_ApplyGainCompression(gain, ch->dist_mult);
+
+	// Smooth fade-out instead of hard cutoff
+	gain = SND_ApplyMinimumGain(gain, relative_dist);
+
+	// Player weapon boost
+	if (fplayersound && ch->entchannel == CHAN_WEAPON)
 	{
-		// player weapon sounds get extra gain - this compensates
-		// for npc distance effect weapons which mix louder as L+R into L, R
-		// Hack.
-		if( ch->entchannel == CHAN_WEAPON )
-			gain = gain * dB_To_Gain( SND_GAIN_PLAYER_WEAPON_DB );
+		gain *= dB_To_Gain(SND_GAIN_PLAYER_WEAPON_DB);
 	}
 
-	// modify gain if sound source not visible to player
-	gain = gain * SND_GetGainObscured( ch, fplayersound, flooping );
+	// Obscuration (occlusion) effects
+	gain *= SND_GetGainObscured(ch, fplayersound, flooping);
 
-	return gain; 
+	// Final clamp to prevent extreme values
+	return bound(0.0f, gain, snd_gain_max->value);
 }
 
 qboolean SND_CheckPHS( channel_t *ch )
@@ -750,94 +771,104 @@ void S_SpatializeChannel( int *left_vol, int *right_vol, int master_vol, float g
 SND_Spatialize
 =================
 */
-void SND_Spatialize( channel_t *ch )
+void SND_Spatialize(channel_t* ch)
 {
 	vec3_t	source_vec;
 	float	dist, dot, gain = 1.0f;
 	qboolean	fplayersound = false;
 	qboolean	looping = false;
-	wavdata_t	*pSource;
+	wavdata_t* pSource;
 
-	// anything coming from the view entity will allways be full volume
-
-	if( S_IsClient( ch->entnum ))
+	// anything coming from the view entity will always be full volume
+	if (S_IsClient(ch->entnum))
 	{
-		if( !s_cull->integer )
+		if (!s_cull->integer)
 		{
 			ch->leftvol = ch->rightvol = ch->master_vol;
-			VOX_SetChanVol( ch );
+			VOX_SetChanVol(ch);
 			return;
 		}
-		// sounds coming from listener actually come from a short distance directly in front of listener
 		fplayersound = true;
 	}
 
-	if( s_cull->integer )
+	// Check if entity exists and get spatialization
+	if (!ch->staticsound)
 	{
-		pSource = ch->sfx->cache;
-
-		if( ch->use_loop && pSource && pSource->loopStart != -1 )
-			looping = true;
-	}
-
-
-	if( !ch->staticsound )
-	{
-		if( !CL_GetEntitySpatialization( ch ) || !SND_CheckPHS( ch ))
+		if (!CL_GetEntitySpatialization(ch) || !SND_CheckPHS(ch))
 		{
-			// origin is null and entity not exist on client
 			ch->leftvol = ch->rightvol = 0;
 			ch->bfirstpass = false;
 			return;
 		}
 	}
 
-	// source_vec is vector from listener to sound source
-	// player sounds come from 1' in front of player
-	if( fplayersound ) VectorScale( s_listener.forward, 12.0f, source_vec );
-	else VectorSubtract( ch->origin, s_listener.origin, source_vec );
+	// Calculate source vector and distance
+	if (fplayersound)
+	{
+		// Use small offset for player sounds, but consider actual distance
+		VectorScale(s_listener.forward, 24.0f, source_vec); // Increased from 12 to 24
+		dist = 24.0f; // Match the vector length
+	}
+	else
+	{
+		VectorSubtract(ch->origin, s_listener.origin, source_vec);
+		dist = VectorNormalizeLength(source_vec);
+	}
 
-	// normalize source_vec and get distance from listener to source
-	dist = VectorNormalizeLength( source_vec );
-	dot = DotProduct( s_listener.right, source_vec );
+	dot = DotProduct(s_listener.right, source_vec);
 
-	// for sounds with a radius, spatialize left/right evenly within the radius
-#if 0
-	if( ch->radius > 0 && dist < ch->radius )
+	// ALWAYS calculate gain, but respect s_cull for aggressive culling
+	gain = SND_GetGain(ch, fplayersound, looping, dist);
+
+	// If culling disabled, only apply basic distance attenuation
+	if (!s_cull->integer)
+	{
+		// Apply minimal distance-based attenuation even when culling is off
+		float minGain = 0.3f; // Minimum gain for distant sounds
+		float maxDist = 2000.0f; // Reasonable maximum distance
+
+		if (dist > maxDist)
+		{
+			gain = minGain;
+		}
+		else if (dist > 500.0f)
+		{
+			// Linear fade from 1.0 to minGain between 500 and maxDist units
+			gain = 1.0f - (1.0f - minGain) * ((dist - 500.0f) / (maxDist - 500.0f));
+			gain = max(gain, minGain);
+		}
+	}
+
+	// Enable radius-based spatialization if sound has radius
+	if (ch->radius > 0 && dist < ch->radius)
 	{
 		float	interval = ch->radius * 0.5f;
 		float	blend = dist - interval;
 
-		if( blend > 0 )
+		if (blend > 0)
 		{
 			blend /= interval;
-
-			// blend is 0.0 - 1.0, from 50% radius -> 100% radius
-			// at radius * 0.5, dot is 0 (ie: sound centered left/right)
-			// at radius dot == dot
+			// Smooth transition from centered to directional sound
 			dot *= blend;
 		}
-	}
-#endif
-
-	if( s_cull->integer )
-	{
-		// calculate gain based on distance, atmospheric attenuation, interposed objects
-		// perform compression as gain approaches 1.0
-		gain = SND_GetGain( ch, fplayersound, looping, dist );
+		else
+		{
+			// Within 50% radius - sound is mostly centered
+			dot *= 0.1f; // Very slight directionality
+		}
 	}
 
 	// don't pan sounds with no attenuation
-	if( ch->dist_mult <= 0.0f ) dot = 0.0f;
+	if (ch->dist_mult <= 0.0f)
+		dot = 0.0f;
 
-	// fill out channel volumes for single location
-	S_SpatializeChannel( &ch->leftvol, &ch->rightvol, ch->master_vol, gain, dot, dist * ch->dist_mult );
+	// Apply volumes
+	S_SpatializeChannel(&ch->leftvol, &ch->rightvol, ch->master_vol, gain, dot, dist * ch->dist_mult);
 
-	// if playing a word, set volume
-	VOX_SetChanVol( ch );
+	VOX_SetChanVol(ch);
 
-	// end of first time spatializing sound
-	if( CL_Active( )) ch->bfirstpass = false;
+	if (CL_Active())
+		ch->bfirstpass = false;
 }
 
 /*

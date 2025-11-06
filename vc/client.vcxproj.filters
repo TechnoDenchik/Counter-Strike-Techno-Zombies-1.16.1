@@ -229,6 +229,21 @@
     <Filter Include="dlls\wpn_shared\Secondary\Overcoming">
       <UniqueIdentifier>{93a07674-cd06-4596-aff7-aeffa7c4b19c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="dlls\wpn_shared\Const">
+      <UniqueIdentifier>{c5370930-7da6-4f7f-8432-33ffb548fb0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cl_dll\hud\hidden">
+      <UniqueIdentifier>{341295f7-6559-47ae-8588-cf3af9692263}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cl_dll\hud\tdm">
+      <UniqueIdentifier>{021ecfba-0fb3-4ac1-b9a7-06a6ebb0e6a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cl_dll\hud\dm">
+      <UniqueIdentifier>{d228bc50-e300-46cc-8047-0cbd71e9029d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cl_dll\discord">
+      <UniqueIdentifier>{cbbadea1-a3f7-4f7a-bddf-6eecd7168c66}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\cl_dll\events\ev_cs16.cpp">
@@ -800,9 +815,6 @@
     </ClCompile>
     <ClCompile Include="..\cl_dll\hud\zsh\infolocationhud.cpp">
       <Filter>cl_dll\hud\zsh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\hud\zb3\InventorySet.cpp">
-      <Filter>cl_dll\hud\zb3</Filter>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\knife_dragonsword.cpp">
       <Filter>dlls\wpn_shared\Melee</Filter>
@@ -1641,6 +1653,69 @@
     <ClCompile Include="..\dlls\wpn_shared\primary\wpn_mg36.cpp">
       <Filter>dlls\wpn_shared\Primary\old</Filter>
     </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\zb3\InventorySet.cpp">
+      <Filter>cl_dll</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\melee\knife_joker.cpp">
+      <Filter>dlls\wpn_shared\Melee</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\hidden\hidden.cpp">
+      <Filter>cl_dll\hud\hidden</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\hidden\JokerKill.cpp">
+      <Filter>cl_dll\hud\hidden</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\hidden\RespawnBarH.cpp">
+      <Filter>cl_dll\hud\hidden</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\dm\dm.cpp">
+      <Filter>cl_dll\hud\dm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\tdm\tdm.cpp">
+      <Filter>cl_dll\hud\tdm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\achievement_manager.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\activity_manager.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\application_manager.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\core.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\image_manager.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\lobby_manager.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\network_manager.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\overlay_manager.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\relationship_manager.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\storage_manager.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\store_manager.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\types.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\user_manager.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\voice_manager.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\cl_dll\hud\followicon.h">
@@ -2047,9 +2122,6 @@
     </ClInclude>
     <ClInclude Include="resource1.h">
       <Filter>Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\cl_dll\hud\zb3\InventorySet.h">
-      <Filter>cl_dll\hud\zb3</Filter>
     </ClInclude>
     <ClInclude Include="..\cl_dll\enginecallback.h">
       <Filter>cl_dll</Filter>
@@ -2497,6 +2569,27 @@
     </ClInclude>
     <ClInclude Include="..\dlls\wpn_shared\primary\wpn_mg3xmas.h">
       <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\zb3\InventorySet.h">
+      <Filter>cl_dll</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\const\weaponid_const.h">
+      <Filter>dlls\wpn_shared\Const</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\hidden\hidden.h">
+      <Filter>cl_dll\hud\hidden</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\hidden\JokerKill.h">
+      <Filter>cl_dll\hud\hidden</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\hidden\RespawnBarH.h">
+      <Filter>cl_dll\hud\hidden</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\dm\dm.h">
+      <Filter>cl_dll\hud\dm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\tdm\tdm.h">
+      <Filter>cl_dll\hud\tdm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

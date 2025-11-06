@@ -29,7 +29,6 @@ ui_globalvars_t	*gpGlobals;
 }
 
 CMenu gMenu;
-
 static UI_FUNCTIONS gFunctionTable = 
 {
 	UI_VidInit,

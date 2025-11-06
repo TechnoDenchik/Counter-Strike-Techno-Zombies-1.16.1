@@ -25,6 +25,7 @@ GNU General Public License for more details.
 #include "Utils.h"
 #include "FontManager.h"
 #include "BtnsBMPTable.h"
+#include <atomic>
 
 #define UI_MAX_MENUDEPTH		1024
 #define UI_MAX_MENUITEMS		1024
@@ -98,6 +99,9 @@ public:
 		menuDepth = 0;
 		rootPosition = 0;
 	}
+
+	std::atomic<bool> discordInitialized{ false };
+	std::time_t gameStartTime = 0;
 };
 
 typedef struct

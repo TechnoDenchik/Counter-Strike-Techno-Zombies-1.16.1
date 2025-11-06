@@ -112,8 +112,8 @@ void CMenuMain::CMenuMainBanner::Draw()
 	float	logoWidth, logoHeight, logoPosY;
 	float	scaleX, scaleY;
 
-	scaleX = ScreenWidth / 720.0f;
-	scaleY = ScreenHeight / 480.0f;
+	scaleX = ScreenWidth / 1280.0f;
+	scaleY = ScreenHeight / 720.0f;
 
 	// a1ba: multiply by height scale to look better on widescreens
 	logoWidth = EngFuncs::GetLogoWidth() * scaleX;
@@ -511,10 +511,23 @@ void UI_Main_Precache( void )
 UI_Main_Menu
 =================
 */
+
+#include "discord_api.h"
+
+DiscordIntegration* dsAPI2;
+
 void UI_Main_Menu( void )
 {
 	uiMain.Show();
 
+	if (!CL_IsActive())
+	{
+		//UI_InitMainMenu();
+	}
+	else
+	{
+
+	}
 
 	if (uiMain.getrestart == FALSE)
 	{

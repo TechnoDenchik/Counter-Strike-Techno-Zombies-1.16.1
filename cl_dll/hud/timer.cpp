@@ -167,7 +167,7 @@ int CHudTimer::Draw(float fTime)
 	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
 	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
 
-	if(gHUD.m_iModRunning != MOD_ZSH && gHUD.m_iModRunning != MOD_BACKUI)
+	if(gHUD.m_iModRunning != MOD_ZSH && gHUD.m_iModRunning != MOD_BACKUI && gHUD.m_iModRunning != MOD_HIDDEN)
 	{ 
 		m_pTexture_Black->Bind();
 		DrawUtils::Draw2DQuadScaled(x4 - 70, y4, x4 + 70, y4 + 40);

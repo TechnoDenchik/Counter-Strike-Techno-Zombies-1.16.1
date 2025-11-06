@@ -115,6 +115,7 @@ void W_Precache()
 	UTIL_PrecacheOtherWeapon("weapon_infinitysr");
 	UTIL_PrecacheOtherWeapon("weapon_mp7a1c");
 	UTIL_PrecacheOtherWeapon("weapon_mp7a1p");
+	UTIL_PrecacheOtherWeapon("knife_joker");
 	UTIL_PrecacheOtherWeapon("knife_zombi");
 	UTIL_PrecacheOtherWeapon("knife_zombi_female");
 	UTIL_PrecacheOtherWeapon("knife_zombi_heavy");
@@ -152,6 +153,7 @@ void W_Precache()
 	UTIL_PrecacheOtherWeapon("weapon_infinityex2");
 	UTIL_PrecacheOtherWeapon("knife_katana");
 	UTIL_PrecacheOtherWeapon("knife_dragonsword");
+	UTIL_PrecacheOtherWeapon("knife_dualsword");
 	UTIL_PrecacheOtherWeapon("knife_knifedragon");
 	UTIL_PrecacheOtherWeapon("knife_thanatos9");
 	UTIL_PrecacheOtherWeapon("knife_stormgiant");

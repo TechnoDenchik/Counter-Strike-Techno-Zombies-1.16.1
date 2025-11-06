@@ -4,7 +4,7 @@
 #include "player.h"
 #include "weapons.h"
 #include "client.h"
-
+#include "effects.h"
 #include "supplyboxreference.h"
 #include "gamemode/mods.h"
 
@@ -24,6 +24,7 @@ void CSupplyBoxR::Precache()
 {
 	PRECACHE_SOUND("zb3/get_box.wav");
 	PRECACHE_MODEL("models/supplybox.mdl");
+	PRECACHE_MODEL("sprites/e_button01.spr");
 }
 
 void CSupplyBoxR::Spawn()
@@ -49,6 +50,31 @@ void CSupplyBoxR::Spawn()
 	SET_MODEL(edict(), "models/supplybox.mdl");
 
 	m_flNextRadarTime = gpGlobals->time + RANDOM_FLOAT(0, 1);
+
+	CreateSprite();
+}
+
+void CSupplyBoxR::CreateSprite()
+{
+	m_pSprite = nullptr;
+	CBaseEntity* pSprite = CBaseEntity::Create("env_sprite", pev->origin, pev->angles, edict());
+	if (pSprite)
+	{
+		pSprite->pev->model = MAKE_STRING("sprites/e_button01.spr");
+		pSprite->pev->rendermode = kRenderTransAdd;
+		pSprite->pev->renderfx = kRenderFxNone;
+		pSprite->pev->renderamt = 255;
+		pSprite->pev->scale = 0.2;
+		pSprite->pev->framerate = 10.0; 
+		pSprite->pev->spawnflags |= SF_SPRITE_STARTON;
+
+
+		pSprite->pev->origin.z += 20.0;
+
+		pSprite->Spawn();
+
+		m_pSprite = pSprite;
+	}
 }
 
 void CSupplyBoxR::SupplyboxTouch(CBaseEntity *pOther)
@@ -61,14 +87,25 @@ void CSupplyBoxR::SupplyboxTouch(CBaseEntity *pOther)
 	if (p->m_bIsZombie)
 		return;
 
-	auto &nf = g_SupplyboxItems[RANDOM_LONG(0, std::extent<decltype(g_SupplyboxItems)>::value - 1)];
-	nf.second(p);
+	int usableButtons = p->pev->button;
+	if ((usableButtons & (IN_USE)))
+	{
+		auto& nf = g_SupplyboxItems[RANDOM_LONG(0, std::extent<decltype(g_SupplyboxItems)>::value - 1)];
+		nf.second(p);
 
-	EMIT_SOUND(ENT(p->pev), CHAN_BODY, "zb3/get_box.wav", VOL_NORM, ATTN_NORM);
+		EMIT_SOUND(ENT(p->pev), CHAN_BODY, "zb3/get_box.wav", VOL_NORM, ATTN_NORM);
+		
+		RemoveSprite();
+	}
+}
 
+void CSupplyBoxR::RemoveSprite()
+{
 	pev->effects |= EF_NODRAW;
 	SendPositionMsg();
 	SUB_Remove();
+	UTIL_Remove(m_pSprite);
+	m_pSprite = nullptr;
 }
 
 void CSupplyBoxR::SupplyboxThink()

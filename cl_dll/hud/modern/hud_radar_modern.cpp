@@ -81,16 +81,30 @@
 		for (int i = 1; i <= MAX_HOSTAGES; i++)
 			m_pHostages[i] = NULL;
 
-		if (strcmp(m_OverviewData.map, gEngfuncs.pfnGetLevelName()))
-		{
-			// update level overview if level changed
-			std::string map = gEngfuncs.pfnGetLevelName();
-			map.erase(map.rfind('.'));
-			map.erase(0, map.find_last_of("/\\") + 1);
-			LoadOverviewInfo((std::string("overviews/") + std::move(map) + ".txt").c_str(), &m_OverviewData);
-			LoadMapSprites();
+		// Получаем имя карты без расширения
+		std::string map = gEngfuncs.pfnGetLevelName();
+		if (map.empty()) {
+			gEngfuncs.Con_Printf("Radar: No level name\n");
+			return;
 		}
 
+		map.erase(map.rfind('.'));
+		map.erase(0, map.find_last_of("/\\") + 1);
+
+		// Загружаем данные обзора
+		if (LoadOverviewInfo((std::string("overviews/") + map + ".txt").c_str(), &m_OverviewData)) {
+			gEngfuncs.Con_Printf("Radar: Loaded overview for %s\n", map.c_str());
+			LoadMapSprites();
+		}
+		else {
+			gEngfuncs.Con_Printf("Radar: No overview for %s\n", map.c_str());
+			// Устанавливаем значения по умолчанию
+			m_OverviewData.zoom = 1.0f;
+			m_OverviewData.originX = 0.0f;
+			m_OverviewData.originY = 0.0f;
+			m_OverviewData.rotated = false;
+			m_OverviewData.image[0] = '\0';
+		}
 	}
 
 	void CHudRadarModern::Think(void)
@@ -686,17 +700,20 @@
 
 		float yaw = gHUD.m_vecAngles[1] * (M_PI / 180.0);
 
+		// НЕПРАВИЛЬНОЕ преобразование - нужно вращать координаты относительно угла камеры
 		float yawSin = sin(yaw);
 		float yawCos = cos(yaw);
 
-		float x = dx * yawSin - dy * yawCos;
-		float y = dx * (-yawCos) - dy * yawSin;
+		// ПРАВИЛЬНОЕ преобразование координат
+		float x = dx * yawCos + dy * yawSin;  // X = dx*cos + dy*sin
+		float y = -dx * yawSin + dy * yawCos; // Y = -dx*sin + dy*cos
 
-		float zoom = 10;
+		// Используем правильный масштаб из данных обзора
+		float zoom = m_OverviewData.zoom * 1024.0f; // Конвертируем в правильный масштаб
 		bool scaled = false;
 
-		screenX = (wide / 2) + (x / zoom) * m_OverviewData.zoom;
-		screenY = (tall / 2) + (y / zoom) * m_OverviewData.zoom;
+		screenX = (wide / 2) + (x / zoom) * wide;
+		screenY = (tall / 2) + (y / zoom) * tall;
 
 		bool result = false;
 		float scalleRate = (1 / 1.2);
@@ -740,6 +757,7 @@
 		}
 
 		return result;
+	
 	}
 
 #ifdef _MSC_VER

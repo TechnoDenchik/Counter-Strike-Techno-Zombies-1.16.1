@@ -92,6 +92,7 @@ public:
 	bool Jump(bool mustJump = false) override;										// returns true if jump was started
 
 	void OnBecomeZombie(ZombieLevel iEvolutionLevel) override;
+	void OnBecomeJoker() override;
 
 	void OnEvent(GameEventType event, CBaseEntity *entity = NULL, CBaseEntity *other = NULL) override;			// invoked when event occurs in the game (some events have NULL entity)
 

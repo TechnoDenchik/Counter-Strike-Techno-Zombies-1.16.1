@@ -116,8 +116,11 @@ int CHud :: MsgFunc_GameMode(const char *pszName, int iSize, void *pbuf )
 
 	// reset mod-specific settings
 	gHUD.m_CLS.m_iFlags &= ~HUD_ACTIVE;
+	gHUD.m_dm.m_iFlags &= ~HUD_ACTIVE;
+	gHUD.m_tdm.m_iFlags &= ~HUD_ACTIVE;
 	//gHUD.m_WPI.m_iFlags &= ~HUD_ACTIVE;
 	gHUD.m_gd.m_iFlags &= ~HUD_ACTIVE;
+	gHUD.m_hid.m_iFlags &= ~HUD_ACTIVE;
 	gHUD.m_ZB2.m_iFlags &= ~HUD_ACTIVE;
 	gHUD.m_ZB3.m_iFlags &= ~HUD_ACTIVE;
 	gHUD.m_ZB5.m_iFlags &= ~HUD_ACTIVE;
@@ -157,12 +160,13 @@ int CHud :: MsgFunc_GameMode(const char *pszName, int iSize, void *pbuf )
 	}
 	case MOD_TDM:
 	{
-		gHUD.m_WPI.m_iFlags |= HUD_ACTIVE;
-		
+		gHUD.m_tdm.m_iFlags |= HUD_ACTIVE;
+		gHUD.m_WPI.m_iFlags |= HUD_ACTIVE;	
 		break;
 	}
 	case MOD_DM:
 	{
+		gHUD.m_dm.m_iFlags |= HUD_ACTIVE;
 		gHUD.m_WPI.m_iFlags |= HUD_ACTIVE;
 	
 		break;
@@ -172,6 +176,13 @@ int CHud :: MsgFunc_GameMode(const char *pszName, int iSize, void *pbuf )
 		gHUD.m_WPI.m_iFlags |= HUD_ACTIVE;
 	
 		gHUD.m_gd.m_iFlags |= HUD_ACTIVE;
+		break;
+	}
+	case MOD_HIDDEN:
+	{
+		gHUD.m_WPI.m_iFlags |= HUD_ACTIVE;
+
+		gHUD.m_hid.m_iFlags |= HUD_ACTIVE;
 		break;
 	}
 	case MOD_ZSH:

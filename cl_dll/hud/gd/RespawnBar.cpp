@@ -16,61 +16,99 @@
 
 int CHudGDRespawnBar::VidInit(void)
 {
-	if (!stringtext1)
-		stringtext1 = R_LoadTextureShared("resource/hud/gd/respawnbar/respawn_bg", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
-	if (!stringtext2)
-		stringtext2 = R_LoadTextureShared("resource/hud/gd/respawnbar/respawn_string", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
+	if (!m_pBackground)
+		m_pBackground = R_LoadTextureShared("resource/hud/gd/respawnbar/respawn_bg", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
+	if (!m_pFillTexture)
+		m_pFillTexture = R_LoadTextureShared("resource/hud/gd/respawnbar/respawn_string", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
+	if (!m_pTextBg)
+		m_pTextBg = R_LoadTextureShared("resource/shelterteam/zsht_ingame_timertext_bg", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
 	return 1;
 }
 
 int CHudGDRespawnBar::Draw(float time)
 {
-	if (!m_pCurTexture)
+	if (!m_bActive)
 		return 1;
 
-	if (barstring == 245)
-	{
-		m_pCurTexture = false;
-		return 1;
-	}
+	float flProgress = 1.0f - ((m_flRespawnEndTime - time) / m_flRespawnDuration);
+	flProgress = std::max(0.0f, std::min(1.0f, flProgress));
 
-	int x = ScreenWidth / 1.995;
-	int y = ScreenHeight / 1.40;
+	int x = ScreenWidth / 2;
+	int y = ScreenHeight - 293; // Отступ от низа
 
-	int x18 = ScreenWidth / 1.995;
-	int y18 = ScreenHeight / 1.45;
+	int x2 = ScreenWidth / 1.995;
+	int y2 = ScreenHeight - 243;
 
-	int w = 335;
-	int h = 38;
+	int iW = m_pBackground->w();
+	int iH = m_pBackground->h();
 
-	int h2 = 245;
+	iW = m_pBackground->w();
+	iH = m_pBackground->h();
 
-	const float flScale = 0.0f;
-	const int r = 255, g = 255, b = 255;
+	int iX = 0;
+	int iY = ScreenHeight - 4;
+
+	iX = ScreenWidth / 2.580;
+	iY = ScreenHeight - 264;
+
+	const int PROGRESS_WIDTH = 419;
+	const int PROGRESS_HEIGHT = 8;
+	const int BG_WIDTH = PROGRESS_WIDTH + 20;
+	const int BG_HEIGHT = PROGRESS_HEIGHT + 12;
+
+	int bg1_x = x - BG_WIDTH / 2;
+	int bg1_y = y - BG_HEIGHT / 2;
+
+	int bg2_x = x - PROGRESS_WIDTH / 2;
+	int bg2_y = y - PROGRESS_HEIGHT / 2;
 
 	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
 	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
 
-	if (barstring < 245)
+	m_pBackground->Draw2DQuadScaled(iX, iY - iH, iX + iW, iY - iH + iH);
+
+	m_pTextBg->Bind();
+	DrawUtils::Draw2DQuadScaled(x2 - 450 / 2, y2 - 38, x2 + 450 / 2, y2 - 9);
+
+	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
+
+	if (m_pFillTexture)
 	{
-		barstring++;
+		m_pFillTexture->Bind();
+
+		int fillWidth = (int)(PROGRESS_WIDTH * flProgress);
+		if (fillWidth > 0)
+		{
+			DrawUtils::Draw2DQuadScaled(bg2_x, bg2_y, bg2_x + fillWidth, bg2_y + PROGRESS_HEIGHT);
+		}
 	}
 
-	stringtext1->Bind();
-	DrawUtils::Draw2DQuadScaled(x18 - 500 / 2, y18 - 38, x18 + 500 / 2, y18 + 28);
+	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 200);
+	DrawUtils::DrawHudString(x2 - 180, y2 - 33, ScreenWidth, "Вы неуязвимы в течении 3-х секунд после возрождения", 255, 255, 255, 200, 0.0f);
 
-	stringtext2->Bind();
-	DrawUtils::Draw2DQuadScaled(x - 490 / 2, y - 38, x + barstring, y - 26);
+	if (flProgress >= 1.0f)
+	{
+		m_bActive = false;
+	}
 
 	return 1;
 }
 
+void CHudGDRespawnBar::StartRespawn(float flDuration)
+{
+	m_bActive = true;
+	m_flRespawnDuration = flDuration;
+	m_flRespawnEndTime = gHUD.m_flTime + flDuration;
+}
+
+void CHudGDRespawnBar::Reset()
+{
+	m_bActive = false;
+	m_flRespawnEndTime = 0;
+	m_flRespawnDuration = 0;
+}
+
 void CHudGDRespawnBar::SetWebm()
 {
-	timetx = 0;
-
-	barstring = -245;
-
-	m_pCurTexture = true;
-	m_flDisplayTime = gHUD.m_flTime;
+	StartRespawn(5.0f);
 }

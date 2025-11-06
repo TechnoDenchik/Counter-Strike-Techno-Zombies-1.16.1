@@ -75,6 +75,8 @@
 
 #define ART_SNAILCITY	"gfx/maps/zsh_deadcity_pve_cso"
 
+#define ART_HARLEN	"gfx/maps/hd_harlem_cso"
+
 /*=================== End Gamemodes Map ===================*/
 
 class CMenuMapListModel : public CMenuBaseModel
@@ -123,6 +125,7 @@ public:
 	bool modezb5;
 	bool modezbs;
 	bool modezsh;
+	bool modehidden;
 
 	int botnumber;
 
@@ -132,6 +135,7 @@ public:
 
 	CMenuField	maxClients;
 	CMenuField	hostName;
+	CMenuField	mapname;
 	CMenuField	password;
 	CMenuField  botNum;
 	CMenuCheckBox   nat;
@@ -193,6 +197,12 @@ public:
 	*/
 		CMenuCheckBox	zsh;
 
+	/*
+	================================
+	 GameMode: Hidden Fun
+	================================
+	*/
+		CMenuCheckBox	hid;
 /*=================== End Gamemodes ===================*/
 
 class CMenuVidPreview : public 
@@ -202,7 +212,7 @@ class CMenuVidPreview : public
 					mapgressia, mapruin,mapbigtree, mapdustmini, mapcs747, mapestate, maphavana, mapmilitia,
 				 mapoffice, mapsiege, mapangelcity, mapaztec, mapcbble, mapchateau, mapprodigy, maprats, mapsantorini,
 					 mapskyscraper, maptorn, mapdarksnow, mapgalery, mapindustry, mapindustry2, mapmoonlight, mapport, mapabyss,
-						 mapabyss2, mapabyss3, maporigin, mapnightmare, mapnightmare2, mapnightmare3, maplastclue, mappanic, maplostcity, maptrap, mapsnailcity;
+						 mapabyss2, mapabyss3, maporigin, mapnightmare, mapnightmare2, mapnightmare3, maplastclue, mappanic, maplostcity, maptrap, mapsnailcity, mapharlen;
 		
 	
 	CMenuCheckBox	
@@ -211,7 +221,7 @@ class CMenuVidPreview : public
 			militia, office, siege, angelcity, aztec, cbble, chateau,
 		prodigy, rats, santorini, skyscraper, torn, darksnow, galery,
 			industry, industry2, moonlight, port, abyss, abyss2, abyss3,
-				origin, nightmare, nightmare2, nightmare3, lastclue, panic, lostcity, trap, snailcity;
+				origin, nightmare, nightmare2, nightmare3, lastclue, panic, lostcity, trap, snailcity, harlen;
 
 	CMapSet
 				MapSetAssault, MapSetItaly, MapSetVertigo, MapSetInferno,MapSetNuke,MapSetDust,MapSetMirage,
@@ -219,7 +229,7 @@ class CMenuVidPreview : public
 		MapSetMilitia, MapSetOffice, MapSetSiege, MapSetAngelCity, MapSetAztec, MapSetCbble, MapSetChateau, 
 			MapSetProdigy, MapSetRats, MapSetSantorini, MapSetSkyScraper, MapSetTorn, MapSetDarkSnow, MapSetGalery, 
 				MapSetIndustry, MapSetIndustry2, MapSetMoonLight, MapSetPort, MapSetAbyss, MapSetAbyss2, MapSetAbyss3, 
-					MapSetOrigin, MapSetNightMare, MapSetNightMare2, MapSetNightMare3, MapSetLastClue, MapSetPanic, MapSetLostCity, MapSetTrap, MapSetSnailCity;
+					MapSetOrigin, MapSetNightMare, MapSetNightMare2, MapSetNightMare3, MapSetLastClue, MapSetPanic, MapSetLostCity, MapSetTrap, MapSetSnailCity, MapSetHarlen;
 
 	CMenuYesNoMessageBox msgBox;
 	CMenuYesNoMessageBox nomap;
@@ -233,7 +243,7 @@ class CMenuVidPreview : public
 	CMenuPicButton 
 		Adv, 		textmap, textmap2, textmap3, textmap4, textmap5, textmap6, textmap7, textmap8,textmap9,textmap10,textmap11,
 		textmap12,textmap13,textmap14,textmap15,textmap16,textmap17,textmap18,textmap19,textmap20,textmap21,textmap22,textmap23,
-		textmap24,textmap25,textmap26,textmap27,textmap28,textmap29, textmap30, textmap31, textmap32, textmap33, textmap34, textmap35;
+		textmap24,textmap25,textmap26,textmap27,textmap28,textmap29, textmap30, textmap31, textmap32, textmap33, textmap34, textmap35, textmap36;
 
 	CMenuPicButton Exit, Exit1;
 private:
@@ -272,9 +282,9 @@ void CMenuCreateGame::Begin( )
 			//EngFuncs::CvarSetValue("public", 1.0f);
 			EngFuncs::CvarSetValue("cl_nat", 1);
 
-
 			password.WriteCvar();
 			hostName.WriteCvar();
+			mapname.WriteCvar();
 			hltv.WriteCvar();
 			maxClients.WriteCvar();
 			botNum.WriteCvar();
@@ -289,96 +299,233 @@ void CMenuCreateGame::Begin( )
 			EngFuncs::CvarSetValue("maxplayers", atoi(maxClients.GetBuffer()));
 			EngFuncs::CvarSetValue("bot_quota", atoi(botNum.GetBuffer()));
 
-			if (assault.bChecked == true)
+			if (assault.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map cs_assault", atoi(maxClients.GetBuffer()));
-			else if (italy.bChecked == true)	
-				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map cs_italy", atoi(maxClients.GetBuffer()));		
-			else if (vertigo.bChecked == true)	
-				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map de_vertigo", atoi(maxClients.GetBuffer()));			
-			else if (inferno.bChecked == true)	
-				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map de_inferno", atoi(maxClients.GetBuffer()));			
-			else if (nuke.bChecked == true)		
-				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map de_nuke", atoi(maxClients.GetBuffer()));			
-			else if (dust2.bChecked == true)		
-				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map de_dust2", atoi(maxClients.GetBuffer()));			
-			else if (mirage.bChecked == true)	
-				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map de_mirage", atoi(maxClients.GetBuffer()));	
-			else if (gressia.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Assault");
+			}
+			else if (italy.bChecked == true) {
+				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map cs_italy", atoi(maxClients.GetBuffer()));
+				EngFuncs::CvarSetString("mapname", "Italy");
+			}
+			else if (vertigo.bChecked == true) {
+				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map de_vertigo", atoi(maxClients.GetBuffer()));
+				EngFuncs::CvarSetString("mapname", "Vertigo");
+			}
+			else if (inferno.bChecked == true) {
+				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map de_inferno", atoi(maxClients.GetBuffer()));
+				EngFuncs::CvarSetString("mapname", "Inferno");
+			}
+			else if (nuke.bChecked == true) {
+				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map de_nuke", atoi(maxClients.GetBuffer()));
+				EngFuncs::CvarSetString("mapname", "Nuke");
+			}
+			else if (dust2.bChecked == true) {
+				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map de_dust2", atoi(maxClients.GetBuffer()));
+				EngFuncs::CvarSetString("mapname", "Dust2");
+			}
+			else if (mirage.bChecked == true) {
+				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map de_mirage", atoi(maxClients.GetBuffer()));
+				EngFuncs::CvarSetString("mapname", "Mirage");
+			}
+			else if (gressia.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map awp_greesia", atoi(maxClients.GetBuffer()));
-			else if (ruin.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Greesia");
+			}
+			else if (ruin.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map awp_ruin", atoi(maxClients.GetBuffer()));
-			else if (bigtree.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Ruin");
+			}
+			else if (bigtree.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map bzm_bigtree", atoi(maxClients.GetBuffer()));
-			else if (dustmini.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "BigTree");
+			}
+			else if (dustmini.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map bzm_dust_mini", atoi(maxClients.GetBuffer()));
-			else if (cs747.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Dust Mini");
+			}
+			else if (cs747.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map cs_747", atoi(maxClients.GetBuffer()));
-			else if (estate.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "747");
+			}
+			else if (estate.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map cs_estate", atoi(maxClients.GetBuffer()));
-			else if (havana.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Estate");
+			}
+			else if (havana.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map cs_havana", atoi(maxClients.GetBuffer()));
-			else if (militia.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Havana");
+			}
+			else if (militia.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map cs_militia", atoi(maxClients.GetBuffer()));
-			else if (office.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Militia");
+			}
+			else if (office.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map cs_office", atoi(maxClients.GetBuffer()));
-			else if (siege.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Office");
+			}
+			else if (siege.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map cs_siege", atoi(maxClients.GetBuffer()));
-			else if (angelcity.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Siege");
+			}
+			else if (angelcity.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map de_angelcity", atoi(maxClients.GetBuffer()));
-			else if (aztec.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Angel City");
+			}
+			else if (aztec.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map de_aztec", atoi(maxClients.GetBuffer()));
-			else if (cbble.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Aztec");
+			}
+			else if (cbble.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map de_cbble", atoi(maxClients.GetBuffer()));
-			else if (chateau.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Cobblestone");
+			}
+			else if (chateau.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map de_chateau", atoi(maxClients.GetBuffer()));
-			else if (prodigy.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Chateau");
+			}
+			else if (prodigy.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map de_prodigy", atoi(maxClients.GetBuffer()));
-			else if (rats.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Prodigy");
+			}
+			else if (rats.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map de_rats", atoi(maxClients.GetBuffer()));
-			else if (santorini.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Rats");
+			}
+			else if (santorini.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map de_santorini", atoi(maxClients.GetBuffer()));
-			else if (skyscraper.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Santorini");
+			}
+			else if (skyscraper.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map de_skyscraper", atoi(maxClients.GetBuffer()));
-			else if (torn.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Skyscraper");
+			}
+			else if (torn.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map de_torn", atoi(maxClients.GetBuffer()));
-			else if (darksnow.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Torn");
+			}
+			else if (darksnow.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map dm_darksnow", atoi(maxClients.GetBuffer()));
-			else if (galery.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Dark Snow");
+			}
+			else if (galery.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map dm_gallery", atoi(maxClients.GetBuffer()));
-			else if (industry.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Gallery");
+			}
+			else if (industry.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map dm_industry", atoi(maxClients.GetBuffer()));
-			else if (industry2.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Industry");
+			}
+			else if (industry2.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map dm_industry2", atoi(maxClients.GetBuffer()));
-			else if (moonlight.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Industry 2");
+			}
+			else if (moonlight.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map dm_moonlight", atoi(maxClients.GetBuffer()));
-			else if (port.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Moonlight");
+			}
+			else if (port.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map dm_port", atoi(maxClients.GetBuffer()));
-			else if (abyss.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Port");
+			}
+			else if (abyss.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zm_abyss", atoi(maxClients.GetBuffer()));
-			else if (abyss2.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Abyss");
+			}
+			else if (abyss2.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zm_abyss2", atoi(maxClients.GetBuffer()));
-			else if (abyss3.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Abyss 2");
+			}
+			else if (abyss3.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zm_abyss3", atoi(maxClients.GetBuffer()));
-			else if (origin.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Abyss 3");
+			}
+			else if (origin.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zm_origin", atoi(maxClients.GetBuffer()));
-			else if (nightmare.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Origin");
+			}
+			else if (nightmare.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zs_nightmare", atoi(maxClients.GetBuffer()));
-			else if (nightmare2.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Nightmare");
+			}
+			else if (nightmare2.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zs_nightmare2", atoi(maxClients.GetBuffer()));
-			else if (nightmare3.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Nightmare 2");
+			}
+			else if (nightmare3.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zs_nightmare3", atoi(maxClients.GetBuffer()));
-			else if (lastclue.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Nightmare 3");
+			}
+			else if (lastclue.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zs_lastclue", atoi(maxClients.GetBuffer()));
-			else if (lostcity.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Last Clue");
+			}
+			else if (lostcity.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zs_lostcity", atoi(maxClients.GetBuffer()));
-			else if (panic.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Lost City");
+			}
+			else if (panic.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zs_panic", atoi(maxClients.GetBuffer()));
-			else if (trap.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Panic");
+			}
+			else if (trap.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zs_trap", atoi(maxClients.GetBuffer()));
-			else if (snailcity.bChecked == true)
+				EngFuncs::CvarSetString("mapname", "Trap");
+			}
+			else if (snailcity.bChecked == true) {
 				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map zsh_snailcity", atoi(maxClients.GetBuffer()));
-			else
-				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map %s\n", atoi(maxClients.GetBuffer()));		
+				EngFuncs::CvarSetString("mapname", "Snail City");
+			}
+			else if (harlen.bChecked == true) {
+				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map hd_harlem", atoi(maxClients.GetBuffer()));
+				EngFuncs::CvarSetString("mapname", "Harlem");
+			}
+			else {
+				sprintf(cmd, "menu_connectionprogress localserver;wait;wait;wait;maxplayers %i;latch;map %s\n", atoi(maxClients.GetBuffer()));
+			}
+
+			char mapnamed[128];
+			sprintf(mapnamed, "%s", EngFuncs::GetCvarString("mapname"));
+
+			if (classic.bChecked == true)
+			{
+				UI_InitPlay(mapnamed,"Classic", atoi(botNum.GetBuffer()),atoi(maxClients.GetBuffer()));
+			}
+			else if(dm.bChecked == true)
+			{
+				UI_InitPlay(mapnamed, "DeathMatch", atoi(botNum.GetBuffer()), atoi(maxClients.GetBuffer()));
+			}
+			else if (tdm.bChecked == true)
+			{
+				UI_InitPlay(mapnamed, "TDeath Match", atoi(botNum.GetBuffer()), atoi(maxClients.GetBuffer()));
+			}
+			else if (zc.bChecked == true)
+			{
+				UI_InitPlay(mapnamed, "Zombie Classic", atoi(botNum.GetBuffer()), atoi(maxClients.GetBuffer()));
+			}
+			else if (zh.bChecked == true)
+			{
+				UI_InitPlay(mapnamed, "Zombie Hero", atoi(botNum.GetBuffer()), atoi(maxClients.GetBuffer()));
+			}
+			else if (zevo.bChecked == true)
+			{
+				UI_InitPlay(mapnamed, "Zombie Evolution", atoi(botNum.GetBuffer()), atoi(maxClients.GetBuffer()));
+			}
+			else if (sz.bChecked == true)
+			{
+				UI_InitPlay(mapnamed, "Scenario Zombie", atoi(botNum.GetBuffer()), atoi(maxClients.GetBuffer()));
+			}
+			else if (zsh.bChecked == true)
+			{
+				UI_InitPlay(mapnamed, "Zombie Shelter", atoi(botNum.GetBuffer()), atoi(maxClients.GetBuffer()));
+			}
+			else if (gd.bChecked == true)
+			{
+				UI_InitPlay(mapnamed, "Gun Death", atoi(botNum.GetBuffer()), atoi(maxClients.GetBuffer()));
+			}
+			else if (hid.bChecked == true)
+			{
+				UI_InitPlay(mapnamed, "Hidden", atoi(botNum.GetBuffer()), atoi(maxClients.GetBuffer()));
+			}
 
 			EngFuncs::ClientCmd(FALSE, cmd);
 		}
@@ -457,6 +604,7 @@ void CMenuCreateGame::ResetMode(const char *value)
 		modezb5 = false;
 		modezbs = false;
 		modezsh = false;
+		modehidden = false;
 
 		botNum.iMaxLength = 3;
 		botNum.bNumbersOnly = true;
@@ -566,6 +714,9 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetSnailCity.Hide();
 		mapsnailcity.Hide();
 
+		MapSetHarlen.Hide();
+		mapharlen.Hide();
+
 		nightmare.bChecked = false;
 		nightmare2.bChecked = false;
 		nightmare3.bChecked = false;
@@ -573,6 +724,8 @@ void CMenuCreateGame::ResetMode(const char *value)
 		lostcity.bChecked = false;
 		panic.bChecked = false;
 		trap.bChecked = false;
+
+		harlen.bChecked = false;
 
 		MapSetBigTree.Hide();
 		MapSetDustMini.Hide();
@@ -936,6 +1089,7 @@ void CMenuCreateGame::ResetMode(const char *value)
 		modezb5 = false;
 		modezbs = false;
 		modezsh = false;
+		modehidden = false;
 
 		botNum.iMaxLength = 3;
 		botNum.bNumbersOnly = true;
@@ -1053,6 +1207,10 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetSnailCity.Hide();
 		mapsnailcity.Hide();
 		snailcity.bChecked = false;
+
+		MapSetHarlen.Hide();
+		mapharlen.Hide();
+		harlen.bChecked = false;
 
 		MapSetBigTree.Hide();
 		MapSetDustMini.Hide();
@@ -1416,6 +1574,7 @@ void CMenuCreateGame::ResetMode(const char *value)
 		modezb5 = false;
 		modezbs = false;
 		modezsh = false;
+		modehidden = false;
 
 		botNum.iMaxLength = 3;
 		botNum.bNumbersOnly = true;
@@ -1533,6 +1692,10 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetSnailCity.Hide();
 		mapsnailcity.Hide();
 		snailcity.bChecked = false;
+
+		MapSetHarlen.Hide();
+		mapharlen.Hide();
+		harlen.bChecked = false;
 
 		MapSetBigTree.Hide();
 		MapSetDustMini.Hide();
@@ -1896,6 +2059,7 @@ void CMenuCreateGame::ResetMode(const char *value)
 		modezb5 = false;
 		modezbs = false;
 		modezsh = false;
+		modehidden = false;
 
 		botNum.iMaxLength = 3;
 		botNum.bNumbersOnly = true;
@@ -2013,6 +2177,10 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetSnailCity.Hide();
 		mapsnailcity.Hide();
 		snailcity.bChecked = false;
+
+		MapSetHarlen.Hide();
+		mapharlen.Hide();
+		harlen.bChecked = false;
 
 		MapSetBigTree.Hide();
 		MapSetDustMini.Hide();
@@ -2376,6 +2544,7 @@ void CMenuCreateGame::ResetMode(const char *value)
 		modezb5 = false;
 		modezbs = false;
 		modezsh = false;
+		modehidden = false;
 
 		botNum.iMaxLength = 3;
 		botNum.bNumbersOnly = true;
@@ -2493,6 +2662,10 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetSnailCity.Hide();
 		mapsnailcity.Hide();
 		snailcity.bChecked = false;
+
+		MapSetHarlen.Hide();
+		mapharlen.Hide();
+		harlen.bChecked = false;
 
 		MapSetBigTree.Hide();
 		MapSetDustMini.Hide();
@@ -2856,6 +3029,7 @@ void CMenuCreateGame::ResetMode(const char *value)
 		modezb5 = false;
 		modezbs = false;
 		modezsh = false;
+		modehidden = false;
 
 		botNum.iMaxLength = 3;
 		botNum.bNumbersOnly = true;
@@ -2963,6 +3137,10 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetSnailCity.Hide();
 		mapsnailcity.Hide();
 		snailcity.bChecked = false;
+
+		MapSetHarlen.Hide();
+		mapharlen.Hide();
+		harlen.bChecked = false;
 
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
@@ -3336,6 +3514,7 @@ void CMenuCreateGame::ResetMode(const char *value)
 		modezb5 = true;
 		modezbs = false;
 		modezsh = false;
+		modehidden = false;
 
 		botNum.iMaxLength = 3;
 		botNum.bNumbersOnly = true;
@@ -3435,6 +3614,10 @@ void CMenuCreateGame::ResetMode(const char *value)
 		MapSetSnailCity.Hide();
 		mapsnailcity.Hide();
 		snailcity.bChecked = false;
+
+		MapSetHarlen.Hide();
+		mapharlen.Hide();
+		harlen.bChecked = false;
 
 		nightmare2.bChecked = false;
 		nightmare3.bChecked = false;
@@ -3815,6 +3998,7 @@ void CMenuCreateGame::ResetMode(const char *value)
 		modezb5 = false;
 		modezbs = true;
 		modezsh = false;
+		modehidden = false;
 
 		botNum.iMaxLength = 3;
 		botNum.bNumbersOnly = true;
@@ -3893,6 +4077,10 @@ void CMenuCreateGame::ResetMode(const char *value)
 
 		trap.Show();
 		textmap34.Show();
+
+		MapSetHarlen.Hide();
+		mapharlen.Hide();
+		harlen.bChecked = false;
 
 		nightmare2.bChecked = false;
 		nightmare3.bChecked = false;
@@ -4164,6 +4352,10 @@ void CMenuCreateGame::ResetMode(const char *value)
 		mapsnailcity.Show();
 		snailcity.bChecked = false;
 
+		MapSetHarlen.Hide();
+		mapharlen.Hide();
+		harlen.bChecked = false;
+
 		textmap.Hide();
 		textmap2.Hide();
 		textmap3.Hide();
@@ -4302,6 +4494,264 @@ void CMenuCreateGame::ResetMode(const char *value)
 		maptorn.Hide();
 		mapdarksnow.Hide();
 	}
+
+	else if (value == "hidden")
+	{
+		hid.LinkCvar("mp_gamemode");
+		EngFuncs::CvarSetString("mp_gamemode", value);
+		ischecksetmode = true;
+
+		textmap36.SetNameAndStatus(L("Harlen"), L(""));
+
+		modenone = false;
+		modedm = false;
+		modetdm = false;
+		modegd = false;
+		modezb1 = false;
+		modezb3 = false;
+		modezb5 = false;
+		modezbs = false;
+		modezsh = false;
+		modehidden = true;
+
+		botNum.iMaxLength = 3;
+		botNum.bNumbersOnly = true;
+		botNum.SetNameAndStatus(L("GameUI_Bots"), L(""));
+		botNum.UpdateCvar();
+		botNum.onCvarGet = botNum.onChanged;
+		SET_EVENT_MULTI(botNum.onChanged,
+			{
+				CMenuField * self = (CMenuField*)pSelf;
+				const char* buf = self->GetBuffer();
+				uiCreateGame.botnumber = atoi(buf);
+				if (uiCreateGame.botnumber <= 0)
+					self->SetBuffer("");
+				else if (uiCreateGame.botnumber > 0)
+					self->SetBuffer("0");
+			});
+		botNum.onCvarGet = botNum.onChanged;
+
+		classic.bChecked = false;
+		dm.bChecked = false;
+		tdm.bChecked = false;
+		gd.bChecked = false;
+		zc.bChecked = false;
+		zh.bChecked = false;
+		zevo.bChecked = false;
+		sz.bChecked = false;
+		zsh.bChecked = false;
+		hid.bChecked = true;
+
+		assault.bChecked = false;
+		vertigo.bChecked = false;
+		nuke.bChecked = false;
+		dust2.bChecked = false;
+		italy.bChecked = false;
+		mirage.bChecked = false;
+		inferno.bChecked = false;
+		gressia.bChecked = false;
+		ruin.bChecked = false;
+		bigtree.bChecked = false;
+		dustmini.bChecked = false;
+		cs747.bChecked = false;
+		estate.bChecked = false;
+		havana.bChecked = false;
+		militia.bChecked = false;
+		office.bChecked = false;
+		siege.bChecked = false;
+		angelcity.bChecked = false;
+
+		aztec.bChecked = false;
+		cbble.bChecked = false;
+		chateau.bChecked = false;
+		prodigy.bChecked = false;
+		rats.bChecked = false;
+		santorini.bChecked = false;
+		skyscraper.bChecked = false;
+		torn.bChecked = false;
+		darksnow.bChecked = false;
+
+		snailcity.bChecked = false;
+
+		MapSetAztec.Hide();
+		MapSetCbble.Hide();
+		MapSetChateau.Hide();
+		MapSetProdigy.Hide();
+		MapSetRats.Hide();
+		MapSetSantorini.Hide();
+		MapSetSkyScraper.Hide();
+		MapSetTorn.Hide();
+		MapSetDarkSnow.Hide();
+
+		MapSetBigTree.Hide();
+		MapSetDustMini.Hide();
+		MapSet747.Hide();
+		MapSetEstate.Hide();
+		MapSetHavana.Hide();
+		MapSetMilitia.Hide();
+		MapSetOffice.Hide();
+		MapSetSiege.Hide();
+		MapSetAngelCity.Hide();
+		MapSetAssault.Hide();
+		MapSetItaly.Hide();
+		MapSetVertigo.Hide();
+		MapSetInferno.Hide();
+		MapSetNuke.Hide();
+		MapSetDust.Hide();
+		MapSetMirage.Hide();
+		MapSetGressia.Hide();
+		MapSetRuin.Hide();
+
+		MapSetSnailCity.Hide();
+		snailcity.Hide();
+		textmap35.Hide();
+		mapsnailcity.Hide();
+		snailcity.bChecked = false;
+
+		MapSetHarlen.Hide();
+		textmap36.Show();	
+		mapharlen.Show();
+		harlen.bChecked = true;
+
+		textmap.Hide();
+		textmap2.Hide();
+		textmap3.Hide();
+		textmap4.Hide();
+		textmap5.Hide();
+		textmap6.Hide();
+		textmap7.Hide();
+		textmap8.Hide();
+		textmap9.Hide();
+
+		textmap10.Hide();
+		textmap11.Hide();
+		textmap12.Hide();
+		textmap13.Hide();
+		textmap14.Hide();
+		textmap15.Hide();
+		textmap16.Hide();
+		textmap17.Hide();
+		textmap18.Hide();
+
+		textmap19.Hide();
+		textmap20.Hide();
+		textmap21.Hide();
+		textmap22.Hide();
+		textmap23.Hide();
+		textmap24.Hide();
+		textmap25.Hide();
+		textmap26.Hide();
+		textmap27.Hide();
+
+		mapassault.Hide();
+		mapitaly.Hide();
+		mapvertigo.Hide();
+		mapinferno.Hide();
+		mapnuke.Hide();
+		mapdust.Hide();
+		mapmirage.Hide();
+		mapgressia.Hide();
+		mapruin.Hide();
+
+		assault.Hide();
+		vertigo.Hide();
+		italy.Hide();
+		nuke.Hide();
+		dust2.Hide();
+		inferno.Hide();
+		mirage.Hide();
+		gressia.Hide();
+		ruin.Hide();
+
+		bigtree.Hide();
+		dustmini.Hide();
+		cs747.Hide();
+		estate.Hide();
+		havana.Hide();
+		militia.Hide();
+		office.Hide();
+		siege.Hide();
+		angelcity.Hide();
+
+		mapbigtree.Hide();
+		mapdustmini.Hide();
+		mapcs747.Hide();
+		mapestate.Hide();
+		maphavana.Hide();
+		mapmilitia.Hide();
+		mapoffice.Hide();
+		mapsiege.Hide();
+		mapangelcity.Hide();
+
+		aztec.Hide();
+		cbble.Hide();
+		chateau.Hide();
+		prodigy.Hide();
+		rats.Hide();
+		santorini.Hide();
+		skyscraper.Hide();
+		torn.Hide();
+		darksnow.Hide();
+
+		uparrow.Hide();
+		downarrow.Hide();
+
+		mapnightmare.Hide();
+		MapSetNightMare.Hide();
+		nightmare.Hide();
+		textmap28.Hide();
+		nightmare.bChecked = false;
+
+
+		mapnightmare2.Hide();
+		MapSetNightMare2.Hide();
+		mapnightmare3.Hide();
+		MapSetNightMare3.Hide();
+		maplastclue.Hide();
+		MapSetLastClue.Hide();
+		maplostcity.Hide();
+		MapSetLostCity.Hide();
+		mappanic.Hide();
+		MapSetPanic.Hide();
+		maptrap.Hide();
+		MapSetTrap.Hide();
+
+		nightmare2.Hide();
+		textmap29.Hide();
+
+		nightmare3.Hide();
+		textmap30.Hide();
+
+		lastclue.Hide();
+		textmap31.Hide();
+
+		lostcity.Hide();
+		textmap32.Hide();
+
+		panic.Hide();
+		textmap33.Hide();
+
+		trap.Hide();
+		textmap34.Hide();
+
+		nightmare2.bChecked = false;
+		nightmare3.bChecked = false;
+		lastclue.bChecked = false;
+		lostcity.bChecked = false;
+		panic.bChecked = false;
+		trap.bChecked = false;
+
+		mapaztec.Hide();
+		mapcbble.Hide();
+		mapchateau.Hide();
+		mapprodigy.Hide();
+		maprats.Hide();
+		mapsantorini.Hide();
+		mapskyscraper.Hide();
+		maptorn.Hide();
+		mapdarksnow.Hide();
+		}
+
 	else
 	{
 		if (stringmaplist == 1)
@@ -5213,6 +5663,9 @@ void CMenuCreateGame::ResetMap( int value)
 		torn.bChecked = false;
 		darksnow.bChecked = false;
 
+		harlen.bChecked = false;
+		MapSetHarlen.Hide();
+
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
 		MapSetChateau.Hide();
@@ -5237,6 +5690,9 @@ void CMenuCreateGame::ResetMap( int value)
 		skyscraper.bChecked = false;
 		torn.bChecked = false;
 		darksnow.bChecked = false;
+
+		harlen.bChecked = false;
+		MapSetHarlen.Hide();
 
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
@@ -5263,6 +5719,9 @@ void CMenuCreateGame::ResetMap( int value)
 		torn.bChecked = false;
 		darksnow.bChecked = false;
 
+		harlen.bChecked = false;
+		MapSetHarlen.Hide();
+
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
 		MapSetChateau.Hide();
@@ -5287,6 +5746,9 @@ void CMenuCreateGame::ResetMap( int value)
 		skyscraper.bChecked = true;
 		torn.bChecked = false;
 		darksnow.bChecked = false;
+
+		harlen.bChecked = false;
+		MapSetHarlen.Hide();
 
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
@@ -5313,6 +5775,9 @@ void CMenuCreateGame::ResetMap( int value)
 		torn.bChecked = true;
 		darksnow.bChecked = false;
 
+		harlen.bChecked = false;
+		MapSetHarlen.Hide();
+
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
 		MapSetChateau.Hide();
@@ -5337,6 +5802,9 @@ void CMenuCreateGame::ResetMap( int value)
 		skyscraper.bChecked = false;
 		torn.bChecked = false;
 		darksnow.bChecked = true;
+
+		harlen.bChecked = false;
+		MapSetHarlen.Hide();
 
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
@@ -5373,6 +5841,9 @@ void CMenuCreateGame::ResetMap( int value)
 
 		snailcity.bChecked = false;
 		MapSetSnailCity.Hide();
+
+		harlen.bChecked = false;
+		MapSetHarlen.Hide();
 
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
@@ -5418,6 +5889,9 @@ void CMenuCreateGame::ResetMap( int value)
 		snailcity.bChecked = false;
 		MapSetSnailCity.Hide();
 
+		harlen.bChecked = false;
+		MapSetHarlen.Hide();
+
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
 		MapSetChateau.Hide();
@@ -5461,6 +5935,9 @@ void CMenuCreateGame::ResetMap( int value)
 
 		snailcity.bChecked = false;
 		MapSetSnailCity.Hide();
+
+		harlen.bChecked = false;
+		MapSetHarlen.Hide();
 
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
@@ -5506,6 +5983,9 @@ void CMenuCreateGame::ResetMap( int value)
 		snailcity.bChecked = false;
 		MapSetSnailCity.Hide();
 
+		harlen.bChecked = false;
+		MapSetHarlen.Hide();
+
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
 		MapSetChateau.Hide();
@@ -5548,6 +6028,9 @@ void CMenuCreateGame::ResetMap( int value)
 
 		snailcity.bChecked = false;
 		MapSetSnailCity.Hide();
+
+		harlen.bChecked = false;
+		MapSetHarlen.Hide();
 
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
@@ -5592,6 +6075,9 @@ void CMenuCreateGame::ResetMap( int value)
 		snailcity.bChecked = false;
 		MapSetSnailCity.Hide();
 
+		harlen.bChecked = false;
+		MapSetHarlen.Hide();
+
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
 		MapSetChateau.Hide();
@@ -5635,6 +6121,9 @@ void CMenuCreateGame::ResetMap( int value)
 		snailcity.bChecked = false;
 		MapSetSnailCity.Hide();
 
+		harlen.bChecked = false;
+		MapSetHarlen.Hide();
+
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
 		MapSetChateau.Hide();
@@ -5676,6 +6165,9 @@ void CMenuCreateGame::ResetMap( int value)
 		trap.bChecked = false;
 		snailcity.bChecked = true;
 
+		harlen.bChecked = false;
+		MapSetHarlen.Hide();
+
 		MapSetAztec.Hide();
 		MapSetCbble.Hide();
 		MapSetChateau.Hide();
@@ -5695,6 +6187,50 @@ void CMenuCreateGame::ResetMap( int value)
 		MapSetTrap.Hide();
 		MapSetSnailCity.Show();
 	}
+	else if (value == 36)//harlen
+	{
+		ischecksetmap = true;
+
+		aztec.bChecked = false;
+		cbble.bChecked = false;
+		chateau.bChecked = false;
+		prodigy.bChecked = false;
+		rats.bChecked = false;
+		santorini.bChecked = false;
+		skyscraper.bChecked = false;
+		torn.bChecked = false;
+		darksnow.bChecked = false;
+		nightmare.bChecked = false;
+
+		nightmare2.bChecked = false;
+		nightmare3.bChecked = false;
+		lastclue.bChecked = false;
+		lostcity.bChecked = false;
+		panic.bChecked = false;
+		trap.bChecked = false;
+		snailcity.bChecked = false;
+		harlen.bChecked = true;
+
+		MapSetAztec.Hide();
+		MapSetCbble.Hide();
+		MapSetChateau.Hide();
+		MapSetProdigy.Hide();
+		MapSetRats.Hide();
+		MapSetSantorini.Hide();
+		MapSetSkyScraper.Hide();
+		MapSetTorn.Hide();
+		MapSetDarkSnow.Hide();
+		MapSetNightMare.Hide();
+
+		MapSetNightMare2.Hide();
+		MapSetNightMare3.Hide();
+		MapSetLastClue.Hide();
+		MapSetLostCity.Hide();
+		MapSetPanic.Hide();
+		MapSetTrap.Hide();
+		MapSetSnailCity.Hide();
+		MapSetHarlen.Show();
+		}
 	else
 	{
 		botNum.Hide();
@@ -5814,6 +6350,10 @@ void CMenuCreateGame::ResetMap( int value)
 			mapsnailcity.Hide();
 			MapSetSnailCity.Hide();
 			snailcity.Hide();
+
+			mapharlen.Hide();
+			MapSetHarlen.Hide();
+			harlen.Hide();
 		}
 		else if (stringmaplist == 2)
 		{
@@ -5925,6 +6465,10 @@ void CMenuCreateGame::ResetMap( int value)
 			mapnightmare.Hide();
 			MapSetNightMare.Hide();
 			nightmare.Hide();
+
+			mapharlen.Hide();
+			MapSetHarlen.Hide();
+			harlen.Hide();
 		}
 		else if (stringmaplist == 3)
 		{
@@ -6060,6 +6604,10 @@ void CMenuCreateGame::ResetMap( int value)
 			maptrap.Hide();
 			MapSetTrap.Hide();
 			trap.Hide();
+
+			mapharlen.Hide();
+			MapSetHarlen.Hide();
+			harlen.Hide();
 		}
 
 		ischecksetmap = false;
@@ -6121,6 +6669,10 @@ void CMenuCreateGame::ResetMap( int value)
 		MapSetMirage.Hide();
 		MapSetGressia.Hide();
 		MapSetRuin.Hide();
+
+		mapharlen.Hide();
+		MapSetHarlen.Hide();
+		harlen.Hide();
 	}
 }
 
@@ -6961,6 +7513,31 @@ void CMenuCreateGame::_Init( void )
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
 
+	mapharlen.iFlags = QMF_NOTIFY;
+	mapharlen.SetRect(160, 225, 256, 124);
+	mapharlen.SetPicture(ART_HARLEN);
+	mapharlen.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	SET_EVENT_MULTI(mapharlen.onActivated,
+		{
+			uiCreateGame.ResetMap(36);
+			((CMenuCheckBox*)pSelf)->bChecked = true;
+		});
+
+	MapSetHarlen.SetCharSize(QM_SMALLFONT);
+	MapSetHarlen.SetModel(&mapsListModel);
+	MapSetHarlen.SetRect(160, 193, 252, 154);
+	MapSetHarlen.colorBase = uiColorWhite;
+
+	harlen.SetNameAndStatus(L(""), L(""));
+	harlen.iFlags |= QMF_NOTIFY;
+	harlen.SetCoord(380, 230);
+	SET_EVENT_MULTI(harlen.onChanged,
+		{
+			uiCreateGame.ResetMap(36);
+			((CMenuCheckBox*)pSelf)->bChecked = true;
+		});
+
+
 	classic.SetNameAndStatus(L("CstzUI_Mod_classic"), L(""));
 	classic.iFlags |= QMF_NOTIFY;
 	classic.SetCoord(1025, 230);
@@ -6986,6 +7563,7 @@ void CMenuCreateGame::_Init( void )
 			uiCreateGame.ResetMode("none");
 			uiCreateGame.botNum.LinkCvar("bot_quota");
 
+			uiCreateGame.harlen.bChecked = false;
 			uiCreateGame.nightmare2.bChecked = false;
 			uiCreateGame.nightmare3.bChecked = false;
 			uiCreateGame.lastclue.bChecked = false;
@@ -7052,6 +7630,7 @@ void CMenuCreateGame::_Init( void )
 			uiCreateGame.ResetMode("dm");
 			uiCreateGame.botNum.LinkCvar("bot_quota");
 
+			uiCreateGame.harlen.bChecked = false;
 			uiCreateGame.nightmare2.bChecked = false;
 			uiCreateGame.nightmare3.bChecked = false;
 			uiCreateGame.lastclue.bChecked = false;
@@ -7118,6 +7697,7 @@ void CMenuCreateGame::_Init( void )
 			uiCreateGame.ResetMode("tdm");
 			uiCreateGame.botNum.LinkCvar("bot_quota");
 
+			uiCreateGame.harlen.bChecked = false;
 			uiCreateGame.nightmare2.bChecked = false;
 			uiCreateGame.nightmare3.bChecked = false;
 			uiCreateGame.lastclue.bChecked = false;
@@ -7184,6 +7764,7 @@ void CMenuCreateGame::_Init( void )
 			uiCreateGame.ResetMode("gd");
 			uiCreateGame.botNum.LinkCvar("bot_quota");
 
+			uiCreateGame.harlen.bChecked = false;
 			uiCreateGame.nightmare2.bChecked = false;
 			uiCreateGame.nightmare3.bChecked = false;
 			uiCreateGame.lastclue.bChecked = false;
@@ -7251,6 +7832,7 @@ void CMenuCreateGame::_Init( void )
 			uiCreateGame.ResetMode("zb1");
 			uiCreateGame.botNum.LinkCvar("bot_quota");
 
+			uiCreateGame.harlen.bChecked = false;
 			uiCreateGame.nightmare2.bChecked = false;
 			uiCreateGame.nightmare3.bChecked = false;
 			uiCreateGame.lastclue.bChecked = false;
@@ -7318,6 +7900,7 @@ void CMenuCreateGame::_Init( void )
 			uiCreateGame.ResetMode("zb3");
 			uiCreateGame.botNum.LinkCvar("bot_quota");
 
+			uiCreateGame.harlen.bChecked = false;
 			uiCreateGame.nightmare2.bChecked = false;
 			uiCreateGame.nightmare3.bChecked = false;
 			uiCreateGame.lastclue.bChecked = false;
@@ -7386,6 +7969,7 @@ void CMenuCreateGame::_Init( void )
 			uiCreateGame.ResetMode("zb5");
 			uiCreateGame.botNum.LinkCvar("bot_quota");
 
+			uiCreateGame.harlen.bChecked = false;
 			uiCreateGame.nightmare2.bChecked = false;
 			uiCreateGame.nightmare3.bChecked = false;
 			uiCreateGame.lastclue.bChecked = false;
@@ -7437,6 +8021,7 @@ void CMenuCreateGame::_Init( void )
 			uiCreateGame.botNum.LinkCvar("bot_quota");
 			uiCreateGame.ResetMode("zbs");
 
+			uiCreateGame.harlen.bChecked = false;
 			uiCreateGame.nightmare2.bChecked = false;
 			uiCreateGame.nightmare3.bChecked = false;
 			uiCreateGame.lastclue.bChecked = false;
@@ -7489,6 +8074,7 @@ void CMenuCreateGame::_Init( void )
 			uiCreateGame.botNum.Hide();
 			uiCreateGame.ResetMode("zsh_pve");
 
+			uiCreateGame.harlen.bChecked = false;
 			uiCreateGame.nightmare2.bChecked = false;
 			uiCreateGame.nightmare3.bChecked = false;
 			uiCreateGame.lastclue.bChecked = false;
@@ -7529,6 +8115,59 @@ void CMenuCreateGame::_Init( void )
 			((CMenuCheckBox*)pSelf)->bChecked = true;
 		});
 	
+	hid.SetNameAndStatus(L("CstzUI_Mod_hidden"), L(""));
+	hid.iFlags |= QMF_NOTIFY;
+	hid.SetCoord(1025, 600);
+	hid.colorBase = uiColorRed;
+	hid.SetCharSize(QM_BOLDFONT);
+	SET_EVENT_MULTI(hid.onChanged,
+		{
+			uiCreateGame.ResetMap(0);
+			uiCreateGame.botNum.LinkCvar("bot_quota");
+			uiCreateGame.botNum.Hide();
+			uiCreateGame.ResetMode("hidden");
+
+			uiCreateGame.harlen.bChecked = false;
+			uiCreateGame.nightmare2.bChecked = false;
+			uiCreateGame.nightmare3.bChecked = false;
+			uiCreateGame.lastclue.bChecked = false;
+			uiCreateGame.lostcity.bChecked = false;
+			uiCreateGame.panic.bChecked = false;
+			uiCreateGame.trap.bChecked = false;
+
+			uiCreateGame.assault.bChecked = false;
+			uiCreateGame.vertigo.bChecked = false;
+			uiCreateGame.nuke.bChecked = false;
+			uiCreateGame.dust2.bChecked = false;
+			uiCreateGame.italy.bChecked = false;
+			uiCreateGame.mirage.bChecked = false;
+			uiCreateGame.inferno.bChecked = false;
+			uiCreateGame.gressia.bChecked = false;
+			uiCreateGame.ruin.bChecked = false;
+			uiCreateGame.bigtree.bChecked = false;
+			uiCreateGame.dustmini.bChecked = false;
+			uiCreateGame.cs747.bChecked = false;
+			uiCreateGame.estate.bChecked = false;
+			uiCreateGame.havana.bChecked = false;
+			uiCreateGame.militia.bChecked = false;
+			uiCreateGame.office.bChecked = false;
+			uiCreateGame.siege.bChecked = false;
+			uiCreateGame.angelcity.bChecked = false;
+
+			uiCreateGame.aztec.bChecked = false;
+			uiCreateGame.cbble.bChecked = false;
+			uiCreateGame.chateau.bChecked = false;
+			uiCreateGame.prodigy.bChecked = false;
+			uiCreateGame.rats.bChecked = false;
+			uiCreateGame.santorini.bChecked = false;
+			uiCreateGame.skyscraper.bChecked = false;
+			uiCreateGame.torn.bChecked = false;
+			uiCreateGame.darksnow.bChecked = false;
+			uiCreateGame.ischecksetmap = false;
+
+			((CMenuCheckBox*)pSelf)->bChecked = true;
+		});
+
 	Adv.SetNameAndStatus(L("GameUI_ServerSettings"), L(""));
 	Adv.onActivated = UI_AdvServerOptions_Menu;
 	Adv.iFlags |= QMF_NOTIFY;
@@ -7625,7 +8264,12 @@ void CMenuCreateGame::_Init( void )
 	msgBox.Link( this );
 
 	Exit.SetNameAndStatus(L("GameUI_Cancel"), L(""));
-	Exit.onActivated = VoidCb(&CMenuCreateGame::Hide);
+	SET_EVENT_MULTI(Exit.onActivated,
+		{
+			uiCreateGame.Hide();
+			UI_InitMainMenu();
+		}
+	);
 	Exit.iFlags |= QMF_NOTIFY;
 	Exit.colorBase = uiColorRed;
 	Exit.SetCharSize(QM_BOLDFONT);
@@ -7670,6 +8314,7 @@ void CMenuCreateGame::_Init( void )
 	AddItem( mappanic );
 	AddItem( maptrap );
 	AddItem( mapsnailcity );
+	AddItem( mapharlen );
 
 	AddItem( MapSetAztec );
 	AddItem( MapSetCbble );
@@ -7710,6 +8355,7 @@ void CMenuCreateGame::_Init( void )
 	AddItem( MapSetOffice );
 	AddItem( MapSetSiege );
 	AddItem( MapSetAngelCity );
+	AddItem( MapSetHarlen );
 
 	AddItem( assault );
 	AddItem( italy );
@@ -7739,6 +8385,7 @@ void CMenuCreateGame::_Init( void )
 	AddItem( panic );
 	AddItem( trap );
 	AddItem( snailcity );
+	AddItem( harlen );
 
 	AddItem( bigtree );
 	AddItem( dustmini );
@@ -7759,6 +8406,7 @@ void CMenuCreateGame::_Init( void )
 	AddItem( zevo );
 	AddItem( sz );
 	AddItem( zsh );
+	AddItem( hid );
 
 	AddItem( textmap );
 	AddItem( textmap2 );
@@ -7799,6 +8447,7 @@ void CMenuCreateGame::_Init( void )
 	AddItem( textmap33 );
 	AddItem( textmap34 );
 	AddItem( textmap35 );
+	AddItem( textmap36 );
 
 	AddItem( Inventory );
 
@@ -7951,6 +8600,9 @@ void CMenuCreateGame::_VidInit()
 		uiCreateGame.textmap35.iFlags |= QMF_INACTIVE;
 		uiCreateGame.textmap35.SetCoord(248, 310);
 		textmap35.SetCharSize(QM_BOLDFONT);
+		uiCreateGame.textmap36.iFlags |= QMF_INACTIVE;
+		uiCreateGame.textmap36.SetCoord(248, 310);
+		textmap36.SetCharSize(QM_BOLDFONT);
 
 		textmap.Show();
 		textmap2.Show();
@@ -7990,6 +8642,7 @@ void CMenuCreateGame::_VidInit()
 		textmap33.Hide();
 		textmap34.Hide();
 		textmap35.Hide();
+		textmap36.Hide();
 
 		mapassault.Show();
 		mapitaly.Show();
@@ -8081,6 +8734,10 @@ void CMenuCreateGame::_VidInit()
 		mapsnailcity.Hide();
 		MapSetSnailCity.Hide();
 		snailcity.Hide();
+
+		mapharlen.Hide();
+		MapSetHarlen.Hide();
+		harlen.Hide();
 
 	}
 	else if (stringmaplist == 2)
@@ -8327,6 +8984,8 @@ void UI_CreateGame_Menu( void )
 	{
 		uiCreateGame.uparrow.Hide();
 	}
+
+	UI_InitCreate();
 
 	uiCreateGame.Show();
 

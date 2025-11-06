@@ -443,7 +443,7 @@ void VGUI_InitKeyTranslationTable( void )
 	//s_pVirtualKeyTrans[SDLK_RALT] = KEY_RALT;
 	s_pVirtualKeyTrans[K_ALT] = KEY_LALT;		// ALT -> left ALT
 	//s_pVirtualKeyTrans[SDLK_RCTRL] = KEY_RCONTROL;
-//	s_pVirtualKeyTrans[K_CTRL] = KEY_LCONTROL;	// CTRL -> left CTRL
+	s_pVirtualKeyTrans[K_CTRL] = KEY_LCONTROL;	// CTRL -> left CTRL
 	s_pVirtualKeyTrans[K_WIN] = KEY_LWIN;
 	//s_pVirtualKeyTrans[SDLK_APPLICATION] = KEY_RWIN;
 	//s_pVirtualKeyTrans[K_WIN] = KEY_APP;

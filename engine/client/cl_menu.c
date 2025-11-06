@@ -868,7 +868,7 @@ int pfnCheckGameDll( void )
 		return true;
 
 	Com_ResetLibraryError();
-	if(( hInst = Com_LoadLibrary(SI.gamedll, true )) != NULL )
+	if(( hInst = Com_LoadLibrary(GI->game_dll, false )) != NULL )
 	{
 		return true;
 	}

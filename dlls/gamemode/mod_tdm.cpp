@@ -7,6 +7,7 @@
 #include "trains.h"
 #include "bmodels.h"
 
+#include "gd/gd_const.h"
 #include "mod_tdm.h"
 
 class CMultiplayGameMgrHelper : public IVoiceGameMgrHelper
@@ -33,6 +34,16 @@ void CMod_TeamDeathMatch::InstallPlayerModStrategy(CBasePlayer *player)
 	public:
 		MyPlayerModStrategy(CBasePlayer *player) : CPlayerModStrategy_Default(player) {}
 		bool CanPlayerBuy(bool display) override { return true; }
+
+		void OnKilled(entvars_t* pKiller, entvars_t* pInflictor) override
+		{
+			MESSAGE_BEGIN(MSG_ONE, gmsgTDMRespawnBar, nullptr, m_pPlayer->pev);
+			WRITE_BYTE(GD_RESPAWN_BAR);
+			WRITE_BYTE(3);
+			MESSAGE_END();
+
+			return CPlayerModStrategy_Default::OnKilled(pKiller, pInflictor);
+		}
 	};
 
 	std::unique_ptr<MyPlayerModStrategy> up(new MyPlayerModStrategy(player));

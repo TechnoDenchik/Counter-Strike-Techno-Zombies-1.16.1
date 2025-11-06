@@ -142,6 +142,9 @@ struct HUDLIST {
 #include "zsh/zsh.h"
 #include "pr/pr.h"
 #include "gd/gd.h"
+#include "dm/dm.h"
+#include "tdm/tdm.h"
+#include "hidden/hidden.h"
 #include "original/mod_base.h"
 #include "legacy/hud_scoreboard_legacy.h"
 #include "zbs/zbs_scoreboard.h"
@@ -1611,8 +1614,11 @@ public:
 	CHudZBS	m_ZBS;
 	CHudZB2 m_ZB2;
 	CHudClassic m_CLS;
+	CHudDeathMatch m_dm;
+	CHudTeamDeathMatch m_tdm;
 	CWeaponInt m_WPI;
 	CHudGunDeath m_gd;
+	CHudHidden m_hid;
 	CHudZB3 m_ZB3;
 	CHudZB5 m_ZB5;
 	CHudZSH m_ZSH;

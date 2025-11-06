@@ -54,7 +54,7 @@ void KeyCode_InitKeyTranslationTable(void)
 	s_pVirtualKeyToKeyCode['X'] = vgui2::KEY_X;
 	s_pVirtualKeyToKeyCode['Y'] = vgui2::KEY_Y;
 	s_pVirtualKeyToKeyCode['Z'] = vgui2::KEY_Z;
-	s_pVirtualKeyToKeyCode['CTRL'] = vgui2::KEY_CTRL;
+	//s_pVirtualKeyToKeyCode['CTRL'] = vgui2::KEY_CTRL;
 	s_pVirtualKeyToKeyCode[VK_NUMPAD0] = vgui2::KEY_PAD_0;
 	s_pVirtualKeyToKeyCode[VK_NUMPAD1] = vgui2::KEY_PAD_1;
 	s_pVirtualKeyToKeyCode[VK_NUMPAD2] = vgui2::KEY_PAD_2;

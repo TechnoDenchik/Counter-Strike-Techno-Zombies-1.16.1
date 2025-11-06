@@ -366,6 +366,7 @@ void CMod_ZombieScenario::CheckMapConditions()
 	}
 
 	m_iRoundTimeSecs = m_iIntroRoundTime = 20 + 2;
+	finished = false;
 
 	return Base::CheckMapConditions();
 }
@@ -406,6 +407,24 @@ void CMod_ZombieScenario::Think()
 
 	if (CheckGameOver())   // someone else quit the game already
 		return;
+
+	if (finished == true)
+	{
+		static int iLastCountDown = -1;
+		int iCountDown = static_cast<int>(gpGlobals->time - m_fRoundCount);
+
+		if (iCountDown < 5)
+		{
+			if (iCountDown != iLastCountDown)
+			{
+				iLastCountDown = iCountDown;
+			}
+		}
+		else
+		{
+			ChangeLevel();		
+		}	
+	}
 
 	if (IsFreezePeriod())
 	{
@@ -485,6 +504,9 @@ void CMod_ZombieScenario::Think()
 
 	if (FRoundStarted() && !m_bRoundTerminating)
 	{
+		if (finished == true)
+			return;
+
 		if (gpGlobals->time > m_flNextSpawnNPC)
 		{
 			MakeZombieNPC();
@@ -504,7 +526,7 @@ void CMod_ZombieScenario::Think()
 	}
 
 	if (TimeRemaining() <= 0 && !m_bRoundTerminating )
-		HumanWin();
+		HumanWin(true);
 }
 
 void CMod_ZombieScenario::CheckWinConditions()
@@ -524,7 +546,7 @@ void CMod_ZombieScenario::CheckWinConditions()
 	}
 }
 
-void CMod_ZombieScenario::HumanWin()
+void CMod_ZombieScenario::HumanWin(bool finish)
 {
 	m_fRoundCount = gpGlobals->time;
 	m_iRoundTimeSecs = m_iRoundTime;
@@ -537,6 +559,9 @@ void CMod_ZombieScenario::HumanWin()
 	++m_iNumCTWins;
 	UpdateTeamScores();
 	ClearZombieNPC();
+
+	finished = finish;
+
     CLIENT_COMMAND(0, "mp3 stop\n");
 }
 
