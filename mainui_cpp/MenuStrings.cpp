@@ -28,7 +28,7 @@ GNU General Public License for more details.
 #define EMPTY_STRINGS_50 EMPTY_STRINGS_20, EMPTY_STRINGS_20, EMPTY_STRINGS_10
 #define EMPTY_STRINGS_100 EMPTY_STRINGS_50, EMPTY_STRINGS_50
 
-#define HASH_SIZE 256 // 256 * 4 * 4 == 4096 bytes
+#define HASH_SIZE 2048 // 256 * 4 * 4 == 4096 bytes
 static struct dictionary_t
 {
 	const char *name;
@@ -42,7 +42,7 @@ EMPTY_STRINGS_100, // 0..9
 EMPTY_STRINGS_20, // 100..119
 EMPTY_STRINGS_10, // 120..129
 EMPTY_STRINGS_2, // 130..131
-"Display mode", // 132
+L("CstzUI_Display"), // 132
 EMPTY_STRINGS_5, // 133..137
 EMPTY_STRINGS_2, // 138..139
 EMPTY_STRINGS_20, // 140..159
@@ -59,15 +59,15 @@ EMPTY_STRINGS_2, // 186..187
 EMPTY_STRINGS_1,	// 190
 "Load a previously saved game.", // 191
 "Load a saved game, save the current game.", // 192
-"Change game settings, configure controls", // 193
+L("CstzUI_Change"), // 193
 EMPTY_STRINGS_20, // 194..213
 EMPTY_STRINGS_20, // 214..233
 "Starting a Hazard Course will exit\nany current game, OK to exit?", // 234
 EMPTY_STRINGS_1, // 235
-"Are you sure you want to quit?", // 236
+
 EMPTY_STRINGS_2, // 237..238
 EMPTY_STRINGS_1, // 239
-"Starting a new game will exit\nany current game, OK to exit?",	// 240
+L("CstzUI_Startnewgame"),	// 240
 EMPTY_STRINGS_5, // 241..245
 EMPTY_STRINGS_2, // 246..247
 EMPTY_STRINGS_2, // 248..249
@@ -80,7 +80,7 @@ EMPTY_STRINGS_5, // 403..407
 EMPTY_STRINGS_2, // 408..409
 EMPTY_STRINGS_100, // 410..509
 EMPTY_STRINGS_20, // 510..529
-"Select a custom game",	// 530
+"https://discord.gg/U9sdYbZrRU",	// 530
 EMPTY_STRINGS_5, // 531..535
 EMPTY_STRINGS_2, // 536..537
 EMPTY_STRINGS_2, // 538..539
@@ -135,7 +135,7 @@ static inline dictionary_t *Dictionary_GetBucket( const char *name )
 
 static void UI_InitAliasStrings( void )
 {
-	char token[1024];
+	char token[4024];
 
 	/*// some strings needs to be initialized here
 	sprintf( token, "Quit %s without\nsaving current game?", gMenu.m_gameinfo.title );
@@ -162,8 +162,8 @@ static void UI_InitAliasStrings( void )
 
 static void Localize_AddToDictionary( const char *name, const char *lang )
 {
-	char filename[64];
-	snprintf( filename, sizeof( filename ), "resource/%s_%s.txt", name, lang );
+	char filename[32000];
+	snprintf( filename, sizeof( filename ), "Resource/%s_%s.txt", name, lang );
 
 	int unicodeLength;
 	uchar16 *unicodeBuf = (uchar16*)EngFuncs::COM_LoadFile( filename, &unicodeLength );
@@ -173,7 +173,8 @@ static void Localize_AddToDictionary( const char *name, const char *lang )
 		int ansiLength = unicodeLength / 2;
 		char *afile = new char[ansiLength]; // save original pointer, so we can free it later
 		char *pfile = afile;
-		char token[4096];
+		char token[32000];
+		char token2[32000];
 		int i = 0;
 
 		Q_UTF16ToUTF8( unicodeBuf + 1, afile, ansiLength, STRINGCONVERT_ASSERT_REPLACE );
@@ -226,7 +227,7 @@ static void Localize_AddToDictionary( const char *name, const char *lang )
 			if( !strcmp( token, "}" ))
 				break;
 
-			char szLocString[4096];
+			char szLocString[32000];
 			pfile = EngFuncs::COM_ParseFile( pfile, szLocString );
 
 			if( !strcmp( szLocString, "}" ))
@@ -255,9 +256,11 @@ error:
 
 static void Localize_Init( void )
 {
-	char gamedir[256];
+	char gamedir[32000];
+	char gamedir2[32000];
 
 	EngFuncs::GetGameDir( gamedir );
+	EngFuncs::GetGameDir(gamedir2);
 
 	memset( hashed_cmds, 0, sizeof( hashed_cmds ) );
 
@@ -265,10 +268,22 @@ static void Localize_Init( void )
 	if( strcmp( gamedir, "gameui" )) // just for case
 		Localize_AddToDictionary( "gameui", "russian" );
 
-	Localize_AddToDictionary( "cstz",  "russian" );
+	if (strcmp(gamedir, "cstzui")) // just for case
+		Localize_AddToDictionary("cstzui", "russian");
+
 
 	if( strcmp( gamedir, "cstz" ))
-		Localize_AddToDictionary( gamedir,  "russian" );
+		Localize_AddToDictionary("cstz",  "russian" );
+
+	if (strcmp(gamedir, "cso_na_ru"))
+		Localize_AddToDictionary("cso_na_ru", "russian");
+
+
+	if (strcmp(gamedir2, "cstzmodui"))
+		Localize_AddToDictionary("cstzmodui", "russian");
+	
+	Localize_AddToDictionary(gamedir, "russian");
+	Localize_AddToDictionary(gamedir2,  "russian" );
 }
 
 static void Localize_Free( void )
@@ -295,7 +310,7 @@ void UI_LoadCustomStrings( void )
 {
 	char *afile = (char *)EngFuncs::COM_LoadFile( "gfx/shell/strings.lst", NULL );
 	char *pfile = afile;
-	char token[1024];
+	char token[32000];
 	int string_num;
 
 	UI_InitAliasStrings ();
@@ -319,23 +334,40 @@ void UI_LoadCustomStrings( void )
 
 		// parse new string
 		pfile = EngFuncs::COM_ParseFile( pfile, token );
-		//MenuStrings[string_num] = StringCopy( token ); // replace default string with custom
+		MenuStrings[string_num] = StringCopy( token ); // replace default string with custom
 	}
 
 	EngFuncs::COM_FreeFile( afile );
 }
 
-const char *L( const char *szStr ) // L means Localize!
+const char* L(const char* szStr) // L means Localize!
 {
-	if( szStr )
+	if (szStr)
 	{
-		if( *szStr == '#' )
+		if (*szStr == '#')
 			szStr++;
 
-		dictionary_t *base = Dictionary_GetBucket( szStr );
-		dictionary_t *found = Dictionary_FindInBucket( base, szStr );
+		dictionary_t* base = Dictionary_GetBucket(szStr);
+		dictionary_t* found = Dictionary_FindInBucket(base, szStr);
 
-		if( found )
+		if (found)
+			return found->value;
+	}
+
+	return szStr;
+}
+
+const char* LL(const char* szStr) // L means Localize!
+{
+	if (szStr)
+	{
+		if (*szStr == '#')
+			szStr++;
+
+		dictionary_t* base = Dictionary_GetBucket(szStr);
+		dictionary_t* found = Dictionary_FindInBucket(base, szStr);
+
+		if (found)
 			return found->value;
 	}
 

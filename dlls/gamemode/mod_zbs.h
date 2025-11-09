@@ -11,6 +11,8 @@
 class CZombieSpawn;
 class CMonster;
 class CMonster2;
+class CMonsterBoss;
+class CZbsSupplyBox;
 
 class CMod_ZombieScenario : public TBaseMod_RemoveObjects<>
 {
@@ -21,21 +23,27 @@ public:
 	void UpdateGameMode(CBasePlayer *pPlayer) override;
 	void RestartRound() override;
 	void PlayerSpawn(CBasePlayer *pPlayer) override;
+	BOOL IsShelter(void) override { return TRUE; }
 	void Think() override;
 	void CheckWinConditions() override;
 	void CheckMapConditions() override;
-	
+	bool boss_clear;
 public:
 	DamageTrack_e DamageTrack() override { return DT_ZBS; }
 	void InstallPlayerModStrategy(CBasePlayer *player) override;
 	float GetAdjustedEntityDamage(CBaseEntity *victim, entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) override;
 
 public:
+	void MakeSupplyboxThink(Vector x, Vector y);
+	void RemoveAllSupplybox();
+	CZbsSupplyBox* CreateSupplybox(Vector x, Vector y);
+	int SupplyboxCount();
+
 	void TeamCheck();
 	void WaitingSound();
 	void RoundStart();
 	void DeimosSpawn();
-	void HumanWin();
+	void HumanWin(bool finish);
 	void ZombieWin();
 	BOOL FRoundStarted();
 
@@ -51,16 +59,19 @@ public:
 	CBaseEntity* MakeZombieNPC9();
 	CBaseEntity* MakeZombieNPC10();
 	CBaseEntity* MakeZombieNPC11();
+	CBaseEntity* MakeZombieBoss();
 	void ClearZombieNPC();
 
 public:
 	std::vector<CZombieSpawn *> m_vecZombieSpawns;
 	float m_flNextSpawnNPC;
-
+	float m_flTimeNextMakeSupplybox;
+	bool finished;
 	EventDispatcher<void(CBasePlayer *attacker, float &)> m_eventAdjustDamage;
 	EventDispatcher<void(CBasePlayer *attacker, float &)> m_eventAdjustDamage2;
 	EventDispatcher<void(CMonster *victim, CBaseEntity *attacker)> m_eventMonsterKilled;
 	EventDispatcher<void(CMonster2* victim, CBaseEntity* attacker)> m_eventMonsterKilled2;
+	EventDispatcher<void(CMonsterBoss* victim, CBaseEntity* attacker)> m_eventMonsterKilled3;
 };
 
 #endif

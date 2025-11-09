@@ -7,7 +7,7 @@
 
 #include <vgui/IBorder.h>
 #include <vgui/IScheme.h>
-#include <KeyValues.h>
+#include <tier1/KeyValues.h>
 
 #include <vgui_controls/Button.h>
 #include <vgui_controls/ImagePanel.h>

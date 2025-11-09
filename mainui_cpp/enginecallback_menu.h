@@ -30,6 +30,8 @@ GNU General Public License for more details.
 #define ref_menu_params_s ref_params_s
 #endif
 
+//#define PRECACHE_GENERIC (*EngFuncs::engfuncs.pfnPrecacheGeneric)
+
 class EngFuncs
 {
 public:
@@ -95,6 +97,7 @@ public:
 
 	// cvar handlers
 	static inline cvar_t*	CvarRegister( const char *szName, const char *szValue, int flags )
+
 	{ return engfuncs.pfnRegisterVariable( szName, szValue, flags ); }
 
 	static inline float	GetCvarFloat( const char *szName )
@@ -124,6 +127,11 @@ public:
 	static inline void	PlayLocalSound( const char *szSound )
 	{ engfuncs.pfnPlayLocalSound( szSound ); }
 
+	
+
+	static inline void	PrecacheGeneric(const char *s)
+	{ engfuncs.pfnPrecacheGeneric(s); }
+
 	// cinematic handlers
 	static void	DrawLogo( const char *filename, float x, float y, float width, float height );
 	static inline void	PrecacheLogo( const char *filename )
@@ -152,7 +160,7 @@ public:
 
 	// TODO: Move into UI class
 
-	// custom rendering (for playermodel preview)
+	/*custom rendering(for playermodel preview)
 	static inline struct cl_entity_s* GetPlayerModel( void )	// for drawing playermodel previews
 	{ return engfuncs.pfnGetPlayerModel(); }
 	static inline void	SetModel( struct cl_entity_s *ed, const char *path )
@@ -162,7 +170,7 @@ public:
 	static inline void	RenderScene( const struct ref_menu_params_s *fd )
 	{  engfuncs.pfnRenderScene( fd ); }
 	static inline int	CL_CreateVisibleEntity( int type, struct cl_entity_s *ent )
-	{  return engfuncs.CL_CreateVisibleEntity( type, ent ); }
+	{  return engfuncs.CL_CreateVisibleEntity( type, ent ); }*/
 
 	// misc handlers
 	// static inline void	HostError( const char *szFmt, ... );
@@ -292,7 +300,6 @@ public:
 	static int UtfMoveRight( const char *str, int pos, int length );
 };
 
-
 // built-in memory manager
 // NOTE: not recommeded to use, because object destruction may be after engine halts
 #define MALLOC( x )		EngFuncs::MemAlloc( x, __FILE__, __LINE__ )
@@ -305,5 +312,4 @@ public:
 #define Con_NPrintf (*EngFuncs::engfuncs.Con_NPrintf)
 #define Con_NXPrintf (*EngFuncs::engfuncs.Con_NXPrintf)
 #define Con_Printf (*EngFuncs::engfuncs.Con_Printf)
-
 #endif // ENGINECALLBACKS_H

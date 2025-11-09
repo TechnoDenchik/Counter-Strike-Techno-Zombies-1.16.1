@@ -21,6 +21,8 @@ int CHudZBSKill::VidInit(void)
 {
 	if (!m_iKillTexture)
 		m_iKillTexture = R_LoadTextureUnique("resource/hud/zbs/zbskill");
+	if (!m_iBossKillTexture)
+		m_iBossKillTexture = R_LoadTextureUnique("resource/hud/zbs/zbsbosskill");
 
 	return 1;
 }
@@ -43,12 +45,20 @@ int CHudZBSKill::Draw(float time)
 		int x = ScreenWidth / 2 - 234 / 2;
 		int y = ScreenHeight / 4 - shownTime * 100.0f;
 
-		m_iKillTexture->Bind();
-
 		float a = (flStartTime - gHUD.m_flTime) / ZBS_KILL_DISPLAY_TIME;
-		gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255 * a);
-
-		DrawUtils::Draw2DQuadScaled(x, y, x + 234, y + 55);
+	
+		if (szbufer == 2)
+		{
+			gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255 * a);
+			m_iBossKillTexture->Bind();
+			DrawUtils::Draw2DQuadScaled(x, y, x + 234, y + 85);
+		}
+		else
+		{
+			gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255 * a);
+			m_iKillTexture->Bind();
+			DrawUtils::Draw2DQuadScaled(x, y, x + 234, y + 55);			
+		}	
 	}
 
 	return 1;

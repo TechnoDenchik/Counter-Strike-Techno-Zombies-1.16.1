@@ -54,8 +54,10 @@ void CChainsaw::Spawn(void)
 	pev->classname = MAKE_STRING("weapon_chainsaw");
 
 	Precache();
-	m_iId = WEAPON_SCOUT;
+	m_iId = WEAPON_AK47;
 	SET_MODEL(ENT(pev), "models/w_chainsaw.mdl");
+
+	m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] != 300;
 
 	m_iDefaultAmmo = CHAINSAW_MAX_CLIP;
 	FallInit();
@@ -89,14 +91,18 @@ void CChainsaw::Precache(void)
 int CChainsaw::GetItemInfo(ItemInfo *p)
 {
 	p->pszName = STRING(pev->classname);
-	p->pszAmmo1 = "chainsawoil";
+	p->pszAmmo1 = "762Nato";
 	p->iMaxAmmo1 = CHAINSAW_MAX_CLIP;
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
-	p->iMaxClip = CHAINSAW_MAX_CLIP	;
+	p->pszAmmo3 = NULL;
+	p->iMaxAmmo3 = -1;
+	p->pszAmmoGrenade = NULL;
+	p->iMaxAmmoGrenade = -1;
+	p->iMaxClip = CHAINSAW_CLIP;
 	p->iSlot = 0;
 	p->iPosition = 9;
-	p->iId = m_iId = WEAPON_SCOUT;
+	p->iId = m_iId = WEAPON_AK47;
 	p->iFlags = 0;
 	p->iWeight = SCOUT_WEIGHT;
 
@@ -130,6 +136,8 @@ void CChainsaw::SecondaryAttack(void)
 	hit_result_t iCallBack = KnifeAttack1(vecSrc, gpGlobals->v_forward, GetSecondaryAttackDamage(), CHAINSAW_DISTANCE_B, CHAINSAW_SLASH_ANGLE, DMG_NEVERGIB | DMG_BULLET, m_pPlayer->pev, m_pPlayer->pev, iAnim == 1);
 	m_pPlayer->SetAnimation(PLAYER_ATTACK2);
 	PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usFireChainsaw, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, CHAINSAW_DISTANCE_B, float(iAnim), iAnim, 2, iCallBack == HIT_PLAYER, m_iClip > 0);
+	
+	
 	pev->iuser3 = iAnim;
 #endif
 	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1.15f;
@@ -169,6 +177,7 @@ void CChainsaw::ItemPostFrame(void)
 				//attack start
 				case 0:
 				{
+					SendWeaponAnim(ANIM_ATTACK_BEGIN, UseDecrement() != FALSE);
 					m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.53f;
 					m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.53f;
 					pev->iuser1 = 1;
@@ -197,6 +206,8 @@ void CChainsaw::ItemPostFrame(void)
 						return;
 					}
 
+					SendWeaponAnim(ANIM_ATTACK_LOOP, UseDecrement() != FALSE);
+
 					m_iClip--;
 
 					UTIL_MakeVectors(m_pPlayer->pev->v_angle);
@@ -212,11 +223,8 @@ void CChainsaw::ItemPostFrame(void)
 
 				#ifndef CLIENT_DLL
 					PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usFireChainsaw, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, CHAINSAW_DISTANCE_A, 0.0, 0, 0, iCallBack != HIT_NONE, TRUE);
-					/*MESSAGE_BEGIN(MSG_ONE, gmsgShake, NULL, m_pPlayer->pev);
-					WRITE_SHORT((1 << 12) * 5);
-					WRITE_SHORT(1);
-					WRITE_SHORT((1 << 12) * 5);
-					MESSAGE_END();*/
+				
+
 				#endif
 					m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.063f;
 					m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 5.0f;
@@ -226,7 +234,8 @@ void CChainsaw::ItemPostFrame(void)
 						m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
 				#endif
 
-		//m_pPlayer->pev->velocity[2] = 0.0;
+				//m_pPlayer->pev->velocity[2] = 0.0;
+
 				if (!FBitSet(m_pPlayer->pev->flags, FL_ONGROUND))
 					KickBack(1.0, 0.4, 0.2, 0.15, 3.0, 2.0, 0);
 				else if (m_pPlayer->pev->velocity.Length2D() > 0)
@@ -261,7 +270,7 @@ void CChainsaw::ItemPostFrame(void)
 
 void CChainsaw::Reload(void)
 {
-	if (DefaultReload(CHAINSAW_MAX_CLIP, ANIM_RELOAD, 3.0f))
+	if (DefaultReload(MAX_AMMO_762NATO, ANIM_RELOAD, 3.0f))
 	{
 #ifndef CLIENT_DLL
 		m_pPlayer->SetAnimation(PLAYER_RELOAD);
@@ -360,9 +369,46 @@ hit_result_t CChainsaw::KnifeAttack1(Vector vecSrc, Vector vecDir, float flDamag
 
 		if (fHitWorld) {
 			TEXTURETYPE_PlaySound(&tr, vecSrc, vecSrc + (vecEnd - vecSrc) * 2, BULLET_PLAYER_CROWBAR);
+
+			if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] != 0)
+			{
+				switch ((m_iSwing3++) % 2)
+				{
+
+				case 0:
+					EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/chainsaw_slash1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+					SendWeaponAnim(ANIM_SLASH1, UseDecrement() != FALSE);
+					break;
+
+				case 1:
+					EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/chainsaw_slash2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+					SendWeaponAnim(ANIM_SLASH2, UseDecrement() != FALSE);
+					break;
+				}
+			}
+			else
+			{
+				switch ((m_iSwing3++) % 2)
+				{
+				case 1:
+					EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/chainsaw_slash3.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+					SendWeaponAnim(ANIM_SLASH3, UseDecrement() != FALSE);
+					break;
+
+				case 2:
+					EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/chainsaw_slash4.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+					SendWeaponAnim(ANIM_SLASH4, UseDecrement() != FALSE);
+					break;
+				}
+
+			}
+			
 			result = HIT_WALL;
 		}
+		
+		
 	}
+
 
 	CBaseEntity *pEntity = nullptr;
 	while ((pEntity = UTIL_FindEntityInSphere(pEntity, vecSrc, flRadius)) != nullptr) {
@@ -397,6 +443,36 @@ hit_result_t CChainsaw::KnifeAttack1(Vector vecSrc, Vector vecDir, float flDamag
 				ApplyMultiDamage(pevInflictor, pevAttacker);
 
 
+				if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] != 0)
+				{
+					switch ((m_iSwing4++) % 2)
+					{
+					case 0:
+						EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/chainsaw_hit2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+						SendWeaponAnim(ANIM_SLASH1, UseDecrement() != FALSE);
+						break;
+
+					case 1:
+						EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/chainsaw_hit2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+						SendWeaponAnim(ANIM_SLASH2, UseDecrement() != FALSE);
+						break;
+					}
+				}
+				else
+				{
+					switch ((m_iSwing4++) % 2)
+					{
+					case 2:
+						EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/chainsaw_hit3.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+						SendWeaponAnim(ANIM_SLASH3, UseDecrement() != FALSE);
+						break;
+
+					case 3:
+						EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/chainsaw_hit4.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+						SendWeaponAnim(ANIM_SLASH4, UseDecrement() != FALSE);
+						break;
+					}
+				}
 				
 				PLAYBACK_EVENT_FULL(0, ENT(pEntity->pev), m_usFireChainsaw, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, 0.0, 0.0, 0, 1, iAnim, m_iClip > 0);
 
@@ -407,6 +483,42 @@ hit_result_t CChainsaw::KnifeAttack1(Vector vecSrc, Vector vecDir, float flDamag
 					ApplyKnockbackData(pVictim, vecSpot - vecSrc, { 700, 1600, 1300, 400, 1.0f });
 				}
 				result = HIT_PLAYER;
+
+			}
+		}
+		else
+		{
+
+			if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] != 0)
+			{
+				switch ((m_iSwing3++) % 2)
+				{
+
+				case 0:
+					EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/chainsaw_slash1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+					SendWeaponAnim(ANIM_SLASH1, UseDecrement() != FALSE);
+					break;
+
+				case 1:
+					EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/chainsaw_slash2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+					SendWeaponAnim(ANIM_SLASH2, UseDecrement() != FALSE);
+					break;
+				}
+			}
+			else
+			{
+				switch ((m_iSwing3++) % 2)
+				{
+				case 1:
+					EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/chainsaw_slash3.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+					SendWeaponAnim(ANIM_SLASH3, UseDecrement() != FALSE);
+					break;
+
+				case 2:
+					EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/chainsaw_slash4.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+					SendWeaponAnim(ANIM_SLASH4, UseDecrement() != FALSE);
+					break;
+				}
 
 			}
 		}

@@ -19,6 +19,20 @@ protected:
 	float m_flDisplayTime;
 };
 
+class CHudRespZombieZB1 : public IBaseHudSub
+{
+public:
+	int VidInit(void) override;
+	int Draw(float time) override;
+
+	void RespZ();
+
+protected:
+	SharedTexture ZombieResp;
+	SharedTexture m_pCurTexture;
+	float m_flDisplayTime;
+};
+
 class CHudInfection : public IBaseHudSub
 {
 public:

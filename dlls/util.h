@@ -442,6 +442,7 @@ void UTIL_ShowMessageArgs(const char *pString, CBaseEntity *pPlayer, CUtlVector<
 void UTIL_ShowMessage(const char *pString, CBaseEntity *pEntity, bool isHint = false);
 void UTIL_ShowMessageAll(const char *pString, bool isHint = false);
 void UTIL_TraceLine(const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, edict_t *pentIgnore, TraceResult *ptr);
+void UTIL_TempModel(const Vector& vecOrigin, const Vector& vecAngles, const Vector& vecVelocity, int iModelIndex, int life, int sequence, int framerate, bool fadeOut, int fadeSpeed, int brightness, int rendermode, CBaseEntity* pEntity, bool fadeIn, int fadeInSpeed, int scale, int frameMax, int flags, bool excludeSource = false);
 void UTIL_TraceLine(const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, IGNORE_GLASS ignoreGlass, edict_t *pentIgnore, TraceResult *ptr);
 #ifndef CLIENT_DLL
 extern void UTIL_TraceHull(const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, int hullNumber, edict_t *pentIgnore, TraceResult *ptr);
@@ -481,6 +482,7 @@ float UTIL_WaterLevel(const Vector &position, float minz, float maxz);
 void UTIL_Bubbles(Vector mins, Vector maxs, int count);
 void UTIL_BubbleTrail(Vector from, Vector to, int count);
 void UTIL_Remove(CBaseEntity *pEntity);
+
 //NOXREF BOOL UTIL_IsValidEntity(edict_t *pent);
 void UTIL_PrecacheOther(const char *szClassname);
 void UTIL_LogPrintf(const char *fmt, ...);
@@ -492,7 +494,8 @@ char UTIL_TextureHit(TraceResult *ptr, Vector vecSrc, Vector vecEnd);
 bool UTIL_IsGame(const char *gameName);
 float UTIL_GetPlayerGaitYaw(int playerIndex);
 int UTIL_ReadFlags(const char *c);
-
+float UTIL_CalculateDamageRate(Vector vecSrc, CBaseEntity* pOther);
+TraceResult UTIL_GetGlobalTrace();
 extern int g_groupmask;
 extern int g_groupop;
 

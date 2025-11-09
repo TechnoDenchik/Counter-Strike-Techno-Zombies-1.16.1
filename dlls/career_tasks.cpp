@@ -402,6 +402,8 @@ void CCareerTask::OnEvent(GameEventType event, CBasePlayer *pVictim, CBasePlayer
 		{
 			TheCareerTasks->SetFinishedTaskTime((int)TheCareerTasks->GetRoundElapsedTime());
 			UTIL_GetLocalPlayer()->SyncRoundTimer();
+			UTIL_GetLocalPlayer()->SyncRoundTimer2();
+			UTIL_GetLocalPlayer()->SyncRoundTimer3();
 		}
 	}
 	else if (event >= EVENT_ROUND_DRAW)
@@ -434,6 +436,8 @@ void CCareerTask::OnEvent(GameEventType event, CBasePlayer *pVictim, CBasePlayer
 				{
 					TheCareerTasks->SetFinishedTaskTime((int)TheCareerTasks->GetRoundElapsedTime());
 					UTIL_GetLocalPlayer()->SyncRoundTimer();
+					UTIL_GetLocalPlayer()->SyncRoundTimer2();
+					UTIL_GetLocalPlayer()->SyncRoundTimer3();
 				}
 
 				if (TheTutor != NULL)
@@ -495,7 +499,7 @@ void CCareerTaskManager::Reset(bool deleteTasks)
 
 void CCareerTaskManager::SetFinishedTaskTime(int val)
 {
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 
 	m_finishedTaskTime = val;
 	m_finishedTaskRound = mp->m_iTotalRoundsPlayed;

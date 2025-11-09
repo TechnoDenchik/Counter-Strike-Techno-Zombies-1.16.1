@@ -23,7 +23,7 @@
 		void DeathMsg(int killer, int victim);
 		void SetScoreboardDefaults(void);
 		void GetAllPlayersInfo(void);
-
+		void GetAllZombieInfo(void);
 		static int FindBestPlayer(const char* team = NULL);
 
 		CHudUserCmd(ShowScores);
@@ -42,6 +42,7 @@
 
 	public:
 		int m_iPlayerNum;
+		int m_iZombieNum;
 		int m_iNumTeams;
 		int m_iTeamScore_Max;
 		int m_iTeamScore_T, m_iTeamScore_CT;

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 1997-2001 Id Software, Inc.
+Copyright (C) 1997-2025 Id Software TechnoSoftware, Inc.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -25,10 +25,28 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "Switch.h"
 #include "Field.h"
 #include "utlvector.h"
+#include "EventSystem.h"
+#include "PicButton.h"
+#include "CheckBox.h"
+#include "Slider.h"
+#include "SpinControl.h"
+#include "PlayerModelView.h"
+#include "StringArrayModel.h"
 
 #define ART_BANNER_INET		"gfx/shell/head_inetgames"
 #define ART_BANNER_LAN		"gfx/shell/head_lan"
 #define ART_BANNER_LOCK		"gfx/shell/lock"
+#define MAX_PLAYERMODELS	100
+
+static byte g_iCrosshairAvailColors[6][3] =
+{
+	{ 0,   0,   0   },
+	{ 50,  250, 50  },
+	{ 250, 50,  50  },
+	{ 50,  50,  250 },
+	{ 250, 250, 50  },
+	{ 50,  250, 250 },
+};
 
 struct server_t
 {
@@ -155,9 +173,13 @@ class CMenuServerBrowser: public CMenuFramework
 {
 public:
 	CMenuServerBrowser() : CMenuFramework( "CMenuServerBrowser" ) { }
+
 	void Draw() override;
 	void Show() override;
+	void SetConfig();
+	void WriteNewLogo();
 
+	CMenuField	name;
 	void SetLANOnly( bool lanOnly )
 	{
 		m_bLanOnly = lanOnly;
@@ -175,9 +197,14 @@ public:
 
 	static void Connect( server_t &server );
 
-	CMenuPicButton *joinGame;
-	CMenuPicButton *createGame;
-	CMenuPicButton *refresh;
+	/*class CMenuLogoPreview : public CMenuBaseItem
+	{
+	public:
+		virtual void Draw();
+		int r, g, b;
+		HIMAGE hImage;
+	} logoImage;*/
+
 	CMenuSwitch natOrDirect;
 
 	CMenuYesNoMessageBox msgBox;
@@ -187,6 +214,15 @@ public:
 	CMenuYesNoMessageBox askPassword;
 	CMenuField password;
 
+	CMenuCheckBox	crosshairTranslucent;
+	CMenuCheckBox	extendedMenus;
+
+	CMenuPicButton Join, Join1;
+	CMenuPicButton Create, Create1;
+	CMenuPicButton Refresh, Refresh1;
+	CMenuPicButton Info, Info1;
+	CMenuPicButton Exit, Exit1;
+	
 	int	  refreshTime;
 	int   refreshTime2;
 
@@ -194,12 +230,35 @@ public:
 private:
 	void _Init() override;
 	void _VidInit() override;
-};
+} uiPlayerSetup;
 
 static server_t staticServerSelect;
 static bool staticWaitingPassword = false;
 
 static CMenuServerBrowser	uiServerBrowser;
+
+/*void CMenuServerBrowser::CMenuLogoPreview::Draw()
+{
+	if (!hImage)
+	{
+		// draw the background
+		UI_FillRect(m_scPos, m_scSize, uiPromptBgColor);
+
+		UI_DrawString(font, m_scPos, m_scSize, "No logo", colorBase, m_scChSize, QM_CENTER, ETF_SHADOW);
+	}
+	else
+	{
+		EngFuncs::PIC_Set(hImage, r, g, b, 255);
+		EngFuncs::PIC_Draw(m_scPos, m_scSize);
+	}
+
+	// draw the rectangle
+	if (eFocusAnimation == QM_HIGHLIGHTIFFOCUS && IsCurrentSelected())
+		UI_DrawRectangle(m_scPos, m_scSize, uiInputTextColor);
+	else
+		UI_DrawRectangle(m_scPos, m_scSize, uiInputFgColor);
+
+}*/
 
 bool CMenuGameListModel::Sort(int column, bool ascend)
 {
@@ -265,7 +324,6 @@ void CMenuGameListModel::Update( void )
 
 	if( servers.Count() )
 	{
-		uiServerBrowser.joinGame->SetGrayed( false );
 		if( m_iSortingColumn != -1 )
 			Sort( m_iSortingColumn, m_bAscend );
 	}
@@ -338,8 +396,6 @@ void CMenuServerBrowser::Connect( server_t &server )
 
 	staticWaitingPassword = false;
 
-	//BUGBUG: ClientJoin not guaranted to return, need use ClientCmd instead!!!
-	//BUGBUG: But server addres is known only as netadr_t here!!!
 	EngFuncs::ClientJoin( server.adr );
 	EngFuncs::ClientCmd( false, "menu_connectionprogress menu server\n" );
 }
@@ -351,33 +407,28 @@ CMenuServerBrowser::JoinGame
 */
 void CMenuServerBrowser::JoinGame()
 {
-	gameListModel.OnActivateEntry( gameList.GetCurrentIndex() );
+	if (~gameList.GetCurrentIndex() == 0)
+		gameListModel.OnActivateEntry( gameList.GetCurrentIndex() );
+	
+	
 }
 
 void CMenuServerBrowser::ClearList()
 {
 	gameListModel.Flush();
-	joinGame->SetGrayed( true );
 }
 
 void CMenuServerBrowser::RefreshList()
 {
 	ClearList();
 
-	if( m_bLanOnly )
+	if( uiStatic.realTime > refreshTime2 )
 	{
 		EngFuncs::ClientCmd( FALSE, "localservers\n" );
-	}
-	else
-	{
-		if( uiStatic.realTime > refreshTime2 )
-		{
-			EngFuncs::ClientCmd( FALSE, "internetservers\n" );
-			refreshTime2 = uiStatic.realTime + (EngFuncs::GetCvarFloat("cl_nat") ? 4000:1000);
-			refresh->SetGrayed( true );
-			if( uiStatic.realTime + 20000 < refreshTime )
-				refreshTime = uiStatic.realTime + 20000;
-		}
+		EngFuncs::ClientCmd( FALSE, "internetservers\n" );
+		refreshTime2 = uiStatic.realTime + (EngFuncs::GetCvarFloat("cl_nat") ? 4000:1000);
+		if( uiStatic.realTime + 20000 < refreshTime )
+			refreshTime = uiStatic.realTime + 20000;
 	}
 }
 
@@ -398,7 +449,7 @@ void CMenuServerBrowser::Draw( void )
 
 	if( uiStatic.realTime > refreshTime2 )
 	{
-		refresh->SetGrayed( false );
+		
 	}
 }
 
@@ -412,26 +463,28 @@ void CMenuServerBrowser::_Init( void )
 	AddItem( background );
 	AddItem( banner );
 
-	joinGame = AddButton( "Join game", "Join to selected game", PC_JOIN_GAME,
-		VoidCb( &CMenuServerBrowser::JoinGame ), QMF_GRAYED );
-	joinGame->onActivatedClActive = msgBox.MakeOpenEvent();
+	Create.SetNameAndStatus(L("GameUI_GameMenu_CreateServer"), L(""));
+	Create.SetCharSize(QM_BOLDFONT);
+	Create.iFlags |= QMF_NOTIFY;
+	Create.onActivated = UI_CreateGame_Menu;
+	Create.SetCoord(80, 250);
 
-	createGame = AddButton( "Create game", NULL, PC_CREATE_GAME );
-	SET_EVENT_MULTI( createGame->onActivated,
-	{
-		if( ((CMenuServerBrowser*)pSelf->Parent())->m_bLanOnly )
-			EngFuncs::CvarSetValue( "public", 0.0f );
-		else EngFuncs::CvarSetValue( "public", 1.0f );
+	Refresh.SetNameAndStatus(L("CstzUI_Refresh"), L(""));
+	Refresh.SetCharSize(QM_BOLDFONT);
+	Refresh.onActivated = VoidCb(&CMenuServerBrowser::RefreshList);
+	Refresh.iFlags |= QMF_NOTIFY;
+	Refresh.SetCoord(80, 300);
 
-		UI_CreateGame_Menu();
-	});
-
-	// TODO: implement!
-	AddButton( "View game info", "Get detail game info", PC_VIEW_GAME_INFO, CEventCallback::NoopCb, QMF_GRAYED );
-
-	refresh = AddButton( "Refresh", "Refresh servers list", PC_REFRESH, VoidCb( &CMenuServerBrowser::RefreshList ) );
-
-	AddButton( "Done", "Return to main menu", PC_DONE, VoidCb( &CMenuServerBrowser::Hide ) );
+	Exit.SetNameAndStatus(L("GameUI_Cancel"), L(""));
+	Exit.SetCharSize(QM_BOLDFONT);
+	SET_EVENT_MULTI(Exit.onActivated,
+		{
+			uiServerBrowser.Hide();
+			UI_InitMainMenu();
+		}
+	);
+	Exit.iFlags |= QMF_NOTIFY;
+	Exit.SetCoord(80, 350);
 
 	msgBox.SetMessage( "Join a network game will exit any current game, OK to exit?" );
 	msgBox.SetPositiveButton( "Ok", PC_OK );
@@ -441,10 +494,10 @@ void CMenuServerBrowser::_Init( void )
 
 	gameList.SetCharSize( QM_SMALLFONT );
 	gameList.SetupColumn( 0, NULL, 32.0f, true );
-	gameList.SetupColumn( 1, "Name", 0.40f );
-	gameList.SetupColumn( 2, "Map", 0.25f );
-	gameList.SetupColumn( 3, "Players", 100.0f, true );
-	gameList.SetupColumn( 4, "Ping", 120.0f, true );
+	gameList.SetupColumn( 1, L("CstzUI_RefreshLogin_UserName"), 0.40f );
+	gameList.SetupColumn( 2, L("GameUI_Map"), 0.25f );
+	gameList.SetupColumn( 3, L("CstzUI_CurrentPlayers"), 100.0f, true );
+	gameList.SetupColumn( 4, L("CstzUI_Ping"), 120.0f, true );
 	gameList.SetModel( &gameListModel );
 	gameList.bFramedHintText = true;
 	gameList.bAllowSorting = true;
@@ -452,7 +505,7 @@ void CMenuServerBrowser::_Init( void )
 	natOrDirect.AddSwitch( "Direct" );
 	natOrDirect.AddSwitch( "NAT" );
 	natOrDirect.eTextAlignment = QM_CENTER;
-	natOrDirect.bMouseToggle = false;
+	natOrDirect.bMouseToggle = true;
 	natOrDirect.LinkCvar( "cl_nat" );
 	natOrDirect.iSelectColor = uiInputFgColor;
 	// bit darker
@@ -468,13 +521,12 @@ void CMenuServerBrowser::_Init( void )
 	});
 
 	// server.dll needs for reading savefiles or startup newgame
-	if( !EngFuncs::CheckGameDll( ))
-		createGame->SetGrayed( true );	// server.dll is missed - remote servers only
+	
 
 	password.bHideInput = true;
 	password.bAllowColorstrings = false;
 	password.bNumbersOnly = false;
-	password.szName = "Password:";
+	password.szName = L("GameUI_Password:");
 	password.iMaxLength = 16;
 	password.SetRect( 188, 140, 270, 32 );
 
@@ -503,6 +555,13 @@ void CMenuServerBrowser::_Init( void )
 
 	AddItem( gameList );
 	AddItem( natOrDirect );
+
+	AddItem(Join);
+	AddItem(Create);
+	//AddItem(Info);
+	AddItem(Refresh);
+	AddItem(Exit);
+	
 }
 
 /*
@@ -512,18 +571,10 @@ CMenuServerBrowser::VidInit
 */
 void CMenuServerBrowser::_VidInit()
 {
-	if( m_bLanOnly )
-	{
-		banner.SetPicture( ART_BANNER_LAN );
-		createGame->szStatusText = ( "Create new LAN game" );
-		natOrDirect.Hide();
-	}
-	else
-	{
-		banner.SetPicture( ART_BANNER_INET );
-		createGame->szStatusText = ( "Create new Internet game" );
-		natOrDirect.Show();
-	}
+	
+	banner.SetPicture( ART_BANNER_INET );
+	natOrDirect.Show();
+	natOrDirect.Hide();
 
 	gameList.SetRect( 360, 230, -20, 465 );
 	natOrDirect.SetCoord( -20 - natOrDirect.size.w, gameList.pos.y - UI_OUTLINE_WIDTH - natOrDirect.size.h );
@@ -536,11 +587,10 @@ void CMenuServerBrowser::Show()
 {
 	CMenuFramework::Show();
 
-	// clear out server table
 	staticWaitingPassword = false;
 	gameListModel.Flush();
 	gameList.DisableSorting();
-	joinGame->SetGrayed( true );
+
 }
 
 void CMenuServerBrowser::AddServerToList(netadr_t adr, const char *info)
@@ -549,8 +599,7 @@ void CMenuServerBrowser::AddServerToList(netadr_t adr, const char *info)
 		return;
 
 	gameListModel.AddServerToList( adr, info );
-
-	joinGame->SetGrayed( false );
+	//Join->SetGrayed(false);
 }
 
 /*
@@ -582,14 +631,18 @@ void UI_ServerBrowser_Menu( void )
 		uiStatic.m_fDemosPlayed = true;
 	}
 
+	UI_Multiplayer();
+
 	uiServerBrowser.Show();
 }
 
 void UI_InternetGames_Menu( void )
 {
-	uiServerBrowser.SetLANOnly( false );
+	uiServerBrowser.SetLANOnly( true );
 
 	UI_ServerBrowser_Menu();
+
+	UI_Multiplayer();
 }
 
 void UI_LanGame_Menu( void )
@@ -598,8 +651,8 @@ void UI_LanGame_Menu( void )
 
 	UI_ServerBrowser_Menu();
 }
-ADD_MENU( menu_langame, NULL, UI_LanGame_Menu );
-ADD_MENU( menu_internetgames, UI_ServerBrowser_Precache, UI_InternetGames_Menu );
+ADD_MENU( menu_langame, UI_ServerBrowser_Precache, UI_InternetGames_Menu, UI_LanGame_Menu);
+ADD_MENU( menu_internetgames, UI_ServerBrowser_Precache, UI_InternetGames_Menu, UI_LanGame_Menu);
 
 /*
 =================

@@ -35,6 +35,28 @@ edict_t *EntSelectSpawnPoint(CBaseEntity *pPlayer)
 	CBaseEntity *pSpot;
 	edict_t *player = pPlayer->edict();
 
+	if (g_pGameRules->IsShelter())
+	{
+		pSpot = UTIL_FindEntityByClassname(g_pLastCTSpawn, "playerspawn");
+
+		if (!FNullEnt(pSpot))
+			goto ReturnSpot;
+
+		pSpot = UTIL_FindEntityByClassname(g_pLastTerroristSpawn, "playerspawn");
+
+		if (!FNullEnt(pSpot))
+			goto ReturnSpot;
+		pSpot = UTIL_FindEntityByClassname(g_pLastCTSpawn, "info_ct_start");
+
+		if (!FNullEnt(pSpot))
+			goto ReturnSpot;
+
+		pSpot = UTIL_FindEntityByClassname(g_pLastTerroristSpawn, "info_tr_start");
+
+		if (!FNullEnt(pSpot))
+			goto ReturnSpot;
+	}
+
 	// choose a info_player_deathmatch point
 	if (g_pGameRules->IsCoOp())
 	{
@@ -44,11 +66,6 @@ edict_t *EntSelectSpawnPoint(CBaseEntity *pPlayer)
 			goto ReturnSpot;
 
 		pSpot = UTIL_FindEntityByClassname(g_pLastSpawn, "info_player_start");
-
-		if (!FNullEnt(pSpot))
-			goto ReturnSpot;
-
-		pSpot = UTIL_FindEntityByClassname(g_pLastSpawn, "playerspawn");
 
 		if (!FNullEnt(pSpot))
 			goto ReturnSpot;

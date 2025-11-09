@@ -1,47 +1,36 @@
-/*
-zclass.h - CSMoE Gameplay server : zombie class for zb2
-Copyright (C) 2018 Moemod Hyakuya
+/* =================================================================================== *
+			 * =================== TechnoSoftware =================== *
+ * =================================================================================== */
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+#ifndef PROJECT_ZB3_HERO_H
+#define PROJECT_ZB3_HERO_H
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-*/
+#include "player/player_mod_strategy.h"
 
-#ifndef PROJECT_CLASS_H
-#define PROJECT_CLASS_H
-
-#include "gamemode/zb3/zb3_human.h"
-#include "gamemode/zb2/zb2_const.h"
-
-class IHeroCharacter_ZB2_Extra
+class IHeroModeCharacter
 {
 public:
-	
+	virtual ~IHeroModeCharacter() = default;
+
+	virtual void Think() = 0;
+	virtual void ResetMaxSpeed() const = 0;
+	virtual bool ApplyKnockback(CBasePlayer *attacker, const KnockbackData & kbd) = 0;
+	virtual float AdjustDamageTaken(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) const = 0;
+	virtual void Pain_Hero(int m_LastHitGroup, bool HasArmour) = 0;
+	virtual void DeathSound_Hero() = 0;
 };
 
-class IZombieSkill;
 
-class CBaseHeroClass_ZB3 : public CHero_ZB1, public IHeroCharacter_ZB2_Extra
+class CHero_ZB1 : public BasePlayerExtra, public IHeroModeCharacter
 {
 public:
-	explicit CBaseHeroClass_ZB3(CBasePlayer *player, ZombieLevel lv) : CHero_ZB1(player, lv) {}
-	void InitHUD() const;
-	void Think() override;
+	explicit CHero_ZB1(CBasePlayer *player); // player_zombie.cpp
+	void Think() override {}
+	bool ApplyKnockback(CBasePlayer *attacker, const KnockbackData & data) override { ApplyKnockbackData(m_pPlayer, m_pPlayer->pev->origin - attacker->pev->origin, data); return true; }
+	float AdjustDamageTaken(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) const override { return flDamage; }
 	void ResetMaxSpeed() const override;
-	bool ApplyKnockback(CBasePlayer *attacker, const KnockbackData & kbd) override;
-	float AdjustDamageTaken(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) const override;
-	
-protected:
-
+	void Pain_Hero(int m_LastHitGroup, bool HasArmour) override;
+	void DeathSound_Hero() override;
 };
-
-std::shared_ptr<CBaseHeroClass_ZB3> HeroClassFactory(CBasePlayer *player, ZombieLevel lv, const char *name = nullptr);
-
 
 #endif

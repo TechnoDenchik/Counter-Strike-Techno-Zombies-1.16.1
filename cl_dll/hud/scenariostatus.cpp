@@ -74,12 +74,12 @@ int CHudScenarioStatus::Draw(float fTime)
 	return 1;
 }
 
-int CHudScenarioStatus::MsgFunc_Scenario(const char *pszName, int iSize, void *pbuf)
+int CHudScenarioStatus::MsgFunc_Scenario(const char* pszName, int iSize, void* pbuf)
 {
 	BufferReader reader(pszName, pbuf, iSize);
 
 	bool wasActive = m_iFlags & HUD_ACTIVE;
-	const char *spriteName;
+	const char* spriteName;
 	int sprIndex;
 	int alpha;
 

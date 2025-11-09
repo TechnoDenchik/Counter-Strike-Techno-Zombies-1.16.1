@@ -115,7 +115,10 @@ int CHudZBSScoreBoard::VidInit(void)
 	R_InitTexture(weaponboard, "resource/hud/zb3/weapon_list_new");
 	R_InitTexture(iconround, "resource/hud/zb3/hud_text_icon_round");
 	R_InitTexture(icontotalkill, "resource/hud/zbs/hud_text_icon_totalkill_left");
+
 	R_InitTexture(iconkill, "resource/hud/hud_text_icon_kill");
+
+	R_InitTexture(textbg, "resource/hud/zbs/textbg_right");
 
 	BuildNumberRC(m_rcTeamnumber, 23, 24);
 	BuildNumberRC(m_rcSelfnumber, 19, 19);
@@ -135,7 +138,7 @@ int CHudZBSScoreBoard::Draw(float time)
 	int x2 = ScreenWidth / 2.050;
 	int y2 = 6;
 
-	int x3 = ScreenWidth / 2.070;
+	int x3 = ScreenWidth / 2.048;
 	int y3 = 14.7;
 
     int x4 = ScreenWidth / 2.210;
@@ -152,16 +155,18 @@ int CHudZBSScoreBoard::Draw(float time)
 
 	int x9 = ScreenWidth / 2;
 	int y9 = 18;
-	
+
 	int x10 = ScreenWidth / 2;
 	int y10 = 5;
 
 	int x11 = ScreenWidth / 2;
 	int y11 = 7;
+
 	const float flScale = 0.0f;
 
 	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
 	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
+
 	m_pBackground->Bind();
 	DrawUtils::Draw2DQuadScaled(x - 170, y - 4.5 , x + 170, y + 77);
 
@@ -181,7 +186,7 @@ int CHudZBSScoreBoard::Draw(float time)
 	
 	int r, g, b;
 	
-	DrawTexturedNumbersTopCenterAligned(*m_pToprecord, m_rcToprecord2, roundNumber, x2 + 20, y2 + 25);
+	DrawTexturedNumbersTopCenterAligned(*m_pToprecord, m_rcToprecord2, roundNumber, x2 + 23, y2 + 25);
 
 	if (teamKill < 10)
 	{
@@ -227,15 +232,15 @@ int CHudZBSScoreBoard::Draw(float time)
 		}
 		else if (selfKill < 1000)
 		{
-			DrawTexturedNumbersTopCenterAligned(*killcount, m_rcToprecord3, selfKill, x3 + 110, y3 + 10, 1.0f);
+			DrawTexturedNumbersTopCenterAligned(*killcount, m_rcToprecord3, selfKill, x3 + 108, y3 + 10, 1.0f);
 		}
 		else if (selfKill < 10000)
 		{
-			DrawTexturedNumbersTopCenterAligned(*killcount, m_rcToprecord3, selfKill, x3 + 115, y3 + 10, 1.0f);
+			DrawTexturedNumbersTopCenterAligned(*killcount, m_rcToprecord3, selfKill, x3 + 113, y3 + 10, 1.0f);
 		}
 		else
 		{
-			DrawTexturedNumbersTopCenterAligned(*killcount, m_rcToprecord3, selfKill, x3 + 124, y3 + 10, 1.0f);
+			DrawTexturedNumbersTopCenterAligned(*killcount, m_rcToprecord3, selfKill, x3 + 122, y3 + 10, 1.0f);
 		}
 
 	}

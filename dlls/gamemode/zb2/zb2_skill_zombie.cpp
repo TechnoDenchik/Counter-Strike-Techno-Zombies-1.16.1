@@ -19,6 +19,7 @@ GNU General Public License for more details.
 #include "player.h"
 
 #include "gamemode/zb2/zb2_const.h"
+#include "gamemode/interface/interface_const.h"
 #include "gamemode/zb2/zb2_zclass.h"
 #include "gamemode/zb2/zb2_skill.h"
 #include "zb2_zclass.h"
@@ -29,6 +30,7 @@ void ZombieSkill_Precache()
 	PRECACHE_SOUND("zb3/zombi_pressure.wav");
 	PRECACHE_SOUND("zb3/zombi_pre_idle_1.wav");
 	PRECACHE_SOUND("zb3/zombi_pre_idle_2.wav");
+	PRECACHE_SOUND("zb3/zombie_female_invis.wav");
 }
 
 void CZombieSkill_Base::Think()
@@ -43,18 +45,11 @@ void CZombieSkill_Base::Think()
 		m_iZombieSkillStatus = SKILL_STATUS_READY;
 		OnSkillReady();
 	}
-
 }
 
-CZombieSkill_Base::CZombieSkill_Base(CBasePlayer *player) : BasePlayerExtra(player), m_iZombieSkillStatus(SKILL_STATUS_READY)
-{
+CZombieSkill_Base::CZombieSkill_Base(CBasePlayer *player) : BasePlayerExtra(player), m_iZombieSkillStatus(SKILL_STATUS_READY){}
 
-}
-
-CZombieSkill_ZombieCrazy::CZombieSkill_ZombieCrazy(CBasePlayer *player) : CZombieSkill_Base(player)
-{
-
-}
+CZombieSkill_ZombieCrazy::CZombieSkill_ZombieCrazy(CBasePlayer *player) : CZombieSkill_Base(player){}
 
 void CZombieSkill_ZombieCrazy::Think()
 {
@@ -62,7 +57,10 @@ void CZombieSkill_ZombieCrazy::Think()
 
 	if (m_iZombieSkillStatus == SKILL_STATUS_USING && gpGlobals->time > m_flTimeZombieSkillEffect)
 	{
-		OnCrazyEffect();
+		if (m_pPlayer->m_bIsZombieFemale == true)
+		{
+			OnCrazyEffect();
+		}
 	}
 }
 
@@ -74,16 +72,18 @@ void CZombieSkill_ZombieCrazy::Activate()
 		{
 		case SKILL_STATUS_USING:
 		case SKILL_STATUS_FREEZING:
-			char buf[16];
-			sprintf(buf, "%d", static_cast<int>(m_flTimeZombieSkillNext - gpGlobals->time));
-			ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER,
-				"The 'Berserk' skill can't be used because the skill is in cooldown. [Remaining Cooldown Time: %s1 sec.]",
-				buf
-			); // #CSO_WaitCoolTimeNormal
 
+			MESSAGE_BEGIN(MSG_ONE, gmsgZB3UsedMsg, NULL, m_pPlayer->pev);
+			WRITE_BYTE(ZB3_USED_MSG);
+			WRITE_BYTE(m_flTimeZombieSkillNext - gpGlobals->time);
+			WRITE_BYTE(0);
+			MESSAGE_END();
 			break;
 		case SKILL_STATUS_USED:
-			ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER, "The 'Sprint' skill can only be used once per round."); // #CSO_CantSprintUsed
+	
+			MESSAGE_BEGIN(MSG_ONE, gmsgZB3UsedMsg2, NULL, m_pPlayer->pev);
+			WRITE_BYTE(ZB3_USED_MSG2);
+			MESSAGE_END();
 			break;
 		default:
 			break;
@@ -100,20 +100,116 @@ void CZombieSkill_ZombieCrazy::Activate()
 	m_flTimeZombieSkillNext = gpGlobals->time + GetCooldownTime();
 	m_flTimeZombieSkillEffect = gpGlobals->time + 3.0f;
 
-	m_pPlayer->pev->renderfx = kRenderFxGlowShell;
-	m_pPlayer->pev->rendercolor = { 255,0,0 };
-	m_pPlayer->pev->renderamt = 1;
-	m_pPlayer->pev->fov = m_pPlayer->m_iFOV = 105;
-	m_pPlayer->pev->speed = 800;
+	if (m_pPlayer->m_bIsZombieFemale == true)
+	{
+		//m_pPlayer->pev->renderfx = kRenderFxGlowShell;
+		m_pPlayer->pev->rendermode = kRenderTransAdd;
+		m_pPlayer->pev->renderamt = 50.0;
+		//m_pPlayer->pev->renderamt = 80;
 
-	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_pressure.wav", VOL_NORM, ATTN_NORM);
+		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombie_female_invis.wav", VOL_NORM, ATTN_NORM);
 
-	MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
-	WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);
-	WRITE_BYTE(ZOMBIE_SKILL_CRAZY);
-	WRITE_SHORT(static_cast<int>(GetDurationTime()));
-	WRITE_SHORT(static_cast<int>(GetCooldownTime()));
-	MESSAGE_END();
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
+		WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);
+		WRITE_BYTE(ZOMBIE_SKILL_HIDE);
+		WRITE_SHORT(static_cast<int>(GetDurationTime()));
+		WRITE_SHORT(static_cast<int>(GetCooldownTime()));
+		MESSAGE_END();
+	}
+	else if (m_pPlayer->m_bIsZombieHeavy == true)
+	{
+		//EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombie_female_invis.wav", VOL_NORM, ATTN_NORM);
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
+		WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);
+		WRITE_BYTE(ZOMBIE_SKILL_TRAP);
+		WRITE_SHORT(static_cast<int>(GetDurationTime()));
+		WRITE_SHORT(static_cast<int>(GetCooldownTime()));
+		MESSAGE_END();
+	}
+	else if (m_pPlayer->m_bIsZombieHeal == true)
+	{
+		//EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombie_female_invis.wav", VOL_NORM, ATTN_NORM);
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
+		WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);
+		WRITE_BYTE(ZOMBIE_SKILL_HEAL);
+		WRITE_SHORT(static_cast<int>(GetDurationTime()));
+		WRITE_SHORT(static_cast<int>(GetCooldownTime()));
+		MESSAGE_END();
+	}
+	else if (m_pPlayer->m_bIsZombiePc == true)
+	{
+		//EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombie_female_invis.wav", VOL_NORM, ATTN_NORM);
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
+		WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);
+		WRITE_BYTE(ZOMBIE_SKILL_SMOKE);
+		WRITE_SHORT(static_cast<int>(GetDurationTime()));
+		WRITE_SHORT(static_cast<int>(GetCooldownTime()));
+		MESSAGE_END();
+	}
+	else if (m_pPlayer->m_bIsZombieDeimos == true)
+	{
+		//EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombie_female_invis.wav", VOL_NORM, ATTN_NORM);
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
+		WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);
+		WRITE_BYTE(ZOMBIE_SKILL_SHOCK);
+		WRITE_SHORT(static_cast<int>(GetDurationTime()));
+		WRITE_SHORT(static_cast<int>(GetCooldownTime()));
+		MESSAGE_END();
+	}
+	else if (m_pPlayer->m_bIsZombieGanimed == true)
+	{
+		//EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombie_female_invis.wav", VOL_NORM, ATTN_NORM);
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
+		WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);
+		WRITE_BYTE(ZOMBIE_SKILL_CRAZY2);
+		WRITE_SHORT(static_cast<int>(GetDurationTime()));
+		WRITE_SHORT(static_cast<int>(GetCooldownTime()));
+		MESSAGE_END();
+	}
+	else if (m_pPlayer->m_bIsZombieBanchee == true)
+	{
+		//EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombie_female_invis.wav", VOL_NORM, ATTN_NORM);
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
+		WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);
+		WRITE_BYTE(ZOMBIE_SKILL_RATS);
+		WRITE_SHORT(static_cast<int>(GetDurationTime()));
+		WRITE_SHORT(static_cast<int>(GetCooldownTime()));
+		MESSAGE_END();
+	}
+	else if (m_pPlayer->m_bIsZombieStamp == true)
+	{
+		//EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombie_female_invis.wav", VOL_NORM, ATTN_NORM);
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
+		WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);
+		WRITE_BYTE(ZOMBIE_SKILL_STAMP);
+		WRITE_SHORT(static_cast<int>(GetDurationTime()));
+		WRITE_SHORT(static_cast<int>(GetCooldownTime()));
+		MESSAGE_END();
+	}
+	else if(m_pPlayer->m_bIsZombieTank == true)
+	{
+		m_pPlayer->pev->renderfx = kRenderFxGlowShell;
+		m_pPlayer->pev->rendercolor = { 255,0,0 };
+		m_pPlayer->pev->renderamt = 1;
+		m_pPlayer->pev->fov = m_pPlayer->m_iFOV = 105;
+		m_pPlayer->pev->speed = 1800;
+
+		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_pressure.wav", VOL_NORM, ATTN_NORM);
+		
+		MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, NULL, m_pPlayer->pev);
+		WRITE_BYTE(ZB2_MESSAGE_SKILL_ACTIVATE);
+		WRITE_BYTE(ZOMBIE_SKILL_CRAZY);
+		WRITE_SHORT(static_cast<int>(GetDurationTime()));
+		WRITE_SHORT(static_cast<int>(GetCooldownTime()));
+		MESSAGE_END();
+	}
 }
 
 void CZombieSkill_ZombieCrazy::ResetMaxSpeed()
@@ -126,21 +222,41 @@ void CZombieSkill_ZombieCrazy::OnSkillEnd()
 {
 	m_iZombieSkillStatus = SKILL_STATUS_FREEZING;
 
-	m_pPlayer->pev->renderfx = kRenderFxNone;
-	m_pPlayer->pev->rendercolor = { 255,255,255 };
-	m_pPlayer->pev->renderamt = 16;
-	m_pPlayer->pev->fov = m_pPlayer->m_iFOV = 90;
-	m_pPlayer->ResetMaxSpeed();
+
+	if (m_pPlayer->m_bIsZombieFemale == true)
+	{
+		m_pPlayer->pev->renderfx = kRenderFxNone;
+		m_pPlayer->pev->rendermode = kRenderNormal;
+		m_pPlayer->pev->fov = m_pPlayer->m_iFOV = 90;
+		m_pPlayer->ResetMaxSpeed();
+	}
+	else
+	{
+		m_pPlayer->pev->renderfx = kRenderFxNone;
+		m_pPlayer->pev->rendercolor = { 255,255,255 };
+		m_pPlayer->pev->renderamt = 16;
+		m_pPlayer->pev->fov = m_pPlayer->m_iFOV = 90;
+		m_pPlayer->ResetMaxSpeed();
+	}
+
 }
 
 void CZombieSkill_ZombieCrazy::OnCrazyEffect()
 {
 	m_flTimeZombieSkillEffect = gpGlobals->time + 3.0f;
 
-	if (RANDOM_LONG(0, 1))
-		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_pre_idle_1.wav", VOL_NORM, ATTN_NORM);
+	if (m_pPlayer->m_bIsZombieFemale == true)
+	{
+
+	}
 	else
-		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_pre_idle_2.wav", VOL_NORM, ATTN_NORM);
+	{
+		if (RANDOM_LONG(0, 1))
+			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_pre_idle_1.wav", VOL_NORM, ATTN_NORM);
+		else
+			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_pre_idle_2.wav", VOL_NORM, ATTN_NORM);
+	}
+	
 }
 
 float CZombieSkill_ZombieCrazy::GetDurationTime() const

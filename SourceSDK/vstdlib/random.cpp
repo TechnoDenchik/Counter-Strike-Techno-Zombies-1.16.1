@@ -42,6 +42,10 @@ void InstallUniformRandomStream( IUniformRandomStream *pStream )
 	s_pUniformStream = pStream ? pStream : &s_UniformStream;
 }
 
+int RandomInt( int iMinVal, int iMaxVal )
+{
+	return s_pUniformStream->RandomInt( iMinVal, iMaxVal );
+}
 
 //-----------------------------------------------------------------------------
 // A couple of convenience functions to access the library's global uniform stream

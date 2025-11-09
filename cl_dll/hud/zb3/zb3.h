@@ -26,8 +26,17 @@ public:
 	void InitHUDData(void) override;		// called every time a server is connected to
 	void Shutdown(void) override;
 	CHudMsgFunc(ZB3Msg);
+	CHudMsgFunc(ZB3SkillUsed);
+	CHudMsgFunc(ZB3SkillUsed2);
+	CHudMsgFunc(ZB3Inventory);
+	CHudMsgFunc(HitDamageMsgZB3);
+
+	int DrawHeroIcon();
 
 protected:
+
+	UniqueTexture m_iHero;
+
 	class impl_t;
 	impl_t *pimpl;
 };

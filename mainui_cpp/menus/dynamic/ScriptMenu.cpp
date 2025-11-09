@@ -65,6 +65,9 @@ public:
 		CMenuFramework::SaveAndPopMenu();
 	}
 
+	CMenuPicButton Apply1, Apply;
+	CMenuPicButton Exit1, Exit;
+
 	void FlipMenu( void );
 	static void ListItemCvarWriteCb( CMenuBaseItem *pSelf, void *pExtra );
 	static void ListItemCvarGetCb( CMenuBaseItem *pSelf, void *pExtra );
@@ -174,8 +177,22 @@ void CMenuScriptConfig::_Init( void )
 {
 	AddItem( background );
 	AddItem( banner );
-	AddButton( "Done", "Save and Go back to previous menu", PC_DONE, VoidCb( &CMenuScriptConfig::SaveAndPopMenu ) );
-	AddButton( "Cancel", "Go back to previous menu", PC_CANCEL, VoidCb( &CMenuScriptConfig::Hide ) );
+	//AddButton( "Done", "Save and Go back to previous menu", PC_DONE, VoidCb( &CMenuScriptConfig::SaveAndPopMenu ) );
+	//AddButton( "Cancel", "Go back to previous menu", PC_CANCEL, VoidCb( &CMenuScriptConfig::Hide ) );
+
+	Apply.SetNameAndStatus(L("GameUI_Apply"), L(""));
+	Apply.onActivated = VoidCb(&CMenuScriptConfig::SaveAndPopMenu);
+	Apply.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Apply.SetGrayed(true);
+	Apply.SetCoord(80, 250);
+
+	Exit.SetNameAndStatus(L("GameUI_GameMenu_Quit"), L(""));
+	Exit.onActivated = VoidCb(&CMenuScriptConfig::Hide);
+	Exit.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Exit.SetGrayed(true);
+	Exit.SetCoord(80, 300);
 
 	if( !m_pVars )
 		return;
@@ -284,6 +301,8 @@ void CMenuScriptConfig::_Init( void )
 		page->AddItem( editable );
 	}
 
+	AddItem(Apply);
+	AddItem(Exit);
 
 	pageSelector.SetInactive(false);
 	pageSelector.Setup( 1, m_iPagesCount, 1 );

@@ -9,8 +9,6 @@
 #include <numeric>
 #include <tuple>
 
-CHudWinhudZB1 m_hudzb1;
-
 int CHudWinhudZB1::VidInit(void)
 {
 	if (!iconwinhm)
@@ -38,7 +36,7 @@ int CHudWinhudZB1::Draw(float time)
 	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
 	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255 * std::min(5.0f - (time - m_flDisplayTime), 1.0f));
 	m_pCurTexture->Bind();
-	DrawUtils::Draw2DQuadScaled(x - 881 / 3.0, y - 3.5, x + 881 / 3.0, y + 120);
+	DrawUtils::Draw2DQuadScaled(x - 881 / 3.0, y - 3.5, x + 881 / 3.0, y + 140);
 	return 1;
 }
 
@@ -123,5 +121,42 @@ int CHudMakeZombies::Draw(float time)
 void CHudMakeZombies::Make()
 {
 	m_pCurTexture = Zombieclassic;
+	m_flDisplayTime = gHUD.m_flTime;
+}
+
+int CHudRespZombieZB1::VidInit(void)
+{
+	if (!ZombieResp)
+		ZombieResp = R_LoadTextureShared("resource/zombieenhance/zombie_nomal", TF_NEAREST | TF_NOPICMIP | TF_NOMIPMAP | TF_CLAMP);
+	return 1;
+}
+
+int CHudRespZombieZB1::Draw(float time)
+{
+	if (!m_pCurTexture)
+		return 1;
+
+	if (time > m_flDisplayTime + 9999.0f)
+	{
+		m_pCurTexture = nullptr;
+		return 1;
+	}
+///	if (g_PlayerExtraInfo[gHUD.m_Scoreboard.m_iPlayerNum].teamnumber == TEAM_CT){}
+	
+	int x = ScreenWidth / 40.25;
+	int y = ScreenHeight / 1.1380;
+	const float flScale = 0.0f;
+
+	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
+	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
+	ZombieResp->Bind();
+	DrawUtils::Draw2DQuadScaled(x - 60, y - 15.5, x + 60, y + 100);
+	
+	return 1;
+}
+
+void CHudRespZombieZB1::RespZ()
+{
+	m_pCurTexture = ZombieResp;
 	m_flDisplayTime = gHUD.m_flTime;
 }

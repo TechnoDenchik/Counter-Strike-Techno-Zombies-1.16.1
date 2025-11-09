@@ -43,6 +43,12 @@ void CMenuBaseWindow::Hide()
 	EnableTransition();
 }
 
+void CMenuBaseWindow::Hide2()
+{
+	//PopMenu(*m_pStack);
+	//EnableTransition();
+}
+
 bool CMenuBaseWindow::IsVisible() const
 {
 	// slow!
@@ -97,6 +103,7 @@ void CMenuBaseWindow::PushMenu( windowStack_t &stack )
 		uiStatic.enterSound = gpGlobals->time + 0.15f;	// make some delay
 
 		EngFuncs::KEY_SetDest ( KEY_MENU );
+		UI_InitMainMenu();
 	}
 
 	m_iCursor = 0;
@@ -158,6 +165,7 @@ void CMenuBaseWindow::PopMenu( windowStack_t &stack )
 
 			// never trying the close menu when client isn't connected
 			EngFuncs::KEY_SetDest( KEY_MENU );
+			UI_InitMainMenu();
 			UI_Main_Menu();
 		}
 	}
@@ -175,6 +183,13 @@ void CMenuBaseWindow::SaveAndPopMenu()
 	EngFuncs::ClientCmd( FALSE, "trysaveconfig\n" );
 	Hide();
 }
+
+void CMenuBaseWindow::exits()
+{
+	EngFuncs::ClientCmd(FALSE, "trysaveconfig\n");
+	Hide2();
+}
+
 
 const char *CMenuBaseWindow::Key(int key, int down)
 {

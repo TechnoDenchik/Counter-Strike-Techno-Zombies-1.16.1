@@ -20,8 +20,8 @@ GNU General Public License for more details.
 #include "game.h"
 
 #include "mod_zb3.h"
-
 #include "util/u_range.hpp"
+#include "gamemode/interface/interface_const.h"
 
 #include <vector>
 #include <algorithm>
@@ -33,16 +33,18 @@ constexpr auto MORALE_TYPE_GLOBAL = ZB3_MORALE_DEFAULT;
 CPlayerModStrategy_ZB3::CPlayerModStrategy_ZB3(CBasePlayer *player, CMod_ZombieHero *mp)
 	:	CPlayerModStrategy_ZB2(player, static_cast<CMod_ZombieMod2 *>(mp)),
 		m_pModZB3(mp),
-		m_eventBecomeHeroListener(mp->m_eventBecomeHero.subscribe(&CPlayerModStrategy_ZB3::Event_OnBecomeHero, this)),
+		//m_eventBecomeHeroListener(mp->m_eventBecomeHero.subscribe(&CPlayerModStrategy_ZB3::Event_OnBecomeHero, this)),
 		m_eventRoundStartListener(mp->m_eventRoundStart.subscribe(&CPlayerModStrategy_ZB3::Event_OnRoundStart, this)),
 		m_flRagePercent(0.0f)
-{
-	
-}
+{}
 
 void CPlayerModStrategy_ZB3::OnSpawn()
 {
+	MESSAGE_BEGIN(MSG_ONE, gmsgZB3InventorySet, nullptr, m_pPlayer->edict());
+	WRITE_BYTE(WPN_INVENTORY);
+	MESSAGE_END();
 	m_pPlayer->m_bIsVIP = false;
+	m_pPlayer->m_bIsHero = false;
 	m_pModZB3->HumanMorale().UpdateHUD(m_pPlayer, MORALE_TYPE_GLOBAL);
 	return CPlayerModStrategy_ZB2::OnSpawn();
 }
@@ -53,22 +55,124 @@ void CPlayerModStrategy_ZB3::CheckEvolution()
 	auto iLastLevel = m_pPlayer->m_iZombieLevel;
 	if (m_pPlayer->m_iZombieLevel == ZOMBIE_LEVEL_HOST && m_flRagePercent > 100.0f)
 	{
-		BecomeZombie(ZOMBIE_LEVEL_ORIGIN);
-		m_flRagePercent = (flLastRagePercent - 100.0f) * 0.5f;
+		if (m_pPlayer->m_bIsZombieTank == true)
+		{
+			BecomeTank(ZOMBIE_LEVEL_ORIGIN);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 15000.0f;
+			m_pPlayer->pev->armorvalue = 4000.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieFemale == true)
+		{
+			BecomeSpeed(ZOMBIE_LEVEL_ORIGIN);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 12000.0f;
+			m_pPlayer->pev->armorvalue = 3200.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieHeavy == true)
+		{
+			BecomeHeavy(ZOMBIE_LEVEL_ORIGIN);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 20000.0f;
+			m_pPlayer->pev->armorvalue = 5500.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieHeal == true)
+		{
+			BecomeHeal(ZOMBIE_LEVEL_ORIGIN);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 25000.0f;
+			m_pPlayer->pev->armorvalue = 2500.0f;
+		}
+		else if (m_pPlayer->m_bIsZombiePc == true)
+		{
+			BecomePsycho(ZOMBIE_LEVEL_ORIGIN);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 22000.0f;
+			m_pPlayer->pev->armorvalue = 3500.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieDeimos == true)
+		{
+			BecomeDeimos(ZOMBIE_LEVEL_ORIGIN);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 25000.0f;
+			m_pPlayer->pev->armorvalue = 4000.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieGanimed == true)
+		{
+			BecomeGanimed(ZOMBIE_LEVEL_ORIGIN);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 25000.0f;
+			m_pPlayer->pev->armorvalue = 4000.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieBanchee == true)
+		{
+			BecomeBanchee(ZOMBIE_LEVEL_ORIGIN);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 17500.0f;
+			m_pPlayer->pev->armorvalue = 3300.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieStamp == true)
+		{
+			BecomeStamper(ZOMBIE_LEVEL_ORIGIN);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 18000.0f;
+			m_pPlayer->pev->armorvalue = 4500.0f;
+		}
 
-		m_pPlayer->pev->health = m_pPlayer->pev->max_health = 7000.0f;
-		m_pPlayer->pev->armorvalue = 500.0f;
+		m_flRagePercent = (flLastRagePercent - 100.0f) * 0.5f;
 
 		EvolutionSound();
 	}
 
 	if (m_pPlayer->m_iZombieLevel == ZOMBIE_LEVEL_ORIGIN && m_flRagePercent > 100.0f)
 	{
-		BecomeZombie(ZOMBIE_LEVEL_ORIGIN_LV2);
-		m_flRagePercent = (flLastRagePercent - 100.0f) * 0.5f;
+		if (m_pPlayer->m_bIsZombieTank == true)
+		{
+			BecomeTank(ZOMBIE_LEVEL_ORIGIN_LV2);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 25000.0f;
+			m_pPlayer->pev->armorvalue = 5000.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieFemale == true)
+		{
+			BecomeSpeed(ZOMBIE_LEVEL_ORIGIN_LV2);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 20000.0f;
+			m_pPlayer->pev->armorvalue = 3500.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieHeavy == true)
+		{
+			BecomeHeavy(ZOMBIE_LEVEL_ORIGIN_LV2);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 30000.0f;
+			m_pPlayer->pev->armorvalue = 7500.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieHeal == true)
+		{
+			BecomeHeal(ZOMBIE_LEVEL_ORIGIN_LV2);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 27000.0f;
+			m_pPlayer->pev->armorvalue = 3700.0f;
+		}
+		else if (m_pPlayer->m_bIsZombiePc == true)
+		{
+			BecomePsycho(ZOMBIE_LEVEL_ORIGIN_LV2);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 25000.0f;
+			m_pPlayer->pev->armorvalue = 4500.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieDeimos == true)
+		{
+			BecomeDeimos(ZOMBIE_LEVEL_ORIGIN_LV2);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 28000.0f;
+			m_pPlayer->pev->armorvalue = 6500.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieGanimed == true)
+		{
+			BecomeGanimed(ZOMBIE_LEVEL_ORIGIN_LV2);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 28000.0f;
+			m_pPlayer->pev->armorvalue = 6500.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieBanchee == true)
+		{
+			BecomeBanchee(ZOMBIE_LEVEL_ORIGIN_LV2);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 24000.0f;
+			m_pPlayer->pev->armorvalue = 4000.0f;
+		}
+		else if (m_pPlayer->m_bIsZombieStamp == true)
+		{
+			BecomeStamper(ZOMBIE_LEVEL_ORIGIN_LV2);
+			m_pPlayer->pev->health = m_pPlayer->pev->max_health = 22000.0f;
+			m_pPlayer->pev->armorvalue = 5000.0f;
+		}
 
-		m_pPlayer->pev->health = m_pPlayer->pev->max_health = 14000.0f;
-		m_pPlayer->pev->armorvalue = 1500.0f;
+		m_flRagePercent = (flLastRagePercent - 100.0f) * 0.5f;
 
 		EvolutionSound();
 	}
@@ -84,7 +188,10 @@ void CPlayerModStrategy_ZB3::CheckEvolution()
 void CPlayerModStrategy_ZB3::BecomeZombie(ZombieLevel iEvolutionLevel)
 {
 	m_pPlayer->m_bIsVIP = false;
-	
+	m_pPlayer->m_bIsHero = false;
+	m_pPlayer->pev->renderfx = kRenderFxNone;
+	m_pPlayer->pev->rendercolor = { 255,255,255 };
+	m_pPlayer->pev->renderamt = 16;
 	return CPlayerModStrategy_ZB2::BecomeZombie(iEvolutionLevel);
 }
 
@@ -169,14 +276,30 @@ void CPlayerModStrategy_ZB3::OnKilled(entvars_t * pKiller, entvars_t * pInflicto
 	return CPlayerModStrategy_ZB2::OnKilled(pKiller, pInflictor);
 }
 
-void CPlayerModStrategy_ZB3::Event_OnBecomeHero(CBasePlayer * who)
-{
-	if (m_pPlayer != who)
-		return;
+//void CPlayerModStrategy_ZB3::Event_OnBecomeHero(CBasePlayer * who)
+//{
+//	if (m_pPlayer != who)
+//		return;
+//	BecomeHero();
+//}
 
-	// TODO : hero weapons & model
+/*void CPlayerModStrategy_ZB3::BecomeHero()
+{
+	auto sp = std::make_shared<CHero_ZB1>(m_pPlayer);
+
+	m_pPlayer->m_bIsHero = true;
 	m_pPlayer->m_bIsVIP = true;
-}
+
+	MESSAGE_BEGIN(MSG_ONE, gmsgZB3InventorySet, nullptr, m_pPlayer->pev);
+	WRITE_BYTE(WPN_INVENTORY);
+	MESSAGE_END();
+
+	MESSAGE_BEGIN(MSG_ONE, gmsgZB3SetHero, nullptr, m_pPlayer->pev);
+	WRITE_BYTE(ZB3_GETHERO);
+	MESSAGE_END();
+
+	sp->ResetMaxSpeed();
+}*/
 
 void CPlayerModStrategy_ZB3::Event_OnRoundStart()
 {
@@ -195,31 +318,30 @@ void CZB3HumanMorale::UpdateHUD(CBasePlayer *player, ZB3HumanMoraleType_e type) 
 	MESSAGE_END();
 }
 
-CMod_ZombieHero::CMod_ZombieHero()
-{
-
-}
+CMod_ZombieHero::CMod_ZombieHero(){}
 
 void CMod_ZombieHero::InstallPlayerModStrategy(CBasePlayer *player)
 {
 	player->m_pModStrategy.reset(new CPlayerModStrategy_ZB3(player, this));
 }
 
-void CMod_ZombieHero::PickZombieOrigin()
-{
-	CMod_Zombi::PickZombieOrigin();
-	// TODO : pick hero
-	// PickHero();
-}
+//void CMod_ZombieHero::PickZombieOrigin()
+//{
+//	CMod_Zombi::PickZombieOrigin();
+//	PickHero();
+//}
 
 void CMod_ZombieHero::UpdateGameMode(CBasePlayer * pPlayer)
 {
 	MESSAGE_BEGIN(MSG_ONE, gmsgGameMode, NULL, pPlayer->edict());
 	WRITE_BYTE(MOD_ZB3);
-	WRITE_BYTE(0); // Reserved. (weapon restriction? )
-	WRITE_BYTE(maxrounds.value); // MaxRound (mp_roundlimit)
-	WRITE_BYTE(0); // Reserved. (MaxTime?)
+	WRITE_BYTE(0);
+	WRITE_BYTE(maxrounds.value);
+	WRITE_BYTE(0);
 	MESSAGE_END();
+
+	pPlayer->m_bIsZombieMod1 = false;
+	iszombiemod1 = false;
 }
 
 void CMod_ZombieHero::RestartRound()
@@ -234,10 +356,12 @@ void CMod_ZombieHero::PlayerKilled(CBasePlayer * pVictim, entvars_t * pKiller, e
 	if (pVictim->m_bIsZombie)
 		if (m_Morale.LevelUp())
 			m_Morale.UpdateHUD(nullptr, MORALE_TYPE_GLOBAL);
+
+
 	return CMod_ZombieMod2::PlayerKilled(pVictim, pKiller, pInflictor);
 }
 
-void CMod_ZombieHero::PickHero()
+/*void CMod_ZombieHero::PickHero()
 {
 	// randomize player list
 	moe::range::PlayersList list;
@@ -248,7 +372,7 @@ void CMod_ZombieHero::PickHero()
 	// make heroes
 	const auto iNumHeroes = std::min(players.size(), players.size() / 10 + std::uniform_int_distribution<size_t>(0, 1)(rd));
 	std::for_each(players.begin(), players.begin() + iNumHeroes, std::bind(&CMod_ZombieHero::MakeHero, this, std::placeholders::_1));
-}
+}*/
 
 void CMod_ZombieHero::CheckWinConditions()
 {
@@ -260,11 +384,32 @@ void CMod_ZombieHero::CheckWinConditions()
 		return;
 
 	moe::range::PlayersList list;
-	auto iAliveHuman = std::count_if(list.begin(), list.end(), [](CBasePlayer *player) { return player->m_iTeam == TEAM_CT && !player->m_bIsZombie && player->IsAlive(); });
-	auto iAliveZombie = std::count_if(list.begin(), list.end(), [](CBasePlayer *player) { return player->m_iTeam == TEAM_TERRORIST && player->m_bIsZombie && !(!player->IsAlive() && player->m_bHeadshotKilled); });
 
-	if (!iAliveHuman)
+	// Считаем живых людей (CT + не зомби + живые)
+	auto iAliveHuman = std::count_if(list.begin(), list.end(),
+		[](CBasePlayer* player) {
+			return player &&
+				player->IsAlive() &&
+				player->m_iTeam == TEAM_CT &&
+				!player->m_bIsZombie;
+		});
+
+	// Считаем живых зомби (T + зомби + живые)
+	auto iAliveZombie = std::count_if(list.begin(), list.end(),
+		[](CBasePlayer* player) {
+			return player &&
+				player->IsAlive() &&
+				player->m_iTeam == TEAM_TERRORIST &&
+				player->m_bIsZombie;
+		});
+
+	// Проверяем условия победы
+	if (iAliveHuman == 0 && iAliveZombie > 0)
+	{
 		ZombieWin();
-	else if (!iAliveZombie)
+	}
+	else if (iAliveZombie == 0 && iAliveHuman > 0)
+	{
 		HumanWin();
+	}
 }

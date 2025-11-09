@@ -92,6 +92,7 @@ public:
 	bool Jump(bool mustJump = false) override;										// returns true if jump was started
 
 	void OnBecomeZombie(ZombieLevel iEvolutionLevel) override;
+	void OnBecomeJoker() override;
 
 	void OnEvent(GameEventType event, CBaseEntity *entity = NULL, CBaseEntity *other = NULL) override;			// invoked when event occurs in the game (some events have NULL entity)
 
@@ -190,6 +191,12 @@ public:
 
 	bool IsBusy() const;									// return true if we are busy doing something important
 
+	void RushToSupplyBox();
+	bool IsRushingForSupplyBox() const;
+
+	void Defend(CNavArea* area);
+	bool IsDefending() const;
+
 	// high-level tasks
 	enum TaskType
 	{
@@ -214,6 +221,8 @@ public:
 		MOVE_TO_SNIPER_SPOT,
 		SNIPING,
 
+		MOVE_TO_ATTACKER_POSITION,
+		MOVE_TO_SAFE_AREA,
 		NUM_TASKS
 	};
 
@@ -434,6 +443,9 @@ public:
 	void EXPORT BotTouch(CBaseEntity *other);
 	bool HasAnyAmmo(CBasePlayerWeapon *weapon) const;
 
+	CBaseEntity* GetKiller();
+	void SetKiller(CBaseEntity* enemy);
+
 private:
 	friend class CCSBotManager;
 
@@ -479,6 +491,9 @@ private:
 	EscapeFromBombState m_escapeFromBombState;
 	FollowState m_followState;
 	UseEntityState m_useEntityState;
+	SupplyBoxRushState m_supplyboxRushState;
+
+	DefendState m_defendState;
 
 	// TODO: Allow multiple simultaneous state machines (look around, etc)
 	void SetState(BotState *state);						// set the current behavior state
@@ -777,6 +792,8 @@ private:
 	void StartSaveProcess();
 	void UpdateSaveProcess();
 	void StartNormalProcess();
+
+	mutable EHANDLE m_killer;
 };
 
 // Inlines
@@ -1186,6 +1203,11 @@ inline bool CCSBot::IsNotMoving() const
 inline bool CCSBot::HasAnyAmmo(CBasePlayerWeapon *weapon) const
 {
 	return (weapon->m_iClip != 0 || m_rgAmmo[weapon->m_iPrimaryAmmoType] > 0);
+}
+
+inline CBaseEntity* CCSBot::GetKiller()
+{
+	return m_killer;
 }
 
 class CollectRetreatSpotsFunctor

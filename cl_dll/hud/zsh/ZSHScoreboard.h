@@ -7,32 +7,78 @@
 #include "hud_sub.h"
 
 class CHudZSHScoreboard : public IBaseHudSub
-{
-public:
+{	
 	friend class CHudZSH;
+public:
 	int VidInit(void) override;
 	int Draw(float time) override;
-	int m_iTeamScore_T, m_iTeamScore_CT;
+	
 	void UpdateDay(int day)
 	{
 		days = day;
 	}
 
-	void UpdateRes(int woods, int metal)
+	void UpdateRes(int woods, int metal, int maxwood, int maxmeat, int energy, int maxenergy)
 	{
 		wood = woods;
 		meat = metal;
+		maxwoods = maxwood;
+		maxmetal = maxmeat;
+		energys = energy;
+		maxenergys = maxenergy;
+	}
+
+	void UpdateResHome(int homewoods, int homemaxwood, int homemetal, int homemaxmeat, int mentalityhealth)
+	{
+		barmeat = homemetal;
+		barwood = homewoods;
+		barmaxmetal = homemaxmeat;
+		barmaxwoods = homemaxwood;
+		barmentalityhealth = mentalityhealth;
+	}
+
+	void UpdateMentality(int mentalityhealth)
+	{
+		barmentalityhealth = mentalityhealth;
+	}
+
+	void UpdateTime(int daytimes, int nighttimes, bool daytimer, int dayseconds, int nightseconds)
+	{
+		timeday = daytimes;
+		timenight = nighttimes;
+		timerday = daytimer;
+		secondsday = dayseconds;
+		secondsnight = nightseconds;
 	}
 
 protected:
 
+	int m_iTeamScore_T, m_iTeamScore_CT;
+
 	int days;
+
+	int timeday;
+	int timenight;
+	int secondsday;
+	int secondsnight;
+	bool timerday;
 
 	int wood;
 	int meat;
 
 	int maxwoods;
 	int maxmetal;
+
+	int barmeat;
+	int barmaxmetal;
+
+	int barmaxwoods;
+	int barwood;
+
+	int maxenergys;
+	int energys;
+
+	int barmentalityhealth;
 
 	UniqueTexture newscoreboardzsh;
 	UniqueTexture textstring;
@@ -43,6 +89,7 @@ protected:
 	SharedTexture m_pCurTexture;
 	
 	UniqueTexture zsht_gungergauge_bg;
+	UniqueTexture zsht_ingame_noisegauge_bg;
 	UniqueTexture zsht_moon_icon;
 	UniqueTexture zsht_sun_icon;
 	UniqueTexture noisegauge_bg;
@@ -55,8 +102,6 @@ protected:
 	wrect_t m_rcSelfnumber[10];
 	wrect_t m_rcToprecord[10];
 	wrect_t m_rcToprecord2[10];
-
-
 	
 private:
 

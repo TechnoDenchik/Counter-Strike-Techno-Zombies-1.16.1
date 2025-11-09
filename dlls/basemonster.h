@@ -82,6 +82,16 @@ public:
 	void RadiusDamage(Vector vecSrc, entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int iClassIgnore, int bitsDamageType);
 	void EXPORT CorpseFallThink(void);
 	CBaseEntity *CheckTraceHullAttack(float flDist, int iDamage, int iDmgType);
+	CBaseEntity* CheckTraceHullAttack2(float flDist, int iDamage, int iDmgType);
+
+	duration_t tNextAttack3;
+	time_point_t tWorldTime3;
+	duration_t tDelta3;
+
+	duration_t tNextAttack4;
+	time_point_t tWorldTime4;
+	duration_t tDelta4;
+
 #ifdef CLIENT_DLL
 	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override {}
 #else

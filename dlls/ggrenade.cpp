@@ -15,6 +15,7 @@
 
 #include "pm_shared.h"
 #include "utllinkedlist.h"
+#include "gamemode/interface/interface_const.h"
 
 // CSBOT and Nav
 #include "game_shared2/GameEvent.h"		// Game event enum used by career mode, tutor system, and bots
@@ -156,7 +157,7 @@ void CGrenade::Explode(TraceResult *pTrace, int bitsDamageType)
 void CGrenade::Explode2(TraceResult *pTrace, int bitsDamageType)
 {
 	float flRndSound; // sound randomizer
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 
 	pev->model = iStringNull; // invisible
 	pev->solid = SOLID_NOT; // intangible
@@ -792,17 +793,48 @@ void CGrenade::SlideTouch(CBaseEntity *pOther)
 
 void CGrenade::BounceSound()
 {
-	if (pev->dmg > 50.0f)
+	if (!Q_strcmp(STRING(pev->classname), "weapon_zombibombz") 
+		&& !Q_strcmp(STRING(pev->classname), "weapon_zombibomb_aksha")
+		&& !Q_strcmp(STRING(pev->classname), "weapon_zombibomb_boomer")
+		&& !Q_strcmp(STRING(pev->classname), "weapon_zombibomb_booster")
+		&& !Q_strcmp(STRING(pev->classname), "weapon_zombibomb_china")
+		&& !Q_strcmp(STRING(pev->classname), "weapon_zombibomb_deathknight")
+		&& !Q_strcmp(STRING(pev->classname), "weapon_zombibomb_deimos")
+		&& !Q_strcmp(STRING(pev->classname), "weapon_zombibomb_fly")
+		&& !Q_strcmp(STRING(pev->classname), "weapon_zombibomb_ganimed")
+		&& !Q_strcmp(STRING(pev->classname), "weapon_zombibomb_heal")
+		&& !Q_strcmp(STRING(pev->classname), "weapon_zombibomb_heavy")
+		&& !Q_strcmp(STRING(pev->classname), "weapon_zombibomb_meatwall")
+		&& !Q_strcmp(STRING(pev->classname), "weapon_zombibomb_pc")
+		&& !Q_strcmp(STRING(pev->classname), "weapon_zombibomb_resident")
+		&& !Q_strcmp(STRING(pev->classname), "weapon_zombibomb_speed")
+		&& !Q_strcmp(STRING(pev->classname), "weapon_zombibomb_spider")
+		&& !Q_strcmp(STRING(pev->classname), "weapon_zombibomb_stamper")
+		&& !Q_strcmp(STRING(pev->classname), "weapon_zombibomb_banchee"))
 	{
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/he_bounce-1.wav", 0.25, ATTN_NORM);
-		return;
-	}
+		if (pev->dmg > 50.0f)
+		{
+			EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/he_bounce-1.wav", 0.25, ATTN_NORM);
+			return;
+		}
 
-	switch (RANDOM_LONG(0, 2))
+		switch (RANDOM_LONG(0, 2))
+		{
+		case 0:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/grenade_hit1.wav", 0.25, ATTN_NORM); break;
+		case 1:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/grenade_hit2.wav", 0.25, ATTN_NORM); break;
+		case 2:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/grenade_hit3.wav", 0.25, ATTN_NORM); break;
+		}
+
+	}
+	else
 	{
-	case 0:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/grenade_hit1.wav", 0.25, ATTN_NORM); break;
-	case 1:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/grenade_hit2.wav", 0.25, ATTN_NORM); break;
-	case 2:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/grenade_hit3.wav", 0.25, ATTN_NORM); break;
+		if (pev->dmg > 50.0f)
+		{
+			EMIT_SOUND(ENT(pev), CHAN_VOICE, "zombi/zombi_bomb_bounce_2-1.wav", 0.25, ATTN_NORM);
+			return;
+		}
+
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, "zombi/zombi_bomb_bounce_1.wav", 0.25, ATTN_NORM);
 	}
 }
 
@@ -955,6 +987,40 @@ CGrenade *CGrenade::ShootTimed2(entvars_t *pevOwner, Vector vecStart, Vector vec
 	pGrenade->m_iTeam = iTeam;
 
 	SET_MODEL(ENT(pGrenade->pev), "models/w_hegrenade.mdl");
+	pGrenade->pev->dmg = 100.0f;
+
+	return pGrenade;
+}
+
+CGrenade* CGrenade::ShootTimedSbmine(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity, float time, int iTeam, unsigned short usEvent)
+{
+	CGrenade* pGrenade = CreateClassPtr<CGrenade>();
+	pGrenade->Spawn();
+
+	UTIL_SetOrigin(pGrenade->pev, vecStart);
+	pGrenade->pev->velocity = vecVelocity;
+	pGrenade->pev->angles = pevOwner->angles;
+	pGrenade->pev->owner = ENT(pevOwner);
+
+	pGrenade->m_usEvent = usEvent;
+
+	pGrenade->SetTouch(&CGrenade::BounceTouch);
+
+	pGrenade->pev->dmgtime = gpGlobals->time + time;
+	pGrenade->SetThink(&CGrenade::TumbleThink);
+	pGrenade->pev->nextthink = gpGlobals->time + 0.1f;
+
+	pGrenade->pev->sequence = RANDOM_LONG(3, 6);
+	pGrenade->pev->framerate = 1.0f;
+
+	pGrenade->m_bJustBlew = true;
+
+	pGrenade->pev->gravity = 0.55f;
+	pGrenade->pev->friction = 0.7f;
+
+	pGrenade->m_iTeam = iTeam;
+
+	SET_MODEL(ENT(pGrenade->pev), "models/w_sbmine.mdl");
 	pGrenade->pev->dmg = 100.0f;
 
 	return pGrenade;
@@ -1226,7 +1292,7 @@ void CGrenade::ZombieBombKnockback(Vector vecSrc, entvars_t* pevInflictor, entva
 	TraceResult tr;
 	float flAdjustedDamage, falloff;
 	Vector vecSpot;
-	float flRadius = 350.0;
+	float flRadius = 450.0;
 	float flDamage, flMul;
 	int bInWater = (UTIL_PointContents(vecSrc) == CONTENTS_WATER);
 	Vector vecVelocityAdd;
@@ -1478,7 +1544,9 @@ void CGrenade::C4Think()
 			{
 				if (!iOnGround)
 				{
-					ClientPrint(m_pBombDefuser->pev, HUD_PRINTCENTER, "#C4_Defuse_Must_Be_On_Ground");
+					MESSAGE_BEGIN(MSG_ONE, gmsgOriginalMsg8, NULL, pPlayer->pev);
+					WRITE_BYTE(ORIG_BOMB4_MSG);
+					MESSAGE_END();
 				}
 
 				// release the player from being frozen

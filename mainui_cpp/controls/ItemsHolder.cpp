@@ -172,65 +172,103 @@ const char *CMenuItemsHolder::Activate()
 	return 0;
 }
 
-bool CMenuItemsHolder::MouseMove( int x, int y )
+bool CMenuItemsHolder::MouseMove(int x, int y)
 {
 	int i;
-	// region test the active menu items
-	// go in reverse direction, so last items will be first
-	for( i = m_numItems - 1; i >= 0; i-- )
-	{
-		CMenuBaseItem *item = m_pItems[i];
+	bool cursorChanged = false;
+	int newCursor = -1;
 
-		// Invisible or inactive items will be skipped
-		if( !item->IsVisible() || item->iFlags & (QMF_INACTIVE) )
+	// Проверяем все элементы в обратном порядке (сверху вниз по z-order)
+	for (i = m_numItems - 1; i >= 0; i--)
+	{
+		CMenuBaseItem* item = m_pItems[i];
+
+		// Пропускаем невидимые или неактивные элементы
+		if (!item->IsVisible() || (item->iFlags & QMF_INACTIVE))
 		{
-			if( item->iFlags & QMF_HASMOUSEFOCUS )
+			// Если у элемента был фокус мыши, но курсор ушел - сбрасываем
+			if ((item->iFlags & QMF_HASMOUSEFOCUS) && !UI_CursorInRect(item->m_scPos, item->m_scSize))
 			{
-				if( !UI_CursorInRect( item->m_scPos, item->m_scSize ) )
-					item->iFlags &= ~QMF_HASMOUSEFOCUS;
-				else item->m_iLastFocusTime = uiStatic.realTime;
+				item->iFlags &= ~QMF_HASMOUSEFOCUS;
+				item->_Event(QM_LOSTFOCUS); // ВАЖНО: сообщаем о потере фокуса
 			}
 			continue;
 		}
 
-		// simple region test
-		if( !UI_CursorInRect( item->m_scPos, item->m_scSize ) || !item->MouseMove( x, y ) )
+		// Проверяем находится ли курсор в области элемента
+		if (UI_CursorInRect(item->m_scPos, item->m_scSize) && item->MouseMove(x, y))
 		{
+			newCursor = i;
+			break; // Нашли элемент под курсором - выходим
+		}
+		else
+		{
+			// Курсор не над элементом - сбрасываем состояние
 			item->m_bPressed = false;
-			item->iFlags &= ~QMF_HASMOUSEFOCUS;
-			continue;
+			if (item->iFlags & QMF_HASMOUSEFOCUS)
+			{
+				item->iFlags &= ~QMF_HASMOUSEFOCUS;
+				item->_Event(QM_LOSTFOCUS); // ВАЖНО: сообщаем о потере фокуса
+			}
 		}
+	}
 
-		if( m_iCursor != i )
+	// Если нашли новый элемент под курсором
+	if (newCursor != -1)
+	{
+		CMenuBaseItem* newItem = m_pItems[newCursor];
+
+		// Если курсор изменился
+		if (m_iCursor != newCursor)
 		{
-			SetCursor( i );
-			// reset two focus states, because we are changed cursor
-			if( m_iCursorPrev != -1 )
-				m_pItems[m_iCursorPrev]->iFlags &= ~(QMF_HASMOUSEFOCUS|QMF_HASKEYBOARDFOCUS);
+			// Сбрасываем фокус у предыдущего элемента
+			if (m_iCursor >= 0 && m_iCursor < m_numItems)
+			{
+				CMenuBaseItem* oldItem = m_pItems[m_iCursor];
+				oldItem->iFlags &= ~(QMF_HASMOUSEFOCUS | QMF_HASKEYBOARDFOCUS);
+				oldItem->_Event(QM_LOSTFOCUS); // ВАЖНО: сообщаем о потере фокуса
+			}
 
-			if( !( m_pItems[m_iCursor]->iFlags & QMF_SILENT ) )
-				EngFuncs::PlayLocalSound( uiSoundMove );
+			// Устанавливаем новый курсор
+			SetCursor(newCursor);
+			cursorChanged = true;
+
+			// Воспроизводим звук если нужно
+			if (!(newItem->iFlags & QMF_SILENT))
+				EngFuncs::PlayLocalSound(uiSoundMove);
 		}
 
-		m_pItems[m_iCursor]->iFlags |= QMF_HASMOUSEFOCUS;
-		m_pItems[m_iCursor]->m_iLastFocusTime = uiStatic.realTime;
-		// Should we stop at first matched item?
+		// Устанавливаем фокус мыши новому элементу
+		newItem->iFlags |= QMF_HASMOUSEFOCUS;
+		newItem->m_iLastFocusTime = uiStatic.realTime;
+		newItem->_Event(QM_GOTFOCUS); // ВАЖНО: сообщаем о получении фокуса
+
 		return true;
 	}
 
-	// out of any region
-	if( !i )
+	// Курсор не над каким-либо элементом
+	if (m_iCursor >= 0 && m_iCursor < m_numItems)
 	{
-		m_pItems[m_iCursor]->iFlags &= ~QMF_HASMOUSEFOCUS;
-		m_pItems[m_iCursor]->m_bPressed = false;
+		CMenuBaseItem* currentItem = m_pItems[m_iCursor];
 
-		// a mouse only item restores focus to the previous item
-		if( m_pItems[m_iCursor]->iFlags & QMF_MOUSEONLY )
-			if( m_iCursorPrev != -1 )
-				m_iCursor = m_iCursorPrev;
+		// Сбрасываем фокус мыши у текущего элемента
+		if (currentItem->iFlags & QMF_HASMOUSEFOCUS)
+		{
+			currentItem->iFlags &= ~QMF_HASMOUSEFOCUS;
+			currentItem->_Event(QM_LOSTFOCUS); // ВАЖНО: сообщаем о потере фокуса
+		}
+
+		currentItem->m_bPressed = false;
+
+		// Для элементов "только для мыши" возвращаем фокус на предыдущий элемент
+		if (currentItem->iFlags & QMF_MOUSEONLY && m_iCursorPrev != -1)
+		{
+			SetCursor(m_iCursorPrev);
+			cursorChanged = true;
+		}
 	}
 
-	return false;
+	return cursorChanged;
 }
 
 void CMenuItemsHolder::Init()
@@ -455,24 +493,75 @@ void CMenuItemsHolder::SetCursor( int newCursor, bool notify )
 
 void CMenuItemsHolder::CursorMoved()
 {
-	CMenuBaseItem *item;
+	CMenuBaseItem* item;
 
-	if( m_iCursor == m_iCursorPrev )
+	if (m_iCursor == m_iCursorPrev)
 		return;
 
-	if( m_iCursorPrev >= 0 && m_iCursorPrev < m_numItems )
+	// 1. СБРАСЫВАЕМ цвет предыдущего элемента
+	if (m_iCursorPrev >= 0 && m_iCursorPrev < m_numItems)
 	{
 		item = m_pItems[m_iCursorPrev];
+		if (item)
+		{
+			item->_Event(QM_LOSTFOCUS);
 
-		item->_Event( QM_LOSTFOCUS );
+		
+		}
 	}
 
-	if( m_iCursor >= 0 && m_iCursor < m_numItems )
+	// 2. УСТАНАВЛИВАЕМ цвет новому элементу
+	if (m_iCursor >= 0 && m_iCursor < m_numItems)
 	{
 		item = m_pItems[m_iCursor];
+		if (item)
+		{
+			item->_Event(QM_GOTFOCUS);
 
-		item->_Event( QM_GOTFOCUS );
+			
+		}
 	}
+}
+
+void CMenuItemsHolder::FindNextAvailableItem()
+{
+	if (m_numItems <= 0) return;
+
+	int start = m_iCursor;
+	int direction = (m_iCursor > m_iCursorPrev) ? 1 : -1;
+
+	// Пытаемся найти доступный элемент в направлении движения
+	for (int i = 1; i < m_numItems; i++)
+	{
+		int testPos = (start + i * direction + m_numItems) % m_numItems;
+		CMenuBaseItem* item = m_pItems[testPos];
+
+		if (item && !(item->iFlags & QMF_HIDDEN) && !(item->iFlags & QMF_GRAYED))
+		{
+			m_iCursorPrev = m_iCursor;
+			m_iCursor = testPos;
+
+			// Рекурсивно вызываем обработку перемещения
+			CursorMoved();
+			return;
+		}
+	}
+
+	// Если в направлении движения ничего не найдено, ищем любой доступный
+	for (int i = 0; i < m_numItems; i++)
+	{
+		CMenuBaseItem* item = m_pItems[i];
+		if (item && !(item->iFlags & QMF_HIDDEN) && !(item->iFlags & QMF_GRAYED))
+		{
+			m_iCursorPrev = m_iCursor;
+			m_iCursor = i;
+			CursorMoved();
+			return;
+		}
+	}
+
+	// Если доступных элементов нет, оставляем курсор на месте
+	m_iCursor = m_iCursorPrev;
 }
 
 void CMenuItemsHolder::AddItem(CMenuBaseItem &item)

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 1997-2001 Id Software, Inc.
+Copyright (C) 1997-2001 Id Software & TechnoSoftware, Inc.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -95,17 +95,19 @@ private:
 		Hide();
 	}
 
-
 	CMenuBannerBitmap banner;
 
-	// state toggle by
 	CMenuTable keysList;
+
 	CMenuKeysModel keysListModel;
 
-	// redefine key wait dialog
-	CMenuMessageBox msgBox1; // small msgbox
+	CMenuMessageBox msgBox1; 
 
-	CMenuYesNoMessageBox msgBox2; // large msgbox
+	CMenuYesNoMessageBox msgBox2; 
+
+	CMenuPicButton Default1, Default;
+	CMenuPicButton Apply1, Apply;
+	CMenuPicButton Exit1, Exit;
 
 	int bind_grab;
 } uiControls;
@@ -380,25 +382,49 @@ void CMenuControls::_Init( void )
 
 	keysList.SetRect( 360, 230, -20, 465 );
 	keysList.SetModel( &keysListModel );
-	keysList.SetupColumn( 0, "Action", 0.50f );
-	keysList.SetupColumn( 1, "Key/Button", 0.25f );
-	keysList.SetupColumn( 2, "Alternate", 0.25f );
+	keysList.SetCharSize(QM_BOLDFONT);
+	keysList.SetupColumn( 0, L("GameUI_Action"), 0.50f );
+	keysList.SetupColumn( 1, L("GameUI_KeyButton"), 0.25f );
+	keysList.SetupColumn( 2, L("GameUI_Alternate"), 0.25f );
 
-	msgBox1.SetMessage( "Press a key or button" );
+	msgBox1.SetMessage(L("Press a key or button"));
+	msgBox1.SetCharSize(QM_BOLDFONT);
 
-	msgBox2.SetMessage( "Reset buttons to default?" );
+	msgBox2.SetMessage(L("GameUI_KeyboardSettingsText"));
+	msgBox2.SetCharSize(QM_BOLDFONT);
 	msgBox2.onPositive = VoidCb( &CMenuControls::ResetKeysList );
 	msgBox2.Link( this );
 
+	Apply.SetNameAndStatus(L("GameUI_Apply"), L(""));
+	Apply.SetCharSize(QM_BOLDFONT);
+	Apply.onActivated = VoidCb(&CMenuControls::SaveAndPopMenu) ;
+	Apply.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Apply.SetGrayed(true);
+	Apply.SetCoord(80, 300);
+
+	Default.SetNameAndStatus(L("GameUI_UseDefaults"), L(""));
+	Default.SetCharSize(QM_BOLDFONT);
+	Default.onActivated = msgBox2.MakeOpenEvent();
+	Default.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Default.SetGrayed(true);
+	Default.SetCoord(80, 350);
+
+	Exit.SetNameAndStatus(L("GameUI_Cancel"), L(""));
+	Exit.SetCharSize(QM_BOLDFONT);
+	Exit.onActivated = VoidCb(&CMenuControls::Cancel);
+	Exit.iFlags |= QMF_NOTIFY;
+	if (CL_IsActive() && !EngFuncs::GetCvarFloat("host_serverstate"))
+		Exit.SetGrayed(true);
+	Exit.SetCoord(80, 400);
+
 	AddItem( background );
 	AddItem( banner );
-	AddButton( "Use defaults", "Reset all buttons binding to their default values", PC_USE_DEFAULTS, msgBox2.MakeOpenEvent() );
-	AddButton( "Adv controls", "Change mouse sensitivity, enable autoaim, mouselook and crosshair", PC_ADV_CONTROLS, UI_AdvControls_Menu );
-	AddButton( "Ok", "Save changed and return to configuration menu", PC_DONE,
-		VoidCb( &CMenuControls::SaveAndPopMenu ) );
-	AddButton( "Cancel", "Discard changes and return to configuration menu", PC_CANCEL,
-		VoidCb( &CMenuControls::Cancel ) );
 	AddItem( keysList );
+	AddItem( Default );
+	AddItem( Apply );
+	AddItem( Exit );
 }
 
 void CMenuControls::_VidInit()

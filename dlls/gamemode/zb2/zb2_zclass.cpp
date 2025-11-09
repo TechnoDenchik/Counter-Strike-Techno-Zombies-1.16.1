@@ -1,6 +1,6 @@
 /*
 zb2_zclass.cpp - CSMoE Gameplay server : Zombie Mod 2
-Copyright (C) 2019 Moemod Yanase
+Copyright (C) 2019 Moemod Yanase & TechnoSoftware
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -24,6 +24,20 @@ GNU General Public License for more details.
 
 #include "zb2_zclass_tank.h"
 #include "zb2_zclass_speed.h"
+#include "zb2_zclass_heavy.h"
+#include "zb2_zclass_heal.h"
+#include "zb2_zclass_pc.h"
+#include "zb2_zclass_deimos.h"
+#include "zb2_zclass_ganimed.h"
+#include "zb2_zclass_banchee.h"
+#include "zb2_zclass_stamper.h"
+
+#include "newclass/zb3_zclass_aksha.h"
+#include "newclass/zb3_zclass_boomer.h"
+#include "newclass/zb3_zclass_booster.h"
+#include "newclass/zb3_zclass_china.h"
+#include "newclass/zb3_zclass_fly.h"
+#include "newclass/zb3_zclass_resident.h"
 
 #include <random>
 
@@ -33,15 +47,29 @@ std::shared_ptr<CBaseZombieClass_ZB2> MakeZombieClass(CBasePlayer *player, Zombi
 	return std::make_shared<T>(player, lv);
 }
 
-const std::pair<const char *, std::shared_ptr<CBaseZombieClass_ZB2>(*)(CBasePlayer *, ZombieLevel)> g_FindList[] = {
-		{"tank", MakeZombieClass<CZombieClass_Default> },
-		{"speed", MakeZombieClass<CZombieClass_Speed> }
+const std::pair<const char *, std::shared_ptr<CBaseZombieClass_ZB2>(*)(CBasePlayer *, ZombieLevel)> g_FindList[] = 
+{
+	{ "tank", MakeZombieClass <CZombieClass_Default> },
+	{ "speed", MakeZombieClass <CZombieClass_Speed> },
+	{ "heavy", MakeZombieClass <CZombieClass_Heavy> },
+	{ "heal", MakeZombieClass <CZombieClass_Heal> },
+	{ "psycho", MakeZombieClass <CZombieClass_Psycho> },
+	{ "deimos", MakeZombieClass <CZombieClass_Deimos> },
+	{ "ganimed", MakeZombieClass <CZombieClass_Ganimed> },
+	{ "banchee", MakeZombieClass <CZombieClass_Banchee> },
+	{ "stamper", MakeZombieClass <CZombieClass_Stamper> },
+	{ "aksha", MakeZombieClass <CZombieClass_Aksha> },
+	{ "boomer", MakeZombieClass <CZombieClass_Boomer> },
+	{ "booster", MakeZombieClass <CZombieClass_Booster> },
+	{ "china", MakeZombieClass <CZombieClass_China> },
+	{ "fly", MakeZombieClass <CZombieClass_Fly> },
+	{ "resident", MakeZombieClass <CZombieClass_Resident> },
 };
 constexpr auto NUM_ZCLASSES = std::extent<decltype(g_FindList)>::value;
 
-std::shared_ptr<CBaseZombieClass_ZB2> ZombieClassFactory(CBasePlayer *player, ZombieLevel lv, const char *name)
+std::shared_ptr<CBaseZombieClass_ZB2> ZombieClassFactory(CBasePlayer* player, ZombieLevel lv, const char* name)
 {
-	if(name == nullptr)
+	if (name == nullptr)
 		return g_FindList[0].second(player, lv);
 
 	if (!stricmp(name, "random"))
@@ -50,8 +78,67 @@ std::shared_ptr<CBaseZombieClass_ZB2> ZombieClassFactory(CBasePlayer *player, Zo
 		const std::size_t N = std::uniform_int_distribution<size_t>(0, NUM_ZCLASSES - 1)(rd);
 		return g_FindList[N].second(player, lv);
 	}
-
-	return g_FindList[0].second(player, lv);
+	else if (!stricmp(name, "tank"))
+	{
+		return g_FindList[0].second(player, lv);
+	}
+	else if (!stricmp(name, "speed"))
+	{
+		return g_FindList[1].second(player, lv);		
+	}
+	else if (!stricmp(name, "heavy"))
+	{
+		return g_FindList[2].second(player, lv);		
+	}
+	else if (!stricmp(name, "heal"))
+	{
+		return g_FindList[3].second(player, lv);		
+	}
+	else if (!stricmp(name, "psycho"))
+	{
+		return g_FindList[4].second(player, lv);		
+	}
+	else if (!stricmp(name, "deimos"))
+	{
+		return g_FindList[5].second(player, lv);		
+	}
+	else if (!stricmp(name, "ganimed"))
+	{
+		return g_FindList[6].second(player, lv);		
+	}
+	else if (!stricmp(name, "banchee"))
+	{
+		return g_FindList[7].second(player, lv);		
+	}
+	else if (!stricmp(name, "stamper"))
+	{
+		return g_FindList[8].second(player, lv);		
+	}
+	else if (!stricmp(name, "aksha"))
+	{
+		return g_FindList[9].second(player, lv);
+	}
+	else if (!stricmp(name, "boomer"))
+	{
+		return g_FindList[10].second(player, lv);
+	}
+	else if (!stricmp(name, "booster"))
+	{
+		return g_FindList[11].second(player, lv);
+	}
+	else if (!stricmp(name, "china"))
+	{
+		return g_FindList[12].second(player, lv);
+	}
+	else if (!stricmp(name, "fly"))
+	{
+		return g_FindList[13].second(player, lv);
+	}
+	else if (!stricmp(name, "resident"))
+	{
+		return g_FindList[14].second(player, lv);
+	}
+	//return g_FindList[0].second(player, lv);
 }
 
 void CBaseZombieClass_ZB2::InitHUD() const

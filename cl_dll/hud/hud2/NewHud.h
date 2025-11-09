@@ -14,11 +14,13 @@
 ****/
 #pragma once
 #include "hud_sub.h"
-
+#include "player/player_model.h"
 //extern vec3_t g_velocity;
 extern long g_iDamage[MAX_CLIENTS + 1];
 extern long g_iDamageTotal[MAX_CLIENTS + 1];
 extern double g_flDamageInAll;
+
+class CPlayerClassManager;
 
 class CHudNewHud : public CHudBase
 {
@@ -45,8 +47,6 @@ private:
 	UniqueTexture m_iIcon_Damage;
 
 	UniqueTexture m_iWeaponBG;
-
-
 	UniqueTexture m_iCharacter;
 	std::string m_szLastModel;
 };

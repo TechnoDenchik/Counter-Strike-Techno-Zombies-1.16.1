@@ -62,6 +62,7 @@ enum
 
 	QMF_HIDDENBYPARENT     = BIT( 30 ), // INTERNAL USE ONLY: parent set this flag and don't want to draw this control
 	QMF_HIDDEN             = BIT( 31 ), // INTERNAL USE ONLY: Use Show/Hide/SetVisibility/ToggleVisibility
+	QMF_SILENT2			   = BIT(32),
 };
 
 

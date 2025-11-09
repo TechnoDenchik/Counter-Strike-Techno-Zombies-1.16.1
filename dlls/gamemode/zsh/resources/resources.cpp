@@ -3,70 +3,103 @@
 #include "cbase.h"
 #include "player.h"
 #include "client.h"
-#include "resources.h"
+#include "../dlls/gamemode/mod_zbshelter_pve.h"
 
-ZSHUpdateRes::ZSHUpdateRes(CBasePlayer* player) : BasePlayerExtra(player)
+void CMod_ZombieShelter_coop::UpdateHUDBar(CBasePlayer* m_pPlayer)
 {
-	woods = 0;
-	metal = 0;
+	MESSAGE_BEGIN(MSG_ONE, gmsgZSHUpdateRes, NULL, m_pPlayer->pev);
+	WRITE_BYTE(0);
+	WRITE_BYTE(woods);
+	WRITE_BYTE(metal);
+	WRITE_BYTE(maxwoods);
+	WRITE_BYTE(maxmetal);
+	WRITE_BYTE(energy);
+	WRITE_BYTE(maxenergy);
+	MESSAGE_END();
+
 }
 
-float ZSHUpdateRes::DamageWood() const
+void CMod_ZombieShelter_coop::UpdateHUDBarHome()
 {
-	if (m_iAttack1 >= 40)
-		return 5.0f;
-
-	return 1.0 + (m_iAttack1 - 1) * 0.1f;
+	MESSAGE_BEGIN(MSG_ALL, gmsgZSHUpdateResHome, NULL);
+	WRITE_BYTE(0);
+	WRITE_BYTE(woodshome);
+	WRITE_BYTE(maxwoodshome);
+	WRITE_BYTE(metalhome);
+	WRITE_BYTE(maxmetalhome);
+	MESSAGE_END();
 }
 
-float ZSHUpdateRes::DamageMeat() const
-{
-	if (m_iAttack1 >= 40)
-		return 5.0f;
-	
-
-	return 1.0 + (m_iAttack1 - 1) * 0.1f;
-}
-
-void ZSHUpdateRes::UpdateWoods()
+void CMod_ZombieShelter_coop::UpdateWoods(CBasePlayer* m_pPlayer)
 {
 	if(woods < maxwoods)
 	{ 
 		++woods;
-		MESSAGE_BEGIN(MSG_ONE, gmsgZSHUpdateRes, NULL, m_pPlayer->pev);
-		WRITE_BYTE(0);
-		WRITE_BYTE(woods);
-		WRITE_BYTE(metal);
-		MESSAGE_END();
+		UpdateHUDBar(m_pPlayer);
 		CLIENT_COMMAND(m_pPlayer->edict(), "spk zsh/zsh_resouceget.wav\n");
 	}
 	else
 	{
+		UpdateHUDBar(m_pPlayer);
 		CLIENT_COMMAND(m_pPlayer->edict(), "spk zsh/zsh_resoucenoget.wav\n");
 	}
 }
 
-void ZSHUpdateRes::UpdateMetal()
+void CMod_ZombieShelter_coop::UpdateMetal(CBasePlayer* m_pPlayer)
 {
 	if(metal < maxmetal)
 	{ 
 		metal++;
-		MESSAGE_BEGIN(MSG_ONE, gmsgZSHUpdateRes, NULL, m_pPlayer->pev);
-		WRITE_BYTE(0);
-		WRITE_BYTE(woods);
-		WRITE_BYTE(metal);
-		MESSAGE_END();
+		UpdateHUDBar(m_pPlayer);
 		CLIENT_COMMAND(m_pPlayer->edict(), "spk zsh/zsh_resouceget.wav\n");
 	}
 	else
 	{
+		UpdateHUDBar(m_pPlayer);
 		CLIENT_COMMAND(m_pPlayer->edict(), "spk zsh/zsh_resoucenoget.wav\n");
 	}
 }
 
-void ZSHUpdateRes::Reset()
+void CMod_ZombieShelter_coop::UpdateWoodsHome()
+{
+	if (woodshome < maxwoodshome)
+	{
+		woodshome++;
+		UpdateHUDBarHome();
+	}
+	else
+	{
+		UpdateHUDBarHome();
+	}
+}
+
+void CMod_ZombieShelter_coop::UpdateMetalHome()
+{
+	if (metalhome < maxmetalhome)
+	{
+		metalhome++;
+		UpdateHUDBarHome();
+	}
+	else
+	{
+		UpdateHUDBarHome();
+	}
+}
+
+void CMod_ZombieShelter_coop::ResetRes()
 {
 	woods = 0;
 	metal = 0;
+	maxwoods = 15;
+	maxmetal = 15;
+	energy = 0;
+	maxenergy = 0;
 }
 
+void CMod_ZombieShelter_coop::ResetResHome()
+{
+	woodshome = 0;
+	metalhome = 0;
+	maxwoodshome = 10;
+	maxmetalhome = 10;
+}

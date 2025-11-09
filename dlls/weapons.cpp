@@ -14,6 +14,7 @@
 
 #include "pm_shared.h"
 #include "utllinkedlist.h"
+#include "gamemode/interface/interface_const.h"
 
 // CSBOT and Nav
 #include "game_shared2/GameEvent.h"		// Game event enum used by career mode, tutor system, and bots
@@ -60,6 +61,7 @@
 
 /*
 * Globals initialization
+* got_bomb
 */
 ItemInfo CBasePlayerItem::ItemInfoArray[MAX_WEAPONS];
 AmmoInfo CBasePlayerItem::AmmoInfoArray[MAX_AMMO_SLOTS];
@@ -105,6 +107,7 @@ short g_sModelIndexFireball2;
 short g_sModelIndexFireball3;
 short g_sModelIndexFireball4;
 short g_sModelIndexRadio;
+short g_sModelIndexSurvival;
 short g_sModelIndexZombiebomb_exp;
 
 short int g_sModelIndexCTGhost;
@@ -129,10 +132,17 @@ int MaxAmmoCarry(int iszName)
 		{
 			return info->iMaxAmmo1;
 		}
-
 		if (info->pszAmmo2 && !Q_strcmp(STRING(iszName), info->pszAmmo2))
 		{
 			return info->iMaxAmmo2;
+		}
+		if (info->pszAmmo3 && !Q_strcmp(STRING(iszName), info->pszAmmo3))
+		{
+			return info->iMaxAmmo3;
+		}
+		if (info->pszAmmoGrenade && !Q_strcmp(STRING(iszName), info->pszAmmoGrenade))
+		{
+			return info->iMaxAmmoGrenade;
 		}
 	}
 
@@ -322,6 +332,14 @@ void UTIL_PrecacheOtherWeapon(const char *szClassname)
 			{
 				AddAmmoNameToAmmoRegistry(II.pszAmmo2);
 			}
+			if (II.pszAmmo3 != NULL && *II.pszAmmo3 != '\0')
+			{
+				AddAmmoNameToAmmoRegistry(II.pszAmmo3);
+			}
+			if (II.pszAmmoGrenade != NULL && *II.pszAmmoGrenade != '\0')
+			{
+				AddAmmoNameToAmmoRegistry(II.pszAmmoGrenade);
+			}
 		}
 	}
 
@@ -359,6 +377,14 @@ NOXREF void UTIL_PrecacheOtherWeapon2(const char *szClassname)
 			if (II.pszAmmo2 != NULL && *II.pszAmmo2 != '\0')
 			{
 				AddAmmoNameToAmmoRegistry(II.pszAmmo2);
+			}
+			if (II.pszAmmo3 != NULL && *II.pszAmmo3 != '\0')
+			{
+				AddAmmoNameToAmmoRegistry(II.pszAmmo3);
+			}
+			if (II.pszAmmoGrenade != NULL && *II.pszAmmoGrenade != '\0')
+			{
+				AddAmmoNameToAmmoRegistry(II.pszAmmoGrenade);
 			}
 		}
 	}
@@ -533,26 +559,29 @@ void CBasePlayerItem::DefaultTouch(CBaseEntity *pOther)
 
 	CBasePlayer *pPlayer = static_cast<CBasePlayer *>(pOther);
 
-	if (pPlayer->m_bIsVIP
-		&& m_iId != WEAPON_USP
-		&& m_iId != WEAPON_GLOCK18
-		&& m_iId != WEAPON_P228
-		&& m_iId != WEAPON_DEAGLE
-		&& m_iId != WEAPON_KNIFE)
+
+	if (pPlayer->m_bIsZombie && m_iId != WEAPON_KNIFE && Q_strcmp(STRING(pev->classname), "weapon_zombibombz")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_aksha")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_boomer")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_booster")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_china")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_deathknight")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_deimos")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_fly")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_ganimed")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_heal")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_heavy")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_meatwall")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_pc")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_resident")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_speed")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_spider")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_stamper")
+		&& Q_strcmp(STRING(pev->classname), "weapon_zombibomb_banchee"))
 	{
 		return;
 	}
 
-
-	if (pPlayer->m_bIsZombie && m_iId != WEAPON_KNIFE)
-	{
-		return;
-	}
-
-	if (pPlayer->m_bIsZombie && m_iId != WEAPON_KNIFE && Q_strcmp(STRING(pev->classname), "weapon_zombibomb"))
-	{
-		return;
-	}
 	// can I have this?
 	if (!g_pGameRules->CanHavePlayerItem(pPlayer, this))
 	{
@@ -968,6 +997,7 @@ void CBasePlayerWeapon::ItemPostFrame()
 		}
 
 		WeaponIdle();
+		AmmoGetAuto();
 		return;
 	}
 
@@ -1065,6 +1095,8 @@ int CBasePlayerWeapon::AddToPlayer(CBasePlayer *pPlayer)
 	{
 		m_iPrimaryAmmoType = pPlayer->GetAmmoIndex(pszAmmo1());
 		m_iSecondaryAmmoType = pPlayer->GetAmmoIndex(pszAmmo2());
+		m_iKnifeAmmoType = pPlayer->GetAmmoIndex(pszAmmo3());
+		m_iGrenadeAmmoType = pPlayer->GetAmmoIndex(pszAmmoGrenade());
 	}
 
 	if (AddWeapon())
@@ -1441,6 +1473,14 @@ int CBasePlayerWeapon::ExtractAmmo(CBasePlayerWeapon *pWeapon)
 	{
 		iReturn = AddSecondaryAmmo(0, (char *)pszAmmo2(), iMaxAmmo2());
 	}
+	if (pszAmmo3() != NULL)
+	{
+		iReturn = AddSecondaryAmmo(0, (char*)pszAmmo3(), iMaxAmmo3());
+	}
+	if (pszAmmoGrenade() != NULL)
+	{
+		iReturn = AddSecondaryAmmo(0, (char*)pszAmmoGrenade(), iMaxAmmoGrenade());
+	}
 
 	return iReturn;
 }
@@ -1614,7 +1654,7 @@ void CWeaponBox::Touch(CBaseEntity *pOther)
 
 	CBasePlayer *pPlayer = static_cast<CBasePlayer *>(pOther);
 
-	if (pPlayer->m_bIsVIP || pPlayer->m_bShieldDrawn || pPlayer->m_bIsZombie)
+	if (pPlayer->m_bShieldDrawn || pPlayer->m_bIsZombie)
 		return;
 
 	pPlayer->OnTouchingWeapon(this);
@@ -1656,7 +1696,10 @@ void CWeaponBox::Touch(CBaseEntity *pOther)
 					pPlayer->HintMessage("#Hint_you_have_the_bomb");
 				}
 				else
-					ClientPrint(pPlayer->pev, HUD_PRINTCENTER, "#Got_bomb");
+					
+					MESSAGE_BEGIN(MSG_ONE, gmsgOriginalMsg9, NULL, pPlayer->pev);
+					WRITE_BYTE(ORIG_BOMB5_MSG);
+					MESSAGE_END();
 
 				UTIL_LogPrintf("\"%s<%i><%s><TERRORIST>\" triggered \"Got_The_Bomb\"\n",
 					STRING(pPlayer->pev->netname),
@@ -2119,9 +2162,6 @@ void CArmoury::ArmouryTouch(CBaseEntity *pOther)
 		return;
 
 	CBasePlayer *p = static_cast<CBasePlayer *>(pOther);
-
-	if (p->m_bIsVIP)
-		return;
 
 	if (m_iCount > 0 && m_iItem <= ARMOURY_M249)
 	{

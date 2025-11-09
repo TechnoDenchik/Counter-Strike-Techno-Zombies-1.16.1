@@ -59,12 +59,16 @@ void CL_AttachTentToPlayer( int client, int modelIndex, float zoffset, float lif
 void CL_KillAttachedTents( int client );
 void CL_RicochetSprite( const vec3_t pos, model_t *pmodel, float duration, float scale );
 void CL_RocketFlare( const vec3_t pos );
-void CL_MuzzleFlash( const vec3_t pos, int type );
+void CL_MuzzleFlash(int clientindex, int iAttachment, const char* type);
 void CL_BloodSprite( const vec3_t org, int colorIndex, int modelIndex, int modelIndex2, float size );
 void CL_BreakModel( const vec3_t pos, const vec3_t size, const vec3_t dir, float random, float life, int count, int modelIndex, char flags );
 struct tempent_s *CL_TempModel( const vec3_t pos, const vec3_t dir, const vec3_t angles, float life, int modelIndex, int soundtype );
 struct tempent_s *CL_TempSprite( const vec3_t pos, const vec3_t dir, float scale, int modelIndex, int rendermode, int renderfx, float a, float life, int flags );
 struct tempent_s *CL_DefaultSprite( const vec3_t pos, int spriteIndex, float framerate );
+struct tempent_s* CL_TempCustomModel(const vec3_t pos, const vec3_t angles, const vec3_t velocity, float life, int modelIndex, int sequence, float framerate, BOOL fadeOut, int brightness, int rendermode, int entity, float fadeSpeed, BOOL fadeIn, float fadeInSpeed, float scale, int frameMax, int flags);
+struct beam_s* CL_BeamPoints_Stretch(const vec3_t start, const vec3_t end, int modelIndex, float life, float width,float brightness, int startFrame, float framerate, float r, float g, float b);
+
+
 void CL_Sprite_Explode( struct tempent_s *pTemp, float scale, int flags );
 void CL_Sprite_Smoke( struct tempent_s *pTemp, float scale );
 void CL_Spray( const vec3_t pos, const vec3_t dir, int modelIndex, int count, int speed, int iRand, int renderMode );
@@ -91,6 +95,8 @@ void CL_DecalRemoveAll( int textureIndex );
 int CL_DecalIndexFromName( const char *name );
 int CL_DecalIndex( int id );
 
+void CL_KillAttachedTentsFromEntity(int client);
+
 // Beams
 struct beam_s *CL_BeamLightning( const vec3_t start, const vec3_t end, int modelIndex, float life, float width, float amplitude, float brightness, float speed );
 struct beam_s *CL_BeamEnts( int startEnt, int endEnt, int modelIndex, float life, float width, float amplitude, float brightness, float speed, int startFrame, float framerate, float r, float g, float b );
@@ -100,7 +106,7 @@ struct beam_s *CL_BeamEntPoint( int startEnt, const vec3_t end, int modelIndex, 
 struct beam_s *CL_BeamRing( int startEnt, int endEnt, int modelIndex, float life, float width, float amplitude, float brightness, float speed, int startFrame, float framerate, float r, float g, float b );
 struct beam_s *CL_BeamFollow( int startEnt, int modelIndex, float life, float width, float r, float g, float b, float brightness );
 void CL_BeamKill( int deadEntity );
-
+struct beam_s* CL_BeamPoints_Tracer(const vec3_t start, const vec3_t end, int modelIndex, float life, float width, float length, float amplitude, float brightness, float speed, int startFrame, float framerate, float r, float g, float b);
 
 // TriAPI
 void TriVertex3fv( const float *v );

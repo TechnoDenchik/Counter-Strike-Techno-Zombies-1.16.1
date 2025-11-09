@@ -25,6 +25,10 @@ struct StaticItemInfo
 	static constexpr int iMaxAmmo1 = -1;
 	static constexpr const char *szAmmo2 = nullptr;
 	static constexpr int iMaxAmmo2 = -1;
+	static constexpr const char* szAmmo3 = nullptr;
+	static constexpr int iMaxAmmo3 = -1;
+	static constexpr const char* szAmmoGrenade = nullptr;
+	static constexpr int iMaxAmmoGrenade = -1;
 	static constexpr int iMaxClip = -1;
 	static constexpr int iSlot = 0;
 	static constexpr int iPosition = 0;
@@ -201,6 +205,7 @@ struct StaticItemInfo<WEAPON_KNIFE> : StaticItemInfo<>
 	static constexpr WeaponIdType iId = WEAPON_KNIFE;
 	static constexpr int iWeight = KNIFE_WEIGHT;
 };
+
 template<>
 struct StaticItemInfo<WEAPON_M3> : StaticItemInfo<>
 {
@@ -224,18 +229,6 @@ struct StaticItemInfo<WEAPON_M4A1> : StaticItemInfo<>
 	static constexpr int iPosition = 6;
 	static constexpr WeaponIdType iId = WEAPON_M4A1;
 	static constexpr int iWeight = M4A1_WEIGHT;
-};
-template<>
-struct StaticItemInfo<WEAPON_M249> : StaticItemInfo<>
-{
-	static constexpr const char *szName = "weapon_m249";
-	static constexpr const char *szAmmo1 = "556NatoBox";
-	static constexpr int iMaxAmmo1 = MAX_AMMO_556NATOBOX;
-	static constexpr int iMaxClip = M249_MAX_CLIP;
-	static constexpr int iSlot = 0;
-	static constexpr int iPosition = 4;
-	static constexpr WeaponIdType iId = WEAPON_M249;
-	static constexpr int iWeight = M249_WEIGHT;
 };
 template<>
 struct StaticItemInfo<WEAPON_MAC10> : StaticItemInfo<>
@@ -396,6 +389,10 @@ constexpr ItemInfo BuildItemInfo(ClassToFind &wpn, const StaticItemInfo &ii)
 			ii.iMaxAmmo1,
 			ii.szAmmo2,
 			ii.iMaxAmmo2,
+			ii.szAmmo3,
+			ii.iMaxAmmo3,
+			ii.szAmmoGrenade,
+			ii.iMaxAmmoGrenade,
 			wpn.ClassName,
 			wpn.MaxClip,
 			wpn.WeaponId,
@@ -414,6 +411,10 @@ constexpr ItemInfo BuildItemInfo(ClassToFind &wpn)
 			StaticItemInfo::iMaxAmmo1,
 			StaticItemInfo::szAmmo2,
 			StaticItemInfo::iMaxAmmo2,
+			StaticItemInfo::szAmmo3,
+			StaticItemInfo::iMaxAmmo3,
+			StaticItemInfo::szAmmoGrenade,
+			StaticItemInfo::iMaxAmmoGrenade,
 			wpn.ClassName,
 			wpn.MaxClip,
 			wpn.WeaponId,
@@ -462,6 +463,10 @@ public:
 	constexpr int iMaxAmmo1() const		{ return ItemInfoInstance().iMaxAmmo1; }
 	constexpr const char *pszAmmo2() const	{ return ItemInfoInstance().pszAmmo2; }
 	constexpr int iMaxAmmo2() const		{ return ItemInfoInstance().iMaxAmmo2; }
+	constexpr const char* pszAmmo3() const { return ItemInfoInstance().pszAmmo3; }
+	constexpr int iMaxAmmo3() const { return ItemInfoInstance().iMaxAmmo3; }
+	constexpr const char* pszAmmoGrenade() const { return ItemInfoInstance().pszAmmoGrenade; }
+	constexpr int iMaxAmmoGrenade() const { return ItemInfoInstance().iMaxAmmoGrenade; }
 	constexpr const char *pszName() const	{ return ItemInfoInstance().pszName; }
 	constexpr int iMaxClip() const		{ return ItemInfoInstance().iMaxClip; }
 	constexpr int iWeight() const		{ return ItemInfoInstance().iWeight; }

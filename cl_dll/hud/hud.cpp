@@ -36,17 +36,20 @@
 #include "vgui_parser.h"
 #include "rain.h"
 
+#include "fog.h"
+
 #include "camera.h"
 
 #include "cs_wpn/bte_weapons.h"
-
+#include "gamemode/mods_const.h"
+#include "vgui2/CBaseViewport.h"
 
 
 extern client_sprite_t *GetSpriteList(client_sprite_t *pList, const char *psz, int iRes, int iCount);
 
 wrect_t nullrc = { 0, 0, 0, 0 };
 float g_lastFOV = 0.0;
-const char *sPlayerModelFiles[12] =
+const char* sPlayerModelFiles[12] =
 {
 	"models/player.mdl",
 	"models/player/leet/leet.mdl", // t
@@ -61,7 +64,6 @@ const char *sPlayerModelFiles[12] =
 	"models/player/spetsnaz/spetsnaz.mdl", // ct
 	"models/player/militia/militia.mdl" // t
 };
-
 #define GHUD_DECLARE_MESSAGE(x) int __MsgFunc_##x(const char *pszName, int iSize, void *pbuf ) { return gHUD.MsgFunc_##x(pszName, iSize, pbuf); }
 
 GHUD_DECLARE_MESSAGE(Logo)
@@ -161,6 +163,7 @@ void CHud :: Init( void )
 	HOOK_COMMAND( "evdev_mouseclose", MouseSucksClose );
 #endif
 	
+
 	HOOK_MESSAGE( Logo );
 	HOOK_MESSAGE( ResetHUD );
 	HOOK_MESSAGE( GameMode );
@@ -176,12 +179,17 @@ void CHud :: Init( void )
 	HOOK_MESSAGE( Spectator ); // ignored due to touch menus
 	HOOK_MESSAGE( ServerName );
 
-
 	HOOK_MESSAGE( ShadowIdx );
 
 	CVAR_CREATE( "_vgui_menus", "1", FCVAR_ARCHIVE | FCVAR_USERINFO );
 	CVAR_CREATE( "_cl_autowepswitch", "1", FCVAR_ARCHIVE | FCVAR_USERINFO );
 	CVAR_CREATE( "_ah", "0", FCVAR_ARCHIVE | FCVAR_USERINFO );
+	CVAR_CREATE("wonderfire", "1", FCVAR_ARCHIVE | FCVAR_USERINFO);
+
+	//CVAR_CREATE("wpn_getgun", "none", FCVAR_ARCHIVE);
+	//CVAR_CREATE("wpn_getpistol", "none", FCVAR_ARCHIVE);
+	//CVAR_CREATE("wpn_getknife", "none", FCVAR_ARCHIVE);
+	//CVAR_CREATE("wpn_getgrenade", "none", FCVAR_ARCHIVE);
 
 	hud_textmode = CVAR_CREATE( "hud_textmode", "0", FCVAR_ARCHIVE );
 	hud_colored  = CVAR_CREATE( "hud_colored", "0", FCVAR_ARCHIVE );
@@ -205,8 +213,17 @@ void CHud :: Init( void )
 	zoom_sens_ratio = CVAR_CREATE( "zoom_sensitivity_ratio", "1.2", 0 );
 	sv_skipshield = gEngfuncs.pfnGetCvarPointer( "sv_skipshield" );
 	m_alarmstyle = CVAR_CREATE("alarm_style", "0", FCVAR_ARCHIVE);
+	m_hudstyle = CVAR_CREATE("hud_style", "0", FCVAR_ARCHIVE);
 
-	cl_headname = CVAR_CREATE("cl_headname", "2", FCVAR_ARCHIVE); // seems lagging, disable by default.
+	cl_headname = CVAR_CREATE("cl_headname", "2", FCVAR_ARCHIVE); 
+	zsh_mentality = CVAR_CREATE("zsh_mentality", "1", FCVAR_ARCHIVE); 
+	menu_tentime = CVAR_CREATE("menu_tentime", "1", FCVAR_ARCHIVE);
+	menu_getconsole = CVAR_CREATE("menu_getconsole", "1", FCVAR_ARCHIVE);
+
+	ui_wpn_getgun = CVAR_CREATE("wpn_getgun", "0", FCVAR_ARCHIVE);
+	ui_wpn_getpistol = CVAR_CREATE("wpn_getpistol", "0", FCVAR_ARCHIVE);
+	ui_wpn_getknife = CVAR_CREATE("wpn_getknife", "0", FCVAR_ARCHIVE);
+	ui_wpn_getgrenade = CVAR_CREATE("wpn_getgrenade", "0", FCVAR_ARCHIVE);
 
 	CVAR_CREATE( "cscl_ver", Q_buildnum(), 1<<14 | FCVAR_USERINFO ); // init and userinfo
 
@@ -223,21 +240,17 @@ void CHud :: Init( void )
 	}
 	m_pHudList = NULL;
 
-	// In case we get messages before the first update -- time will be valid
 	m_flTime = 1.0;
 	m_iNoConsolePrint = 0;
 	m_szServerName[0] = 0;
 
 	Localize_Init();
 
-	// fullscreen overlays
 	m_SniperScope.Init();
 	m_NVG.Init();
 	m_Retina.Init();
 	m_SpectatorGui.Init();
 
-
-	// Game HUD things
 	m_Ammo.Init();
 	m_Health.Init();
 	m_Radio.Init();
@@ -250,14 +263,20 @@ void CHud :: Init( void )
 	m_ZBS.Init();
 	m_ZB2.Init();
 	m_ZB3.Init();
+	m_ZB5.Init();
 	m_ZSH.Init();
+	m_PR.Init();
 	m_CLS.Init();
+	m_dm.Init();
+	m_tdm.Init();
+	m_WPI.Init();
 	m_gd.Init();
-	//m_GDScoreboard.Init();
+	m_hid.Init();
 	m_MoeTouch.Init();
 	m_HitIndicator.Init();
  	m_HudSiFiammo.Init();
-	// chat, death notice, status bars and other
+
+	m_DrawFontText.Init();
 	m_SayText.Init();
 	m_Spectator.Init();
 	m_Geiger.Init();
@@ -267,17 +286,23 @@ void CHud :: Init( void )
 	m_DeathNotice.Init();
 	m_TextMessage.Init();
 	m_FollowIcon.Init();
+	infogetitem.Init();
 	m_MOTD.Init();
 	m_scenarioStatus.Init();
 	m_DrawFontText.VidInit();
 	m_HeadName.Init();
-	
+	m_NewAlarm.Init();
+	m_TwinAxes.Init();
+	m_HeadIcon.Init();
+	util.Init();
+	m_MVP.Init();
+	m_SpecialCrossHair.Init();
 
 	// all things that have own background and must be drawn last
 	m_ProgressBar.Init();
 	m_Menu.Init();
 	m_Scoreboard.Init();
-	
+	gFog.Init();
 
 	InitRain();
 
@@ -480,8 +505,14 @@ void CHud :: VidInit( void )
 	m_Radar.VidInit();
 	m_SpectatorGui.VidInit();*/
 
+	
+
 	for( HUDLIST *pList = m_pHudList; pList; pList = pList->pNext )
 		pList->p->VidInit();
+
+	gFog.VidInit();
+
+	util.VidInit();
 
 	if( firstinit && gEngfuncs.CheckParm( "-firsttime", NULL ) )
 	{
@@ -654,5 +685,11 @@ void CHud::AddHudElem(CHudBase *phudelem)
 	// find last
 	for( ptemp = m_pHudList; ptemp->pNext; ptemp = ptemp->pNext );
 
+	
 	ptemp->pNext = pdl;
+}
+
+bool CHud::IsZombieMod() const
+{
+	return m_iModRunning == MOD_ZB1 || m_iModRunning == MOD_ZB2 || m_iModRunning == MOD_ZB3 || m_iModRunning == MOD_ZB5;
 }

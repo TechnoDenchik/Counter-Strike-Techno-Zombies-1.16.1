@@ -26,8 +26,8 @@
 *
 */
 
-#ifndef FUNC_BREAK_H
-#define FUNC_BREAK_H
+#ifndef FUNC_SHELTER_H
+#define FUNC_SHELTER_H
 #ifdef _WIN32
 #pragma once
 #endif
@@ -44,53 +44,30 @@
 // func_pushable (it's also func_breakable, so don't collide with those flags)
 #define SF_PUSH_BREAKABLE		128
 
-typedef enum
+#include "func_break.h"
+
+class CShelter: public CBreakable
 {
-	expRandom = 0,
-	expDirected,
-
-} Explosions;
-
-typedef enum
-{
-	matGlass = 0,
-	matWood,
-	matMetal,
-	matFlesh,
-	matCinderBlock,
-	matCeilingTile,
-	matComputer,
-	matUnbreakableGlass,
-	matRocks,
-	matNone,
-	matLastMaterial,
-
-} Materials;
-
-class CShelter: public CBaseDelay
-{
-	
 public:
 	// basic functions
-	virtual void Spawn();
-	virtual void Precache();
-	virtual void Restart();
-	virtual void KeyValue(KeyValueData *pkvd);
-	virtual int Save(CSave &save);
-	virtual int Restore(CRestore &restore);
-	virtual int ObjectCaps() { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
+	void Spawn() override;
+	void Precache() override;
+	void Restart() override;
+	void KeyValue(KeyValueData *pkvd) override;
+	int Save(CSave &save) override;
+	int Restore(CRestore &restore) override;
+	int ObjectCaps() override { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); } 
 
 	// To spark when hit
-	virtual void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
-
+	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
 	// breakables use an overridden takedamage
-	virtual int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
+	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) override;
 
-	virtual int DamageDecal(int bitsDamageType);
-	virtual void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	int DamageDecal(int bitsDamageType);
+	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value) override;
 
 public:
-	void EXPORT BreakTouch(CBaseEntity *pOther);
+	void EXPORT BreakTouch(CBaseEntity *pOther) ;
 	void DamageSound();
 
 	BOOL IsBreakable();
@@ -115,8 +92,15 @@ public:
 	static const char *pSpawnObjects[32];
 
 	static TYPEDESCRIPTION m_SaveData[5];
-
+	float m_flHumanDamageRatio;
+	float m_flZombiDamageRatio;
+	float m_flNextSpawnNPC;
+	bool shelterattack(bool result)
+	{
+		return result;
+	}
 public:
+	friend class CBaseTurret;
 	Materials m_Material;
 	Explosions m_Explosion;
 	int m_idShard;
@@ -124,6 +108,17 @@ public:
 	int m_iszGibModel;
 	int m_iszSpawnObject;
 	float m_flHealth;
+
+	EHANDLE m_hShelterEnt;
+
+	duration_t tNextAttack9;
+	time_point_t tWorldTime9;
+	duration_t tDelta9;
+
+	duration_t tNextAttack10;
+	time_point_t tWorldTime10;
+	duration_t tDelta10;
+
 };
 
 class CPushable2: public CShelter

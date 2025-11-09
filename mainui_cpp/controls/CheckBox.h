@@ -20,11 +20,11 @@ GNU General Public License for more details.
 
 #include "Editable.h"
 
-#define UI_CHECKBOX_EMPTY		"gfx/shell/cb_empty"
-#define UI_CHECKBOX_GRAYED		"gfx/shell/cb_disabled"
-#define UI_CHECKBOX_FOCUS		"gfx/shell/cb_over"
-#define UI_CHECKBOX_PRESSED		"gfx/shell/cb_down"
-#define UI_CHECKBOX_ENABLED		"gfx/shell/cb_checked"
+#define UI_CHECKBOX_EMPTY		"gfx/shell/cb/cb_empty"
+#define UI_CHECKBOX_GRAYED		"gfx/shell/cb/cb_disabled"
+#define UI_CHECKBOX_FOCUS		"gfx/shell/cb/cb_over"
+#define UI_CHECKBOX_PRESSED		"gfx/shell/cb/cb_down"
+#define UI_CHECKBOX_ENABLED		"gfx/shell/cb/cb_checked"
 
 class CMenuCheckBox : public CMenuEditable
 {

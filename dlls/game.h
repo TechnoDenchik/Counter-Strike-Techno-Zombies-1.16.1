@@ -53,6 +53,8 @@ extern cvar_t *g_psv_stopspeed;
 
 extern cvar_t displaysoundlist;
 extern cvar_t timelimit;
+extern cvar_t daytimelimit;
+extern cvar_t nighttimelimit;
 extern cvar_t flashlight;
 extern cvar_t decalfrequency;
 extern cvar_t fadetoblack;
@@ -133,6 +135,7 @@ extern cvar_t sk_scientist_heal2;
 extern cvar_t sk_scientist_heal3;
 
 extern cvar_t gamemode;
+extern cvar_t mapname;
 extern cvar_t maxkills;
 
 void GameDLLInit();

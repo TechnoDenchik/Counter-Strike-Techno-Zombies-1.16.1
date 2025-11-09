@@ -1,17 +1,6 @@
-/***
-*
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
-*
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Valve LLC.  All other use, distribution, or modification is prohibited
-*   without written permission from Valve LLC.
-*
-****/
+/* =================================================================================== *
+			 * =================== TechnoSoftware =================== *
+ * =================================================================================== */
 
 #include "extdll.h"
 #include "util.h"
@@ -25,8 +14,26 @@
 #include "gamemode/mods.h"
 #endif
 
-
-
+enum
+{
+	HUMAN_SKILL_KNIFE2X,
+	HUMAN_SKILL_HEADSHOT,
+	ZOMBIE_SKILL_HEAL,
+	ZOMBIE_SKILL_HEAL_HEAD,
+	CANNON_FLAME_BURN,
+	HUNTBOW_DMGREITERATION,
+	HUNTBOW_MARKZOMBIE,
+	TELEPORT_MARKEF,
+	HOLYBOMB_BURN,
+	LANCE_HIT,
+	ZOMBIE_SKILL_PILE,
+	ZSHELTER_HOME,
+	ZSHELTER_RESMEAT,
+	ZSHELTER_RESWOOD,
+	ZSHELTER_BUYZONE,
+	ZSHELTER_ZOMBIE,
+	WPN_VOID_SCANAIM,
+};
 
 enum blackhole_anim
 {
@@ -40,6 +47,9 @@ enum blackhole_anim
 	class CVoidpistolBlackhole : public CBaseEntity
 	{
 	public:
+
+		KnockbackData GetKnockBackData() { return { 50.0f,20.0f,30.0f,10.0f,0.6f }; }
+		float m_flNextSpawnMen;
 		void Spawn() override
 		{
 			Precache();
@@ -85,7 +95,7 @@ enum blackhole_anim
 				PLAYBACK_EVENT_FULL(FEV_GLOBAL, ENT(pev), m_usFireVoidpistol, 0.0, pev->origin, (float*)&g_vecZero, 0.0, 0.0, 0, m_iState, FALSE, TRUE);
 			}
 				RadiusDamage(pev->origin, m_BlackholeDamage, TRUE, m_freq);
-				
+
 			if (m_freq == 30)
 			{
 				m_freq = 0;
@@ -98,7 +108,7 @@ enum blackhole_anim
 			m_SoundRepeat++;
 			m_freq++;
 			pev->nextthink = gpGlobals->time + 0.01f;
-			//RadiusDamage();
+
 			if (gpGlobals->time > m_flLoopTime)		//after 4s
 			{
 				SetThink(&CVoidpistolBlackhole::OnEnd);
@@ -120,7 +130,7 @@ enum blackhole_anim
 				PLAYBACK_EVENT_FULL(FEV_GLOBAL, ENT(pev), m_usFireVoidpistol, 0.0, pev->origin, (float*)&g_vecZero, 0.0, 0.0, 0, m_iState, FALSE, TRUE);
 			}
 
-				RadiusDamage(pev->origin, DetonationDamage(), FALSE, m_freq);
+			RadiusDamage(pev->origin, DetonationDamage(), FALSE, m_freq);
 			if (m_freq == 72)
 			{	
 				m_freq = 73;
@@ -160,7 +170,6 @@ enum blackhole_anim
 					if (pEntity->pev == pevAttacker)
 						continue;
 
-
 					if (bInWater && !pEntity->pev->waterlevel)
 						continue;
 
@@ -168,6 +177,12 @@ enum blackhole_anim
 						continue;
 
 					if (pEntity->IsBSPModel())
+						continue;
+
+					if (pEntity->pev->solid == SOLID_TRIGGER)
+						continue;
+
+					if (pEntity->pev->solid == SOLID_NOT)
 						continue;
 
 					if (!m_pPlayer->m_bIsZombie)
@@ -229,25 +244,19 @@ enum blackhole_anim
 									pEntity->TraceAttack(pevAttacker, flAdjustedDamage, (tr.vecEndPos - vecSrc).Normalize(), &tr, bitsDamageType);
 									ApplyMultiDamage(pevInflictor, pevAttacker);
 								}
-							}
-							/*CBasePlayer *pVictim = dynamic_cast<CBasePlayer *>(pEntity);
-							if (pVictim->m_bIsZombie) // Zombie Knockback...
-							{
-							ApplyKnockbackData(pVictim, vecSpot - vecSrc, GetKnockBackData());
-							}*/
+							}		
 						}
 					}
 				}
 			}
 		}
 
-
 		float DetonationDamage() const
 		{
 			float flDamage = 40.0f;
 #ifndef CLIENT_DLL
 			if (g_pModRunning->DamageTrack() == DT_ZB)
-				flDamage = 500.0f;
+				flDamage = 200.0f;
 			//flDamage = 750.0f;
 			else if (g_pModRunning->DamageTrack() == DT_ZBS)
 				flDamage = 1500.0f;
@@ -316,7 +325,13 @@ enum blackhole_anim
 
 		void Precache() override
 		{
-			PRECACHE_MODEL("models/ef_blackhole_projectile.spr");
+			PRECACHE_MODEL("sprites/ef_blackhole_projectile.spr");
+			PRECACHE_MODEL("models/ef_blackhole_projectile.mdl");
+
+			PRECACHE_MODEL("sprites/ef_blackhole_star.spr");
+			PRECACHE_MODEL("sprites/ef_blackhole_loop.spr");
+			PRECACHE_MODEL("sprites/ef_blackhole_end.spr");
+			PRECACHE_MODEL("sprites/ef_blackhole_loop.spr");
 		}
 
 		void OnThink()
@@ -327,15 +342,13 @@ enum blackhole_anim
 				{
 					m_bCreateSpr = TRUE;
 					PLAYBACK_EVENT_FULL(FEV_GLOBAL, ENT(pev), m_usFireVoidpistol, 0.0, pev->origin, vecForward, 0.0, 0.0, 0, 4, FALSE, TRUE);
-				}
-				
+				}				
 			}
 			else
 			{
 				Explode();
 			}
 			
-
 			pev->nextthink = gpGlobals->time + 0.01f;
 		}
 		void Explode()
@@ -384,7 +397,6 @@ enum blackhole_anim
 
 #endif
 
-
 enum voidpistol_e
 {
 	VOIDPISTOL_IDLEA,
@@ -405,13 +417,13 @@ enum voidpistol_e
 	VOIDPISTOL_DRAWA,
 	VOIDPISTOL_DRAWB,
 	VOIDPISTOL_DRAWC,
-	VOIDPISTOL_MODEC
 };
 
 enum voidpistol_mode
 {
 	VOIDPISTOL_MODEA,
 	VOIDPISTOL_MODEB,
+	VOIDPISTOL_MODEC
 };
 
 LINK_ENTITY_TO_CLASS(weapon_voidpistol, CVoidpistol)
@@ -424,7 +436,7 @@ void CVoidpistol::Spawn(void)
 	m_iId = WEAPON_DEAGLE;
 	SET_MODEL(ENT(pev), "models/w_voidpistol.mdl");
 	m_iCharging = 0;
-	m_iDefaultAmmo = 150;
+	m_iDefaultAmmo = 300;
 	m_iDefaultAmmo2 = 0;
 	m_flAccuracy = 0.9;
 	m_iMode = VOIDPISTOL_MODEA;
@@ -456,11 +468,8 @@ void CVoidpistol::Precache(void)
 	PRECACHE_MODEL("sprites/ef_blackhole_loop.spr");
 	PRECACHE_MODEL("sprites/ef_blackhole_end.spr");
 
-
-
 	PRECACHE_SOUND("weapons/voidpistol-1.wav");
 	PRECACHE_SOUND("weapons/voidpistol-2.wav");
-
 
 	m_iShell = PRECACHE_MODEL("models/pshell.mdl");
 	m_usFireVoidpistol = PRECACHE_EVENT(1, "events/voidpistol.sc");
@@ -469,10 +478,14 @@ void CVoidpistol::Precache(void)
 int CVoidpistol::GetItemInfo(ItemInfo *p)
 {
 	p->pszName = STRING(pev->classname);
-	p->pszAmmo1 = "voidpistolammo";
+	p->pszAmmo1 = "VoidAmmo";
 	p->iMaxAmmo1 = 100;
 	p->pszAmmo2 = "VoidpistolProjectile";
 	p->iMaxAmmo2 = 0;
+	p->pszAmmo3 = NULL;
+	p->iMaxAmmo3 = -1;
+	p->pszAmmoGrenade = NULL;
+	p->iMaxAmmoGrenade = -1;
 	p->iMaxClip = VOIDPISTOL_MAX_CLIP;
 	p->iSlot = 1;
 	p->iPosition = 1;
@@ -529,93 +542,85 @@ void CVoidpistol::ItemPostFrame()
 			if (pEntity->IsBSPModel())
 				continue;
 
+			if (pEntity->pev->solid == SOLID_TRIGGER)
+				continue;
+
+			if (pEntity->pev->solid == SOLID_NOT)
+				continue;
+
 			if (pEntity->IsPlayer())
 			{
-				if(g_pGameRules->PlayerRelationship(m_pPlayer, pEntity) != GR_TEAMMATE)
+				if (FVisible(vecPlayerOrigin) == TRUE)
 				{
-					if (!IsModeCEnabled(m_iCharging))
+					if (g_pGameRules->PlayerRelationship(m_pPlayer, pEntity) != GR_TEAMMATE)
 					{
-						if (m_iMode == VOIDPISTOL_MODEB)
+						if (!IsModeCEnabled(m_iCharging))
 						{
-							return CBasePlayerWeapon::ItemPostFrame();	//already MODE B
-						}
-
-						m_iMode = VOIDPISTOL_MODEB;
-						SendWeaponAnim(VOIDPISTOL_SCANNING_ON, 0);
-						//m_flNextSecondaryAttack = m_flNextPrimaryAttack = 0.7s;
-						m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.8f;
-						pev->iuser1 = 0;
-						return CBasePlayerWeapon::ItemPostFrame();
-					}
-					else
-					{
-						if (pev->iuser1)
-						{				
-							m_iMode = VOIDPISTOL_MODEB;
-
-
-							/*int iSupplyboxCount = SupplyboxCount();
-							for (int i = 0; i < iSupplyboxCount; ++i)
+							if (m_iMode == VOIDPISTOL_MODEB)
 							{
-								CSupplyBox* sb = CreateSupplybox();
-								if (!sb)
-									continue;
-								sb->m_iSupplyboxIndex = i + 1;
+								return CBasePlayerWeapon::ItemPostFrame();	//already MODE B
+							}
 
-								for (CBasePlayer* player : moe::range::PlayersList())
-								{
-									if (player->m_bIsZombie)
-										continue;
+							m_iMode = VOIDPISTOL_MODEB;
+							SendWeaponAnim(VOIDPISTOL_SCANNING_ON, 0);
+							m_flNextSecondaryAttack = m_flNextPrimaryAttack = 0.7f;
+							m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.8f;
+							pev->iuser1 = 0;
 
-									MESSAGE_BEGIN(MSG_ALL, gmsgHostagePos, nullptr, player->pev);
-									WRITE_BYTE(1);
-									WRITE_BYTE(sb->m_iSupplyboxIndex);
-									WRITE_COORD(sb->pev->origin.x);
-									WRITE_COORD(sb->pev->origin.y);
-									WRITE_COORD(sb->pev->origin.z);
-									MESSAGE_END();
-								}
-							}*/
+							MESSAGE_BEGIN(MSG_ALL, gmsgHeadIcon);
+							WRITE_BYTE(WPN_VOID_SCANAIM);
+							WRITE_SHORT(ENTINDEX(pEntity->edict()));
+							WRITE_BYTE(pev->iuser1);
+							MESSAGE_END();
 
-
-							return CBasePlayerWeapon::ItemPostFrame();	//already MODE B
+							return CBasePlayerWeapon::ItemPostFrame();
 						}
-						pev->iuser1 = 1;
-						m_iMode = VOIDPISTOL_MODEB;
-						SendWeaponAnim(VOIDPISTOL_CHANGEBC, 0);
-						//m_flNextSecondaryAttack = m_flNextPrimaryAttack = 0.5s;
-						m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.8f;
-						return CBasePlayerWeapon::ItemPostFrame();
-					}
-				}
-				else
-				{
-					if (!IsModeCEnabled(m_iCharging))
-					{
-						if (m_iMode == VOIDPISTOL_MODEA)
+						else
 						{
-							return CBasePlayerWeapon::ItemPostFrame();	//already MODE B
+							if (pev->iuser1)
+							{
+								m_iMode = VOIDPISTOL_MODEB;
+								return CBasePlayerWeapon::ItemPostFrame();	//already MODE B
+							}
+							pev->iuser1 = 1;
+							m_iMode = VOIDPISTOL_MODEB;
+							SendWeaponAnim(VOIDPISTOL_CHANGEBC, 0);
+							m_flNextSecondaryAttack = m_flNextPrimaryAttack = 0.5f;
+							m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.8f;
+							return CBasePlayerWeapon::ItemPostFrame();
 						}
-						m_iMode = VOIDPISTOL_MODEA;
-						SendWeaponAnim(VOIDPISTOL_SCANNING_OFF, 0);
-						m_flNextSecondaryAttack = m_flNextPrimaryAttack = 0.57f;
-						m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.8f;
-						pev->iuser1 = 0;
 					}
 					else
 					{
-						if (pev->iuser1)
+						if (!IsModeCEnabled(m_iCharging))
 						{
-							return CBasePlayerWeapon::ItemPostFrame();	//already MODE B
+							if (m_iMode == VOIDPISTOL_MODEA)
+							{
+								return CBasePlayerWeapon::ItemPostFrame();	//already MODE B
+							}
+							m_iMode = VOIDPISTOL_MODEA;
+							SendWeaponAnim(VOIDPISTOL_SCANNING_OFF, 0);
+							m_flNextSecondaryAttack = m_flNextPrimaryAttack = 0.57f;
+							m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.8f;
+							pev->iuser1 = 0;
 						}
-						pev->iuser1 = 1;
-						SendWeaponAnim(VOIDPISTOL_CHANGEAC, 0);
-						m_flNextSecondaryAttack = m_flNextPrimaryAttack = 0.5f;
-						m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.8f;
+						else
+						{
+							if (pev->iuser1)
+							{
+								return CBasePlayerWeapon::ItemPostFrame();	//already MODE B
+							}
+							m_iMode = VOIDPISTOL_MODEB;
+							pev->iuser1 = 1;
+							SendWeaponAnim(VOIDPISTOL_CHANGEAC, 0);
+							m_flNextSecondaryAttack = m_flNextPrimaryAttack = 0.5f;
+							m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.8f;
+						}
 					}
+
+
 				}
-			}
-			
+			}		
 		}
 	}
 
@@ -623,7 +628,7 @@ void CVoidpistol::ItemPostFrame()
 	{
 		if (m_iMode == VOIDPISTOL_MODEA)
 		{
-			return CBasePlayerWeapon::ItemPostFrame();	//already MODE B
+			return CBasePlayerWeapon::ItemPostFrame();
 		}
 		m_iMode = VOIDPISTOL_MODEA;
 		SendWeaponAnim(VOIDPISTOL_SCANNING_OFF, 0);
@@ -635,11 +640,11 @@ void CVoidpistol::ItemPostFrame()
 	{
 		if (pev->iuser1)
 		{		
-			m_iMode = VOIDPISTOL_MODEA;
-			return CBasePlayerWeapon::ItemPostFrame();	//already MODE B
+			m_iMode = VOIDPISTOL_MODEB;
+			return CBasePlayerWeapon::ItemPostFrame();
 		}
 		pev->iuser1 = 1;
-		m_iMode = VOIDPISTOL_MODEA;
+		m_iMode = VOIDPISTOL_MODEB;
 		SendWeaponAnim(VOIDPISTOL_CHANGEAC, 0);
 		m_flNextSecondaryAttack = m_flNextPrimaryAttack = 0.5f;
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.8f;
@@ -647,10 +652,7 @@ void CVoidpistol::ItemPostFrame()
 	return CBasePlayerWeapon::ItemPostFrame();
 	
 #endif
-	
-
 }
-
 
 void CVoidpistol::PrimaryAttack(void)
 {
@@ -660,18 +662,18 @@ void CVoidpistol::PrimaryAttack(void)
 	case VOIDPISTOL_MODEA:
 	{
 		if (!FBitSet(m_pPlayer->pev->flags, FL_ONGROUND))
-			VoidpistolFireA((1.5) * (1 - m_flAccuracy), 0.3f, FALSE);
+			VoidpistolFireA((1.5) * (1 - m_flAccuracy), 0.235f, FALSE);
 		else if (m_pPlayer->pev->velocity.Length2D() > 0)
-			VoidpistolFireA((0.25) * (1 - m_flAccuracy), 0.3f, FALSE);
+			VoidpistolFireA((0.25) * (1 - m_flAccuracy), 0.235f, FALSE);
 		else if (FBitSet(m_pPlayer->pev->flags, FL_DUCKING))
-			VoidpistolFireA((0.115) * (1 - m_flAccuracy), 0.3f, FALSE);
+			VoidpistolFireA((0.115) * (1 - m_flAccuracy), 0.235f, FALSE);
 		else
-			VoidpistolFireA((0.13) * (1 - m_flAccuracy), 0.3f, FALSE);
+			VoidpistolFireA((0.13) * (1 - m_flAccuracy), 0.235f, FALSE);
 		break;
 	}
 	case VOIDPISTOL_MODEB:
 	{
-		VoidpistolFireB((0.13) * (1 - m_flAccuracy), 0.3f, FALSE); break;
+		VoidpistolFireB((0.13) * (1 - m_flAccuracy), 0.235f, FALSE); break;
 	}
 	}
 #endif
@@ -706,6 +708,7 @@ void CVoidpistol::VoidpistolFireC(void)
 
 			if (pEntity->IsPlayer() && g_pGameRules->PlayerRelationship(m_pPlayer, pEntity) != GR_TEAMMATE)
 			{
+				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/voidpistol-2.wav", VOL_NORM, ATTN_NORM);
 				SendWeaponAnim(VOIDPISTOL_SHOOT_BLACKHOLE_B, UseDecrement() != FALSE);
 				m_flNextSecondaryAttack = m_flNextPrimaryAttack = 1.03f;
 				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.1f;
@@ -715,6 +718,7 @@ void CVoidpistol::VoidpistolFireC(void)
 			}
 			else
 			{
+				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/voidpistol_shoot_blackhole.wav", VOL_NORM, ATTN_NORM);
 				SendWeaponAnim(VOIDPISTOL_SHOOT_BLACKHOLE_A, UseDecrement() != FALSE);
 				m_flNextSecondaryAttack = m_flNextPrimaryAttack = 1.03f;
 				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.1f;
@@ -789,6 +793,12 @@ void CVoidpistol::VoidpistolFireB(float flSpread, duration_t flCycleTime, BOOL f
 				if (pEntity->IsBSPModel())
 					continue;
 
+				if (pEntity->pev->solid == SOLID_TRIGGER)
+					continue;
+
+				if (pEntity->pev->solid == SOLID_NOT)
+					continue;
+
 				if (m_iCountPlayer > 10)
 					continue;
 
@@ -820,16 +830,30 @@ void CVoidpistol::VoidpistolFireB(float flSpread, duration_t flCycleTime, BOOL f
 		}
 		m_iCountPlayer = 0;
 
-		SendWeaponAnim(m_iMode == VOIDPISTOL_MODEC ? VOIDPISTOL_SHOOTC : VOIDPISTOL_SHOOTB, UseDecrement() != FALSE);
+		//EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/voidpistol-1.wav", VOL_NORM, ATTN_NORM);
+		//EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_STATIC, "weapons/voidpistol_beep.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+
+		CBaseEntity* pevAttacker = this->m_pPlayer;
+
+		auto vecShootPosition = Get_ShootPosition(pevAttacker, vecSrc);
+
+		RadiusDamage(vecShootPosition, 0);
+
 		if (IsModeCEnabled(m_iCharging))
 		{
+			SendWeaponAnim(VOIDPISTOL_SHOOTC, UseDecrement() != FALSE);
 			m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] = 1;
+			m_iMode = VOIDPISTOL_MODEB;
 		}
+		else
+		{
+			SendWeaponAnim(VOIDPISTOL_SHOOTB, UseDecrement() != FALSE);
+		}		
 
 		m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME; // 600
 		m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH; // 512
 
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.5f;
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0f;
 #endif
 		m_pPlayer->pev->effects |= EF_MUZZLEFLASH;
 		PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usFireVoidpistol, 0, (float*)&g_vecZero, (float*)&g_vecZero, 2.0, 0.0, 0, 0, IsModeCEnabled(m_iCharging), FALSE);
@@ -855,11 +879,125 @@ void CVoidpistol::SecondaryAttack(void)
 #endif
 }
 
+Vector CVoidpistol::Get_ShootPosition(CBaseEntity* pevAttacker, Vector Start)
+{
+	CBaseEntity* pEntity = nullptr;
+	Vector end, vecforward, GunFire;
+
+	end = pevAttacker->pev->v_angle;
+	UTIL_MakeVectors(end);
+	GunFire[0] = Start[0] + gpGlobals->v_forward[0] * 160.0 + gpGlobals->v_right[0] * 40.0 + gpGlobals->v_up[0] * -40.0;
+	GunFire[1] = Start[1] + gpGlobals->v_forward[1] * 160.0 + gpGlobals->v_right[1] * 40.0 + gpGlobals->v_up[1] * -40.0;
+	GunFire[2] = Start[2] + gpGlobals->v_forward[2] * 160.0 + gpGlobals->v_right[2] * 40.0 + gpGlobals->v_up[2] * -40.0;
+	end = gpGlobals->v_forward;
+
+	end = end * 8192.0;
+	end = Start + end;
+
+
+	TraceResult tr;
+	UTIL_TraceLine(Start, end, dont_ignore_monsters, pevAttacker->edict(), &tr);
+	end = tr.vecEndPos;
+
+#ifndef CLIENT_DLL
+	vecforward = (end - GunFire) / 4.5;
+	if ((GunFire - end).Length() > 40.0)
+	{
+
+		int iCount = round((end - GunFire).Length() / 4.5);
+		int iCount2 = iCount;
+		while (iCount)
+		{
+
+			Vector vecEffectPos = pev->origin - pev->velocity.Normalize() * 10;
+
+			iCount--;
+		}
+	}
+
+#endif
+	return end;
+}
+
+#ifndef CLIENT_DLL
+void CVoidpistol::RadiusDamage(Vector vecAiming, float flDamage)
+{
+
+	float flRadius = 85.0f;
+
+	if (g_pModRunning->DamageTrack() == DT_ZBS)
+		flRadius = 140.0f;
+	if (g_pModRunning->DamageTrack() == DT_ZB)
+		flRadius = 125.0f;
+
+	const Vector vecSrc = vecAiming;
+	entvars_t* const pevAttacker = VARS(pev->owner);
+	entvars_t* const pevInflictor = this->pev;
+	int bitsDamageType = DMG_BULLET;
+
+	TraceResult tr;
+	const int bInWater = (UTIL_PointContents(vecSrc) == CONTENTS_WATER);
+
+	CBaseEntity* pEntity = NULL;
+	while ((pEntity = UTIL_FindEntityInSphere(pEntity, vecSrc, flRadius)) != NULL)
+	{
+		if (pEntity->pev->takedamage != DAMAGE_NO)
+		{
+			if (bInWater && !pEntity->pev->waterlevel)
+				continue;
+
+			if (!bInWater && pEntity->pev->waterlevel == 3)
+				continue;
+
+			if (pEntity->IsBSPModel())
+				continue;
+
+			if (pEntity->pev == pevAttacker)
+				continue;
+
+			Vector vecSpot = pEntity->BodyTarget(vecSrc);
+			UTIL_TraceLine(vecSrc, vecSpot, missile, ENT(pevInflictor), &tr);
+
+			if (tr.flFraction == 1.0f || tr.pHit == pEntity->edict())
+			{
+				if (tr.fStartSolid)
+				{
+					tr.vecEndPos = vecSrc;
+					tr.flFraction = 0;
+				}		
+			}
+		}
+	}
+
+	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
+	WRITE_BYTE(TE_EXPLOSION);
+	WRITE_COORD(vecAiming[0]);
+	WRITE_COORD(vecAiming[1]);
+	WRITE_COORD(vecAiming[2]);
+	WRITE_SHORT(MODEL_INDEX("sprites/ef_blackhole_star.spr"));
+	WRITE_BYTE(3);
+	WRITE_BYTE(40);
+	WRITE_BYTE(TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOSOUND);
+	MESSAGE_END();
+
+	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
+	WRITE_BYTE(TE_EXPLOSION);
+	WRITE_COORD(vecAiming[0]);
+	WRITE_COORD(vecAiming[1]);
+	WRITE_COORD(vecAiming[2]);
+	WRITE_SHORT(MODEL_INDEX("sprites/ef_blackhole_star.spr"));
+	WRITE_BYTE(3);
+	WRITE_BYTE(40);
+	WRITE_BYTE(TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOSOUND);
+	MESSAGE_END();
+
+
+}
+#endif	
 
 void CVoidpistol::VoidpistolFireA(float flSpread, duration_t flCycleTime, BOOL fUseAutoAim)
 {
 	m_iShotsFired++;
-
 
 	if (m_flLastFire )
 	{
@@ -889,6 +1027,7 @@ void CVoidpistol::VoidpistolFireA(float flSpread, duration_t flCycleTime, BOOL f
 	SetPlayerShieldAnim();
 #ifndef CLIENT_DLL
 	m_pPlayer->SetAnimation(PLAYER_ATTACK1);
+	SendWeaponAnim(VOIDPISTOL_SHOOTA, UseDecrement() != FALSE);
 #endif
 	UTIL_MakeVectors(m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle);
 
@@ -897,7 +1036,14 @@ void CVoidpistol::VoidpistolFireA(float flSpread, duration_t flCycleTime, BOOL f
 
 	Vector vecSrc = m_pPlayer->GetGunPosition();
 	
+	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/voidpistol-1.wav", VOL_NORM, ATTN_NORM);
+	CBaseEntity* pevAttacker = this->m_pPlayer;
 
+	auto vecShootPosition = Get_ShootPosition(pevAttacker, vecSrc);
+
+#ifndef CLIENT_DLL	
+	RadiusDamage(vecShootPosition, 0);
+#endif	
 #ifndef CLIENT_DLL	
 	Vector vecDir = m_pPlayer->FireBullets4(vecSrc, gpGlobals->v_forward, flSpread, 4096, 2, BULLET_PLAYER_50AE, GetDamage(), 0.81, m_pPlayer->pev, TRUE, m_pPlayer->random_seed, 1);
 	TraceResult tr;
@@ -909,11 +1055,11 @@ void CVoidpistol::VoidpistolFireA(float flSpread, duration_t flCycleTime, BOOL f
 			
 			if (pHit->IsPlayer())
 			{
-				//PLAYBACK_EVENT_FULL(FEV_GLOBAL, ENT(pHit->pev), PRECACHE_EVENT(1, "events/wpneffects.sc"), 0.0, pHit->pev->origin, (float*)&g_vecZero, 0.0, 0.0, 2, 0, TRUE, FALSE);
+				PLAYBACK_EVENT_FULL(FEV_GLOBAL, ENT(pHit->pev), PRECACHE_EVENT(1, "events/wpneffects.sc"), 0.0, pHit->pev->origin, (float*)&g_vecZero, 0.0, 0.0, 2, 0, TRUE, FALSE);
 				if (g_pGameRules->PlayerRelationship(m_pPlayer, pHit) != GR_TEAMMATE)
 					m_iCharging++;
 			}
-				//PLAYBACK_EVENT_FULL(FEV_GLOBAL, ENT(pHit->pev), PRECACHE_EVENT(1, "events/wpneffects.sc"), 0.0, tr.vecEndPos, (float*)&g_vecZero, 0.0, 0.0, 2, 0, TRUE, FALSE);
+				PLAYBACK_EVENT_FULL(FEV_GLOBAL, ENT(pHit->pev), PRECACHE_EVENT(1, "events/wpneffects.sc"), 0.0, tr.vecEndPos, (float*)&g_vecZero, 0.0, 0.0, 2, 0, TRUE, FALSE);
 		}
 	}
 	if (IsModeCEnabled(m_iCharging))
@@ -922,7 +1068,7 @@ void CVoidpistol::VoidpistolFireA(float flSpread, duration_t flCycleTime, BOOL f
 	}
 
 	PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usFireVoidpistol, 0, (float*)&g_vecZero, (float*)&g_vecZero, vecDir.x, vecDir.y, (int)(m_pPlayer->pev->punchangle.x * 100), 1, IsModeCEnabled(m_iCharging), FALSE);
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.5f;
+	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0f;
 #endif
 
 	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + flCycleTime;
@@ -998,6 +1144,11 @@ void CVoidpistol::WeaponIdle(void)
 		case VOIDPISTOL_MODEB:
 		{
 			SendWeaponAnim(VOIDPISTOL_IDLEB, UseDecrement() != FALSE); break;
+			MESSAGE_BEGIN(MSG_ALL, gmsgHeadIcon);
+			WRITE_BYTE(WPN_VOID_SCANAIM);
+			WRITE_SHORT(ENTINDEX(edict()));
+			WRITE_BYTE(pev->iuser1);
+			MESSAGE_END();
 		}
 		}
 	}
@@ -1011,10 +1162,10 @@ float CVoidpistol::GetDamage() const
 	float flDamage = 24.0f;
 #ifndef CLIENT_DLL
 	if (g_pModRunning->DamageTrack() == DT_ZB)
-		flDamage = 24.0f;
+		flDamage = 220.0f;
 		//flDamage = 225.0f;
 	else if (g_pModRunning->DamageTrack() == DT_ZBS)
-		flDamage = 390.0f;
+		flDamage = 590.0f;
 #endif
 	return flDamage;
 }
@@ -1024,7 +1175,7 @@ float CVoidpistol::BlackholeDamage() const
 	float flDamage = 10.0f;
 #ifndef CLIENT_DLL
 	if (g_pModRunning->DamageTrack() == DT_ZB)
-		flDamage = 70.0f;
+		flDamage = 870.0f;
 	//flDamage = 375.0f;
 	else if (g_pModRunning->DamageTrack() == DT_ZBS)
 		flDamage = 70.0f;

@@ -23,6 +23,14 @@ GNU General Public License for more details.
 #include "gamemode/zb2/zb2_skill.h"
 
 #include "zb2_zclass_tank.h"
+void CZombieClass_Default::Precache()
+{
+	PRECACHE_SOUND("sound/zb3/zombi_hurt_01.wav");
+	PRECACHE_SOUND("sound/zb3/zombi_hurt_02.wav");
+	PRECACHE_SOUND("sound/zb3/zombi_death_1.wav");
+	PRECACHE_SOUND("sound/zb3/zombi_death_2.wav");
+	PRECACHE_MODEL("sprites/deathres_zombie.spr");
+}
 
 CZombieClass_Default::CZombieClass_Default(CBasePlayer *player, ZombieLevel iEvolutionLevel) : CBaseZombieClass_ZB2(player, iEvolutionLevel)
 {
@@ -40,8 +48,12 @@ CZombieClass_Default::CZombieClass_Default(CBasePlayer *player, ZombieLevel iEvo
 	m_pPlayer->pev->armortype = ARMOR_TYPE_HELMET;
 	m_pPlayer->pev->armorvalue = 3000;
 	m_pPlayer->pev->gravity = 0.83f;
+	m_pPlayer->pev->renderfx = kRenderFxNone;
+	m_pPlayer->pev->rendermode = kRenderNormal;
 	m_pPlayer->ResetMaxSpeed();
 	m_pPlayer->GiveNamedItem("knife_zombi");
+	m_pPlayer->GiveNamedItem("weapon_zombibombz");
+	m_pPlayer->GiveNamedItem("weapon_zombibombz");
 	m_pPlayer->m_bIsZombieTank = true;
 }
 
@@ -56,7 +68,7 @@ void CZombieClass_Default::InitHUD() const
 
 void CZombieClass_Default::ResetMaxSpeed() const
 {
-	m_pPlayer->pev->maxspeed = 290;
+	m_pPlayer->pev->maxspeed = 390;
 }
 
 float CZombieClass_Default::AdjustDamageTaken(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) const
@@ -87,8 +99,8 @@ void CZombieClass_Default::Pain_Zombie(int m_LastHitGroup, bool HasArmour)
 {
 	switch (RANDOM_LONG(0, 1))
 	{
-		case 0: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_hurt_01.wav", VOL_NORM, ATTN_NORM); break;
-		case 1: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_hurt_02.wav", VOL_NORM, ATTN_NORM); break;
+		case 0: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_AUTO, "zb3/zombi_hurt_01.wav", VOL_NORM, ATTN_NORM); break;
+		case 1: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_AUTO, "zb3/zombi_hurt_02.wav", VOL_NORM, ATTN_NORM); break;
 		default:break;
 	}
 }
@@ -97,10 +109,20 @@ void CZombieClass_Default::DeathSound_Zombie()
 {
 	switch (RANDOM_LONG(1, 2))
 	{
-		case 1: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_death_1.wav", VOL_NORM, ATTN_NORM); break;
-		case 2: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_death_2.wav", VOL_NORM, ATTN_NORM); break;
+		case 1: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_AUTO, "zb3/zombi_death_1.wav", VOL_NORM, ATTN_NORM); break;
+		case 2: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_AUTO, "zb3/zombi_death_2.wav", VOL_NORM, ATTN_NORM); break;
 		default:break;
 	}
+	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
+	WRITE_BYTE(TE_EXPLOSION);
+	WRITE_COORD(m_pPlayer->pev->origin.x);
+	WRITE_COORD(m_pPlayer->pev->origin.y);
+	WRITE_COORD(m_pPlayer->pev->origin.z);
+	WRITE_SHORT(MODEL_INDEX("sprites/deathres_zombie.spr"));
+	WRITE_BYTE(8);
+	WRITE_BYTE(40);
+	WRITE_BYTE(TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOSOUND);
+	MESSAGE_END();
 }
 
 void CZombieClass_Default::OnThink()

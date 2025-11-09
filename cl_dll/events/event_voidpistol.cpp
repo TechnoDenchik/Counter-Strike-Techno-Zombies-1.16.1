@@ -51,7 +51,7 @@ enum voidpistol_e
 	VOIDPISTOL_CHANGEBC,
 	VOIDPISTOL_DRAWA,
 	VOIDPISTOL_DRAWB,
-	VOIDPISTOL_DRAWC
+	VOIDPISTOL_DRAWC,
 };
 
 enum blackhole_anim
@@ -62,29 +62,29 @@ enum blackhole_anim
 };
 
 
-void EV_FireVoidpistol( event_args_t *args )
+void EV_FireVoidPistol( event_args_t *args )
 {
 	vec3_t ShellVelocity;
 	vec3_t ShellOrigin;
 	vec3_t vecSrc;
 
 	int idx = args->entindex;
-	Vector origin( args->origin );
-	Vector velocity( args->velocity );
+	Vector origin(args->origin);
+	Vector velocity(args->velocity);
 	Vector angles(
 		args->iparam1 / 100.0f + args->angles[0],
 		args->iparam2 / 100.0f + args->angles[1],
 		args->angles[2]
 	);
 	Vector forward, right, up;
-	AngleVectors( angles, forward, right, up );
+	AngleVectors(angles, forward, right, up);
 
-	if ( EV_IsLocal( idx ) )
+	if (EV_IsLocal(idx))
 	{
 		++g_iShotsFired;
 		EV_MuzzleFlash();
-		
-		if((args->iparam2))
+
+		if ((args->iparam2))
 			gEngfuncs.pEventAPI->EV_WeaponAnimation(args->bparam1 ? VOIDPISTOL_SHOOTC : VOIDPISTOL_SHOOTA, 2);
 		else
 			gEngfuncs.pEventAPI->EV_WeaponAnimation(args->bparam1 ? VOIDPISTOL_SHOOTC : VOIDPISTOL_SHOOTB, 2);
@@ -98,27 +98,27 @@ void EV_FireVoidpistol( event_args_t *args )
 			EV_GetDefaultShellInfo(args, origin, velocity, ShellVelocity, ShellOrigin, forward, right, up, 35.0, -11.0, 16.0, 0);
 		}
 
-			EV_EjectBrass(ShellOrigin, ShellVelocity, angles[ YAW ], g_iPShell, TE_BOUNCE_SHELL);
-			if (args->fparam1 == 2.0)
-			{
-				gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/voidpistol-1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
-				gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_STATIC, "weapons/voidpistol_beep.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
-			}
-			else
-				gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/voidpistol-1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+		EV_EjectBrass(ShellOrigin, ShellVelocity, angles[YAW], g_iPShell, TE_BOUNCE_SHELL);
+		if (args->fparam1 == 2.0)
+		{
+			gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/voidpistol-1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+			gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_STATIC, "weapons/voidpistol_beep.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+		}
+		else
+			gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/voidpistol-1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 
-			if (args->iparam1)
-			{
-				EV_GetGunPosition(args, vecSrc, origin);
-				Vector vSpread(args->fparam1, args->fparam2, 0.0f);
+		if (args->iparam1)
+		{
+			EV_GetGunPosition(args, vecSrc, origin);
+			Vector vSpread(args->fparam1, args->fparam2, 0.0f);
 
-				EV_HLDM_FireBullets(idx,
-					forward, right, up,
-					1, vecSrc, forward,
-					vSpread, 8192.0, BULLET_PLAYER_50AE,
-					2);
-			}
-		
+			EV_HLDM_FireBullets(idx,
+				forward, right, up,
+				1, vecSrc, forward,
+				vSpread, 8192.0, BULLET_PLAYER_50AE,
+				2);
+		}
+
 	}
 	else
 	{
@@ -136,7 +136,7 @@ void EV_FireVoidpistol( event_args_t *args )
 					TEMPENTITY* pEnt = gEngfuncs.pEfxAPI->CL_TempEntAllocHigh(origin, pModel);
 					pEnt->entity.curstate.frame = 0;
 					pEnt->entity.curstate.framerate = 30.0;
-					
+
 					pEnt->entity.curstate.rendermode = kRenderTransAdd;
 					pEnt->entity.curstate.scale = 0.5;
 					pEnt->entity.curstate.renderamt = 255;
@@ -154,7 +154,7 @@ void EV_FireVoidpistol( event_args_t *args )
 					TEMPENTITY* pEnt = gEngfuncs.pEfxAPI->CL_TempEntAllocHigh(origin, pModel);
 					pEnt->entity.curstate.frame = 0;
 					pEnt->entity.curstate.framerate = 30.0;
-					
+
 					pEnt->entity.curstate.rendermode = kRenderTransAdd;
 					pEnt->entity.curstate.scale = 0.5;
 					pEnt->entity.curstate.renderamt = 255;
@@ -172,7 +172,7 @@ void EV_FireVoidpistol( event_args_t *args )
 					TEMPENTITY* pEnt = gEngfuncs.pEfxAPI->CL_TempEntAllocHigh(origin, pModel);
 					pEnt->entity.curstate.frame = 0;
 					pEnt->entity.curstate.framerate = 30.0;
-					
+
 					pEnt->entity.curstate.scale = 0.5;
 					pEnt->entity.curstate.rendermode = kRenderTransAdd;
 					pEnt->entity.curstate.renderamt = 255;
@@ -188,7 +188,7 @@ void EV_FireVoidpistol( event_args_t *args )
 				struct model_s* pModel = IEngineStudio.Mod_ForName("sprites/ef_blackhole_projectile.spr", false);
 				if (pModel)
 				{
-					
+
 					TEMPENTITY* pEnt = gEngfuncs.pEfxAPI->CL_TempEntAllocHigh(origin, pModel);
 					pEnt->entity.curstate.frame = 0;
 					pEnt->entity.curstate.framerate = 30.0;
@@ -201,8 +201,8 @@ void EV_FireVoidpistol( event_args_t *args )
 					pEnt->frameMax = 30;
 					pEnt->tentOffset = Vector(0, 0, 0);
 					pEnt->die = gHUD.m_flTime + 4.0;
-					pEnt->callback = [](tempent_s* ent, float frametime, float currenttime){
-					
+					pEnt->callback = [](tempent_s* ent, float frametime, float currenttime) {
+
 						float	traceFraction = 1;
 						vec3_t	traceNormal;
 						pmtrace_t pmtrace;
@@ -226,12 +226,12 @@ void EV_FireVoidpistol( event_args_t *args )
 								}
 							}
 						}
-					};
+						};
 					pEnt->hitcallback = [](tempent_s* ent, pmtrace_t* tr)
-					{
-						ent->flags &= ~FTENT_FADEOUT;
-						ent->die = gHUD.m_flTime;
-					};
+						{
+							ent->flags &= ~FTENT_FADEOUT;
+							ent->die = gHUD.m_flTime;
+						};
 
 					pEnt->flags |= FTENT_PLYRATTACHMENT | FTENT_SPRANIMATELOOP | FTENT_SPRANIMATE | FTENT_CLIENTCUSTOM;
 				}

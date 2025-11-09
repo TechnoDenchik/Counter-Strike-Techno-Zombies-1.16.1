@@ -19,13 +19,14 @@ GNU General Public License for more details.
 #include "mod_zb2.h"
 #include "zb3/zb3_const.h"
 #include "zb3/zb3_morale.h"
+#include "zb3/zb3_hero.h"
 
 class CMod_ZombieHero : public CMod_ZombieMod2
 {
 public:
 	CMod_ZombieHero();
 	void InstallPlayerModStrategy(CBasePlayer *) override;
-	void PickZombieOrigin() override;
+	//void PickZombieOrigin() override;
 	void UpdateGameMode(CBasePlayer *pPlayer) override;
 	void RestartRound() override;
 	void PlayerKilled(CBasePlayer *pVictim, entvars_t *pKiller, entvars_t *pInflictor) override;
@@ -33,12 +34,12 @@ public:
 
 	const CZB3HumanMorale &HumanMorale() const { return m_Morale; }
 
-	EventDispatcher<void(CBasePlayer *who)> m_eventBecomeHero;
+//	EventDispatcher<void(CBasePlayer *who)> m_eventBecomeHero;
 	EventDispatcher<void()> m_eventRoundStart;
 
 protected:
-	void PickHero();
-	void MakeHero(CBasePlayer *p) { m_eventBecomeHero.dispatch(p); }
+	//void PickHero();
+	//void MakeHero(CBasePlayer *p) { m_eventBecomeHero.dispatch(p); }
 
 	CZB3HumanMorale m_Morale;
 };
@@ -58,16 +59,19 @@ public:
 	void OnThink() override;
 	void OnKilled(entvars_t *pKiller, entvars_t *pInflictor) override;
 
-	virtual void Event_OnBecomeHero(CBasePlayer *who);
 	virtual void Event_OnRoundStart();
 
-	bool IsHero() const { return m_pPlayer->m_bIsVIP; }
+	//virtual void Event_OnBecomeHero(CBasePlayer *who);
+	
+	//void BecomeHero();
+
+	//bool IsHero() const { return m_pPlayer->m_bIsVIP; }
 
 private:
 	CMod_ZombieHero * const m_pModZB3;
-	const EventListener m_eventBecomeHeroListener;
+	//const EventListener m_eventBecomeHeroListener;
 	const EventListener m_eventRoundStartListener;
-
+	//std::shared_ptr<IHeroModeCharacter> m_pCharacter_ZB3;
 	float m_flRagePercent; // [0.0-100.0]
 	float m_flDeadTime;
 	float m_flBackupMaxHealth;

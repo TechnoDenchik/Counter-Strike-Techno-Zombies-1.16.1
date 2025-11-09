@@ -37,11 +37,11 @@
     <Filter Include="engine\platform\sdl">
       <UniqueIdentifier>{e1e4056c-fa78-4289-9042-877d1fe349a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{89ba6504-f168-46c0-b1ee-5a693983a741}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\engine\client\gl_vidnt.h">
-      <Filter>engine\client</Filter>
-    </ClInclude>
     <ClInclude Include="..\engine\client\input.h">
       <Filter>engine\client</Filter>
     </ClInclude>
@@ -73,9 +73,6 @@
       <Filter>engine\client</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\client\gl_local.h">
-      <Filter>engine\client</Filter>
-    </ClInclude>
-    <ClInclude Include="..\engine\client\gl_static.h">
       <Filter>engine\client</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\client\vgui\vgui_draw.h">
@@ -188,6 +185,21 @@
     </ClInclude>
     <ClInclude Include="..\engine\client\vgui2_surface.h">
       <Filter>engine\client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\common\tests.h">
+      <Filter>engine\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\platform\win32\lib_win.h">
+      <Filter>engine\platform\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\platform\win32\net.h">
+      <Filter>engine\platform\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="resource2.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\common\mod_extend_seq.h">
+      <Filter>engine\common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -593,10 +605,27 @@
     <ClCompile Include="..\engine\client\gl_rstrobe.c">
       <Filter>engine\client</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\platform\win32\lib_custom_win.c">
+      <Filter>engine\platform\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\platform\win32\lib_win.c">
+      <Filter>engine\platform\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\platform\win32\sys_win.c">
+      <Filter>engine\platform\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\common\mod_extend_seq.cpp">
+      <Filter>engine\common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\engine\common\soundlib\libmpg\libmpg.dsp">
       <Filter>engine\common\soundlib\libmpg</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="technoengine2.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

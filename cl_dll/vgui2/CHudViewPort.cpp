@@ -26,7 +26,7 @@ void CHudViewport::Start()
 
 	static CHudViewport * const s_pHudViewPort = this;
 
-	gEngfuncs.pfnHookUserMsg("VGUIMenu", [](const char *pszName, int iSize, void *pbuf) { return s_pHudViewPort->MsgFunc_MOTD(pszName, iSize, pbuf); });
+	gEngfuncs.pfnHookUserMsg("VGUIMenu2", [](const char *pszName, int iSize, void *pbuf) { return s_pHudViewPort->MsgFunc_MOTD(pszName, iSize, pbuf); });
 
 	gEngfuncs.pfnAddCommand("motd_open", []() { s_pHudViewPort->m_pMOTD->Activate(gHUD.m_szServerName, "wow"); });
 }

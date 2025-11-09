@@ -280,6 +280,9 @@ SV_ActivateServer
 activate server on changed map, run physics
 ================
 */
+#define MAX_MUZZLEFLASH		205
+int	cl_muzzleflash[MAX_MUZZLEFLASH];
+
 void SV_ActivateServer( void )
 {
 	int	i, numFrames;
@@ -292,6 +295,64 @@ void SV_ActivateServer( void )
 	pfnPrecacheModel( "sprites/muzzleflash1.spr" );
 	pfnPrecacheModel( "sprites/muzzleflash2.spr" );
 	pfnPrecacheModel( "sprites/muzzleflash3.spr" );
+
+	char str[128];
+	for (int i = 4; i < MAX_MUZZLEFLASH; i++) {
+		sprintf(str, "sprites/muzzleflash%d.spr", i);
+		cl_muzzleflash[i] = pfnPrecacheModel(str);
+		Con_Printf("MF: Precache %d %d\n", str, i);
+	}
+
+	pfnPrecacheModel("sprites/muzzleflash208.spr");
+	pfnPrecacheModel("sprites/muzzleflash210.spr");
+	pfnPrecacheModel("sprites/muzzleflash211.spr");
+	pfnPrecacheModel("sprites/muzzleflash212.spr");
+	pfnPrecacheModel("sprites/muzzleflash217.spr");
+	pfnPrecacheModel("sprites/muzzleflash222.spr");
+	pfnPrecacheModel("sprites/muzzleflash223.spr");
+	pfnPrecacheModel("sprites/muzzleflash224.spr");
+	pfnPrecacheModel("sprites/muzzleflash226.spr");
+	pfnPrecacheModel("sprites/muzzleflash237.spr");
+	pfnPrecacheModel("sprites/muzzleflash238.spr");
+	pfnPrecacheModel("sprites/muzzleflash239.spr");
+	pfnPrecacheModel("sprites/muzzleflash242.spr");
+	pfnPrecacheModel("sprites/muzzleflash243.spr");
+	pfnPrecacheModel("sprites/muzzleflash244.spr");
+	pfnPrecacheModel("sprites/muzzleflash245.spr");
+	pfnPrecacheModel("sprites/muzzleflash246.spr");
+	pfnPrecacheModel("sprites/muzzleflash247.spr");
+	pfnPrecacheModel("sprites/muzzleflash249.spr");
+	pfnPrecacheModel("sprites/muzzleflash255.spr");
+	pfnPrecacheModel("sprites/muzzleflash260.spr");
+	pfnPrecacheModel("sprites/muzzleflash261.spr");
+	pfnPrecacheModel("sprites/muzzleflash270.spr");
+	pfnPrecacheModel("sprites/muzzleflash271.spr");
+	pfnPrecacheModel("sprites/muzzleflash272.spr");
+	pfnPrecacheModel("sprites/muzzleflash273.spr");
+	pfnPrecacheModel("sprites/muzzleflash274.spr");
+	pfnPrecacheModel("sprites/muzzleflash275.spr");
+	pfnPrecacheModel("sprites/muzzleflash276.spr");
+	pfnPrecacheModel("sprites/muzzleflash277.spr");
+	pfnPrecacheModel("sprites/muzzleflash278.spr");
+	pfnPrecacheModel("sprites/muzzleflash279.spr");
+	pfnPrecacheModel("sprites/muzzleflash280.spr");
+	pfnPrecacheModel("sprites/muzzleflash281.spr");
+	pfnPrecacheModel("sprites/muzzleflash282.spr");
+	pfnPrecacheModel("sprites/muzzleflash283.spr");
+	pfnPrecacheModel("sprites/muzzleflash284.spr");
+	pfnPrecacheModel("sprites/muzzleflash285.spr");
+	pfnPrecacheModel("sprites/muzzleflash286.spr");
+	pfnPrecacheModel("sprites/muzzleflash287.spr");
+	pfnPrecacheModel("sprites/muzzleflash290.spr");
+	pfnPrecacheModel("sprites/muzzleflash291.spr");
+	pfnPrecacheModel("sprites/muzzleflash313.spr");
+	pfnPrecacheModel("sprites/muzzleflash314.spr");
+	pfnPrecacheModel("sprites/muzzleflash324.spr");
+	pfnPrecacheModel("sprites/muzzleflash325.spr");
+	pfnPrecacheModel("sprites/muzzleflash331.spr");
+	pfnPrecacheModel("sprites/muzzleflash332.spr");
+	pfnPrecacheModel("sprites/muzzleflash363.spr");
+	pfnPrecacheModel("sprites/muzzleflash455.spr");
 
 	// rocket flare
 	pfnPrecacheModel( "sprites/animglow01.spr" );
@@ -635,6 +696,11 @@ void SV_InitGame( void )
 	edict_t	*ent;
 	int	i;
 	
+	string fullpath;
+
+	// НОВОЕ (загрузка из корня):
+	Q_sprintf(fullpath, "%s\%s", host.rootdir, SI.gamedll);
+
 	if( svs.initialized )
 	{
 		// cause any connected clients to reconnect
@@ -647,12 +713,12 @@ void SV_InitGame( void )
 		if( !svgame.hInstance )
 		{
 			Com_ResetLibraryError();
-			if( !SV_LoadProgs( SI.gamedll ))
+			if( !SV_LoadProgs(SI.gamedll))
 			{
 				if( CL_IsInMenu() )
-					Sys_Warn( "SV_InitGame: can't initialize \"%s\":\n%s", SI.gamedll, Com_GetLibraryError() );
+					Sys_Warn( "SV_InitGame: can't initialize \"%s\":\n%s", fullpath, Com_GetLibraryError() );
 				else
-					Msg( "SV_InitGame: can't initialize \"%s\":\n%s", SI.gamedll, Com_GetLibraryError() );
+					Msg( "SV_InitGame: can't initialize \"%s\":\n%s", fullpath, Com_GetLibraryError() );
 				return; // can't load
 			}
 			MsgDev( D_INFO, "Server loaded\n" );
@@ -758,8 +824,16 @@ void SV_InitGameProgs( void )
 {
 	if( svgame.hInstance ) return; // already loaded
 
+	//string fullpath;
+
+	// НОВОЕ (загрузка из корня):
+	//Q_sprintf(fullpath, "%s\%s", host.rootdir, SI.gamedll);
+
+
+	SV_LoadProgs(SI.gamedll);
+
 	// just try to initialize
-	SV_LoadProgs( SI.gamedll );
+	
 	Com_ResetLibraryError();
 }
 

@@ -104,13 +104,15 @@
 // entity effects
 #define EF_BRIGHTFIELD		1	// swirling cloud of particles
 #define EF_MUZZLEFLASH		2	// single frame ELIGHT on entity attachment 0
+
 #define EF_BRIGHTLIGHT		4	// DLIGHT centered at entity origin
 #define EF_DIMLIGHT			8	// player flashlight
 #define EF_INVLIGHT			16	// get lighting from ceiling
 #define EF_NOINTERP			32	// don't interpolate the next frame
 #define EF_LIGHT			64	// rocket flare glow sprite
 #define EF_NODRAW			128	// don't draw entity
-
+#define EF_MUZZLEFLASH2		256	// single frame ELIGHT on entity attachment 0
+#define EF_MUZZLEFLASH3		512	// single frame ELIGHT on entity attachment 0
 
 
 #define EF_NOREFLECT		(1<<24)	// Entity won't reflecting in mirrors
@@ -120,10 +122,14 @@
 #define EF_NOSHADOW			(1<<28)	// ignore shadow for this entity
 #define EF_MERGE_VISIBILITY		(1<<29)	// this entity allowed to merge vis (e.g. env_sky or portal camera)
 #define EF_REQUEST_PHS		(1<<30)	// This entity requested phs bitvector instead of pvsbitvector in AddToFullPack calls
+#define EF_NOCULL		(1<<8)	// Entity won't cull front face
 // g-cont. one reserved bit here for me
 
 // entity flags
 #define EFLAG_SLERP			1	// do studio interpolation of this entity
+
+#define EFLAG_DEPTH_CHANGED		(1<<1)	// prevent model from poking into walls
+#define EFLAG_AFTER_VIEWMODEL		(1<<2)	// draw after view model
 
 //
 // temp entity events
@@ -574,6 +580,32 @@
 // byte ( color ) this is an index into an array of color vectors in the engine. (0 - )
 // byte ( length * 10 )
 
+
+#define	TE_BEAMPOINTS_STRETCH		128	// beam effect between two points
+// coord coord coord (start position) 
+// coord coord coord (end position) 
+// short (sprite index) 
+// byte (starting frame) 
+// byte (frame rate in 0.1's) 
+// byte (life in 0.1's) 
+// byte (line width in 0.1's) 
+// byte,byte,byte (color)
+// byte (brightness)
+
+#define	TE_BEAMPOINTS_TRACER		129	// flying beam
+// coord coord coord (start position) 
+// coord coord coord (end position)
+// short (sprite index) 
+// byte (starting frame) 
+// byte (frame rate in 0.1's) 
+// byte (life in 0.1's) 
+// byte (line width in 0.1's) 
+// byte (noise amplitude in 0.01's) 
+// byte,byte,byte (color)
+// byte (brightness)
+// byte (scroll speed in 0.1's)
+// byte (flags)
+
 #define MSG_BROADCAST		0	// unreliable to all
 #define MSG_ONE			1	// reliable to one (msg_entity)
 #define MSG_ALL			2	// reliable to all
@@ -669,6 +701,7 @@
 #define IN_RELOAD			(1<<13)
 #define IN_ALT1			(1<<14)
 #define IN_SCORE			(1<<15)   // Used by client.dll for when scoreboard is held down
+#define IN_VIEW			(1<<16)
 
 // Break Model Defines
 #define BREAK_TYPEMASK		0x4F
@@ -695,6 +728,31 @@
 #define TE_BOUNCE_NULL		0
 #define TE_BOUNCE_SHELL		1
 #define TE_BOUNCE_SHOTSHELL		2
+
+#define TE_TEMPSPRITE				132
+
+#define TE_TEMPMODEL				133	// a customized model
+// coord, coord, coord (position)
+// angle, angle, angle (angles)
+// coord, coord, coord (velocity)
+// short (model index)
+// byte (life * 10)
+// short (sequence)
+// byte (framerate)
+// byte (fade out)
+// byte (brightness)
+// byte (rendermode)
+// short (player index)
+// byte (fade out speed)
+// byte (fade in)
+// byte (fade in speed)
+// byte (scale * 10)
+// short (frame max)
+// long (tempentity flags)
+
+#define TE_KILLENTITYATTACHMENTS	134	// will expire all TENTS attached to a ent.
+
+
 
 // Rendering constants
 enum

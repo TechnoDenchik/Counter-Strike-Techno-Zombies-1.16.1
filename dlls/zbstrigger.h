@@ -221,10 +221,24 @@ public:
 
 class CTriggerMonsterJump2: public ZBSTrigger
 {
+private:
+	bool touchmonster;
+
 public:
 	virtual void Spawn();
 	virtual void Think();
 	virtual void Touch(CBaseEntity *pOther);
+
+	int setTouch (int valueS)
+	{
+		touchmonster = valueS;
+	}
+
+	int getTouch(int valueG)
+	{
+		valueG = touchmonster;
+	}
+
 };
 
 // trigger_cdaudio - starts/stops cd audio tracks

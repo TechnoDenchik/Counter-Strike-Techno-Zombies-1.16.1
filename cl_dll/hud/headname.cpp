@@ -10,6 +10,17 @@
 #include "com_model.h"
 #include "calcscreen.h"
 
+#include <assert.h>
+#include <string.h>
+
+#include "wrect.h"
+#include "cl_dll.h"
+#include "ammo.h"
+#include "csprite.h"
+#include "cvardef.h" 
+
+#include "gamemode/mods_const.h"
+
 int CHudHeadName::Init(void)
 {
 	gHUD.AddHudElem(this);
@@ -47,6 +58,9 @@ int CHudHeadName::Draw(float flTime)
 		if (g_PlayerExtraInfo[i].teamnumber != g_PlayerExtraInfo[gHUD.m_Scoreboard.m_iPlayerNum].teamnumber)
 			continue;
 
+		if (gHUD.m_iModRunning == MOD_DM)
+			continue;
+
 		if (i != gHUD.m_Scoreboard.m_iPlayerNum)
 		{
 			if(gHUD.cl_headname->value == 1)
@@ -68,7 +82,7 @@ int CHudHeadName::Draw(float flTime)
 
 				int textlen = DrawUtils::HudStringLen(g_PlayerInfoList[i].name);
 
-				DrawUtils::DrawHudString(screen[0] - textlen * 0.5f, screen[1], gHUD.m_scrinfo.iWidth, g_PlayerInfoList[i].name, 150, 150, 150);
+				DrawUtils::DrawHudString(screen[0] - textlen * 0.5f, screen[1], gHUD.m_scrinfo.iWidth, g_PlayerInfoList[i].name, 150, 150, 150, 255);
 			}
 
 			if (gHUD.cl_headname->value == 2)

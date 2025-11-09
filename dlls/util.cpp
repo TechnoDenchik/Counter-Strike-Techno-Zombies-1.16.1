@@ -907,6 +907,46 @@ void UTIL_TraceLine(const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTER
 	TRACE_LINE(vecStart, vecEnd, (igmon == ignore_monsters), pentIgnore, ptr);
 }
 
+void UTIL_TempModel(const Vector& vecOrigin, const Vector& vecAngles, const Vector& vecVelocity, int iModelIndex, int life, int sequence, int framerate, bool fadeOut, int fadeSpeed, int brightness, int rendermode, CBaseEntity* pEntity, bool fadeIn, int fadeInSpeed, int scale, int frameMax, int flags, bool excludeSource)
+{
+	if (excludeSource)
+		MESSAGE_BEGIN(MSG_EXCLUDESOURCE, SVC_TEMPENTITY, g_vecZero, pEntity->edict());
+	else
+		MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
+	WRITE_BYTE(TE_TEMPMODEL);
+	WRITE_COORD(vecOrigin.x);
+	WRITE_COORD(vecOrigin.y);
+	WRITE_COORD(vecOrigin.z);
+	WRITE_COORD(vecAngles.x);
+	WRITE_COORD(vecAngles.y);
+	WRITE_COORD(vecAngles.z);
+	WRITE_COORD(vecVelocity.x);
+	WRITE_COORD(vecVelocity.y);
+	WRITE_COORD(vecVelocity.z);
+	WRITE_SHORT(iModelIndex);
+	WRITE_BYTE(life);
+	WRITE_SHORT(sequence);
+	WRITE_BYTE(framerate);
+	WRITE_BYTE(fadeOut != false);
+	WRITE_BYTE(brightness);
+	WRITE_BYTE(rendermode);
+	if (pEntity)
+	{
+		WRITE_SHORT(pEntity->entindex());
+	}
+	else
+	{
+		WRITE_SHORT(-1);
+	}
+	WRITE_BYTE(fadeSpeed);
+	WRITE_BYTE(fadeIn != false);
+	WRITE_BYTE(fadeInSpeed);
+	WRITE_BYTE(scale);
+	WRITE_SHORT(frameMax);
+	WRITE_LONG(flags);
+	MESSAGE_END();
+}
+
 // OVERLOAD
 void UTIL_TraceLine(const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, IGNORE_GLASS ignoreGlass, edict_t *pentIgnore, TraceResult *ptr)
 {
@@ -923,7 +963,8 @@ void UTIL_TraceModel(const Vector &vecStart, const Vector &vecEnd, int hullNumbe
 	TRACE_MODEL(vecStart, vecEnd, hullNumber, pentModel, ptr);
 }
 
-NOXREF TraceResult UTIL_GetGlobalTrace()
+TraceResult UTIL_GetGlobalTrace()
+//NOXREF TraceResult UTIL_GetGlobalTrace()
 {
 	TraceResult tr;
 
@@ -940,6 +981,7 @@ NOXREF TraceResult UTIL_GetGlobalTrace()
 
 	return tr;
 }
+
 
 void UTIL_SetSize(entvars_t *pev, const Vector &vecMin, const Vector &vecMax)
 {
@@ -2345,6 +2387,62 @@ bool UTIL_IsGame(const char *gameName)
 #endif // CSTRIKE
 
 	return false;
+}
+
+float UTIL_CalculateDamageRate(Vector vecSrc, CBaseEntity* pOther)
+{
+	TraceResult tr;
+	float rate = 0.0;
+
+	if (!pOther->IsPlayer())
+	{
+		UTIL_TraceLine(vecSrc, pOther->pev->origin, ignore_monsters, NULL, &tr);
+
+		return tr.flFraction < 1.0 ? 0.0 : 1.0;
+	}
+
+	UTIL_TraceLine(vecSrc, pOther->pev->origin, ignore_monsters, NULL, &tr);
+
+	if (tr.flFraction == 1.0)
+		rate = 0.4;
+
+	UTIL_TraceLine(vecSrc, pOther->pev->origin + Vector(0, 0, 25), ignore_monsters, NULL, &tr);
+
+	if (tr.flFraction == 1.0)
+		rate += 0.2;
+
+	UTIL_TraceLine(vecSrc, pOther->pev->origin + Vector(0, 0, FBitSet(pOther->pev->flags, FL_DUCKING) ? -14 : -34), ignore_monsters, NULL, &tr);
+
+	if (tr.flFraction == 1.0)
+		rate += 0.2;
+
+	Vector2D vecDir = pOther->pev->origin.Make2D() - vecSrc.Make2D();
+	float dis2D = vecDir.LengthSquared();
+
+	if (!dis2D)
+	{
+		vecDir.x = 0.0;
+		vecDir.y = 1.0;
+
+		UTIL_TraceLine(vecSrc, pOther->pev->origin + Vector(0, 13, 0), ignore_monsters, NULL, &tr);
+	}
+	else
+	{
+		vecDir.x /= dis2D;
+		vecDir.y /= dis2D;
+
+		UTIL_TraceLine(vecSrc, pOther->pev->origin + Vector(-vecDir.y, vecDir.x, 0.0) * 13, ignore_monsters, NULL, &tr);
+	}
+
+	if (tr.flFraction == 1.0)
+		rate += 0.1;
+
+	UTIL_TraceLine(vecSrc, pOther->pev->origin - Vector(-vecDir.y, vecDir.x, 0.0) * 13, ignore_monsters, NULL, &tr);
+
+	if (tr.flFraction == 1.0)
+		rate += 0.1;
+
+	return rate;
 }
 
 float UTIL_GetPlayerGaitYaw(int playerIndex)

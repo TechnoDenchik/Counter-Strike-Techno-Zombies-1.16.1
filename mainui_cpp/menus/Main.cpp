@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "keydefs.h"
 #include "MenuStrings.h"
 #include "PlayerIntroduceDialog.h"
+#include "SpinControl.h"
 
 #define ART_MINIMIZE_N	"gfx/shell/min_n"
 #define ART_MINIMIZE_F	"gfx/shell/min_f"
@@ -34,6 +35,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define ART_CLOSEBTN_N	"gfx/shell/cls_n"
 #define ART_CLOSEBTN_F	"gfx/shell/cls_f"
 #define ART_CLOSEBTN_D	"gfx/shell/cls_d"
+
+#define ART_DISCORD		"gfx/shell/icon_discord"
+#define ART_CONSOLE		"gfx/shell/icon_console"
+#define ART_PLAY		"gfx/shell/icon_play"
+#define ART_RESUNEGAME	"gfx/shell/icon_returnright"
+#define ART_DISCONNECT	"gfx/shell/icon_resune"
+#define ART_MULTIPLAYER	"gfx/shell/icon_multi"
+#define ART_SETTINGS	"gfx/shell/icon_settings"
+#define ART_PREVIEW		"gfx/shell/icon_play"
+#define ART_QUIT		"gfx/shell/icon_quit"
 
 class CMenuMain: public CMenuFramework
 {
@@ -43,12 +54,15 @@ public:
 	const char *Key( int key, int down ) override;
 	const char *Activate( ) override;
 
+	bool getrestart;
 private:
 	void _Init() override;
 	void _VidInit( ) override;
 
 	void QuitDialog( void *pExtra = NULL );
+	void EndGame();
 	void DisconnectDialogCb();
+	void RestartMusic();
 	void HazardCourseDialogCb();
 	void HazardCourseCb();
 
@@ -59,17 +73,28 @@ private:
 		virtual void Draw();
 	} banner;
 
+	class CMenuVidPreview : public CMenuBitmap {} 
+	discord,
+	iconplay,
+	iconresune,
+	icondiscon,
+	iconconsole,
+	iconsettings,
+	iconmulti,
+	iconpreview,
+	iconquit;
+
 	CMenuPicButton	resumeGame;
 	CMenuPicButton	disconnect;
-	CMenuPicButton	credits;
 	CMenuPicButton	createGame;
 	CMenuPicButton	configuration;
 	CMenuPicButton	multiPlayer;
 	CMenuPicButton	previews;
 	CMenuPicButton	quit;
-
+	CMenuSpinControl cvar;
 	CMenuYesNoMessageBox dialog;
 
+	int		outlineWidth;
 	bool bTrainMap;
 	bool bCustomGame;
 };
@@ -78,24 +103,24 @@ static CMenuMain uiMain;
 
 void CMenuMain::CMenuMainBanner::Draw()
 {
-	if( !uiMain.background.ShouldDrawLogoMovie() )
-		return; // no logos for steam background
+	if (EngFuncs::ClientInGame() && EngFuncs::GetCvarFloat("ui_renderworld") != 0.0f)
+		return;
 
-	if( EngFuncs::GetLogoLength() <= 0.05f || EngFuncs::GetLogoWidth() <= 32 )
-		return;	// don't draw stub logo (GoldSrc rules)
+	if (!CMenuBackgroundBitmap::ShouldDrawLogoMovie())
+		return; // no logos for steam background
 
 	float	logoWidth, logoHeight, logoPosY;
 	float	scaleX, scaleY;
 
-	scaleX = ScreenWidth / 1920.0f;
-	scaleY = ScreenHeight / 1080.0f;
+	scaleX = ScreenWidth / 1280.0f;
+	scaleY = ScreenHeight / 720.0f;
 
 	// a1ba: multiply by height scale to look better on widescreens
 	logoWidth = EngFuncs::GetLogoWidth() * scaleX;
 	logoHeight = EngFuncs::GetLogoHeight() * scaleY * uiStatic.scaleY;
 	logoPosY = 70 * scaleY * uiStatic.scaleY;	// 70 it's empirically determined value (magic number)
 
-	EngFuncs::DrawLogo( "technocorp.avi", 0, logoPosY, logoWidth, logoHeight );
+	EngFuncs::DrawLogo( "technocorp.avi", 0, logoPosY, scaleX, scaleY);
 }
 
 void CMenuMain::QuitDialog(void *pExtra)
@@ -103,23 +128,49 @@ void CMenuMain::QuitDialog(void *pExtra)
 	if( CL_IsActive() && EngFuncs::GetCvarFloat( "host_serverstate" ) && EngFuncs::GetCvarFloat( "maxplayers" ) == 1.0f )
 		dialog.SetMessage( MenuStrings[IDS_MAIN_QUITPROMPTINGAME] );
 	else
-		dialog.SetMessage( MenuStrings[IDS_MAIN_QUITPROMPT] );
+		dialog.SetMessage(L("CstzUI_Exit"));
 
-	dialog.onPositive.SetCommand( FALSE, "quit\n" );
+	dialog.onPositive.SetCommand(FALSE, "quit\n");
+
 	dialog.Show();
 }
 
+void CMenuMain::EndGame()
+{
+	dialog.onPositive.SetCommand(FALSE, "quit\n");
+}
 void CMenuMain::DisconnectDialogCb()
 {
-	dialog.onPositive.SetCommand( FALSE, "cmd disconnect;endgame disconnect;wait;wait;wait;menu_options;menu_main\n" );
-	dialog.SetMessage( "Really disconnect?" );
+	//dialog.onPositive.SetCommand( FALSE, "cmd disconnect;endgame disconnect;wait;wait;wait;map_background back;mp_gamemode background; maxplayers 1;\n" );
+	SET_EVENT_MULTI(dialog.onPositive,
+		{
+			uiMain.RestartMusic();
+		});
+	dialog.SetMessage(L("CstzUI_MainDiscon"));
 	dialog.Show();
+}
+
+void CMenuMain::RestartMusic()
+{
+	EngFuncs::ClientCmd(FALSE, "cmd disconnect;endgame disconnect;wait;wait;wait;menu_main;\n");
+	int bgmapid = EngFuncs::RandomLong(0, uiStatic.bgmapcount - 1);
+
+	char cmd[128];
+	sprintf(cmd, "maps/%s.bsp", uiStatic.bgmaps[bgmapid]);
+
+	sprintf(cmd, "map_background %s\n", uiStatic.bgmaps[bgmapid]);
+	EngFuncs::ClientCmd(FALSE, cmd);
+	
+	EngFuncs::CvarSetString("mp_gamemode", "background");
+	EngFuncs::CvarSetValue("public", 0);
+	EngFuncs::CvarSetValue("maxplayers", 1);
+	EngFuncs::CvarSetValue("mp_roundtime", 99);
 }
 
 void CMenuMain::HazardCourseDialogCb()
 {
 	dialog.onPositive = VoidCb( &CMenuMain::HazardCourseCb );;
-	dialog.SetMessage( MenuStrings[IDS_TRAINING_EXITCURRENT] );
+	dialog.SetMessage( L("CstzUI_Hazard") );
 	dialog.Show();
 }
 
@@ -136,6 +187,63 @@ const char *CMenuMain::Key( int key, int down )
 		{
 			if( !dialog.IsVisible() )
 				UI_CloseMenu();
+			int musicset = (int)EngFuncs::GetCvarFloat("menu_musicpack");
+
+			if (!CL_IsActive())
+			{
+				if (musicset == 0)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/valve_01/mainmenu", "Music/valve_01/mainmenu");
+				}
+				else if (musicset == 1)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/valve_cs2_01/mainmenu", "Music/valve_cs2_01/mainmenu");
+				}
+				else if (musicset == 2)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/radcat_01/mainmenu", "Music/radcat_01/mainmenu");
+				}
+				else if (musicset == 3)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/3kliksphilip_01/mainmenu", "Music/3kliksphilip_01/mainmenu");
+				}
+				else if (musicset == 4)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/bbnos_01/mainmenu", "Music/bbnos_01/mainmenu");
+				}
+				else if (musicset == 5)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/chipzel_01/mainmenu", "Music/chipzel_01/mainmenu");
+				}
+				else if (musicset == 6)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/dryden_01/mainmenu", "Music/dryden_01/mainmenu");
+				}
+				else if (musicset == 7)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/freakydna_01/mainmenu", "Music/freakydna_01/mainmenu");
+				}
+				else if (musicset == 8)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/isoxo_01/mainmenu", "Music/isoxo_01/mainmenu");
+				}
+				else if (musicset == 9)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/knock2_01/mainmenu", "Music/knock2_01/mainmenu");
+				}
+				else if (musicset == 10)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/mattlevine_01/mainmenu", "Music/mattlevine_01/mainmenu");
+				}
+				else if (musicset == 11)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/meechydarko_01/mainmenu", "Music/meechydarko_01/mainmenu");
+				}
+				else if (musicset == 12)
+				{
+					EngFuncs::PlayBackgroundTrack("Music/mordfustang_01/mainmenu", "Music/mordfustang_01/mainmenu");
+				}
+			}
 		}
 		else
 		{
@@ -157,17 +265,35 @@ const char *CMenuMain::Activate( void )
 	{
 		resumeGame.Show();
 		disconnect.Show();
+		icondiscon.Show();
+		iconresune.Show();
 	}
 	else
 	{
 		resumeGame.Hide();
 		disconnect.Hide();
+		icondiscon.Hide();
+		iconresune.Hide();
 	}
 
 	if( gpGlobals->developer )
 	{
 		console.pos.y = CL_IsActive() ? 130 : 230;
 		console.pos.y += 50;
+	}
+
+	int consoleset = (int)EngFuncs::GetCvarFloat("menu_getconsole");
+	if (consoleset == 1)
+	{
+		gpGlobals->developer = 1;
+		console.Show();
+		iconconsole.Show();
+	}
+	else
+	{
+		gpGlobals->developer = 0;
+		console.Hide();
+		iconconsole.Hide();
 	}
 
 	CMenuPicButton::ClearButtonStack();
@@ -188,9 +314,9 @@ void CMenuMain::HazardCourseCb()
 	EngFuncs::CvarSetValue( "skill", 1.0f );
 	EngFuncs::CvarSetValue( "deathmatch", 0.0f );
 	EngFuncs::CvarSetValue( "teamplay", 0.0f );
-	EngFuncs::CvarSetValue( "pausable", 1.0f ); // singleplayer is always allowing pause
+	EngFuncs::CvarSetValue( "pausable", 1.0f );
 	EngFuncs::CvarSetValue( "coop", 0.0f );
-	EngFuncs::CvarSetValue( "maxplayers", 1.0f ); // singleplayer
+	EngFuncs::CvarSetValue( "maxplayers", 1.0f );
 
 	EngFuncs::PlayBackgroundTrack( NULL, NULL );
 
@@ -202,89 +328,158 @@ void CMenuMain::_Init( void )
 	bTrainMap = false;
 	bCustomGame = false;
 
-	// console
-	console.SetNameAndStatus( "Console", "Show console" );
+	iconconsole.iFlags = QMF_NOTIFY;
+	iconconsole.SetRect(7, 400, 32, 32);
+	iconconsole.SetPicture(ART_CONSOLE);
+	iconconsole.eFocusAnimation = QM_PULSEIFFOCUS;
+	iconconsole.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+
+	console.SetNameAndStatus(L("GameUI_Console"), L(""));
+	console.onActivated = UI_CloseMenu;
 	console.iFlags |= QMF_NOTIFY;
-	console.SetPicture( PC_CONSOLE );
+	console.eFocusAnimation = QM_PULSEIFFOCUS;
+	console.colorBase = uiColorCyan;
+	console.SetCharSize(QM_BOLDFONT);
 	SET_EVENT_MULTI( console.onActivated,
 	{
 		UI_SetActiveMenu( FALSE );
 		EngFuncs::KEY_SetDest( KEY_CONSOLE );
 	});
 
-	resumeGame.SetNameAndStatus( "Resume Game", 0);
-	resumeGame.SetPicture( PC_RESUME_GAME );
-	resumeGame.iFlags |= QMF_NOTIFY;
+	discord.iFlags = QMF_NOTIFY;
+	discord.SetPicture(ART_DISCORD);
+	discord.eFocusAnimation = QM_PULSEIFFOCUS;
+	discord.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	discord.SetRect(32, 40, 32, 32);
+	SET_EVENT(discord.onActivated, EngFuncs::ShellExecute("https://discord.gg/U9sdYbZrRU", NULL, false));
+
+	iconresune.iFlags = QMF_NOTIFY;
+	iconresune.SetRect(7, 440, 32, 32);
+	iconresune.SetPicture(ART_RESUNEGAME);
+	iconresune.eFocusAnimation = QM_PULSEIFFOCUS;
+	iconresune.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	iconresune.onActivated = UI_CloseMenu;
+
+	resumeGame.SetNameAndStatus(L("GameUI_GameMenu_ResumeGame"), L(""));
 	resumeGame.onActivated = UI_CloseMenu;
+	resumeGame.eFocusAnimation = QM_PULSEIFFOCUS;
+	resumeGame.colorBase = uiColorCyan;
+	resumeGame.SetCharSize(QM_BOLDFONT);
+	resumeGame.iFlags |= QMF_NOTIFY;
 
-	disconnect.SetNameAndStatus( "Disconnect", "Disconnect from server" );
-	disconnect.SetPicture( PC_DISCONNECT );
+	icondiscon.iFlags = QMF_NOTIFY;
+	icondiscon.SetRect(7, 480, 32, 32);
+	icondiscon.SetPicture(ART_DISCONNECT);
+	icondiscon.eFocusAnimation = QM_PULSEIFFOCUS;
+	icondiscon.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	icondiscon.onActivated = VoidCb(&CMenuMain::DisconnectDialogCb);
+
+	disconnect.SetNameAndStatus(L("GameUI_GameMenu_Disconnect"), L(""));
+	disconnect.onActivated = VoidCb(&CMenuMain::DisconnectDialogCb);
+	disconnect.eFocusAnimation = QM_PULSEIFFOCUS;
+	disconnect.colorBase = uiColorCyan;
+	disconnect.SetCharSize(QM_BOLDFONT);
 	disconnect.iFlags |= QMF_NOTIFY;
-	disconnect.onActivated = VoidCb( &CMenuMain::DisconnectDialogCb );
 
-	credits.SetNameAndStatus( "Credits", 0);
-	credits.SetPicture( PC_VIEW_README );
-	credits.iFlags |= QMF_NOTIFY;
-	credits.onActivated = UI_Credits_Menu;
+	iconplay.iFlags = QMF_NOTIFY;
+	iconplay.SetRect(7, 520, 32, 32);
+	iconplay.SetPicture(ART_PLAY);
+	iconplay.eFocusAnimation = QM_PULSEIFFOCUS;
+	iconplay.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	iconplay.onActivated = UI_CreateGame_Menu;
 
-	createGame.SetNameAndStatus( "Create Game", 0);
-	createGame.SetPicture(PC_CREATE_GAME);
-	createGame.iFlags |= QMF_NOTIFY;
+	createGame.SetNameAndStatus(LL("GameUI_StartGame"), L(""));
 	createGame.onActivated = UI_CreateGame_Menu;
+	createGame.eFocusAnimation = QM_PULSEIFFOCUS;
+	createGame.colorBase = uiColorCyan;
+	createGame.SetCharSize(QM_BOLDFONT);
+	createGame.iFlags |= QMF_NOTIFY;
 
-	multiPlayer.SetNameAndStatus( "Multiplayer", 0);
-	multiPlayer.SetPicture( PC_MULTIPLAYER );
+	iconmulti.iFlags = QMF_NOTIFY;
+	iconmulti.SetRect(7, 560, 32, 32);
+	iconmulti.SetPicture(ART_MULTIPLAYER);
+	iconmulti.eFocusAnimation = QM_PULSEIFFOCUS;
+	iconmulti.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	iconmulti.onActivated = UI_InternetGames_Menu;
+
+	multiPlayer.SetNameAndStatus(L("GameUI_GameMenu_FindServers"), L(""));
+	multiPlayer.onActivated = UI_InternetGames_Menu;
+	multiPlayer.eFocusAnimation = QM_PULSEIFFOCUS;
+	multiPlayer.colorBase = uiColorCyan;
+	multiPlayer.SetCharSize(QM_BOLDFONT);
 	multiPlayer.iFlags |= QMF_NOTIFY;
-	multiPlayer.onActivated = UI_MultiPlayer_Menu;
 
-	configuration.SetNameAndStatus( "Configuration", 0);
-	configuration.SetPicture( PC_CONFIG );
-	configuration.iFlags |= QMF_NOTIFY;
+	iconsettings.iFlags = QMF_NOTIFY;
+	iconsettings.SetRect(7, 640, 32, 32);
+	iconsettings.SetPicture(ART_SETTINGS);
+	iconsettings.eFocusAnimation = QM_PULSEIFFOCUS;
+	iconsettings.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	iconsettings.onActivated = UI_Options_Menu;
+
+	configuration.SetNameAndStatus(L("GameUI_Options"), L(""));
 	configuration.onActivated = UI_Options_Menu;
+	configuration.eFocusAnimation = QM_PULSEIFFOCUS;
+	configuration.colorBase = uiColorCyan;
+	configuration.SetCharSize(QM_BOLDFONT);
+	configuration.iFlags |= QMF_NOTIFY;
 
-	previews.SetNameAndStatus( "Previews", 0);
-	previews.SetPicture( PC_PREVIEWS );
+	iconpreview.iFlags = QMF_NOTIFY;
+	iconpreview.SetRect(7, 600, 32, 32);
+	iconpreview.SetPicture(ART_PREVIEW);
+	iconpreview.eFocusAnimation = QM_PULSEIFFOCUS;
+	iconpreview.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	iconpreview.onActivated = UI_Options_Menu;
+	SET_EVENT(iconpreview.onActivated, EngFuncs::ShellExecute("https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.1/tree/cstz1161", NULL, false));
+
+	previews.SetNameAndStatus(L("GameUI_Previews"), L(""));
+	previews.onActivated = UI_Options_Menu;
 	previews.iFlags |= QMF_NOTIFY;
-	SET_EVENT( previews.onActivated, EngFuncs::ShellExecute( MenuStrings[IDS_MEDIA_PREVIEWURL], NULL, false ) );
+	previews.eFocusAnimation = QM_PULSEIFFOCUS;
+	previews.colorBase = uiColorCyan;
+	previews.SetCharSize(QM_BOLDFONT);
+	SET_EVENT(previews.onActivated, EngFuncs::ShellExecute("https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.1/tree/cstz1161", NULL, false));
 
-	quit.SetNameAndStatus( "Quit", 0);
-	quit.SetPicture( PC_QUIT );
+	iconquit.iFlags = QMF_NOTIFY;
+	iconquit.SetRect(10, 685, 26, 26);
+	iconquit.SetPicture(ART_QUIT);
+	iconquit.eFocusAnimation = QM_PULSEIFFOCUS;
+	iconquit.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	iconquit.onActivated = MenuCb(&CMenuMain::QuitDialog);
+
+	quit.SetNameAndStatus(L("GameUI_GameMenu_Quit"), L(""));
+	quit.onActivated = MenuCb(&CMenuMain::QuitDialog);
 	quit.iFlags |= QMF_NOTIFY;
-	quit.onActivated = MenuCb( &CMenuMain::QuitDialog );
-
-
-	if ( gMenu.m_gameinfo.gamemode == GAME_MULTIPLAYER_ONLY || gMenu.m_gameinfo.startmap[0] == 0 )
-		credits.SetGrayed( true );
+	quit.eFocusAnimation = QM_PULSEIFFOCUS;
+	quit.colorBase = uiColorCyan;
+	quit.SetCharSize(QM_BOLDFONT);
 
 	if ( gMenu.m_gameinfo.gamemode == GAME_SINGLEPLAYER_ONLY )
 		multiPlayer.SetGrayed( true );
-
-	// server.dll needs for reading savefiles or startup newgame
-	if( !EngFuncs::CheckGameDll( ))
-	{
-		credits.SetGrayed( true );
-	}
 
 	dialog.Link( this );
 
 	AddItem( background );
 	AddItem( banner );
 
-	if ( gpGlobals->developer )
-		AddItem( console );
+	AddItem( console );
+	AddItem( iconconsole );
 
 	AddItem( disconnect );
+	AddItem( iconplay );
+	AddItem( iconresune );
+	AddItem( icondiscon );
+	AddItem( iconmulti );
+	AddItem( iconsettings );
+	AddItem( iconpreview );
+	AddItem( iconquit );
+	
+	AddItem( discord );
 	AddItem( resumeGame );
-	//AddItem( credits );
-
 	AddItem( createGame );
 	AddItem( configuration );
 	AddItem( multiPlayer );
-
 	AddItem( previews );
 	AddItem( quit );
-	//AddItem( minimizeBtn );
-	//AddItem( quitButton );
 }
 
 /*
@@ -295,27 +490,19 @@ UI_Main_Init
 void CMenuMain::_VidInit( void )
 {
 	Activate();
+	cvar.LinkCvar("menu_getconsole", CMenuEditable::CVAR_VALUE);
+	console.SetCoord(42, 400);
+	resumeGame.SetCoord( 42, 440);
+	disconnect.SetCoord( 42, 480);
+	createGame.SetCoord( 42, 520 );
+	multiPlayer.SetCoord( 42, 560 );
+	previews.SetCoord( 42,  600);
+	configuration.SetCoord( 42, 640 );
 
-	console.pos.x = 32;
-	resumeGame.SetCoord( 32, 440);
-	disconnect.SetCoord( 32, 480);
-	//credits.SetCoord( 72, 280 );
-	createGame.SetCoord( 32, 520 );
+	quit.SetCoord( 42, 680 );
 
-	configuration.SetCoord( 32, 560 );
-	multiPlayer.SetCoord( 32, 600 );
-
-	previews.SetCoord( 32,  640);
-
-	// too short execute string - not a real command
-	if( strlen( MenuStrings[IDS_MEDIA_PREVIEWURL] ) <= 3 )
-		previews.SetGrayed( true );
-
-	quit.SetCoord( 32, 680 );
-
-	//minimizeBtn.SetRect( uiStatic.width - 72, 13, 32, 32 );
-
-	//quitButton.SetRect( uiStatic.width - 36, 13, 32, 32 );
+	outlineWidth = 2;
+	UI_ScaleCoords(NULL, NULL, &outlineWidth, NULL);
 }
 
 /*
@@ -331,8 +518,8 @@ void UI_Main_Precache( void )
 	EngFuncs::PIC_Load( ART_CLOSEBTN_N );
 	EngFuncs::PIC_Load( ART_CLOSEBTN_F );
 	EngFuncs::PIC_Load( ART_CLOSEBTN_D );
-
-	// precache .avi file and get logo width and height
+	EngFuncs::PIC_Load( ART_DISCORD );
+	EngFuncs::PIC_Load( ART_PLAY );
 	EngFuncs::PrecacheLogo( "technocorp.avi" );
 }
 
@@ -341,8 +528,82 @@ void UI_Main_Precache( void )
 UI_Main_Menu
 =================
 */
+
+#include "discord_api.h"
+
+DiscordIntegration* dsAPI2;
+
 void UI_Main_Menu( void )
 {
 	uiMain.Show();
+
+	if (!CL_IsActive())
+	{
+		//UI_InitMainMenu();
+	}
+	else
+	{
+
+	}
+
+	if (uiMain.getrestart == FALSE)
+	{
+		int musicset = (int)EngFuncs::GetCvarFloat("menu_musicpack");
+
+		if (musicset == 0)
+		{
+			EngFuncs::PlayBackgroundTrack("Music/valve_01/mainmenu", "Music/valve_01/mainmenu");
+		}
+		else if (musicset == 1)
+		{
+			EngFuncs::PlayBackgroundTrack("Music/valve_cs2_01/mainmenu", "Music/valve_cs2_01/mainmenu");
+		}
+		else if (musicset == 2)
+		{
+			EngFuncs::PlayBackgroundTrack("Music/radcat_01/mainmenu", "Music/radcat_01/mainmenu");
+		}
+		else if (musicset == 3)
+		{
+			EngFuncs::PlayBackgroundTrack("Music/3kliksphilip_01/mainmenu", "Music/3kliksphilip_01/mainmenu");
+		}
+		else if (musicset == 4)
+		{
+			EngFuncs::PlayBackgroundTrack("Music/bbnos_01/mainmenu", "Music/bbnos_01/mainmenu");
+		}
+		else if (musicset == 5)
+		{
+			EngFuncs::PlayBackgroundTrack("Music/chipzel_01/mainmenu", "Music/chipzel_01/mainmenu");
+		}
+		else if (musicset == 6)
+		{
+			EngFuncs::PlayBackgroundTrack("Music/dryden_01/mainmenu", "Music/dryden_01/mainmenu");
+		}
+		else if (musicset == 7)
+		{
+			EngFuncs::PlayBackgroundTrack("Music/freakydna_01/mainmenu", "Music/freakydna_01/mainmenu");
+		}
+		else if (musicset == 8)
+		{
+			EngFuncs::PlayBackgroundTrack("Music/isoxo_01/mainmenu", "Music/isoxo_01/mainmenu");
+		}
+		else if (musicset == 9)
+		{
+			EngFuncs::PlayBackgroundTrack("Music/knock2_01/mainmenu", "Music/knock2_01/mainmenu");
+		}
+		else if (musicset == 10)
+		{
+			EngFuncs::PlayBackgroundTrack("Music/mattlevine_01/mainmenu", "Music/mattlevine_01/mainmenu");
+		}
+		else if (musicset == 11)
+		{
+			EngFuncs::PlayBackgroundTrack("Music/meechydarko_01/mainmenu", "Music/meechydarko_01/mainmenu");
+		}
+		else if (musicset == 12)
+		{
+			EngFuncs::PlayBackgroundTrack("Music/mordfustang_01/mainmenu", "Music/mordfustang_01/mainmenu");
+		}
+		uiMain.getrestart = TRUE;
+	}
 }
-ADD_MENU( menu_main, UI_Main_Precache, UI_Main_Menu );
+
+ADD_MENU( menu_main, UI_Main_Precache, UI_Main_Menu);

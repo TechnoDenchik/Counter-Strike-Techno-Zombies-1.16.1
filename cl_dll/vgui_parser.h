@@ -29,8 +29,8 @@
 #ifndef VGUI_PARSER_H
 #define VGUI_PARSER_H
 
-#define MAX_TOLOCALIZE_STRING_SIZE 256
-#define MAX_LOCALIZEDSTRING_SIZE 2048
+#define MAX_TOLOCALIZE_STRING_SIZE 1024
+#define MAX_LOCALIZEDSTRING_SIZE 4096
 
 void Localize_Init( );
 void Localize_Free( );

@@ -12,6 +12,8 @@
 #pragma once
 #endif
 
+#include <datamap.h>
+
 void WriteField( void *pData, typedescription_t *pField );
 void WriteFields( void *pOutputBuffer, void *pBaseData, typedescription_t *pFields, int fieldCount );
 

@@ -1,0 +1,12 @@
+
+#ifndef PROJECT_HID_CONST_H
+#define PROJECT_HID_CONST_H
+
+enum HiddenModType : int
+{
+	HIDDEN_MSG_KILL,
+	HIDDEN_MSG_RESPAWN,
+	HIDDEN_MSG_MASK,
+};
+
+#endif

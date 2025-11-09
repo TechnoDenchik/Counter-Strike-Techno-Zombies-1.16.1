@@ -19,7 +19,7 @@ GNU General Public License for more details.
 #include "player.h"
 #include "gamerules.h"
 #include "client.h"
-
+#include "player/player_hero.h"
 #include "gamemode/mods.h"
 #include "gamemode/zb3/zb3_human.h"
 
@@ -29,7 +29,7 @@ CHero_ZB1::CHero_ZB1(CBasePlayer *player, ZombieLevel iEvolutionLevel) : BasePla
 	m_pPlayer->m_bNotKilled = false;
 
 	m_pPlayer->pev->body = 0;
-	m_pPlayer->m_iModelName = MODEL_HUMAN_HERO;
+	m_pPlayer->m_iModelName = MODEL_VIP;
 
 	const char *szModel = "hero";
 	SET_CLIENT_KEY_VALUE(m_pPlayer->entindex(), GET_INFO_BUFFER(m_pPlayer->edict()), "model", const_cast<char *>(szModel));
@@ -44,9 +44,9 @@ CHero_ZB1::CHero_ZB1(CBasePlayer *player, ZombieLevel iEvolutionLevel) : BasePla
 	m_pPlayer->m_bNightVisionOn = false;
 
 	// set default property
-	m_pPlayer->pev->health = m_pPlayer->pev->max_health = 2000;
+	m_pPlayer->pev->health = m_pPlayer->pev->max_health = 3000;
 	m_pPlayer->pev->armortype = ARMOR_TYPE_HELMET;
-	m_pPlayer->pev->armorvalue = 1000;
+	m_pPlayer->pev->armorvalue = 2000;
 	m_pPlayer->pev->gravity = 0.83f;
 	m_pPlayer->ResetMaxSpeed();
 

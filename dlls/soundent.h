@@ -23,7 +23,7 @@
 // spawns, and handles the world's active and free sound
 // lists.
 
-#define MAX_WORLD_SOUNDS 64
+#define MAX_WORLD_SOUNDS 1024
 
 #define bits_SOUND_NONE 0
 #define bits_SOUND_COMBAT (1<<0)

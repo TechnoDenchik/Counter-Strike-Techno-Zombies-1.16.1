@@ -16,17 +16,20 @@
     <Filter Include="Source Files\controls">
       <UniqueIdentifier>{f8570da3-2737-4b6d-8ae2-ff7c3fabe4b3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\font">
+      <UniqueIdentifier>{9655e1fc-e12d-4abf-b791-6c9dcde0c16d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utl">
+      <UniqueIdentifier>{28895f00-bee6-4194-bc04-a9c26bce09ff}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\menus">
       <UniqueIdentifier>{c3b5ae88-b49d-4aaa-8bbe-fdddef14924d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\menus\dynamic">
       <UniqueIdentifier>{e7095df3-a1ea-4ed0-9b32-2c63905af416}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\font">
-      <UniqueIdentifier>{9655e1fc-e12d-4abf-b791-6c9dcde0c16d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Utl">
-      <UniqueIdentifier>{28895f00-bee6-4194-bc04-a9c26bce09ff}</UniqueIdentifier>
+    <Filter Include="Source Files\discord">
+      <UniqueIdentifier>{12cd862e-476f-4e9c-8e25-9ac183af8b55}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -183,6 +186,12 @@
     <ClInclude Include="..\mainui_cpp\utl\utlvector.h">
       <Filter>Source Files\Utl</Filter>
     </ClInclude>
+    <ClInclude Include="resource3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mainui_cpp\discord_api.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\mainui_cpp\EventSystem.cpp">
@@ -314,7 +323,7 @@
     <ClCompile Include="..\mainui_cpp\menus\Zoo.cpp">
       <Filter>Source Files\menus</Filter>
     </ClCompile>
-    <ClCompile Include="..\mainui_cpp\menus\AdvancedControls.cpp">
+    <ClCompile Include="..\mainui_cpp\menus\Mouse.cpp">
       <Filter>Source Files\menus</Filter>
     </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\Audio.cpp">
@@ -359,9 +368,6 @@
     <ClCompile Include="..\mainui_cpp\menus\Main.cpp">
       <Filter>Source Files\menus</Filter>
     </ClCompile>
-    <ClCompile Include="..\mainui_cpp\menus\Multiplayer.cpp">
-      <Filter>Source Files\menus</Filter>
-    </ClCompile>
     <ClCompile Include="..\mainui_cpp\menus\NewGame.cpp">
       <Filter>Source Files\menus</Filter>
     </ClCompile>
@@ -392,5 +398,61 @@
     <ClCompile Include="..\mainui_cpp\utl\unicode_strtools.cpp">
       <Filter>Source Files\Utl</Filter>
     </ClCompile>
+    <ClCompile Include="..\mainui_cpp\menus\Music.cpp">
+      <Filter>Source Files\menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mainui_cpp\menus\Inventory.cpp">
+      <Filter>Source Files\menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\achievement_manager.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\activity_manager.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\application_manager.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\core.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\image_manager.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\lobby_manager.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\network_manager.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\overlay_manager.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\relationship_manager.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\storage_manager.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\store_manager.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\types.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\user_manager.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\voice_manager.cpp">
+      <Filter>Source Files\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mainui_cpp\discord_api.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Interface.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

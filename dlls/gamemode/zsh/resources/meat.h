@@ -68,10 +68,12 @@ public:
 	void BecomeDead(void) override;
 	void Killed(entvars_t* pevAttacker, int iGib) override;
 	void Killed2(entvars_t* pevAttacker, int iGib) override;
-	int BloodColor() override { return BLOOD_COLOR_RED; }
 	void Touch(CBaseEntity* pOther) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
-
+	int BloodColor(void) { return DONT_BLEED; }
+	void GibMonster(void) {}
+	void EXPORT MeatThink();
+	void SendPositionMsg();
 	// RAII support to prevent memory leak.
 	CMeat();
 	~CMeat() override;
@@ -111,7 +113,8 @@ public:
 	int m_iKillBonusFrags2;
 	float m_flTimeLastActive;
 	float m_flTargetChange;
-
+	float m_flNextRadarTime;
+	int m_iMeatIndex;
 	std::map<std::string, int> m_mapLookupSequenceCache;
 	std::mutex m_mutexSetAnimation;
 

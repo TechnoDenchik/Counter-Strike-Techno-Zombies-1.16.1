@@ -68,9 +68,12 @@ public:
 	void BecomeDead(void) override;
 	void Killed(entvars_t *pevAttacker, int iGib) override;
 	void Killed2(entvars_t* pevAttacker, int iGib) override;
-	int BloodColor() override { return BLOOD_COLOR_RED; }
+	int BloodColor(void) { return DONT_BLEED; }
+	void GibMonster(void) {} 
 	void Touch(CBaseEntity *pOther) override;
 	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value) override;
+	void EXPORT WoodThink();
+	void SendPositionMsg();
 
 	// RAII support to prevent memory leak.
 	CWood();
@@ -106,10 +109,10 @@ public:
 	float m_flAttackAnimTime;
 	float m_flAttackDamage;
 	int m_iKillBonusMoney;
-	int m_iKillBonusFrags;
+	int m_iKillBonusFrags2;
 	float m_flTimeLastActive;
 	float m_flTargetChange;
-
+	int m_iWoodIndex;
 	std::map<std::string, int> m_mapLookupSequenceCache;
 	std::mutex m_mutexSetAnimation;
 

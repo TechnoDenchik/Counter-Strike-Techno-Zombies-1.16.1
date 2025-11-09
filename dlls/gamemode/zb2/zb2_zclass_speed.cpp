@@ -24,9 +24,18 @@ GNU General Public License for more details.
 
 #include "zb2_zclass_speed.h"
 
+void CZombieClass_Speed::Precache()
+{
+	PRECACHE_SOUND("sound/zb3/zombi_hurt_female_1.wav");
+	PRECACHE_SOUND("sound/zb3/zombi_hurt_female_2.wav");
+	PRECACHE_SOUND("sound/zb3/zombi_death_female_1.wav");
+	PRECACHE_SOUND("sound/zb3/zombi_death_female_2.wav");
+}
+
 CZombieClass_Speed::CZombieClass_Speed(CBasePlayer *player, ZombieLevel iEvolutionLevel) : CBaseZombieClass_ZB2(player, iEvolutionLevel)
 {
-	m_pZombieSkill.reset(new CZombieSkill_female(m_pPlayer));
+	Precache();
+	m_pZombieSkill.reset(new CZombieSkill_ZombieCrazy(m_pPlayer));
 
 	const char *szModel = iEvolutionLevel ? "speed_zombi_origin" : "speed_zombi_host";
 	SET_CLIENT_KEY_VALUE(m_pPlayer->entindex(), GET_INFO_BUFFER(m_pPlayer->edict()), "model", szModel);
@@ -36,12 +45,15 @@ CZombieClass_Speed::CZombieClass_Speed(CBasePlayer *player, ZombieLevel iEvoluti
 	m_pPlayer->SetNewPlayerModel(szModelPath);
 
 	// set default property
-	m_pPlayer->pev->health = m_pPlayer->pev->max_health = 8000;
+	m_pPlayer->pev->health = m_pPlayer->pev->max_health = 10000;
 	m_pPlayer->pev->armortype = ARMOR_TYPE_HELMET;
-	m_pPlayer->pev->armorvalue = 2000;
-	m_pPlayer->pev->gravity = 0.84f;
+	m_pPlayer->pev->armorvalue = 2500;
+	m_pPlayer->pev->gravity = 0.94f;
+	m_pPlayer->pev->renderfx = kRenderFxNone;
+	m_pPlayer->pev->rendermode = kRenderNormal;
 	m_pPlayer->ResetMaxSpeed();
 	m_pPlayer->GiveNamedItem("Knife_Zombi_female");
+	m_pPlayer->GiveNamedItem("weapon_zombibombz");
 	m_pPlayer->m_bIsZombieFemale = true;
 }
 
@@ -96,8 +108,8 @@ void CZombieClass_Speed::Pain_Zombie(int m_LastHitGroup, bool HasArmour)
 {
 	switch (RANDOM_LONG(0, 1))
 	{
-		case 0: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_hurt_female_1.wav", VOL_NORM, ATTN_NORM); break;
-		case 1: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_hurt_female_2.wav", VOL_NORM, ATTN_NORM); break;
+		case 0: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_AUTO, "zb3/zombi_hurt_female_1.wav", VOL_NORM, ATTN_NORM); break;
+		case 1: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_AUTO, "zb3/zombi_hurt_female_2.wav", VOL_NORM, ATTN_NORM); break;
 		default:break;
 	}
 }
@@ -106,8 +118,8 @@ void CZombieClass_Speed::DeathSound_Zombie()
 {
 	switch (RANDOM_LONG(1, 2))
 	{
-		case 1: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_death_female_1.wav", VOL_NORM, ATTN_NORM); break;
-		case 2: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_death_female_2.wav", VOL_NORM, ATTN_NORM); break;
+		case 1: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_AUTO, "zb3/zombi_death_female_1.wav", VOL_NORM, ATTN_NORM); break;
+		case 2: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_AUTO, "zb3/zombi_death_female_2.wav", VOL_NORM, ATTN_NORM); break;
 		default:break;
 	}
 }
@@ -144,7 +156,7 @@ void CZombieClass_Speed::Zombie_HealthRecoveryThink()
 			m_pPlayer->pev->health = std::min(m_pPlayer->pev->max_health, m_pPlayer->pev->health + flRecoverValue);
 
 			// effects
-			CLIENT_COMMAND(m_pPlayer->edict(), "spk zb3/zombi_heal.wav\n");
+			CLIENT_COMMAND(m_pPlayer->edict(), "spk zb3/zombi_heal_female.wav\n");
 
 			MESSAGE_BEGIN(MSG_ONE, gmsgZB2Msg, nullptr, m_pPlayer->pev);
 			WRITE_BYTE(ZB2_MESSAGE_HEALTH_RECOVERY);

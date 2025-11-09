@@ -41,7 +41,8 @@
 // addons
 #include "player/player_spawnpoint.h"
 #include "player/player_knockback.h"
-
+#include "gamemode/interface/interface_const.h"
+#include <dlls/util/u_range.hpp>
 /*
 * Globals initialization
 */
@@ -127,8 +128,6 @@ WeaponStruct g_weaponStruct[ MAX_WEAPONS ] =
 	{ WEAPON_P90,		P90_PRICE,		TERRORIST|CT,		AUTOBUYCLASS_PRIMARY,	AMMO_57MM_PRICE },
 	{ WEAPON_FAMAS,		FAMAS_PRICE,		TERRORIST,		AUTOBUYCLASS_PRIMARY,	AMMO_556MM_PRICE },
 	{ WEAPON_GALIL,		GALIL_PRICE,		CT,			AUTOBUYCLASS_PRIMARY,	AMMO_556MM_PRICE },
-				// TODO: this have bug, the cost of galil $2000, but not $2250
-
 	{ WEAPON_SHIELDGUN,	SHIELDGUN_PRICE,	TERRORIST,		AUTOBUYCLASS_PRIMARY,	0 },
 
 	{ 0, 0, 0, 0, 0 },
@@ -152,13 +151,14 @@ int gEvilImpulse101;
 char g_szMapBriefingText[512];
 
 entvars_t *g_pevLastInflictor;
-
+//ak47
 LINK_ENTITY_TO_CLASS(player, CBasePlayer);
 
 CBasePlayer::CBasePlayer() : m_rebuyString(nullptr) 
 {
 	g_pModRunning->InstallPlayerModStrategy(this);
 }
+
 CBasePlayer::~CBasePlayer()
 {
 	delete[] m_rebuyString;
@@ -299,6 +299,112 @@ CBasePlayer *CBasePlayer::GetNextRadioRecipient(CBasePlayer *pStartPlayer)
 	}
 
 	return NULL;
+}
+
+void CBasePlayer::Skill(const char* msg_id, const char* msg_verbose, short pitch, bool showIcon)
+{
+	// Spectators don't say radio messages.
+	if (!IsPlayer())
+		return;
+
+	// Neither do dead guys.
+	if (pev->deadflag != DEAD_NO && !IsBot())
+		return;
+
+	CBaseEntity* pEntity = NULL;
+	while ((pEntity = UTIL_FindEntityByClassname(pEntity, "player")) != NULL)
+	{
+		if (FNullEnt(pEntity->edict()))
+			break;
+
+		BOOL bSend = FALSE;
+		CBasePlayer* pPlayer = GetClassPtr<CBasePlayer>(pEntity->pev);
+
+		if (pPlayer == NULL)
+			continue;
+
+		// are we a regular player? (not spectator)
+		if (pPlayer->IsPlayer())
+		{
+			if (pPlayer->IsDormant())
+				continue;
+
+			// is this player on our team? (even dead players hear our radio calls)
+			//if (pPlayer->m_iTeam == m_iTeam)
+			if (g_pGameRules->PlayerRelationship(this, pPlayer) == GR_TEAMMATE)
+				bSend = TRUE;
+		}
+		// this means we're a spectator
+		else
+		{
+			// do this when spectator mode is in
+			int iSpecMode = pPlayer->IsObserver();
+
+			if (iSpecMode != OBS_CHASE_LOCKED && iSpecMode != OBS_CHASE_FREE && iSpecMode != OBS_IN_EYE)
+				continue;
+
+			if (!pPlayer->m_hObserverTarget)
+				continue;
+
+			CBasePlayer* pTarget = (CBasePlayer*)CBaseEntity::Instance(pPlayer->m_hObserverTarget->pev);
+
+			if (pTarget && g_pGameRules->PlayerRelationship(this, pPlayer) == GR_TEAMMATE)
+			{
+				bSend = TRUE;
+			}
+		}
+
+		if (bSend)
+		{
+			// ignorerad command
+			if (!pPlayer->m_bIgnoreRadio)
+			{
+				MESSAGE_BEGIN(MSG_ONE, gmsgSendAudio, NULL, pEntity->pev);
+				WRITE_BYTE(ENTINDEX(edict()));
+				WRITE_STRING(msg_id);
+				WRITE_SHORT(pitch);
+				MESSAGE_END();
+
+				// radio message icon
+				if (msg_verbose != NULL)
+				{
+					// search the place name where is located the player
+					const char* placeName = NULL;
+					if (g_bIsCzeroGame && TheBotPhrases != NULL)
+					{
+						Place playerPlace = TheNavAreaGrid.GetPlace(&pev->origin);
+						const BotPhraseList* placeList = TheBotPhrases->GetPlaceList();
+
+						for (auto phrase : *placeList)
+						{
+							if (phrase->GetID() == playerPlace)
+							{
+								placeName = phrase->GetName();
+								break;
+							}
+						}
+					}
+					if (placeName != NULL)
+						ClientPrint(pEntity->pev, HUD_PRINTCENTER, NumAsString(entindex()), "#Game_radio_location", STRING(pev->netname), placeName, msg_verbose);
+					else
+						ClientPrint(pEntity->pev, HUD_PRINTCENTER, NumAsString(entindex()), "#Game_radio", STRING(pev->netname), msg_verbose);
+				}
+
+				// icon over the head for teammates
+				if (showIcon)
+				{
+					// put an icon over this guys head to show that he used the radio
+					MESSAGE_BEGIN(MSG_ONE, SVC_TEMPENTITY, NULL, pEntity->pev);
+					WRITE_BYTE(TE_PLAYERATTACHMENT);
+					WRITE_BYTE(ENTINDEX(edict()));	// byte	(entity index of player)
+					WRITE_COORD(35); // coord (vertical offset) ( attachment origin.z = player origin.z + vertical offset)
+					WRITE_SHORT(g_sModelIndexRadio); // short (model index) of tempent
+					WRITE_SHORT(15); // short (life * 10 ) e.g. 40 = 4 seconds
+					MESSAGE_END();
+				}
+			}
+		}
+	}
 }
 
 void CBasePlayer::Radio(const char *msg_id, const char *msg_verbose, short pitch, bool showIcon)
@@ -741,6 +847,10 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 
 	flDamage = m_pModStrategy->AdjustDamageTaken(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 
+	int hitBits = 0;
+	if (m_LastHitGroup == HITGROUP_SHIELD) hitBits |= (1 << 0);
+	if (bitsDamageType & DMG_BURN) hitBits |= (1 << 3);
+
 	if (bitsDamageType & (DMG_EXPLOSION | DMG_BLAST))
 	{
 		if (!IsAlive())
@@ -815,11 +925,30 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 		}
 		else
 		{
+
+			if (CBaseEntity::Instance(this->pev)->IsPlayer()) {
+				MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, this->pev);
+				WRITE_LONG(-1);
+				WRITE_SHORT(ENTINDEX(edict()));
+				WRITE_BYTE(0);
+				WRITE_BYTE(1);
+				MESSAGE_END();
+			}
+
 			if (bitsDamageType & DMG_BLAST)
 				m_bKilledByBomb = true;
 
 			else if (bitsDamageType & DMG_EXPLOSION)
 				m_bKilledByGrenade = true;
+		}
+
+		if (CBaseEntity::Instance(pevAttacker)->IsPlayer() && (int)flDamage > 0) {
+			MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, pevAttacker);
+			WRITE_LONG((long)flDamage);
+			WRITE_SHORT(ENTINDEX(edict()));
+			WRITE_BYTE(0);
+			WRITE_BYTE(0);
+			MESSAGE_END();
 		}
 
 		// notify gamerules
@@ -830,7 +959,7 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 
 		if (fTookDamage > 0)
 		{
-			CHalfLifeMultiplay *mp = g_pGameRules;
+			CCstrikeTechnoZombies *mp = g_pGameRules;
 
 			if (TheBots != NULL)
 			{
@@ -903,12 +1032,6 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 
 	if (!g_pGameRules->FPlayerCanTakeDamage(this, pAttacker) && Q_strcmp("grenade", STRING(pevInflictor->classname)))
 	{
-
-		MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, pevAttacker);
-		WRITE_LONG((long)flDamage);
-		WRITE_SHORT(ENTINDEX(edict()));
-		WRITE_BYTE(0);
-		MESSAGE_END();
 		// Refuse the damage
 		return 0;
 	}
@@ -929,15 +1052,6 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 	{
 		pAttack = GetClassPtr<CBasePlayer>(pevAttacker);
 
-		if (CBaseEntity::Instance(pevAttacker)->IsPlayer() && flDamage > 0.0f) 
-		{
-				MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, pevAttacker);
-				WRITE_LONG((long)flDamage);
-				WRITE_SHORT(ENTINDEX(edict()));
-				WRITE_BYTE(0);
-				MESSAGE_END();
-				
-		}
 		bool bAttackFFA = !g_pGameRules->IsTeamplay();
 
 		// warn about team attacks
@@ -974,11 +1088,6 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 
 		if (g_pGameRules->IsTeamplay() && pAttack->m_iTeam == m_iTeam && !bAttackFFA)
 		{
-			MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, pevAttacker);
-			WRITE_LONG((long)flDamage);
-			WRITE_SHORT(ENTINDEX(edict()));
-			WRITE_BYTE(0);
-			MESSAGE_END();
 			// bullets hurt teammates less
 			flDamage *= 0.35;
 		}
@@ -1055,16 +1164,24 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 		int hitBits = 0;
 		if (m_LastHitGroup == HITGROUP_HEAD) hitBits |= (1 << 0);
 		if (bitsDamageType & DMG_BURN) hitBits |= (1 << 3);
+		Pain(m_LastHitGroup, true);
+	}
+	else
+		Pain(m_LastHitGroup, false);
+
+	if (CBaseEntity::Instance(pevAttacker)->IsPlayer()) {
+		int hitBits = 0;
+		if (m_LastHitGroup == HITGROUP_HEAD) hitBits |= (1 << 0);
+		if (bitsDamageType & DMG_CRITICAL) hitBits |= (1 << 1);
+		if (bitsDamageType & DMG_BACKATK) hitBits |= (1 << 2);
+		if (bitsDamageType & DMG_BURN) hitBits |= (1 << 3);
 		MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, pevAttacker);
 		WRITE_LONG((long)flDamage);
 		WRITE_SHORT(ENTINDEX(edict()));
 		WRITE_BYTE(hitBits);
 		WRITE_BYTE(0);
 		MESSAGE_END();
-		Pain(m_LastHitGroup, true);
 	}
-	else
-		Pain(m_LastHitGroup, false);
 
 	LogAttack(pAttack, this, teamAttack, flDamage, armorHit, pev->health - flDamage, pev->armorvalue, GetWeaponName(pevInflictor, pevAttacker));
 
@@ -1074,7 +1191,7 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 
 	if (fTookDamage > 0)
 	{
-		CHalfLifeMultiplay *mp = g_pGameRules;
+		CCstrikeTechnoZombies *mp = g_pGameRules;
 
 		if (TheBots != NULL)
 		{
@@ -1712,6 +1829,7 @@ void CBasePlayer::Killed(entvars_t *pevAttacker, int iGib)
 			if ((pev->button & IN_ATTACK) && m_rgAmmo[ pHEGrenade->m_iPrimaryAmmoType ])
 			{
 				CGrenade::ShootTimed2(pev, (pev->origin + pev->view_ofs), pev->angles, 1.5, m_iTeam, pHEGrenade->m_usCreateExplosion);
+				CGrenade::ShootTimedSbmine(pev, (pev->origin + pev->view_ofs), pev->angles, 1.5, m_iTeam, pHEGrenade->m_usCreateExplosion);
 			}
 			break;
 		}
@@ -2828,7 +2946,7 @@ void CBasePlayer::ResetMenu()
 void CBasePlayer::SyncRoundTimer()
 {
 	float tmRemaining;
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 
 	if (mp->IsMultiplayer())
 		tmRemaining = mp->TimeRemaining();
@@ -2890,6 +3008,146 @@ void CBasePlayer::SyncRoundTimer()
 				WRITE_SHORT(remaining);		// remaining of time, -1 the timer is disappears
 				WRITE_BYTE(shouldCountDown);	// timer counts down
 				WRITE_BYTE(fadeOutDelay); // fade in time, hide HUD timer after the expiration time
+			MESSAGE_END();
+		}
+	}
+}
+
+void CBasePlayer::SyncRoundTimer2()
+{
+	float tmRemaining;
+	CCstrikeTechnoZombies* mp = g_pGameRules;
+
+	if (mp->IsMultiplayer())
+		tmRemaining = mp->TimeRemaining2();
+	else
+		tmRemaining = 0;
+
+	if (tmRemaining < 0)
+		tmRemaining = 0;
+
+	MESSAGE_BEGIN(MSG_ONE, gmsgRoundTime, NULL, pev);
+	WRITE_SHORT((int)tmRemaining);
+	MESSAGE_END();
+
+	if (!mp->IsMultiplayer())
+		return;
+
+	if (mp->IsFreezePeriod() && TheTutor != NULL && !IsObserver())
+	{
+		MESSAGE_BEGIN(MSG_ONE, gmsgBlinkAcct, NULL, pev);
+		WRITE_BYTE(MONEY_BLINK_AMOUNT);
+		MESSAGE_END();
+	}
+
+	if (TheCareerTasks != NULL && mp->IsCareer())
+	{
+		int remaining = 0;
+		bool shouldCountDown = false;
+		int fadeOutDelay = 0;
+
+		if (tmRemaining != 0.0f)
+		{
+			remaining = TheCareerTasks->GetTaskTime() - (gpGlobals->time - mp->m_fRoundCount);
+		}
+
+		if (remaining < 0)
+			remaining = 0;
+
+		if (mp->IsFreezePeriod())
+			remaining = -1;
+
+		if (TheCareerTasks->GetFinishedTaskTime())
+			remaining = -TheCareerTasks->GetFinishedTaskTime();
+
+		if (!mp->IsFreezePeriod() && !TheCareerTasks->GetFinishedTaskTime())
+		{
+			shouldCountDown = true;
+		}
+		if (!mp->IsFreezePeriod())
+		{
+			if (TheCareerTasks->GetFinishedTaskTime() || (TheCareerTasks->GetTaskTime() <= TheCareerTasks->GetRoundElapsedTime()))
+			{
+				fadeOutDelay = 3;
+			}
+		}
+
+		if (!TheCareerTasks->GetFinishedTaskTime() || TheCareerTasks->GetFinishedTaskRound() == mp->m_iTotalRoundsPlayed)
+		{
+			MESSAGE_BEGIN(MSG_ONE, gmsgTaskTime, NULL, pev);
+			WRITE_SHORT(remaining);		// remaining of time, -1 the timer is disappears
+			WRITE_BYTE(shouldCountDown);	// timer counts down
+			WRITE_BYTE(fadeOutDelay); // fade in time, hide HUD timer after the expiration time
+			MESSAGE_END();
+		}
+	}
+}
+
+void CBasePlayer::SyncRoundTimer3()
+{
+	float tmRemaining;
+	CCstrikeTechnoZombies* mp = g_pGameRules;
+
+	if (mp->IsMultiplayer())
+		tmRemaining = mp->TimeRemaining3();
+	else
+		tmRemaining = 0;
+
+	if (tmRemaining < 0)
+		tmRemaining = 0;
+
+	MESSAGE_BEGIN(MSG_ONE, gmsgRoundTime, NULL, pev);
+	WRITE_SHORT((int)tmRemaining);
+	MESSAGE_END();
+
+	if (!mp->IsMultiplayer())
+		return;
+
+	if (mp->IsFreezePeriod() && TheTutor != NULL && !IsObserver())
+	{
+		MESSAGE_BEGIN(MSG_ONE, gmsgBlinkAcct, NULL, pev);
+		WRITE_BYTE(MONEY_BLINK_AMOUNT);
+		MESSAGE_END();
+	}
+
+	if (TheCareerTasks != NULL && mp->IsCareer())
+	{
+		int remaining = 0;
+		bool shouldCountDown = false;
+		int fadeOutDelay = 0;
+
+		if (tmRemaining != 0.0f)
+		{
+			remaining = TheCareerTasks->GetTaskTime() - (gpGlobals->time - mp->m_fRoundCount);
+		}
+
+		if (remaining < 0)
+			remaining = 0;
+
+		if (mp->IsFreezePeriod())
+			remaining = -1;
+
+		if (TheCareerTasks->GetFinishedTaskTime())
+			remaining = -TheCareerTasks->GetFinishedTaskTime();
+
+		if (!mp->IsFreezePeriod() && !TheCareerTasks->GetFinishedTaskTime())
+		{
+			shouldCountDown = true;
+		}
+		if (!mp->IsFreezePeriod())
+		{
+			if (TheCareerTasks->GetFinishedTaskTime() || (TheCareerTasks->GetTaskTime() <= TheCareerTasks->GetRoundElapsedTime()))
+			{
+				fadeOutDelay = 3;
+			}
+		}
+
+		if (!TheCareerTasks->GetFinishedTaskTime() || TheCareerTasks->GetFinishedTaskRound() == mp->m_iTotalRoundsPlayed)
+		{
+			MESSAGE_BEGIN(MSG_ONE, gmsgTaskTime, NULL, pev);
+			WRITE_SHORT(remaining);		// remaining of time, -1 the timer is disappears
+			WRITE_BYTE(shouldCountDown);	// timer counts down
+			WRITE_BYTE(fadeOutDelay); // fade in time, hide HUD timer after the expiration time
 			MESSAGE_END();
 		}
 	}
@@ -2992,7 +3250,7 @@ void CBasePlayer::JoiningThink()
 		}
 		case GETINTOGAME:
 		{
-			CHalfLifeMultiplay *mp = g_pGameRules;
+			CCstrikeTechnoZombies *mp = g_pGameRules;
 
 			m_bNotKilled = false;
 			m_iIgnoreGlobalChat = IGNOREMSG_NONE;
@@ -3403,7 +3661,7 @@ void CBasePlayer::StartObserver(Vector vecPosition, Vector vecViewAngle)
 	pev->iuser1 = OBS_NONE;
 
 	static int iFirstTime = 1;
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 
 	if (iFirstTime && mp && mp->IsCareer() && !IsBot())
 	{
@@ -3760,7 +4018,7 @@ void CBasePlayer::AddPointsToTeam(int score, BOOL bAllowNegativeScore)
 
 bool CBasePlayer::CanPlayerBuy(bool display)
 {
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 
 	if (!mp->IsMultiplayer())
 	{
@@ -5048,7 +5306,9 @@ void CBasePlayer::Reset()
 	m_iDeaths = 0;
 	m_iAccount.Reset();
 	m_iAccount.UpdateHUD(this);
-
+	m_iRoundKill = 0;
+	m_iRoundAssist = 0;
+	m_iRoundInfect = 0;
 	m_bNotKilled = false;
 
 	RemoveShield();
@@ -5709,7 +5969,7 @@ void OLD_CheckRescueZone(CBasePlayer *player)
 
 void CBasePlayer::HandleSignals()
 {
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 
 	if (mp->IsMultiplayer())
 	{
@@ -6099,7 +6359,7 @@ void CBasePlayer::UpdateClientData()
 		MESSAGE_BEGIN(MSG_ONE, gmsgResetHUD, NULL, pev);
 		MESSAGE_END();
 
-		CHalfLifeMultiplay *mp = g_pGameRules;
+		CCstrikeTechnoZombies *mp = g_pGameRules;
 
 		if (!m_fGameHUDInitialized)
 		{
@@ -6112,28 +6372,7 @@ void CBasePlayer::UpdateClientData()
 			{
 				CClientFog *pFog = (CClientFog *)pEntity;
 
-				int r = pFog->pev->rendercolor[0];
-				int g = pFog->pev->rendercolor[1];
-				int b = pFog->pev->rendercolor[2];
-
-				union
-				{
-					float f;
-					char b[4];
-
-				} density;
-
-				density.f = pFog->m_fDensity;
-
-				MESSAGE_BEGIN(MSG_ONE, gmsgFog, NULL, pev);
-					WRITE_BYTE(r);
-					WRITE_BYTE(g);
-					WRITE_BYTE(b);
-					WRITE_BYTE(density.b[0]);
-					WRITE_BYTE(density.b[1]);
-					WRITE_BYTE(density.b[2]);
-					WRITE_BYTE(density.b[3]);
-				MESSAGE_END();
+				pFog->UpdateClientMsg(pev);
 			}
 
 			mp->InitHUD(this);
@@ -6214,7 +6453,7 @@ void CBasePlayer::UpdateClientData()
 	{
 		MESSAGE_BEGIN(MSG_ONE, gmsgShowGameTitle, NULL, pev);
 			WRITE_BYTE(0);
-		MESSAGE_END();
+	 	MESSAGE_END();
 
 		gDisplayTitle = FALSE;
 	}
@@ -6756,9 +6995,8 @@ void CBasePlayer::DropPlayerItem(const char *pszItemName)
 		pszItemName = NULL;
 	}
 
-	if (m_bIsVIP || !m_pModStrategy->CanDropWeapon(pszItemName))
+	if (!m_pModStrategy->CanDropWeapon(pszItemName))
 	{
-		ClientPrint(pev, HUD_PRINTCENTER, "#Weapon_Cannot_Be_Dropped");
 		return;
 	}
 	else if (!pszItemName && HasShield())
@@ -6791,7 +7029,9 @@ void CBasePlayer::DropPlayerItem(const char *pszItemName)
 		{
 			if (!pWeapon->CanDrop())
 			{
-				ClientPrint(pev, HUD_PRINTCENTER, "#Weapon_Cannot_Be_Dropped");
+				MESSAGE_BEGIN(MSG_ONE, gmsgOriginalMsg11,NULL, pev);
+				WRITE_BYTE(ORIG_WDROP_MSG);
+				MESSAGE_END();
 				continue;
 			}
 
@@ -6833,9 +7073,15 @@ void CBasePlayer::DropPlayerItem(const char *pszItemName)
 						{
 							CBasePlayer *pOther = GetClassPtr<CBasePlayer>(pEntity->pev);
 
+							CBasePlayer* pPlayer = static_cast<CBasePlayer*>(pOther);
 							if (pOther->pev->deadflag == DEAD_NO && pOther->m_iTeam == TERRORIST)
 							{
-								ClientPrint(pOther->pev, HUD_PRINTCENTER, "#Game_bomb_drop", STRING(pev->netname));
+
+								MESSAGE_BEGIN(MSG_ONE, gmsgOriginalMsg10, NULL, pPlayer->pev);
+								WRITE_BYTE(ORIG_BOMB6_MSG);
+								MESSAGE_END();
+
+								//ClientPrint(pOther->pev, HUD_PRINTCENTER, "#Game_bomb_drop", STRING(pev->netname));
 
 								MESSAGE_BEGIN(MSG_ONE, gmsgBombDrop, NULL, pOther->pev);
 									WRITE_COORD(pev->origin.x);
@@ -7209,6 +7455,10 @@ void CBasePlayer::TabulateAmmo()
 	ammo_556nato = AmmoInventory(GetAmmoIndex("556Nato"));
 	ammo_556natobox = AmmoInventory(GetAmmoIndex("556NatoBox"));
 	ammo_762nato = AmmoInventory(GetAmmoIndex("762Nato"));
+
+	ammo_QuantAmmo = AmmoInventory(GetAmmoIndex("QuantAmmo"));
+	ammo_TwinAmmo = AmmoInventory(GetAmmoIndex("TwinAmmo"));
+
 	ammo_45acp = AmmoInventory(GetAmmoIndex("45acp"));
 	ammo_50ae = AmmoInventory(GetAmmoIndex("50AE"));
 	ammo_338mag = AmmoInventory(GetAmmoIndex("338Magnum"));
@@ -7841,7 +8091,7 @@ bool CBasePlayer::NeedsArmor()
 
 bool CBasePlayer::NeedsDefuseKit()
 {
-	CHalfLifeMultiplay *mpRules = g_pGameRules;
+	CCstrikeTechnoZombies *mpRules = g_pGameRules;
 
 	if (m_bHasDefuser || m_iTeam != CT)
 		return false;
@@ -7898,7 +8148,7 @@ const char *GetBuyStringForWeaponClass(int weaponClass)
 	case WEAPONCLASS_MACHINEGUN:
 		return "m249";
 	case WEAPONCLASS_RIFLE:
-		return "sg552 aug ak47 m4a1 galil famas";
+		return "sg552 aug ak47 m4a1 galil famas quantum";
 	}
 
 	return NULL;

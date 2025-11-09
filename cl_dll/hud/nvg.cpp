@@ -34,6 +34,7 @@ version.
 #include "r_efx.h"
 #include "dlight.h"
 #include "eventscripts.h"
+#include "gamemode/mods_const.h"
 
 DECLARE_MESSAGE(m_NVG, NVGToggle)
 DECLARE_COMMAND(m_NVG, NVGAdjustDown)
@@ -77,7 +78,11 @@ int CHudNVG::Draw(float flTime)
 
 	if (g_PlayerExtraInfo[idx].zombie)
 	{
-		r = 225, g = 50, b = 50, a = 110;
+		if(gHUD.m_iModRunning == MOD_HIDDEN)
+			r = 72, g = 61, b = 139, a = 110;
+		else
+			r = 225, g = 50, b = 50, a = 110;
+
 		bNewLight = true;
 	}
 

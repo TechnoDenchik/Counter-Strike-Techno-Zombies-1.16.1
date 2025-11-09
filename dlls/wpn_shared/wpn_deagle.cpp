@@ -55,6 +55,7 @@ void CDEAGLE::Precache(void)
 	PRECACHE_MODEL("models/shield/v_shield_deagle.mdl");
 #endif
 	PRECACHE_MODEL("models/w_deagle.mdl");
+	PRECACHE_MODEL("models/p_deagle.mdl");
 
 	PRECACHE_SOUND("weapons/deagle-1.wav");
 	PRECACHE_SOUND("weapons/deagle-2.wav");
@@ -73,6 +74,10 @@ int CDEAGLE::GetItemInfo(ItemInfo *p)
 	p->iMaxAmmo1 = MAX_AMMO_50AE;
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
+	p->pszAmmo3 = NULL;
+	p->iMaxAmmo3 = -1;
+	p->pszAmmoGrenade = NULL;
+	p->iMaxAmmoGrenade = -1;
 	p->iMaxClip = DEAGLE_MAX_CLIP;
 	p->iSlot = 1;
 	p->iPosition = 1;

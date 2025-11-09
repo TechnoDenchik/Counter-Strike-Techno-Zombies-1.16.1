@@ -1,5 +1,5 @@
 /*
-Copyright (C) 1997-2001 Id Software, Inc.
+Copyright (C) 1997-2001 Id Software & TechnoSoftware, Inc.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -31,6 +31,43 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define ART_BANNER		"gfx/shell/head_customize"
 
+#define ART_HIT0		"gfx/shell/Item/floatingdamage/option_none"
+#define ART_HITORIG		"gfx/shell/Item/floatingdamage/option_default"
+#define ART_HIT1		"gfx/shell/Item/floatingdamage/option_skin01"
+#define ART_HIT2		"gfx/shell/Item/floatingdamage/option_skin02"
+#define ART_HIT3		"gfx/shell/Item/floatingdamage/option_skin03"
+#define ART_HIT4		"gfx/shell/Item/floatingdamage/option_skin04"
+#define ART_HIT5		"gfx/shell/Item/floatingdamage/option_skin05"
+#define ART_HIT6		"gfx/shell/Item/floatingdamage/option_skin06"
+#define ART_HIT7		"gfx/shell/Item/floatingdamage/option_skin07"
+#define ART_HIT8		"gfx/shell/Item/floatingdamage/option_skin08"
+#define ART_HIT9		"gfx/shell/Item/floatingdamage/option_skin09"
+#define ART_HIT10		"gfx/shell/Item/floatingdamage/option_skin10"
+#define ART_HIT11		"gfx/shell/Item/floatingdamage/option_skin11"
+#define ART_HIT12		"gfx/shell/Item/floatingdamage/option_skin12"
+#define ART_HIT13		"gfx/shell/Item/floatingdamage/option_skin13"
+#define ART_HIT14		"gfx/shell/Item/floatingdamage/option_skin14"
+#define ART_HIT15		"gfx/shell/Item/floatingdamage/option_skin15"
+#define ART_HIT16		"gfx/shell/Item/floatingdamage/option_skin16"
+#define ART_HIT17		"gfx/shell/Item/floatingdamage/option_skin17"
+#define ART_HIT18		"gfx/shell/Item/floatingdamage/option_skin18"
+#define ART_HIT19		"gfx/shell/Item/floatingdamage/option_skin19"
+#define ART_HIT20		"gfx/shell/Item/floatingdamage/option_skin20"
+#define ART_HIT21		"gfx/shell/Item/floatingdamage/option_skin21"
+#define ART_HIT22		"gfx/shell/Item/floatingdamage/option_skin22"
+#define ART_HIT23		"gfx/shell/Item/floatingdamage/option_skin23"
+#define ART_HIT24		"gfx/shell/Item/floatingdamage/option_skin24"
+#define ART_HIT25		"gfx/shell/Item/floatingdamage/option_skin26"
+#define ART_HIT26		"gfx/shell/Item/floatingdamage/option_skin27"
+#define ART_HIT27		"gfx/shell/Item/floatingdamage/option_skin28"
+#define ART_HIT28		"gfx/shell/Item/floatingdamage/option_skin29"
+#define ART_HIT29		"gfx/shell/Item/floatingdamage/option_skin30"
+#define ART_HIT30		"gfx/shell/Item/floatingdamage/option_skin31"
+#define ART_HIT31		"gfx/shell/Item/floatingdamage/option_skin32"
+#define ART_HIT32		"gfx/shell/Item/floatingdamage/option_skin33"
+#define ART_HIT33		"gfx/shell/Item/floatingdamage/option_skin34"
+
+#define ART_SYSTEM		"gfx/shell/Item/floatingdamage/option_system"
 #define MAX_PLAYERMODELS	100
 
 static struct
@@ -63,7 +100,7 @@ static byte g_iCrosshairAvailColors[6][3] =
 	{ 50,  250, 250 },
 };
 
-static const char *g_szCrosshairAvailSizes[] =
+/**/static const char* g_szCrosshairAvailSizes[] =
 {
 	"auto", "small", "medium", "large"
 };
@@ -82,6 +119,7 @@ static class CMenuPlayerSetup : public CMenuFramework
 {
 private:
 	void _Init() override;
+	void _VidInit() override;
 public:
 	CMenuPlayerSetup() : CMenuFramework( "CMenuPlayerSetup" ), msgBox( true ) { }
 
@@ -91,6 +129,8 @@ public:
 	void ApplyColorToLogoPreview();
 	void WriteNewLogo();
 	void SaveAndPopMenu() override;
+	void SetSkinHitIndicator();
+	class CMenuVidPreview : public CMenuBitmap {} hitindicatorid;
 
 	class CLogosListModel : public CStringArrayModel
 	{
@@ -125,10 +165,11 @@ public:
 	CMenuSpinControl	crosshairSize;
 	CMenuSpinControl	crosshairColor;
 	CMenuSpinControl	crosshairType;
+	CMenuSpinControl	playerinfo;
+	CMenuSpinControl	hitindicator;
 	CMenuCheckBox	crosshairTranslucent;
-	CMenuCheckBox	extendedMenus;
-
-
+	CMenuCheckBox	uirenderworld;
+	CMenuPicButton Exit;
 	CMenuYesNoMessageBox msgBox;
 
 } uiPlayerSetup;
@@ -241,6 +282,7 @@ void CMenuPlayerSetup::CMenuCrosshairPreview::Draw()
 		b = g_iCrosshairAvailColors[(int)uiPlayerSetup.crosshairColor.GetCurrentValue()+1][2];
 
 	bool additive = uiPlayerSetup.crosshairTranslucent.bChecked;
+	bool additive2 = uiPlayerSetup.uirenderworld.bChecked;
 
 	if (bDrawCircle)
 	{
@@ -259,11 +301,33 @@ void CMenuPlayerSetup::CMenuCrosshairPreview::Draw()
 			for (int i = 0; i < count; i++)
 				EngFuncs::PIC_DrawAdditive(x + w / 2 + radius * cos(2 * M_PI / count * i), y + h / 2 + radius * sin(2 * M_PI / count * i), 1, 1);
 		}
+		if (additive2)
+		{
+			EngFuncs::PIC_Set(hWhite, r, g, b, a);
+			for (int i = 0; i < count; i++)
+				EngFuncs::PIC_DrawTrans(x + w / 2 + radius * cos(2 * M_PI / count * i), y + h / 2 + radius * sin(2 * M_PI / count * i), 1, 1);
+		}
+		else
+		{
+			EngFuncs::PIC_Set(hWhite, r, g, b, a);
+			for (int i = 0; i < count; i++)
+				EngFuncs::PIC_DrawAdditive(x + w / 2 + radius * cos(2 * M_PI / count * i), y + h / 2 + radius * sin(2 * M_PI / count * i), 1, 1);
+		}
 	}
 
 	if (bDrawPoint)
 	{
 		if (additive)
+		{
+			EngFuncs::PIC_Set(hWhite, r, g, b, a);
+			EngFuncs::PIC_DrawTrans(x + w / 2 - 1, y + h / 2 - 1, 3, 3);
+		}
+		else
+		{
+			EngFuncs::PIC_Set(hWhite, r, g, b, a);
+			EngFuncs::PIC_DrawAdditive(x + w / 2 - 1, y + h / 2 - 1, 3, 3);
+		}
+		if (additive2)
 		{
 			EngFuncs::PIC_Set(hWhite, r, g, b, a);
 			EngFuncs::PIC_DrawTrans(x + w / 2 - 1, y + h / 2 - 1, 3, 3);
@@ -309,9 +373,40 @@ void CMenuPlayerSetup::CMenuCrosshairPreview::Draw()
 			EngFuncs::PIC_Set(hWhite, r, g, b, a);
 			EngFuncs::PIC_DrawAdditive(x + w / 2 + d, y + h / 2, l, 1);
 		}
+		if (additive2)
+		{
+			// verical
+			EngFuncs::PIC_Set(hWhite, r, g, b, a);
+			EngFuncs::PIC_DrawTrans(x + w / 2, y + d, 1, l);
+
+			EngFuncs::PIC_Set(hWhite, r, g, b, a);
+			EngFuncs::PIC_DrawTrans(x + w / 2, y + h / 2 + d, 1, l);
+
+			// horizontal
+			EngFuncs::PIC_Set(hWhite, r, g, b, a);
+			EngFuncs::PIC_DrawTrans(x + d, y + h / 2, l, 1);
+
+			EngFuncs::PIC_Set(hWhite, r, g, b, a);
+			EngFuncs::PIC_DrawTrans(x + w / 2 + d, y + h / 2, l, 1);
+		}
+		else
+		{
+			// verical
+			EngFuncs::PIC_Set(hWhite, r, g, b, a);
+			EngFuncs::PIC_DrawAdditive(x + w / 2, y + d, 1, l);
+
+			EngFuncs::PIC_Set(hWhite, r, g, b, a);
+			EngFuncs::PIC_DrawAdditive(x + w / 2, y + h / 2 + d, 1, l);
+
+			// horizontal
+			EngFuncs::PIC_Set(hWhite, r, g, b, a);
+			EngFuncs::PIC_DrawAdditive(x + d, y + h / 2, l, 1);
+
+			EngFuncs::PIC_Set(hWhite, r, g, b, a);
+			EngFuncs::PIC_DrawAdditive(x + w / 2 + d, y + h / 2, l, 1);
+		}
 	}
 }
-
 
 /*
 =================
@@ -369,8 +464,227 @@ void CMenuPlayerSetup::SetConfig( void )
 	crosshairSize.WriteCvar();
 	crosshairType.WriteCvar();
 	crosshairTranslucent.WriteCvar();
-	extendedMenus.WriteCvar();
-	WriteNewLogo();
+	uirenderworld.WriteCvar();
+	playerinfo.WriteCvar();
+	hitindicator.LinkCvar("hud_hitstyle", CMenuEditable::CVAR_VALUE);
+}
+
+void CMenuPlayerSetup::SetSkinHitIndicator()
+{
+	hitindicator.WriteCvar();
+	int hitset = (int)EngFuncs::GetCvarFloat("hud_hitstyle");
+
+
+	if (hitset == 0)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT0);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 1)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_SYSTEM);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 2)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT1);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 3)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT2);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 4)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT3);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 5)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT4);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 6)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT5);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 7)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT6);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 8)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT7);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 9)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT8);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 10)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT9);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 11)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT10);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 12)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT11);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 13)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT12);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 14)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT13);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 15)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT14);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 16)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT15);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 17)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT16);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 18)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT17);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 19)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT18);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 20)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT19);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 21)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT20);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 22)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT21);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 23)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT22);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 24)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT23);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 25)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT24);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 26)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT25);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 27)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT26);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 28)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT27);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 29)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT28);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 30)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT29);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 31)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT30);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 32)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT31);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 33)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT32);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 34)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT33);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
 }
 
 void CMenuPlayerSetup::SaveAndPopMenu()
@@ -424,7 +738,7 @@ void CMenuPlayerSetup::ApplyColorToLogoPreview()
 
 void CMenuPlayerSetup::WriteNewLogo( void )
 {
-#ifdef NEW_ENGINE_INTERFACE
+
 	char filename[1024];
 	CBMP *bmpFile;
 
@@ -443,7 +757,6 @@ void CMenuPlayerSetup::WriteNewLogo( void )
 	EngFuncs::COM_SaveFile( "logos/remapped.bmp", bmpFile->GetBitmap(), bmpFile->GetBitmapHdr()->fileSize );
 
 	delete bmpFile;
-#endif
 }
 
 /*
@@ -453,9 +766,29 @@ UI_PlayerSetup_Init
 */
 void CMenuPlayerSetup::_Init( void )
 {
+	SetSkinHitIndicator();
 	bool hideModels = false;
 	bool hideLogos = false;
 	int addFlags = 0;
+
+	static const char* playerinfor[] =
+	{
+		L("CstzUI_PlayerInfOff"), L("CstzUI_PlayerInfText"), L("CstzUI_PlayerInfTga")
+	};
+
+	static const char* hitstyle[] =
+	{
+		L("CstzUI_PlayerInfOff"),L("CSTUI_System"), 
+		L("CSTUI_Hit1"), L("CSTUI_Hit2"), L("CSTUI_Hit3"), L("CSTUI_Hit4"),
+		L("CSTUI_Hit5"), L("CSTUI_Hit6"), L("CSTUI_Hit7"), L("CSTUI_Hit8"),
+		L("CSTUI_Hit9"), L("CSTUI_Hit10"), L("CSTUI_Hit11"), L("CSTUI_Hit12"),
+		L("CSTUI_Hit13"), L("CSTUI_Hit14"), L("CSTUI_Hit15"), L("CSTUI_Hit16"),
+		L("CSTUI_Hit17"), L("CSTUI_Hit18"), L("CSTUI_Hit19"), L("CSTUI_Hit20"), 
+		L("CSTUI_Hit21"), L("CSTUI_Hit22"), L("CSTUI_Hit23"), L("CSTUI_Hit24"), 
+		L("CSTUI_Hit25"), L("CSTUI_Hit26"), L("CSTUI_Hit27"), L("CSTUI_Hit28"),
+		L("CSTUI_Hit29"), L("CSTUI_Hit30"), L("CSTUI_Hit31"), L("CSTUI_Hit32"),
+		L("CSTUI_Hit33")
+	};
 
 	// disable playermodel preview for HLRally to prevent crash
 	if( !stricmp( gMenu.m_gameinfo.gamefolder, "hlrally" ))
@@ -471,57 +804,87 @@ void CMenuPlayerSetup::_Init( void )
 
 	banner.SetPicture(ART_BANNER);
 
-	name.SetNameAndStatus( "Name","Enter your multiplayer display name" );
+	name.SetNameAndStatus(L("CstzUI_NickName"), L("CstzUI_NickName"));
+	name.SetCharSize(QM_BOLDFONT);
 	name.iMaxLength = 32;
 	name.LinkCvar( "name" );
 	name.SetRect( 320, 260, 256, 36 );
 
 	crosshairView.SetRect( 320, 370, 96, 96 );
-	crosshairView.SetNameAndStatus( "Crosshair preview", "Choose dynamic crosshair" );
+	crosshairView.SetNameAndStatus(L("CstzUI_Crosshair_preview"), L("CstzUI_Crosshair_preview"));
+	crosshairView.SetCharSize(QM_BOLDFONT);
 	crosshairView.hWhite = EngFuncs::PIC_Load("*white");
 
-	static CStringArrayModel modelSizes( g_szCrosshairAvailSizes, ARRAYSIZE( g_szCrosshairAvailSizes ));
+	static CStringArrayModel modelSizes( g_szCrosshairAvailSizes, ARRAYSIZE(g_szCrosshairAvailSizes));
+
 	crosshairSize.SetRect( 480, 345, 256, 26 );
-	crosshairSize.SetNameAndStatus( "Crosshair size", "Set crosshair size" );
+	crosshairSize.SetNameAndStatus(L("CstzUI_Crosshair_size"), L("CstzUI_Crosshair_size"));
+	crosshairSize.SetCharSize(QM_BOLDFONT);
 	crosshairSize.Setup(&modelSizes);
+	crosshairSize.onChanged = CMenuEditable::WriteCvarCb;
 	crosshairSize.LinkCvar("cl_crosshair_size", CMenuEditable::CVAR_STRING);
+	crosshairSize.font = QM_SMALLFONT;
 
 	static CStringArrayModel modelColors( g_szCrosshairAvailColors, ARRAYSIZE( g_szCrosshairAvailColors ));
 	crosshairColor.SetRect( 480, 415, 256, 26 );
-	crosshairColor.SetNameAndStatus( "Crosshair color", "Set crosshair color" );
+	crosshairColor.SetNameAndStatus(L("CstzUI_Crosshair_color"), L("CstzUI_Crosshair_color"));
+	crosshairColor.SetCharSize(QM_BOLDFONT);
 	crosshairColor.Setup(&modelColors);
+	crosshairColor.onChanged = CMenuEditable::WriteCvarCb;
+	crosshairColor.font = QM_SMALLFONT;
 
 	static CStringArrayModel modelTypes(g_szCrosshairTypes, ARRAYSIZE(g_szCrosshairTypes));
 	crosshairType.SetRect(480, 485, 256, 26);
-	crosshairType.SetNameAndStatus("Crosshair type", "Set crosshair type");
+	crosshairType.SetNameAndStatus(L("CstzUI_Crosshair_type"), L("CstzUI_Crosshair_type"));
+	crosshairType.SetCharSize(QM_BOLDFONT);
 	crosshairType.Setup(&modelTypes);
+	
 	crosshairType.LinkCvar("cl_crosshair_type", CMenuEditable::CVAR_VALUE);
+	crosshairType.font = QM_SMALLFONT;
 
 	crosshairTranslucent.SetCoord( 320, 540 );
-	crosshairTranslucent.SetNameAndStatus( "Translucent crosshair", "Set additive render crosshair" );
+	crosshairTranslucent.SetNameAndStatus(L("CstzUI_Translucent"), L("CstzUI_Translucent"));
+	crosshairTranslucent.SetCharSize(QM_BOLDFONT);
 	crosshairTranslucent.LinkCvar( "cl_crosshair_translucent" );
 
-	extendedMenus.SetCoord( 320, 590 );
-	extendedMenus.SetNameAndStatus( "Extended touch menu", "Force touch menus for radio" );
-	extendedMenus.LinkCvar( "_extended_menus" );
+	uirenderworld.SetCoord(320, 580);
+	uirenderworld.SetNameAndStatus(L("CstzUI_uirender"), L("CstzUI_uirender2"));
+	uirenderworld.SetCharSize(QM_BOLDFONT);
+	uirenderworld.LinkCvar("ui_renderworld");
 
-	msgBox.SetMessage( "Please, choose another player name" );
+	msgBox.SetMessage(L("CstzUI_SetMessage"));
+	msgBox.SetCharSize(QM_BOLDFONT);
 	msgBox.Link( this );
 
+	static CStringArrayModel model(playerinfor, ARRAYSIZE(playerinfor));
+	playerinfo.SetNameAndStatus(L("CstzUI_PlayerInfo"), L("CstzUI_PlayerInfo2"));
+	playerinfo.SetCharSize(QM_BOLDFONT);
+	playerinfo.Setup(&model);
+	playerinfo.onChanged = CMenuEditable::WriteCvarCb;
+	playerinfo.font = QM_SMALLFONT;
+	playerinfo.LinkCvar("cl_headname", CMenuEditable::CVAR_VALUE);
+	playerinfo.SetRect(780, 345, 256, 26);
+
+	static CStringArrayModel modelhit(hitstyle, ARRAYSIZE(hitstyle));
+	hitindicator.SetNameAndStatus(L("CstzUI_HitIndicator"), L("CstzUI_HitIndicator2"));
+	hitindicator.SetCharSize(QM_BOLDFONT);
+	hitindicator.Setup(&modelhit);
+	hitindicator.font = QM_SMALLFONT;
+	hitindicator.LinkCvar("hud_hitstyle", CMenuEditable::CVAR_VALUE);
+	hitindicator.SetRect(780, 485, 412, 26);
+	SET_EVENT_MULTI(hitindicator.onChanged,
+		{
+			CMenuEditable::WriteCvarCb;
+			uiPlayerSetup.SetSkinHitIndicator();
+		});
+
 	AddItem( background );
-	AddItem( banner );
-
-	AddButton( "Done", "Go back to the Multiplayer Menu", PC_DONE, VoidCb( &CMenuPlayerSetup::SaveAndPopMenu ) );
-	CMenuPicButton *gameOpt = AddButton( "Game options", "Configure handness, fov and other advanced options", PC_GAME_OPTIONS );
-	SET_EVENT_MULTI( gameOpt->onActivated,
-	{
-		((CMenuPlayerSetup*)pSelf->Parent())->SetConfig();
-		UI_AdvUserOptions_Menu();
-	});
-
-	AddButton( "Adv options", "", PC_ADV_OPT, UI_GameOptions_Menu );
-	gameOpt->SetGrayed( !UI_AdvUserOptions_IsAvailable() );
-
+	
+	Exit.SetNameAndStatus(L("GameUI_Apply"), L(""));
+	Exit.SetCharSize(QM_BOLDFONT);
+	Exit.onActivated = VoidCb(&CMenuPlayerSetup::SaveAndPopMenu);
+	Exit.iFlags |= QMF_NOTIFY;
+	Exit.SetCoord(80, 250);
 
 	if( !hideLogos )
 	{
@@ -557,16 +920,235 @@ void CMenuPlayerSetup::_Init( void )
 	AddItem( crosshairColor );
 	AddItem( crosshairType );
 	AddItem( crosshairTranslucent );
-	AddItem( extendedMenus );
 	AddItem( crosshairView );
-
-
+	AddItem( uirenderworld );
+	AddItem( playerinfo );
+	AddItem(hitindicator);
+	AddItem(hitindicatorid);
+	AddItem(Exit);
 	if( !hideLogos )
 	{
 		AddItem( logo );
 		AddItem( logoColor );
 		AddItem( logoImage );
 		UpdateLogo();
+	}
+}
+
+void CMenuPlayerSetup::_VidInit(void)
+{
+	int hitset = (int)EngFuncs::GetCvarFloat("hud_hitstyle");
+	hitindicatorid.SetRect(1000, 415, 64, 64);
+
+	if (hitset == 0)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT0);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 1)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_SYSTEM);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 2)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT1);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 3)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT2);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 4)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT3);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 5)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT4);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 6)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT5);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 7)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT6);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 8)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT7);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 9)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT8);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 10)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT9);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 11)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT10);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 12)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT11);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 13)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT12);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 14)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT13);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 15)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT14);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 16)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT15);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 17)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT16);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 18)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT17);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 19)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT18);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 20)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT19);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 21)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT20);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 22)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT21);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 23)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT22);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 24)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT23);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 25)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT24);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 26)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT25);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 27)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT26);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 28)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT27);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 29)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT28);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 30)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT29);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 31)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT30);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 32)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT31);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 33)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT32);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
+	}
+	else if (hitset == 34)
+	{
+		hitindicatorid.iFlags = QMF_INACTIVE;
+		hitindicatorid.SetPicture(ART_HIT33);
+		hitindicatorid.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	}
 }
 

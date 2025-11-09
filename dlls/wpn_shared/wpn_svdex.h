@@ -13,11 +13,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-#ifndef WPN_SVDEX_H
-#define WPN_SVDEX_H
-#ifdef _WIN32
 #pragma once
-#endif
 
 	//SB
 #define SVDEX_MAX_SPEED		270
@@ -27,11 +23,26 @@ GNU General Public License for more details.
 
 	class CSVDEX : public CBasePlayerWeapon
 	{
+		enum svdex_e
+		{
+			SVDEX_IDLEA,
+			SVDEX_SHOOTA,
+			SVDEX_RELOAD,
+			SVDEX_DRAWA,
+			SVDEX_IDLEB,
+			SVDEX_SHOOTB_1,
+			SVDEX_SHOOTB_LAST,
+			SVDEX_DRAWB,
+			SVDEX_MOVE_GRENADE,
+			SVDEX_MOVE_CARBINE
+		};
 	public:
 		void Spawn() override;
 		void Precache() override;
 		int GetItemInfo(ItemInfo* p) override;
 		BOOL Deploy() override;
+		void Holster(int skiplocal) override;
+		int ExtractAmmo(CBasePlayerWeapon* pWeapon) override;
 		float GetMaxSpeed() override { return SVDEX_MAX_SPEED; }
 		int iItemSlot() override { return PRIMARY_WEAPON_SLOT; }
 		void PrimaryAttack() override;
@@ -46,18 +57,17 @@ GNU General Public License for more details.
 #endif
 		}
 		KnockbackData GetKnockBackData() override { return { 1500.0f, 1000.0f, 1500.0f, 860.0f, 0.8f }; }
+		const char* GetCSModelName() override { return "models/w_svdex.mdl"; }
 
 	public:
-		void SVDEXFire1(float flSpread, float flCycleTime, BOOL fUseAutoAim);
-		void SVDEXFire2(float flCycleTime, BOOL fUseAutoAim);
+		void SVDEXFire1(float flSpread, duration_t flCycleTime, BOOL fUseAutoAim);
+		void SVDEXFire2(duration_t flCycleTime, BOOL fUseAutoAim);
 
 		int m_iShell;
 		int iShellOn;
+		int m_iDefaultAmmo2;
 
 	private:
 		unsigned short m_usFireSVDEX;
 	};
 
-
-
-#endif

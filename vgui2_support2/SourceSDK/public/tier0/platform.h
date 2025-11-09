@@ -247,7 +247,7 @@ typedef void * HINSTANCE;
  
 // Defines MAX_PATH
 #ifndef MAX_PATH
-#define MAX_PATH  260
+#define MAX_PATH  1024
 #endif
 
 // Used to step into the debugger

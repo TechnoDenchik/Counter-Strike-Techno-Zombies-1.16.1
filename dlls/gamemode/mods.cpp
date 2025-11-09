@@ -29,8 +29,11 @@ GNU General Public License for more details.
 #include "mod_zbs.h"
 #include "mod_zb2.h"
 #include "mod_zb3.h"
+#include "zb5/mod_zb5.h"
 #include "mod_zbshelter_pve.h"
 #include "mod_gd.h"
+#include "backui/mod_backui.h"
+#include "mod_hidden.h"
 
 IBaseMod *g_pModRunning = nullptr;
 
@@ -42,8 +45,8 @@ IBaseMod *DefaultFactory()
 
 std::pair<const char *, IBaseMod *(*)()> g_FindList[] = {
 	{ "", DefaultFactory<CMod_None> }, // default
-	{ "", DefaultFactory<CMod_None> }, // BTE_MOD_CS16
-	{ "none", DefaultFactory<CMod_None> }, // BTE_MOD_NONE
+	{ "background", DefaultFactory<CMod_BackUI> }, // BackGround UI
+	{ "none", DefaultFactory<CMod_None> },
 	{ "dm", DefaultFactory<CMod_DeathMatch> },
 	{ "tdm", DefaultFactory<CMod_TeamDeathMatch> },
 	{ "zb1", DefaultFactory<CMod_Zombi> },
@@ -51,7 +54,9 @@ std::pair<const char *, IBaseMod *(*)()> g_FindList[] = {
 	{ "zb2", DefaultFactory<CMod_ZombieMod2> },
 	{ "zb3", DefaultFactory<CMod_ZombieHero> },
 	{ "zsh_pve", DefaultFactory<CMod_ZombieShelter_coop> },
-	{ "gd", DefaultFactory<CMod_GunDeath> }
+	{ "gd", DefaultFactory<CMod_GunDeath> },
+	{ "zb5", DefaultFactory<CMod_ZombieEvolution> },
+	{ "hidden", DefaultFactory<CMod_Hidden> },
 };
 
 void InstallBteMod(const char *name)

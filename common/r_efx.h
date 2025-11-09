@@ -87,6 +87,8 @@ color24 gTracerColors[] =
 #define FTENT_NOMODEL			0x00040000 // Doesn't have a model, never try to draw ( it just triggers other things )
 #define FTENT_CLIENTCUSTOM		0x00080000 // Must specify callback.  Callback function is responsible for killing tempent and updating fields ( unless other flags specify how to do things )
 #define FTENT_IGNOREGRAVITY		0x00200000 // CS1.6
+#define FTENT_FADEIN			0x10000000 //CSAE
+#define FTENT_NOCULL	0x20000000		// NOCULL
 
 typedef struct tempent_s	TEMPENTITY;
 typedef struct tempent_s
@@ -139,7 +141,7 @@ struct efx_api_s
 	void		( *R_LargeFunnel )				( float * org, int reverse );
 	void		( *R_LavaSplash )				( float * org );
 	void		( *R_MultiGunshot )				( float * org, float * dir, float * noise, int count, int decalCount, int *decalIndices );
-	void		( *R_MuzzleFlash )				( float *pos1, int type );
+	void		( *R_MuzzleFlash )				(int index, int iAttachment, const char* type);
 	void		( *R_ParticleBox )				( float *mins, float *maxs, unsigned char r, unsigned char g, unsigned char b, float life );
 	void		( *R_ParticleBurst )			( float * pos, int size, int color, float life );
 	void		( *R_ParticleExplosion )		( float * org );
@@ -194,6 +196,10 @@ struct efx_api_s
 	short		( *R_LookupColor )				( unsigned char r, unsigned char g, unsigned char b );
 	void		( *R_DecalRemoveAll )			( int textureIndex ); //textureIndex points to the decal index in the array, not the actual texture index.
 	void		(*R_FireCustomDecal)( int textureIndex, int entity, int modelIndex, float *position, int flags, float scale );
+	TEMPENTITY* (*R_TempCustomModel)			(const vec3_t pos, const vec3_t angles, const vec3_t velocity, float life, int modelIndex, int sequence, float framerate, BOOL fadeOut, int brightness, int rendermode, int entity, float fadeSpeed, BOOL fadeIn, float fadeInSpeed, float scale, int frameMax, int flags);
+	BEAM*		(*R_BeamPoints_Stretch)			(const vec3_t start, const vec3_t end, int modelIndex, float life, float width, float brightness, int startFrame, float framerate, float r, float g, float b);
+	void		(*R_KillAttachedTentsFromEntity)		(int client);
+	BEAM* (*R_BeamPoints_Tracer)		(const vec3_t start, const vec3_t end, int modelIndex, float life, float width, float length, float amplitude, float brightness, float speed, int startFrame, float framerate, float r, float g, float b);
 };
 
 extern efx_api_t efx;

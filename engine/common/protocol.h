@@ -110,7 +110,7 @@ GNU General Public License for more details.
 #define MAX_EDICTS			(1<<MAX_ENTITY_BITS)// 12 bits = 4096 edicts
 
 #define MAX_CUSTOM			1024	// max custom resources per level
-#define MAX_USER_MESSAGES		191	// another 63 messages reserved for engine routines
+#define MAX_USER_MESSAGES		291	// another 63 messages reserved for engine routines
 #define MAX_DLIGHTS			32	// dynamic lights (rendered per one frame)
 #define MAX_ELIGHTS			64	// entity only point lights
 #define MAX_LIGHTSTYLES		256	// a byte limit, don't modify

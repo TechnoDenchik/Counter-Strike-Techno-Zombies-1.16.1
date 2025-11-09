@@ -83,6 +83,7 @@ enum ArmouryItemPack
 	ARMOURY_P90,
 	ARMOURY_MAC10,
 	ARMOURY_AK47,
+	ARMOURY_QUANT,
 	ARMOURY_SG552,
 	ARMOURY_M4A1,
 	ARMOURY_AUG,
@@ -97,6 +98,7 @@ enum ArmouryItemPack
 	ARMOURY_KEVLAR,
 	ARMOURY_ASSAULT,
 	ARMOURY_SMOKEGRENADE,
+	ARMOURY_TWINAXES,
 };
 
 struct ItemInfo
@@ -107,6 +109,10 @@ struct ItemInfo
 	int iMaxAmmo1;
 	const char *pszAmmo2;
 	int iMaxAmmo2;
+	const char* pszAmmo3;
+	int iMaxAmmo3;
+	const char* pszAmmoGrenade;
+	int iMaxAmmoGrenade;
 	const char *pszName;
 	int iMaxClip;
 	int iId;
@@ -167,13 +173,15 @@ public:
 #ifndef CLIENT_DLL
 	static CGrenade *ShootTimed(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity, float time);
 	static CGrenade *ShootTimed2(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity, float time, int iTeam, unsigned short usEvent);
-	static CGrenade* ShootZombieBomb(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity, duration_t time, int iTeam, unsigned short usEvent);
+	static CGrenade *ShootTimedSbmine(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity, float time, int iTeam, unsigned short usEvent);
+	static CGrenade *ShootZombieBomb(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity, duration_t time, int iTeam, unsigned short usEvent);
 	static CGrenade *ShootContact(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity);
 	static CGrenade *ShootSmokeGrenade(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity, float time, unsigned short usEvent);
 	static CGrenade *ShootSatchelCharge(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity);
 #else
 	static CGrenade *ShootTimed(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity, float time) { return NULL; }
 	static CGrenade *ShootTimed2(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity, float time, int iTeam, unsigned short usEvent) { return NULL; }
+	static CGrenade *ShootTimedSbmine(entvars_t* pevOwner, Vector vecStart, Vector vecVelocity, float time, int iTeam, unsigned short usEvent) { return NULL; }
 	static CGrenade *ShootContact(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity) { return NULL; }
 	static CGrenade *ShootSmokeGrenade(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity, float time, unsigned short usEvent) { return NULL; }
 	static CGrenade *ShootSatchelCharge(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity) { return NULL; }
@@ -262,6 +270,7 @@ public:
 	virtual BOOL CanDeploy() { return TRUE; }
 	virtual BOOL CanDrop() { return TRUE; }
 	virtual BOOL Deploy() { return TRUE; }
+	bool DeployArb;
 	virtual BOOL IsWeapon() { return FALSE; }
 	virtual BOOL CanHolster() { return TRUE; }
 #ifdef CLIENT_DLL
@@ -328,6 +337,10 @@ public:
 	inline int iMaxAmmo1() const		{ return ItemInfoInstance().iMaxAmmo1; }
 	inline const char *pszAmmo2() const	{ return ItemInfoInstance().pszAmmo2; }
 	inline int iMaxAmmo2() const		{ return ItemInfoInstance().iMaxAmmo2; }
+	inline const char* pszAmmo3() const { return ItemInfoInstance().pszAmmo3; }
+	inline int iMaxAmmo3() const { return ItemInfoInstance().iMaxAmmo3; }
+	inline const char* pszAmmoGrenade() const { return ItemInfoInstance().pszAmmoGrenade; }
+	inline int iMaxAmmoGrenade() const { return ItemInfoInstance().iMaxAmmoGrenade; }
 	inline const char *pszName() const	{ return ItemInfoInstance().pszName; }
 	inline int iMaxClip() const		{ return ItemInfoInstance().iMaxClip; }
 	inline int iWeight() const		{ return ItemInfoInstance().iWeight; }
@@ -403,6 +416,7 @@ public:
 	virtual void SecondaryAttack() {};
 	virtual void Reload() {};
 	virtual void WeaponIdle() {};
+	virtual void AmmoGetAuto() {};
 	virtual void RetireWeapon();
 	virtual BOOL ShouldWeaponIdle() { return FALSE; }
 	virtual BOOL UseDecrement() { return FALSE; }
@@ -436,7 +450,10 @@ public:
 	float m_flTimeWeaponIdle;
 	int m_iPrimaryAmmoType;
 	int m_iSecondaryAmmoType;
+	int m_iKnifeAmmoType;
+	int m_iGrenadeAmmoType;
 	int m_iClip;
+	int m_iClip2;
 	int m_iClientClip;
 	int m_iClientWeaponState;
 	int m_fInReload;
@@ -553,6 +570,7 @@ extern short g_sModelIndexZombiebomb_exp;
 extern short g_sModelIndexC4Glow;
 
 extern short g_sModelIndexRadio;
+extern short g_sModelIndexSurvival;
 extern MULTIDAMAGE gMultiDamage;
 
 void FindHullIntersection(const Vector &vecSrc, TraceResult &tr, float *mins, float *maxs, edict_t *pEntity);

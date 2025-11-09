@@ -19,10 +19,11 @@ GNU General Public License for more details.
 #include "player.h"
 
 #include "gamemode/zb2/zb2_const.h"
+#include "gamemode/interface/interface_const.h"
 #include "gamemode/zb2/zb2_zclass.h"
 #include "gamemode/zb2/zb2_skill.h"
 #include "zb2_zclass.h"
-
+/*
 
 void CZombieSkill_female_precache()
 {
@@ -31,7 +32,7 @@ void CZombieSkill_female_precache()
 	PRECACHE_SOUND("zb3/zombi_pre_idle_2.wav");
 }
 
-void CZombieSkill_female::Think()
+void CZombieSkill_Base::Think()
 {
 	if (m_iZombieSkillStatus == SKILL_STATUS_USING && gpGlobals->time > m_flTimeZombieSkillEnd)
 	{
@@ -46,19 +47,19 @@ void CZombieSkill_female::Think()
 
 }
 
-CZombieSkill_female::CZombieSkill_female(CBasePlayer *player) : BasePlayerExtra(player), m_iZombieSkillStatus(SKILL_STATUS_READY)
+CZombieSkill_Base::CZombieSkill_Base(CBasePlayer *player) : BasePlayerExtra(player), m_iZombieSkillStatus(SKILL_STATUS_READY)
 {
 
 }
 
-CZombieSkill_ZombieInvisible::CZombieSkill_ZombieInvisible(CBasePlayer *player) : CZombieSkill_female(player)
+CZombieSkill_ZombieCrazy::CZombieSkill_ZombieCrazy(CBasePlayer *player) : CZombieSkill_Base(player)
 {
 
 }
 
-void CZombieSkill_ZombieInvisible::Think()
+void CZombieSkill_ZombieCrazy::Think()
 {
-	CZombieSkill_female::Think();
+	CZombieSkill_Base::Think();
 
 	if (m_iZombieSkillStatus == SKILL_STATUS_USING && gpGlobals->time > m_flTimeZombieSkillEffect)
 	{
@@ -66,7 +67,7 @@ void CZombieSkill_ZombieInvisible::Think()
 	}
 }
 
-void CZombieSkill_ZombieInvisible::Activate()
+void CZombieSkill_ZombieCrazy::Activate()
 {
 	if (m_iZombieSkillStatus != SKILL_STATUS_READY)
 	{
@@ -74,16 +75,17 @@ void CZombieSkill_ZombieInvisible::Activate()
 		{
 		case SKILL_STATUS_USING:
 		case SKILL_STATUS_FREEZING:
-			char buf[16];
-			sprintf(buf, "%d", static_cast<int>(m_flTimeZombieSkillNext - gpGlobals->time));
-			ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER,
-				"The 'Berserk' skill can't be used because the skill is in cooldown. [Remaining Cooldown Time: %s1 sec.]",
-				buf
-			); // #CSO_WaitCoolTimeNormal
-
+			MESSAGE_BEGIN(MSG_ONE, gmsgZB3UsedMsg, NULL, m_pPlayer->pev);
+			WRITE_BYTE(ZB3_USED_MSG);
+			WRITE_BYTE(m_flTimeZombieSkillNext - gpGlobals->time);
+			WRITE_BYTE(0);
+			MESSAGE_END();
 			break;
+
 		case SKILL_STATUS_USED:
-			ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER, "The 'Sprint' skill can only be used once per round."); // #CSO_CantSprintUsed
+			MESSAGE_BEGIN(MSG_ONE, gmsgZB3UsedMsg2, NULL, m_pPlayer->pev);
+			WRITE_BYTE(ZB3_USED_MSG2);
+			MESSAGE_END();
 			break;
 		default:
 			break;
@@ -116,13 +118,13 @@ void CZombieSkill_ZombieInvisible::Activate()
 	MESSAGE_END();
 }
 
-void CZombieSkill_ZombieInvisible::ResetMaxSpeed()
+void CZombieSkill_ZombieCrazy::ResetMaxSpeed()
 {
 	if (m_iZombieSkillStatus == SKILL_STATUS_USING)
 		m_pPlayer->pev->maxspeed = 390;
 }
 
-void CZombieSkill_ZombieInvisible::OnSkillEnd()
+void CZombieSkill_ZombieCrazy::OnSkillEnd()
 {
 	m_iZombieSkillStatus = SKILL_STATUS_FREEZING;
 
@@ -133,7 +135,7 @@ void CZombieSkill_ZombieInvisible::OnSkillEnd()
 	m_pPlayer->ResetMaxSpeed();
 }
 
-void CZombieSkill_ZombieInvisible::OnCrazyEffect()
+void CZombieSkill_ZombieCrazy::OnCrazyEffect()
 {
 	m_flTimeZombieSkillEffect = gpGlobals->time + 3.0f;
 
@@ -143,20 +145,20 @@ void CZombieSkill_ZombieInvisible::OnCrazyEffect()
 		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "zb3/zombi_pre_idle_2.wav", VOL_NORM, ATTN_NORM);
 }
 
-float CZombieSkill_ZombieInvisible::GetDurationTime() const
+float CZombieSkill_ZombieCrazy::GetDurationTime() const
 {
 	return m_pPlayer->m_iZombieLevel == ZOMBIE_LEVEL_HOST ? 3.0f : 10.0f;
 }
 
-float CZombieSkill_ZombieInvisible::GetCooldownTime() const
+float CZombieSkill_ZombieCrazy::GetCooldownTime() const
 {
 	return m_pPlayer->m_iZombieLevel == ZOMBIE_LEVEL_HOST ? 15.0f : 10.0f;
 }
 
-float CZombieSkill_ZombieInvisible::GetDamageRatio() const
+float CZombieSkill_ZombieCrazy::GetDamageRatio() const
 {
 	if (m_iZombieSkillStatus == SKILL_STATUS_USING)
 		return 1.6f;
 	return 1.0f;
-}
+}*/
 

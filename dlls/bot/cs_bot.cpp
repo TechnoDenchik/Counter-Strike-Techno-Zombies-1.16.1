@@ -354,7 +354,9 @@ bool CCSBot::IsBusy() const
 		IsDefusingBomb() || 
 		GetTask() == PLANT_BOMB ||
 		GetTask() == RESCUE_HOSTAGES ||
-		IsSniping())
+		IsSniping() || 
+		IsRushingForSupplyBox() || 
+		IsDefending())
 	{
 		return true;
 	}
@@ -986,6 +988,16 @@ bool CCSBot::IsAwareOfEnemyDeath() const
 void CCSBot::OnBecomeZombie(ZombieLevel iEvolutionLevel)
 {
 	CBasePlayer::OnBecomeZombie(iEvolutionLevel);
+
+	StopAiming();
+	StopAttacking();
+	Idle();
+}
+
+void CCSBot::OnBecomeJoker()
+{
+	CBasePlayer::OnBecomeJoker();
+
 	StopAiming();
 	StopAttacking();
 	Idle();

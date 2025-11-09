@@ -38,7 +38,7 @@ enum sgdrill_e
 
 static const char *SOUNDS_NAME = "weapons/sgdrill-1.wav";
 
-void EV_FireSgdrill(event_args_s *args)
+void EV_FireSgDrill(event_args_s *args)
 {
 	vec3_t ShellVelocity;
 	vec3_t ShellOrigin;

@@ -206,6 +206,11 @@ public:
 	{
 		return Vector((vec_t)(x / fl), (vec_t)(y / fl), (vec_t)(z / fl));
 	}
+	Vector& operator*=(float fl)
+	{
+		return *this = *this * fl;
+	}
+
 	void CopyToArray(float *rgfl) const
 	{
 		rgfl[0] = x;

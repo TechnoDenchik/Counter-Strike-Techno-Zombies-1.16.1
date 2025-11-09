@@ -19,186 +19,56 @@
 #include "buymenu.h"
 #include "menuspecifed.h"
 #include "skillsmenu.h"
+#include "zsh_kill.h"
+#include "messageset.h"
 
 #include "gamemode/zsh/zsh_const.h"
 
 class CHudZSH::impl_t
-	: public THudSubDispatcher< CHudZSHScoreboard > {};
+	: public THudSubDispatcher< CHudZSHScoreboard, CHudZSHKill, CHudTextZSH, CHudTextDayZSH, CHudWinhudZSH> {};
 
 DECLARE_MESSAGE(m_ZSH, ZSHMsg)
 DECLARE_MESSAGE(m_ZSH, ZSHUpdateDay)
+DECLARE_MESSAGE(m_ZSH, ZSHUpdateTime)
 DECLARE_MESSAGE(m_ZSH, ZSHUpdateRes)
+DECLARE_MESSAGE(m_ZSH, ZSHUpdateResHome)
+DECLARE_MESSAGE(m_ZSH, ZSHMsgText)
+DECLARE_MESSAGE(m_ZSH, ZSHMsgTextNextDay)
+DECLARE_MESSAGE(m_ZSH, ZSHMsgRound)
+DECLARE_MESSAGE(m_ZSH, ZSHMentalityHealth)
+DECLARE_MESSAGE(m_ZSH, ZSHResPos)
+DECLARE_MESSAGE(m_ZSH, ZSHRes2Pos)
+DECLARE_MESSAGE(m_ZSH, ZSHZmPos)
 
 int CHudZSH::MsgFunc_ZSHMsg(const char* pszName, int iSize, void* pbuf)
 {
 	BufferReader buf(pszName, pbuf, iSize);
-	auto type = static_cast<ZSHMessageTypes>(buf.ReadByte());
-	auto type2 = static_cast<ZSHMessageBuild>(buf.ReadByte());
-	auto type3 = static_cast<ZSHMessageSkills>(buf.ReadByte());
-	auto type4 = static_cast<ZSHMessageUi>(buf.ReadByte());
+	auto type = static_cast<ZSHTipKill>(buf.ReadByte());
+	switch (type)
+	{
+		case ZSHKill:
+			pimpl->get<CHudZSHKill>().OnKillMessage();
+		break;
+	}
+	return 1;
+}
+
+int CHudZSH::MsgFunc_ZSHMsgText(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+	int type = buf.ReadByte();
+	int time = buf.ReadByte();
+
+	pimpl->get<CHudTextZSH>().renaining(time);
 
 	switch (type)
 	{
-		case ZSHScoreboard: 
+		case ZSHMessageTime:
 		{
-			
-			break;
-		}
-		case ZSHWeaponboard:
-		{
-			//auto morale_type = static_cast<>(buf.ReadByte());
-			//int morale_level = buf.ReadByte();
-			//pimpl->get<>().();
-			break;
-		}
-		case ZSHMessagebox:
-		{
-			//auto morale_type = static_cast<>(buf.ReadByte());
-			//int morale_level = buf.ReadByte();
-			//pimpl->get<>().();
+			pimpl->get<CHudTextZSH>().Settext();
 			break;
 		}
 	}
-
-	switch (type2)
-	{
-		case ZSHTurret:
-		{
-			//auto morale_type = static_cast<>(buf.ReadByte());
-			//int morale_level = buf.ReadByte();
-			//pimpl->get<>().();
-			break;
-		}
-		case ZSHBase:
-		{
-			//auto morale_type = static_cast<>(buf.ReadByte());
-			//int morale_level = buf.ReadByte();
-			//pimpl->get<>().();
-			break;
-		}
-		case ZSHBase2:
-		{
-			//auto morale_type = static_cast<>(buf.ReadByte());
-			//int morale_level = buf.ReadByte();
-			//pimpl->get<>().();
-			break;
-		}
-		case ZSHBase3:
-		{
-			//auto morale_type = static_cast<>(buf.ReadByte());
-			//int morale_level = buf.ReadByte();
-			//pimpl->get<>().();
-			break;
-		}
-		case ZSHBase4:
-		{
-			//auto morale_type = static_cast<>(buf.ReadByte());
-			//int morale_level = buf.ReadByte();
-			//pimpl->get<>().();
-			break;
-		}
-		case ZSHPost:
-		{
-			//auto morale_type = static_cast<>(buf.ReadByte());
-			//int morale_level = buf.ReadByte();
-			//pimpl->get<>().();
-			break;
-		}
-		case ZSHDodgers:
-		{
-			//auto morale_type = static_cast<>(buf.ReadByte());
-			//int morale_level = buf.ReadByte();
-			//pimpl->get<>().();
-			break;
-		}
-		case ZSHFences:
-		{
-			//auto morale_type = static_cast<>(buf.ReadByte());
-			//int morale_level = buf.ReadByte();
-			//pimpl->get<>().();
-			break;
-		}
-		case ZSHGate:
-		{
-			//auto morale_type = static_cast<>(buf.ReadByte());
-			//int morale_level = buf.ReadByte();
-			//pimpl->get<>().();
-			break;
-		}
-		case ZSHStorage:
-		{
-			//auto morale_type = static_cast<>(buf.ReadByte());
-			//int morale_level = buf.ReadByte();
-			//pimpl->get<>().();
-			break;
-		}
-		case ZSHGenerator:
-		{
-			//auto morale_type = static_cast<>(buf.ReadByte());
-			//int morale_level = buf.ReadByte();
-			//pimpl->get<>().();
-			break;
-		}
-		case ZSHRecovery:
-		{
-			//auto morale_type = static_cast<>(buf.ReadByte());
-			//int morale_level = buf.ReadByte();
-			//pimpl->get<>().();
-			break;
-		}
-		case ZSHTechnical:
-		{
-			//auto morale_type = static_cast<>(buf.ReadByte());
-			//int morale_level = buf.ReadByte();
-			//pimpl->get<>().();
-			break;
-		}
-		
-	}
-
-	switch (type3)
-	{
-	   case ZSHWarrior:
-	   {
-			//auto morale_type = static_cast<>(buf.ReadByte());
-			//int morale_level = buf.ReadByte();
-			//pimpl->get<>().();
-			break;
-	   }
-	   case ZSHSurvival:
-	   {
-		  // auto morale_type = static_cast<>(buf.ReadByte());
-		  // int morale_level = buf.ReadByte();
-		  // pimpl->get<>().();
-		   break;
-	   }
-	   case ZSHEngineer:
-	   {
-		   //auto morale_type = static_cast<>(buf.ReadByte());
-		   //int morale_level = buf.ReadByte();
-		   //pimpl->get<>().();
-		   break;
-	   }
-	}
-
-	switch (type4)
-	{
-	   case ZSHBuildbord:
-	   {
-			//auto morale_type = static_cast<>(buf.ReadByte());
-			//int morale_level = buf.ReadByte();
-			//pimpl->get<>().();
-			break;
-	   }
-	   case ZSHSkillsboard:
-	   {
-		   //auto morale_type = static_cast<>(buf.ReadByte());
-		   //int morale_level = buf.ReadByte();
-		  // pimpl->get<>().();
-		   break;
-	   }
-	}
-
 	return 1;
 }
 
@@ -207,8 +77,26 @@ int CHudZSH::MsgFunc_ZSHUpdateDay(const char* pszName, int iSize, void* pbuf)
 	BufferReader buf(pszName, pbuf, iSize);
 	int type = buf.ReadByte(); // reserved.
 	int dayses = buf.ReadByte();
-
 	pimpl->get<CHudZSHScoreboard>().UpdateDay(dayses);
+
+	return 1;
+}
+
+int CHudZSH::MsgFunc_ZSHMsgTextNextDay(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+	int type = buf.ReadByte(); // reserved.
+	int dayses = buf.ReadByte();
+	pimpl->get<CHudTextDayZSH>().nexting(dayses);
+
+	switch (type)
+	{
+		case ZSHMessagebox:
+		{
+			pimpl->get<CHudTextDayZSH>().Settext();
+			break;
+		}
+	}
 
 	return 1;
 }
@@ -219,8 +107,97 @@ int CHudZSH::MsgFunc_ZSHUpdateRes(const char* pszName, int iSize, void* pbuf)
 	int type = buf.ReadByte(); // reserved.
 	int woods = buf.ReadByte();
 	int metal = buf.ReadByte();
-	pimpl->get<CHudZSHScoreboard>().UpdateRes(woods, metal);
+	int maxwood = buf.ReadByte();
+	int maxmeat = buf.ReadByte();
+	int energy = buf.ReadByte();
+	int maxenergy = buf.ReadByte();
+	pimpl->get<CHudZSHScoreboard>().UpdateRes(woods, metal, maxwood, maxmeat, energy, maxenergy);
 
+	return 1;
+}
+
+int CHudZSH::MsgFunc_ZSHUpdateTime(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+	int type = buf.ReadByte();
+	int daytimes = buf.ReadByte();
+	int nighttimes = buf.ReadByte();
+	bool daytimer = buf.ReadByte();
+	int dayseconds = buf.ReadByte();
+	int nightsecond = buf.ReadByte();
+	pimpl->get<CHudZSHScoreboard>().UpdateTime(daytimes, nighttimes, daytimer, dayseconds, nightsecond);
+
+	return 1;
+}
+
+int CHudZSH::MsgFunc_ZSHUpdateResHome(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+	int type = buf.ReadByte();
+	int homewood = buf.ReadByte();
+	int homemaxwood = buf.ReadByte();
+	int homemeat = buf.ReadByte();
+	int homemaxmeat = buf.ReadByte();
+	int mentalityhealth = buf.ReadByte();
+	pimpl->get<CHudZSHScoreboard>().UpdateResHome(homewood, homemaxwood, homemeat, homemaxmeat, mentalityhealth);
+
+	return 1;
+}
+
+int CHudZSH::MsgFunc_ZSHMentalityHealth(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+	int type = buf.ReadByte();
+	int mentalityhealth = buf.ReadByte();
+	pimpl->get<CHudZSHScoreboard>().UpdateMentality(mentalityhealth);
+
+	return 1;
+}
+
+int CHudZSH::MsgFunc_ZSHResPos(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+	int type = buf.ReadByte();
+	int mentalityhealth = buf.ReadByte();
+	pimpl->get<CHudZSHScoreboard>().UpdateMentality(mentalityhealth);
+
+	return 1;
+}
+
+int CHudZSH::MsgFunc_ZSHRes2Pos(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+	int type = buf.ReadByte();
+	int mentalityhealth = buf.ReadByte();
+	pimpl->get<CHudZSHScoreboard>().UpdateMentality(mentalityhealth);
+
+	return 1;
+}
+
+int CHudZSH::MsgFunc_ZSHZmPos(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+	int type = buf.ReadByte();
+	int mentalityhealth = buf.ReadByte();
+	pimpl->get<CHudZSHScoreboard>().UpdateMentality(mentalityhealth);
+
+	return 1;
+}
+
+int CHudZSH::MsgFunc_ZSHMsgRound(const char* pszName, int iSize, void* pbuf)
+{
+	BufferReader buf(pszName, pbuf, iSize);
+	auto type = static_cast<ZSHMessageUi>(buf.ReadByte());
+	switch (type)
+	{
+		case ZSHSurvivallose:
+			pimpl->get<CHudWinhudZSH>().SurvivalLose();
+			break;
+
+		case ZSHSurvivalwin:
+			pimpl->get<CHudWinhudZSH>().SurvivalWin();
+			break;
+	}
 	return 1;
 }
 
@@ -231,9 +208,17 @@ int CHudZSH::Init(void)
 	gHUD.AddHudElem(this);
 
 	HOOK_MESSAGE(ZSHMsg);
-	HOOK_MESSAGE(ZSHUpdateDay);
+	HOOK_MESSAGE(ZSHUpdateDay);	
+	HOOK_MESSAGE(ZSHUpdateTime);
 	HOOK_MESSAGE(ZSHUpdateRes);
-
+	HOOK_MESSAGE(ZSHUpdateResHome);
+	HOOK_MESSAGE(ZSHMsgText);
+	HOOK_MESSAGE(ZSHMsgTextNextDay);
+	HOOK_MESSAGE(ZSHMsgRound);
+	HOOK_MESSAGE(ZSHMentalityHealth);
+	HOOK_MESSAGE(ZSHResPos);
+	HOOK_MESSAGE(ZSHRes2Pos);
+	HOOK_MESSAGE(ZSHZmPos);
 	return 1;
 }
 

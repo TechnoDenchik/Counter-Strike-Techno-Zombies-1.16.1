@@ -28,23 +28,11 @@
     <Filter Include="public">
       <UniqueIdentifier>{3b9d1c81-47fa-4ca9-a462-51e928dbd118}</UniqueIdentifier>
     </Filter>
-    <Filter Include="dlls">
-      <UniqueIdentifier>{1ffbfb16-9fec-424f-88bc-f44c078d51f0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="dlls\wpn_shared">
-      <UniqueIdentifier>{bf8c2f92-98f5-45fb-95c5-5f4261d4bdff}</UniqueIdentifier>
-    </Filter>
     <Filter Include="cl_dll\hud\zbs">
       <UniqueIdentifier>{9718376f-9be6-4149-90e0-74ecacbe3f55}</UniqueIdentifier>
     </Filter>
     <Filter Include="cl_dll\hud\zb2">
       <UniqueIdentifier>{d9c65c73-59d9-44c6-8962-22c76159f6af}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="dlls\gamemode">
-      <UniqueIdentifier>{d8e590bf-41b8-4fb7-9af3-499fd59690a6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="dlls\gamemode\zb2">
-      <UniqueIdentifier>{bfe516c8-2205-4872-a2be-cd1c32c09097}</UniqueIdentifier>
     </Filter>
     <Filter Include="cl_dll\hud\legacy">
       <UniqueIdentifier>{01673bc5-d5f2-4b53-af8e-0b049595122e}</UniqueIdentifier>
@@ -103,9 +91,6 @@
     <Filter Include="cl_dll\hud\classes">
       <UniqueIdentifier>{c1dbbf2a-206d-4614-808f-389eefa8d3a4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="dlls\gamemode\zsh">
-      <UniqueIdentifier>{3bc83959-3410-43ee-b51e-6d59b314ffcc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="cl_dll\hud\zsh\header">
       <UniqueIdentifier>{84e87efb-70b4-49ee-ab73-7370755142f4}</UniqueIdentifier>
     </Filter>
@@ -118,114 +103,150 @@
     <Filter Include="cl_dll\hud\gd">
       <UniqueIdentifier>{0712bec9-636d-45d3-a70e-8e220627afb9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="dlls\gamemode\gd">
-      <UniqueIdentifier>{92fb51c8-59a5-4f39-b32d-070341e535e6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="cl_dll\hud\gd\header">
       <UniqueIdentifier>{80c451ce-05ae-458d-a618-55476f4c0e78}</UniqueIdentifier>
     </Filter>
     <Filter Include="cl_dll\hud\interface">
       <UniqueIdentifier>{e482edef-a63d-400f-994d-a95bb1720ec5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header">
+      <UniqueIdentifier>{cbc7b252-2a4c-42b6-bd31-99e2f62f2fb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cl_dll\hud\vgui2\weapons">
+      <UniqueIdentifier>{cd1daf4c-71d6-4407-891c-39c6af2a5780}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cl_dll\hud\vgui2\weapons\epic">
+      <UniqueIdentifier>{662e8627-1707-4b4c-9a78-ae250d1e3026}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cl_dll\hud\vgui2\weapons\overcoming">
+      <UniqueIdentifier>{02ecc6cc-39f2-4803-993a-ff84a96781e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{c7b68013-2c6f-40ba-b1c2-a257914323a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls">
+      <UniqueIdentifier>{1ffbfb16-9fec-424f-88bc-f44c078d51f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\gamemode">
+      <UniqueIdentifier>{d8e590bf-41b8-4fb7-9af3-499fd59690a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\gamemode\zb2">
+      <UniqueIdentifier>{bfe516c8-2205-4872-a2be-cd1c32c09097}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\gamemode\zsh">
+      <UniqueIdentifier>{3bc83959-3410-43ee-b51e-6d59b314ffcc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\gamemode\gd">
+      <UniqueIdentifier>{92fb51c8-59a5-4f39-b32d-070341e535e6}</UniqueIdentifier>
+    </Filter>
     <Filter Include="dlls\gamemode\interface">
       <UniqueIdentifier>{87eb0b36-c224-4e97-9594-14cd2447e0fa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header">
-      <UniqueIdentifier>{cbc7b252-2a4c-42b6-bd31-99e2f62f2fb4}</UniqueIdentifier>
+    <Filter Include="dlls\wpn_shared">
+      <UniqueIdentifier>{e7794dc2-636a-4278-a86e-9f9bb3387916}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Secondary">
+      <UniqueIdentifier>{35c841fd-f9a8-4c01-928f-cff118562e17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Melee">
+      <UniqueIdentifier>{2b48a217-9b19-4c31-9a44-0b292738ca1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Melee\Zombie">
+      <UniqueIdentifier>{22ec23c8-9e28-452b-a8b6-3682cd0ee989}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Grenade">
+      <UniqueIdentifier>{d820c4fe-a398-4a65-96c4-dd62627805bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Primary">
+      <UniqueIdentifier>{5e765236-4430-4145-84fc-8892eff34071}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Primary\Classic">
+      <UniqueIdentifier>{0766dadf-5366-4d74-bbab-0ee051d06192}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cl_dll\hud\zb5">
+      <UniqueIdentifier>{324d3e91-0c30-4d6f-a48a-488cc0aa84b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\gamemode\zb5">
+      <UniqueIdentifier>{22cfaaeb-5aed-42a6-8c12-917a246ea13c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\gamemode\zb3">
+      <UniqueIdentifier>{1a7b3650-6463-4056-b6e2-0369e62cd56c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\gamemode\zb1">
+      <UniqueIdentifier>{8c7bd131-6433-4975-8e2b-3563b6c4a6af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Primary\old">
+      <UniqueIdentifier>{100c13d7-2104-41bf-89eb-afe2beb85e78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Melee\old">
+      <UniqueIdentifier>{c18081b5-9f07-47e2-89f2-1faef6bee071}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Secondary\old">
+      <UniqueIdentifier>{102c23f9-dcf2-4298-8239-0910d59ebd5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Melee\Zombie\new">
+      <UniqueIdentifier>{7cf09116-9517-479a-a130-d36c2551d843}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Primary\hl">
+      <UniqueIdentifier>{0987916b-0c6d-40ed-9c2f-e195d2acc872}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cl_dll\hud\pr">
+      <UniqueIdentifier>{272d3d17-47d3-47df-8784-51cab455ce53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\gamemode\playroom">
+      <UniqueIdentifier>{353523d0-b296-4990-bbdd-134d9d5e692b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Grenade\Zombie">
+      <UniqueIdentifier>{67afc5f1-1289-42fd-84e0-e049dca3afc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Primary\old\content_0">
+      <UniqueIdentifier>{40180b4e-b704-4135-9a88-30e2acb10eb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cl_dll\events\content_0">
+      <UniqueIdentifier>{3c075c62-4f06-4364-9f8c-44ca607903d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cl_dll\events\Epic">
+      <UniqueIdentifier>{120a21c6-b397-4583-a02e-4d7e7a19bd10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cl_dll\events\Overcoming">
+      <UniqueIdentifier>{6b9c52db-aa77-46d0-b3ad-ee459d394cbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cl_dll\events\Classic">
+      <UniqueIdentifier>{0aefa7c5-b57c-472d-b0c1-49c16e5a9b04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Primary\Epic">
+      <UniqueIdentifier>{811acaf8-a9d2-4efc-a819-850a2a3a1a15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Primary\Overcoming">
+      <UniqueIdentifier>{b0ce9572-3dcb-4633-80b6-6c3ef66a495b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Secondary\Classic">
+      <UniqueIdentifier>{c4d4fd15-a3b3-47f6-9786-69cdc660f25e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Secondary\Epic">
+      <UniqueIdentifier>{edb8f9e8-ea32-48a4-92a9-39133b97b185}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Secondary\Overcoming">
+      <UniqueIdentifier>{93a07674-cd06-4596-aff7-aeffa7c4b19c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlls\wpn_shared\Const">
+      <UniqueIdentifier>{c5370930-7da6-4f7f-8432-33ffb548fb0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cl_dll\hud\hidden">
+      <UniqueIdentifier>{341295f7-6559-47ae-8588-cf3af9692263}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cl_dll\hud\tdm">
+      <UniqueIdentifier>{021ecfba-0fb3-4ac1-b9a7-06a6ebb0e6a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cl_dll\hud\dm">
+      <UniqueIdentifier>{d228bc50-e300-46cc-8047-0cbd71e9029d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cl_dll\discord">
+      <UniqueIdentifier>{cbbadea1-a3f7-4f7a-bddf-6eecd7168c66}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\cl_dll\events\ev_cs16.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_ak47.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_aug.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_awp.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_createexplo.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_createsmoke.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_deagle.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_decal_reset.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_elite_left.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_elite_right.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_famas.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_fiveseven.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_g3sg1.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_galil.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_glock18.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_knife.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_m3.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_m4a1.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_m249.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_mac10.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_mp5n.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_p90.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_p228.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_scout.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_sg550.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_sg552.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_tmp.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_ump45.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_usp.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_vehicle.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_xm1014.cpp">
       <Filter>cl_dll\events</Filter>
     </ClCompile>
     <ClCompile Include="..\cl_dll\events\hl_events.cpp">
@@ -248,93 +269,6 @@
     </ClCompile>
     <ClCompile Include="..\cl_dll\cs_wpn\cs_weapons.cpp">
       <Filter>cl_dll\cs_wpn</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_ak47.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_aug.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_awp.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_c4.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_deagle.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_elite.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_famas.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_fiveseven.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_flashbang.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_g3sg1.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_galil.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_glock18.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_hegrenade.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_knife.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_m3.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_m4a1.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_m249.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_mac10.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_mp5navy.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_p90.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_p228.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_scout.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_sg550.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_sg552.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_smokegrenade.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_tmp.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_ump45.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_usp.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_xm1014.cpp">
-      <Filter>dlls\wpn_shared</Filter>
     </ClCompile>
     <ClCompile Include="..\cl_dll\hud\ammo.cpp">
       <Filter>cl_dll\hud</Filter>
@@ -492,26 +426,8 @@
     <ClCompile Include="..\cl_dll\hud\zbs\zbs_roundclear.cpp">
       <Filter>cl_dll\hud\zbs</Filter>
     </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_ak47l.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_deagled.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
     <ClCompile Include="..\cl_dll\cs_wpn\bte_weapons.cpp">
       <Filter>cl_dll\cs_wpn</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_ak47l.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_deagled.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_mp7a1d.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_mp7a1d.cpp">
-      <Filter>cl_dll\events</Filter>
     </ClCompile>
     <ClCompile Include="..\cl_dll\hud\zb2\zb2_skill.cpp">
       <Filter>cl_dll\hud\zb2</Filter>
@@ -528,107 +444,17 @@
     <ClCompile Include="..\cl_dll\r_texture.cpp">
       <Filter>cl_dll</Filter>
     </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_wa2000.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_wa2000.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_as50.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_m95.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_as50.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_m95.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_kriss.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_thompson.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_thompson.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_kriss.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_xm8s.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_xm8c.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_xm8c.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_xm8s.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_m1887.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_tar21.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_m1887.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_tar21.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_scarl.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_scarh.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_scarh.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_scarl.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_cannon.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_cannon.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
     <ClCompile Include="..\cl_dll\hud\legacy\hud_radar_legacy.cpp">
       <Filter>cl_dll\hud\legacy</Filter>
     </ClCompile>
     <ClCompile Include="..\cl_dll\hud\modern\hud_radar_modern.cpp">
       <Filter>cl_dll\hud\modern</Filter>
     </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_k1a.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_k1a.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\knife_skullaxe.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_infinity.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_infinity.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
     <ClCompile Include="..\cl_dll\hud\legacy\hud_scoreboard_legacy.cpp">
       <Filter>cl_dll\hud\legacy</Filter>
     </ClCompile>
     <ClCompile Include="..\cl_dll\input_touch.cpp">
       <Filter>cl_dll</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_gungnir.cpp">
-      <Filter>dlls\wpn_shared</Filter>
     </ClCompile>
     <ClCompile Include="..\cl_dll\hud\zb3\zb3.cpp">
       <Filter>cl_dll\hud\zb3</Filter>
@@ -639,47 +465,8 @@
     <ClCompile Include="..\cl_dll\hud\zb3\zb3_rage.cpp">
       <Filter>cl_dll\hud\zb3</Filter>
     </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_svdex.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_svdex.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\knife_zombi.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_mp7a1c.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_mp7a1p.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_mp7a1c.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_mp7a1p.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_mg3.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_mg3.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_infinitys.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_infinitys.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
     <ClCompile Include="..\cl_dll\hud\moe\moe_touch.cpp">
       <Filter>cl_dll\hud\moe</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_m14ebr.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_m14ebr.cpp">
-      <Filter>cl_dll\events</Filter>
     </ClCompile>
     <ClCompile Include="..\cl_dll\vgui2\CClientVGUI.cpp">
       <Filter>cl_dll\vgui2</Filter>
@@ -915,19 +702,10 @@
     <ClCompile Include="..\vgui2_support\SourceSDK\vgui2\src\vgui_key_translation.cpp">
       <Filter>vgui2_support\SourceSDK\vgui2\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_infinityex2.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_infinityex1.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\hud\zb3\NewScoreboard.cpp">
-      <Filter>cl_dll\hud\zb3</Filter>
-    </ClCompile>
     <ClCompile Include="..\cl_dll\hud\zb3\TextSet.cpp">
       <Filter>cl_dll\hud\zb3</Filter>
     </ClCompile>
-    <ClCompile Include="..\cl_dll\hud\zb2\Textstring.cpp">
+    <ClCompile Include="..\cl_dll\hud\zb2\Textset2.cpp">
       <Filter>cl_dll\hud\zb2</Filter>
     </ClCompile>
     <ClCompile Include="..\cl_dll\hud\zb2\Winhud.cpp">
@@ -942,10 +720,10 @@
     <ClCompile Include="..\cl_dll\hud\original\Classic.cpp">
       <Filter>cl_dll\hud\none</Filter>
     </ClCompile>
-    <ClCompile Include="..\cl_dll\hud\original\Winhud2.cpp">
+    <ClCompile Include="..\cl_dll\hud\original\OrigWinhud.cpp">
       <Filter>cl_dll\hud\none</Filter>
     </ClCompile>
-    <ClCompile Include="..\cl_dll\hud\original\Wins.cpp">
+    <ClCompile Include="..\cl_dll\hud\original\TextOrig.cpp">
       <Filter>cl_dll\hud\none</Filter>
     </ClCompile>
     <ClCompile Include="..\cl_dll\hud\classes\Militia.cpp">
@@ -990,37 +768,16 @@
     <ClCompile Include="..\cl_dll\hud\hud2\NewFontManager.cpp">
       <Filter>cl_dll\hud\hud2</Filter>
     </ClCompile>
-    <ClCompile Include="..\cl_dll\hud\hud2\NewHud.cpp">
-      <Filter>cl_dll\hud\hud2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\hud\vgui2menu\Buymenu.cpp">
-      <Filter>cl_dll\hud\vgui2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\hud\vgui2menu\Classmenu.cpp">
-      <Filter>cl_dll\hud\vgui2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\hud\vgui2menu\Tabmenu.cpp">
-      <Filter>cl_dll\hud\vgui2</Filter>
-    </ClCompile>
     <ClCompile Include="..\cl_dll\vgui2\vgui_int.cpp">
       <Filter>cl_dll\vgui2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\knife_shelter_axe.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\knife_dualsword.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_shelteraxe.cpp">
-      <Filter>cl_dll\events</Filter>
     </ClCompile>
     <ClCompile Include="..\cl_dll\hud\gd\gd.cpp">
       <Filter>cl_dll\hud\gd</Filter>
     </ClCompile>
-    <ClCompile Include="..\cl_dll\hud\gd\lvupdate.cpp">
+    <ClCompile Include="..\cl_dll\hud\gd\WeaponChange.cpp">
       <Filter>cl_dll\hud\gd</Filter>
     </ClCompile>
-    <ClCompile Include="..\cl_dll\hud\gd\upweaponhud.cpp">
+    <ClCompile Include="..\cl_dll\hud\gd\FinalAttack.cpp">
       <Filter>cl_dll\hud\gd</Filter>
     </ClCompile>
     <ClCompile Include="..\cl_dll\hud\gd\Winhud.cpp">
@@ -1028,57 +785,6 @@
     </ClCompile>
     <ClCompile Include="..\cl_dll\hud\gd\GDScoreboard.cpp">
       <Filter>cl_dll\hud\gd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_voidpistol.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\knife_dragonsword.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\knife_katana.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_bow.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_chainsaw.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_starchaserar.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_bow.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_chainsaw.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_gunkata.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_knifedragon.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_sgdrill.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_starchaserar.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_voidpistol.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\cl_dll\events\event_gungnir.cpp">
-      <Filter>cl_dll\events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_gunkata.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\wpn_sgdrill.cpp">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_female.cpp">
-      <Filter>dlls\wpn_shared</Filter>
     </ClCompile>
     <ClCompile Include="..\cl_dll\hud\interface\interface.cpp">
       <Filter>cl_dll\hud\interface</Filter>
@@ -1089,95 +795,932 @@
     <ClCompile Include="..\public2\unicode_strtools.cpp">
       <Filter>public</Filter>
     </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\weapons\weapon_int.cpp">
+      <Filter>cl_dll\hud\vgui2\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\weapons\epic\TwinShadowAxes.cpp">
+      <Filter>cl_dll\hud\vgui2\weapons\epic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\weapons\epic\QuantumHorizon.cpp">
+      <Filter>cl_dll\hud\vgui2\weapons\epic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\weapons\epic\Arbalest.cpp">
+      <Filter>cl_dll\hud\vgui2\weapons\epic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\zsh\zsh_kill.cpp">
+      <Filter>cl_dll\hud\zsh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\zsh\messageset.cpp">
+      <Filter>cl_dll\hud\zsh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\zsh\infolocationhud.cpp">
+      <Filter>cl_dll\hud\zsh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_dragonsword.cpp">
+      <Filter>dlls\wpn_shared\Melee</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_dualsword.cpp">
+      <Filter>dlls\wpn_shared\Melee</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_katana.cpp">
+      <Filter>dlls\wpn_shared\Melee</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_shelter_axe.cpp">
+      <Filter>dlls\wpn_shared\Melee</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_skullaxe.cpp">
+      <Filter>dlls\wpn_shared\Melee</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_twin_axes.cpp">
+      <Filter>dlls\wpn_shared\Melee</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_twin_axesex.cpp">
+      <Filter>dlls\wpn_shared\Melee</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_knife.cpp">
+      <Filter>dlls\wpn_shared\Melee</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_banchee.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_deimos.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_female.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_ganimed.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_heal.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_heavy.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_pc.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_stamper.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_c4.cpp">
+      <Filter>dlls\wpn_shared\Grenade</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_c4shelter.cpp">
+      <Filter>dlls\wpn_shared\Grenade</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_flashbang.cpp">
+      <Filter>dlls\wpn_shared\Grenade</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_hegrenade.cpp">
+      <Filter>dlls\wpn_shared\Grenade</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_sbmine.cpp">
+      <Filter>dlls\wpn_shared\Grenade</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_smokegrenade.cpp">
+      <Filter>dlls\wpn_shared\Grenade</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_zombiebomb.cpp">
+      <Filter>dlls\wpn_shared\Grenade</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_ak47.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_ak47l.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_as50.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_aug.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_awp.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_g3sg1.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_galil.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_k1a.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_kriss.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_m3.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_m4a1.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_m14ebr.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_m95.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_m249.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_m1887.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_mac10.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_mg3.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_mp5navy.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_mp7a1c.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_mp7a1d.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_mp7a1p.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_p90.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_p228.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_scarh.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_scarl.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_scout.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_sg550.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_sg552.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_svdex.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_tar21.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_thompson.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_tmp.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_ump45.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_wa2000.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_xm8c.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_xm8s.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_xm1014.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\zb5\InventorySetZb5.cpp">
+      <Filter>cl_dll\hud\zb5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\zb5\TextSetZb5.cpp">
+      <Filter>cl_dll\hud\zb5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\zb5\zb5.cpp">
+      <Filter>cl_dll\hud\zb5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\zb5\zb5_morale.cpp">
+      <Filter>cl_dll\hud\zb5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\zb5\zb5_rage.cpp">
+      <Filter>cl_dll\hud\zb5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_deathknight.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_meatwall.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_spider.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\zb5\Webmsprite.cpp">
+      <Filter>cl_dll\hud\zb5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\zb3\NewScoreboard.cpp">
+      <Filter>cl_dll\hud</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\secondary\wpn_balrog1.cpp">
+      <Filter>dlls\wpn_shared\Secondary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_balrog3.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_balrog5.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_balrog7.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_balrog11.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_ethereal.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_guitar.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_m134hero.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_plasmagun.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_poisongun.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_spas12ex.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_violingun.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\melee\wpn_balrog9.cpp">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\melee\wpn_clawhammer.cpp">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\melee\wpn_dragonclaw.cpp">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\melee\wpn_dualkatana.cpp">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\melee\wpn_nataknifed.cpp">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\melee\wpn_serpentblade.cpp">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\melee\wpn_thanatos9.cpp">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_buffaug.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_aksha.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_boomer.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_booster.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_china.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_fly.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_resident.cpp">
+      <Filter>dlls\wpn_shared\Melee\Zombie\new</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\fog.cpp">
+      <Filter>cl_dll</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\hud_HeadIcon.cpp">
+      <Filter>cl_dll\hud</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\hud_mvp.cpp">
+      <Filter>cl_dll\hud</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\hl\weapon_egon.cpp">
+      <Filter>dlls\wpn_shared\Primary\hl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\pr\PrTextset.cpp">
+      <Filter>cl_dll\hud\pr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\pr\PrWinhud.cpp">
+      <Filter>cl_dll\hud\pr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\pr\pr.cpp">
+      <Filter>cl_dll\hud\pr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\pr\pr_skill.cpp">
+      <Filter>cl_dll\hud\pr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\webm_util.cpp">
+      <Filter>cl_dll</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\gd\RespawnBar.cpp">
+      <Filter>cl_dll\hud\gd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_aksha.cpp">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_boomer.cpp">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_booster.cpp">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_china.cpp">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_deathknight.cpp">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_deimos.cpp">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_fly.cpp">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_ganimed.cpp">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_heal.cpp">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_heavy.cpp">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_meatwall.cpp">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_pc.cpp">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_resident.cpp">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_speed.cpp">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_spider.cpp">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_stamper.cpp">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_banchee.cpp">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\specialcrosshair.cpp">
+      <Filter>cl_dll\hud</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_ak47dragon.cpp">
+      <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_blaster.cpp">
+      <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_broad.cpp">
+      <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_hk23.cpp">
+      <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_k3.cpp">
+      <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_m4a1dragon.cpp">
+      <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_m60e4.cpp">
+      <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_mp5tiger.cpp">
+      <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_p90lapin.cpp">
+      <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_pkm.cpp">
+      <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_stunrifle.cpp">
+      <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_tmpdragon.cpp">
+      <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\content_0\event_ak47dragon.cpp">
+      <Filter>cl_dll\events\content_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\content_0\event_board.cpp">
+      <Filter>cl_dll\events\content_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\content_0\event_coilgun.cpp">
+      <Filter>cl_dll\events\content_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\content_0\event_hk23.cpp">
+      <Filter>cl_dll\events\content_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\content_0\event_k3.cpp">
+      <Filter>cl_dll\events\content_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\content_0\event_m4a1dragon.cpp">
+      <Filter>cl_dll\events\content_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\content_0\event_m60e4.cpp">
+      <Filter>cl_dll\events\content_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\content_0\event_mp5tiger.cpp">
+      <Filter>cl_dll\events\content_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\content_0\event_p90lapin.cpp">
+      <Filter>cl_dll\events\content_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\content_0\event_pkm.cpp">
+      <Filter>cl_dll\events\content_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\content_0\event_stunrifle.cpp">
+      <Filter>cl_dll\events\content_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\content_0\event_tmpdragon.cpp">
+      <Filter>cl_dll\events\content_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_ak47.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_ak47l.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_as50.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_aug.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_awp.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_balrog1.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_balrog3.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_bow.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_createexplo.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_createsmoke.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_deagle.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_deagled.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_decal_reset.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_egon.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_elite_left.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_elite_right.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_famas.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_fiveseven.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_g3sg1.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_galil.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_glock18.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_guitar.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_infinity.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_infinitys.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_k1a.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_knife.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_knifedragon.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_kriss.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_m3.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_m4a1.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_m14ebr.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_m95.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_m249.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_m1887.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_mac10.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_mg3.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_mp5n.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_mp7a1c.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_mp7a1d.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_mp7a1p.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_p90.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_p228.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_scarh.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_scarl.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_scout.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_sg550.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_sg552.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_shelteraxe.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_starchaserar.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_svdex.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_tar21.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_thompson.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_tmp.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_ump45.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_usp.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_vehicle.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_wa2000.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_xm8c.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_xm8s.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_xm1014.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_arbalest.cpp">
+      <Filter>cl_dll\events\Epic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_gungnir.cpp">
+      <Filter>cl_dll\events\Epic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_wondercannon.cpp">
+      <Filter>cl_dll\events\Epic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_wondercannonex.cpp">
+      <Filter>cl_dll\events\Epic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_voidpistol.cpp">
+      <Filter>cl_dll\events\Epic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_voidpistolex.cpp">
+      <Filter>cl_dll\events\Epic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_twinaxes.cpp">
+      <Filter>cl_dll\events\Epic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_quant.cpp">
+      <Filter>cl_dll\events\Epic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_buffaug.cpp">
+      <Filter>cl_dll\events\Overcoming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_buffm4a1.cpp">
+      <Filter>cl_dll\events\Overcoming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_cannon.cpp">
+      <Filter>cl_dll\events\Overcoming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_chainsaw.cpp">
+      <Filter>cl_dll\events\Overcoming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_gunkata.cpp">
+      <Filter>cl_dll\events\Overcoming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_paladin.cpp">
+      <Filter>cl_dll\events\Overcoming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_sgdrill.cpp">
+      <Filter>cl_dll\events\Overcoming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wondercannon.cpp">
+      <Filter>dlls\wpn_shared\Primary\Epic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wondercannonex.cpp">
+      <Filter>dlls\wpn_shared\Primary\Epic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_arbalest.cpp">
+      <Filter>dlls\wpn_shared\Primary\Epic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_gungnir.cpp">
+      <Filter>dlls\wpn_shared\Primary\Epic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_quant.cpp">
+      <Filter>dlls\wpn_shared\Primary\Epic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_buffm4a1.cpp">
+      <Filter>dlls\wpn_shared\Primary\Overcoming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_cannon.cpp">
+      <Filter>dlls\wpn_shared\Primary\Overcoming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_chainsaw.cpp">
+      <Filter>dlls\wpn_shared\Primary\Overcoming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_paladin.cpp">
+      <Filter>dlls\wpn_shared\Primary\Overcoming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_sgdrill.cpp">
+      <Filter>dlls\wpn_shared\Primary\Overcoming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_bow.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_starchaserar.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_famas.cpp">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_1\wpn_failnaught.cpp">
+      <Filter>dlls\wpn_shared\Primary\Epic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_huntbow.cpp">
+      <Filter>cl_dll\events\Overcoming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_deagle.cpp">
+      <Filter>dlls\wpn_shared\Secondary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_elite.cpp">
+      <Filter>dlls\wpn_shared\Secondary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_fiveseven.cpp">
+      <Filter>dlls\wpn_shared\Secondary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_glock18.cpp">
+      <Filter>dlls\wpn_shared\Secondary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_usp.cpp">
+      <Filter>dlls\wpn_shared\Secondary\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_voidpistolex.cpp">
+      <Filter>dlls\wpn_shared\Secondary\Epic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_voidpistol.cpp">
+      <Filter>dlls\wpn_shared\Secondary\Epic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_infinitys.cpp">
+      <Filter>dlls\wpn_shared\Secondary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_infinityex2.cpp">
+      <Filter>dlls\wpn_shared\Secondary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_infinityex1.cpp">
+      <Filter>dlls\wpn_shared\Secondary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_infinity.cpp">
+      <Filter>dlls\wpn_shared\Secondary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_deagled.cpp">
+      <Filter>dlls\wpn_shared\Secondary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_gunkata.cpp">
+      <Filter>dlls\wpn_shared\Secondary\Overcoming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\secondary\wpn_desperado.cpp">
+      <Filter>dlls\wpn_shared\Secondary\Overcoming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_desperado.cpp">
+      <Filter>cl_dll\events\Overcoming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\melee\wpn_stormgiant.cpp">
+      <Filter>dlls\wpn_shared\Melee</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\zb5\ZbGaugeBar.cpp">
+      <Filter>cl_dll\hud\zb5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_gatling.cpp">
+      <Filter>dlls\wpn_shared\Primary\Overcoming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_gatlingex.cpp">
+      <Filter>dlls\wpn_shared\Primary\Overcoming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_gatling.cpp">
+      <Filter>cl_dll\events\Overcoming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_gatlingex.cpp">
+      <Filter>cl_dll\events\Overcoming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_balrog7.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_stg44.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_tbarrel.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_stg44.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_tbarrel.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_janus7xmas.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_m2.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_m95xmas.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_m134ex.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_m134xmas.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\events\event_mg3xmas.cpp">
+      <Filter>cl_dll\events\Classic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_janus7xmas.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_m2.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_m95xmas.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_m134ex.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_m134xmas.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_mg3.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_mg3xmas.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_mg36.cpp">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\zb3\InventorySet.cpp">
+      <Filter>cl_dll</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\melee\knife_joker.cpp">
+      <Filter>dlls\wpn_shared\Melee</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\hidden\hidden.cpp">
+      <Filter>cl_dll\hud\hidden</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\hidden\JokerKill.cpp">
+      <Filter>cl_dll\hud\hidden</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\hidden\RespawnBarH.cpp">
+      <Filter>cl_dll\hud\hidden</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\dm\dm.cpp">
+      <Filter>cl_dll\hud\dm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cl_dll\hud\tdm\tdm.cpp">
+      <Filter>cl_dll\hud\tdm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\achievement_manager.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\activity_manager.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\application_manager.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\core.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\image_manager.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\lobby_manager.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\network_manager.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\overlay_manager.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\relationship_manager.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\storage_manager.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\store_manager.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\types.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\user_manager.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\discord_game_sdk\cpp\voice_manager.cpp">
+      <Filter>cl_dll\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_gungnirex.cpp">
+      <Filter>dlls\wpn_shared\Primary\Epic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_m249.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_mac10.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_mp5navy.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_p90.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_p228.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_scout.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_sg550.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_sg552.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_smokegrenade.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_tmp.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_ump45.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_usp.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_xm1014.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_ak47.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_aug.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_awp.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_c4.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_deagle.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_elite.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_famas.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_fiveseven.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_flashbang.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_g3sg1.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_galil.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_glock18.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_hegrenade.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_knife.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_m3.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_m4a1.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
     <ClInclude Include="..\cl_dll\hud\followicon.h">
       <Filter>cl_dll\hud</Filter>
     </ClInclude>
@@ -1202,15 +1745,6 @@
     <ClInclude Include="..\cl_dll\cs_wpn\bte_weapons.h">
       <Filter>cl_dll\cs_wpn</Filter>
     </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_ak47l.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_deagled.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_mp7a1d.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
     <ClInclude Include="..\cl_dll\cs_wpn\wpn_shared.h">
       <Filter>cl_dll\cs_wpn</Filter>
     </ClInclude>
@@ -1232,44 +1766,8 @@
     <ClInclude Include="..\cl_dll\r_texture.h">
       <Filter>cl_dll</Filter>
     </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_wa2000.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_m95.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_as50.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
     <ClInclude Include="..\cl_dll\hud\hud_sub.h">
       <Filter>cl_dll\hud</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_thompson.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_kriss.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_xm8s.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_xm8c.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_m1887.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_tar21.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_scarl.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_scarh.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_cannon.h">
-      <Filter>dlls\wpn_shared</Filter>
     </ClInclude>
     <ClInclude Include="..\cl_dll\hud\legacy\hud_radar_legacy.h">
       <Filter>cl_dll\hud\legacy</Filter>
@@ -1279,12 +1777,6 @@
     </ClInclude>
     <ClInclude Include="..\cl_dll\hud\modern\hud_radar_modern.h">
       <Filter>cl_dll\hud\modern</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_k1a.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_infinity.h">
-      <Filter>dlls\wpn_shared</Filter>
     </ClInclude>
     <ClInclude Include="..\cl_dll\hud\legacy\hud_scoreboard_legacy.h">
       <Filter>cl_dll\hud\legacy</Filter>
@@ -1300,12 +1792,6 @@
     </ClInclude>
     <ClInclude Include="..\cl_dll\hud\zb3\zb3_rage.h">
       <Filter>cl_dll\hud\zb3</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_svdex.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_mg3.h">
-      <Filter>dlls\wpn_shared</Filter>
     </ClInclude>
     <ClInclude Include="..\cl_dll\hud\moe\moe_touch.h">
       <Filter>cl_dll\hud\moe</Filter>
@@ -1478,22 +1964,10 @@
     <ClInclude Include="..\vgui2_support\vgui_controls\QueryBox.h">
       <Filter>vgui2_support\vgui_controls</Filter>
     </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_m14ebr.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_infinityex2.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_infinityex1.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\cl_dll\hud\zb3\NewScoreboard.h">
-      <Filter>cl_dll\hud\zb3</Filter>
-    </ClInclude>
     <ClInclude Include="..\cl_dll\hud\zb3\TextSet.h">
       <Filter>cl_dll\hud\zb3</Filter>
     </ClInclude>
-    <ClInclude Include="..\cl_dll\hud\zb2\Textstring.h">
+    <ClInclude Include="..\cl_dll\hud\zb2\Textset2.h">
       <Filter>cl_dll\hud\zb2</Filter>
     </ClInclude>
     <ClInclude Include="..\cl_dll\hud\zb2\Winhud.h">
@@ -1502,10 +1976,10 @@
     <ClInclude Include="..\cl_dll\hud\original\Classic.h">
       <Filter>cl_dll\hud\none</Filter>
     </ClInclude>
-    <ClInclude Include="..\cl_dll\hud\original\Winhud2.h">
+    <ClInclude Include="..\cl_dll\hud\original\OrigWinhud.h">
       <Filter>cl_dll\hud\none</Filter>
     </ClInclude>
-    <ClInclude Include="..\cl_dll\hud\original\Wins.h">
+    <ClInclude Include="..\cl_dll\hud\original\TextOrig.h">
       <Filter>cl_dll\hud\none</Filter>
     </ClInclude>
     <ClInclude Include="..\cl_dll\hud\classes\Militia.h">
@@ -1553,23 +2027,8 @@
     <ClInclude Include="..\cl_dll\hud\hud2\NewFontManager.h">
       <Filter>cl_dll\hud\hud2</Filter>
     </ClInclude>
-    <ClInclude Include="..\cl_dll\hud\hud2\NewHud.h">
-      <Filter>cl_dll\hud\hud2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\cl_dll\hud\vgui2menu\Buymenu.h">
-      <Filter>cl_dll\hud\vgui2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\cl_dll\hud\vgui2menu\Classmenu.h">
-      <Filter>cl_dll\hud\vgui2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\cl_dll\hud\vgui2menu\Tabmenu.h">
-      <Filter>cl_dll\hud\vgui2</Filter>
-    </ClInclude>
     <ClInclude Include="..\cl_dll\vgui2\vgui_int.h">
       <Filter>cl_dll\vgui2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\knife_shelter_axe.h">
-      <Filter>dlls\wpn_shared</Filter>
     </ClInclude>
     <ClInclude Include="..\dlls\gamemode\gd\gd_const.h">
       <Filter>dlls\gamemode\gd</Filter>
@@ -1577,32 +2036,17 @@
     <ClInclude Include="..\cl_dll\hud\gd\gd.h">
       <Filter>cl_dll\hud\gd\header</Filter>
     </ClInclude>
-    <ClInclude Include="..\cl_dll\hud\gd\lvupdate.h">
+    <ClInclude Include="..\cl_dll\hud\gd\WeaponChange.h">
       <Filter>cl_dll\hud\gd\header</Filter>
     </ClInclude>
     <ClInclude Include="..\cl_dll\hud\gd\GDScoreboard.h">
       <Filter>cl_dll\hud\gd\header</Filter>
     </ClInclude>
-    <ClInclude Include="..\cl_dll\hud\gd\upweaponhud.h">
+    <ClInclude Include="..\cl_dll\hud\gd\FinalAttack.h">
       <Filter>cl_dll\hud\gd\header</Filter>
     </ClInclude>
     <ClInclude Include="..\cl_dll\hud\gd\Winhud.h">
       <Filter>cl_dll\hud\gd\header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_voidpistol.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_bow.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_chainsaw.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_starchaserar.h">
-      <Filter>dlls\wpn_shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dlls\wpn_shared\wpn_sgdrill.h">
-      <Filter>dlls\wpn_shared</Filter>
     </ClInclude>
     <ClInclude Include="..\cl_dll\hud\interface\interface.h">
       <Filter>cl_dll\hud\interface</Filter>
@@ -1658,5 +2102,502 @@
     <ClInclude Include="..\public2\unicode_strtools.h">
       <Filter>public</Filter>
     </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\weapons\weapon_int.h">
+      <Filter>cl_dll\hud\vgui2\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\weapons\epic\TwinShadowAxes.h">
+      <Filter>cl_dll\hud\vgui2\weapons\epic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\weapons\epic\QuantumHorizon.h">
+      <Filter>cl_dll\hud\vgui2\weapons\epic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\weapons\epic\Arbalest.h">
+      <Filter>cl_dll\hud\vgui2\weapons\epic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\zsh\zsh_kill.h">
+      <Filter>cl_dll\hud\zsh\header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\zsh\messageset.h">
+      <Filter>cl_dll\hud\zsh\header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\zsh\infolocationhud.h">
+      <Filter>cl_dll\hud\zsh\header</Filter>
+    </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\enginecallback.h">
+      <Filter>cl_dll</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\knife_shelter_axe.h">
+      <Filter>dlls\wpn_shared\Melee</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\knife_twin_axes.h">
+      <Filter>dlls\wpn_shared\Melee</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\knife_twin_axesex.h">
+      <Filter>dlls\wpn_shared\Melee</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_knife.h">
+      <Filter>dlls\wpn_shared\Melee</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_c4.h">
+      <Filter>dlls\wpn_shared\Grenade</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_c4shelter.h">
+      <Filter>dlls\wpn_shared\Grenade</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_flashbang.h">
+      <Filter>dlls\wpn_shared\Grenade</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_hegrenade.h">
+      <Filter>dlls\wpn_shared\Grenade</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_sbmine.h">
+      <Filter>dlls\wpn_shared\Grenade</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_smokegrenade.h">
+      <Filter>dlls\wpn_shared\Grenade</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_zombiebomb.h">
+      <Filter>dlls\wpn_shared\Grenade</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_ak47.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_as50.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_aug.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_awp.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_g3sg1.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_galil.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_k1a.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_kriss.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_m3.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_m4a1.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_m14ebr.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_m95.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_m249.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_m1887.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_mac10.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_mg3.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_mp5navy.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_mp7a1d.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_p90.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_p228.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_scarh.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_scarl.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_scout.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_sg550.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_sg552.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_svdex.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_tar21.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_thompson.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_tmp.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_ump45.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_wa2000.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_xm8s.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_xm1014.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\zb5\InventorySetZb5.h">
+      <Filter>cl_dll\hud\zb5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\zb5\TextSetZb5.h">
+      <Filter>cl_dll\hud\zb5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\zb5\zb5.h">
+      <Filter>cl_dll\hud\zb5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\zb5\zb5_morale.h">
+      <Filter>cl_dll\hud\zb5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\zb5\zb5_rage.h">
+      <Filter>cl_dll\hud\zb5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\zb5\Webmsprites.h">
+      <Filter>cl_dll\hud\zb5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb5\zb5_const.h">
+      <Filter>dlls\gamemode\zb5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb3\zb3_const.h">
+      <Filter>dlls\gamemode\zb3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\zb1\zb1_const.h">
+      <Filter>dlls\gamemode\zb1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\zb3\NewScoreboard.h">
+      <Filter>cl_dll\hud</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\secondary\wpn_balrog1.h">
+      <Filter>dlls\wpn_shared\Secondary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_balrog3.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_balrog5.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_balrog7.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_balrog11.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_ethereal.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_guitar.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_plasmagun.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_poisongun.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_spas12ex.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_violingun.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\melee\wpn_balrog9.h">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\melee\wpn_clawhammer.h">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\melee\wpn_dragonclaw.h">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\melee\wpn_dualkatana.h">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\melee\wpn_serpentblade.h">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\melee\wpn_thanatos9.h">
+      <Filter>dlls\wpn_shared\Melee\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_buffaug.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\fog.h">
+      <Filter>cl_dll</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\hud_mvp.h">
+      <Filter>cl_dll\hud</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\hl\weapon_egon.h">
+      <Filter>dlls\wpn_shared\Primary\hl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\pr\PrTextset.h">
+      <Filter>cl_dll\hud\pr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\pr\PrWinhud.h">
+      <Filter>cl_dll\hud\pr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\pr\pr.h">
+      <Filter>cl_dll\hud\pr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\pr\pr_skill.h">
+      <Filter>cl_dll\hud\pr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\gamemode\playroom\playroom_const.h">
+      <Filter>dlls\gamemode\playroom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\webm_util.h">
+      <Filter>cl_dll</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\gd\RespawnBar.h">
+      <Filter>cl_dll\hud\gd\header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_aksha.h">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_boomer.h">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_booster.h">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_china.h">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_deathknight.h">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_deimos.h">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_fly.h">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_ganimed.h">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_heal.h">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_heavy.h">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_meatwall.h">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_pc.h">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_resident.h">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_speed.h">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_spider.h">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_stamper.h">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_banchee.h">
+      <Filter>dlls\wpn_shared\Grenade\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_ak47dragon.h">
+      <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_blaster.h">
+      <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_broad.h">
+      <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_hk23.h">
+      <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_k3.h">
+      <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_m4a1dragon.h">
+      <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_m60e4.h">
+      <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_mp5tiger.h">
+      <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_p90lapin.h">
+      <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_pkm.h">
+      <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_stunrifle.h">
+      <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_tmpdragon.h">
+      <Filter>dlls\wpn_shared\Primary\old\content_0</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wondercannon.h">
+      <Filter>dlls\wpn_shared\Primary\Epic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wondercannonex.h">
+      <Filter>dlls\wpn_shared\Primary\Epic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_arbalest.h">
+      <Filter>dlls\wpn_shared\Primary\Epic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_quant.h">
+      <Filter>dlls\wpn_shared\Primary\Epic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_buffm4a1.h">
+      <Filter>dlls\wpn_shared\Primary\Overcoming</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_cannon.h">
+      <Filter>dlls\wpn_shared\Primary\Overcoming</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_chainsaw.h">
+      <Filter>dlls\wpn_shared\Primary\Overcoming</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_paladin.h">
+      <Filter>dlls\wpn_shared\Primary\Overcoming</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_sgdrill.h">
+      <Filter>dlls\wpn_shared\Primary\Overcoming</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_bow.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_starchaserar.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_famas.h">
+      <Filter>dlls\wpn_shared\Primary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_1\wpn_failnaught.h">
+      <Filter>dlls\wpn_shared\Primary\Epic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_deagle.h">
+      <Filter>dlls\wpn_shared\Secondary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_elite.h">
+      <Filter>dlls\wpn_shared\Secondary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_fiveseven.h">
+      <Filter>dlls\wpn_shared\Secondary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_glock18.h">
+      <Filter>dlls\wpn_shared\Secondary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_usp.h">
+      <Filter>dlls\wpn_shared\Secondary\Classic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_voidpistolex.h">
+      <Filter>dlls\wpn_shared\Secondary\Epic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_voidpistol.h">
+      <Filter>dlls\wpn_shared\Secondary\Epic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_infinityex2.h">
+      <Filter>dlls\wpn_shared\Secondary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_infinityex1.h">
+      <Filter>dlls\wpn_shared\Secondary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_infinity.h">
+      <Filter>dlls\wpn_shared\Secondary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\wpn_deagled.h">
+      <Filter>dlls\wpn_shared\Secondary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\secondary\wpn_desperado.h">
+      <Filter>dlls\wpn_shared\Secondary\Overcoming</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\zb5\ZbGaugeBar.h">
+      <Filter>cl_dll\hud\zb5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_gatling.h">
+      <Filter>dlls\wpn_shared\Primary\Overcoming</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_gatlingex.h">
+      <Filter>dlls\wpn_shared\Primary\Overcoming</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_stg44.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_tbarrel.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_janus7xmas.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_m2.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_m95xmas.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_m134ex.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_m134xmas.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_mg3.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_mg3xmas.h">
+      <Filter>dlls\wpn_shared\Primary\old</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\zb3\InventorySet.h">
+      <Filter>cl_dll</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dlls\wpn_shared\const\weaponid_const.h">
+      <Filter>dlls\wpn_shared\Const</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\hidden\hidden.h">
+      <Filter>cl_dll\hud\hidden</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\hidden\JokerKill.h">
+      <Filter>cl_dll\hud\hidden</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\hidden\RespawnBarH.h">
+      <Filter>cl_dll\hud\hidden</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\dm\dm.h">
+      <Filter>cl_dll\hud\dm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cl_dll\hud\tdm\tdm.h">
+      <Filter>cl_dll\hud\tdm</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="client.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

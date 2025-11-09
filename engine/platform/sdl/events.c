@@ -563,10 +563,10 @@ static int SDLash_JoyInit_Old(int numjoy)
 	num = SDL_NumJoysticks();
 
 	if (num > 0)
-		MsgDev(D_INFO, "%i joysticks found:\n", num);
+		MsgDev(D_INFO, "%i Джойстик найден:\n", num);
 	else
 	{
-		MsgDev(D_INFO, "No joystick found.\n");
+		MsgDev(D_INFO, "Джойстик не найден.\n");
 		return 0;
 	}
 
@@ -579,11 +579,11 @@ static int SDLash_JoyInit_Old(int numjoy)
 
 	if (!joy)
 	{
-		MsgDev(D_INFO, "Failed to select joystick: %s\n", SDL_GetError());
+		MsgDev(D_INFO, "Не удалось выбрать джойстик: %s\n", SDL_GetError());
 		return 0;
 	}
 
-	MsgDev(D_INFO, "Selected joystick: %s\n"
+	MsgDev(D_INFO, "Выбор джойстика: %s\n"
 		"\tAxes: %i\n"
 		"\tHats: %i\n"
 		"\tButtons: %i\n"
@@ -608,7 +608,7 @@ static int SDLash_JoyInit_New(int numjoy)
 	int temp, num;
 	int i;
 
-	MsgDev(D_INFO, "Joystick: SDL GameController API\n");
+	MsgDev(D_INFO, "Джойстик: SDL GameController API\n");
 
 	if (SDL_WasInit(SDL_INIT_GAMECONTROLLER) != SDL_INIT_GAMECONTROLLER &&
 		SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER))
@@ -635,10 +635,10 @@ static int SDLash_JoyInit_New(int numjoy)
 	}
 
 	if (num > 0)
-		MsgDev(D_INFO, "%i joysticks found:\n", num);
+		MsgDev(D_INFO, "%i Найден джойстик:\n", num);
 	else
 	{
-		MsgDev(D_INFO, "No joystick found.\n");
+		MsgDev(D_INFO, "Джойстик не найден.\n");
 		return 0;
 	}
 
@@ -656,7 +656,7 @@ static int SDLash_JoyInit_New(int numjoy)
 	}
 	// was added in SDL2-2.0.6, allow build with earlier versions just in case
 #if SDL_MAJOR_VERSION > 2 || SDL_MINOR_VERSION > 0 || SDL_PATCHLEVEL >= 6
-	MsgDev(D_INFO, "Selected joystick: %s (%i:%i:%i)\n",
+	MsgDev(D_INFO, "Выбор джойстика: %s (%i:%i:%i)\n",
 		SDL_GameControllerName(gamecontroller),
 		SDL_GameControllerGetVendor(gamecontroller),
 		SDL_GameControllerGetProduct(gamecontroller),

@@ -148,7 +148,7 @@ static void UI_DrawLogo( const char *filename, float x, float y, float width, fl
 	
 		// run cinematic if not
 		Q_snprintf( path, sizeof( path ), "media/%s", filename );
-		FS_DefaultExtension( path, ".mp4" );
+		FS_DefaultExtension( path, ".avi" );
 		fullpath = FS_GetDiskPath( path, false );
 
 		if( FS_FileExists( path, false ) && !fullpath )
@@ -561,6 +561,14 @@ static void pfnPlaySound( const char *szSound )
 	S_StartLocalSound( szSound, VOL_NORM, false );
 }
 
+enginefuncs_t g_engfuncs;
+
+static void pfnPrecacheGeneric(const char* szSound)
+{
+	g_engfuncs.pfnPrecacheGeneric(szSound);
+}
+
+
 /*
 =============
 pfnDrawCharacter
@@ -860,7 +868,7 @@ int pfnCheckGameDll( void )
 		return true;
 
 	Com_ResetLibraryError();
-	if(( hInst = Com_LoadLibrary( SI.gamedll, true )) != NULL )
+	if(( hInst = Com_LoadLibrary(GI->game_dll, false )) != NULL )
 	{
 		return true;
 	}
@@ -1048,7 +1056,8 @@ static ui_enginefuncs_t gEngfuncs =
 	pfnIsMapValid,
 	GL_ProcessTexture,
 	(void*)COM_CompareFileTime,
-	VID_GetModeString
+	VID_GetModeString,
+	pfnPrecacheGeneric
 };
 
 static ui_textfuncs_t gTextfuncs =
@@ -1083,10 +1092,10 @@ qboolean UI_LoadProgs( void )
 	// setup globals
 	menu.globals = &gpGlobals;
 #ifdef XASH_INTERNAL_GAMELIBS
-	if(!( menu.hInstance = Com_LoadLibrary( "interface", false )))
+	if(!( menu.hInstance = Com_LoadLibrary( "../interface", false )))
 		return false;
 #else
-	if(!( menu.hInstance = Com_LoadLibrary( va( "%s/" MENUDLL, GI->dll_path ), false )))
+	if(!( menu.hInstance = Com_LoadLibrary( va( "../" MENUDLL), false )))
 	{
 		FS_AllowDirectPaths( true );
 

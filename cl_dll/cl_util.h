@@ -92,9 +92,9 @@ inline struct cvar_s *CVAR_CREATE( const char *cv, const char *val, const int fl
 #define ServerCmd (*gEngfuncs.pfnServerCmd)
 
 //#define ClientCmd (*gEngfuncs.pfnClientCmd)
-inline int ClientCmd(const char *szCmdString)
+inline int ClientCmd(const char* szCmdString)
 {
-	return gEngfuncs.pfnClientCmd(const_cast<char *>(szCmdString));
+	return gEngfuncs.pfnClientCmd(const_cast<char*>(szCmdString));
 }
 
 #define SetCrosshair (*gEngfuncs.pfnSetCrosshair)

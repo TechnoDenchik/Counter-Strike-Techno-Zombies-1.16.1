@@ -302,8 +302,18 @@ void CCSBot::OnEvent(GameEventType event, CBaseEntity *entity, CBaseEntity *othe
 					if ((pev->origin - entity->pev->origin).IsLengthLessThan(skillUseRange))
 					{
 						ClientCommand("BTE_ZombieSkill1");
+						ClientCommand("CST_SetEvo");
 					}
 				}
+			}
+			break;
+		}
+		case EVENT_SUPPLYBOX_ARRIVE:
+		{
+			// fetch the supplybox
+			if (!m_bIsZombie && RANDOM_FLOAT(0.0f, 100.0f) < 10.0f && !IsDefending())
+			{
+				RushToSupplyBox();
 			}
 			break;
 		}

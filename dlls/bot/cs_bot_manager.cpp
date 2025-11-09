@@ -877,7 +877,7 @@ bool CCSBotManager::BotAddCommand(BotProfileTeamType team, bool isFromConsole)
 	{
 		// in career, ignore humans
 		bool ignoreHumans = false;
-		CHalfLifeMultiplay *mp = g_pGameRules;
+		CCstrikeTechnoZombies *mp = g_pGameRules;
 
 		if (mp != NULL && mp->IsCareer())
 			ignoreHumans = true;
@@ -921,7 +921,7 @@ void CCSBotManager::MaintainBotQuota()
 	if (m_isLearningMap)
 		return;
 
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 	int totalHumansInGame = UTIL_HumansInGame();
 	int humanPlayersInGame = UTIL_HumansInGame(IGNORE_SPECTATORS);
 
@@ -1227,7 +1227,7 @@ bool CCSBotManager::AddBot(const BotProfile *profile, BotProfileTeamType team)
 	if (!g_bEnableCSBot)
 		return false;
 
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 
 	int nTeamSlot = UNASSIGNED;
 

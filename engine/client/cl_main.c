@@ -179,7 +179,7 @@ qboolean CL_ChangeGame( const char *gamefolder, qboolean bReset )
 		Q_strncpy( maptitle, clgame.maptitle, MAX_STRING );
 
 		Com_ResetLibraryError();
-		if( !CL_LoadProgs( va( "%s/%s", GI->dll_path, GI->client_lib)))
+		if( !CL_LoadProgs( va( "%s", GI->client_lib)))
 			Sys_Warn( "Can't initialize client library\n%s", Com_GetLibraryError() );
 
 		// restore parms
@@ -1241,6 +1241,7 @@ void CL_InternetServers_f( void )
 	char *info = fullquery + sizeof( MS_SCAN_REQUEST ) - 1;
 	const size_t remaining = sizeof( fullquery ) - sizeof( MS_SCAN_REQUEST );
 
+
 	Info_SetValueForKey( info, "nat", cl_nat->string, remaining );
 	Info_SetValueForKey( info, "gamedir", GI->gamefolder, remaining );
 
@@ -1673,7 +1674,7 @@ void CL_ConnectionlessPacket( netadr_t from, sizebuf_t *msg )
 		if( extensions & NET_EXT_SPLIT )
 		{
 			if( cl_maxpacket->integer >= 40000 || cl_maxpacket->integer < 100 )
-				Cvar_SetFloat( "cl_maxpacket", 1400 );
+				Cvar_SetFloat( "cl_maxpacket", 2400 );
 
 			cls.netchan.maxpacket = Cvar_VariableInteger( "cl_maxoutpacket" );
 			if( cls.netchan.maxpacket < 100 )
@@ -2372,15 +2373,20 @@ void CL_Init( void )
 			loaded = CL_LoadProgs(VGUI_SUPPORT_DLL);
 		else
 #ifdef XASH_INTERNAL_GAMELIBS
-			loaded = CL_LoadProgs( "client" );
+			loaded = CL_LoadProgs( "../client" );
 #else
-			loaded = CL_LoadProgs( va( "%s/%s" , GI->dll_path, SI.clientlib ));
+			loaded = CL_LoadProgs(CLIENTDLL);
 #endif
 		if( !loaded )
 		{
 			loaded = CL_LoadProgs( CLIENTDLL );
 		}
 	}
+#ifdef XASH_VGUI2
+	extern void VGui2_Startup();
+	VGui2_Startup();
+#endif
+
 
 	if( loaded )
 	{

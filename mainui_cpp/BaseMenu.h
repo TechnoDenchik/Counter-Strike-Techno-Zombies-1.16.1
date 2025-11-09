@@ -25,9 +25,10 @@ GNU General Public License for more details.
 #include "Utils.h"
 #include "FontManager.h"
 #include "BtnsBMPTable.h"
+#include <atomic>
 
-#define UI_MAX_MENUDEPTH		64
-#define UI_MAX_MENUITEMS		64
+#define UI_MAX_MENUDEPTH		1024
+#define UI_MAX_MENUITEMS		1024
 
 #define UI_PULSE_DIVISOR		75.0f
 
@@ -68,6 +69,8 @@ extern cvar_t	*ui_precache;
 extern cvar_t	*ui_showmodels;
 extern cvar_t   *ui_show_window_stack;
 extern cvar_t	*ui_borderclip;
+extern cvar_t	*ui_musicpack;
+extern cvar_t	*ui_getconsole;
 
 class CMenuBaseWindow;
 
@@ -96,6 +99,9 @@ public:
 		menuDepth = 0;
 		rootPosition = 0;
 	}
+
+	std::atomic<bool> discordInitialized{ false };
+	std::time_t gameStartTime = 0;
 };
 
 typedef struct
@@ -159,6 +165,7 @@ extern uiStatic_t		uiStatic;
 #define DLG_X ((uiStatic.width - 640) / 2 - 192) // Dialogs are 640px in width
 
 extern const char		*uiSoundIn;
+extern const char*	 uiStartGame;
 extern const char		*uiSoundRollOver;
 extern const char		*uiSoundOut;
 extern const char		*uiSoundKey;
@@ -168,6 +175,8 @@ extern const char		*uiSoundBuzz;
 extern const char		*uiSoundGlow;
 extern const char		*uiSoundMove;
 extern const char		*uiSoundNull;
+extern const char* uiSoundOnmouse;
+extern const char* uiSoundSelect;
 
 extern unsigned int	uiColorHelp;
 extern unsigned int	uiPromptBgColor;
@@ -179,6 +188,10 @@ extern unsigned int	uiInputFgColor;
 extern unsigned int	uiColorWhite;
 extern unsigned int	uiColorDkGrey;
 extern unsigned int	uiColorBlack;
+extern unsigned int	uiColorRed;
+extern unsigned int	uiColorGreen;
+extern unsigned int	uiColorBlue;
+extern unsigned int	uiColorCyan;
 
 // TODO: Move it under namespace?
 
@@ -277,7 +290,7 @@ void UI_LanGame_Menu( void );
 void UI_ServerBrowser_Menu( void );
 void UI_PlayerSetup_Menu( void );
 void UI_Controls_Menu( void );
-void UI_AdvControls_Menu( void );
+void UI_MouseControls_Menu( void );
 void UI_GameOptions_Menu( void );
 void UI_CreateGame_Menu( void );
 void UI_Audio_Menu( void );
@@ -301,7 +314,8 @@ void UI_AdvUserOptions_Menu( void );
 bool UI_AdvServerOptions_IsAvailable( void );
 void UI_AdvServerOptions_Menu( void );
 void UI_InputDevices_Menu( void );
-
+void UI_Music_Menu(void);
+void UI_Inventory_Menu(void);
 void UI_OpenUpdatePage(bool engine , bool preferstore);
 
 // time

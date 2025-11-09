@@ -5,20 +5,25 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug|x64">
-      <Configuration>Debug</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|x64">
-      <Configuration>Release</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\discord_game_sdk\cpp\achievement_manager.cpp" />
+    <ClCompile Include="..\discord_game_sdk\cpp\activity_manager.cpp" />
+    <ClCompile Include="..\discord_game_sdk\cpp\application_manager.cpp" />
+    <ClCompile Include="..\discord_game_sdk\cpp\core.cpp" />
+    <ClCompile Include="..\discord_game_sdk\cpp\image_manager.cpp" />
+    <ClCompile Include="..\discord_game_sdk\cpp\lobby_manager.cpp" />
+    <ClCompile Include="..\discord_game_sdk\cpp\network_manager.cpp" />
+    <ClCompile Include="..\discord_game_sdk\cpp\overlay_manager.cpp" />
+    <ClCompile Include="..\discord_game_sdk\cpp\relationship_manager.cpp" />
+    <ClCompile Include="..\discord_game_sdk\cpp\storage_manager.cpp" />
+    <ClCompile Include="..\discord_game_sdk\cpp\store_manager.cpp" />
+    <ClCompile Include="..\discord_game_sdk\cpp\user_manager.cpp" />
+    <ClCompile Include="..\discord_game_sdk\cpp\voice_manager.cpp" />
     <ClCompile Include="..\dlls\airtank.cpp" />
     <ClCompile Include="..\dlls\ammo.cpp" />
     <ClCompile Include="..\dlls\animating.cpp" />
@@ -26,200 +31,131 @@
     <ClCompile Include="..\dlls\bmodels.cpp" />
     <ClCompile Include="..\dlls\bot\cs_bot.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\cs_bot_bhopjump.cpp" />
     <ClCompile Include="..\dlls\bot\cs_bot_chatter.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\cs_bot_event.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\cs_bot_init.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\cs_bot_learn.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\cs_bot_listen.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\cs_bot_manager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\cs_bot_nav.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\cs_bot_pathfind.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\cs_bot_radio.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\cs_bot_statemachine.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\cs_bot_update.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\cs_bot_vision.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\cs_bot_weapon.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\cs_gamestate.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\states\cs_bot_attack.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\states\cs_bot_buy.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\states\cs_bot_defuse_bomb.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\states\cs_bot_escape_from_bomb.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\states\cs_bot_fetch_bomb.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\states\cs_bot_follow.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\states\cs_bot_hide.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\states\cs_bot_hunt.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\states\cs_bot_idle.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\states\cs_bot_investigate_noise.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\states\cs_bot_move_to.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\bot\states\cs_bot_plant_bomb.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\dlls\bot\states\cs_bot_supplybox_rush.cpp" />
     <ClCompile Include="..\dlls\bot\states\cs_bot_use_entity.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\buttons.cpp" />
     <ClCompile Include="..\dlls\career_tasks.cpp" />
@@ -235,10 +171,16 @@
     <ClCompile Include="..\dlls\func_shelter.cpp" />
     <ClCompile Include="..\dlls\func_tank.cpp" />
     <ClCompile Include="..\dlls\game.cpp" />
+    <ClCompile Include="..\dlls\gamemode\backui\mod_backui.cpp" />
+    <ClCompile Include="..\dlls\gamemode\hidden\Class\hidden_class_human.cpp" />
+    <ClCompile Include="..\dlls\gamemode\hidden\Class\hidden_class_joker.cpp" />
+    <ClCompile Include="..\dlls\gamemode\hidden\Class\hidden_class_tratior.cpp" />
+    <ClCompile Include="..\dlls\gamemode\hidden\Entity\supplyboxh.cpp" />
     <ClCompile Include="..\dlls\gamemode\mods.cpp" />
     <ClCompile Include="..\dlls\gamemode\mod_base.cpp" />
     <ClCompile Include="..\dlls\gamemode\mod_dm.cpp" />
     <ClCompile Include="..\dlls\gamemode\mod_gd.cpp" />
+    <ClCompile Include="..\dlls\gamemode\mod_hidden.cpp" />
     <ClCompile Include="..\dlls\gamemode\mod_none.cpp" />
     <ClCompile Include="..\dlls\gamemode\mod_tdm.cpp" />
     <ClCompile Include="..\dlls\gamemode\mod_zb1.cpp" />
@@ -246,30 +188,79 @@
     <ClCompile Include="..\dlls\gamemode\mod_zb3.cpp" />
     <ClCompile Include="..\dlls\gamemode\mod_zbs.cpp" />
     <ClCompile Include="..\dlls\gamemode\mod_zbshelter_pve.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_aksha.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_boomer.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_booster.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_china.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_fly.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_resident.cpp" />
     <ClCompile Include="..\dlls\gamemode\zb2\supplybox.cpp" />
-    <ClCompile Include="..\dlls\gamemode\zb2\zb2_skill_hero.cpp" />
     <ClCompile Include="..\dlls\gamemode\zb2\zb2_skill_human.cpp" />
     <ClCompile Include="..\dlls\gamemode\zb2\zb2_skill_zombie.cpp" />
-    <ClCompile Include="..\dlls\gamemode\zb2\zb2_skill_zombie_female.cpp" />
-    <ClCompile Include="..\dlls\gamemode\zb2\zb2_winhud.cpp" />
     <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass_banchee.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass_deimos.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass_ganimed.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass_heal.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass_heavy.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass_pc.cpp" />
     <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass_speed.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass_stamper.cpp" />
     <ClCompile Include="..\dlls\gamemode\zb2\zb2_zclass_tank.cpp" />
-    <ClCompile Include="..\dlls\gamemode\zb3\zb3_class_hero.cpp" />
     <ClCompile Include="..\dlls\gamemode\zb3\zb3_hero.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\mod_zb1reference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\mod_zb2reference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\mod_zb5.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_akshaR.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_boomerR.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_boosterR.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_chinaR.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_flyR.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_residentR.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\supplyboxreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_skill_heroreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_skill_humanreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_skill_zombiereference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_winhudreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclassreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_bancheereference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_deimosreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_ganimedreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_healreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_heavyreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_pcreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_speedreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_stamperreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_tankreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb5_zclass_deathknight.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb5_zclass_meatwall.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb2reference\zb5_zclass_spider.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb3reference\zb3_heroreference.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb5\zb5_humanclass.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zb5\zb5_evobox.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zbs\boss_manager.cpp" />
     <ClCompile Include="..\dlls\gamemode\zbs\monster_entity.cpp" />
     <ClCompile Include="..\dlls\gamemode\zbs\monster_entity2.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zbs\monster_entity_boss.cpp" />
     <ClCompile Include="..\dlls\gamemode\zbs\monster_manager.cpp" />
     <ClCompile Include="..\dlls\gamemode\zbs\monster_manager2.cpp" />
     <ClCompile Include="..\dlls\gamemode\zbs\npc_group.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zbs\zbs_box.cpp" />
     <ClCompile Include="..\dlls\gamemode\zbs\zs_subs.cpp" />
     <ClCompile Include="..\dlls\gamemode\zsh\base.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zsh\buildobject\Generator\male_generator.cpp" />
     <ClCompile Include="..\dlls\gamemode\zsh\buildobject\Turrets\automatic turret.cpp" />
     <ClCompile Include="..\dlls\gamemode\zsh\buildobject\Turrets\electric turret.cpp" />
     <ClCompile Include="..\dlls\gamemode\zsh\buildobject\Turrets\fire turret.cpp" />
     <ClCompile Include="..\dlls\gamemode\zsh\buildobject\Turrets\gatling turret.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zsh\buildobject\Turrets\gatling turret_manager.cpp" />
     <ClCompile Include="..\dlls\gamemode\zsh\buildobject\Turrets\plasma turret.cpp" />
     <ClCompile Include="..\dlls\gamemode\zsh\buildobject\Turrets\tower.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zsh\NPC\Zombie\zm_tank.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zsh\NPC\Zombie\zm_light.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zsh\NPC\Zombie\zm_tank_manager.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zsh\NPC\Zombie\zm_light_manager.cpp" />
+    <ClCompile Include="..\dlls\gamemode\zsh\NPC\zsh_zm.cpp" />
     <ClCompile Include="..\dlls\gamemode\zsh\resources\resources.cpp" />
     <ClCompile Include="..\dlls\gamemode\zsh\build.cpp" />
     <ClCompile Include="..\dlls\gamemode\zsh\skill\Enginner\battlefield repairs.cpp" />
@@ -311,59 +302,41 @@
     <ClCompile Include="..\dlls\gamemode\zsh\skill\Warrior\The master of weapons 3.cpp" />
     <ClCompile Include="..\dlls\gamemode\zsh\skill\Warrior\The master of weapons.cpp" />
     <ClCompile Include="..\dlls\gamemode\zsh\skill\Warrior\Warrior.cpp" />
-    <ClCompile Include="..\dlls\gamemode\zsh\spawnres.cpp" />
-    <ClCompile Include="..\dlls\gamemode\zsh\zsh_scoreboard.cpp" />
     <ClCompile Include="..\dlls\gamerules.cpp" />
     <ClCompile Include="..\dlls\ggrenade.cpp" />
     <ClCompile Include="..\dlls\globals.cpp" />
     <ClCompile Include="..\dlls\healthkit.cpp" />
     <ClCompile Include="..\dlls\hostage\hostage.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\hostage\hostage_improv.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\hostage\hostage_localnav.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\hostage\states\hostage_animate.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\hostage\states\hostage_escape.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\hostage\states\hostage_follow.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\hostage\states\hostage_idle.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\hostage\states\hostage_retreat.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\h_ai.cpp" />
     <ClCompile Include="..\dlls\h_battery.cpp" />
@@ -383,7 +356,6 @@
     <ClCompile Include="..\dlls\player\csdm_randomspawn.cpp" />
     <ClCompile Include="..\dlls\player\hintmessage.cpp" />
     <ClCompile Include="..\dlls\player\player_account.cpp" />
-    <ClCompile Include="..\dlls\player\player_hero.cpp" />
     <ClCompile Include="..\dlls\player\player_human_level.cpp" />
     <ClCompile Include="..\dlls\player\player_knockback.cpp" />
     <ClCompile Include="..\dlls\player\player_model.cpp" />
@@ -392,7 +364,6 @@
     <ClCompile Include="..\dlls\player\player_spawnpoint.cpp" />
     <ClCompile Include="..\dlls\player\player_spawnprotection.cpp" />
     <ClCompile Include="..\dlls\player\player_zombie.cpp" />
-    <ClCompile Include="..\dlls\player\zsh_updateday.cpp" />
     <ClCompile Include="..\dlls\singleplay_gamerules.cpp" />
     <ClCompile Include="..\dlls\skill.cpp" />
     <ClCompile Include="..\dlls\sound.cpp" />
@@ -415,99 +386,165 @@
     <ClCompile Include="..\dlls\weapons_msg.cpp" />
     <ClCompile Include="..\dlls\weapons_precache.cpp" />
     <ClCompile Include="..\dlls\world.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\grenade\sbmine_get.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_aksha.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_banchee.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_boomer.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_booster.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_china.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_deathknight.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_deimos.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_fly.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_ganimed.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_heal.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_heavy.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_meatwall.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_pc.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_resident.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_speed.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_spider.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_stamper.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\hl\weapon_egon.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_dragonsword.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_dualsword.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_katana.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_shelter_axe.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_skullaxe.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_twin_axes.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_twin_axesex.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_aksha.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_banchee.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_boomer.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_booster.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_china.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_deathknight.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_deimos.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\knife_zombi_female.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_fly.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_ganimed.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_heal.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_heavy.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_meatwall.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_pc.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_resident.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_spider.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\knife_zombi_stamper.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\melee\knife_joker.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\melee\wpn_balrog9.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\melee\wpn_clawhammer.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\melee\wpn_dragonclaw.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\melee\wpn_dualkatana.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\melee\wpn_nataknifed.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\melee\wpn_serpentblade.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\melee\wpn_stormgiant.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\melee\wpn_thanatos9.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_ak47dragon.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_blaster.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_broad.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_hk23.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_k3.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_m4a1dragon.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_m60e4.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_mp5tiger.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_p90lapin.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_pkm.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_stunrifle.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_0\wpn_tmpdragon.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\content_1\wpn_failnaught.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_balrog11.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_balrog3.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_balrog5.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_balrog7.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_buffaug.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_ethereal.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_gatling.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_gatlingex.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_guitar.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_janus7xmas.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_m134ex.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_m134hero.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_m134xmas.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_m2.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_m95xmas.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_mg3.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_mg36.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_mg3xmas.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_plasmagun.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_poisongun.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_spas12ex.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_stg44.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_tbarrel.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\primary\wpn_violingun.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\secondary\wpn_balrog1.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\secondary\wpn_desperado.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wondercannon.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wondercannonchain.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wondercannonex.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wondercannonmine.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_ak47.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_ak47l.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_arbalest.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_as50.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_aug.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_awp.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_bow.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_buffm4a1.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_c4.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_c4shelter.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_cannon.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_chainsaw.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_deagle.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_deagled.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_elite.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_famas.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_fiveseven.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_flashbang.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_g3sg1.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_galil.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_glock18.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_gungnir.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_gungnirex.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_gunkata.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_hegrenade.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_infinity.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_infinityex1.cpp" />
@@ -516,86 +553,65 @@
     <ClCompile Include="..\dlls\wpn_shared\wpn_k1a.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_knife.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_kriss.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_m14ebr.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_m1887.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_m249.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_m3.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_m4a1.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_m95.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_mac10.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_mg3.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_mp5navy.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_mp7a1c.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_mp7a1d.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_mp7a1p.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_p228.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_p90.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_paladin.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_quant.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_sbmine.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_scarh.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_scarl.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_scout.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_sg550.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_sg552.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_sgdrill.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_smokegrenade.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_starchaserar.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_svdex.cpp" />
@@ -603,29 +619,23 @@
     <ClCompile Include="..\dlls\wpn_shared\wpn_thompson.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_tmp.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_twinsummon.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_ump45.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_usp.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_voidpistol.cpp" />
+    <ClCompile Include="..\dlls\wpn_shared\wpn_voidpistolex.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_wa2000.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_xm1014.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\dlls\wpn_shared\wpn_xm8c.cpp" />
     <ClCompile Include="..\dlls\wpn_shared\wpn_xm8s.cpp" />
@@ -667,6 +677,7 @@
     <ClInclude Include="..\common2\weaponinfo.h" />
     <ClInclude Include="..\common2\winsani_in.h" />
     <ClInclude Include="..\common2\winsani_out.h" />
+    <ClInclude Include="..\common\features.h" />
     <ClInclude Include="..\dlls\activity.h" />
     <ClInclude Include="..\dlls\airtank.h" />
     <ClInclude Include="..\dlls\ammo.h" />
@@ -676,39 +687,25 @@
     <ClInclude Include="..\dlls\bot\cs_bot.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\dlls\bot\cs_bot_chatter.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\dlls\bot\cs_bot_manager.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\dlls\bot\cs_bot_statemachine.h" />
     <ClInclude Include="..\dlls\bot\cs_gamestate.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\dlls\bot_include.h" />
     <ClInclude Include="..\dlls\career_tasks.h" />
@@ -728,13 +725,18 @@
     <ClInclude Include="..\dlls\func_shelter.h" />
     <ClInclude Include="..\dlls\func_tank.h" />
     <ClInclude Include="..\dlls\game.h" />
+    <ClInclude Include="..\dlls\gamemode\backui\mod_backui.h" />
     <ClInclude Include="..\dlls\gamemode\gd\gd_const.h" />
+    <ClInclude Include="..\dlls\gamemode\hidden\Entity\supplyboxh.h" />
+    <ClInclude Include="..\dlls\gamemode\hidden\hidden_class.h" />
+    <ClInclude Include="..\dlls\gamemode\hidden\hidden_const.h" />
     <ClInclude Include="..\dlls\gamemode\interface\interface_const.h" />
     <ClInclude Include="..\dlls\gamemode\mods.h" />
     <ClInclude Include="..\dlls\gamemode\mods_const.h" />
     <ClInclude Include="..\dlls\gamemode\mod_base.h" />
     <ClInclude Include="..\dlls\gamemode\mod_dm.h" />
     <ClInclude Include="..\dlls\gamemode\mod_gd.h" />
+    <ClInclude Include="..\dlls\gamemode\mod_hidden.h" />
     <ClInclude Include="..\dlls\gamemode\mod_none.h" />
     <ClInclude Include="..\dlls\gamemode\mod_tdm.h" />
     <ClInclude Include="..\dlls\gamemode\mod_zb1.h" />
@@ -742,31 +744,84 @@
     <ClInclude Include="..\dlls\gamemode\mod_zb3.h" />
     <ClInclude Include="..\dlls\gamemode\mod_zbs.h" />
     <ClInclude Include="..\dlls\gamemode\mod_zbshelter_pve.h" />
+    <ClInclude Include="..\dlls\gamemode\zb1\zb1_const.h" />
+    <ClInclude Include="..\dlls\gamemode\zb1\zb1_zclass.h" />
+    <ClInclude Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_aksha.h" />
+    <ClInclude Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_boomer.h" />
+    <ClInclude Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_booster.h" />
+    <ClInclude Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_china.h" />
+    <ClInclude Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_fly.h" />
+    <ClInclude Include="..\dlls\gamemode\zb2\newclass\zb3_zclass_resident.h" />
     <ClInclude Include="..\dlls\gamemode\zb2\supplybox.h" />
     <ClInclude Include="..\dlls\gamemode\zb2\zb2_const.h" />
     <ClInclude Include="..\dlls\gamemode\zb2\zb2_skill.h" />
     <ClInclude Include="..\dlls\gamemode\zb2\zb2_zclass.h" />
-    <ClInclude Include="..\dlls\gamemode\zb3\zb3_class_hero.h" />
+    <ClInclude Include="..\dlls\gamemode\zb2\zb2_zclass_banchee.h" />
+    <ClInclude Include="..\dlls\gamemode\zb2\zb2_zclass_deimos.h" />
+    <ClInclude Include="..\dlls\gamemode\zb2\zb2_zclass_ganimed.h" />
+    <ClInclude Include="..\dlls\gamemode\zb2\zb2_zclass_heal.h" />
+    <ClInclude Include="..\dlls\gamemode\zb2\zb2_zclass_heavy.h" />
+    <ClInclude Include="..\dlls\gamemode\zb2\zb2_zclass_pc.h" />
+    <ClInclude Include="..\dlls\gamemode\zb2\zb2_zclass_speed.h" />
+    <ClInclude Include="..\dlls\gamemode\zb2\zb2_zclass_stamper.h" />
+    <ClInclude Include="..\dlls\gamemode\zb2\zb2_zclass_tank.h" />
     <ClInclude Include="..\dlls\gamemode\zb3\zb3_const.h" />
     <ClInclude Include="..\dlls\gamemode\zb3\zb3_hero.h" />
-    <ClInclude Include="..\dlls\gamemode\zb3\zb3_human.h" />
     <ClInclude Include="..\dlls\gamemode\zb3\zb3_morale.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\mod_zb1reference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\mod_zb2reference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\mod_zb5.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb1reference\zb1_zclassreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_akshaR.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_boomerR.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_boosterR.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_chinaR.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_flyR.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\newclass\zb3_zclass_residentR.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\supplyboxreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb2_skillreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclassreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_bancheereference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_deimosreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_ganimedreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_healreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_heavyreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_pcreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_speedreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_stamperreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb2_zclass_tankreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb5_zclass_deathknight.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb5_zclass_meatwall.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb2reference\zb5_zclass_spider.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb3reference\zb3_heroreference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb3reference\zb3_moralereference.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb5_const.h" />
+    <ClInclude Include="..\dlls\gamemode\zb5\zb5_evobox.h" />
+    <ClInclude Include="..\dlls\gamemode\zbs\boss_manager.h" />
     <ClInclude Include="..\dlls\gamemode\zbs\monster_entity.h" />
     <ClInclude Include="..\dlls\gamemode\zbs\monster_entity2.h" />
+    <ClInclude Include="..\dlls\gamemode\zbs\monster_entity_boss.h" />
     <ClInclude Include="..\dlls\gamemode\zbs\monster_manager.h" />
     <ClInclude Include="..\dlls\gamemode\zbs\monster_manager2.h" />
     <ClInclude Include="..\dlls\gamemode\zbs\npc_group.h" />
+    <ClInclude Include="..\dlls\gamemode\zbs\zbs_box.h" />
     <ClInclude Include="..\dlls\gamemode\zbs\zbs_const.h" />
     <ClInclude Include="..\dlls\gamemode\zbs\zs_subs.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\base.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\build.h" />
+    <ClInclude Include="..\dlls\gamemode\zsh\buildobject\Generator\male_generator.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\buildobject\Turrets\automatic turret.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\buildobject\Turrets\electric turret.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\buildobject\Turrets\fire turret.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\buildobject\Turrets\gatling turret.h" />
+    <ClInclude Include="..\dlls\gamemode\zsh\buildobject\Turrets\gatling turret_manager.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\buildobject\Turrets\plasma turret.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\buildobject\Turrets\tower.h" />
-    <ClInclude Include="..\dlls\gamemode\zsh\resources\resources.h" />
+    <ClInclude Include="..\dlls\gamemode\zsh\NPC\Zombie\zm_tank.h" />
+    <ClInclude Include="..\dlls\gamemode\zsh\NPC\Zombie\zm_light.h" />
+    <ClInclude Include="..\dlls\gamemode\zsh\NPC\Zombie\zm_tank_manager.h" />
+    <ClInclude Include="..\dlls\gamemode\zsh\NPC\Zombie\zm_light_manager.h" />
+    <ClInclude Include="..\dlls\gamemode\zsh\NPC\zsh_zm.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\resources\meat.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\resources\meat_manager.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\resources\resource_group.h" />
@@ -774,14 +829,11 @@
     <ClInclude Include="..\dlls\gamemode\zsh\resources\wood.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\resources\wood_manager.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\resources\zsh_subs.h" />
-    <ClInclude Include="..\dlls\gamemode\zsh\shelter_axe.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\skills.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\skill\Enginner\engineer.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\skill\Survival\survival.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\skill\Warrior\warrior.h" />
-    <ClInclude Include="..\dlls\gamemode\zsh\spawnres.h" />
     <ClInclude Include="..\dlls\gamemode\zsh\zsh_const.h" />
-    <ClInclude Include="..\dlls\gamemode\zsh\zsh_scoreboard.h" />
     <ClInclude Include="..\dlls\gamerules.h" />
     <ClInclude Include="..\dlls\globals.h" />
     <ClInclude Include="..\dlls\healthkit.h" />
@@ -801,6 +853,7 @@
     <ClInclude Include="..\dlls\monsterevent.h" />
     <ClInclude Include="..\dlls\monsters.h" />
     <ClInclude Include="..\dlls\mortar.h" />
+    <ClInclude Include="..\dlls\mp_discord_api.h" />
     <ClInclude Include="..\dlls\nodes.h" />
     <ClInclude Include="..\dlls\observer.h" />
     <ClInclude Include="..\dlls\pathcorner.h" />
@@ -811,7 +864,6 @@
     <ClInclude Include="..\dlls\player\hintmessage.h" />
     <ClInclude Include="..\dlls\player\player_account.h" />
     <ClInclude Include="..\dlls\player\player_const.h" />
-    <ClInclude Include="..\dlls\player\player_hero.h" />
     <ClInclude Include="..\dlls\player\player_human_level.h" />
     <ClInclude Include="..\dlls\player\player_knockback.h" />
     <ClInclude Include="..\dlls\player\player_model.h" />
@@ -819,7 +871,6 @@
     <ClInclude Include="..\dlls\player\player_msg.h" />
     <ClInclude Include="..\dlls\player\player_spawnpoint.h" />
     <ClInclude Include="..\dlls\player\player_zombie.h" />
-    <ClInclude Include="..\dlls\player\zsh_updateday.h" />
     <ClInclude Include="..\dlls\saverestore.h" />
     <ClInclude Include="..\dlls\schedule.h" />
     <ClInclude Include="..\dlls\scriptevent.h" />
@@ -868,12 +919,79 @@
     <ClInclude Include="..\dlls\weapons_msg.h" />
     <ClInclude Include="..\dlls\weapons_precache.h" />
     <ClInclude Include="..\dlls\world.h" />
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_aksha.h" />
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_banchee.h" />
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_boomer.h" />
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_booster.h" />
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_china.h" />
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_deathknight.h" />
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_deimos.h" />
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_fly.h" />
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_ganimed.h" />
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_heal.h" />
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_heavy.h" />
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_meatwall.h" />
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_pc.h" />
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_resident.h" />
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_speed.h" />
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_spider.h" />
+    <ClInclude Include="..\dlls\wpn_shared\grenade\Zombie\wpn_zombiebomb_stamper.h" />
+    <ClInclude Include="..\dlls\wpn_shared\hl\weapon_egon.h" />
     <ClInclude Include="..\dlls\wpn_shared\knife_shelter_axe.h" />
+    <ClInclude Include="..\dlls\wpn_shared\knife_twin_axes.h" />
+    <ClInclude Include="..\dlls\wpn_shared\knife_twin_axesex.h" />
+    <ClInclude Include="..\dlls\wpn_shared\melee\wpn_balrog9.h" />
+    <ClInclude Include="..\dlls\wpn_shared\melee\wpn_clawhammer.h" />
+    <ClInclude Include="..\dlls\wpn_shared\melee\wpn_dragonclaw.h" />
+    <ClInclude Include="..\dlls\wpn_shared\melee\wpn_dualkatana.h" />
+    <ClInclude Include="..\dlls\wpn_shared\melee\wpn_serpentblade.h" />
+    <ClInclude Include="..\dlls\wpn_shared\melee\wpn_thanatos9.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_ak47dragon.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_blaster.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_broad.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_hk23.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_k3.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_m4a1dragon.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_m60e4.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_mp5tiger.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_p90lapin.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_pkm.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_stunrifle.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_0\wpn_tmpdragon.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\content_1\wpn_failnaught.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_balrog11.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_balrog3.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_balrog5.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_balrog7.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_buffaug.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_ethereal.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_gatling.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_gatlingex.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_guitar.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_janus7xmas.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_m134ex.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_m134xmas.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_m2.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_m95xmas.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_mg3.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_mg3xmas.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_plasmagun.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_poisongun.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_spas12ex.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_stg44.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_tbarrel.h" />
+    <ClInclude Include="..\dlls\wpn_shared\primary\wpn_violingun.h" />
+    <ClInclude Include="..\dlls\wpn_shared\secondary\wpn_balrog1.h" />
+    <ClInclude Include="..\dlls\wpn_shared\secondary\wpn_desperado.h" />
+    <ClInclude Include="..\dlls\wpn_shared\wondercannon.h" />
+    <ClInclude Include="..\dlls\wpn_shared\wondercannonex.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_ak47.h" />
+    <ClInclude Include="..\dlls\wpn_shared\wpn_arbalest.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_as50.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_aug.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_awp.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_bow.h" />
+    <ClInclude Include="..\dlls\wpn_shared\wpn_buffm4a1.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_c4.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_c4shelter.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_cannon.h" />
@@ -906,6 +1024,9 @@
     <ClInclude Include="..\dlls\wpn_shared\wpn_mp7a1d.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_p228.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_p90.h" />
+    <ClInclude Include="..\dlls\wpn_shared\wpn_paladin.h" />
+    <ClInclude Include="..\dlls\wpn_shared\wpn_quant.h" />
+    <ClInclude Include="..\dlls\wpn_shared\wpn_sbmine.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_scarh.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_scarl.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_scout.h" />
@@ -921,6 +1042,7 @@
     <ClInclude Include="..\dlls\wpn_shared\wpn_ump45.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_usp.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_voidpistol.h" />
+    <ClInclude Include="..\dlls\wpn_shared\wpn_voidpistolex.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_wa2000.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_xm1014.h" />
     <ClInclude Include="..\dlls\wpn_shared\wpn_xm8s.h" />
@@ -975,22 +1097,19 @@
     <ClInclude Include="..\public2\utllinkedlist.h" />
     <ClInclude Include="..\public2\utlmemory.h" />
     <ClInclude Include="..\public2\utlvector.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="mp.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{70A2B904-B7DB-4C48-8DE0-AF567360D572}</ProjectGuid>
     <RootNamespace>regamelite</RootNamespace>
-    <ProjectName>mp</ProjectName>
+    <ProjectName>Multiplayer</ProjectName>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>MultiByte</CharacterSet>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <PlatformToolset>v141_xp</PlatformToolset>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
@@ -1003,25 +1122,13 @@
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141_xp</PlatformToolset>
-  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
@@ -1034,30 +1141,13 @@
     <OutDir>$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <TargetName>mp</TargetName>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRules />
-    <CodeAnalysisRuleAssemblies />
-    <LinkIncremental />
-    <OutDir>$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <TargetName>mp</TargetName>
+    <TargetName>mp2</TargetName>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRules />
     <CodeAnalysisRuleAssemblies />
-    <OutDir>F:\Release 2\cstz\dlls</OutDir>
+    <OutDir>K:\CSTZ</OutDir>
     <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <TargetName>mp</TargetName>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRules />
-    <CodeAnalysisRuleAssemblies />
-    <OutDir>$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PreBuildEvent>
@@ -1096,42 +1186,6 @@
     </PostBuildEvent>
     <CustomBuildStep />
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <PreBuildEvent>
-      <Command>
-      </Command>
-      <Message>Setup version from Git revision</Message>
-    </PreBuildEvent>
-    <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)\..\;$(ProjectDir)\..\common;$(ProjectDir)\..\dlls;$(ProjectDir)\..\engine;$(ProjectDir)\..\public;$(ProjectDir)\..\public2\tier1;$(ProjectDir)\..\game_shared;$(ProjectDir)\..\pm_shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Full</Optimization>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;CLIENT_WEAPONS;DEDICATED;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <FloatingPointModel>Precise</FloatingPointModel>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <MinimalRebuild>false</MinimalRebuild>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <WholeProgramOptimization>true</WholeProgramOptimization>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-    </ClCompile>
-    <Link>
-      <ModuleDefinitionFile>
-      </ModuleDefinitionFile>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <SubSystem>Windows</SubSystem>
-    </Link>
-    <PostBuildEvent>
-      <Command>
-      </Command>
-      <Message>Automatic deployment script</Message>
-    </PostBuildEvent>
-    <CustomBuildStep />
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
       <Command>
@@ -1139,7 +1193,7 @@
       <Message>Setup version from Git revision</Message>
     </PreBuildEvent>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)\..\;$(ProjectDir)\..\common2;$(ProjectDir)\..\dlls;$(ProjectDir)\..\engine2;$(ProjectDir)\..\public2;$(ProjectDir)\..\public2\tier1;$(ProjectDir)\..\game_shared2;$(ProjectDir)\..\pm_shared2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\;$(ProjectDir)\..\common2;$(ProjectDir)\..\dlls;$(ProjectDir)\..\engine2;$(ProjectDir)\..\public2;$(ProjectDir)\..\public2\tier1;$(ProjectDir)\..\game_shared2;$(ProjectDir)\..\pm_shared2;..\discord_game_sdk\cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
@@ -1148,39 +1202,19 @@
       <AdditionalOptions>/arch:IA32 %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <OpenMPSupport>true</OpenMPSupport>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <IntelJCCErratum>true</IntelJCCErratum>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
       <SubSystem>Windows</SubSystem>
-    </Link>
-    <PostBuildEvent>
-      <Command>
-      </Command>
-      <Message>Automatic deployment script</Message>
-    </PostBuildEvent>
-    <CustomBuildStep />
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <PreBuildEvent>
-      <Command>
-      </Command>
-      <Message>Setup version from Git revision</Message>
-    </PreBuildEvent>
-    <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)\..\;$(ProjectDir)\..\common;$(ProjectDir)\..\dlls;$(ProjectDir)\..\engine;$(ProjectDir)\..\public;$(ProjectDir)\..\public2\tier1;$(ProjectDir)\..\game_shared;$(ProjectDir)\..\pm_shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;CLIENT_WEAPONS;DEDICATED;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_DEBUG;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <FloatingPointModel>Precise</FloatingPointModel>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-    </ClCompile>
-    <Link>
-      <ModuleDefinitionFile>
-      </ModuleDefinitionFile>
-      <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>G:\CST-1.16.1\discord_game_sdk\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>discord_game_sdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>

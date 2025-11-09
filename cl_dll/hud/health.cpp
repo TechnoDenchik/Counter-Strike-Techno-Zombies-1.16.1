@@ -1,4 +1,4 @@
-/* =================================================================================== *
+﻿/* =================================================================================== *
 	  * =================== TechnoSoftware & Valve Developing =================== *
  * =================================================================================== */
 
@@ -200,7 +200,6 @@ int CHudHealth::VidInit(void)
 	m_vAttackPos[ATK_LEFT ].x = ScreenWidth  / 2 - SPR_Width ( m_hSprite, 3 ) * 3;
 	m_vAttackPos[ATK_LEFT ].y = ScreenHeight / 2 - SPR_Height( m_hSprite, 3 ) / 2;
 
-
 	m_HUD_dmg_bio = gHUD.GetSpriteIndex( "dmg_bio" ) + 1;
 	m_HUD_cross = gHUD.GetSpriteIndex( "cross" );
 
@@ -209,6 +208,15 @@ int CHudHealth::VidInit(void)
 	R_InitTexture(m_ihealthes, "resource/hud/zb3/hud_sb_num_big_white");
 	R_InitTexture(m_plus, "resource/hud/hud_sb_num_plus");
 	R_InitTexture(m_armors, "resource/hud/hud_sb_num_defense");
+
+	if (!m_iCharacterBG)
+		m_iCharacterBG = R_LoadTextureUnique("resource/hud/hud_character_bg");
+
+	if (!m_iCharacterBG_New_Bottom)
+		m_iCharacterBG_New_Bottom = R_LoadTextureUnique("resource/hud/hud_character_bg_new_bottom");
+
+	if (!m_iCharacterBG_New_Top)
+		m_iCharacterBG_New_Top = R_LoadTextureUnique("resource/hud/hud_character_bg_new_top");
 
 	BuildNumberRC(ihealth, 18, 22);
 	BuildNumberRC(iarmors, 18, 22);
@@ -229,14 +237,23 @@ int CHudHealth::VidInit(void)
 
 int CHudHealth:: MsgFunc_Health(const char *pszName,  int iSize, void *pbuf )
 {
-	BufferReader reader( pszName, pbuf, iSize );
+	BufferReader reader(pszName, pbuf, iSize);
 	int x = m_iHealth;
+
 	if (iSize == 2)
 	{
-		x = reader.ReadShort();
+		// 🔴 ИСПРАВЛЕНИЕ: Чтение unsigned short вместо short
+		unsigned short usHealth = reader.ReadShort();
+		x = (int)usHealth;
+	}
+	else if (iSize == 4)
+	{
+		// 🔴 ДОБАВЛЕНИЕ: Поддержка 4-байтных значений
+		x = reader.ReadLong();
 	}
 	else
 	{
+		// 1-байтное значение
 		x = reader.ReadByte();
 	}
 
@@ -292,7 +309,9 @@ int CHudHealth:: MsgFunc_ScoreAttrib(const char *pszName,  int iSize, void *pbuf
 	g_PlayerExtraInfo[index].dead   = !!(flags & PLAYER_DEAD);
 	g_PlayerExtraInfo[index].has_c4 = !!(flags & PLAYER_HAS_C4);
 	g_PlayerExtraInfo[index].vip    = !!(flags & PLAYER_VIP);
+	g_PlayerExtraInfo[index].hero = !!(flags & PLAYER_HERO);
 	g_PlayerExtraInfo[index].zombie = !!(flags & PLAYER_ZOMBIE);
+	g_PlayerExtraInfo[index].mutant = !!(flags & PLAYER_MUTANT);
 	return 1;
 }
 
@@ -304,13 +323,13 @@ int CHudHealth::Draw(float flTime)
 		int a = 0;
 		int a2 = 0;
 
-		int x2 = ScreenWidth / 75;
+		int x2 = ScreenWidth / 95;
 		int y2 = ScreenHeight / 1.0215;
 
-		int x3 = ScreenWidth / 9.0;
+		int x3 = ScreenWidth / 9.8;
 		int y3 = ScreenHeight / 1.0215;
 
-		int x8 = ScreenWidth / 10.4;
+		int x8 = ScreenWidth / 10.6;
 		int y8 = ScreenHeight / 1.1014;
 
 		int x9 = ScreenWidth / 50.5;
@@ -325,11 +344,20 @@ int CHudHealth::Draw(float flTime)
 		int x12 = ScreenWidth / 9.8;
 		int y12 = ScreenHeight / 1.0485;
 
-		int x13 = ScreenWidth / 215.5;
+		int x13 = ScreenWidth / 555.5;
 		int y13 = ScreenHeight / 1.0485;
 
-		int x14 = ScreenWidth / 10.0;
+		int x14 = ScreenWidth / 11.0;
 		int y14 = ScreenHeight / 1.0485;
+
+		int x15;
+		int y15;
+
+		int iX = 0;
+		int iY = ScreenHeight - 5;
+
+		int iW = m_iCharacterBG_New_Bottom->w();
+		int iH = m_iCharacterBG_New_Bottom->h();
 
 		if (m_iHealth > 25)
 		{
@@ -406,23 +434,20 @@ int CHudHealth::Draw(float flTime)
 			switch (gHUD.m_iModRunning)
 			{
 			case MOD_ZB1:
+			case MOD_ZB2:
 			case MOD_ZB3:
+			case MOD_ZB5:
 
 				rc = m_hEmpty[m_enArmorType].rect;
 				rc.top += m_iHeight * ((float)(100 - (min(100, m_iBat))) * 0.01f);
 
-				m_health_board->Bind();
-				DrawUtils::Draw2DQuadScaled(x8 - 550 / 3.0, y8 + 5.5, x8 + 450 / 3.0, y8 + 95);
+				iW = m_iCharacterBG->w();
+				iH = m_iCharacterBG->h();
+				m_iCharacterBG->Draw2DQuadScaled(iX, iY - iH, iX + iW, iY - iH + iH);
 
 				gEngfuncs.pTriAPI->Color4ub(r, g, b, 255);
 				m_plus->Bind();
 				DrawUtils::Draw2DQuadScaled(x2 - 8, y2 - 8, x2 + 8, y2 + 8);
-				gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
-				m_armors->Bind();
-				DrawUtils::Draw2DQuadScaled(x3 - 8, y3 - 8, x3 + 8, y3 + 8);
-
-				m_ihealthes_top->Bind();
-				DrawUtils::Draw2DQuadScaled(x8 - 550 / 3.0, y8 + 5.5, x8 + 450 / 3.0, y8 + 95);
 
 				if (m_fFade)
 				{
@@ -471,33 +496,68 @@ int CHudHealth::Draw(float flTime)
 
 				if (m_iBat < 10)
 				{
+					x15 = ScreenWidth / 10.0;
+					y15 = ScreenHeight / 1.0215;
+
+					gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
+					m_armors->Bind();
+					DrawUtils::Draw2DQuadScaled(x15 - 8, y15 - 8, x15 + 8, y15 + 8);
+
 					gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
 					(m_hEmpty[m_enArmorType].rect.right - m_hEmpty[m_enArmorType].rect.left);
 					DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 46, y14 + 14, 1);
 				}
 				else if (m_iBat < 100)
 				{
+					x15 = ScreenWidth / 10.0;
+					y15 = ScreenHeight / 1.0215;
+
+					gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
+					m_armors->Bind();
+					DrawUtils::Draw2DQuadScaled(x15 - 8, y15 - 8, x15 + 8, y15 + 8);
+
 					gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
 					(m_hEmpty[m_enArmorType].rect.right - m_hEmpty[m_enArmorType].rect.left);
 					DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 54, y14 + 14, 1);
 				}
 				else if (m_iBat < 1000)
 				{
+					x15 = ScreenWidth / 10.0;
+					y15 = ScreenHeight / 1.0215;
+
+					gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
+					m_armors->Bind();
+					DrawUtils::Draw2DQuadScaled(x15 - 8, y15 - 8, x15 + 8, y15 + 8);
+
 					gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
 					(m_hEmpty[m_enArmorType].rect.right - m_hEmpty[m_enArmorType].rect.left);
 					DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 70, y14 + 14, 1);
 				}
 				else if (m_iBat < 10000)
-				{
+				{	
+					x15 = ScreenWidth / 11.8;
+					y15 = ScreenHeight / 1.0215;
+
+					gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
+					m_armors->Bind();
+					DrawUtils::Draw2DQuadScaled(x15 - 8, y15 - 8, x15 + 8, y15 + 8);
+
 					gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
 					(m_hEmpty[m_enArmorType].rect.right - m_hEmpty[m_enArmorType].rect.left);
-					DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 86, y14 + 14, 1);
+					DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 60, y14 + 14, 1);
 				}
 				else
 				{
+					x15 = ScreenWidth / 12.8;
+					y15 = ScreenHeight / 1.0215;
+
+					gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
+					m_armors->Bind();
+					DrawUtils::Draw2DQuadScaled(x15 - 8, y15 - 8, x15 + 8, y15 + 8);
+
 					gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
 					(m_hEmpty[m_enArmorType].rect.right - m_hEmpty[m_enArmorType].rect.left);
-					DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 106, y14 + 14, 1);
+					DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 65, y14 + 14, 1);
 				}
 				break;
 			
@@ -506,18 +566,14 @@ int CHudHealth::Draw(float flTime)
 				rc = m_hEmpty[m_enArmorType].rect;
 				rc.top += m_iHeight * ((float)(100 - (min(100, m_iBat))) * 0.01f);
 
-				m_health_board->Bind();
-				DrawUtils::Draw2DQuadScaled(x8 - 550 / 3.0, y8 + 5.5, x8 + 450 / 3.0, y8 + 95);
+				iW = m_iCharacterBG_New_Bottom->w();
+				iH = m_iCharacterBG_New_Bottom->h();
+				m_iCharacterBG_New_Bottom->Draw2DQuadScaled(iX, iY - iH, iX + iW, iY - iH + iH);
 
 				gEngfuncs.pTriAPI->Color4ub(r, g, b, 255);
 				m_plus->Bind();
 				DrawUtils::Draw2DQuadScaled(x2 - 8, y2 - 8, x2 + 8, y2 + 8);
 				gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
-				m_armors->Bind();
-				DrawUtils::Draw2DQuadScaled(x3 - 8, y3 - 8, x3 + 8, y3 + 8);
-
-				//m_ihealthes_top->Bind();
-				//DrawUtils::Draw2DQuadScaled(x8 - 550 / 3.0, y8 + 5.5, x8 + 450 / 3.0, y8 + 95);
 
 				if (m_fFade)
 				{
@@ -566,33 +622,68 @@ int CHudHealth::Draw(float flTime)
 
 				if (m_iBat < 10)
 				{
+					x15 = ScreenWidth / 10.0;
+					y15 = ScreenHeight / 1.0215;
+
+					gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
+					m_armors->Bind();
+					DrawUtils::Draw2DQuadScaled(x15 - 8, y15 - 8, x15 + 8, y15 + 8);
+
 					gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
 					(m_hEmpty[m_enArmorType].rect.right - m_hEmpty[m_enArmorType].rect.left);
 					DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 46, y14 + 14, 1);
 				}
 				else if (m_iBat < 100)
 				{
+					x15 = ScreenWidth / 10.0;
+					y15 = ScreenHeight / 1.0215;
+
+					gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
+					m_armors->Bind();
+					DrawUtils::Draw2DQuadScaled(x15 - 8, y15 - 8, x15 + 8, y15 + 8);
+
 					gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
 					(m_hEmpty[m_enArmorType].rect.right - m_hEmpty[m_enArmorType].rect.left);
 					DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 54, y14 + 14, 1);
 				}
 				else if (m_iBat < 1000)
 				{
+					x15 = ScreenWidth / 10.0;
+					y15 = ScreenHeight / 1.0215;
+
+					gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
+					m_armors->Bind();
+					DrawUtils::Draw2DQuadScaled(x15 - 8, y15 - 8, x15 + 8, y15 + 8);
+
 					gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
 					(m_hEmpty[m_enArmorType].rect.right - m_hEmpty[m_enArmorType].rect.left);
 					DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 70, y14 + 14, 1);
 				}
 				else if (m_iBat < 10000)
 				{
+					x15 = ScreenWidth / 11.8;
+					y15 = ScreenHeight / 1.0215;
+
+					gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
+					m_armors->Bind();
+					DrawUtils::Draw2DQuadScaled(x15 - 8, y15 - 8, x15 + 8, y15 + 8);
+
 					gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
 					(m_hEmpty[m_enArmorType].rect.right - m_hEmpty[m_enArmorType].rect.left);
-					DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 86, y14 + 14, 1);
+					DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 60, y14 + 14, 1);
 				}
 				else
 				{
+					x15 = ScreenWidth / 12.8;
+					y15 = ScreenHeight / 1.0215;
+
+					gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
+					m_armors->Bind();
+					DrawUtils::Draw2DQuadScaled(x15 - 8, y15 - 8, x15 + 8, y15 + 8);
+
 					gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
 					(m_hEmpty[m_enArmorType].rect.right - m_hEmpty[m_enArmorType].rect.left);
-					DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 106, y14 + 14, 1);
+					DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 65, y14 + 14, 1);
 				}
 
 				break;
@@ -601,16 +692,14 @@ int CHudHealth::Draw(float flTime)
 
 					rc = m_hEmpty[m_enArmorType].rect;
 					rc.top += m_iHeight * ((float)(100 - (min(100, m_iBat))) * 0.01f);
-
-					m_health_board->Bind();
-					DrawUtils::Draw2DQuadScaled(x8 - 550 / 3.0, y8 + 5.5, x8 + 450 / 3.0, y8 + 95);
 					
+					iW = m_iCharacterBG_New_Bottom->w();
+					iH = m_iCharacterBG_New_Bottom->h();
+					m_iCharacterBG_New_Bottom->Draw2DQuadScaled(iX, iY - iH, iX + iW, iY - iH + iH);
+
 					gEngfuncs.pTriAPI->Color4ub(r, g, b, 255);
 					m_plus->Bind();
 					DrawUtils::Draw2DQuadScaled(x2 - 8, y2 - 8, x2 + 8, y2 + 8);
-					gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
-					m_armors->Bind();
-					DrawUtils::Draw2DQuadScaled(x3 - 8, y3 - 8, x3 + 8, y3 + 8);
 
 					if (m_fFade)
 					{
@@ -659,43 +748,77 @@ int CHudHealth::Draw(float flTime)
 
 					if (m_iBat < 10)
 					{
+						x15 = ScreenWidth / 10.0;
+						y15 = ScreenHeight / 1.0215;
+
+						gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
+						m_armors->Bind();
+						DrawUtils::Draw2DQuadScaled(x15 - 8, y15 - 8, x15 + 8, y15 + 8);
+
 						gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
 						(m_hEmpty[m_enArmorType].rect.right - m_hEmpty[m_enArmorType].rect.left);
 						DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 46, y14 + 14, 1); 
 					}
 					else if (m_iBat < 100)
 					{
+						x15 = ScreenWidth / 10.0;
+						y15 = ScreenHeight / 1.0215;
+
+						gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
+						m_armors->Bind();
+						DrawUtils::Draw2DQuadScaled(x15 - 8, y15 - 8, x15 + 8, y15 + 8);
+
 						gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
 						(m_hEmpty[m_enArmorType].rect.right - m_hEmpty[m_enArmorType].rect.left);
 						DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 54, y14 + 14, 1);
 					}
 					else if (m_iBat < 1000)
 					{
+						x15 = ScreenWidth / 10.0;
+						y15 = ScreenHeight / 1.0215;
+
+						gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
+						m_armors->Bind();
+						DrawUtils::Draw2DQuadScaled(x15 - 8, y15 - 8, x15 + 8, y15 + 8);
+
 						gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
 						(m_hEmpty[m_enArmorType].rect.right - m_hEmpty[m_enArmorType].rect.left);
 						DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 70, y14 + 14, 1);
 					}
 					else if (m_iBat < 10000)
 					{
+						x15 = ScreenWidth / 11.8;
+						y15 = ScreenHeight / 1.0215;
+
+						gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
+						m_armors->Bind();
+						DrawUtils::Draw2DQuadScaled(x15 - 8, y15 - 8, x15 + 8, y15 + 8);
+
 						gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
 						(m_hEmpty[m_enArmorType].rect.right - m_hEmpty[m_enArmorType].rect.left);
-						DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 86, y14 + 14, 1);
+						DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 60, y14 + 14, 1);
 					}
 					else
 					{
+						x15 = ScreenWidth / 12.8;
+						y15 = ScreenHeight / 1.0215;
+
+						gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
+						m_armors->Bind();
+						DrawUtils::Draw2DQuadScaled(x15 - 8, y15 - 8, x15 + 8, y15 + 8);
+
 						gEngfuncs.pTriAPI->Color4ub(r2, g2, b2, 255);
 						(m_hEmpty[m_enArmorType].rect.right - m_hEmpty[m_enArmorType].rect.left);
-						DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 106, y14 + 14, 1);
-					}
-					
-
-
-
-
-					
+						DrawTexturedNumbersTopRightAligned(*m_ihealthes, iarmors, m_iBat, x14 + 65, y14 + 14, 1);
+					}		
 					break;
 
 				}
+				iX = ScreenWidth;
+				iY = ScreenHeight - 5;
+
+				iW = m_iCharacterBG_New_Bottom->w();
+				iH = m_iCharacterBG_New_Bottom->h();
 		}
 		DrawDamage( flTime );
 		DrawPain( flTime );
@@ -709,12 +832,12 @@ int CHudHealth::MsgFunc_Battery(const char* pszName, int iSize, void* pbuf)
 	BufferReader reader(pszName, pbuf, iSize);
 
 	m_iFlags |= HUD_DRAW;
-	int x = reader.ReadShort();
+	unsigned short armor = reader.ReadShort();
 
-	if (x != m_iBat)
+	if (armor != m_iBat)
 	{
 		m_fFade = FADE_TIME;
-		m_iBat = x;
+		m_iBat = armor;
 	}
 
 	return 1;

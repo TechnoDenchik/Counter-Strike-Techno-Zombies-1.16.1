@@ -674,16 +674,19 @@ int CBreakable::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, floa
 	// do the damage
 	pev->health -= flDamage;
 
+
+	//gr
+	//ClientPrint(pevAttacker, HUD_PRINTTALK, "Hit Breakable Msg Sending \n");
 	if (CBaseEntity::Instance(pevAttacker)->IsPlayer() && flDamage > 0.0f) {
 		MESSAGE_BEGIN(MSG_ONE, gmsgHitMsg, NULL, pevAttacker);
 		WRITE_LONG((long)flDamage);
 		WRITE_SHORT(ENTINDEX(edict()));
 		WRITE_BYTE(0);
 		MESSAGE_END();
+		//ClientPrint(pevAttacker, HUD_PRINTTALK, "Hit Breakable Msg Sent \n");
 	}
-		
 	
-
+	
 	if (pev->health <= 0)
 	{
 		pev->takedamage = DAMAGE_NO;

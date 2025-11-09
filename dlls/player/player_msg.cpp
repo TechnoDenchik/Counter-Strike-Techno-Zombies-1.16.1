@@ -21,6 +21,7 @@ GNU General Public License for more details.
 #include "player.h"
 
 // global vars
+int gmsgMPToCL = 0;
 int giPrecacheGrunt = 0;
 int gmsgWeapPickup = 0;
 int gmsgHudText = 0;
@@ -64,6 +65,7 @@ int gmsgArmorType = 0;
 int gmsgStatusValue = 0;
 int gmsgStatusText = 0;
 int gmsgStatusIcon = 0;
+int gmsgShelterIcon = 0;
 int gmsgWeaponList2 = 0;
 
 int gmsgBarTime = 0;
@@ -105,21 +107,82 @@ int gmsgBotProgress = 0;
 int gmsgBrass = 0;
 int gmsgFog = 0;
 int gmsgShowTimer = 0;
-
+int gmsgHeadIcon = 0;
+int gmsgSpecialCrossHair = 0;
 int gmsgZBSTip = 0;
 int gmsgZBSLevel = 0;
+int gmsgZBSMsgLevel = 0;
+int gmsgZBSRenMsg = 0;
 int gmsgZSHUpdateDay = 0;
 int gmsgZSHUpdateRes = 0;
+int gmsgZSHUpdateResHome = 0;
+int gmsgZSHUpdateTime = 0;
 int gmsgGDUpdateLV = 0;
 int gmsgGDMsg = 0;
 int gmsgBTEWeapon = 0;
 int gmsgZB2Msg = 0;
 int gmsgZB3Msg = 0;
+int gmsgZB3RenMsg = 0;
+int gmsgMVPInfo = 0;
+int gmsgZB5Msg = 0;
+int gmsgZB5RenMsg = 0;
+int gmsgZB5UsedMsg = 0;
+int gmsgZB5UsedMsg2 = 0;
+int gmsgZB5SetHero = 0;
+int gmsgZB5ExternEvo;
+int gmsgZB5InventorySet = 0;
+int gmsgZB5Evolution = 0;
+int gmsgZB5UpdateEvoLv = 0;
+int gmsgZB5GetLocationBox = 0;
+int gmsgZB5GetLocationBoxK = 0;
+int gmsgZB5RespawnBar = 0;
+int gmsgHIDMsg = 0;
+
+int gmsgDMRespawnBar = 0;
+int gmsgTDMRespawnBar = 0;
+
+int gmsgOriginalMsg = 0;
+int gmsgOriginalMsg2 = 0;
+int gmsgOriginalMsg3 = 0;
+int gmsgOriginalMsg4 = 0;
+int gmsgOriginalMsg5 = 0;
+int gmsgOriginalMsg6 = 0;
+int gmsgOriginalMsg7 = 0;
+int gmsgOriginalMsg8 = 0;
+int gmsgOriginalMsg9 = 0;
+int gmsgOriginalMsg10 = 0;
+int gmsgOriginalMsg11 = 0;
+int gmsgOriginalMsg12 = 0;
+int gmsgOriginalMsg13 = 0;
+int gmsgOriginalMsgMusic = 0;
+int gmsgOriginalMsgCantBuy = 0;
+int gmsgTwinAxesMsg = 0;
+int gmsgQuantumMsg = 0;
+int gmsgArbalestMsg = 0;
+int gmsgZB3UsedMsg = 0;
+int gmsgZB3UsedMsg2 = 0;
+int gmsgZB3InventorySet = 0;
+int gmsgZB3SetHero = 0;
 int gmsgZSHMsg = 0;
 int gmsgZSHMsgText = 0;
+int gmsgZSHMsgTextNextDay = 0;
+int gmsgZSHMsgRound = 0;
 int gmsgResetRound = 0;
+int gmsgZSHMsgShelterPos = 0;
+int gmsgZSHMsgResPos = 0;
+int gmsgZSHMsgRes2Pos = 0;
+int gmsgZSHMsgZmPos = 0;
+int gmsgZSHMsgShelterPosK = 0;
+int gmsgZSHMsgResPosK = 0;
+int gmsgZSHMsgRes2PosK = 0;
+int gmsgZSHMsgZmPosK = 0;
+int gmsgZSHMsgMentality = 0;
 int gmsgGunDeath = 0;
-int gmsgSupplyText = 0;
+int gmsgHitDamageMsgZB3 = 0;
+int gmsgHitDamageMsgZB5 = 0;
+int gmsgHitDamageMsgZBS = 0;
+int gmsgHitDamageMsgZSH = 0;
+
 
 // utils
 inline int FNullEnt(CBaseEntity *ent) { return (!ent) || FNullEnt(ent->edict()); }
@@ -174,6 +237,7 @@ void LinkUserMessages()
 	gmsgStatusText = REG_USER_MSG("StatusText", -1);
 	gmsgWeaponList2 = REG_USER_MSG("WeaponList2", -1);
 	gmsgStatusIcon = REG_USER_MSG("StatusIcon", -1);
+	gmsgShelterIcon = REG_USER_MSG("ShelterIcon", -1);
 	gmsgBarTime = REG_USER_MSG("BarTime", 2);
 	gmsgReloadSound = REG_USER_MSG("ReloadSound", 2);
 	gmsgCrosshair = REG_USER_MSG("Crosshair", 1);
@@ -213,21 +277,83 @@ void LinkUserMessages()
 	gmsgFog = REG_USER_MSG("Fog", 7);
 	gmsgShowTimer = REG_USER_MSG("ShowTimer", 0);
 	gmsgHudTextArgs = REG_USER_MSG("HudTextArgs", -1);
-
+	gmsgHeadIcon = REG_USER_MSG("HeadIcon", -1);
+	gmsgSpecialCrossHair = REG_USER_MSG("SpecialCrossHair", -1);
 	gmsgZBSTip = REG_USER_MSG("ZBSTip", -1);
 	gmsgZBSLevel = REG_USER_MSG("ZBSLevel", -1);
+	gmsgZBSMsgLevel = REG_USER_MSG("ZBSMsgLevel", -1);
+	gmsgZBSRenMsg = REG_USER_MSG("ZBSRenMsg", -1);
 	gmsgZSHUpdateDay = REG_USER_MSG("ZSHUpdateDay", -1);
 	gmsgZSHUpdateRes = REG_USER_MSG("ZSHUpdateRes", -1);
+	gmsgZSHUpdateResHome = REG_USER_MSG("ZSHUpdateResHome", -1);
 	gmsgGDUpdateLV = REG_USER_MSG("GDMsgLV", -1);
 	gmsgGDMsg = REG_USER_MSG("GDMsg", -1);
 	gmsgBTEWeapon = REG_USER_MSG("BTEWeapon", -1);
 	gmsgZB2Msg = REG_USER_MSG("ZB2Msg", -1);
 	gmsgZSHMsg = REG_USER_MSG("ZSHMsg", -1);
 	gmsgZSHMsgText = REG_USER_MSG("ZSHMsgText", -1);
+	gmsgZSHMsgTextNextDay = REG_USER_MSG("ZSHMsgTextNextDay", -1);
+	gmsgZSHMsgRound = REG_USER_MSG("ZSHMsgRound", -1);
+	gmsgZSHMsgShelterPos = REG_USER_MSG("ShelterPos", -1);
+	gmsgZSHMsgShelterPosK = REG_USER_MSG("ShelterK", -1);
+	gmsgZSHMsgMentality = REG_USER_MSG("ZSHMentalityHealth", -1);
+	gmsgZSHMsgResPos = REG_USER_MSG("WoodPos", -1);
+	gmsgZSHMsgRes2Pos = REG_USER_MSG("MetalPos", -1);
+	gmsgZSHMsgZmPos = REG_USER_MSG("ZombiePos", -1);
+	gmsgZSHMsgResPosK = REG_USER_MSG("WoodK", -1);
+	gmsgZSHMsgRes2PosK = REG_USER_MSG("MetalK", -1);
+	gmsgZSHMsgZmPosK = REG_USER_MSG("ZombieK", -1);
+	gmsgZSHUpdateTime = REG_USER_MSG("ZSHUpdateTime", -1);
 	gmsgZB3Msg = REG_USER_MSG("ZB3Msg", -1);
+	gmsgZB3RenMsg = REG_USER_MSG("ZB3RenMsg", -1);
+	gmsgMVPInfo = REG_USER_MSG("MVPInfo", -1);
+	gmsgZB5Msg = REG_USER_MSG("ZB5Msg", -1);
+	gmsgZB5RenMsg = REG_USER_MSG("ZB5RenMsg", -1);
+	gmsgZB5UsedMsg = REG_USER_MSG("ZB5SkillUsed", -1);
+	gmsgZB5UsedMsg2 = REG_USER_MSG("ZB5SkillUsed2", -1);
+	gmsgZB5InventorySet = REG_USER_MSG("ZB5Inventory", -1);
+	gmsgZB5SetHero = REG_USER_MSG("ZB5Hero", -1);
+	gmsgZB5ExternEvo = REG_USER_MSG("ZB5ExternEvo", -1);
+	gmsgZB5Evolution = REG_USER_MSG("ZB5Evolevel", -1);
+	gmsgZB5UpdateEvoLv = REG_USER_MSG("ZB5UpdateEvoLv", -1);
+	gmsgZB5GetLocationBox = REG_USER_MSG("ZB5Getlocationbox", -1);
+	gmsgZB5GetLocationBoxK = REG_USER_MSG("ZB5GetlocationboxK", -1);
+	gmsgZB5RespawnBar = REG_USER_MSG("ZB5RespawnBar", -1);
+	gmsgHIDMsg = REG_USER_MSG("HIDMsg", -1);
+
+	gmsgDMRespawnBar = REG_USER_MSG("RespawnBarDm", -1);
+	gmsgTDMRespawnBar = REG_USER_MSG("RespawnBarTdm", -1);
+
+	gmsgOriginalMsg = REG_USER_MSG("StartGame", -1);
+	gmsgOriginalMsg2 = REG_USER_MSG("BombPlant", -1);
+	gmsgOriginalMsg3 = REG_USER_MSG("BombDefuse", -1);
+	gmsgOriginalMsg4 = REG_USER_MSG("CTWIN", -1);
+	gmsgOriginalMsg5 = REG_USER_MSG("TRWIN", -1);
+	gmsgOriginalMsg6 = REG_USER_MSG("RoundDraw", -1);
+	gmsgOriginalMsg7 = REG_USER_MSG("Bombnozone", -1);
+	gmsgOriginalMsg8 = REG_USER_MSG("Bombnoground", -1);
+	gmsgOriginalMsg9 = REG_USER_MSG("Bombgive", -1);
+	gmsgOriginalMsg10 = REG_USER_MSG("Bombdrop", -1);
+	gmsgOriginalMsg11 = REG_USER_MSG("WPNDrop", -1);
+	gmsgOriginalMsg12 = REG_USER_MSG("", -1);
+	gmsgOriginalMsg13 = REG_USER_MSG("AK47", -1);
+	gmsgOriginalMsgMusic = REG_USER_MSG("MusicKit", -1);
+	gmsgOriginalMsgCantBuy = REG_USER_MSG("CantBuy", -1);
+	gmsgTwinAxesMsg = REG_USER_MSG("HudTwinAxesMsg", -1);
+	gmsgQuantumMsg = REG_USER_MSG("HudQuantumMsg", -1);
+	gmsgArbalestMsg = REG_USER_MSG("ArbalestMsg", -1);
+
+	gmsgZB3UsedMsg = REG_USER_MSG("ZB3SkillUsed", -1);
+	gmsgZB3UsedMsg2 = REG_USER_MSG("ZB3SkillUsed2", -1);
+	gmsgZB3InventorySet = REG_USER_MSG("ZB3Inventory", -1);
+	gmsgZB3SetHero = REG_USER_MSG("ZB3Hero", -1);
 	gmsgResetRound = REG_USER_MSG("ResetRound", -1);
 	gmsgGunDeath = REG_USER_MSG("GunDeath", -1);
-	gmsgSupplyText = REG_USER_MSG("SupplyText", -1);
+	gmsgMPToCL = REG_USER_MSG("MPToCL", -1);
+	gmsgHitDamageMsgZB3 = REG_USER_MSG("HitDamageMsgZB3", -1);
+	gmsgHitDamageMsgZB5 = REG_USER_MSG("HitDamageMsgZB5", -1);
+	gmsgHitDamageMsgZBS = REG_USER_MSG("HitDamageMsgZBS", -1);
+	gmsgHitDamageMsgZSH = REG_USER_MSG("HitDamageMsgZSH", -1);
 }
 
 void WriteWeaponInfo2(CBasePlayer* pPlayer, const ItemInfo& II)
@@ -244,6 +370,10 @@ void WriteWeaponInfo2(CBasePlayer* pPlayer, const ItemInfo& II)
 	WRITE_BYTE(II.iMaxAmmo1);
 	WRITE_SHORT(CBasePlayer::GetAmmoIndex(II.pszAmmo2));
 	WRITE_BYTE(II.iMaxAmmo2);
+	WRITE_SHORT(CBasePlayer::GetAmmoIndex(II.pszAmmo3));
+	WRITE_BYTE(II.iMaxAmmo3);
+	WRITE_SHORT(CBasePlayer::GetAmmoIndex(II.pszAmmoGrenade));
+	WRITE_BYTE(II.iMaxAmmoGrenade);
 	WRITE_BYTE(II.iSlot);
 	WRITE_BYTE(II.iPosition);
 	WRITE_SHORT(II.iId);
@@ -265,6 +395,10 @@ void WriteWeaponInfo(CBasePlayer *pPlayer, const ItemInfo &II)
 	WRITE_BYTE(II.iMaxAmmo1);
 	WRITE_BYTE(CBasePlayer::GetAmmoIndex(II.pszAmmo2));
 	WRITE_BYTE(II.iMaxAmmo2);
+	WRITE_BYTE(CBasePlayer::GetAmmoIndex(II.pszAmmo3));
+	WRITE_BYTE(II.iMaxAmmo3);
+	WRITE_BYTE(CBasePlayer::GetAmmoIndex(II.pszAmmoGrenade));
+	WRITE_BYTE(II.iMaxAmmoGrenade);
 	WRITE_BYTE(II.iSlot);
 	WRITE_BYTE(II.iPosition);
 	WRITE_BYTE(II.iId);
@@ -277,15 +411,15 @@ void WriteSigonMessages()
 	// No need for this
 	// WeaponList will be sent when player pick up weapon.
 
-	/*for (int i = 0; i < MAX_WEAPONS; ++i)
+	for (int i = 0; i < MAX_WEAPONS; ++i)
 	{
 		ItemInfo &II = CBasePlayerItem::ItemInfoArray[i];
-
+		
 		if (!II.iId)
 			continue;
-
-		WriteWeaponInfo(II);
-	}*/
+		CBasePlayer* m_pPlayer = nullptr;
+		WriteWeaponInfo(m_pPlayer, II);
+	}
 }
 
 void SendItemStatus(CBasePlayer *pPlayer)
@@ -314,8 +448,20 @@ void SetScoreAttrib(CBasePlayer *dest, CBasePlayer *src)
 	if (src->m_bIsVIP)
 		state |= PLAYER_VIP;
 
+	if (src->m_bIsHero)
+		state |= PLAYER_HERO;
+
 	if (src->m_bIsZombie)
 		state |= PLAYER_ZOMBIE;
+
+	if (src->m_bIsZombieMeatWall)
+		state |= PLAYER_MUTANT;
+
+	if (src->m_bIsZombieDeathKnight)
+		state |= PLAYER_MUTANT;
+
+	if (src->m_bIsZombieSpider)
+		state |= PLAYER_MUTANT;
 
 	if (gmsgScoreAttrib)
 	{

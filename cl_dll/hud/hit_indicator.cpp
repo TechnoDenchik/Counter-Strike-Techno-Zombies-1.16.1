@@ -57,7 +57,7 @@ int CHudHitIndicator:: Init( void )
 	m_iFlags |= HUD_DRAW;
 	HOOK_MESSAGE(HitMsg);
 
-	hud_hitindicator_style = CVAR_CREATE( "hud_hitstyle", "7", FCVAR_ARCHIVE);
+	hud_hitindicator_style = CVAR_CREATE( "hud_hitstyle", "34", FCVAR_ARCHIVE);
 	current_style = 3;
 	return 1;
 }
@@ -79,18 +79,64 @@ int CHudHitIndicator:: VidInit( void )
 	case 6: i = 5; break;
 	case 7: i = 6; break;
 	case 8: i = 7; break;
+	case 9: i = 8; break;
+	case 10: i = 9; break;
+	case 11: i = 10; break;
+	case 12: i = 11; break;
+	case 13: i = 12; break;
+	case 14: i = 13; break;
+	case 15: i = 14; break;
+	case 16: i = 15; break;
+	case 17: i = 16; break;
+	case 18: i = 17; break;
+
+	case 19: i = 18; break;
+	case 20: i = 19; break;
+	case 21: i = 20; break;
+	case 22: i = 21; break;
+	case 23: i = 22; break;
+	case 24: i = 23; break;
+	case 25: i = 24; break;
+	case 26: i = 26; break;
+	case 27: i = 27; break;
+	case 28: i = 28; break;
+	case 29: i = 29; break;
+	case 30: i = 30; break;
+	case 31: i = 31; break;
+	case 32: i = 32; break;
+	case 33: i = 33; break;
+	case 34: i = 34; break;
+
 	default: i = 1;
 	}
-	sprintf(path, "resource/floatingdamage/num_nomal_skin0%d.tga", i);
-	R_InitTexture(m_iTex[0], path);
-	sprintf(path, "resource/floatingdamage/num_head_skin0%d.tga", i);
-	R_InitTexture(m_iTex[1], path);
-	sprintf(path, "resource/floatingdamage/num_miss_skin0%d.tga", i);
-	R_InitTexture(m_iTex[2], path);
-	sprintf(path, "resource/floatingdamage/icon_critical_skin0%d.tga", i);
-	R_InitTexture(m_iTex[3], path);
-	sprintf(path, "resource/floatingdamage/icon_backatk_skin0%d.tga", i);
-	R_InitTexture(m_iTex[4], path);
+
+	if ((int)hud_hitindicator_style->value < 11)
+	{
+		sprintf(path, "resource/floatingdamage/num_nomal_skin0%d.tga", i);
+		R_InitTexture(m_iTex[0], path);
+		sprintf(path, "resource/floatingdamage/num_head_skin0%d.tga", i);
+		R_InitTexture(m_iTex[1], path);
+		sprintf(path, "resource/floatingdamage/num_miss_skin0%d.tga", i);
+		R_InitTexture(m_iTex[2], path);
+		sprintf(path, "resource/floatingdamage/icon_critical_skin0%d.tga", i);
+		R_InitTexture(m_iTex[3], path);
+		sprintf(path, "resource/floatingdamage/icon_backatk_skin0%d.tga", i);
+		R_InitTexture(m_iTex[4], path);
+	}
+	else
+	{
+		sprintf(path, "resource/floatingdamage/num_nomal_skin%d.tga", i);
+		R_InitTexture(m_iTex[0], path);
+		sprintf(path, "resource/floatingdamage/num_head_skin%d.tga", i);
+		R_InitTexture(m_iTex[1], path);
+		sprintf(path, "resource/floatingdamage/num_miss_skin%d.tga", i);
+		R_InitTexture(m_iTex[2], path);
+		sprintf(path, "resource/floatingdamage/icon_critical_skin%d.tga", i);
+		R_InitTexture(m_iTex[3], path);
+		sprintf(path, "resource/floatingdamage/icon_backatk_skin%d.tga", i);
+		R_InitTexture(m_iTex[4], path);
+	}
+	
 	
 	return 1;
 }
@@ -108,7 +154,7 @@ int CHudHitIndicator:: Draw( float flTime )
 
 	if ((int)hud_hitindicator_style->value != current_style) {
 		int new_style = (int)hud_hitindicator_style->value;
-		if (new_style >= 2 && new_style <= 8) {
+		if (new_style >= 2 && new_style <= 34) {
 			current_style = new_style;
 			std::fill(std::begin(m_iTex), std::end(m_iTex), nullptr);
 			VidInit();
@@ -164,10 +210,10 @@ int CHudHitIndicator:: Draw( float flTime )
 			else {
 				r = 150; g = 150; b = 150; fScale = 2.0f; //scale not working
 			}
-			DrawUtils::DrawHudString(screen[0] - textlen * 0.5f, screen[1], ScreenWidth, pList[i].damage_num, r, g, b, fScale);
+			DrawUtils::DrawHudString(screen[0] - textlen * 0.5f, screen[1], ScreenWidth, pList[i].damage_num, r, g, b, 255, fScale);
 		}
 	}
-	else if ((int)hud_hitindicator_style->value >= 2 && (int)hud_hitindicator_style->value <= 8) 
+	else if ((int)hud_hitindicator_style->value >= 2 && (int)hud_hitindicator_style->value <= 34) 
 	{
 
 		for (int i = 0; i < MAX_INDICATORS; i++)

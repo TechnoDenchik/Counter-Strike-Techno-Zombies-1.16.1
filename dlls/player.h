@@ -327,6 +327,7 @@ public:
 	int IsObserver() { return pev->iuser1; }
 	void PlantC4();
 	void Radio(const char *msg_id, const char *msg_verbose = NULL, short pitch = 100, bool showIcon = true);
+	void Skill(const char* msg_id, const char* msg_verbose = NULL, short pitch = 100, bool showIcon = true);
 	CBasePlayer *GetNextRadioRecipient(CBasePlayer *pStartPlayer);
 	void SmartRadio();
 	void ThrowWeapon(const char *pszItemName);
@@ -400,6 +401,8 @@ public:
 	void MenuPrint(const char *msg);
 	void ResetMenu();
 	void SyncRoundTimer();
+	void SyncRoundTimer2();
+	void SyncRoundTimer3();
 	void CheckSuitUpdate();
 	void SetSuitUpdate(const char *name = nullptr, int fgroup = 0, int iNoRepeatTime = 0);
 	void UpdateGeigerCounter();
@@ -505,6 +508,7 @@ public:
 	int m_iKevlar;
 	bool m_bNotKilled;
 	TeamName m_iTeam;
+	TeamName m_iModelTeam;
 	CPlayerAccount m_iAccount;
 	bool m_bHasPrimary;
 	float m_flDeathThrowTime;
@@ -617,6 +621,9 @@ public:
 	int m_iClientHideHUD;
 	int m_iFOV;
 	int m_iClientFOV;
+	int m_iRoundKill;
+	int m_iRoundAssist;
+	int m_iRoundInfect;
 	int m_iNumSpawns;
 	CBaseEntity *m_pObserver;
 	CBasePlayerItem *m_rgpPlayerItems[MAX_ITEM_TYPES];
@@ -684,17 +691,25 @@ public:
 public:
 #ifdef CLIENT_DLL
 	virtual void OnBecomeZombie(ZombieLevel iEvolutionLevel) {}
+	virtual void OnBecomeJoker() {}
 	virtual bool Knockback(CBasePlayer *attacker, const KnockbackData &data) { return false; }
 #else
 	virtual void OnBecomeZombie(ZombieLevel iEvolutionLevel) {} // moved to mod_zb1.cpp -> CZombie_ZB1::CZombie_ZB1()
+	virtual void OnBecomeJoker() {}
 	virtual bool Knockback(CBasePlayer *attacker, const KnockbackData &data) { return m_pModStrategy->ApplyKnockback(attacker, data); }
 #endif
+
+	void SetMoraleEffect(int lv);
 
 	void SpawnProtection_Check();
 	void SpawnProtection_Start(float flTime);
 	void SpawnProtection_End();
+	bool m_bIsFemale;
 
 public:
+	bool m_bIsHero;
+	bool m_bIsTratior;
+	bool m_bIsZombieMod1;
 	bool m_bIsZombie;
 	bool m_bIsZombieTank;
 	bool m_bIsZombieFemale;
@@ -706,14 +721,40 @@ public:
 	bool m_bIsZombieBanchee;
 	bool m_bIsZombieStamp;
 	bool m_bIsZombieRecovery;
+
+	bool m_bIsZombieMeatWall;
+	bool m_bIsZombieDeathKnight;
+	bool m_bIsZombieSpider;
+
+	bool m_bIsZombieAksha;
+	bool m_bIsZombieBoomer;
+	bool m_bIsZombieBooster;
+	bool m_bIsZombieChina;
 	bool m_bIsZombieFlying;
+	bool m_bIsZombieResident;
+
+	//skills
+	bool m_bIsSkillHeadK2x;
+	bool m_bIsSkillHeal;
+
 	bool m_bSpawnProtection; // pack bools
+	
+	bool m_bEvolutionProtected;
+	int evolvl;
+	float evolvprogress;
+
+	int m_iHumanMoraleLevel;
+	float m_iHumanMoraleLevelProgress;
+	bool m_bEvolutionProtectedH;
 	ZombieLevel m_iZombieLevel;
 	float m_flTimeSpawnProctionExpires;
 
 public:
 	std::unique_ptr<IBasePlayerModStrategy> m_pModStrategy;
 	std::unique_ptr<IBasePlayerModStrategy> m_pModStrategy2;
+	std::unique_ptr<IBasePlayerModStrategy> m_pModStrategy3;
+	std::unique_ptr<IBasePlayerModStrategy> m_pModStrategy4;
+	std::unique_ptr<IBasePlayerModStrategy> m_pModStrategy5;
 };
 
 extern int gEvilImpulse101;

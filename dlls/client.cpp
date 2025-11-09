@@ -55,8 +55,10 @@
 // Hostage
 #include "hostage/hostage.h"
 #include "hostage/hostage_localnav.h"
-
+#include "gamemode/interface/interface_const.h"
+#include "gamemode/mod_hidden.h"
 #include "bot/cs_bot.h"
+#include "wpn_shared/wpn_arbalest.h"
 
 // Tutor
 #include "tutor.h"
@@ -73,6 +75,7 @@
 
 /*
 * Globals initialization
+bomb
 */
 float g_flTimeLimit = 0;
 float g_flResetTime = 0;
@@ -224,7 +227,7 @@ void respawn(entvars_t *pev, BOOL fCopyCorpse)
 {
 	if (gpGlobals->coop || gpGlobals->deathmatch)
 	{
-		CHalfLifeMultiplay *mp = g_pGameRules;
+		CCstrikeTechnoZombies *mp = g_pGameRules;
 
 		if (mp->m_iTotalRoundsPlayed > 0)
 			mp->MarkSpawnSkipped();
@@ -248,7 +251,7 @@ void respawn(entvars_t *pev, BOOL fCopyCorpse)
 void EXT_FUNC ClientKill(edict_t *pEntity)
 {
 	entvars_t *pev = &pEntity->v;
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 	CBasePlayer *pl = (CBasePlayer *)CBasePlayer::Instance(pev);
 
 	if (pl->IsObserver())
@@ -451,7 +454,7 @@ void ProcessKickVote(CBasePlayer *pVotingPlayer, CBasePlayer *pKickPlayer)
 TeamName SelectDefaultTeam()
 {
 	TeamName team = UNASSIGNED;
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 
 	if (mp->m_iNumTerrorist < mp->m_iNumCT)
 	{
@@ -510,8 +513,8 @@ void CheckStartMoney()
 {
 	int money = (int)startmoney.value;
 
-	if (money > 16000)
-		CVAR_SET_FLOAT("mp_startmoney", 16000);
+	if (money > 32000)
+		CVAR_SET_FLOAT("mp_startmoney", 32000);
 	else if (money < 800)
 		CVAR_SET_FLOAT("mp_startmoney", 800);
 }
@@ -522,7 +525,7 @@ void EXT_FUNC ClientPutInServer(edict_t *pEntity)
 
 	entvars_t *pev = &pEntity->v;
 	CBasePlayer *pPlayer = GetClassPtr<CBasePlayer>(pev);
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 
 	pPlayer->SetCustomDecalFrames(-1);
 	pPlayer->SetPrefsFromUserinfo(GET_INFO_BUFFER(pEntity));
@@ -970,7 +973,7 @@ void DropPrimary(CBasePlayer *pPlayer)
 
 bool CanBuyThis(CBasePlayer *pPlayer, int iWeapon)
 {
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 #ifdef ENABLE_SHIELD
 	if (pPlayer->HasShield() && iWeapon == WEAPON_ELITE)
 	{
@@ -1831,132 +1834,228 @@ void BuyItem(CBasePlayer *pPlayer, int iSlot)
 
 void HandleMenu_ChooseAppearance(CBasePlayer *player, int slot)
 {
-	CHalfLifeMultiplay *mp = g_pGameRules;
-	int numSkins = g_bIsCzeroGame ? CZ_NUM_SKIN : CS_NUM_SKIN;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
+#if PLAYER_CLASS_SYSTEM
+	int numSkins = PlayerClassManager().PlayerClass_GetNumClass() - 1;
+#else
+	int numSkins = PlayerModel_GetNumSkins() - 1;
+#endif
 
 	struct
 	{
 		ModelName model_id;
-		const char *model_name;
-		int model_name_index;
+		const char* model_name;
 
 	} appearance;
 
 	Q_memset(&appearance, 0, sizeof(appearance));
 
+
+
+#if PLAYER_CLASS_SYSTEM
 	if (player->m_iTeam == TERRORIST)
 	{
-		if ((slot > numSkins || slot < 1) && (!TheBotProfiles->GetCustomSkin(slot) || !player->IsBot()))
-		{
-			slot = RANDOM_LONG(1, numSkins);
+		int numTR = PlayerClassManager().PlayerClass_GetNumTR();
+		if ((slot > numTR || slot < 1) && (!TheBotProfiles->GetCustomSkin(slot) || !player->IsBot())) {
+			slot = RANDOM_LONG(1, numTR);
 		}
 
 		switch (slot)
 		{
 		case 1:
-			appearance.model_id = MODEL_TERROR;
-			appearance.model_name = "terror";
-			break;
-		case 2:
-			appearance.model_id = MODEL_LEET;
-			appearance.model_name = "leet";
-			break;
-		case 3:
-			appearance.model_id = MODEL_ARCTIC;
-			appearance.model_name = "arctic";
-			break;
-		case 4:
-			appearance.model_id = MODEL_GUERILLA;
-			appearance.model_name = "guerilla";
-			break;
-		case 5:
-			if (g_bIsCzeroGame)
-			{
-				appearance.model_id = MODEL_MILITIA;
-				appearance.model_name = "militia";
-				break;
-			}
-		default:
-			if (TheBotProfiles->GetCustomSkinModelname(slot) && player->IsBot())
-			{
-				appearance.model_name = (char *)TheBotProfiles->GetCustomSkinModelname(slot);
-			}
-			else
-			{
-				appearance.model_id = MODEL_TERROR;
-				appearance.model_name = "terror";
-			}
+		{
+			appearance.model_id = MODEL_YURI;
 			break;
 		}
-
-		// default T model models/player/terror/terror.mdl
-		appearance.model_name_index = 8;
-
+		case 2:
+		{
+			appearance.model_id = MODEL_PIRATEBOY;
+			break;
+		}
+		case 3:
+		{
+			appearance.model_id = MODEL_MARINEBOY;
+			break;
+		}
+		case 4:
+		{
+			appearance.model_id = MODEL_PIRATEGIRL;
+			break;
+		}
+		case 5:
+		{
+			appearance.model_id = MODEL_RB;
+			break;
+		}
+		case 6:
+		{
+			appearance.model_id = MODEL_JPNGIRL01;
+			break;
+		}
+		case 7:
+		{
+			appearance.model_id = MODEL_RITSUKA;
+			break;
+		}
+		case 8:
+		{
+			appearance.model_id = MODEL_TERROR;
+			break;
+		}
+		case 9:
+		{
+			appearance.model_id = MODEL_LEET;
+			break;
+		}
+		case 10:
+		{
+			appearance.model_id = MODEL_ARCTIC;
+			break;
+		}
+		case 11:
+		{
+			appearance.model_id = MODEL_GUERILLA;
+			break;
+		}
+		case 12:
+		{
+			appearance.model_id = MODEL_MILITIA;
+			break;
+		}
+		case 13:
+		{
+			appearance.model_id = MODEL_BUFFCLASSB;
+			break;
+		}
+		case 14:
+		{
+			appearance.model_id = MODEL_BUFFCLASSHUNTER;
+			break;
+		}
+		case 15:
+		{
+			appearance.model_id = MODEL_BUFFCLASSBLAIR;
+			break;
+		}
+		default:
+		{
+			appearance.model_id = MODEL_YURI;
+			break;
+		}
+		}
 	}
 	else if (player->m_iTeam == CT)
 	{
-		if ((slot > numSkins || slot < 1) && (!TheBotProfiles->GetCustomSkin(slot) || !player->IsBot()))
-		{
-			slot = RANDOM_LONG(1, numSkins);
+		int numCT = PlayerClassManager().PlayerClass_GetNumCT();
+		if ((slot > numCT || slot < 1) && (!TheBotProfiles->GetCustomSkin(slot) || !player->IsBot())) {
+			slot = RANDOM_LONG(1, numCT);
 		}
 
 		switch (slot)
 		{
 		case 1:
-			appearance.model_id = MODEL_URBAN;
-			appearance.model_name = "urban";
-			break;
-		case 2:
-			appearance.model_id = MODEL_GSG9;
-			appearance.model_name = "gsg9";
-			break;
-		case 3:
-			appearance.model_id = MODEL_SAS;
-			appearance.model_name = "sas";
-			break;
-		case 4:
-			appearance.model_id = MODEL_GIGN;
-			appearance.model_name = "gign";
-			break;
-		case 5:
-			if (g_bIsCzeroGame)
-			{
-				appearance.model_id = MODEL_SPETSNAZ;
-				appearance.model_name = "spetsnaz";
-				break;
-			}
-		default:
-			if (TheBotProfiles->GetCustomSkinModelname(slot) && player->IsBot())
-			{
-				appearance.model_name = (char *)TheBotProfiles->GetCustomSkinModelname(slot);
-			}
-			else
-			{
-				appearance.model_id = MODEL_URBAN;
-				appearance.model_name = "urban";
-			}
+		{
+			appearance.model_id = MODEL_SAF;
 			break;
 		}
-
-		// default CT model models/player/urban/urban.mdl
-		appearance.model_name_index = 9;
+		case 2:
+		{
+			appearance.model_id = MODEL_CHOIJIYOON;
+			break;
+		}
+		case 3:
+		{
+			appearance.model_id = MODEL_FERNANDO;
+			break;
+		}
+		case 4:
+		{
+			appearance.model_id = MODEL_707;
+			break;
+		}
+		case 5:
+		{
+			appearance.model_id = MODEL_SOZO;
+			break;
+		}
+		case 6:
+		{
+			appearance.model_id = MODEL_MAGUI;
+			break;
+		}
+		case 7:
+		{
+			appearance.model_id = MODEL_NATASHA;
+			break;
+		}
+		case 8:
+		{
+			appearance.model_id = MODEL_URBAN;
+			break;
+		}
+		case 9:
+		{
+			appearance.model_id = MODEL_GSG9;
+			break;
+		}
+		case 10:
+		{
+			appearance.model_id = MODEL_SAS;
+			break;
+		}
+		case 11:
+		{
+			appearance.model_id = MODEL_GIGN;
+			break;
+		}
+		case 12:
+		{
+			appearance.model_id = MODEL_SPETSNAZ;
+			break;
+		}
+		case 13:
+		{
+			appearance.model_id = MODEL_BUFFCLASSA;
+			break;
+		}
+		case 14:
+		{
+			appearance.model_id = MODEL_BUFFCLASSLYCAN;
+			break;
+		}
+		case 15:
+		{
+			appearance.model_id = MODEL_BUFFCLASSFERNADO;
+			break;
+		}
+		default:
+		{
+			appearance.model_id = MODEL_SAF;
+			break;
+		}
+		}
 	}
 
+	appearance.model_name = PlayerClassManager().PlayerClass_GetModelName(appearance.model_id);
+#else
+	if ((slot > numSkins || slot < 1) && (!TheBotProfiles->GetCustomSkin(slot) || !player->IsBot())) {
+		slot = RANDOM_LONG(1, numSkins);
+	}
+
+	appearance.model_id = (ModelName)slot;
+	appearance.model_name = PlayerModel_GetApperance(slot, player->m_iTeam);
+#endif
 	player->ResetMenu();
 
 	// Reset the player's state
-	if (player->m_iJoiningState == JOINED)
-	{
+	if (player->m_iJoiningState == JOINED) {
 		mp->CheckWinConditions();
 	}
-	else if (player->m_iJoiningState == PICKINGTEAM)
-	{
+	else if (player->m_iJoiningState == PICKINGTEAM) {
 		player->m_iJoiningState = GETINTOGAME;
 
-		if (mp->IsCareer())
-		{
-			if (!player->IsBot())
-			{
+		if (mp->IsCareer()) {
+			if (!player->IsBot()) {
 				mp->CheckWinConditions();
 			}
 		}
@@ -1965,21 +2064,32 @@ void HandleMenu_ChooseAppearance(CBasePlayer *player, int slot)
 	player->pev->body = 0;
 	player->m_iModelName = appearance.model_id;
 
-	SET_CLIENT_KEY_VALUE(player->entindex(), GET_INFO_BUFFER(player->edict()), "model", appearance.model_name);
-	player->SetNewPlayerModel(Client_ApperanceToModel(appearance.model_name_index));
+#if PLAYER_CLASS_SYSTEM
+	player->m_bIsFemale = PlayerClassManager().PlayerClass_IsFemale(slot);
+#else
+ 	player->m_bIsFemale = PlayerModel_IsFemale(slot, player->m_iModelTeam);
+#endif
 
-	if (mp->m_iMapHasVIPSafetyZone == MAP_VIP_SAFETYZONE_UNINITIALIZED)
-	{
+	SET_CLIENT_KEY_VALUE(player->entindex(), GET_INFO_BUFFER(player->edict()), "model", appearance.model_name);
+	char path[128];
+
+#if PLAYER_CLASS_SYSTEM
+	PlayerClassManager().Client_ApperanceToModel(path, slot);
+#else
+	Client_ApperanceToModel(path, slot, player->m_iTeam);
+#endif
+
+	player->SetNewPlayerModel(path);
+
+	if (mp->m_iMapHasVIPSafetyZone == MAP_VIP_SAFETYZONE_UNINITIALIZED) {
 		if ((UTIL_FindEntityByClassname(NULL, "func_vip_safetyzone")) != NULL)
 			mp->m_iMapHasVIPSafetyZone = MAP_HAVE_VIP_SAFETYZONE_YES;
 		else
 			mp->m_iMapHasVIPSafetyZone = MAP_HAVE_VIP_SAFETYZONE_NO;
 	}
 
-	if (mp->m_iMapHasVIPSafetyZone == MAP_HAVE_VIP_SAFETYZONE_YES)
-	{
-		if (!mp->m_pVIP && player->m_iTeam == CT)
-		{
+	if (mp->m_iMapHasVIPSafetyZone == MAP_HAVE_VIP_SAFETYZONE_YES) {
+		if (!mp->m_pVIP && player->m_iTeam == CT) {
 			player->MakeVIP();
 		}
 	}
@@ -1990,7 +2100,7 @@ void HandleMenu_ChooseAppearance(CBasePlayer *player, int slot)
 
 BOOL HandleMenu_ChooseTeam(CBasePlayer *player, int slot)
 {
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 
 	int oldTeam;
 	const char *szOldTeam;
@@ -2378,6 +2488,25 @@ void Radio1(CBasePlayer *player, int slot)
 	}
 }
 
+void SurvSkills(CBasePlayer* player, int slot)
+{
+
+	switch (slot)
+	{
+	case 1:
+		player->Skill("%!MRAD_DEX1", "#CstzUI_DEX");
+		break;
+	case 2:
+		player->Skill("%!MRAD_Master1", "#CstzUI_Master");
+		break;
+	case 3:
+		player->Skill("%!MRAD_Searching1", "#CstzUI_Searching");
+		break;
+	default:
+		break;
+	}
+}
+
 void Radio2(CBasePlayer *player, int slot)
 {
 	if (player->m_flRadioTime >= gpGlobals->time)
@@ -2758,6 +2887,30 @@ BOOL HandleBuyAliasCommands(CBasePlayer *pPlayer, const char *pszCommand)
 	return bRetVal;
 }
 
+BOOL HandleSkillsAliasCommands(CBasePlayer* pPlayer, const char* pszCommand)
+{
+	BOOL bRetVal = FALSE;
+
+	if (FStrEq(pszCommand, "dex"))
+	{
+		bRetVal = TRUE;
+		SurvSkills(pPlayer, 1);
+	}
+	else if (FStrEq(pszCommand, "surv"))
+	{
+		bRetVal = TRUE;
+		SurvSkills(pPlayer, 2);
+	}
+	else if (FStrEq(pszCommand, "search"))
+	{
+		bRetVal = TRUE;
+		SurvSkills(pPlayer, 3);
+	}
+
+	return bRetVal;
+}
+
+
 BOOL HandleRadioAliasCommands(CBasePlayer *pPlayer, const char *pszCommand)
 {
 	BOOL bRetVal = FALSE;
@@ -2877,7 +3030,7 @@ void EXT_FUNC ClientCommand(edict_t *pEntity)
 {
 	const char *pcmd = CMD_ARGV_(0);
 	const char *pstr = NULL;
-	CHalfLifeMultiplay *mp = g_pGameRules;
+	CCstrikeTechnoZombies *mp = g_pGameRules;
 
 	// Is the client spawned yet?
 	if (!pEntity->pvPrivateData)
@@ -3158,6 +3311,9 @@ void EXT_FUNC ClientCommand(edict_t *pEntity)
 
 			case Menu_ChooseTeam:
 			{
+				if (g_pModRunning->DamageTrack() == DT_BACK)
+					return;
+
 				if (!player->m_bVGUIMenus && !HandleMenu_ChooseTeam(player, slot))
 				{
 					if (player->m_iJoiningState == JOINED)
@@ -3384,6 +3540,7 @@ void EXT_FUNC ClientCommand(edict_t *pEntity)
 				}
 				break;
 			}
+		
 			case Menu_Radio1:
 			{
 				Radio1(player, slot);
@@ -3397,6 +3554,11 @@ void EXT_FUNC ClientCommand(edict_t *pEntity)
 			case Menu_Radio3:
 			{
 				Radio3(player, slot);
+				break;
+			}
+			case Menu_SurvSkills:
+			{
+				SurvSkills(player, slot);
 				break;
 			}
 			case Menu_ZbsUpgrade:
@@ -3415,6 +3577,9 @@ void EXT_FUNC ClientCommand(edict_t *pEntity)
 	}
 	else if (FStrEq(pcmd, "chooseteam"))
 	{
+		if (g_pModRunning->DamageTrack() == DT_BACK)
+			return;
+
 		if (player->m_iMenu == Menu_ChooseAppearance)
 		{
 			return;
@@ -3567,10 +3732,8 @@ void EXT_FUNC ClientCommand(edict_t *pEntity)
 			{
 				if (slot == MENU_SLOT_TEAM_VIP || slot == MENU_SLOT_TEAM_SPECT || player->m_bIsVIP)
 				{
-					player->ResetMenu();
-				}
-				else
 					player->m_iMenu = Menu_ChooseAppearance;
+				}			
 			}
 			else
 			{
@@ -3674,6 +3837,11 @@ void EXT_FUNC ClientCommand(edict_t *pEntity)
 			{
 				ShowMenu(player, (MENU_KEY_1 | MENU_KEY_2 | MENU_KEY_3 | MENU_KEY_4 | MENU_KEY_5 | MENU_KEY_6 | MENU_KEY_7 | MENU_KEY_8 | MENU_KEY_9 | MENU_KEY_0), -1, FALSE, "#RadioC");
 				player->m_iMenu = Menu_Radio3;
+			}	
+			else if (FStrEq(pcmd, "survival"))
+			{
+				ShowMenu(player, (MENU_KEY_1 | MENU_KEY_2 | MENU_KEY_3 | MENU_KEY_0), -1, FALSE, "#Skillssurv");
+				player->m_iMenu = Menu_SurvSkills;
 			}
 			else if (FStrEq(pcmd, "drop"))
 			{
@@ -3682,6 +3850,7 @@ void EXT_FUNC ClientCommand(edict_t *pEntity)
 				{
 					// ...
 				}
+
 #ifdef ENABLE_SHIELD
 				else if (player->HasShield())
 				{
@@ -3835,7 +4004,7 @@ void EXT_FUNC ClientCommand(edict_t *pEntity)
 			{
 				player->SmartRadio();
 			}
-			else if (FStrEq(pcmd, "moe_buy"))
+			else if (FStrEq(pcmd, "cstbuy"))
 			{
 				MoE_HandleBuyCommands(player, CMD_ARGV_(1));
 			}
@@ -3846,7 +4015,9 @@ void EXT_FUNC ClientCommand(edict_t *pEntity)
 
 				if (HandleRadioAliasCommands(player, pcmd))
 					return;
-
+				
+				if (HandleSkillsAliasCommands(player, pcmd))
+					return;
 
 				if (!g_pGameRules->ClientCommand(GetClassPtr<CBasePlayer>(pev), pcmd) && !player->m_pModStrategy->ClientCommand(pcmd))
 				{
@@ -3864,7 +4035,25 @@ void EXT_FUNC ClientCommand(edict_t *pEntity)
 					command[Q_strlen(command)] = '\n';
 
 					// tell the user they entered an unknown command
-					ClientPrint(&pEntity->v, HUD_PRINTCONSOLE, "#Game_unknown_command", command);
+					ClientPrint(&pEntity->v, HUD_PRINTCONSOLE, "", command);
+				}
+				if (!g_pGameRules->ClientCommand(GetClassPtr<CBasePlayer>(pev), pcmd) && !player->m_pModStrategy->ClientCommand2(pcmd))
+				{
+					// tell the user they entered an unknown command
+					char command[128];
+
+					// check the length of the command (prevents crash)
+					// max total length is 192 ...and we're adding a string below ("Unknown command: %s\n")
+					Q_strncpy(command, pcmd, sizeof(command) - 1);
+					command[sizeof(command) - 1] = '\0';
+
+					// Add extra '\n' to make command string safe
+					// This extra '\n' is removed by the client, so it is ok
+					command[sizeof(command) - 2] = '\0';
+					command[Q_strlen(command)] = '\n';
+
+					// tell the user they entered an unknown command
+					ClientPrint(&pEntity->v, HUD_PRINTCONSOLE, "", command);
 				}
 			}
 		}
@@ -3996,7 +4185,7 @@ void EXT_FUNC ServerActivate(edict_t *pEdictList, int edictCount, int clientMax)
 
 	// Link user messages here to make sure first client can get them...
 	LinkUserMessages();
-	WriteSigonMessages();
+	//WriteSigonMessages();
 
 	if (g_pGameRules != NULL)
 	{
@@ -4206,6 +4395,7 @@ void ClientPrecache()
 	PRECACHE_SOUND("player/pl_pain7.wav");
 
 	PlayerZombie_Precache();
+	PlayerJoker_Precache();
 	PlayerModel_Precache();
 
 	if (g_bIsCzeroGame)
@@ -4235,6 +4425,8 @@ void ClientPrecache()
 	PRECACHE_MODEL("models/p_usp.mdl");
 	PRECACHE_MODEL("models/p_fiveseven.mdl");
 	PRECACHE_MODEL("models/p_knife.mdl");
+	PRECACHE_MODEL("models/p_revivegun.mdl");
+	PRECACHE_MODEL("models/p_dgaxe_a.mdl");
 	PRECACHE_MODEL("models/w_flashbang.mdl");
 	PRECACHE_MODEL("models/w_hegrenade.mdl");
 	PRECACHE_MODEL("models/p_sg550.mdl");
@@ -4517,7 +4709,7 @@ const char *EXT_FUNC GetGameDescription()
 	if (g_bIsCzeroGame)
 		return "Condition Zero";
 
-	return "Counter-Strike";
+	return "Counter-Strike Techno Zombies";
 }
 
 void EXT_FUNC Sys_Error(const char *error_string)
@@ -5159,6 +5351,10 @@ void EXT_FUNC UpdateClientData(const struct edict_s *ent, int sendweapons, struc
 		cd->ammo_cells = pl->ammo_556nato;
 		cd->ammo_rockets = pl->ammo_556natobox;
 		cd->vuser2.x = pl->ammo_762nato;
+
+		cd->vuser2.x = pl->ammo_QuantAmmo;
+		cd->vuser2.x = pl->ammo_TwinAmmo;
+
 		cd->vuser2.y = pl->ammo_45acp;
 		cd->vuser2.z = pl->ammo_50ae;
 		cd->vuser3.x = pl->ammo_338mag;

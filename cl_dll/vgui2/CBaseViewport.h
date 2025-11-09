@@ -109,7 +109,7 @@ public:
 	virtual void ReloadScheme();
 
 	virtual void ReloadScheme( const char* pszFromFile );
-
+	virtual int GetAllowSpectators() { return true; }
 	// GameUI
 	virtual IGameUIPanel* CreateGameUIPanelByName(const char* pszName);
 	bool AddNewGameUIPanel(IGameUIPanel* pPanel);

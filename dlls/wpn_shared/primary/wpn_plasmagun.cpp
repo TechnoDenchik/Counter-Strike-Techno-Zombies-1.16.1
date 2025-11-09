@@ -1,0 +1,301 @@
+/* =================================================================================== *
+			 * =================== TechnoSoftware =================== *
+ * =================================================================================== */
+
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "player.h"
+#include "weapons.h"
+#include "wpn_plasmagun.h"
+
+#ifndef CLIENT_DLL
+#include "effects.h"
+#include "customentity.h"
+#include "monsters.h"
+#include "gamemode/mods.h"
+#endif
+
+enum plasmagun_e
+{
+	PLASMAGUN_IDLE1,
+	PLASMAGUN_RELOAD,
+	PLASMAGUN_DRAW,
+	PLASMAGUN_SHOOT1,
+	PLASMAGUN_SHOOT2,
+	PLASMAGUN_SHOOT3
+};
+
+#ifndef CLIENT_DLL
+LINK_ENTITY_TO_CLASS(weapon_plasmabomb, CPlasmaGunProjectile)
+#endif
+LINK_ENTITY_TO_CLASS(weapon_plasmagun, CPlasmaGun)
+
+void CPlasmaGun::Spawn(void)
+{
+	pev->classname = MAKE_STRING("weapon_plasmagun");
+
+	Precache();
+	m_iId = WEAPON_AUG;
+	SET_MODEL(ENT(pev), "models/w_plasmagun.mdl");
+
+	m_iDefaultAmmo = AUG_DEFAULT_GIVE;
+	m_flAccuracy = 0.2;
+	m_iShotsFired = 0;
+
+	FallInit();
+}
+
+void CPlasmaGun::Precache(void)
+{
+	PRECACHE_MODEL("models/v_plasmagun.mdl");
+	PRECACHE_MODEL("models/p_plasmagun.mdl");
+	PRECACHE_MODEL("models/w_plasmagun.mdl");
+
+	PRECACHE_SOUND("weapons/plasmagun_clipin1.wav");
+	PRECACHE_SOUND("weapons/plasmagun_clipin2.wav");
+	PRECACHE_SOUND("weapons/plasmagun_clipout.wav");
+	PRECACHE_SOUND("weapons/plasmagun_draw.wav");
+	PRECACHE_SOUND("weapons/plasmagun_exp.wav");
+	PRECACHE_SOUND("weapons/plasmagun_idle.wav");
+	PRECACHE_SOUND("weapons/plasmagun-1.wav");
+
+	m_iShell = PRECACHE_MODEL("models/rshell.mdl");
+	m_usFireAug = PRECACHE_EVENT(1, "events/plasmagun.sc");
+}
+
+int CPlasmaGun::GetItemInfo(ItemInfo *p)
+{
+	p->pszName = STRING(pev->classname);
+	p->pszAmmo1 = "556Nato";
+	p->iMaxAmmo1 = MAX_AMMO_556NATO;
+	p->pszAmmo2 = NULL;
+	p->iMaxAmmo2 = -1;
+	p->pszAmmo3 = NULL;
+	p->iMaxAmmo3 = -1;
+	p->pszAmmoGrenade = NULL;
+	p->iMaxAmmoGrenade = -1;
+	p->iMaxClip = AUG_MAX_CLIP;
+	p->iSlot = 0;
+	p->iPosition = 14;
+	p->iId = m_iId = WEAPON_AUG;
+	p->iFlags = 0;
+	p->iWeight = AUG_WEIGHT;
+
+	return 1;
+}
+
+BOOL CPlasmaGun::Deploy(void)
+{
+	m_flAccuracy = 0.2;
+	m_iShotsFired = 0;
+	iShellOn = 1;
+
+	return DefaultDeploy("models/v_plasmagun.mdl", "models/p_plasmagun.mdl", PLASMAGUN_DRAW, "carbine", UseDecrement() != FALSE);
+}
+
+void CPlasmaGun::SecondaryAttack(void)
+{
+	if (m_pPlayer->m_iFOV != 90)
+		m_pPlayer->pev->fov = m_pPlayer->m_iFOV = 90;
+	else
+		m_pPlayer->pev->fov = m_pPlayer->m_iFOV = 55;
+
+	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.3;
+}
+
+void CPlasmaGun::PrimaryAttack(void)
+{
+	if (!FBitSet(m_pPlayer->pev->flags, FL_ONGROUND))
+		PLASMAGUNFire(0.035 + (0.4) * m_flAccuracy, 0.145, FALSE);
+	else if (m_pPlayer->pev->velocity.Length2D() > 140)
+		PLASMAGUNFire(0.035 + (0.07) * m_flAccuracy, 0.145, FALSE);
+	else if (m_pPlayer->pev->fov == 90)
+		PLASMAGUNFire((0.02) * m_flAccuracy, 0.145, FALSE);
+	else
+		PLASMAGUNFire((0.02) * m_flAccuracy, 0.145, FALSE);
+}
+
+void CPlasmaGun::PLASMAGUNFire(float flSpread, float flCycleTime, BOOL fUseAutoAim)
+{
+	m_bDelayFire = true;
+	m_iShotsFired++;
+	m_flAccuracy = ((float)(m_iShotsFired * m_iShotsFired * m_iShotsFired) / 215.0) + 0.3;
+
+	if (m_flAccuracy > 1)
+		m_flAccuracy = 1;
+
+	if (m_iClip <= 0)
+	{
+		if (m_fFireOnEmpty)
+		{
+			PlayEmptySound();
+			m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.2;
+		}
+
+		return;
+	}
+
+	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/plasmagun-1.wav", VOL_NORM, ATTN_NORM);
+
+	switch (RANDOM_LONG(1, 3))
+	{
+	case 1:
+		SendWeaponAnim(PLASMAGUN_SHOOT1, UseDecrement() != FALSE);
+		break;
+	case 2:
+		SendWeaponAnim(PLASMAGUN_SHOOT2, UseDecrement() != FALSE);
+		break;
+	case 3:
+		SendWeaponAnim(PLASMAGUN_SHOOT3, UseDecrement() != FALSE);
+		break;
+	}
+
+
+	m_pPlayer->pev->effects |= EF_MUZZLEFLASH;
+#ifndef CLIENT_DLL
+	m_pPlayer->SetAnimation(PLAYER_ATTACK1);
+#endif
+	m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME;
+	m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
+
+	UTIL_MakeVectors(m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle);
+	Vector vecSrc = m_pPlayer->GetGunPosition();
+//	Vector vecDir = m_pPlayer->FireBullets3(vecSrc, gpGlobals->v_forward, flSpread, 8192, 2, BULLET_PLAYER_556MM, 32, 0.96, m_pPlayer->pev, FALSE, m_pPlayer->random_seed);
+
+	ShootProjectile();
+
+	int flags;
+#ifdef CLIENT_WEAPONS
+	flags = FEV_NOTHOST;
+#else
+	flags = 0;
+#endif
+
+	//PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usFireAug, 0, (float *)&g_vecZero, (float *)&g_vecZero, vecDir.x, vecDir.y, (int)(m_pPlayer->pev->punchangle.x * 100), (int)(m_pPlayer->pev->punchangle.y * 100), FALSE, FALSE);
+	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + flCycleTime;
+
+#ifndef CLIENT_DLL
+	if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+		m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
+#endif
+	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.9;
+
+	if (m_pPlayer->pev->velocity.Length2D() > 0)
+		KickBack(1.0, 0.45, 0.275, 0.05, 4.0, 2.5, 7);
+	else if (!FBitSet(m_pPlayer->pev->flags, FL_ONGROUND))
+		KickBack(1.25, 0.45, 0.22, 0.18, 5.5, 4.0, 5);
+	else if (FBitSet(m_pPlayer->pev->flags, FL_DUCKING))
+		KickBack(0.575, 0.325, 0.2, 0.011, 3.25, 2.0, 8);
+	else
+		KickBack(0.625, 0.375, 0.25, 0.0125, 3.5, 2.25, 8);
+}
+
+void CPlasmaGun::ShootProjectile()
+{
+#ifndef CLIENT_DLL
+
+	if (g_pModRunning->DamageTrack() == DT_ZBS)
+		damageA = 1400.0f;
+		damageB = 1100.0f;
+	if (g_pModRunning->DamageTrack() == DT_ZB)
+		damageA = 340.0f;
+		damageB = 240.0f;
+
+	UTIL_MakeVectors(m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle);
+	Vector vecSrc = m_pPlayer->GetGunPosition() + gpGlobals->v_forward * 10;
+	CPlasmaGunProjectile* pEnt = static_cast<CPlasmaGunProjectile*>(CBaseEntity::Create("weapon_plasmabomb", vecSrc, m_pPlayer->pev->v_angle, ENT(m_pPlayer->pev)));
+	if (pEnt)
+	{
+		pEnt->Init(gpGlobals->v_forward * 1200, damageA, damageB, 50, m_pPlayer->m_iTeam);
+	}
+#endif
+	m_iClip--;
+	m_flNextPrimaryAttack = m_flNextSecondaryAttack = m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.58;
+
+	PLAYBACK_EVENT_FULL(1, m_pPlayer->edict(), m_usFireAug, 0, (float*)&g_vecZero, (float*)&g_vecZero, 3/*0*/, 0, 3, 0, FALSE, FALSE);
+
+#ifndef CLIENT_DLL
+	if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+		m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
+#endif
+}
+
+void CPlasmaGun::Reload(void)
+{
+	if (m_pPlayer->ammo_556nato <= 0)
+		return;
+
+	if (DefaultReload(AUG_MAX_CLIP, PLASMAGUN_RELOAD, 3.3))
+	{
+#ifndef CLIENT_DLL
+		m_pPlayer->SetAnimation(PLAYER_RELOAD);
+#endif
+		if (m_pPlayer->m_iFOV != 90)
+			SecondaryAttack();
+
+		m_flAccuracy = 0;
+		m_iShotsFired = 0;
+		m_bDelayFire = false;
+	}
+}
+
+void CPlasmaGun::WeaponIdle(void)
+{
+	ResetEmptySound();
+	m_pPlayer->GetAutoaimVector(AUTOAIM_10DEGREES);
+
+	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase())
+		return;
+
+	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 20;
+	SendWeaponAnim(PLASMAGUN_IDLE1, UseDecrement() != FALSE);
+}
+
+#ifndef CLIENT_DLL
+void CPlasmaGunProjectile::Spawn(void)
+{
+	Precache();
+
+	pev->classname = MAKE_STRING("weapon_plasmabomb");
+
+	m_fSequenceLoops = 0;
+
+	SetThink(&CPlasmaGunProjectile::OnThink);
+	SetTouch(&CPlasmaGunProjectile::OnTouch);
+	SET_MODEL(this->edict(), "sprites/plasmaball.spr");
+
+	pev->rendermode = kRenderTransAdd;
+	pev->renderfx = kRenderFxNone;
+	pev->renderamt = 255.0;
+	pev->scale = 0.3;
+
+	switch (RANDOM_LONG(1,3))
+	{
+	case 1:
+		pev->framerate = 2;
+		break;
+	case 2:
+		pev->framerate = 4;
+		break;
+	case 3:
+		pev->framerate = 1;
+		break;
+	}
+	
+	pev->solid = SOLID_BBOX; // 2
+	pev->movetype = MOVETYPE_FLYMISSILE; // 9
+	pev->nextthink = gpGlobals->time + 0.0099999998;
+	m_flAnimEndTime = gpGlobals->time + 2.0; // ph27?
+	m_flMaxFrames = 300.0;
+	
+	UTIL_SetSize(pev, { -4, -4, -4 }, { 4, 4, 4 });
+}
+
+void CPlasmaGunProjectile::Precache(void)
+{
+	PRECACHE_MODEL("sprites/plasmaball.spr");
+	PRECACHE_MODEL("sprites/plasmabomb.spr");
+	PRECACHE_SOUND("weapons/plasmagun_exp.wav");
+}
+#endif

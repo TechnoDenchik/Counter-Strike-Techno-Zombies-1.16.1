@@ -4,7 +4,7 @@
 #include "triangleapi.h"
 #include <string.h>
 
-float DrawUtils::color[3];
+float DrawUtils::color[4];
 
 #define IsColorString( p )	( p && *( p ) == '^' && *(( p ) + 1) && *(( p ) + 1) >= '0' && *(( p ) + 1 ) <= '9' )
 #define ColorIndex( c )	((( c ) - '0' ) & 7 )
@@ -23,7 +23,7 @@ static byte g_color_table[][4] =
 };
 
 
-int DrawUtils::DrawHudString(int xpos, int ypos, int iMaxX, const char* str, int r, int g, int b, float scale, bool drawing)
+int DrawUtils::DrawHudString(int xpos, int ypos, int iMaxX, const char* str, int r, int g, int b, int a, float scale, bool drawing)
 {
 	if (!str)
 		return 1;
@@ -69,13 +69,13 @@ int DrawUtils::DrawHudString(int xpos, int ypos, int iMaxX, const char* str, int
 			continue;
 		}
 
-		xpos += TextMessageDrawChar(xpos, ypos, *szIt, r, g, b, scale);
+		xpos += TextMessageDrawChar(xpos, ypos, *szIt, r, g, b, a, scale);
 	}
 
 	return xpos;
 }
 
-int DrawUtils::DrawHudString2(int xpos, int ypos, int iMaxX, const char* str, int r, int g, int b, float scale, bool drawing)
+int DrawUtils::DrawHudString2(int xpos, int ypos, int iMaxX, const char* str, int r, int g, int b, int a, float scale, bool drawing)
 {
 	if (!str)
 		return 1;
@@ -121,13 +121,13 @@ int DrawUtils::DrawHudString2(int xpos, int ypos, int iMaxX, const char* str, in
 			continue;
 		}
 
-		xpos += TextMessageDrawChar(xpos, ypos, *szIt, r, g, b, scale);
+		xpos += TextMessageDrawChar(xpos, ypos, *szIt, r, g, b, a, scale);
 	}
 
 	return xpos;
 }
 
-int DrawUtils::DrawHudStringReverse(int xpos, int ypos, int iMinX, const char* szString, int r, int g, int b, float scale, bool drawing)
+int DrawUtils::DrawHudStringReverse(int xpos, int ypos, int iMinX, const char* szString, int r, int g, int b, int a, float scale, bool drawing)
 {
 	// iterate throug the string in reverse
 	for (signed int i = strlen(szString); i >= 0; i--)
@@ -173,7 +173,7 @@ int DrawUtils::DrawHudStringReverse(int xpos, int ypos, int iMinX, const char* s
 			}
 		}
 
-		TextMessageDrawChar(xpos, ypos, szString[i], r, g, b, scale);
+		TextMessageDrawChar(xpos, ypos, szString[i], r, g, b, a, scale);
 	}
 
 	return xpos;
@@ -317,6 +317,89 @@ int DrawUtils::DrawHudNumber2(int x, int y, int iNumber, int r, int g, int b)
 	} while (iNumber > 0);
 
 	return ResX;
+}
+
+int DrawUtils::DrawNEWHudNumber(int type, int iX, int iY, int number, int r, int g, int b, int a, int iDrawZero, int maxsize, int widthplus)
+{
+	if (maxsize <= 0)
+	{
+		maxsize = 1;
+
+		for (int num = 10; (number / num) > 0; num *= 10)
+			maxsize++;
+	}
+
+	if (maxsize > 255)
+		maxsize = 255;
+
+	int index = !type ? gHUD.m_NEWHUD_number_0 : gHUD.m_NEWHUD_dollar_number_0;
+	int width = !type ? gHUD.m_NEWHUD_iFontWidth : gHUD.m_NEWHUD_iFontWidth_Dollar;
+
+	int color = 100 * a / 255;
+	ScaleColors(r, g, b, a);
+
+	bool bShouldDraw = false;
+
+	for (int i = 0; i < maxsize; i++)
+	{
+		int div = 1;
+		for (int j = 0; j < maxsize - i; j++)
+			div *= 10;
+
+		int iNum = (number % div * 10) / div;
+
+		if (iNum)
+			bShouldDraw = true;
+
+		if (!iDrawZero && !iNum && !bShouldDraw && i != maxsize - 1)
+			continue;
+
+		if (!iNum && !bShouldDraw)
+			SPR_Set(gHUD.GetSprite(index), color, color, color);
+		else
+			SPR_Set(gHUD.GetSprite(index + iNum), r, g, b);
+
+		SPR_DrawAdditive(0, iX, iY, &gHUD.GetSpriteRect(index + iNum));
+		iX += width + widthplus;
+	}
+	return iX;
+}
+
+int DrawUtils::GetNEWHudNumberWidth(int type, int number, int iDrawZero, int maxsize, int widthplus)
+{
+	if (maxsize <= 0)
+	{
+		maxsize = 1;
+
+		for (int num = 10; (number / num) > 0; num *= 10)
+			maxsize++;
+	}
+
+	if (maxsize > 255)
+		maxsize = 255;
+
+	int iW = 0;
+	int width = !type ? gHUD.m_NEWHUD_iFontWidth : gHUD.m_NEWHUD_iFontWidth_Dollar;
+
+	bool bShouldDraw = false;
+
+	for (int i = 0; i < maxsize; i++)
+	{
+		int div = 1;
+		for (int j = 0; j < maxsize - i; j++)
+			div *= 10;
+
+		int iNum = (number % div * 10) / div;
+
+		if (iNum)
+			bShouldDraw = true;
+
+		if (!iDrawZero && !iNum && !bShouldDraw && i != maxsize - 1)
+			continue;
+
+		iW += width + widthplus;
+	}
+	return iW;
 }
 
 void DrawUtils::Draw2DQuad(float x1, float y1, float x2, float y2)

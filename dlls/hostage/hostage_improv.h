@@ -151,6 +151,7 @@ public:
 
 	// begin following "leader"
 	void Follow(CBasePlayer *leader) { m_followState.SetLeader(leader); m_behavior.SetState(&m_followState); }
+	void Follow2(CBaseMonster* leader) { m_followState.SetLeader(leader); m_behavior.SetState(&m_followState); }
 	bool IsFollowing(const CBaseEntity *leader = NULL) const { return m_behavior.IsState(&m_followState); }
 
 	// Escape

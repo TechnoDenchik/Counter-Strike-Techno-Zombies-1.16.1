@@ -10,7 +10,6 @@ typedef vec_t		vec2_t[2];
 #ifndef vec3_t
 typedef vec_t		vec3_t[3];
 #endif
-
 typedef vec_t		vec4_t[4];
 typedef vec_t		quat_t[4];
 typedef byte		rgba_t[4];	// unsigned byte colorpack

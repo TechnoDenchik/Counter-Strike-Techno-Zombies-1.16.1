@@ -23,6 +23,7 @@ GNU General Public License for more details.
 #include "gameinfo.h"
 #include "FontManager.h"
 #include "BMPUtils.h"
+#include <string>
 
 #define FILE_GLOBAL	static
 #define DLL_GLOBAL
@@ -67,6 +68,13 @@ extern int UI_MouseInRect( void );
 extern int UI_IsVisible( void );
 extern int UI_CreditsActive( void );
 extern void UI_FinalCredits( void );
+
+extern void UI_InitSettings(void);
+extern void UI_InitMainMenu(void);
+extern void UI_Multiplayer(void);
+extern void UI_InitPlay(const std::string& map, const std::string& mode, int players, int maxPlayers);
+extern void UI_InitMap(void);
+extern void UI_InitCreate(void);
 
 #include "cvardef.h"
 
@@ -148,6 +156,7 @@ extern void UI_EnableTextInput( bool enable );
 
 void UI_LoadCustomStrings( void );
 const char *L( const char *szStr ); // L means Localize!
+const char* LL(const char* szStr); // L means Localize!
 void UI_FreeCustomStrings( void );
 
 #ifdef __APPLE__

@@ -14,7 +14,7 @@ static std::pair<const char *, void(*)(CBasePlayer *p)> g_SupplyboxItems[]=
 {
 	{ "Dual MP7A1", [](CBasePlayer *p) {
 			DropPrimary(p);
-			p->GiveNamedItem("weapon_gungnir");
+			p->GiveNamedItem("weapon_quantum");
 			int iAmount = p->m_pModStrategy->ComputeMaxAmmo("46mm", MAX_AMMO_46MM);
 			p->GiveAmmo(iAmount, "46mm", iAmount);
 			
@@ -23,8 +23,7 @@ static std::pair<const char *, void(*)(CBasePlayer *p)> g_SupplyboxItems[]=
 			int iAmount2 = p->m_pModStrategy->ComputeMaxAmmo("50ae", MAX_AMMO_50AE);
 			p->GiveAmmo(iAmount2, "762Nato", iAmount2);
 
-			p->GiveNamedItem("knife_dualsword");
-			p->GiveNamedItem("weapon_zombibomb");
+			p->GiveNamedItem("weapon_twinaxes");
 		}
 	}
 };
@@ -69,7 +68,7 @@ void CSupplyBox::SupplyboxTouch(CBaseEntity *pOther)
 
 	CBasePlayer *p = static_cast<CBasePlayer *>(pOther);
 
-	if (p->m_bIsVIP || p->m_bIsZombie)
+	if (p->m_bIsZombie)
 		return;
 
 	auto &nf = g_SupplyboxItems[RANDOM_LONG(0, std::extent<decltype(g_SupplyboxItems)>::value - 1)];
@@ -141,4 +140,23 @@ void CSupplyBox::SendPositionMsg()
 			
 		}
 	}
+}
+
+LINK_ENTITY_TO_CLASS(info_supplybox, CSupSpawn);
+
+void CSupSpawn::Spawn()
+{
+	return CPointEntity::Spawn();
+}
+
+void CSupSpawn::KeyValue(KeyValueData* pkvd)
+{
+	
+}
+
+BOOL CSupSpawn::IsTriggered(CBaseEntity* pEntity)
+{
+	BOOL master = UTIL_IsMasterTriggered(pev->netname, pEntity);
+
+	return master;
 }

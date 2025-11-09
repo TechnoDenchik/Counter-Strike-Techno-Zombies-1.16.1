@@ -31,6 +31,7 @@ typedef unsigned char byte;
 typedef unsigned short word;
 typedef float vec_t;
 typedef int (*pfnUserMsgHook)(const char *pszName, int iSize, void *pbuf);
+typedef struct playermove_s playermove_t;
 
 #include "util_vector.h"
 

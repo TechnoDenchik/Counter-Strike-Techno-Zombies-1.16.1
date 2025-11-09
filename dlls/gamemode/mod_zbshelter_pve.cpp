@@ -1,3 +1,7 @@
+/* =================================================================================== *
+			 * =================== TechnoSoftware =================== *
+ * =================================================================================== */
+
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -8,7 +12,7 @@
 #include "globals.h"
 
 #include "mod_zbshelter_pve.h"
-#include "player/zsh_updateday.h"
+
 #include "zsh/zsh_const.h"
 #include "zsh/resources/resources.h"
 #include "zsh/spawnres.h"
@@ -17,41 +21,40 @@
 #include "zsh/resources/resource_group.h"
 #include "zsh/resources/wood.h"
 #include "zsh/resources/wood_manager.h"
-#include "zsh/resources/zsh_subs.h"
 #include "zsh/resources/resrandomspawn.h"
+#include "zsh/buildobject/Generator/male_generator.h"
+#include "zsh/NPC/Zombie/zm_tank.h"
+#include "zsh/NPC/Zombie/zm_light.h"
+#include "zsh/resources/zsh_subs.h"
+#include "zsh/build.h"
+#include "zsh/base.h"
+#include "zsh/buildobject/Turrets/automatic turret.h"
+#include "zsh/buildobject/Turrets/gatling turret.h"
+#include "zsh/buildobject/Turrets/gatling turret_manager.h"
+#include "../dlls/gamemode/zsh/NPC/zsh_zm.h"
+
+#include "../dlls/gamemode/zbs/zs_subs.h"
+#include "player/csdm_randomspawn.h"
+#include "game_shared2/GameEvent.h"	
 
 #include <vector>
 #include <random>
 #include <algorithm>
-
 #include <dlls/util/u_range.hpp>
-
-bool start = true;
-
 
 class PlayerModStrategy_ZSH: public CPlayerModStrategy_Default
 {
 public:
-	PlayerModStrategy_ZSH(CBasePlayer* pPlayer, CMod_ZombieShelter_coop* mp) : CPlayerModStrategy_Default(pPlayer), update(pPlayer), updateres(pPlayer)
+	PlayerModStrategy_ZSH(CBasePlayer* pPlayer, CMod_ZombieShelter_coop* mp) : CPlayerModStrategy_Default(pPlayer), updateres()
 	{
-		/*m_listenerAdjustDamage = mp->m_eventAdjustDamage.subscribe(
-			[=](CBasePlayer* attacker, float& out)
-			{
-				updateres.UpdateWoods();
-			}
-		);*/
 		m_listenerMonsterKilled2 = mp->m_eventWoodKilled.subscribe(
 			[=](CWood* victim, CBaseEntity* attacker)
 			{
 				if (attacker == m_pPlayer)
 				{
-					if (victim->m_iKillBonusFrags)
-						m_pPlayer->AddPoints(victim->m_iKillBonusFrags, FALSE);
-					updateres.UpdateWoods();
-					
+					updateres.UpdateWoods(m_pPlayer);
 				}
 			}
-
 		);
 
 		m_listenerMonsterKilled = mp->m_eventMeatKilled.subscribe(
@@ -59,35 +62,80 @@ public:
 			{
 				if (attacker == m_pPlayer)
 				{
-					if (victim->m_iKillBonusFrags2)
-						m_pPlayer->AddPoints(victim->m_iKillBonusFrags2, FALSE);
-					updateres.UpdateMetal();
-
+					updateres.UpdateMetal(m_pPlayer);
 				}
 			}
+		);
 
+		m_listenerMonsterKilled3 = mp->m_eventTankKilled.subscribe(
+			[=](CZMTank* victim, CBaseEntity* attacker)
+			{
+				if (attacker == m_pPlayer)
+				{
+					if (victim->m_iKillBonusFrags)
+						m_pPlayer->AddPoints(victim->m_iKillBonusFrags, FALSE);
+				
+					MESSAGE_BEGIN(MSG_ONE, gmsgZSHMsg, NULL, m_pPlayer->pev);
+					WRITE_BYTE(ZSHKill);
+					MESSAGE_END();
+				}
+			}
+		);
+
+		m_listenerMonsterKilled4 = mp->m_eventLightKilled.subscribe(
+			[=](CZMLight* victim, CBaseEntity* attacker)
+			{
+				if (attacker == m_pPlayer)
+				{
+					if (victim->m_iKillBonusFrags)
+						m_pPlayer->AddPoints(victim->m_iKillBonusFrags, FALSE);
+
+					MESSAGE_BEGIN(MSG_ONE, gmsgZSHMsg, NULL, m_pPlayer->pev);
+					WRITE_BYTE(ZSHKill);
+					MESSAGE_END();
+				}
+			}
+		);
+
+
+		m_listenerBuildGenerator = mp->m_eventBuildGenerator.subscribe(
+			[=](CBasePlayer* builder)
+			{
+				if (builder == m_pPlayer)
+				{
+					Vector vecSrc = builder->GetGunPosition() + gpGlobals->v_forward * 10;
+					CGeneratorMale* pEnt = static_cast<CGeneratorMale*>(CBaseEntity::Create("generatormale", vecSrc, builder->pev->angles, ENT(m_pPlayer->pev)));
+					if (pEnt)
+					{
+						pEnt->Init(m_pPlayer, gpGlobals->v_forward * 700);
+						mp->energy =+ 40;
+						updateres.UpdateHUDBar(m_pPlayer);
+					}
+				
+				}
+			}
 		);
 	}
+
 	int  ComputeMaxAmmo(const char* szAmmoClassName, int iOriginalMax) override { return 100; }
 	bool CanPlayerBuy(bool display) override
 	{
 		// is the player alive?
 		if (m_pPlayer->pev->deadflag != DEAD_NO)
-			
-		
 			return false;
 
 		return true;
 	}
 
-	CMod_ZombieShelter_coop add;
+	void OnThink() override
+	{
+	
+	}
 
 	void OnSpawn() override
 	{
-		if (m_pPlayer->pev->health > 1)
-		{
-			update.spawn();
-		}
+		updateres.UpdateHUDBar(m_pPlayer);
+		updateres.UpdateHUDBarHome();
 	}
 	
 	void GiveDefaultItems() override
@@ -97,58 +145,57 @@ public:
 			if (m_pPlayer->pev->health > 1)
 			{
 				GiveWeaponsToPlayer();
-				update.spawn();
+				//update.spawn();
 			}
 		}
 	}
 
-	void OnThink() override
-	{
-		
-	}
-
 	void OnInitHUD() override
 	{
-		updateres.Reset();
-		update.UpdateHUD();
+		updateres.ResetRes();
+		updateres.ResetResHome();
+		//shelter.shelterattack == true;
+		//updateres.shelt(shelter);
 	}
 	
 	void GiveWeaponsToPlayer() const
 	{
-		m_pPlayer->RemoveAllItems(false);
-		m_pPlayer->m_bHasPrimary = true;
 		m_pPlayer->GiveNamedItem("weapon_shelteraxe");
 		//m_pPlayer->GiveNamedItem("weapon_c4shelter");
 	}
 
 protected:
-	EventListener m_listenerAdjustDamage;
-	EventListener m_listenerMonsterKilled;
-	EventListener m_listenerAdjustDamage2;
-	EventListener m_listenerMonsterKilled2;
-	ZSHUpdateDay update;
-	ZSHUpdateRes updateres;
-	
-};
 
+	float m_flRagePercent;
+	float m_flDeadTime;
+	float m_flBackupMaxHealth;
+	float m_flBackupArmor;
+
+	EventListener m_listenerMonsterKilled;
+	EventListener m_listenerMonsterKilled2;
+	EventListener m_listenerMonsterKilled3;
+	EventListener m_listenerMonsterKilled4;
+
+	EventListener m_listenerBuildGenerator;
+
+	EventListener m_listenerAdjustDamage;
+	EventListener m_listenerAdjustDamage2;
+	EventListener m_listenerAdjustDamage3;	
+	EventListener m_listenerAdjustDamage4;
+	CMod_ZombieShelter_coop updateres;
+	CShelter *shelter;
+	CGeneratorMale *generator1;
+};
 
 class PlayerModStrategy_ZSH2 : public CPlayerModStrategy_Default
 {
 public:
-	PlayerModStrategy_ZSH2(CBasePlayer* pPlayer, CMod_ZombieShelter_coop* mp) : CPlayerModStrategy_Default(pPlayer), updateres(pPlayer)
-	{
-		
+	PlayerModStrategy_ZSH2(CBasePlayer* pPlayer, CMod_ZombieShelter_coop* mp) : CPlayerModStrategy_Default(pPlayer) {}
 
-	}
-
-	void OnInitHUD() override
-	{
-		updateres.Reset();
-	}
+	void OnInitHUD() override{}
 
 protected:
 	
-	ZSHUpdateRes updateres;
 };
 
 class CResModStrategy_ZSH : public CWoodModStrategy_Default
@@ -156,10 +203,7 @@ class CResModStrategy_ZSH : public CWoodModStrategy_Default
 	friend class PlayerModStrategy_ZBS;
 
 public:
-	CResModStrategy_ZSH(CWood* p, CMod_ZombieShelter_coop* pGameRules) : CWoodModStrategy_Default(p), mp(pGameRules)
-	{
-
-	}
+	CResModStrategy_ZSH(CWood* p, CMod_ZombieShelter_coop* pGameRules) : CWoodModStrategy_Default(p), mp(pGameRules){}
 
 	void OnKilled(entvars_t* pevKiller, int iGib) override
 	{
@@ -180,10 +224,7 @@ class CResModStrategy_ZSH2 : public CMeatModStrategy_Default
 	friend class PlayerModStrategy_ZSH;
 
 public:
-	CResModStrategy_ZSH2(CMeat* p, CMod_ZombieShelter_coop* pGameRules) : CMeatModStrategy_Default(p), mp(pGameRules)
-	{
-
-	}
+	CResModStrategy_ZSH2(CMeat* p, CMod_ZombieShelter_coop* pGameRules) : CMeatModStrategy_Default(p), mp(pGameRules){}
 
 	void OnKilled2(entvars_t* pevKiller, int iGib) override
 	{
@@ -199,10 +240,85 @@ protected:
 	CMod_ZombieShelter_coop* const mp;
 };
 
+class CZMTankModStrategy_ZSH : public CZMTankModStrategy_Default
+{
+	friend class PlayerModStrategy_ZSH;
+
+public:
+	CZMTankModStrategy_ZSH(CZMTank* p, CMod_ZombieShelter_coop* pGameRules) : CZMTankModStrategy_Default(p), mp(pGameRules){}
+
+	void OnKilled(entvars_t* pevKiller, int iGib) override
+	{
+		CZMTankModStrategy_Default::OnKilled(pevKiller, iGib);
+		if (pevKiller)
+		{
+			CBaseEntity* pKiller = CBaseEntity::Instance(pevKiller);
+			mp->m_eventTankKilled.dispatch(m_pZMTank, pKiller);
+		}
+	}
+
+protected:
+	CMod_ZombieShelter_coop* const mp;
+};
+
+class CZMLightModStrategy_ZSH : public CZMLightModStrategy_Default
+{
+	friend class PlayerModStrategy_ZSH;
+
+public:
+	CZMLightModStrategy_ZSH(CZMLight* p, CMod_ZombieShelter_coop* pGameRules) : CZMLightModStrategy_Default(p), mp(pGameRules){}
+
+	void OnKilled(entvars_t* pevKiller, int iGib) override
+	{
+		CZMLightModStrategy_Default::OnKilled(pevKiller, iGib);
+		if (pevKiller)
+		{
+			CBaseEntity* pKiller = CBaseEntity::Instance(pevKiller);
+			mp->m_eventLightKilled.dispatch(m_pZMLight, pKiller);
+		}
+	}
+
+protected:
+	CMod_ZombieShelter_coop* const mp;
+};
+
+class CZMTurretModStrategy_ZSH : public CZMTurretModStrategy_Default
+{
+	friend class PlayerModStrategy_ZSH;
+
+public:
+	CZMTurretModStrategy_ZSH(CTurret* p, CMod_ZombieShelter_coop* pGameRules) : CZMTurretModStrategy_Default(p), mp(pGameRules) {}
+	
+
+protected:
+	CMod_ZombieShelter_coop* const mp;
+};
+
+class CBDGatlingModStrategy_ZSH : public CZMGatlingModStrategy_Default
+{
+	friend class PlayerModStrategy_ZSH;
+
+public:
+   	CBDGatlingModStrategy_ZSH(CZSHGatling* p, CMod_ZombieShelter_coop* pGameRules) : CZMGatlingModStrategy_Default(p), mp(pGameRules) {}
+
+	void OnKilled(entvars_t* pevKiller, int iGib) override
+	{
+		CZMGatlingModStrategy_Default::OnKilled(pevKiller, iGib);
+		if (pevKiller)
+		{
+			CBaseEntity* pKiller = CBaseEntity::Instance(pevKiller);
+			mp->m_eventGatlingKilled.dispatch(m_pZSHGatling, pKiller);
+		}
+	}
+
+protected:
+	CMod_ZombieShelter_coop* const mp;
+};
+
 void CMod_ZombieShelter_coop::InstallPlayerModStrategy(CBasePlayer* player)
 {
 	player->m_pModStrategy.reset(new PlayerModStrategy_ZSH(player, this));	
-	player->m_pModStrategy2.reset(new PlayerModStrategy_ZSH2(player, this));
+	player->m_pModStrategy2.reset(new PlayerModStrategy_ZSH2(player, this)); 
 }
 
 float CMod_ZombieShelter_coop::GetAdjustedEntityDamage(CBaseEntity* victim, entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
@@ -242,57 +358,83 @@ float CMod_ZombieShelter_coop::GetAdjustedEntityDamage2(CBaseEntity* victim, ent
 void CMod_ZombieShelter_coop::PlayerSpawn(CBasePlayer* pPlayer)
 {
 	IBaseMod::PlayerSpawn(pPlayer);
-	pPlayer->AddAccount(16000);
+	pPlayer->AddAccount(800);
 
-	// Give Armor
+	for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
+	{
+		CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
+		if (!entity)
+			continue;
+		CLIENT_COMMAND(entity->edict(), "spk zsh/skill_bonus.wav\n");
+	}
+	
 	pPlayer->m_iKevlar = ARMOR_TYPE_HELMET;
+	pPlayer->pev->health = 100;
 	pPlayer->pev->armorvalue = 100;
 	pPlayer->SpawnProtection_Start(3.0f);
 }
 
 CMod_ZombieShelter_coop::CMod_ZombieShelter_coop()
 {
+	m_iRoundTimeSecs = m_iIntroRoundTime = 20 + 2;
+	m_iMaxMapTime = 19999;
+	m_fIntroRoundCount = 19999;
+	mentalitysecond = 5;
+	//mentalityhealth = 50;
+	start = false;
+
 	PRECACHE_SOUND("zsh/BGM_start.wav");
+	PRECACHE_SOUND("zsh/zsh_dead.wav");
 	PRECACHE_GENERIC("sound/zsh/BGM_zombie_attack.mp3");
-	UTIL_PrecacheOther("resources");
-	UTIL_PrecacheOther("monster_sentry2");
 
 	CVAR_SET_FLOAT("sv_maxspeed", 990 );
-	CVAR_SET_FLOAT("mp_freezetime", 25);
-	for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
-	{
-		CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
-		if (!entity)
-			continue;
-		CLIENT_COMMAND(entity->edict(), "mp_freezetime 25");
 
-	}
-	
-	
+	UTIL_PrecacheOther("info_resources");
+	UTIL_PrecacheOther("monster_turret");
+	UTIL_PrecacheOther("monster_miniturret");
+	UTIL_PrecacheOther("mentality");
+
+	Reset();
+	UpdateHUD();
 }
 
 void CMod_ZombieShelter_coop::CheckMapConditions()
 {
-	CVAR_SET_STRING("sv_skyname", "hk");
-
 	CBaseEntity* fog = nullptr;
 	while ((fog = UTIL_FindEntityByClassname(fog, "env_fog")) != nullptr)
 	{
 		REMOVE_ENTITY(fog->edict());
 	}
-
-	m_vecZombieSpawns.clear();
 	CBaseEntity* sp = nullptr;
-	CBaseEntity* ent = NULL;
-	while ((sp = UTIL_FindEntityByClassname(sp, "zombiespawn")) != nullptr)
+
+	m_vecWoodSpawns.clear();
+	while ((sp = UTIL_FindEntityByClassname(sp, "info_resources")) != nullptr)
 	{
-		m_vecZombieSpawns.push_back(static_cast<CResSpawn*>(sp));
+		m_vecWoodSpawns.push_back(static_cast<CResSpawn*>(sp));
 	}
 
-	while ((ent = UTIL_FindEntityByClassname(ent, "playerspawn")) != NULL)
+	m_vecMetalSpawns.clear();
+	while ((sp = UTIL_FindEntityByClassname(sp, "info_resources2")) != nullptr)
+	{
+		m_vecMetalSpawns.push_back(static_cast<CResSpawn2*>(sp));
+	}
+
+	m_ZombieSpawns.clear();
+	while ((sp = UTIL_FindEntityByClassname(sp, "zombiespawn")) != nullptr)
+	{
+		m_ZombieSpawns.push_back(static_cast<CZombieSpawn*>(sp));
+	}
+
+	m_vecMenSpawns.clear();
+	while ((sp = UTIL_FindEntityByClassname(sp, "morale_static")) != nullptr)
+	{
+		m_vecMenSpawns.push_back(static_cast<CMenSpawn*>(sp));
+	}
+
+	while ((sp = UTIL_FindEntityByClassname(sp, "info_tr_start")) != NULL)
 		++m_iSpawnPointCount_Terrorist;
 
-	while ((ent = UTIL_FindEntityByClassname(ent, "playerspawn")) != NULL)
+	while ((sp = UTIL_FindEntityByClassname(sp, "info_ct_start")) != NULL)
 		++m_iSpawnPointCount_CT;
 
 	UTIL_FindEntityByClassname(sp, "shelter_team_barricade2");
@@ -314,8 +456,67 @@ void CMod_ZombieShelter_coop::UpdateGameMode(CBasePlayer* pPlayer)
 	WRITE_BYTE(0);
 	WRITE_BYTE(static_cast<int>(maxrounds.value)); 
 	WRITE_BYTE(0);
-
 	MESSAGE_END();
+}
+
+void CMod_ZombieShelter_coop::DaySound()
+{
+	for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
+	{
+		CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
+		if (!entity)
+			continue;
+		CLIENT_COMMAND(entity->edict(), "spk zsh/skill_bonus.wav\n");	
+	}
+}
+
+void CMod_ZombieShelter_coop::NightSound()
+{
+	for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
+	{
+		CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
+		if (!entity)
+			continue;
+		CLIENT_COMMAND(entity->edict(), "mp3 loop sound/zsh/BGM_zombie_attack.mp3\n");
+		CLIENT_COMMAND(entity->edict(), "spk sound/zsh/monster/zombies_amb.wav\n");
+	}
+}
+
+void CMod_ZombieShelter_coop::UpdateDay()
+{
+	dayses++;
+	UpdateHUD();
+	DaySound();
+}
+
+void CMod_ZombieShelter_coop::Reset()
+{
+	dayses = 1;
+}
+
+void CMod_ZombieShelter_coop::UpdateHUD()
+{
+	MESSAGE_BEGIN(MSG_ALL, gmsgZSHUpdateDay, NULL);
+	WRITE_BYTE(0);
+	WRITE_BYTE(dayses);
+	MESSAGE_END();
+
+	MESSAGE_BEGIN(MSG_ALL, gmsgZSHMsgTextNextDay, NULL);
+	WRITE_BYTE(ZSHMessagebox);
+	WRITE_BYTE(dayses);
+	MESSAGE_END();
+}
+
+void CMod_ZombieShelter_coop::ResetTime()
+{
+	daytimes = 240;
+	nighttimes = 120;
+}
+
+void CMod_ZombieShelter_coop::ResetTime2()
+{
+	dayseconds = 20;
+	nightseconds = 60;
 }
 
 BOOL CMod_ZombieShelter_coop::ClientConnected(edict_t* pEntity, const char* pszName, const char* pszAddress, char* szRejectReason)
@@ -336,92 +537,227 @@ void CMod_ZombieShelter_coop::WaitingSound()
 		if (!entity)
 			continue;
 		CLIENT_COMMAND(entity->edict(), "spk sound/zsh/BGM_start.wav\n");
-
+		ResetTime();
+		ResetTime2();
+		daytimer = true;
 	}
 }
 
-void CMod_ZombieShelter_coop::day()
+void CMod_ZombieShelter_coop::UpdateBarMentality()
 {
-	
+	MESSAGE_BEGIN(MSG_ONE, gmsgZSHMsgMentality, NULL);
+	WRITE_BYTE(0);
+	WRITE_BYTE(mentalityhealth);
+	MESSAGE_END();
 }
-
 
 void CMod_ZombieShelter_coop::Think()
 {
+	UpdateBarMentality();
+
 	if (CheckGameOver())
 		return;
-
+	
 	TeamCheck();
 	CheckLevelInitialized();
+	CheckRoundTimeExpired();
+	CheckMentality();
+	MakeMenThink();
 
-		if (CheckGameOver())
-			return;
+	MESSAGE_BEGIN(MSG_ALL, gmsgZSHUpdateTime, NULL);
+	WRITE_BYTE(0);
+	WRITE_BYTE(dayminutes);
+	WRITE_BYTE(nightminutes);
+	WRITE_BYTE(daytimer);
+	WRITE_BYTE(dayseconds);
+	WRITE_BYTE(nightseconds);
+	MESSAGE_END();
 
-		if (CheckTimeLimit())
-			return;
-		
-
-		if (IsFreezePeriod())
+	if (nighttimer == true)
+	{
+		if (nighttimes > 118)
 		{
+			ClearDayZombie();
+			dayzombies = false;
+		}
+	}
 
-			static int iLastCountDown = -1;
-			int iCountDown = TimeRemaining();
+	if (daytimes == 240)
+	{
+		dayminutes = 4;
+		dayseconds = 0;
+	}
+	else if (daytimes > 180)
+	{
+		dayminutes = 3;	
+	}
+	else if (daytimes > 120)
+	{
+		dayminutes = 2;	
+	}
+	else if (daytimes > 60)
+	{
+		dayminutes = 1;
+	}
+	else
+	{
+		dayminutes = 0;
+	}
 
-			if (iCountDown > 0)
+	if (nighttimes == 120)
+	{
+		nightminutes = 2;		
+	}
+	else if (nighttimes > 60)
+	{
+		nightminutes = 1;
+	}
+	else
+	{
+		nightminutes = 0;		
+	}
+
+	if (gpGlobals->time - tWorldTime5 < 1.0f)
+	{
+		tDelta5 += gpGlobals->time - tWorldTime5;
+	}
+	if (tNextAttack5 > 1.0f || (gpGlobals->time - tWorldTime5 > 1.0f) || tDelta5 > 1.0f)
+	{
+		tNextAttack5 = 0.0f;
+		tDelta5 = 0.0f;
+
+		if (start == true)
+		{
+			if (nightseconds == 0)
 			{
-				if (iCountDown != iLastCountDown)
+				nightseconds = 60;
+			}
+
+			if (dayseconds == 0)
+			{
+				dayseconds = 60;
+			}
+			
+			if (daytimes > 1)
+			{
+				nighttimer = false;
+				daytimer = true;
+			}
+			else
+			{
+				daytimer = false;
+				nighttimer = true;
+			}
+			
+			if (daytimer == true)
+			{
+				daytimes--;
+				dayseconds--;
+				dayzombies = true;
+			}
+
+			if (nighttimer == true)
+			{
+				nighttimes--;
+				nightseconds--;
+				
+				if (daytimer == false)
 				{
-					iLastCountDown = iCountDown;
-					if (iCountDown > 0 && iCountDown < 20)
+					if (nighttimes > 118)
 					{
-						UTIL_ClientPrintAll(HUD_PRINTCENTER, "Waiting for Round Start: %s1 sec(s)", UTIL_dtos1(iCountDown)); // #CSO_ZBS_StartCount
+						NightSound();
 					}
-
-					if (iCountDown == 18)
+					if (nighttimes < 57)
 					{
-
-						WaitingSound();
-						
+						for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
+						{
+							CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
+							if (!entity)
+								continue;
+							CLIENT_COMMAND(entity->edict(), "mp3 stop\n");
+						}
 					}
-					if (iCountDown == 15)
+					if (nighttimes == 0)
 					{
-						day();
+						ResetTime();
+						UpdateDay();
+						ClearResources();
+						daytimer = true;
+						nighttimer = false;
+						dayzombies = true;
 					}
 				}
 			}
-
-
-			CheckFreezePeriodExpired();
-
 		}
-		if (FRoundStarted() && !m_bRoundTerminating)
-		{
+	}
+	tWorldTime5 = gpGlobals->time;
+	
+	if (IsFreezePeriod())
+	{
+		CheckRoundTimeExpired();
 
-			if (gpGlobals->time > m_flNextSpawnNPC)
+		static int iLastCountDown = -1;
+		int iCountDown = TimeRemaining();
+
+		if (iCountDown > 0)
+		{
+			if (iCountDown != iLastCountDown)
 			{
-				MakeResources();
-				MakeResources2();
-				m_flNextSpawnNPC = gpGlobals->time + 18.0f;
+				iLastCountDown = iCountDown;
+				if (iCountDown > 0 && iCountDown < 20)
+				{
+					MESSAGE_BEGIN(MSG_ALL, gmsgZSHMsgText);
+					WRITE_BYTE(ZSHMessageTime);
+					WRITE_BYTE(iCountDown);
+					MESSAGE_END();
+				}
+
+				if (iCountDown == 18)
+				{
+					CreateMentality();
+					WaitingSound();
+				}
 			}
 		}
-		if (FRoundStarted() && !m_bRoundTerminating)
+		CheckFreezePeriodExpired();
+	}
+	if (FRoundStarted() && !m_bRoundTerminating)
+	{
+		start = true;
+		if (gpGlobals->time > m_flNextSpawnRes)
 		{
-
-			if (gpGlobals->time > m_flNextDay)
-			{
-				m_flNextDay = gpGlobals->time + 18.0f;
-
-				
-				
-			}
+			MakeResources();
+			MakeResources2();
+			
+			//MakeTurret();
+			//MakeGatling();
+			m_flNextSpawnRes = gpGlobals->time + 10.0f;
 		}
-		
-	//if (m_fTeamCount != 0.0f && m_fTeamCount <= gpGlobals->time)
-	//{
-	//	RestartRound();
-	//}
-
-	CheckLevelInitialized();
+		if (gpGlobals->time > m_flNextSpawnNPC)
+		{
+			if (dayzombies == true)
+			{
+				MakeZmTank();
+				MakeZmLight();
+			}
+			else
+			{
+				MakeZmTankNight();
+			}
+			
+			if (dayzombies == true)
+			{
+				m_flNextSpawnNPC = gpGlobals->time + 30.0f;
+			}
+			else
+				m_flNextSpawnNPC = gpGlobals->time + 7.0f;			
+		}
+		if (gpGlobals->time > m_flNextSpawnMen)
+		{
+			ClearResources();
+			m_flNextSpawnMen = gpGlobals->time + 250.0f;
+		}
+	}
 
 	if (gpGlobals->time > m_tmNextPeriodicThink)
 	{
@@ -447,7 +783,7 @@ void CMod_ZombieShelter_coop::Think()
 		if (m_iMaxRounds < 0)
 		{
 			m_iMaxRounds = 0;
-			CVAR_SET_FLOAT("mp_maxrounds", 2);
+			CVAR_SET_FLOAT("mp_maxrounds", 100);
 		}
 
 		m_iMaxRoundsWon = (int)winlimit.value;
@@ -455,11 +791,46 @@ void CMod_ZombieShelter_coop::Think()
 		if (m_iMaxRoundsWon < 0)
 		{
 			m_iMaxRoundsWon = 0;
-			CVAR_SET_FLOAT("mp_winlimit", 1);
+			CVAR_SET_FLOAT("mp_winlimit", 990);
 		}
 	}
-
 	for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
+	{
+		CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
+		CBasePlayer* player = static_cast<CBasePlayer*>(entity);
+		const char* pcmd = CMD_ARGV_(0);
+		int slot = Q_atoi(CMD_ARGV_(1));
+
+		if (!entity)
+			continue;
+
+		if (FStrEq(pcmd, "zsh_mentality1"))
+		{
+			mentality = false;
+		}
+		else if (FStrEq(pcmd, "zsh_mentality0"))
+		{
+			mentality = true;
+		}
+
+		if (FStrEq(pcmd, "survel"))
+		{
+			for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
+			{
+				CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
+				if (!entity)
+					continue;
+				CLIENT_COMMAND(entity->edict(), "spk zsh/skill_bonus.wav\n");
+			}
+			ShowMenu(player, (MENU_KEY_1 | MENU_KEY_2 | MENU_KEY_0), -1, 0, "#ZbsUpgrade");
+			//SurvSkills(player, slot);			
+			return;
+		}
+		if (HandleSkillsAliasCommands(player, pcmd))
+				return;
+	}
+
+ 	for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
 	{
 		CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
 
@@ -474,11 +845,199 @@ void CMod_ZombieShelter_coop::Think()
 		if (player->m_iTeam == TEAM_UNASSIGNED || player->m_iTeam == TEAM_SPECTATOR)
 			continue;
 
-		if (gpGlobals->time < player->m_fDeadTime + 5.0f)
+		if (gpGlobals->time < player->m_fDeadTime + 15.0f)
 			continue;
 
 		player->RoundRespawn();
 	}
+}
+
+void CMod_ZombieShelter_coop::SurvSkills(CBasePlayer* player, int slot)
+{
+	switch (slot)
+	{
+	case 1:
+		//player->Skill("%!MRAD_DEX1", "#CstzUI_DEX");
+		for (int iIndex = 1; iIndex <= gpGlobals->maxClients; ++iIndex)
+		{
+			CBaseEntity* entity = UTIL_PlayerByIndex(iIndex);
+			if (!entity)
+				continue;
+			CLIENT_COMMAND(entity->edict(), "spk zsh/skill_bonus.wav\n");
+		}
+		break;
+	case 2:
+		player->Skill("%!MRAD_Master1", "#CstzUI_Master");
+		break;
+	case 3:
+		player->Skill("%!MRAD_Searching1", "#CstzUI_Searching");
+		break;
+	default:
+		break;
+	}
+}
+
+BOOL CMod_ZombieShelter_coop::HandleSkillsAliasCommands(CBasePlayer* pPlayer, const char* pszCommand)
+{
+	BOOL bRetVal = FALSE;
+
+	if (FStrEq(pszCommand, "dex"))
+	{
+		bRetVal = TRUE;
+		SurvSkills(pPlayer, 1);
+	}
+	else if (FStrEq(pszCommand, "surv"))
+	{
+		bRetVal = TRUE;
+		SurvSkills(pPlayer, 2);
+	}
+	else if (FStrEq(pszCommand, "search"))
+	{
+		bRetVal = TRUE;
+		SurvSkills(pPlayer, 3);
+	}
+
+	else if (FStrEq(pszCommand, "generator"))
+	{
+		m_eventBuildGenerator.dispatch(pPlayer);
+		bRetVal = TRUE;
+	}
+
+	return bRetVal;
+}
+
+void CMod_ZombieShelter_coop::MakeMenThink()
+{
+
+	if (gpGlobals->time < m_flTimeNextMakeSupplybox)
+		return;
+	m_flTimeNextMakeSupplybox = gpGlobals->time + 1.0f;
+	RemoveAllMen();
+	
+
+	int iSupplyboxCount = 2;
+	for (int i = 0; i < iSupplyboxCount; ++i)
+	{
+		CMenSpawn* sb = SelectMenSpawn();
+		//sb->m_iMentalityIndex = i + 1;
+
+		for (CBasePlayer* player : moe::range::PlayersList())
+		{
+			if (player->m_bIsZombie)
+				continue;
+
+
+			//MESSAGE_BEGIN(MSG_ALL, gmsgZSHMsgShelterPos, nullptr, player->pev);
+		//	WRITE_BYTE(1);
+		//	WRITE_BYTE(sb->m_iId);
+		//	WRITE_COORD(sb->pev->origin.x);
+		//	WRITE_COORD(sb->pev->origin.y);
+		//	WRITE_COORD(sb->pev->origin.z);
+		//	MESSAGE_END();
+		}
+	}
+}
+
+void CMod_ZombieShelter_coop::RemoveAllMen()
+{
+	CBaseEntity* ent = nullptr;
+	while ((ent = UTIL_FindEntityByClassname(ent, "mentality")) != nullptr)
+	{
+		CMentalityHealth* sb = dynamic_ent_cast<CMentalityHealth*>(ent);
+		sb->SendPositionMsg();
+		sb->SetThink(&CBaseEntity::SUB_Remove);
+	}
+}
+
+void CMod_ZombieShelter_coop::CheckFreezePeriodExpired()
+{
+	if (TimeRemaining() > 0)
+		return;
+
+	// Log this information
+	UTIL_LogPrintf("World triggered \"Round_Start\"\n");
+
+	// Freeze period expired: kill the flag
+	m_bFreezePeriod = FALSE;
+
+	char CT_sentence[40];
+	char T_sentence[40];
+
+	switch (RANDOM_LONG(0, 3))
+	{
+	case 0:
+		Q_strncpy(CT_sentence, "%!MRAD_MOVEOUT", sizeof(CT_sentence));
+		Q_strncpy(T_sentence, "%!MRAD_MOVEOUT", sizeof(T_sentence));
+		break;
+	case 1:
+		Q_strncpy(CT_sentence, "%!MRAD_LETSGO", sizeof(CT_sentence));
+		Q_strncpy(T_sentence, "%!MRAD_LETSGO", sizeof(T_sentence));
+		break;
+	case 2:
+		Q_strncpy(CT_sentence, "%!MRAD_LOCKNLOAD", sizeof(CT_sentence));
+		Q_strncpy(T_sentence, "%!MRAD_LOCKNLOAD", sizeof(T_sentence));
+		break;
+	default:
+		Q_strncpy(CT_sentence, "%!MRAD_GO", sizeof(CT_sentence));
+		Q_strncpy(T_sentence, "%!MRAD_GO", sizeof(T_sentence));
+		break;
+	}
+
+	// More specific radio commands for the new scenarios : Prison & Assasination
+	if (m_bMapHasEscapeZone)
+	{
+		Q_strncpy(CT_sentence, "%!MRAD_ELIM", sizeof(CT_sentence));
+		Q_strncpy(T_sentence, "%!MRAD_GETOUT", sizeof(T_sentence));
+	}
+	else if (m_iMapHasVIPSafetyZone == MAP_HAVE_VIP_SAFETYZONE_YES)
+	{
+		Q_strncpy(CT_sentence, "%!MRAD_VIP", sizeof(CT_sentence));
+		Q_strncpy(T_sentence, "%!MRAD_LOCKNLOAD", sizeof(T_sentence));
+	}
+
+	bool bCTPlayed = false;
+	bool bTPlayed = false;
+
+	for (int i = 1; i <= gpGlobals->maxClients; ++i)
+	{
+		CBasePlayer* plr = static_cast<CBasePlayer*>(UTIL_PlayerByIndex(i));
+
+		if (!plr || plr->pev->flags == FL_DORMANT)
+		{
+			continue;
+		}
+
+		if (plr->m_iJoiningState == JOINED)
+		{
+			if (plr->m_iTeam == CT && !bCTPlayed)
+			{
+				plr->Radio(CT_sentence);
+				bCTPlayed = true;
+			}
+			else if (plr->m_iTeam == TERRORIST && !bTPlayed)
+			{
+				plr->Radio(T_sentence);
+				bTPlayed = true;
+			}
+
+			if (plr->m_iTeam != SPECTATOR)
+			{
+				plr->ResetMaxSpeed();
+				plr->m_bCanShoot = true;
+			}
+		}
+	}
+}
+
+void CMod_ZombieShelter_coop::CheckRoundTimeExpired()
+{
+	if (!HasRoundTimeExpired())
+		return;
+}
+
+bool CMod_ZombieShelter_coop::HasRoundTimeExpired()
+{
+	return false;
 }
 
 BOOL CMod_ZombieShelter_coop::FInfectionStarted()
@@ -487,79 +1046,49 @@ BOOL CMod_ZombieShelter_coop::FInfectionStarted()
 	return iCountDown > 20;
 }
 
-/*
-void CMod_ZombieShelter_coop::MakeSpawnresThink()
-{
-	if (!FInfectionStarted())
-		return;
-	if (gpGlobals->time < m_flTimeNextMakeSupplybox)
-		return;
-	m_flTimeNextMakeSupplybox = gpGlobals->time + RANDOM_FLOAT(20.0f, 30.0f);
-
-	RemoveAllSupplybox();
-
-	int iSupplyboxCount = SpawnresCount();
-	for (int i = 0; i < iSupplyboxCount; ++i)
-	{
-		CSpawnres* sb = CreateSpawnres();
-		if (!sb)
-			continue;
-		sb->m_iSupplyboxIndex = i + 1;
-
-		for (CBasePlayer* player : moe::range::PlayersList())
-		{
-			if (player->m_bIsZombie)
-				continue;
-
-			MESSAGE_BEGIN(MSG_ALL, gmsgHostagePos, nullptr, player->pev);
-			WRITE_BYTE(1);
-			WRITE_BYTE(sb->m_iSupplyboxIndex);
-			WRITE_COORD(sb->pev->origin.x);
-			WRITE_COORD(sb->pev->origin.y);
-			WRITE_COORD(sb->pev->origin.z);
-			MESSAGE_END();
-		}
-	}
-
-}
-
-int CMod_ZombieShelter_coop::SpawnresCount()
-{
-	int NumDeadCT, NumDeadTerrorist, NumAliveTerrorist, NumAliveCT;
-	InitializePlayerCounts(NumAliveTerrorist, NumAliveCT, NumDeadTerrorist, NumDeadCT);
-	int iSupplyboxCount = (NumAliveTerrorist + NumAliveCT + NumDeadTerrorist) / 10 + 1;
-	return iSupplyboxCount;
-}
-
-void CMod_ZombieShelter_coop::RemoveAllSupplybox()
-{
-	CBaseEntity* ent = nullptr;
-	while ((ent = UTIL_FindEntityByClassname(ent, "resoures")) != nullptr)
-	{
-		CSpawnres* sb = dynamic_ent_cast<CSpawnres*>(ent);
-		sb->pev->effects |= EF_NODRAW;
-		sb->pev->flags |= FL_KILLME;
-		sb->SendPositionMsg();
-		sb->SetThink(&CBaseEntity::SUB_Remove);
-	}
-}
-
-CSpawnres* CMod_ZombieShelter_coop::CreateSpawnres()
-{
-	auto supplybox = CreateClassPtr<CSpawnres>();
-
-	Vector backup_v_angle = supplybox->pev->v_angle;
-	CSDM_DoRandomSpawn(supplybox);
-
-	supplybox->pev->spawnflags |= SF_NORESPAWN;
-
-	DispatchSpawn(supplybox->edict());
-	return supplybox;
-}*/
-
 BOOL CMod_ZombieShelter_coop::FRoundStarted()
 {
 	return !IsFreezePeriod();
+}
+
+void CMod_ZombieShelter_coop::RoundEndScore(int iWinStatus)
+{
+	for (CBasePlayer* player : moe::range::PlayersList())
+	{
+		if (player->m_iTeam == TEAM_UNASSIGNED || player->m_iTeam == TEAM_SPECTATOR)
+			continue;
+
+		if (iWinStatus == WINSTATUS_CTS)
+		{
+			if (player->IsAlive() && !player->m_bIsZombie)
+			{
+				player->pev->frags += 3;
+
+				MESSAGE_BEGIN(MSG_BROADCAST, gmsgScoreInfo);
+				WRITE_BYTE(ENTINDEX(player->edict()));
+				WRITE_SHORT((int)player->pev->frags);
+				WRITE_SHORT(player->m_iDeaths);
+				WRITE_SHORT(0);
+				WRITE_SHORT(player->m_iTeam);
+				MESSAGE_END();
+			}
+		}
+		else if (iWinStatus == WINSTATUS_TERRORISTS)
+		{
+			if (player->m_bIsZombie)
+			{
+				player->pev->frags += 1;
+
+				MESSAGE_BEGIN(MSG_BROADCAST, gmsgScoreInfo);
+				WRITE_BYTE(ENTINDEX(player->edict()));
+				WRITE_SHORT((int)player->pev->frags);
+				WRITE_SHORT(player->m_iDeaths);
+				WRITE_SHORT(0);
+				WRITE_SHORT(player->m_iTeam);
+				MESSAGE_END();
+			}
+		}
+	}
 }
 
 void CMod_ZombieShelter_coop::TeamCheck()
@@ -575,18 +1104,98 @@ void CMod_ZombieShelter_coop::TeamCheck()
 		{
 			player->m_iTeam = CT;
 			TeamChangeUpdate(player, player->m_iTeam);
-			start = true;
 		}
 	}
 }
 
-CResSpawn* CMod_ZombieShelter_coop::SelectZombieSpawnPoint()
+CGenSpawn* CMod_ZombieShelter_coop::SelectGenSpawnPoint()
 {
-	size_t const iSize = m_vecZombieSpawns.size();
+	size_t const iSize = m_vecGenSpawns.size();
 	if (!iSize)
 		return nullptr;
-	return m_vecZombieSpawns[RANDOM_LONG(0, iSize - 1)];
+	return m_vecGenSpawns[RANDOM_LONG(0, iSize - 1)];
+}
 
+CResSpawn* CMod_ZombieShelter_coop::SelectWoodSpawnPoint()
+{
+	size_t const iSize = m_vecWoodSpawns.size();
+	if (!iSize)
+		return nullptr;
+	return m_vecWoodSpawns[RANDOM_LONG(0, iSize - 1)];
+}
+
+CResSpawn2* CMod_ZombieShelter_coop::SelectMetalSpawnPoint()
+{
+	size_t const iSize = m_vecMetalSpawns.size();
+	if (!iSize)
+		return nullptr;
+	return m_vecMetalSpawns[RANDOM_LONG(0, iSize - 1)];
+}
+
+CMenSpawn* CMod_ZombieShelter_coop::SelectMenSpawn()
+{
+	size_t const iSize = m_vecMenSpawns.size();
+	if (!iSize)
+		return nullptr;
+	return m_vecMenSpawns[RANDOM_LONG(0, iSize - 1)];
+}
+
+CZombieSpawn* CMod_ZombieShelter_coop::SelectZombieSpawn()
+{
+	size_t const iSize = m_ZombieSpawns.size();
+	if (!iSize)
+		return nullptr;
+	return m_ZombieSpawns[RANDOM_LONG(0, iSize - 1)];
+}
+
+CMentalityHealth* CMod_ZombieShelter_coop::CreateMentality()
+{
+	//CMentalityHealth* supplybox = GetClassPtr<CMentalityHealth>(nullptr);
+	auto supplybox = CreateClassPtr<CMentalityHealth>();
+	if (!supplybox)
+		return nullptr;
+
+	CMenSpawn* sp = SelectMenSpawn();
+	if (sp)
+	{
+		supplybox->pev->origin = sp->pev->origin;
+		supplybox->pev->angles = sp->pev->angles;
+	}
+	else
+	{
+		Vector backup_v_angle = supplybox->pev->v_angle;
+		RES_DoRandomSpawn(supplybox);
+		supplybox->pev->v_angle = backup_v_angle;
+	}
+
+	supplybox->pev->spawnflags |= SF_NORESPAWN;
+
+	DispatchSpawn(supplybox->edict());
+}
+
+CGeneratorMale* CMod_ZombieShelter_coop::CreateGenerator()
+{
+	//CGeneratorMale* generator = GetClassPtr<CGeneratorMale>(nullptr);
+	auto generator = CreateClassPtr<CGeneratorMale>();
+	if (!generator)
+		return nullptr;
+
+	CMenSpawn* sp = SelectMenSpawn();
+	if (sp)
+	{
+		generator->pev->origin = sp->pev->origin;
+		generator->pev->angles = sp->pev->angles;
+	}
+	else
+	{
+		Vector backup_v_angle = generator->pev->v_angle;
+		RES_DoRandomSpawn(generator);
+		//generator->pev->v_angle = backup_v_angle;
+	}
+
+	generator->pev->spawnflags |= SF_NORESPAWN;
+
+	DispatchSpawn(generator->edict());
 }
 
 CBaseEntity* CMod_ZombieShelter_coop::MakeResources()
@@ -598,88 +1207,7 @@ CBaseEntity* CMod_ZombieShelter_coop::MakeResources()
 
 	edict_t* pent = monster->edict();
 
-	CResSpawn* sp = SelectZombieSpawnPoint();
-	//if (sp)
-	//{
-		//monster->pev->origin = sp->pev->origin;
-		//monster->pev->angles = sp->pev->angles;
-	//}
-	//else
-	//{
-		Vector backup_v_angle = monster->pev->v_angle;
-		RES_DoRandomSpawn(monster);
-		monster->pev->v_angle = backup_v_angle;
-	//}
-
-	pent->v.spawnflags |= SF_NORESPAWN;
-
-	DispatchSpawn(pent);
-
-	// default settings
-	
-//	monster->pev->maxspeed = 180.0f + (m_iNumCTWins / static_cast<float>(3)) * 15;
-	//monster->m_flAttackDamage = (0.2f * m_iNumCTWins + 1) * (0.2f * m_iNumCTWins + 1);
-	int health[10] = { 230, 164, 135, 176, 152, 164, 178, 182, 192, 130 };
-	int max_health = 0;
-	monster->pev->health = max_health + m_iNumCTWins * 15;
-	switch (RANDOM_LONG(1, 10))
-	{
-		monster->pev->max_health = max_health;
-
-	case 1: max_health = health[0];
-		break;
-		monster->pev->max_health = max_health;
-	case 2: max_health = health[1];
-		break;
-		monster->pev->max_health = max_health;
-	case 3: max_health = health[2];
-		break;
-		monster->pev->max_health = max_health;
-	case 4: max_health = health[3];
-		break;
-		monster->pev->max_health = max_health;
-	case 5: max_health = health[4];
-		break;
-		monster->pev->max_health = max_health;
-	case 6: max_health = health[5];
-		break;
-		monster->pev->max_health = max_health;
-	case 7: max_health = health[6];
-		break;
-		monster->pev->max_health = max_health;
-	case 8: max_health = health[7];
-		break;
-		monster->pev->max_health = max_health;
-	case 9: max_health = health[8];
-		break;
-		monster->pev->max_health = max_health;
-	case 10: max_health = health[9];
-		break;
-	}
-	if (m_iNumCTWins < 5 || RANDOM_LONG(0, 3))
-	{
-		//monster->pev->health = monster->pev->max_health = monster->pev->max_health / 2;
-		
-		SET_MODEL(monster->edict(), "models/shelter/item_wood.mdl");
-
-		UTIL_SetSize(monster->pev, VEC_HULL_MIN, VEC_HULL_MAX);
-	}
-
-	monster->m_pWoodStrategy.reset(new CResModStrategy_ZSH(monster, this));
-
-	return monster;
-}
-
-CBaseEntity* CMod_ZombieShelter_coop::MakeResources2()
-{
-	CMeat* monster = GetClassPtr<CMeat>(nullptr);
-
-	if (!monster)
-		return nullptr;
-
-	edict_t* pent = monster->edict();
-
-	CResSpawn* sp = SelectZombieSpawnPoint();
+	CResSpawn* sp = SelectWoodSpawnPoint();
 	if (sp)
 	{
 		monster->pev->origin = sp->pev->origin;
@@ -696,55 +1224,157 @@ CBaseEntity* CMod_ZombieShelter_coop::MakeResources2()
 
 	DispatchSpawn(pent);
 
-	// default settings
-	monster->pev->health = monster->pev->max_health = 100 + m_iNumCTWins * 15;
-	//monster->pev->maxspeed = 180.0f + (m_iNumCTWins / static_cast<float>(3)) * 15;
-	//monster->m_flAttackDamage = (0.2f * m_iNumCTWins + 1) * (0.2f * m_iNumCTWins + 1);
-
-	int health[10] = { 100, 64, 35, 76, 52, 64, 78, 82, 92, 130 };
-	int max_health = 0;
-
-	switch (RANDOM_LONG(1, 10))
+	if (m_iNumCTWins < 5 || RANDOM_LONG(0, 3))
 	{
-	monster->pev->health = max_health;
+		switch (RANDOM_LONG(1, 10))
+		{
 
-	case 1: max_health = health[0];
-		break;
-		monster->pev->health = max_health;
-	case 2: max_health = health[1];
-		break;
-		monster->pev->health = max_health;
-	case 3: max_health = health[2];
-		break;
-		monster->pev->health = max_health;
-	case 4: max_health = health[3];
-		break;
-		monster->pev->health = max_health;
-	case 5: max_health = health[4];
-		break;
-		monster->pev->health = max_health;
-	case 6: max_health = health[5];
-		break;
-		monster->pev->health = max_health;
-	case 7: max_health = health[6];
-		break;
-		monster->pev->health = max_health;
-	case 8: max_health = health[7];
-		break;
-		monster->pev->health = max_health;
-	case 9: max_health = health[8];
-		break;
-		monster->pev->health = max_health;
-	case 10: max_health = health[9];
-		break;
+		case 1:
+			monster->pev->health = monster->pev->max_health = 29;
+			break;
+
+		case 2:
+			monster->pev->health = monster->pev->max_health = 42;
+			break;
+
+		case 3:
+			monster->pev->health = monster->pev->max_health = 85;
+			break;
+
+		case 4:
+			monster->pev->health = monster->pev->max_health = 49;
+			break;
+
+		case 5:
+			monster->pev->health = monster->pev->max_health = 10;
+			break;
+
+		case 6:
+			monster->pev->health = monster->pev->max_health = 32;
+			break;
+
+		case 7:
+			monster->pev->health = monster->pev->max_health = 93;
+			break;
+
+		case 8:
+			monster->pev->health = monster->pev->max_health = 97;
+			break;
+
+		case 9:
+			monster->pev->health = monster->pev->max_health = 34;
+			break;
+
+		case 10:
+			monster->pev->health = monster->pev->max_health = 70;
+			break;
+		default:
+			monster->pev->health = monster->pev->max_health = 50;
+			break;
+		}
+		
+		SET_MODEL(monster->edict(), "models/shelter/item_wood.mdl");
+		//monster->pev->rendermode = kRenderTransAdd;
+		//monster->pev->renderamt = 200;
+		//monster->pev->renderfx = 200;
+		UTIL_SetSize(monster->pev, VEC_HULL_MIN, VEC_HULL_MAX);
+
+		MESSAGE_BEGIN(MSG_ALL, gmsgHeadIcon);
+		WRITE_BYTE(14);
+		WRITE_SHORT(ENTINDEX(monster->edict()));
+		MESSAGE_END();
+
 	}
+
+	monster->m_pWoodStrategy.reset(new CResModStrategy_ZSH(monster, this));
+
+	return monster;
+}
+
+CBaseEntity* CMod_ZombieShelter_coop::MakeResources2()
+{
+	CMeat* monster = GetClassPtr<CMeat>(nullptr);
+
+	if (!monster)
+		return nullptr;
+
+	edict_t* pent = monster->edict();
+
+	CResSpawn2* sp = SelectMetalSpawnPoint();
+	if (sp)
+	{
+		monster->pev->origin = sp->pev->origin;
+		monster->pev->angles = sp->pev->angles;
+	}
+	else
+	{
+		Vector backup_v_angle = monster->pev->v_angle;
+		RES_DoRandomSpawn(monster);
+		monster->pev->v_angle = backup_v_angle;
+	}
+
+	pent->v.spawnflags |= SF_NORESPAWN;
+
+	DispatchSpawn(pent);
 
 	if (m_iNumCTWins < 5 || RANDOM_LONG(0, 3))
 	{
-		//monster->pev->health = monster->pev->max_health = monster->pev->max_health / 2;
+		switch (RANDOM_LONG(1, 10))
+		{
 
+		case 1:
+			monster->pev->health = monster->pev->max_health = 29;
+			break;
+
+		case 2:
+			monster->pev->health = monster->pev->max_health = 42;
+			break;
+
+		case 3:
+			monster->pev->health = monster->pev->max_health = 85;
+			break;
+
+		case 4:
+			monster->pev->health = monster->pev->max_health = 49;
+			break;
+
+		case 5:
+			monster->pev->health = monster->pev->max_health = 10;
+			break;
+
+		case 6:
+			monster->pev->health = monster->pev->max_health = 32;
+			break;
+
+		case 7:
+			monster->pev->health = monster->pev->max_health = 93;
+			break;
+
+		case 8:
+			monster->pev->health = monster->pev->max_health = 97;
+			break;
+
+		case 9:
+			monster->pev->health = monster->pev->max_health = 34;
+			break;
+
+		case 10:
+			monster->pev->health = monster->pev->max_health = 170;
+			break;
+		default:
+			monster->pev->health = monster->pev->max_health = 100;
+			break;
+		}
 		SET_MODEL(monster->edict(), "models/shelter/item_hbeam.mdl");
 
+		MESSAGE_BEGIN(MSG_ALL, gmsgHeadIcon);
+		WRITE_BYTE(13);
+		WRITE_SHORT(ENTINDEX(monster->edict()));
+		MESSAGE_END();
+
+		//monster->pev->rendermode = kRenderTransAdd;
+		//monster->pev->renderamt = 200;
+		//monster->pev->renderfx = 200;
 		UTIL_SetSize(monster->pev, VEC_HULL_MIN, VEC_HULL_MAX);
 	}
 
@@ -753,89 +1383,260 @@ CBaseEntity* CMod_ZombieShelter_coop::MakeResources2()
 	return monster;
 }
 
-void _IBaseMod_RemoveObjects_CheckMapConditions_impl2(IBaseMod* mod)
+CBaseEntity* CMod_ZombieShelter_coop::MakeTurret()
 {
-	//CHalfLifeMultiplay::CheckMapConditions();
+	CTurret* monster = GetClassPtr<CTurret>(nullptr);
 
-	// Check to see if this map has a bomb target in it
-	mod->m_bMapHasBombTarget = false;
-	mod->m_bMapHasBombZone = false;
+	if (!monster)
+		return nullptr;
+	
+	edict_t* pent = monster->edict();
+	
 
-	// Check to see if this map has hostage rescue zones
-	mod->m_bMapHasRescueZone = false;
-
-	// See if the map has func_buyzone entities
-	// Used by CBasePlayer::HandleSignals() to support maps without these entities
-	mod->m_bMapHasBuyZone = true;
-
-	// GOOSEMAN : See if this map has func_escapezone entities
-	mod->m_bMapHasEscapeZone = false;
-
-	// Check to see if this map has VIP safety zones
-	mod->m_iMapHasVIPSafetyZone = MAP_HAVE_VIP_SAFETYZONE_NO;
-
-	// Hostage
-	/*CBaseEntity *hostage = nullptr;
-	while ((hostage = UTIL_FindEntityByClassname(hostage, "hostage_entity")) != nullptr)
+	CZombieSpawn* sp = SelectZombieSpawn();
+	if (sp)
 	{
-		// should be removed.
-		REMOVE_ENTITY(hostage->edict());
-	}*/
+		monster->pev->origin = sp->pev->origin;
+		monster->pev->angles = sp->pev->angles;
+	}
+	else
+	{
+		Vector backup_v_angle = monster->pev->v_angle;
+		CSDM_DoRandomSpawn(monster);
+		monster->pev->v_angle = backup_v_angle;
+	}
+
+	pent->v.spawnflags |= SF_NORESPAWN;
+
+	DispatchSpawn(pent);
+	monster->pev->health = monster->pev->max_health = 100 + m_iNumCTWins * 15;
+	monster->pev->maxspeed = 140.0f + (m_iNumCTWins / static_cast<float>(3)) * 15;
+	//monster->m_flAttackDamage = 4;
+
+	if (m_iNumCTWins < 5 || RANDOM_LONG(0, 3))
+	{
+		monster->pev->health = monster->pev->max_health = monster->pev->max_health / 2;
+
+		UTIL_SetSize(monster->pev, VEC_HULL_MIN, VEC_HULL_MAX);
+	}
+
+	monster->m_pTurretStrategy.reset(new CZMTurretModStrategy_ZSH(monster, this));
+
+	return monster;
 }
 
-BOOL _IBaseMod_RemoveObjects_IsAllowedToSpawn_impl2(IBaseMod* mod, CBaseEntity* pEntity) {
-	if (!Q_strcmp(STRING(pEntity->pev->classname), "func_bomb_target") ||
-		!Q_strcmp(STRING(pEntity->pev->classname), "info_bomb_target")) {
-		return FALSE;
+CBaseEntity* CMod_ZombieShelter_coop::MakeGatling()
+{
+	CZSHGatling* monster = GetClassPtr<CZSHGatling>(nullptr);
+
+	if (!monster)
+		return nullptr;
+
+	edict_t* pent = monster->edict();
+
+
+	CZombieSpawn* sp = SelectZombieSpawn();
+	if (sp)
+	{
+		monster->pev->origin = sp->pev->origin;
+		monster->pev->angles = sp->pev->angles;
 	}
-	if (!Q_strcmp(STRING(pEntity->pev->classname), "func_hostage_rescue")) {
-		return FALSE;
+	else
+	{
+		Vector backup_v_angle = monster->pev->v_angle;
+		CSDM_DoRandomSpawn(monster);
+		monster->pev->v_angle = backup_v_angle;
 	}
-	if (!Q_strcmp(STRING(pEntity->pev->classname), "func_escapezone")) {
-		return FALSE;
+
+	pent->v.spawnflags |= SF_NORESPAWN;
+
+	DispatchSpawn(pent);
+	monster->pev->health = monster->pev->max_health = 100 + m_iNumCTWins * 15;
+	monster->pev->maxspeed = 140.0f + (m_iNumCTWins / static_cast<float>(3)) * 15;
+	//monster->m_flAttackDamage = 4;
+
+	if (m_iNumCTWins < 5 || RANDOM_LONG(0, 3))
+	{
+		monster->pev->health = monster->pev->max_health = monster->pev->max_health / 2;
+
+		UTIL_SetSize(monster->pev, VEC_HULL_MIN, VEC_HULL_MAX);
 	}
-	if (!Q_strcmp(STRING(pEntity->pev->classname), "func_vip_safetyzone")) {
-		return FALSE;
-	}
-	if (!Q_strcmp(STRING(pEntity->pev->classname), "hostage_entity")) {
-		return FALSE;
-	}
-	return TRUE;
+
+	monster->m_pGatlingStrategy.reset(new CBDGatlingModStrategy_ZSH(monster, this));
+
+	return monster;
 }
 
-edict_t* _IBaseMod_RandomSpawn_GetPlayerSpawnSpot_impl2(IBaseMod* mod, CBasePlayer* pPlayer)
+CBaseEntity* CMod_ZombieShelter_coop::MakeZmTank()
 {
-	// completely rewrites it
+	CZMTank* monster = GetClassPtr<CZMTank>(nullptr);
 
-	// select spawnpoint from both teams.
-	TeamName iBackupTeam = pPlayer->m_iTeam;
-	pPlayer->m_iTeam = static_cast<TeamName>(RANDOM_LONG(TERRORIST, CT));
+	if (!monster)
+		return nullptr;
 
-	// gat valid spawn point
-	edict_t* pentSpawnSpot = EntSelectSpawnPoint(pPlayer);
+	edict_t* pent = monster->edict();
 
-	pPlayer->m_iTeam = iBackupTeam;
-
-	// Move the player to the place it said.
-	// Note that here has been modified
-	if (!RES_DoRandomSpawn(pPlayer))
+	CZombieSpawn* sp = SelectZombieSpawn();
+	if (sp)
 	{
-		pPlayer->pev->origin = VARS(pentSpawnSpot)->origin + Vector(0, 0, 1);
-		pPlayer->pev->v_angle = g_vecZero;
-		pPlayer->pev->velocity = g_vecZero;
-		pPlayer->pev->angles = VARS(pentSpawnSpot)->angles;
+		monster->pev->origin = sp->pev->origin;
+		monster->pev->angles = sp->pev->angles;
+	}
+	else
+	{
+		Vector backup_v_angle = monster->pev->v_angle;
+		CSDM_DoRandomSpawn(monster);
+		monster->pev->v_angle = backup_v_angle;
 	}
 
-	pPlayer->pev->punchangle = g_vecZero;
-	pPlayer->pev->fixangle = 1;
+	pent->v.spawnflags |= SF_NORESPAWN;
 
-	if (mod->IsMultiplayer())
+	DispatchSpawn(pent);
+
+	monster->pev->health = monster->pev->max_health = 100 + m_iNumCTWins * 15;
+	monster->pev->maxspeed = 70.0f + (m_iNumCTWins / static_cast<float>(3)) * 15;
+	monster->m_flAttackDamage = 2;
+	
+	//monster->pev->renderamt = 100.0;
+
+	if (m_iNumCTWins < 5 || RANDOM_LONG(0, 3))
 	{
-		if (pentSpawnSpot->v.target)
+		monster->pev->health = monster->pev->max_health = monster->pev->max_health / 2;
+		switch (RANDOM_LONG(1, 2))
 		{
-			FireTargets(STRING(pentSpawnSpot->v.target), pPlayer, pPlayer, USE_TOGGLE, 0);
+		case 1: SET_MODEL(monster->edict(), "models/player/zombi_origin/zombi_origin.mdl"); break;
+		case 2: SET_MODEL(monster->edict(), "models/player/zombi_host/zombi_host.mdl"); break;
+
+		default:
+			break;
 		}
+
+		UTIL_SetSize(monster->pev, VEC_HULL_MIN, VEC_HULL_MAX);
 	}
 
-	return pentSpawnSpot;
+	monster->m_pTankStrategy.reset(new CZMTankModStrategy_ZSH(monster, this));
+
+	return monster;
+}
+
+CBaseEntity* CMod_ZombieShelter_coop::MakeZmTankNight()
+{
+	CZMTank* monster = GetClassPtr<CZMTank>(nullptr);
+
+	if (!monster)
+		return nullptr;
+
+	edict_t* pent = monster->edict();
+
+	CZombieSpawn* sp = SelectZombieSpawn();
+	if (sp)
+	{
+		monster->pev->origin = sp->pev->origin;
+		monster->pev->angles = sp->pev->angles;
+	}
+	else
+	{
+		Vector backup_v_angle = monster->pev->v_angle;
+		CSDM_DoRandomSpawn(monster);
+		monster->pev->v_angle = backup_v_angle;
+	}
+
+	pent->v.spawnflags |= SF_NORESPAWN;
+
+	DispatchSpawn(pent);
+
+	monster->pev->health = monster->pev->max_health = 100 + m_iNumCTWins * 15;
+	monster->pev->maxspeed = 240.0f + (m_iNumCTWins / static_cast<float>(3)) * 15;
+	monster->m_flAttackDamage = 6;
+
+	if (m_iNumCTWins < 5 || RANDOM_LONG(0, 3))
+	{
+		monster->pev->health = monster->pev->max_health = monster->pev->max_health / 2;
+
+		SET_MODEL(monster->edict(), "models/player/zombi_origin/zombi_origin5.mdl");
+
+		UTIL_SetSize(monster->pev, VEC_HULL_MIN, VEC_HULL_MAX);
+	}
+
+	monster->m_pTankStrategy.reset(new CZMTankModStrategy_ZSH(monster, this));
+
+	return monster;
+}
+
+CBaseEntity* CMod_ZombieShelter_coop::MakeZmLight()
+{
+	CZMLight* monster = GetClassPtr<CZMLight>(nullptr);
+
+	if (!monster)
+		return nullptr;
+
+	edict_t* pent = monster->edict();
+
+	CZombieSpawn* sp = SelectZombieSpawn();
+	if (sp)
+	{
+		monster->pev->origin = sp->pev->origin;
+		monster->pev->angles = sp->pev->angles;
+	}
+	else
+	{
+		Vector backup_v_angle = monster->pev->v_angle;
+		CSDM_DoRandomSpawn(monster);
+		monster->pev->v_angle = backup_v_angle;
+	}
+
+	pent->v.spawnflags |= SF_NORESPAWN;
+
+	DispatchSpawn(pent);
+
+	monster->pev->health = monster->pev->max_health = 200 + m_iNumCTWins * 15;
+	monster->pev->maxspeed = 80.0f + (m_iNumCTWins / static_cast<float>(3)) * 15;
+	monster->m_flAttackDamage = 3;
+
+	if (m_iNumCTWins < 5 || RANDOM_LONG(0, 3))
+	{
+		monster->pev->health = monster->pev->max_health = monster->pev->max_health / 2;
+		switch (RANDOM_LONG(1, 2))
+		{
+		case 1: SET_MODEL(monster->edict(), "models/player/speed_zombi_origin/speed_zombi_origin.mdl"); break;
+		case 2: SET_MODEL(monster->edict(), "models/player/speed_zombi_host/speed_zombi_host.mdl"); break;
+
+		default:
+			break;
+		}
+		UTIL_SetSize(monster->pev, VEC_HULL_MIN, VEC_HULL_MAX);
+	}
+
+	monster->m_pLightStrategy.reset(new CZMLightModStrategy_ZSH(monster, this));
+
+	return monster;
+}
+
+void CMod_ZombieShelter_coop::ClearDayZombie()
+{
+	dayzombies = false;
+	CBaseEntity* npc = nullptr;
+	while ((npc = UTIL_FindEntityByClassname(npc, "zm_tank")) != nullptr)
+	{
+		npc->Killed(nullptr, GIB_NORMAL);
+	}
+	CBaseEntity* npc2 = nullptr;
+	while ((npc2 = UTIL_FindEntityByClassname(npc2, "zm_light")) != nullptr)
+	{
+		npc2->Killed(nullptr, GIB_NORMAL);
+	}
+}
+
+void CMod_ZombieShelter_coop::ClearResources()
+{
+	CBaseEntity* npc = nullptr;
+	while ((npc = UTIL_FindEntityByClassname(npc, "Wood_entity")) != nullptr)
+	{
+		npc->Killed(nullptr, GIB_NORMAL);
+	}
+	CBaseEntity* npc2 = nullptr;
+	while ((npc2 = UTIL_FindEntityByClassname(npc2, "Meat_entity")) != nullptr)
+	{
+		npc2->Killed(nullptr, GIB_NORMAL);
+	}
 }

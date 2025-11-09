@@ -380,7 +380,7 @@ CBasePlayerWeapon :: DefaultDeploy
 
 =====================
 */
-BOOL CBasePlayerWeapon :: DefaultDeploy( const char *szViewModel, const char *szWeaponModel, int iAnim, const char *szAnimExt, int skiplocal )
+BOOL CBasePlayerWeapon :: DefaultDeploy( const char *szViewModel, const char *szWeaponModel, int iAnim, const char *szAnimExt, int skiplocal)
 {
 	if ( !CanDeploy() )
 		return FALSE;
@@ -629,6 +629,7 @@ void CBasePlayerWeapon::ItemPostFrame( void )
 		}
 
 		WeaponIdle();
+		AmmoGetAuto();
 		return;
 	}
 }
@@ -878,6 +879,8 @@ void HUD_InitClientWeapons( void )
 	HUD_PrepEntity( &g_Knife, &player);
 	HUD_PrepEntity( &g_P90, &player );
 
+//	HUD_PrepEntity( &g_shelteraxe, &player);
+
 	BTEClientWeapons().PrepEntity(&player);
 }
 
@@ -1106,13 +1109,13 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 			pWeapon = &g_P90;
 			break;
 
-		/*case WEAPON_NONE:
+		case WEAPON_NONE:
 			break;
 
 		case WEAPON_GLOCK:
 		default:
 			gEngfuncs.Con_Printf("VALVEWHY: Unknown Weapon %i is active.\n", from->client.m_iId );
-			break;*/
+			break;
 	}
 
 	// if we have BTE weapon entity, use it.
@@ -1213,6 +1216,8 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 	player.ammo_buckshot	= from->client.ammo_shells;
 	player.ammo_556natobox	= from->client.ammo_rockets;
 	player.ammo_762nato		= (int)from->client.vuser2.x;
+	player.ammo_QuantAmmo = (int)from->client.vuser2.x;
+	player.ammo_TwinAmmo = (int)from->client.vuser2.x;
 	player.ammo_45acp		= (int)from->client.vuser2.y;
 	player.ammo_50ae		= (int)from->client.vuser2.z;
 	player.ammo_338mag		= (int)from->client.vuser3.x;
@@ -1229,6 +1234,7 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 
 	flags = from->client.iuser3;
 	g_bHoldingKnife		= pWeapon->m_iId == WEAPON_KNIFE;
+	
 	player.m_bCanShoot	= (flags & PLAYER_CAN_SHOOT) != 0;
 	g_iFreezeTimeOver	= !(flags & PLAYER_FREEZE_TIME_OVER);
 	g_bInBombZone		= (flags & PLAYER_IN_BOMB_ZONE) != 0;
@@ -1297,6 +1303,10 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 	to->client.ammo_shells = player.ammo_buckshot;
 	to->client.ammo_rockets = player.ammo_556natobox;
 	to->client.vuser2.x = player.ammo_762nato;
+
+	to->client.vuser2.x = player.ammo_QuantAmmo;
+	to->client.vuser2.x = player.ammo_TwinAmmo;
+
 	to->client.vuser2.y = player.ammo_45acp;
 	to->client.vuser2.z = player.ammo_50ae;
 	to->client.vuser3.x = player.ammo_338mag;

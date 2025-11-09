@@ -29,8 +29,12 @@ struct WEAPON
 	char	szName[MAX_WEAPON_NAME];
 	int		iAmmoType;
 	int		iAmmo2Type;
+	int		iAmmo3Type;
+	int		iAmmoGrenadeType;
 	int		iMax1;
 	int		iMax2;
+	int		iMax3;
+	int		iMaxGrenade;
 	int		iSlot;
 	int		iSlotPos;
 	int		iFlags;
@@ -47,6 +51,10 @@ struct WEAPON
 	wrect_t rcAmmo;
 	HSPRITE hAmmo2;
 	wrect_t rcAmmo2;
+	HSPRITE hAmmo3;
+	wrect_t rcAmmo3;
+	HSPRITE hAmmoGrenade;
+	wrect_t rcAmmoGrenade;
 	HSPRITE hCrosshair;
 	wrect_t rcCrosshair;
 	HSPRITE hAutoaim;

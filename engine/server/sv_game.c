@@ -5285,7 +5285,7 @@ qboolean SV_LoadProgs( const char *name )
 	svgame.pmove = &gpMove;
 	svgame.globals = &gpGlobals;
 	svgame.mempool = Mem_AllocPool( "Server Edicts Zone" );
-	svgame.hInstance = Com_LoadLibrary( name, true );
+	svgame.hInstance = Com_LoadLibrary(name, false);
 #ifdef DLL_LOADER
 	dll = host.enabledll && Loader_GetDllHandle( svgame.hInstance );
 #endif

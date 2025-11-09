@@ -18,10 +18,30 @@ public:
 	}
 
 protected:
-	UniqueTexture textbg;
+	
 	UniqueTexture m_pTexture_ZBSBoard_BG_Wall;
 
 	int m_iLevel_HP;
 	int m_iLevel_ATK;
 	int m_iLevel_Wall;
+};
+
+class CHudZBSMsgLevel : public IBaseHudSub
+{
+public:
+
+	int VidInit(void) override;
+	int Draw(float time) override;
+	void Setlv();
+	void UpdateLevel(int lv)
+	{
+		lvl = lv;		
+	}
+
+protected:
+	SharedTexture m_pCurTexture;
+	SharedTexture stringtext;
+	float m_flDisplayTime;
+
+	int lvl;
 };

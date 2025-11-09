@@ -5,6 +5,8 @@
 #include "player.h"
 
 #include "zs_subs.h"
+#include "../mod_zbs.h"
+
 
 LINK_ENTITY_TO_CLASS(zombiespawn, CZombieSpawn);
 
@@ -63,4 +65,43 @@ int CZBSBreak::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float
 			flDamage *= m_flHumanDamageRatio;
 	}
 	return CBreakable::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+}
+
+LINK_ENTITY_TO_CLASS(zbstrigger, CZBSTriggerWin);
+
+void CZBSTriggerWin::Spawn()
+{
+	InitTrigger();
+	SetTouch(&CZBSTriggerWin::TouchWin);
+}
+
+void CZBSTriggerWin::TouchWin(CBaseEntity* pOther)
+{
+	if (m_iId != 14)
+		return;
+
+	if (!pOther->IsPlayer())
+		return;
+
+	if (iswin == true)
+		return;
+
+	CMod_ZombieScenario zbs;
+	iswin = true;
+	zbs.HumanWin(iswin);
+	SetTouch(NULL);
+}
+
+void CZBSTriggerWin::KeyValue(KeyValueData* pkvd)
+{
+	if (FStrEq(pkvd->szKeyName, "model"))
+	{
+		m_model = Q_atof(pkvd->szValue);
+	}
+	else if (FStrEq(pkvd->szKeyName, "id"))
+	{
+		m_iId = Q_atof(pkvd->szValue);
+	}
+	else
+		CBaseTrigger::KeyValue(pkvd);
 }

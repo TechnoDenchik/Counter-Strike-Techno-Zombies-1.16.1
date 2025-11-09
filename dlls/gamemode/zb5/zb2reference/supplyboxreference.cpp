@@ -1,0 +1,177 @@
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "player.h"
+#include "weapons.h"
+#include "client.h"
+#include "effects.h"
+#include "supplyboxreference.h"
+#include "gamemode/mods.h"
+
+#include <utility>
+
+static std::pair<const char *, void(*)(CBasePlayer *p)> g_SupplyboxItems[]=
+{
+	{ "Human", [](CBasePlayer *p) {
+			CLIENT_COMMAND(p->edict(), "CST_GetWeapon\n");
+		}
+	}
+};
+
+LINK_ENTITY_TO_CLASS(supplyboxR, CSupplyBoxR);
+
+void CSupplyBoxR::Precache()
+{
+	PRECACHE_SOUND("zb3/get_box.wav");
+	PRECACHE_MODEL("models/supplybox.mdl");
+	PRECACHE_MODEL("sprites/e_button01.spr");
+}
+
+void CSupplyBoxR::Spawn()
+{
+	Precache();
+
+	if (pev->classname)
+	{
+		RemoveEntityHashValue(pev, STRING(pev->classname), CLASSNAME);
+	}
+
+	MAKE_STRING_CLASS("supplyboxR", pev);
+	AddEntityHashValue(pev, STRING(pev->classname), CLASSNAME);
+
+	pev->movetype = MOVETYPE_TOSS;
+	pev->solid = SOLID_TRIGGER;
+
+	UTIL_SetSize(pev, Vector(-16, -16, 0), Vector(16, 16, 16));
+	UTIL_SetOrigin(pev, pev->origin);
+	SetTouch(&CSupplyBoxR::SupplyboxTouch);
+	SetThink(&CSupplyBoxR::SupplyboxThink);
+
+	SET_MODEL(edict(), "models/supplybox.mdl");
+
+	m_flNextRadarTime = gpGlobals->time + RANDOM_FLOAT(0, 1);
+
+	CreateSprite();
+}
+
+void CSupplyBoxR::CreateSprite()
+{
+	m_pSprite = nullptr;
+	CBaseEntity* pSprite = CBaseEntity::Create("env_sprite", pev->origin, pev->angles, edict());
+	if (pSprite)
+	{
+		pSprite->pev->model = MAKE_STRING("sprites/e_button01.spr");
+		pSprite->pev->rendermode = kRenderTransAdd;
+		pSprite->pev->renderfx = kRenderFxNone;
+		pSprite->pev->renderamt = 255;
+		pSprite->pev->scale = 0.2;
+		pSprite->pev->framerate = 10.0; 
+		pSprite->pev->spawnflags |= SF_SPRITE_STARTON;
+
+
+		pSprite->pev->origin.z += 20.0;
+
+		pSprite->Spawn();
+
+		m_pSprite = pSprite;
+	}
+}
+
+void CSupplyBoxR::SupplyboxTouch(CBaseEntity *pOther)
+{
+	if (!pOther->IsPlayer())
+		return;
+
+	CBasePlayer *p = static_cast<CBasePlayer *>(pOther);
+
+	if (p->m_bIsZombie)
+		return;
+
+	int usableButtons = p->pev->button;
+	if ((usableButtons & (IN_USE)))
+	{
+		auto& nf = g_SupplyboxItems[RANDOM_LONG(0, std::extent<decltype(g_SupplyboxItems)>::value - 1)];
+		nf.second(p);
+
+		EMIT_SOUND(ENT(p->pev), CHAN_BODY, "zb3/get_box.wav", VOL_NORM, ATTN_NORM);
+		
+		RemoveSprite();
+	}
+}
+
+void CSupplyBoxR::RemoveSprite()
+{
+	pev->effects |= EF_NODRAW;
+	SendPositionMsg();
+	SUB_Remove();
+	UTIL_Remove(m_pSprite);
+	m_pSprite = nullptr;
+}
+
+void CSupplyBoxR::SupplyboxThink()
+{
+	if (pev->deadflag != DEAD_DEAD && !(pev->effects & EF_NODRAW))
+	{
+		if (m_flNextRadarTime <= gpGlobals->time)
+		{
+			SendPositionMsg();
+			m_flNextRadarTime = gpGlobals->time + 1;
+		}
+	}
+}
+
+void CSupplyBoxR::SendPositionMsg()
+{
+	CBaseEntity *pEntity = NULL;
+
+	while ((pEntity = UTIL_FindEntityByClassname(pEntity, "player")) != NULL)
+	{
+		if (FNullEnt(pEntity->edict()))
+			break;
+
+		if (!pEntity->IsPlayer())
+			continue;
+
+		if (pEntity->pev->flags == FL_DORMANT)
+			continue;
+
+		CBasePlayer *pTempPlayer = static_cast<CBasePlayer *>(pEntity);
+
+		if (pTempPlayer->pev->deadflag == DEAD_NO && pTempPlayer->m_iTeam == CT)
+		{
+			if (pev->effects & EF_NODRAW)
+			{
+				MESSAGE_BEGIN(MSG_ONE, gmsgHostageK, NULL, pTempPlayer->pev);
+				WRITE_BYTE(m_iSupplyboxIndex);
+				MESSAGE_END();
+			}
+			else
+			{
+				MESSAGE_BEGIN(MSG_ONE, gmsgHostagePos, NULL, pTempPlayer->pev);
+				WRITE_BYTE(0);
+				WRITE_BYTE(m_iSupplyboxIndex);
+				WRITE_COORD(pev->origin.x);
+				WRITE_COORD(pev->origin.y);
+				WRITE_COORD(pev->origin.z);
+				MESSAGE_END();
+			}		
+		}
+	}
+}
+
+void CSupSpawnR::Spawn()
+{
+	return CPointEntity::Spawn();
+}
+
+void CSupSpawnR::KeyValue(KeyValueData* pkvd)
+{
+	
+}
+
+BOOL CSupSpawnR::IsTriggered(CBaseEntity* pEntity)
+{
+	BOOL master = UTIL_IsMasterTriggered(pev->netname, pEntity);
+
+	return master;
+}

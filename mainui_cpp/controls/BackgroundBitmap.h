@@ -20,7 +20,7 @@ GNU General Public License for more details.
 
 #include "Bitmap.h"
 
-#define ART_BACKGROUND		"gfx/shell/splash.bmp"
+#define ART_BACKGROUND		"gfx/shell/main.tga"
 
 #define MAX_BACKGROUNDS 48 // SC 5.0 have 35 tiled backgrounds!
 
@@ -45,6 +45,7 @@ private:
 	// void DrawSplash( Point p, float xScale, float yScale );
 	void DrawColor();
 	void DrawInGameBackground();
+	void DrawGameBackground();
 
 	static bool LoadBackgroundImage( const bool gamedirOnly ); // Steam background loader
 	static bool CheckBackgroundSplash( const bool gamedirOnly ); // WON background loader

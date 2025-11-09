@@ -15,6 +15,8 @@ cvar_t *g_psv_friction = NULL;
 cvar_t *g_psv_stopspeed = NULL;
 cvar_t displaysoundlist = { "displaysoundlist", "0", 0, 0.0f, NULL };
 cvar_t timelimit = { "mp_timelimit", "0", FCVAR_SERVER, 0.0f, NULL };
+cvar_t daytimelimit = { "mp_daytimelimit", "0", FCVAR_SERVER, 0.0f, NULL };
+cvar_t nighttimelimit = { "mp_nighttimelimit", "0", FCVAR_SERVER, 0.0f, NULL };
 cvar_t flashlight = { "mp_flashlight", "0", FCVAR_SERVER, 0.0f, NULL };
 cvar_t decalfrequency = { "decalfrequency", "30", FCVAR_SERVER, 0.0f, NULL };
 cvar_t fadetoblack = { "mp_fadetoblack", "0", FCVAR_SERVER, 0.0f, NULL };
@@ -95,6 +97,7 @@ cvar_t sk_scientist_heal2 = { "sk_scientist_heal2", "0", 0, 0.0f, NULL };
 cvar_t sk_scientist_heal3 = { "sk_scientist_heal3", "0", 0, 0.0f, NULL };
 
 cvar_t gamemode = { "mp_gamemode", "none", FCVAR_SERVER, 0.0f, NULL };
+cvar_t mapname = { "mapname", "none", FCVAR_SERVER, 0.0f, NULL };
 cvar_t maxkills = { "mp_maxkills", "150", FCVAR_SERVER, 0.0f, NULL };
 
 extern void Bot_RegisterCvars();
@@ -116,6 +119,8 @@ void EXT_FUNC GameDLLInit()
 
 	CVAR_REGISTER(&displaysoundlist);
 	CVAR_REGISTER(&timelimit);
+	CVAR_REGISTER(&daytimelimit);
+	CVAR_REGISTER(&nighttimelimit);
 	CVAR_REGISTER(&friendlyfire);
 	CVAR_REGISTER(&flashlight);
 	CVAR_REGISTER(&decalfrequency);

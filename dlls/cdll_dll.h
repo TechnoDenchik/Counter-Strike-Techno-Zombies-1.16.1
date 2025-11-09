@@ -85,7 +85,9 @@
 #define PLAYER_DEAD (1<<0)
 #define PLAYER_HAS_C4 (1<<1)
 #define PLAYER_VIP (1<<2)
+#define PLAYER_HERO (1<<2)
 #define PLAYER_ZOMBIE (1<<3)
+#define PLAYER_MUTANT (1<<4)
 
 #define SIGNAL_BUY			(1<<0)
 #define SIGNAL_BOMB			(1<<1)
@@ -114,7 +116,7 @@
 #define MENU_KEY_0			(1<<9)
 
 #define MAX_AMMO_TYPES			32		// ???
-#define MAX_AMMO_SLOTS			32		// not really slots
+#define MAX_AMMO_SLOTS			64		// not really slots
 
 #define HUD_PRINTNOTIFY			1
 #define HUD_PRINTCONSOLE		2
@@ -167,10 +169,11 @@ enum VGUIMenuSlot
 #define MENU_BUY_MACHINEGUN 33
 #define MENU_BUY_ITEM 34
 // -- cs16client extension start -- //
-#define MENU_RADIOA 35
-#define MENU_RADIOB 36
-#define MENU_RADIOC 37
-#define MENU_RADIOSELECTOR 38
+#define MENU_SURVSKILLS 35
+#define MENU_RADIOA 36
+#define MENU_RADIOB 37
+#define MENU_RADIOC 38
+#define MENU_RADIOSELECTOR 39
 #define MENU_NUMERICAL_MENU -1
 // -- cs16client extension end -- //
 

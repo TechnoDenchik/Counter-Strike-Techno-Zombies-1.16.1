@@ -163,23 +163,26 @@ int CHudTimer::Draw(float fTime)
 
 	int x6 = ScreenWidth / 2;
 	int y6 = ScreenHeight / 1.04;
+
 	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
 	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
 
-	if(gHUD.m_iModRunning != MOD_ZSH)
+	if(gHUD.m_iModRunning != MOD_ZSH && gHUD.m_iModRunning != MOD_BACKUI && gHUD.m_iModRunning != MOD_HIDDEN)
 	{ 
-	m_pTexture_Black->Bind();
-	DrawUtils::Draw2DQuadScaled(x4 - 70, y4, x4 + 70, y4 + 40);
+		m_pTexture_Black->Bind();
+		DrawUtils::Draw2DQuadScaled(x4 - 70, y4, x4 + 70, y4 + 40);
 
-	m_colon->Bind();
-	DrawUtils::Draw2DQuadScaled(x6 - 5, y6, x6 + 5, y6 + 23);
-
+		m_colon->Bind();
+		DrawUtils::Draw2DQuadScaled(x6 - 5, y6, x6 + 5, y6 + 23);
 	}
 	gEngfuncs.pTriAPI->Color4ub(r, g, b, 255);
+
+	int imusicpack = (int)CVAR_GET_FLOAT("menu_musicpack");
 	switch (gHUD.m_iModRunning)
 	{
 	case MOD_ZB1:
 	case MOD_ZB3:
+	case MOD_ZB5:
 
 		if (minutes < 10)
 		{
@@ -234,11 +237,77 @@ int CHudTimer::Draw(float fTime)
 		{
 			DrawTexturedNumbersTopRightAligned(*m_timer, rc_m_timer_s, seconds, x3 + 42, y3, 1.0f);
 		}
-		
-		
+
+		if (minutes == 0)
+		{
+			switch (imusicpack)
+			{
+			case 0:	
+				if (seconds == 17)
+				{
+					ClientCmd("menu_tentime 0");
+				}
+				else if (seconds == 1)
+				{
+					ClientCmd("mp3 stop");
+				}
+				else
+				{
+					ClientCmd("menu_tentime 1");
+				}; 
+				break;
+
+			case 1: 
+				if (seconds == 13)
+				{
+					ClientCmd("menu_tentime 0");
+				}
+				else if (seconds == 1)
+				{
+					ClientCmd("mp3 stop");
+				}
+				else
+				{
+					ClientCmd("menu_tentime 1");
+				};
+				break;
+
+			case 2: 
+				if (seconds == 19)
+				{
+					ClientCmd("menu_tentime 0");
+				}
+				else if (seconds == 1)
+				{
+					ClientCmd("mp3 stop");
+				}
+				else
+				{
+					ClientCmd("menu_tentime 1");
+				};
+				break;
+
+			case 3: 
+				if (seconds == 16)
+				{
+					ClientCmd("menu_tentime 0");
+				}
+				else if (seconds == 1)
+				{
+					ClientCmd("mp3 stop");
+				}
+				else
+				{
+					ClientCmd("menu_tentime 1");
+				};
+				break;
+								
+			}
+		}
 		break;
 	case MOD_DM:
 	case MOD_TDM:
+	case MOD_GD:
 
 		if (minutes < 10)
 		{
@@ -296,8 +365,6 @@ int CHudTimer::Draw(float fTime)
 		}
 		break;
 	}
-	
-
 	return 1;
 }
 
@@ -349,7 +416,7 @@ int CHudProgressBar::VidInit()
 int CHudProgressBar::Draw(float flTime)
 {
 	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
-	// allow only 0.0..1.0
+
 	if ((m_fPercent < 0.0f) || (m_fPercent > 1.0f))
 	{
 		m_iFlags = 0;
@@ -361,7 +428,7 @@ int CHudProgressBar::Draw(float flTime)
 	{
 		int r, g, b;
 		DrawUtils::UnpackRGB(r, g, b, RGB_WHITE);
-		DrawUtils::DrawHudString(ScreenWidth / 4, ScreenHeight / 2, ScreenWidth, (char*)m_szLocalizedHeader, r, g, b);
+		DrawUtils::DrawHudString(ScreenWidth / 4, ScreenHeight / 2, ScreenWidth, (char*)m_szLocalizedHeader, r, g, b, 255);
 
 		DrawUtils::DrawRectangle(ScreenWidth / 4, ScreenHeight / 2 + gHUD.GetCharHeight(), ScreenWidth / 2, ScreenHeight / 30);
 		FillRGBA(ScreenWidth / 4 + 2, ScreenHeight / 2 + gHUD.GetCharHeight() + 2, m_fPercent * (ScreenWidth / 2 - 4), ScreenHeight / 30 - 4, 255, 140, 0, 255);

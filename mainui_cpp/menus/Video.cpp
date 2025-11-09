@@ -1,5 +1,5 @@
 /*
-Copyright (C) 1997-2001 Id Software, Inc.
+Copyright (C) 1997-2001 Id Software & TechnoSoftware, Inc.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -44,15 +44,38 @@ void UI_Video_Menu( void )
 {
 	static CMenuFramework video("CMenuVideo");
 
+	static CMenuPicButton Graphic1, Graphic;
+	static CMenuPicButton VidoeMode1, VidoeMode;
+	static CMenuPicButton Exit1, Exit;
+
 	if( !video.WasInit() )
 	{
 		video.banner.SetPicture(ART_BANNER);
 
+		Graphic.SetNameAndStatus(L("CstzUI_VideoGraphic"), L(""));
+		Graphic.SetCharSize(QM_BOLDFONT);
+		Graphic.onActivated = UI_VidOptions_Menu;
+		Graphic.iFlags |= QMF_NOTIFY;
+		Graphic.SetCoord(80, 300);
+
+		VidoeMode.SetNameAndStatus(L("CstzUI_VideoModes"), L(""));
+		VidoeMode.SetCharSize(QM_BOLDFONT);
+		VidoeMode.onActivated = UI_VidModes_Menu;
+		VidoeMode.iFlags |= QMF_NOTIFY;
+		VidoeMode.SetCoord(80, 350);
+
+		Exit.SetNameAndStatus(L("GameUI_Close"), L(""));
+		Exit.SetCharSize(QM_BOLDFONT);
+		Exit.onActivated = VoidCb(&CMenuFramework::Hide);
+		Exit.iFlags |= QMF_NOTIFY;
+		Exit.SetCoord(80, 400);
+
 		video.AddItem( video.background );
 		video.AddItem( video.banner );
-		video.AddButton( "Video options", "Set video options such as screen size, gamma and image quality.", PC_VID_OPT, UI_VidOptions_Menu, QMF_NOTIFY );
-		video.AddButton( "Video modes", "Set video modes and configure 3D accelerators.", PC_VID_MODES, UI_VidModes_Menu, QMF_NOTIFY );
-		video.AddButton( "Done", "Go back to the previous menu", PC_DONE, VoidCb( &CMenuFramework::Hide ), QMF_NOTIFY );
+
+		video.AddItem(Graphic);
+		video.AddItem(VidoeMode);
+		video.AddItem(Exit);
 	}
 
 	video.Show();

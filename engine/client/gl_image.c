@@ -332,6 +332,11 @@ void R_SetTextureParameters( void )
 		r_textureMinFilter = GL_LINEAR_MIPMAP_LINEAR;
 		r_textureMagFilter = GL_LINEAR;
 	}
+	else if (!Q_stricmp(gl_texturemode->string, "GL_MIPMAP_NEAREST_LINEAR"))
+	{
+		r_textureMinFilter = GL_MIPMAP_NEAREST_LINEAR;
+		r_textureMagFilter = GL_LINEAR;
+	}
 	else
 	{
 		MsgDev( D_ERROR, "gl_texturemode invalid mode %s, defaulting to GL_LINEAR_MIPMAP_LINEAR\n", gl_texturemode->string );

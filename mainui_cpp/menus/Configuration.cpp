@@ -1,5 +1,5 @@
 /*
-Copyright (C) 1997-2001 Id Software, Inc.
+Copyright (C) 1997-2025 Id Software & TechnoSoftware, Inc.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -24,20 +24,32 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "YesNoMessageBox.h"
 #include "keydefs.h"
 #include "TabView.h"
+#include "PlayerIntroduceDialog.h"
+
 
 #define ART_BANNER	     	"gfx/shell/head_config"
 
 class CMenuOptions: public CMenuFramework
 {
 private:
+	
 	void _Init( void ) override;
+	CMenuYesNoMessageBox msgBox;
+public:	
 
-public:
+	void AskPredictEnable() { msgBox.Show(); }
 	typedef CMenuFramework BaseClass;
 	CMenuOptions() : CMenuFramework("CMenuOptions") { }
 
-	// update dialog
-	CMenuYesNoMessageBox msgBox;
+	CMenuPicButton Profile;
+	CMenuPicButton Ethernet;
+	CMenuPicButton Advanced;
+	CMenuPicButton KeyBoard;
+	CMenuPicButton Mouse;
+	CMenuPicButton Audio;
+	CMenuPicButton Video;
+	CMenuPicButton Exit;
+
 };
 
 static CMenuOptions	uiOptions;
@@ -51,19 +63,100 @@ void CMenuOptions::_Init( void )
 {
 	banner.SetPicture( ART_BANNER );
 
-	msgBox.SetMessage( "Check the Internet for updates?" );
-	SET_EVENT( msgBox.onPositive, UI_OpenUpdatePage( false, true ) );
-
-	msgBox.Link( this );
-
 	AddItem( background );
 	AddItem( banner );
-	AddButton( "Controls", "Change keyboard and mouse settings", PC_CONTROLS, UI_Controls_Menu, QMF_NOTIFY );
-	AddButton( "Audio",    "Change sound volume and quality", PC_AUDIO, UI_Audio_Menu, QMF_NOTIFY );
-	AddButton( "Video",    "Change screen size, video mode and gamma", PC_VIDEO, UI_Video_Menu, QMF_NOTIFY );
-//	AddButton( "Gamepad",  "Change gamepad axis and button settings", PC_GAMEPAD, UI_GamePad_Menu, QMF_NOTIFY );
-	AddButton( "Update",   "Check for updates", PC_UPDATE, msgBox.MakeOpenEvent(), QMF_NOTIFY );
-	AddButton( "Done",     "Go back to the Main menu", PC_DONE, VoidCb( &CMenuOptions::Hide ), QMF_NOTIFY );
+
+	Profile.SetNameAndStatus(L("GameUI_Profile"), L(""));
+	Profile.onActivated = UI_PlayerSetup_Menu;
+	Profile.iFlags |= QMF_NOTIFY;
+	Profile.colorBase = uiColorCyan;
+	Profile.SetCharSize(QM_BOLDFONT);
+	Profile.SetCoord(80, 250);
+
+	Ethernet.SetNameAndStatus(L("GameUI_Ethernet"), L(""));
+	Ethernet.onActivated = UI_GameOptions_Menu;
+	Ethernet.iFlags |= QMF_NOTIFY;
+	Ethernet.colorBase = uiColorCyan;
+	Ethernet.SetCharSize(QM_BOLDFONT);
+	Ethernet.SetCoord(80, 300);
+
+	Advanced.SetNameAndStatus(L("GameUI_AdvancedNoEllipsis"), L(""));
+	Advanced.onActivated = UI_AdvUserOptions_Menu;
+	Advanced.iFlags |= QMF_NOTIFY;
+	Advanced.colorBase = uiColorCyan;
+	Advanced.SetCharSize(QM_BOLDFONT);
+	Advanced.SetCoord(80, 350);
+
+	KeyBoard.SetNameAndStatus(L("GameUI_Keyboard"), L(""));
+	KeyBoard.onActivated = UI_Controls_Menu;
+	KeyBoard.iFlags |= QMF_NOTIFY;
+	KeyBoard.colorBase = uiColorCyan;
+	KeyBoard.SetCharSize(QM_BOLDFONT);
+	KeyBoard.SetCoord(80, 400);
+
+	Mouse.SetNameAndStatus(L("GameUI_Mouse"), L(""));
+	Mouse.onActivated = UI_MouseControls_Menu;
+	Mouse.iFlags |= QMF_NOTIFY;
+	Mouse.colorBase = uiColorCyan;
+	Mouse.SetCharSize(QM_BOLDFONT);
+	Mouse.SetCoord(80, 450);
+	
+	Audio.SetNameAndStatus(L("GameUI_Audio"), L(""));
+	Audio.onActivated = UI_Audio_Menu;
+	Audio.iFlags |= QMF_NOTIFY;
+	Audio.colorBase = uiColorCyan;
+	Audio.SetCharSize(QM_BOLDFONT);
+	Audio.SetCoord(80, 500);
+
+	Video.SetNameAndStatus(L("GameUI_Video"), L(""));
+	Video.onActivated = UI_Video_Menu;
+	Video.iFlags |= QMF_NOTIFY;
+	Video.colorBase = uiColorCyan;
+	Video.SetCharSize(QM_BOLDFONT);
+	Video.SetCoord(80, 550);
+
+	Exit.SetNameAndStatus(L("GameUI_Close"), L(""));
+	SET_EVENT_MULTI(Exit.onActivated,
+		{
+			uiOptions.Hide();
+			UI_InitMainMenu();
+		}
+	);
+	Exit.iFlags |= QMF_NOTIFY;
+	Exit.colorBase = uiColorCyan;
+	Exit.SetCharSize(QM_BOLDFONT);
+	Exit.SetCoord(80, 600);
+
+	msgBox.SetMessage("It is recomended to enable client movement prediction.\nPress OK to enable it now or enable it later in ^5(Multiplayer/Customize)");
+	msgBox.SetPositiveButton("Ok", PC_OK);
+	msgBox.SetNegativeButton("Cancel", PC_CANCEL);
+	msgBox.HighlightChoice(CMenuYesNoMessageBox::HIGHLIGHT_YES);
+	SET_EVENT_MULTI
+	(
+		msgBox.onPositive,
+		{
+			EngFuncs::CvarSetValue("cl_predict", 1.0f); EngFuncs::CvarSetValue("menu_mp_firsttime", 0.0f);
+			UI_PlayerIntroduceDialog_Show(&uiOptions);
+		}
+	);
+	SET_EVENT_MULTI
+	(
+		msgBox.onNegative,
+		{
+			EngFuncs::CvarSetValue("menu_mp_firsttime", 0.0f);
+
+			UI_PlayerIntroduceDialog_Show(&uiOptions);
+		}
+	);
+	msgBox.Link(this);
+	AddItem(Profile);
+	AddItem(Ethernet);
+	AddItem(Advanced);
+	AddItem(KeyBoard);
+	AddItem(Mouse);
+	AddItem(Audio);
+	AddItem(Video);
+	AddItem(Exit);
 }
 
 /*
@@ -81,8 +174,28 @@ void UI_Options_Precache( void )
 CMenuOptions::Menu
 =================
 */
+
+#include "discord_api.h"
+
+DiscordIntegration dsAPI3;
+
 void UI_Options_Menu( void )
 {
+	if (gMenu.m_gameinfo.gamemode == GAME_SINGLEPLAYER_ONLY)
+		return;
+
 	uiOptions.Show();
+
+	UI_InitSettings();
+
+	if (EngFuncs::GetCvarFloat("menu_mp_firsttime") && !EngFuncs::GetCvarFloat("cl_predict"))
+	{
+		uiOptions.AskPredictEnable();
+	}
+	else if (!UI::Names::CheckIsNameValid(EngFuncs::GetCvarString("name")))
+	{
+		UI_PlayerIntroduceDialog_Show(&uiOptions);
+	}
 }
+
 ADD_MENU( menu_options, UI_Options_Precache, UI_Options_Menu );

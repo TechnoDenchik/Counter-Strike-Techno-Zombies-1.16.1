@@ -20,11 +20,11 @@
 #include "weapons.h"
 #include "wpn_zombiebomb.h"
 
-LINK_ENTITY_TO_CLASS(weapon_zombibomb, CZombieBomb)
+LINK_ENTITY_TO_CLASS(weapon_zombibombz, CZombieBomb)
 
 void CZombieBomb::Spawn(void)
 {
-	pev->classname = MAKE_STRING("weapon_zombibomb");
+	pev->classname = MAKE_STRING("weapon_zombibombz");
 	Precache();
 	m_iId = WEAPON_HEGRENADE;
 
@@ -41,12 +41,35 @@ void CZombieBomb::Spawn(void)
 
 void CZombieBomb::Precache(void)
 {
-	PRECACHE_MODEL("models/v_zombibomb.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_trans.mdl");
+
+	PRECACHE_MODEL("models/v_zombibomb_aksha_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_boomer_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_booster_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_china_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_deathknight_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_deimos_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_fly_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_h_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_heal_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_meatwall.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_meatwall_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_pass_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_resident_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_revival_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_s_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_spider_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_teleport.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_teleport_host.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_undertaker.mdl");
+	PRECACHE_MODEL("models/v_zombibomb_witch_trans.mdl");
+	PRECACHE_MODEL("models/v_zombibomb-deimos.mdl");
+	PRECACHE_MODEL("models/v_zombibomb-deimos_host.mdl");
+	PRECACHE_MODEL("models/v_zombibomb-deimos2.mdl");
+	PRECACHE_MODEL("models/v_zombibombpc.mdl");
+
 	PRECACHE_MODEL("models/w_zombibomb.mdl");
 	PRECACHE_MODEL("models/p_zombibomb.mdl");
-#ifdef ENABLE_SHIELD
-	PRECACHE_MODEL("models/shield/v_shield_hegrenade.mdl");
-#endif
 	PRECACHE_SOUND("zb3/zombi_bomb_deploy.wav");
 	PRECACHE_SOUND("zb3/zombi_bomb_idle_1.wav");
 	PRECACHE_SOUND("zb3/zombi_bomb_idle_2.wav");
@@ -65,6 +88,10 @@ int CZombieBomb::GetItemInfo(ItemInfo *p)
 	p->iMaxAmmo1 = MAX_AMMO_HEGRENADE;
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
+	p->pszAmmo3 = NULL;
+	p->iMaxAmmo3 = -1;
+	p->pszAmmoGrenade = NULL;
+	p->iMaxAmmoGrenade = -1;
 	p->iMaxClip = WEAPON_NOCLIP;
 	p->iSlot = 3;
 	p->iPosition = 1;
@@ -81,17 +108,12 @@ BOOL CZombieBomb::Deploy(void)
 	m_fMaxSpeed = 250;
 	m_iWeaponState &= ~WPNSTATE_SHIELD_DRAWN;
 	m_pPlayer->m_bShieldDrawn = false;
-#ifdef ENABLE_SHIELD
-	if (m_pPlayer->HasShield() != false)
-		return DefaultDeploy("models/shield/v_shield_hegrenade.mdl", "models/shield/p_shield_hegrenade.mdl", HEGRENADE_DRAW, "shieldgren", UseDecrement() != FALSE);
-	else
-#endif
-		return DefaultDeploy("models/v_zombibomb.mdl", "models/p_zombibomb.mdl", HEGRENADE_DRAW, "grenade", UseDecrement() != FALSE);
+
+	return DefaultDeploy("models/v_zombibomb_trans.mdl", "models/p_zombibomb.mdl", HEGRENADE_DRAW, "grenade", UseDecrement() != FALSE);
 }
 
 BOOL CZombieBomb::CanHolster(void)
 {
-	//return m_flStartThrow != invalid_time_point;
 	return CBasePlayerWeapon::CanHolster();
 }
 

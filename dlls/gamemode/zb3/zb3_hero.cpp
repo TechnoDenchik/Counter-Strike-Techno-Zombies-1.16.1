@@ -1,73 +1,75 @@
-/*
-zb2_zclass.cpp - CSMoE Gameplay server : Zombie Mod 2
-Copyright (C) 2019 Moemod Yanase
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-*/
+/* =================================================================================== *
+			 * =================== TechnoSoftware =================== *
+ * =================================================================================== */
 
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
 #include "player.h"
 
-#include "gamemode/zb2/zb2_const.h"
-#include "gamemode/zb3/zb3_human.h"
-#include "gamemode/zb3/zb3_hero.h"
 #include "zb3_hero.h"
-#include "zb3_class_hero.h"
-#include <random>
+#include "../mod_zb3.h"
+#include "gamemode/zb3/zb3_const.h"
 
-template<class T>
-std::shared_ptr<CBaseHeroClass_ZB3> MakeHeroClass(CBasePlayer *player, ZombieLevel lv)
+CHero_ZB1::CHero_ZB1(CBasePlayer* player) : BasePlayerExtra(player)
 {
-	return std::make_shared<T>(player, lv);
+	m_pPlayer->m_bIsZombie = false;
+	m_pPlayer->m_bNotKilled = false;
+	m_pPlayer->m_bIsVIP = true;
+	m_pPlayer->pev->body = 0;
+
+	const char* szModel = "hero";
+	SET_CLIENT_KEY_VALUE(m_pPlayer->entindex(), GET_INFO_BUFFER(m_pPlayer->edict()), "model", const_cast<char*>(szModel));
+
+	static char szModelPath[64];
+	Q_snprintf(szModelPath, sizeof(szModelPath), "models/player/%s/%s.mdl", szModel, szModel);
+	m_pPlayer->SetNewPlayerModel(szModelPath);
+
+	UTIL_LogPrintf("\"%s<%i><%s><CT>\" triggered \"Became_Hero\"\n", STRING(m_pPlayer->pev->netname), GETPLAYERUSERID(m_pPlayer->edict()), GETPLAYERAUTHID(m_pPlayer->edict()));
+
+	// remove guns & give nvg
+	m_pPlayer->m_bNightVisionOn = false;
+
+	// set default property
+	m_pPlayer->pev->health = m_pPlayer->pev->max_health = 3000;
+	m_pPlayer->pev->armortype = ARMOR_TYPE_HELMET;
+	m_pPlayer->pev->armorvalue = 2000;
+	m_pPlayer->pev->gravity = 0.83f;
+	m_pPlayer->ResetMaxSpeed();
+
 }
 
-const std::pair<const char *, std::shared_ptr<CBaseHeroClass_ZB3>(*)(CBasePlayer *, ZombieLevel)> g_FindList[] = {
-		{"Hero", MakeHeroClass<CHeroClass_Default> }
-};
-
-constexpr auto NUM_ZCLASSES = std::extent<decltype(g_FindList)>::value;
-
-std::shared_ptr<CBaseHeroClass_ZB3> HeroClassFactory(CBasePlayer *player, ZombieLevel lv, const char *name)
+void CHero_ZB1::ResetMaxSpeed() const
 {
-	if(name == nullptr)
-		return g_FindList[0].second(player, lv);
+	m_pPlayer->pev->maxspeed = 360;
+}
 
-	if (!stricmp(name, "random"))
+void CHero_ZB1::DeathSound_Hero()
+{
+	switch (RANDOM_LONG(1, 3))
 	{
-		std::random_device rd;
-		const std::size_t N = std::uniform_int_distribution<size_t>(0, NUM_ZCLASSES - 1)(rd);
-		return g_FindList[N].second(player, lv);
+	case 1: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "player/die1.wav", VOL_NORM, ATTN_NORM); break;
+	case 2: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "player/die2.wav", VOL_NORM, ATTN_NORM); break;
+	case 3: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "player/die3.wav", VOL_NORM, ATTN_NORM); break;
+
+	default:break;
 	}
-
-	return g_FindList[0].second(player, lv);
 }
 
-void CBaseHeroClass_ZB3::Think()
+void CHero_ZB1::Pain_Hero(int m_LastHitGroup, bool HasArmour)
 {
-	return CBaseHeroClass_ZB3::Think();
+	switch (RANDOM_LONG(0, 3))
+	{
+	case 0: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "player/bhit_flesh-1.wav", VOL_NORM, ATTN_NORM); break;
+	case 1: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "player/bhit_flesh-2.wav", VOL_NORM, ATTN_NORM); break;
+	case 2: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "player/bhit_flesh-3.wav", VOL_NORM, ATTN_NORM); break;
+	case 3: EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_VOICE, "player/bhit_kevlar-1.wav", VOL_NORM, ATTN_NORM); break;
+
+	default:break;
+	}
 }
 
-void CBaseHeroClass_ZB3::ResetMaxSpeed() const
+void PlayerHero_Precache()
 {
-	CBaseHeroClass_ZB3::ResetMaxSpeed();
-}
 
-bool CBaseHeroClass_ZB3::ApplyKnockback(CBasePlayer *attacker, const KnockbackData &kbd)
-{
-	return CBaseHeroClass_ZB3::ApplyKnockback(attacker, kbd);
-}
-
-float CBaseHeroClass_ZB3::AdjustDamageTaken(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) const
-{
-	return CBaseHeroClass_ZB3::AdjustDamageTaken(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 }

@@ -27,6 +27,7 @@
 #include "StudioModelRenderer.h"
 #include "GameStudioModelRenderer.h"
 #include "com_weapons.h"
+#include "vgui2/CBaseViewport.h"
 
 #include <cstring>
 
@@ -114,9 +115,15 @@ int CHud :: MsgFunc_GameMode(const char *pszName, int iSize, void *pbuf )
 	reader.ReadByte();
 
 	// reset mod-specific settings
+	gHUD.m_CLS.m_iFlags &= ~HUD_ACTIVE;
+	gHUD.m_dm.m_iFlags &= ~HUD_ACTIVE;
+	gHUD.m_tdm.m_iFlags &= ~HUD_ACTIVE;
+	//gHUD.m_WPI.m_iFlags &= ~HUD_ACTIVE;
 	gHUD.m_gd.m_iFlags &= ~HUD_ACTIVE;
+	gHUD.m_hid.m_iFlags &= ~HUD_ACTIVE;
 	gHUD.m_ZB2.m_iFlags &= ~HUD_ACTIVE;
 	gHUD.m_ZB3.m_iFlags &= ~HUD_ACTIVE;
+	gHUD.m_ZB5.m_iFlags &= ~HUD_ACTIVE;
 	gHUD.m_ZSH.m_iFlags &= ~HUD_ACTIVE;
 	gHUD.m_ZBS.m_iFlags &= ~HUD_ACTIVE;
 
@@ -124,6 +131,8 @@ int CHud :: MsgFunc_GameMode(const char *pszName, int iSize, void *pbuf )
 	{
 	case MOD_NONE:
 	{
+		gHUD.m_CLS.m_iFlags |= HUD_ACTIVE;
+		gHUD.m_WPI.m_iFlags |= HUD_ACTIVE;
 		int iBombTargetsNum = reader.ReadByte();
 		iBombTargetsNum = min(iBombTargetsNum, 2);
 
@@ -151,43 +160,76 @@ int CHud :: MsgFunc_GameMode(const char *pszName, int iSize, void *pbuf )
 	}
 	case MOD_TDM:
 	{
-		
+		gHUD.m_tdm.m_iFlags |= HUD_ACTIVE;
+		gHUD.m_WPI.m_iFlags |= HUD_ACTIVE;	
 		break;
 	}
 	case MOD_DM:
 	{
+		gHUD.m_dm.m_iFlags |= HUD_ACTIVE;
+		gHUD.m_WPI.m_iFlags |= HUD_ACTIVE;
+	
 		break;
 	}
 	case MOD_GD:
 	{
+		gHUD.m_WPI.m_iFlags |= HUD_ACTIVE;
+	
 		gHUD.m_gd.m_iFlags |= HUD_ACTIVE;
+		break;
+	}
+	case MOD_HIDDEN:
+	{
+		gHUD.m_WPI.m_iFlags |= HUD_ACTIVE;
+
+		gHUD.m_hid.m_iFlags |= HUD_ACTIVE;
 		break;
 	}
 	case MOD_ZSH:
 	{
+		gHUD.m_WPI.m_iFlags |= HUD_ACTIVE;
 		m_Teamplay = true;
 		gHUD.m_ZSH.m_iFlags |= HUD_ACTIVE;
+		gHUD.m_StatusIcons.m_iFlags |= HUD_DRAW;
 		
 		break;
 	}
 	case MOD_ZB3:
 	{
+	
 		gHUD.m_ZB3.m_iFlags |= HUD_ACTIVE;
+		gHUD.m_WPI.m_iFlags |= HUD_ACTIVE;
+		// dont break, continue to ZB2...
+		//[fallthrough]];
+	}
+	case MOD_ZB5:
+	{
+
+		gHUD.m_ZB5.m_iFlags |= HUD_ACTIVE;
+		gHUD.m_WPI.m_iFlags |= HUD_ACTIVE;
 		// dont break, continue to ZB2...
 		//[fallthrough]];
 	}
 	case MOD_ZB2:
 	{
+		//gHUD.m_WPI.m_iFlags |= HUD_ACTIVE;
+	
 		gHUD.m_ZB2.m_iFlags |= HUD_ACTIVE;
+		gHUD.m_WPI.m_iFlags |= HUD_ACTIVE;
 		// dont break, continue to ZB1...
 		//[fallthrough]];
 	}
 	case MOD_ZB1:
 	{
+		gHUD.m_WPI.m_iFlags |= HUD_ACTIVE;
+		
+
 		break;
 	}
 	case MOD_ZBS:
 	{
+		gHUD.m_WPI.m_iFlags |= HUD_ACTIVE;
+	
 		m_Teamplay = false;
 		gHUD.m_ZBS.m_iFlags |= HUD_ACTIVE;
 		break;
@@ -195,7 +237,6 @@ int CHud :: MsgFunc_GameMode(const char *pszName, int iSize, void *pbuf )
 	default:
 		break;
 	}
-
 	return 1;
 }
 

@@ -27,7 +27,6 @@ struct SpawnPointData
 {
 	Vector origin;
 	Vector angles;
-	Vector v_angle;
 };
 std::vector<SpawnPointData> g_vecSpawnRES;
 
@@ -38,7 +37,7 @@ inline Vector PackVector(const Arr &arr, size_t N)
 }
 SpawnPointData MakeSpawnRESPointData(const std::array<float, 9> &arr)
 {
-	return { PackVector(arr, 0), PackVector(arr, 1), PackVector(arr, 2) };
+	return { PackVector(arr, 0), PackVector(arr, 1)};
 }
 
 BOOL RES_IsSpawnPointValid(CBaseEntity *pPlayer, const SpawnPointData &data)
@@ -57,10 +56,8 @@ BOOL RES_IsSpawnPointValid(CBaseEntity *pPlayer, const SpawnPointData &data)
 
 void RES_ApplyRandomSpawnPoint(CBaseEntity *pEntity, const SpawnPointData & data)
 {
-	pEntity->pev->origin = data.origin + Vector(0, 0, 1);
-	pEntity->pev->velocity = g_vecZero;
+	pEntity->pev->origin = data.origin;
 	pEntity->pev->angles = data.angles;
-	pEntity->pev->v_angle = data.v_angle;
 }
 
 bool RES_DoRandomSpawn(CBaseEntity *pEntity)

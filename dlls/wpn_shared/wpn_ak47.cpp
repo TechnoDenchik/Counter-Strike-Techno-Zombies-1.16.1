@@ -19,6 +19,7 @@
 #include "player.h"
 #include "weapons.h"
 #include "wpn_ak47.h"
+#include "gamemode/interface/interface_const.h"
 
 enum ak47_e
 {
@@ -27,7 +28,8 @@ enum ak47_e
 	AK47_DRAW,
 	AK47_SHOOT1,
 	AK47_SHOOT2,
-	AK47_SHOOT3
+	AK47_SHOOT3,
+	AK47_VIEW,
 };
 
 LINK_ENTITY_TO_CLASS(weapon_ak47, CAK47)
@@ -52,11 +54,12 @@ void CAK47::Precache(void)
 	PRECACHE_MODEL("models/v_ak47.mdl");
 	PRECACHE_MODEL("models/w_ak47.mdl");
 
-	PRECACHE_SOUND("weapons/ak47-1.wav");
-	PRECACHE_SOUND("weapons/ak47-2.wav");
-	PRECACHE_SOUND("weapons/ak47_clipout.wav");
-	PRECACHE_SOUND("weapons/ak47_clipin.wav");
-	PRECACHE_SOUND("weapons/ak47_boltpull.wav");
+	PRECACHE_SOUND("weapons/cs2_ak47/ak47-1.wav");
+	PRECACHE_SOUND("weapons/cs2_ak47/ak47-2.wav");
+	PRECACHE_SOUND("weapons/cs2_ak47/clipout.wav");
+	PRECACHE_SOUND("weapons/cs2_ak47/clipin.wav");
+	PRECACHE_SOUND("weapons/cs2_ak47/boltpull.wav");
+	PRECACHE_SOUND("weapons/cs2_ak47/draw.wav");
 
 	m_iShell = PRECACHE_MODEL("models/rshell.mdl");
 	m_usFireAK47 = PRECACHE_EVENT(1, "events/ak47.sc");
@@ -69,6 +72,10 @@ int CAK47::GetItemInfo(ItemInfo *p)
 	p->iMaxAmmo1 = MAX_AMMO_762NATO;
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
+	p->pszAmmo3 = NULL;
+	p->iMaxAmmo3 = -1;
+	p->pszAmmoGrenade = NULL;
+	p->iMaxAmmoGrenade = -1;
 	p->iMaxClip = AK47_MAX_CLIP;
 	p->iSlot = 0;
 	p->iPosition = 1;
@@ -84,7 +91,6 @@ BOOL CAK47::Deploy(void)
 	m_flAccuracy = 0.2;
 	m_iShotsFired = 0;
 	iShellOn = 1;
-
 	return DefaultDeploy("models/v_ak47.mdl", "models/p_ak47.mdl", AK47_DRAW, "ak47", UseDecrement() != FALSE);
 }
 
@@ -170,6 +176,24 @@ void CAK47::Reload(void)
 		m_iShotsFired = 0;
 		m_bDelayFire = false;
 	}
+}
+
+void CAK47::ItemPostFrame()
+{
+	int usableButtons = m_pPlayer->pev->button;
+
+	if (usableButtons & (IN_VIEW))
+	{
+		ResetEmptySound();
+
+		if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase())
+			return;
+
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 5;
+		SendWeaponAnim(AK47_VIEW, UseDecrement() != FALSE);
+	}
+
+	return CBasePlayerWeapon::ItemPostFrame();
 }
 
 void CAK47::WeaponIdle(void)

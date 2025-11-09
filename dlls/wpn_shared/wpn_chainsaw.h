@@ -13,7 +13,8 @@ namespace sv {
 //chainsaw
 #define CHAINSAW_MAX_SPEED			260
 #define CHAINSAW_TIME_DRAW			1.1s
-#define CHAINSAW_MAX_CLIP			200
+#define CHAINSAW_MAX_CLIP			300
+#define CHAINSAW_CLIP			200
 #define chainsaw_RELOAD_TIME		2
 #define CHAINSAW_SLASH_ANGLE 120.0
 #define CHAINSAW_DISTANCE_A			115.0
@@ -40,6 +41,7 @@ public:
 	const char *GetCSModelName() override { return "models/w_chainsaw.mdl"; }
 	float GetPrimaryAttackDamage() const;
 	float GetSecondaryAttackDamage() const;
+	
 #ifndef CLIENT_DLL
 #include "weapons/KnifeAttack.h"
 	hit_result_t KnifeAttack1(Vector vecSrc, Vector vecDir, float flDamage, float flRadius, float flAngleDegrees, int bitsDamageType,
@@ -55,10 +57,14 @@ public:
 	}
 	KnockbackData GetKnockBackData() override { return { 290.0f, 85.0f, 150.0f, 150.0f, 0.25f }; }
 #ifndef CLIENT_DLL
-	WeaponBuyAmmoConfig GetBuyAmmoConfig() override { return { "ammo_chainsaw" , 300 }; }
+	WeaponBuyAmmoConfig GetBuyAmmoConfig() override { return { "ammo_762Nato" , 100 }; }
 #endif
 
 public:;
+	int m_iSwing;
+	int m_iSwing2;
+	int m_iSwing3;
+	int m_iSwing4;
 	int m_iShell;
 	int m_iButton;
 	int m_iState;

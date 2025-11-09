@@ -23,7 +23,6 @@
 #include "netadr.h"
 
 #include <string.h>
-//#include "interface.h" // not used here
 #include "render_api.h"
 #include "mobility_int.h"
 #include "vgui_parser.h"
@@ -38,14 +37,18 @@ extern "C"
 {
 #include "pmtrace.h"
 #include "pm_shared.h"
+#include "pm_defs.h"
 }
 
 cl_enginefunc_t gEngfuncs = { };
 render_api_t gRenderAPI = { };
 mobile_engfuncs_t gMobileAPI = { };
 CHud gHUD;
+
 int g_iXash = 0; // indicates a buildnum
 int g_iMobileAPIVersion = 0;
+vec3_t g_velocity;
+vec3_t g_vecOrigin, g_vecEyePos, g_vecEye, g_vecVAngles;
 long g_iDamage[MAX_CLIENTS + 1];
 long g_iDamageTotal[MAX_CLIENTS + 1];
 double g_flDamageInAll;
@@ -157,6 +160,9 @@ char DLLEXPORT HUD_PlayerMoveTexture( char *name )
 
 void DLLEXPORT HUD_PlayerMove( struct playermove_s *ppmove, int server )
 {
+
+	VectorCopy(ppmove->velocity, g_velocity);
+
 	PM_Move( ppmove, server );
 }
 
@@ -178,8 +184,6 @@ int DLLEXPORT HUD_VidInit( void )
 
 	isLoaded = true;
 
-	//VGui_Startup();
-
 	return 1;
 }
 
@@ -197,7 +201,6 @@ void DLLEXPORT HUD_Init( void )
 {
 	InitInput();
 	gHUD.Init();
-	//Scheme_Init();
 }
 
 
@@ -325,17 +328,6 @@ int DLLEXPORT HUD_GetRenderInterface( int version, render_api_t *renderfuncs, re
 
 	gRenderAPI = *renderfuncs;
 
-	// we didn't send callbacks to engine, because we don't use it
-	// *callback = renderInterface;
-
-	// we have here a Host_Error, so check Xash for version
-#ifdef __ANDROID__
-	if( g_iXash < 3224 )
-	{
-		gRenderAPI.Host_Error("Xash3D Android version check failed!\nPlease update your Xash3D Android!\n");
-	}
-#endif
-
 	return true;
 }
 
@@ -350,13 +342,6 @@ int DLLEXPORT HUD_MobilityInterface( mobile_engfuncs_t *mobileapi )
 	{
 		gEngfuncs.Con_Printf("Client Error: Mobile API version mismatch. Got: %i, want: %i\n",
 			mobileapi->version, MOBILITY_API_VERSION);
-
-#ifdef __ANDROID__
-		if( gRenderAPI.Host_Error )
-		{
-			gRenderAPI.Host_Error("Xash3D Android version check failed!\nPlease update your Xash3D Android!\n");
-		}
-#endif
 		return 1;
 	}
 

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 1997-2001 Id Software, Inc.
+Copyright (C) 1997-2025 Id Software & TechnoSoftware, Inc.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "CheckBox.h"
 #include "Action.h"
 #include "YesNoMessageBox.h"
+#include "SpinControl.h"
 
 #define ART_BANNER		"gfx/shell/head_vidmodes"
 
@@ -70,6 +71,9 @@ public:
 
 	CMenuYesNoMessageBox testModeMsgBox;
 
+	CMenuPicButton Apply1, Apply;
+	CMenuPicButton Exit1, Exit;
+	CMenuSpinControl FPSmax;
 	int prevMode;
 	bool prevFullscreen;
 	float testModeTimer;
@@ -85,7 +89,7 @@ UI_VidModes_GetModesList
 void CMenuVidModesModel::Update( void )
 {
 	unsigned int i;
-
+	uiVidModes.FPSmax.WriteCvar();
 	m_szModes[0] = "<Current window size>";
 	m_szModes[1] = "<Desktop size>";
 
@@ -140,7 +144,7 @@ void CMenuVidModes::SetConfig( )
 	}
 
 	vsync.WriteCvar();
-
+	FPSmax.WriteCvar();
 	if( testMode )
 	{
 		testModeMsgBox.Show();
@@ -196,7 +200,8 @@ void CMenuVidModes::_Init( void )
 	vidList.SetupColumn( 0, 0, 1.0f );
 	vidList.SetModel( &vidListModel );
 
-	windowed.SetNameAndStatus( "Run in a window", "Run game in window mode" );
+	windowed.SetNameAndStatus(L("CstzUI_VideoWind"), L("CstzUI_VideoWind") );
+	windowed.SetCharSize(QM_BOLDFONT);
 	windowed.SetCoord( 360, 620 );
 	SET_EVENT_MULTI( windowed.onChanged,
 	{
@@ -210,7 +215,8 @@ void CMenuVidModes::_Init( void )
 			uiVidModes.vidList.SetCurrentIndex( VID_AUTOMODE_POS );
 	});
 
-	vsync.SetNameAndStatus( "Vertical sync", "Enable vertical synchronization" );
+	vsync.SetNameAndStatus(L("CstzUI_VideoSync"), L("CstzUI_VideoSync") );
+	vsync.SetCharSize(QM_BOLDFONT);
 	vsync.SetCoord( 360, 670 );
 	vsync.LinkCvar( "gl_swapInterval" );
 
@@ -219,18 +225,37 @@ void CMenuVidModes::_Init( void )
 	testModeMsgBox.onNegative = VoidCb( &CMenuVidModes::RevertChanges );
 	testModeMsgBox.Link( this );
 
+	FPSmax.SetCharSize(QM_BOLDFONT);
+	FPSmax.szName = L("FPS limit");
+	FPSmax.szStatusText = "Cap your game frame rate";
+	FPSmax.Setup(60, 1000, 40);
+	FPSmax.LinkCvar("fps_max", CMenuEditable::CVAR_VALUE);
+
+	Apply.SetNameAndStatus(L("GameUI_Apply"), L(""));
+	Apply.SetCharSize(QM_BOLDFONT);
+	Apply.onActivated = VoidCb(&CMenuVidModes::SetConfig);
+	Apply.iFlags |= QMF_NOTIFY;
+	Apply.SetCoord(80, 250);
+
+	Exit.SetNameAndStatus(L("GameUI_GameMenu_Quit"), L(""));
+	Exit.SetCharSize(QM_BOLDFONT);
+	Exit.onActivated = VoidCb(&CMenuVidModes::Hide);
+	Exit.iFlags |= QMF_NOTIFY;
+	Exit.SetCoord(80, 300);
+
 	AddItem( background );
+	AddItem( FPSmax );
 	AddItem( banner );
-	AddButton( "Apply", "Apply changes", PC_OK, VoidCb( &CMenuVidModes::SetConfig ) );
-	AddButton( "Cancel", "Return back to previous menu", PC_CANCEL, VoidCb( &CMenuVidModes::Hide ) );
 	AddItem( windowed );
 	AddItem( vsync );
+	AddItem( Apply );
+	AddItem( Exit );
 	AddItem( vidList );
 }
 
 void CMenuVidModes::_VidInit()
 {
-	// don't overwrite prev values
+	FPSmax.SetRect(650, 205, 220, 32);
 	if( !testModeMsgBox.IsVisible() )
 	{
 		prevMode = EngFuncs::GetCvarFloat( "vid_mode" );

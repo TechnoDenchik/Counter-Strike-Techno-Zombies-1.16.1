@@ -574,7 +574,10 @@
 		void PrimaryAttack_InstantDamage();
 		void ClearEffect();
 		void ShootProjectile();
+		void GungnirLighting();
 		void ShootSpear();
+
+		BOOL IsTargetAvailable(CBasePlayer* m_pPlayer, CBaseEntity* pEntity, Vector vecSrc);
 
 		double GetDamage_PrimaryAttack_Instant() const
 		{
@@ -645,12 +648,14 @@
 		// unsigned short phs8; // m_usFireGungnir
 		std::vector<EHANDLE> phs9_10_11;
 		float phs12;
+		int m_iSprBeam;
 	};
 	LINK_ENTITY_TO_CLASS(weapon_gungnir, CGungnir)
 
 		void CGungnir::Precache()
 	{
 		PRECACHE_MODEL(Beam_SPR);
+		m_iSprBeam = PRECACHE_MODEL("sprites/ef_gungnir_xbeam.spr");
 		PRECACHE_MODEL("models/p_gungnirB.mdl");
 		PRECACHE_MODEL("sprites/ef_gungnir_aexplo.spr");
 		PRECACHE_SOUND("weapons/gungnir_charge_loop.wav");
@@ -715,6 +720,9 @@
 			}
 			return; // sth ignored
 		}
+
+		GungnirLighting();
+
 		--m_iClip;
 		if (phs2 > 0.0f)
 			phs2 = -1.0f; // 0xBF800000
@@ -755,6 +763,105 @@
 		PrimaryAttack_InstantDamage();
 	}
 
+	void CGungnir::GungnirLighting(void)
+	{
+		UTIL_MakeVectors(m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle);
+
+		m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME;
+		m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
+
+		Vector vecSrc = m_pPlayer->GetGunPosition();
+
+#ifndef CLIENT_DLL
+		CBaseEntity* pEntity = NULL;
+		while ((pEntity = UTIL_FindEntityInSphere(pEntity, vecSrc, 320.0f)) != nullptr)
+		{
+			if (IsTargetAvailable(m_pPlayer, pEntity, vecSrc))
+				break;
+		}
+		Vector VecEnd;
+		if (pEntity != nullptr && pEntity->IsAlive())
+		{
+			VecEnd = pEntity->pev->origin;
+			entvars_t* const pevAttacker = VARS(pev->owner);
+			entvars_t* const pevInflictor = this->pev;
+		}
+		else
+		{
+			Vector VecForward;
+			VecForward = gpGlobals->v_forward;
+			VecForward *= 400;
+			VecEnd = vecSrc + VecForward;
+		}
+
+		MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
+		WRITE_BYTE(TE_BEAMENTPOINT);
+		WRITE_SHORT(ENTINDEX(m_pPlayer->edict()) | 0x1000);
+		WRITE_COORD(VecEnd.x);
+		WRITE_COORD(VecEnd.y);
+		WRITE_COORD(VecEnd.z);
+		WRITE_SHORT(m_iSprBeam);
+		WRITE_BYTE(0); // FRAMERATE
+		WRITE_BYTE(0); // FRAMERATE
+		WRITE_BYTE(1); // LIFE
+		WRITE_BYTE(40); // WIDTH
+		WRITE_BYTE(25);   // NOISE
+		WRITE_BYTE(255);   // R, G, B
+		WRITE_BYTE(255);  // R, G, B
+		WRITE_BYTE(255);   // R, G, B
+		WRITE_BYTE(255);	// BRIGHTNESS
+		WRITE_BYTE(25);		// SPEED
+		MESSAGE_END();
+
+		MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
+		WRITE_BYTE(TE_BEAMENTPOINT);
+		WRITE_SHORT(ENTINDEX(m_pPlayer->edict()) | 0x1000);
+		WRITE_COORD(VecEnd.x);
+		WRITE_COORD(VecEnd.y);
+		WRITE_COORD(VecEnd.z);
+		WRITE_SHORT(m_iSprBeam);
+		WRITE_BYTE(0); // FRAMERATE
+		WRITE_BYTE(0); // FRAMERATE
+		WRITE_BYTE(1); // LIFE
+		WRITE_BYTE(40); // WIDTH
+		WRITE_BYTE(25);   // NOISE
+		WRITE_BYTE(255);   // R, G, B
+		WRITE_BYTE(255);  // R, G, B
+		WRITE_BYTE(255);   // R, G, B
+		WRITE_BYTE(255);	// BRIGHTNESS
+		WRITE_BYTE(25);		// SPEED
+		MESSAGE_END();
+#endif
+	}
+
+	BOOL CGungnir::IsTargetAvailable(CBasePlayer* m_pPlayer, CBaseEntity* pEntity, Vector vecSrc)
+	{
+
+		if (!pEntity->IsAlive())
+			return false;
+
+#ifndef CLIENT_DLL
+		if (g_pGameRules->PlayerRelationship(m_pPlayer, pEntity) == GR_TEAMMATE)
+			return false;
+#endif
+
+		if (pEntity->IsBSPModel())
+			return false;
+
+		if (pEntity->pev == m_pPlayer->pev)
+			return false;
+
+		Vector vecGunPostion = m_pPlayer->GetGunPosition();
+		Vector vecDelta = (pEntity->Center() - vecGunPostion).Normalize();
+
+		UTIL_MakeVectors(m_pPlayer->pev->v_angle);
+
+		if (DotProduct(gpGlobals->v_forward, vecDelta) < 0.5)
+			return false;
+
+		return true;
+	}
+
 	void CGungnir::ShootProjectile()
 	{
 		if (m_iClip <= 0)
@@ -777,7 +884,6 @@
 			pEnt->Init(gpGlobals->v_forward * 1500, GetDamage_ProjectileA(), GetDamage_ProjectileB(), 110, m_pPlayer->m_iTeam);
 		}
 #endif
-
 		m_flNextPrimaryAttack = m_flNextSecondaryAttack = m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.58;
 
 		PLAYBACK_EVENT_FULL(1, m_pPlayer->edict(), m_usFire, 0, (float*)&g_vecZero, (float*)&g_vecZero, 3/*0*/, 0, 3, 0, FALSE, FALSE);
@@ -1038,20 +1144,7 @@
 			if (v8 < 3)
 			{
 #ifndef CLIENT_DLL
-				CBeam* pBeam = phs5_6_7[v8];
-				if (pBeam)
-				{
-					pBeam->EntsInit(ENTINDEX(m_pPlayer->edict()), ENTINDEX(pEntity->edict()));
-					pBeam->SetType(BEAM_ENTS);
-					pBeam->SetStartEntity(ENTINDEX(m_pPlayer->edict()));
-					pBeam->SetEndEntity(ENTINDEX(pEntity->edict()));
-					pBeam->SetStartAttachment(1);
-					pBeam->SetEndAttachment(0);
-					pBeam->RelinkBeam();
-					pBeam->SetBrightness(230);
-					pBeam->pev->effects &= ~EF_NODRAW;
-
-				}
+				
 
 				MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pEntity->pev->origin);
 				WRITE_BYTE(TE_EXPLOSION);

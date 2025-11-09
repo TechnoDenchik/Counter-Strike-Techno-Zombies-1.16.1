@@ -26,6 +26,13 @@ public:
 	T& Element(int i);
 	T const& Element(int i) const;
 
+	inline bool IsEmpty(void) const
+	{
+		return (Count() == 0);
+	}
+
+	void RemoveMultipleFromHead(int num); // removes num elements from tail
+
 	// Gets the base address (can change when adding elements!)
 	T* Base();
 	T const* Base() const;
@@ -155,6 +162,19 @@ inline CUtlVector<T>& CUtlVector<T>::operator=(const CUtlVector<T> &other)
 {
 	CopyArray(other.Base(), other.Count());
 	return *this;
+}
+
+template< typename T>
+void CUtlVector<T>::RemoveMultipleFromHead(int num)
+{
+	Assert(num <= Count());
+
+	// Global scope to resolve conflict with Scaleform 4.0
+	for (int i = num; --i >= 0; )
+		::Destruct(&Element(i));
+
+	ShiftElementsLeft(0, num);
+	m_Size -= num;
 }
 
 //-----------------------------------------------------------------------------

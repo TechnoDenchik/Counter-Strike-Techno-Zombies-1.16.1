@@ -35,7 +35,7 @@ public:
 
 	void Setup( CMenuBaseArrayModel *model );
 	void Setup( float minValue, float maxValue, float range );
-
+	int SetStatusMusic();
 	void SetDisplayPrecision( short precision );
 
 	void SetCurrentValue( const char *stringValue );
@@ -67,4 +67,60 @@ private:
 	char m_szDisplay[CS_SIZE];
 };
 
+
 #endif // MENU_SPINCONTROL_H
+
+#ifndef MODE_SPINCONTROL_H
+#define MODE_SPINCONTROL_H
+
+#include "Editable.h"
+#include "BaseArrayModel.h"
+
+
+class CModeSpinControl : public CMenuEditable
+{
+public:
+	typedef CMenuEditable BaseClass;
+
+	CModeSpinControl();
+
+	void VidInit(void) override;
+	const char* Key(int key, int down) override;
+	void Draw(void) override;
+	void UpdateEditable() override;
+
+	void Setup(CMenuBaseArrayModel* model);
+	void Setup(float minValue, float maxValue, float range);
+	int SetStatusMusic();
+	void SetDisplayPrecision(short precision);
+
+	void SetCurrentValue(const char* stringValue);
+	void SetCurrentValue(float curValue);
+
+	float GetCurrentValue() { return m_flCurValue; }
+	const char* GetCurrentString() { return m_pModel->GetText((int)m_flCurValue); }
+
+	void ForceDisplayString(const char* display);
+
+private:
+	const char* MoveLeft();
+	const char* MoveRight();
+	void Display();
+
+	const char* m_szBackground;
+	const char* m_szLeftArrow;
+	const char* m_szRightArrow;
+	const char* m_szLeftArrowFocus;
+	const char* m_szRightArrowFocus;
+	float		m_flMinValue;
+	float		m_flMaxValue;
+	float		m_flCurValue;
+	float		m_flRange;
+
+	CMenuBaseArrayModel* m_pModel;
+	short m_iFloatPrecision;
+
+	char m_szDisplay[CS_SIZE];
+};
+
+#endif 

@@ -6,8 +6,9 @@
 
 enum GunDeath : byte
 {
-	GD_UPDATE_LEVEL,
+	GD_WEAPON_CHANGE,
 	GD_FINAL_ATTACK,
+	GD_RESPAWN_BAR,
 };
 
 #endif

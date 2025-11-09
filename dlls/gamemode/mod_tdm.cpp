@@ -7,12 +7,13 @@
 #include "trains.h"
 #include "bmodels.h"
 
+#include "gd/gd_const.h"
 #include "mod_tdm.h"
 
 class CMultiplayGameMgrHelper : public IVoiceGameMgrHelper
 {
 public:
-	virtual bool		CanPlayerHearPlayer(CBasePlayer *pListener, CBasePlayer *pTalker)
+	virtual bool CanPlayerHearPlayer(CBasePlayer *pListener, CBasePlayer *pTalker)
 	{
 		if (g_pGameRules->IsTeamplay())
 		{
@@ -21,7 +22,6 @@ public:
 				return false;
 			}
 		}
-
 		return true;
 	}
 };
@@ -34,6 +34,16 @@ void CMod_TeamDeathMatch::InstallPlayerModStrategy(CBasePlayer *player)
 	public:
 		MyPlayerModStrategy(CBasePlayer *player) : CPlayerModStrategy_Default(player) {}
 		bool CanPlayerBuy(bool display) override { return true; }
+
+		void OnKilled(entvars_t* pKiller, entvars_t* pInflictor) override
+		{
+			MESSAGE_BEGIN(MSG_ONE, gmsgTDMRespawnBar, nullptr, m_pPlayer->pev);
+			WRITE_BYTE(GD_RESPAWN_BAR);
+			WRITE_BYTE(3);
+			MESSAGE_END();
+
+			return CPlayerModStrategy_Default::OnKilled(pKiller, pInflictor);
+		}
 	};
 
 	std::unique_ptr<MyPlayerModStrategy> up(new MyPlayerModStrategy(player));
@@ -54,21 +64,16 @@ void CMod_TeamDeathMatch::Think(void)
 {
 	m_VoiceGameMgr.Update(gpGlobals->frametime);\
 
-	///// Check game rules /////
-
-	if (CheckGameOver())   // someone else quit the game already
+	if (CheckGameOver())
 		return;
 	
 	if (CheckTimeLimit())
 		return;
 
-	m_iTotalRoundsPlayed = m_iNumCTWins + m_iNumTerroristWins; // hack
-	/*if (CheckMaxRounds())
-		return;
-	*/
+	m_iTotalRoundsPlayed = m_iNumCTWins + m_iNumTerroristWins;
+
 	if (CheckWinLimit())
 		return;
-	
 	
 	if (IsFreezePeriod())
 	{
@@ -96,8 +101,7 @@ void CMod_TeamDeathMatch::Think(void)
 		{
 			CVAR_SET_FLOAT("sv_stopspeed", 75.0);
 		}
-
-		
+	
 		m_iMaxRoundsWon = (int)maxkills.value;
 
 		if (m_iMaxRoundsWon < 0)
@@ -122,7 +126,7 @@ void CMod_TeamDeathMatch::Think(void)
 		if (player->m_iTeam == TEAM_UNASSIGNED  || player->m_iTeam == TEAM_SPECTATOR)
 			continue;
 
-		if(gpGlobals->time < player->m_fDeadTime + 5.0f)
+		if (gpGlobals->time < player->m_fDeadTime + 3.0f)
 			continue;
 
 		player->RoundRespawn();
@@ -163,45 +167,36 @@ void CMod_TeamDeathMatch::PlayerKilled(CBasePlayer *pVictim, entvars_t *pKiller,
 				++m_iNumTerroristWins;
 				break;
 			default:
-				// ?
 				break;
 			}
 			UpdateTeamScores();
 		}
 	}
-
-	// TODO: RespawnBar.
 }
 
 BOOL CMod_TeamDeathMatch::FPlayerCanTakeDamage(CBasePlayer *pPlayer, CBaseEntity *pAttacker)
 {
 	if (pAttacker && PlayerRelationship(pPlayer, pAttacker) == GR_TEAMMATE)
 	{
-		// my teammate hit me.
 		if ((friendlyfire.value == 0) && (pAttacker != pPlayer))
 		{
-			// friendly fire is off, and this hit came from someone other than myself,  then don't get hurt
 			return FALSE;
 		}
 	}
-
-	return CHalfLifeMultiplay::FPlayerCanTakeDamage(pPlayer, pAttacker);
+	return CCstrikeTechnoZombies::FPlayerCanTakeDamage(pPlayer, pAttacker);
 }
 
 BOOL CMod_TeamDeathMatch::FPlayerCanRespawn(CBasePlayer *pPlayer)
 {
-	/*// Wait to Respawn...
-	if (gpGlobals->time < pPlayer->m_fDeadTime + 3.0)
-	{
-		return FALSE;
-	}*/
-
-	// Player cannot respawn while in the Choose Appearance menu
-	if (pPlayer->m_iMenu == Menu_ChooseAppearance)
+	if (gpGlobals->time < pPlayer->m_fDeadTime + 3.0f)
 	{
 		return FALSE;
 	}
 
+	if (pPlayer->m_iMenu == Menu_ChooseAppearance)
+	{
+		return FALSE;
+	}
 	return TRUE;
 }
 
@@ -209,11 +204,9 @@ void CMod_TeamDeathMatch::UpdateGameMode(CBasePlayer *pPlayer)
 {
 	MESSAGE_BEGIN(MSG_ONE, gmsgGameMode, NULL, pPlayer->edict());
 	WRITE_BYTE(MOD_TDM);
-	WRITE_BYTE(0); // Reserved. (weapon restriction? )
-	WRITE_BYTE(maxkills.value); // MaxRound (mp_roundlimit)
-	WRITE_BYTE(0); // Reserved. (MaxTime?)
-
-	
+	WRITE_BYTE(0);
+	WRITE_BYTE(maxkills.value);
+	WRITE_BYTE(0);
 	MESSAGE_END();
 }
 
@@ -222,7 +215,6 @@ void CMod_TeamDeathMatch::PlayerSpawn(CBasePlayer *pPlayer)
 	IBaseMod::PlayerSpawn(pPlayer);
 	pPlayer->AddAccount(16000);
 
-	// Give Armor
 	pPlayer->m_iKevlar = ARMOR_TYPE_HELMET;
 	pPlayer->pev->armorvalue = 100;
 	pPlayer->SpawnProtection_Start(3.0f);

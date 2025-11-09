@@ -27,7 +27,7 @@ CMenuMessageBox::CMenuMessageBox(const char *name) : BaseClass( name )
 void CMenuMessageBox::_Init()
 {
 	background.bForceColor = true;
-	background.colorBase = uiPromptBgColor;
+	background.colorBase = uiColorWhite;
 
 	dlgMessage.eTextAlignment = QM_CENTER; // center
 	dlgMessage.iFlags = QMF_INACTIVE|QMF_DROPSHADOW;

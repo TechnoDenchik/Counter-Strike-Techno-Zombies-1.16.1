@@ -371,11 +371,9 @@ void SV_MapBackground_f( void )
 	sv.background = true;
 	sv.loadgame = false; // set right state
 
-	// reset all multiplayer cvars
-	Cvar_FullSet( "coop", "0",  CVAR_LATCH );
-	Cvar_FullSet( "teamplay", "0",  CVAR_LATCH );
-	Cvar_FullSet( "deathmatch", "0",  CVAR_LATCH );
-	Cvar_FullSet( "maxplayers", "1", CVAR_LATCH );
+	Cvar_FullSet("coop", "0",  CVAR_LATCH );
+	Cvar_FullSet("teamplay", "0",  CVAR_LATCH );
+	Cvar_FullSet("deathmatch", "1",  CVAR_LATCH );
 
 	SCR_BeginLoadingPlaque( true );
 

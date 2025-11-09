@@ -39,15 +39,22 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "Scoreboard.h"
 #endif
 
+#include "discord_api.h"
+
 cvar_t		*ui_showmodels;
 cvar_t		*ui_show_window_stack;
 cvar_t		*ui_borderclip;
+cvar_t		*ui_musicpack;
+cvar_t		*ui_getconsole;
 
 uiStatic_t	uiStatic;
 static CMenuEntry	*s_pEntries = NULL;
 
+DiscordIntegration dsAPI;
+windowStack_t menu;
 
 const char* uiSoundIn = "media/launch_upmenu1.wav";
+const char* uiStartGame = "media/mm_success_lets_roll.wav";
 const char* uiSoundOut = "media/launch_dnmenu1.wav";
 const char* uiSoundLaunch = "media/launch_select2.wav";
 const char* uiSoundGlow = "media/launch_glow1.wav";
@@ -56,6 +63,9 @@ const char* uiSoundKey = "media/launch_select1.wav";
 const char* uiSoundRemoveKey = "media/launch_deny1.wav";
 const char* uiSoundMove = "media/buttonrollover.wav";		// Xash3D not use movesound
 const char* uiSoundNull = "media/launch_select3.wav";
+
+const char* uiSoundOnmouse = "media/onmouse.wav";
+const char* uiSoundSelect = "media/select.wav";
 
 // they match default WON colors.lst now, except alpha
 unsigned int		uiColorHelp         = 0xFF7F7F7F;	// 127, 127, 127, 255	// hint letters color
@@ -68,7 +78,12 @@ unsigned int		uiInputFgColor      = 0xFF555555;	// 85,  85,  85,  255	// field, 
 unsigned int		uiColorWhite        = 0xFFFFFFFF;	// 255, 255, 255, 255	// useful for bitmaps
 unsigned int		uiColorDkGrey       = 0x80404040;	// 64,  64,  64,  255	// shadow and grayed items
 unsigned int		uiColorBlack        = 0x80000000;	//  0,   0,   0,  255	// some controls background
+unsigned int		uiColorRed			= 0xFFFF0000;	//  0,   0,   0,  255	// some controls background
 unsigned int		uiColorConsole      = 0xFFF0B418;	// just for reference
+
+unsigned int		uiColorGreen		= 0xFF00FF00;
+unsigned int		uiColorBlue			= 0xFF0000FF;
+unsigned int		uiColorCyan			= 0xFF00FFFF;
 
 // color presets (this is nasty hack to allow color presets to part of text)
 const unsigned int g_iColorTable[8] =
@@ -82,6 +97,36 @@ const unsigned int g_iColorTable[8] =
 0xFFF0B418, // dialog or button letters color
 0xFFFFFFFF, // white
 };
+
+void UI_InitMainMenu(void)
+{
+	dsAPI.UpdatePresence("Main Menu", "TechnoSoftware");
+}
+
+void UI_Multiplayer(void)
+{
+	dsAPI.UpdatePresence("Multyplayer Menu", "TechnoSoftware");
+}
+
+void UI_InitSettings(void)
+{
+	dsAPI.UpdatePresence("Settings Menu", "TechnoSoftware");
+}
+
+void UI_InitPlay(const std::string& map, const std::string& mode, int players, int maxPlayers)
+{
+	dsAPI.UpdateInGame(map, mode, players, maxPlayers);
+}
+
+void UI_InitMap(void)
+{
+	dsAPI.UpdatePresence("Selection map", "TechnoSoftware");
+}
+
+void UI_InitCreate(void)
+{
+	dsAPI.UpdatePresence("Creating game...", "TechnoSoftware");
+}
 
 bool UI_IsXashFWGS( void )
 {
@@ -575,22 +620,29 @@ bool UI_StartBackGroundMap( void )
 {
 	static bool	first = TRUE;
 
-	if( !first ) return FALSE;
+	if (!first) return FALSE;
 
 	first = FALSE;
 
 	// some map is already running
-	if( !uiStatic.bgmapcount || CL_IsActive() || gpGlobals->demoplayback )
+	if (!uiStatic.bgmapcount || CL_IsActive() || gpGlobals->demoplayback)
 		return FALSE;
 
-	int bgmapid = EngFuncs::RandomLong( 0, uiStatic.bgmapcount - 1 );
+	int bgmapid = EngFuncs::RandomLong(0, uiStatic.bgmapcount - 1);
 
 	char cmd[128];
-	sprintf( cmd, "maps/%s.bsp", uiStatic.bgmaps[bgmapid] );
-	if( !EngFuncs::FileExists( cmd, TRUE )) return FALSE;
+	sprintf(cmd, "maps/%s.bsp", uiStatic.bgmaps[bgmapid]);
+	if (!EngFuncs::FileExists(cmd)) return FALSE;
 
-	sprintf( cmd, "map_background %s\n", uiStatic.bgmaps[bgmapid] );
-	EngFuncs::ClientCmd( FALSE, cmd );
+	sprintf(cmd, "map_background %s\n", uiStatic.bgmaps[bgmapid]);
+	EngFuncs::ClientCmd(FALSE, cmd);
+
+	UI_InitMainMenu();
+
+	EngFuncs::CvarSetString("mp_gamemode", "background");
+	EngFuncs::CvarSetValue("public", 0);
+	EngFuncs::CvarSetValue("maxplayers", 1);
+	EngFuncs::CvarSetValue("mp_roundtime", 99);
 
 	return TRUE;
 }
@@ -604,10 +656,57 @@ UI_CloseMenu
 */
 void UI_CloseMenu( void )
 {
+	const char* mapnamed = EngFuncs::GetCvarString("mapname");
+	const char* modnamed = EngFuncs::GetCvarString("mp_gamemode");
+
+	int numplayers = (int)EngFuncs::GetCvarFloat("bot_quota");
+	int maxplayers = (int)EngFuncs::GetCvarFloat("maxplayers");
+
+	if (strcmp(modnamed, "none") == 0)
+	{
+		UI_InitPlay(mapnamed, "Classic", numplayers, maxplayers);
+	}
+	else if (strcmp(modnamed, "dm") == 0)
+	{
+		UI_InitPlay(mapnamed, "Death Match", numplayers, maxplayers);
+	}
+	else if (strcmp(modnamed, "tdm") == 0)
+	{
+		UI_InitPlay(mapnamed, "Team Death Match", numplayers, maxplayers);
+	}
+	else if (strcmp(modnamed, "gd") == 0)
+	{
+		UI_InitPlay(mapnamed, "Gun Death", numplayers, maxplayers);
+	}
+	else if (strcmp(modnamed, "zb1") == 0)
+	{
+		UI_InitPlay(mapnamed, "Zombie Classic", numplayers, maxplayers);
+	}
+	else if (strcmp(modnamed, "zb3") == 0)
+	{
+		UI_InitPlay(mapnamed, "Zombie Hero", numplayers, maxplayers);
+	}
+	else if (strcmp(modnamed, "zb5") == 0)
+	{
+		UI_InitPlay(mapnamed, "Zombie Evolution", numplayers, maxplayers);
+	}
+	else if (strcmp(modnamed, "zbs") == 0)
+	{
+		UI_InitPlay(mapnamed, "Scenario Zombie", numplayers, maxplayers);
+	}
+	else if (strcmp(modnamed, "zsh_pve") == 0)
+	{
+		UI_InitPlay(mapnamed, "Zombie Shelter", numplayers, maxplayers);
+	}
+	else if (strcmp(modnamed, "hidden") == 0)
+	{
+		UI_InitPlay(mapnamed, "Hidden", numplayers, maxplayers);
+	}
+
 	uiStatic.menu.Close();
 	CMenuPicButton::ClearButtonStack();
+	EngFuncs::ClientCmd(1, "firstperson");
 
-//	EngFuncs::KEY_ClearStates ();
 	if( !uiStatic.client.IsActive() )
 		EngFuncs::KEY_SetDest( KEY_GAME );
 }
@@ -733,11 +832,83 @@ void UI_UpdateMenu( float flTime )
 		uiStatic.firstDraw = false;
 		static int first = TRUE;
                     
-		if( first )
+		if (first)
 		{
 			// if game was launched with commandline e.g. +map or +load ignore the music
-			if( !CL_IsActive( ))
-				EngFuncs::PlayBackgroundTrack( "gamestartup", "gamestartup" );
+
+			int musicset = (int)EngFuncs::GetCvarFloat("menu_musicpack");
+
+			if (musicset == 0)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/valve_01/mainmenu", "Music/valve_01/mainmenu");
+			}
+			else if (musicset == 1)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/valve_cs2_01/mainmenu", "Music/valve_cs2_01/mainmenu");
+			}
+			else if (musicset == 2)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/radcat_01/mainmenu", "Music/radcat_01/mainmenu");
+			}
+			else if (musicset == 3)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/3kliksphilip_01/mainmenu", "Music/3kliksphilip_01/mainmenu");
+			}
+			else if (musicset == 4)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/bbnos_01/mainmenu", "Music/bbnos_01/mainmenu");
+			}
+			else if (musicset == 5)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/chipzel_01/mainmenu", "Music/chipzel_01/mainmenu");
+			}
+			else if (musicset == 6)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/dryden_01/mainmenu", "Music/dryden_01/mainmenu");
+			}
+			else if (musicset == 7)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/freakydna_01/mainmenu", "Music/freakydna_01/mainmenu");
+			}
+			else if (musicset == 8)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/isoxo_01/mainmenu", "Music/isoxo_01/mainmenu");
+			}
+			else if (musicset == 9)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/knock2_01/mainmenu", "Music/knock2_01/mainmenu");
+			}
+			else if (musicset == 10)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/mattlevine_01/mainmenu", "Music/mattlevine_01/mainmenu");
+			}
+			else if (musicset == 11)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/meechydarko_01/mainmenu", "Music/meechydarko_01/mainmenu");
+			}
+			else if (musicset == 12)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/mordfustang_01/mainmenu", "Music/mordfustang_01/mainmenu");
+			}
+			else if (musicset == 13)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/trfn_1/mainmenu", "Music/trfn_1/mainmenu");
+			}
+			else if (musicset == 14)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/laurashigihara_01/mainmenu", "Music/laurashigihara_01/mainmenu");
+			}
+			else if (musicset == 15)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/twerl_01/mainmenu", "Music/twerl_01/mainmenu");
+			}
+			else if (musicset == 16)
+			{
+				EngFuncs::PlayBackgroundTrack("Music/denzelcurry_01/mainmenu", "Music/denzelcurry_01/mainmenu");
+			}
+
+			//UI_InitMainMenu();
+
 			first = FALSE;
 		}
 	}
@@ -855,7 +1026,6 @@ void windowStack_t::MouseEvent( int x, int y )
 
 }
 
-
 bool g_bCursorDown;
 float cursorDY;
 
@@ -931,6 +1101,7 @@ void UI_SetActiveMenu( int fActive )
 	{
 		EngFuncs::KEY_SetDest( KEY_MENU );
 		UI_Main_Menu();
+		UI_InitMainMenu();
 	}
 	else
 	{
@@ -1047,7 +1218,7 @@ void UI_Precache( void )
 	EngFuncs::PIC_Load( UI_UPARROWFOCUS );
 	EngFuncs::PIC_Load( UI_DOWNARROW );
 	EngFuncs::PIC_Load( UI_DOWNARROWFOCUS );
-	EngFuncs::PIC_Load( "gfx/shell/splash" );
+	EngFuncs::PIC_Load( "gfx/shell/main" );
 
 	for( CMenuEntry *entry = s_pEntries; entry; entry = entry->m_pNext )
 	{
@@ -1073,7 +1244,7 @@ void UI_ParseColor( char *&pfile, unsigned int *outColor )
 
 void UI_ApplyCustomColors( void )
 {
-	char *afile = (char *)EngFuncs::COM_LoadFile( "gfx/shell/colors.lst" );
+	char *afile = (char *)EngFuncs::COM_LoadFile( "gfx/shell/colors.cst" );
 	char *pfile = afile;
 	char token[1024];
 
@@ -1274,17 +1445,17 @@ void UI_OpenUpdatePage( bool engine, bool preferstore )
 	{
 #ifndef XASH_DISABLE_FWGS_EXTENSIONS
 		if( preferstore )
-			updateUrl = "https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.0/releases";
+			updateUrl = "https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.1/releases/tag/cstz1.16.1(beta)";
 		else
-			updateUrl = "https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.0/releases";
+			updateUrl = "https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.1/releases/tag/cstz1.16.1(beta)";
 #else
 		// TODO: Replace by macro for mainui_cpp modders?
-		updateUrl = "https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.0/releases";
+		updateUrl = "https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.1/releases/tag/cstz1.16.1(beta)";
 #endif 
 	}
 	else
 	{
-		updateUrl = "https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.0/releases";
+		updateUrl = "https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.1/releases/tag/cstz1.16.1(beta)";
 	}
 
 	EngFuncs::ShellExecute( updateUrl, NULL, TRUE );
@@ -1326,14 +1497,26 @@ UI_Init
 */
 void UI_Init( void )
 {
+
+	if (dsAPI.Initialize()) {
+		menu.discordInitialized = true;
+		menu.gameStartTime = std::time(nullptr);
+		std::cout << "Discord Rich Presence activated" << std::endl;
+	}
+	else {
+		std::cout << "Discord Rich Presence not available" << std::endl;
+	}
+
 	// register our cvars and commands
 	ui_showmodels = EngFuncs::CvarRegister( "ui_showmodels", "0", FCVAR_ARCHIVE );
 	ui_show_window_stack = EngFuncs::CvarRegister( "ui_show_window_stack", "0", FCVAR_ARCHIVE );
 	ui_borderclip = EngFuncs::CvarRegister( "ui_borderclip", "0", FCVAR_ARCHIVE );
-#ifdef CS16CLIENT
-	// autofill ammo after bought weapon
+
+	ui_getconsole = EngFuncs::CvarRegister("menu_getconsole", "0", FCVAR_ARCHIVE);
+	ui_musicpack = EngFuncs::CvarRegister("menu_musicpack", "12", FCVAR_ARCHIVE);
+
 	EngFuncs::CvarRegister( "ui_cs_autofill", "0", FCVAR_ARCHIVE );
-#endif // CS16CLIENT
+
 
 	// show cl_predict dialog
 	EngFuncs::CvarRegister( "menu_mp_firsttime", "1", FCVAR_ARCHIVE );

@@ -56,6 +56,8 @@
 #include "tutor_cs_states.h"
 #include "tutor_cs_tutor.h"
 
+#include "gamemode/mods.h"
+
 #include "gamerules.h"
 #include "career_tasks.h"
 #include "maprules.h"
@@ -394,13 +396,25 @@ void BuyState::OnUpdate(CCSBot *me)
 				}
 			}
 
-			if (buyAlias)
+			if (g_pModRunning->DamageTrack() == DT_ZB)
 			{
-				me->ClientCommand(buyAlias);
+				
+				me->ClientCommand("cstbuy weapon_guitar");
 				me->PrintIfWatched("Tried to buy preferred weapon %s.\n", buyAlias);
 
 				isPreferredAllDisallowed = false;
+				
 			}
+			else
+			{
+				if (buyAlias)
+				{
+					me->ClientCommand(buyAlias);
+					me->PrintIfWatched("Tried to buy preferred weapon %s.\n", buyAlias);
+
+					isPreferredAllDisallowed = false;
+				}
+			}	
 
 			++m_prefRetries;
 

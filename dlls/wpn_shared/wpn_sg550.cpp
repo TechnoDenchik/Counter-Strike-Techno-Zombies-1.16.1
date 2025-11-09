@@ -65,6 +65,10 @@ int CSG550::GetItemInfo(ItemInfo *p)
 	p->iMaxAmmo1 = MAX_AMMO_556NATO;
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
+	p->pszAmmo3 = NULL;
+	p->iMaxAmmo3 = -1;
+	p->pszAmmoGrenade = NULL;
+	p->iMaxAmmoGrenade = -1;
 	p->iMaxClip = SG550_MAX_CLIP;
 	p->iSlot = 0;
 	p->iPosition = 16;

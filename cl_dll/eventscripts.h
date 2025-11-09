@@ -41,6 +41,36 @@ inline void EV_MuzzleFlash(void)
 	if (gMobileAPI.pfnVibrate)
 		gMobileAPI.pfnVibrate(0.1f, false);
 }
+inline void EV_MuzzleFlash2(void)
+{
+	if (gHUD.cl_lw->value)
+		return;
+
+	// Add muzzle flash to current weapon model
+	cl_entity_t* ent = gEngfuncs.GetViewModel();
+	if (!ent)
+		return;
+
+	// Or in the muzzle flash
+	ent->curstate.effects |= EF_MUZZLEFLASH2;
+	if (gMobileAPI.pfnVibrate)
+		gMobileAPI.pfnVibrate(0.1f, false);
+}
+inline void EV_MuzzleFlash3(void)
+{
+	if (gHUD.cl_lw->value)
+		return;
+
+	// Add muzzle flash to current weapon model
+	cl_entity_t* ent = gEngfuncs.GetViewModel();
+	if (!ent)
+		return;
+
+	// Or in the muzzle flash
+	ent->curstate.effects |= EF_MUZZLEFLASH3;
+	if (gMobileAPI.pfnVibrate)
+		gMobileAPI.pfnVibrate(0.1f, false);
+}
 
 /*
 =================

@@ -237,23 +237,10 @@
 				strcpy(g_TempAlarm.szSound, AlarmDataInfo[iType].sound.c_str());
 
 				//Vgui Localize
-				char SzText[64]; sprintf(SzText, "CSO_Alarm_%s", g_TempAlarm.szName);
-				if (vgui2::localize()->Find(SzText))
-					wcscpy(g_TempAlarm.m_wcsAlarmText, vgui2::localize()->Find(SzText));
-				else
-				{
-					vgui2::localize()->ConvertANSIToUnicode(SzText, vgui2::localize()->Find(SzText), sizeof(vgui2::localize()->Find(SzText)));
-					mbstowcs(g_TempAlarm.m_wcsAlarmText, SzText, strlen(SzText));
-				}
-
-				sprintf(SzText, "CSO_Alarm_%s_desc", g_TempAlarm.szName);
-				if (vgui2::localize()->Find(SzText))
-					wcscpy(g_TempAlarm.m_wcsAlarmDesc, vgui2::localize()->Find(SzText));
-				else
-				{
-					vgui2::localize()->ConvertANSIToUnicode(SzText, vgui2::localize()->Find(SzText), sizeof(vgui2::localize()->Find(SzText)));
-					mbstowcs(g_TempAlarm.m_wcsAlarmDesc, SzText, strlen(SzText));
-				}
+				
+				sprintf(SzTextAlarm, "CSTZ_Alarm_%s", g_TempAlarm.szName);
+				sprintf(SzTextAlarm, "CSTZ_Alarm_%s_desc", g_TempAlarm.szName);
+				
 			}
 
 			//RibbonCount
@@ -265,23 +252,10 @@
 				R_InitTexture(g_TempAlarm.iTextureRibbon, szImagePath);
 
 				//Vgui Localize
-				char SzText[64]; sprintf(SzText, "CSO_Ribbon_%s", g_TempAlarm.szName);
-				if (vgui2::localize()->Find(SzText))
-					wcscpy(g_TempAlarm.m_wcsRibbonText, vgui2::localize()->Find(SzText));
-				else
-				{
-					vgui2::localize()->ConvertANSIToUnicode(SzText, vgui2::localize()->Find(SzText), sizeof(vgui2::localize()->Find(SzText)));
-					mbstowcs(g_TempAlarm.m_wcsRibbonText, SzText, strlen(SzText));
-				}
-
-				sprintf(SzText, "CSO_Ribbon_%s_desc", g_TempAlarm.szName);
-				if (vgui2::localize()->Find(SzText))
-					wcscpy(g_TempAlarm.m_wcsRibbonDesc, vgui2::localize()->Find(SzText));
-				else
-				{
-					vgui2::localize()->ConvertANSIToUnicode(SzText, vgui2::localize()->Find(SzText), sizeof(vgui2::localize()->Find(SzText)));
-					mbstowcs(g_TempAlarm.m_wcsRibbonDesc, SzText, strlen(SzText));
-				}
+				
+				sprintf(SzTextRibbon, "CSTZ_Ribbon_%s", g_TempAlarm.szName);
+				sprintf(SzTextRibbon, "CSTZ_Ribbon_%s_desc", g_TempAlarm.szName);
+			
 			}
 
 			if (bCustom)
@@ -317,9 +291,6 @@
 	}
 	void CHudNewAlarm::SetAlarm(int iAlarm, bool bCustom)
 	{
-		if (gHUD.m_alarmstyle->value != 0)
-			return;
-
 		AlarmBasicdata g_TempAlarm;
 		if (!bCustom)
 		{
@@ -395,9 +366,6 @@
 			{
 				if (iter.first.index == m_AlarmDefault[iAlarm].index)
 				{
-
-					gEngfuncs.Con_Printf("[Alarm] Local Player has %d(name: %s) alarm\n", iAlarm, m_AlarmDefault[iAlarm].szName);
-
 					return true;
 				}
 			}
@@ -408,9 +376,6 @@
 			{
 				if (iter.first.index == m_vecAlarmCustom[iAlarm].index)
 				{
-
-					gEngfuncs.Con_Printf("[Alarm] Local Player has %d(name: %s) alarm\n", iAlarm, m_vecAlarmCustom[iAlarm].szName);
-
 					return true;
 				}
 			}
@@ -421,10 +386,6 @@
 
 	int CHudNewAlarm::RedrawAlarm(float flTime)
 	{
-		if (m_font == vgui2::INVALID_FONT)
-			return 1;
-
-
 		if (!m_AlarmDisplay.m_bPlaying)
 			return 1;
 
@@ -499,17 +460,42 @@
 			m_iTextureLogoBG->Draw2DQuadScaled(iX - m_iTextureLogoBG->w() / 2, iY, iX - m_iTextureLogoBG->w() / 2 + m_iTextureLogoBG->w(), iY + m_iTextureLogoBG->h(), 0.0F, 0.0F, 1.0F, 1.0F, 255, 255, 255, iA);
 
 			int r = 255, g = 255, b = 255;
-			/*DrawUtils::ScaleColors(r, g, b, iA);
+			DrawUtils::ScaleColors(r, g, b, iA);
+
+
+			char szModifiedWpnName2[64];
+			strcpy(szModifiedWpnName2, (char*)pMsg);
+
+			char SzWpnNameCn[64];
+			char SzText[64];
+
+			sprintf(SzText, "#CSTZ_%s", szModifiedWpnName2);
+			strcpy(SzWpnNameCn, gHUD.m_TextMessage.BufferedLocaliseTextString(SzText));
 
 			int iLength, iHeight;
-			gEngfuncs.pfnDrawConsoleStringLen(HudDeathInfo().UnicodeToUTF8(pMsg), &iLength, &iHeight);
-			DrawUtils::DrawHudString(iX - iLength / 2 + 2, iY + 10, ScreenWidth, HudDeathInfo().UnicodeToUTF8(pMsg), r, g, b);
+			gEngfuncs.pfnDrawConsoleStringLen(SzWpnNameCn, &iLength, &iHeight);
+			DrawUtils::DrawHudString(iX - iLength / 2 + 2, iY + 10, ScreenWidth, SzWpnNameCn, r, g, b, 255);
 
-			gEngfuncs.pfnDrawConsoleStringLen(HudDeathInfo().UnicodeToUTF8(pMsgDesc), &iLength, &iHeight);
-			DrawUtils::DrawHudString(iX - iLength / 2 + 2, iY + 15 + iHeight, ScreenWidth, HudDeathInfo().UnicodeToUTF8(pMsgDesc), r, g, b);*/
 
-			int iLen = GetWide(pMsg);
-			DrawVguiTexts((ScreenWidth - iLen) / 2, iY + 10, r, g, b, iA, pMsg);
+			if (!frontelem.second)
+			{
+				DrawUtils::DrawHudString(iX - iLength / 2 + 2, iY + 10, ScreenWidth, SzTextRibbon, r, g, b, 255);
+				DrawUtils::DrawHudString(iX - iLength / 2 + 2, iY + 10, ScreenWidth, SzTextAlarm, r, g, b, 255);
+			}
+			else
+			{
+
+				DrawUtils::DrawHudString(iX - iLength / 2 + 2, iY + 10, ScreenWidth, SzTextAlarm, r, g, b, 255);
+				DrawUtils::DrawHudString(iX - iLength / 2 + 2, iY + 10, ScreenWidth, SzTextAlarm, r, g, b, 255);
+
+					//frontelem.first.m_wcsRibbonDesc
+			}
+
+			//gEngfuncs.pfnDrawConsoleStringLen(HudDeathInfo().UnicodeToUTF8(pMsgDesc), &iLength, &iHeight);
+			//DrawUtils::DrawHudString(iX - iLength / 2 + 2, iY + 15 + iHeight, ScreenWidth, HudDeathInfo().UnicodeToUTF8(pMsgDesc), r, g, b);
+
+			//int iLen = GetWide(pMsg);
+			//DrawVguiTexts((ScreenWidth - iLen) / 2, iY + 10, r, g, b, iA, pMsg);
 			//iLen = GetWide(pMsgDesc);
 			//DrawVguiTexts((ScreenWidth - iLen) / 2, iY + 12 + vgui2::surface()->GetFontTall(m_font), r, g, b, iA, pMsgDesc);
 		}
@@ -566,13 +552,24 @@
 				if (!(g_PlayerInfoList[i].name && g_PlayerInfoList[i].name[0] != 0))
 					continue;
 
-				//g_CWcount[i][1] = 0;
-				//g_CWcount[i][2] += 1;
+				g_CWcount[i][1] = 0;
+				g_CWcount[i][2] += 1;
 
 			}
 
-			
+			g_iPlanter = g_iDefuser = 0;
+			g_lastsoldier[0] = 0;
+			g_lastsoldier[1] = 0;
+
+			g_flDamageInAll = 0;
+			gHUD.m_ZB2.m_flAliveTime = 0.0;
+			gHUD.m_ZB2.m_flPlayerMoveDis = 0.0;
+			gHUD.m_ZB2.m_flRecoveryAmount = 0.0;
+
+			g_bFirstBlood = true;
+			gHUD.m_flZombieSelectTime = 0.0;
 		}
+
 
 		return 1;
 	}

@@ -175,7 +175,7 @@ int CHudGDScoreboard::Draw(float time)
 	char szBuffer[64];
 	sprintf(szBuffer, "%d", lv);
 
-	if (lv < 18)
+	if (lv < 28)
 	{
 		iconlv->Bind();
 		DrawUtils::Draw2DQuadScaled(x9 - 39.7, y9 - 1.7, x9 + 39.7, y9 + 9.63);

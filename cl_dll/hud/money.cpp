@@ -225,21 +225,24 @@ int CHudMoney::Draw(float flTime)
 
 	alphaBalance = 255 - interpolate * (255 - MIN_ALPHA);
 
-	gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
-	gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
-	m_iDollarBG->Bind();
-	DrawUtils::Draw2DQuadScaled(x2 - 110, y2, x2 + 153, y2 + 38);
-	gEngfuncs.pTriAPI->Color4ub(r, g, b, 255);
-	DrawTexturedNumbersTopRightAligned(*money_count, rc_money_count, m_iMoneyCount, x3 + 77, y3, 0.80f);
-	alphaBalance = 255;
-	DrawUtils::ScaleColors(r, g, b, alphaBalance);
+	if (gHUD.m_iModRunning != MOD_ZB5)
+	{
+		gEngfuncs.pTriAPI->RenderMode(kRenderTransTexture);
+		gEngfuncs.pTriAPI->Color4ub(255, 255, 255, 255);
+		m_iDollarBG->Bind();
+		DrawUtils::Draw2DQuadScaled(x2 - 110, y2, x2 + 153, y2 + 38);
+		gEngfuncs.pTriAPI->Color4ub(r, g, b, 255);
+		DrawTexturedNumbersTopRightAligned(*money_count, rc_money_count, m_iMoneyCount, x3 + 77, y3, 0.80f);
+		alphaBalance = 255;
+		DrawUtils::ScaleColors(r, g, b, alphaBalance);
 
-	m_iDollar->Bind();
-	DrawUtils::Draw2DQuadScaled(x7 - 15, y7, x7 + 15, y7 + 28);
+		m_iDollar->Bind();
+		DrawUtils::Draw2DQuadScaled(x7 - 15, y7, x7 + 15, y7 + 28);
 
-	//SPR_Set(m_hDollar.spr, 255, 255, 255);
-	//SPR_DrawAdditive(0, x7, y7 + iDollarWidth * 1.5, &m_hDollar.rect);
-	
+		//SPR_Set(m_hDollar.spr, 255, 255, 255);
+		//SPR_DrawAdditive(0, x7, y7 + iDollarWidth * 1.5, &m_hDollar.rect);
+	}
+
 	return 1;
 }
 

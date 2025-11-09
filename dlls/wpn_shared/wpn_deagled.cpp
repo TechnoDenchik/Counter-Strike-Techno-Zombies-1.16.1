@@ -78,6 +78,10 @@ int CDeagleD::GetItemInfo(ItemInfo *p)
 	p->iMaxAmmo1 = MAX_AMMO_50AE;
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
+	p->pszAmmo3 = NULL;
+	p->iMaxAmmo3 = -1;
+	p->pszAmmoGrenade = NULL;
+	p->iMaxAmmoGrenade = -1;
 	p->iMaxClip = DEAGLED_MAXCLIP;
 	p->iSlot = 1;
 	p->iPosition = 5;

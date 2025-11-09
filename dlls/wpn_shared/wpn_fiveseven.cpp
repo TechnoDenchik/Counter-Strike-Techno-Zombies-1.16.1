@@ -72,6 +72,10 @@ int CFiveSeven::GetItemInfo(ItemInfo *p)
 	p->iMaxAmmo1 = MAX_AMMO_57MM;
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
+	p->pszAmmo3 = NULL;
+	p->iMaxAmmo3 = -1;
+	p->pszAmmoGrenade = NULL;
+	p->iMaxAmmoGrenade = -1;
 	p->iMaxClip = FIVESEVEN_MAX_CLIP;
 	p->iSlot = 1;
 	p->iPosition = 6;

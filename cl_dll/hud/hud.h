@@ -35,6 +35,7 @@
 
 #include <assert.h>
 #include <string.h>
+#include <set>
 
 #include "wrect.h"
 #include "cl_dll.h"
@@ -61,11 +62,15 @@ enum
 	MAX_TEAMS = 3,
 	MAX_TEAM_NAME = 16,
 	MAX_HOSTAGES = 24,
+	MAX_BOX = 24,
 };
 
 extern const char *sPlayerModelFiles[];
 extern wrect_t nullrc;
-
+extern bool g_bFirstBlood;
+extern float g_fLastAssist[MAX_CLIENTS + 1][MAX_CLIENTS + 1];
+extern int g_iDefuser, g_iPlanter, g_CWcount[MAX_CLIENTS + 1][3];
+extern int g_lastsoldier[2];
 
 class CClientSprite;
 
@@ -125,6 +130,7 @@ struct HUDLIST {
 //#include "voice_status.h"
 #include "hud_spectator.h"
 #include "followicon.h"
+#include "zsh/infolocationhud.h"
 #include "scenariostatus.h"
 #include "health.h"
 #include "radar.h"
@@ -132,8 +138,13 @@ struct HUDLIST {
 #include "zbs/zbs.h"
 #include "zb2/zb2.h"
 #include "zb3/zb3.h"
+#include "zb5/zb5.h"
 #include "zsh/zsh.h"
+#include "pr/pr.h"
 #include "gd/gd.h"
+#include "dm/dm.h"
+#include "tdm/tdm.h"
+#include "hidden/hidden.h"
 #include "original/mod_base.h"
 #include "legacy/hud_scoreboard_legacy.h"
 #include "zbs/zbs_scoreboard.h"
@@ -141,12 +152,13 @@ struct HUDLIST {
 #include "moe/moe_touch.h"
 #include "hud_sub.h"
 #include "r_texture.h"
-#include "hud2/NewHud.h"
 #include "hud2/NewAlarm.h"
 #include "hud2/NewFontManager.h"
 #include "Original/Classic.h"
 #include "interface/interface.h"
-
+#include "weapons/weapon_int.h"
+#include "hud_mvp.h"
+#include "webm_util.h"
 
 //
 //-----------------------------------------------------
@@ -170,6 +182,12 @@ public:
 	void CalcCrosshairColor();
 
 	int DrawWList(float flTime);
+
+	int DrawNEWHudWList(float flTime);
+	int DrawWpnList(float flTime);
+	int DrawNEWHudCurrentWpn(float flTime);
+	int DrawNEWHudAmmo(float flTime);
+
 	CHudMsgFunc(CurWeapon);
 	CHudMsgFunc(WeaponList);
 	CHudMsgFunc(AmmoX);
@@ -201,14 +219,24 @@ public:
 	CHudUserCmd(Autobuy);
 
 	bool FHasSecondaryAmmo() { return m_pWeapon && m_pWeapon->iAmmo2Type > 0; }
+	bool FHasType3Ammo() { return m_pWeapon && m_pWeapon->iAmmo3Type > 0; }
+	bool FHasTypeGrenadeAmmo() { return m_pWeapon && m_pWeapon->iAmmoGrenadeType > 0; }
+	void renaining(int iCountDown)
+	{
+		m_iClip_c = iCountDown;
+	}
 
 public:
+	int m_iClip_c;
 
 	SharedTexture ammoclips;
 	SharedTexture ammofloat;
 	UniqueTexture ammoboard;
 	UniqueTexture ammoboard2;
 	UniqueTexture weaponboard;
+
+	UniqueTexture m_iCharacterBG_New_Bottom;
+	UniqueTexture m_iWeaponBG;
 
 	wrect_t m_rcAmmoclip[10];
 	wrect_t m_rcAmmofloat[10];
@@ -239,6 +267,19 @@ public:
 	cvar_t *m_pHud_DrawHistory_Time;
 
 	cvar_t *cl_crosshair_type;
+
+	HSPRITE m_hBuffHit;
+
+	float m_flLastHitTime, m_flLastBuffHit;
+
+	inline void HitForBuff(float flTime)
+	{
+		m_flLastBuffHit = flTime + 0.1;
+	}
+
+	int m_iWeaponSelect;
+	UniqueTexture m_iWeaponList;
+	UniqueTexture m_iWeapon_OffBG;
 };
 
 //
@@ -261,10 +302,14 @@ private:
 		MAX_SEC_AMMO_VALUES = 4
 	};
 
-	SharedTexture winhm;
-	SharedTexture winzb;
-	wrect_t m_rcTeamnumber[10];
-	wrect_t m_rcSelfnumber[10];
+	SharedTexture ammoclips;
+	SharedTexture ammofloat;
+	UniqueTexture ammoboard;
+	UniqueTexture ammoboard2;
+	UniqueTexture weaponboard;
+
+	wrect_t m_rcAmmoclip[10];
+	wrect_t m_rcAmmofloat[10];
 
 	int m_HUD_ammoicon; // sprite indices
 	int m_iAmmoAmounts[MAX_SEC_AMMO_VALUES];
@@ -383,6 +428,7 @@ struct extra_player_info_t
 	bool vip;
 	bool dead;
 	bool zombie;
+	bool mutant;
 	bool hero;
 	bool showhealth;
 	bool nextflash;
@@ -430,14 +476,81 @@ struct hostage_info_t
 	int radarflashes;
 };
 
-extern hud_player_info_t	g_PlayerInfoList[MAX_PLAYERS+1];	   // player info from the engine
-extern extra_player_info_t  g_PlayerExtraInfo[MAX_PLAYERS+1];  
-extern extra_player_info_t  g_location[MAX_PLAYERS + 32]; // additional player info sent directly to the client dll
-extern team_info_t			g_TeamInfo[MAX_TEAMS+1];
-extern hostage_info_t		g_HostageInfo[MAX_HOSTAGES+1];
-extern RoundPlayerInfo      g_PlayerExtraInfoEx[MAX_PLAYERS + 1];
-extern int					g_IsSpectator[MAX_PLAYERS+1];
+struct zombiebox_info_t
+{
+	vec3_t origin;
+	float radarflashtimedelta;
+	float radarflashtime;
+	bool dead;
+	bool nextflash;
+	int radarflashes;
+};
 
+struct zombie_info_t
+{
+	vec3_t origin;
+	float radarflashtimedelta;
+	float radarflashtime;
+	bool dead;
+	bool nextflash;
+	int radarflashes;
+};
+
+struct wood_info_t
+{
+	vec3_t origin;
+	float radarflashtimedelta;
+	float radarflashtime;
+	bool dead;
+	bool nextflash;
+	int radarflashes;
+};
+
+struct metal_info_t
+{
+	vec3_t origin;
+	float radarflashtimedelta;
+	float radarflashtime;
+	bool dead;
+	bool nextflash;
+	int radarflashes;
+};
+
+struct shelter_info_t
+{
+	vec3_t origin;
+	float radarflashtimedelta;
+	float radarflashtime;
+	bool dead;
+	bool nextflash;
+	int radarflashes;
+};
+
+struct buyzone_info_t
+{
+	vec3_t origin;
+	float radarflashtimedelta;
+	float radarflashtime;
+	bool dead;
+	bool nextflash;
+	int radarflashes;
+};
+
+extern hud_player_info_t	g_PlayerInfoList[MAX_PLAYERS + 1];	   // player info from the engine
+extern extra_player_info_t  g_PlayerExtraInfo[MAX_PLAYERS + 1];  
+extern extra_player_info_t  g_location[MAX_PLAYERS + 32]; // additional player info sent directly to the client dll
+extern team_info_t			g_TeamInfo[MAX_TEAMS + 1];
+extern hostage_info_t		g_HostageInfo[MAX_HOSTAGES + 1];
+extern RoundPlayerInfo      g_PlayerExtraInfoEx[MAX_PLAYERS + 1];
+
+extern zombiebox_info_t		g_ZombieBoxInfo[MAX_BOX + 1];
+extern zombie_info_t		g_ZombieInfo[MAX_HOSTAGES + 1];
+extern wood_info_t		g_WoodInfo[MAX_HOSTAGES + 1];
+extern metal_info_t		g_MetalInfo[MAX_HOSTAGES + 1];
+extern shelter_info_t		g_ShelterInfo[MAX_HOSTAGES + 1];
+extern buyzone_info_t		g_BuyZoneInfo[MAX_HOSTAGES + 1];
+
+extern int					g_IsSpectator[MAX_PLAYERS + 1];
 
 class AlarmBasicdata
 {
@@ -494,6 +607,8 @@ public:
 
 	CHudMsgFunc(ResetRound);
 
+	char SzTextAlarm[64];
+	char SzTextRibbon[64];
 public:
 
 	//NewAlarm From Sme
@@ -587,45 +702,31 @@ CHudDeathInfo& HudDeathInfo(void);
 class CHudDeathNotice : public CHudBase
 {
 public:
-	int Init( void );
+	int Init(void);
 	void Reset(void);
-	void InitHUDData( void );
-	int VidInit( void );
+	void InitHUDData(void);
+	int VidInit(void);
 	void Shutdown(void);
-	int Draw( float time );
-
-	void headshots();
-	void crazy();
-	void excellent();
-	void knife();
-	void incredible();
-	void cantbelieve();
-
+	int Draw(float flTime);
 	CHudMsgFunc(DeathMsg);
 
 private:
-	
 	int m_HUD_d_skull;  // sprite index of skull icon
 	int m_HUD_d_headshot;
-	cvar_t *hud_deathnotice_time;
+	cvar_t* hud_deathnotice_time;
 
 	int m_killNums, m_multiKills;
 	int m_iconIndex;
 	bool m_showIcon, m_showKill;
 	float m_killEffectTime, m_killIconTime;
-protected:
 
-	SharedTexture ribbon_headshot;
-	SharedTexture ribbon_crazy;
-	SharedTexture ribbon_excellent;
-	SharedTexture ribbon_knife;
-	SharedTexture ribbon_incredible;
-	SharedTexture ribbon_cantbelieve;
-	SharedTexture m_pCurTexture;
-	float m_flDisplayTime;
 private:
-	int m_killBg[3];
-	int m_deathBg[3];
+	SharedTexture m_killBg[3];
+	SharedTexture m_deathBg[3];
+	SharedTexture m_csgo_defaultBg[3];
+	SharedTexture m_csgo_killBg[3];
+	SharedTexture m_NewHud_deathBg[3];
+	SharedTexture m_NewHud_killBg[3];
 	int m_KM_Number0;
 	int m_KM_Number1;
 	int m_KM_Number2;
@@ -797,7 +898,7 @@ enum armortype_t {
 		VestHelm
 	} m_enArmorType;
 
- int	 m_iBat;
+	int	 m_iBat;
 	CClientSprite m_hEmpty[VestHelm + 1];
 	CClientSprite m_hFull[VestHelm + 1];
 
@@ -824,6 +925,17 @@ enum armortype_t {
 	UniqueTexture m_armors;
 	wrect_t ihealth[10];
 	wrect_t iarmors[10];
+
+
+	UniqueTexture m_iCharacterBG;
+	UniqueTexture m_iCharacterBG_New_Bottom;
+	UniqueTexture m_iCharacterBG_New_Top;
+
+
+
+
+
+
 	HSPRITE m_hDamage;
 	Vector2D m_vAttackPos[4];
 	DAMAGE_IMAGE m_dmg[NUM_DMG_TYPES];
@@ -974,6 +1086,7 @@ public:
 	void Shutdown(void);
 	int Draw(float flTime);
 	CHudMsgFunc(StatusIcon);
+	CHudMsgFunc(ShelterIcon);
 
 	enum {
 		MAX_ICONSPRITENAME_LENGTH = MAX_SPRITE_NAME_LENGTH,
@@ -985,13 +1098,17 @@ public:
 	//could use a friend declaration instead...
 	void EnableIcon( const char *pszIconName, unsigned char red, unsigned char green, unsigned char blue );
 	void DisableIcon( const char *pszIconName );
-	
-	
+	void EnableIcon2();
+	bool buyzones;
 	friend class CHudScoreboard;
+	
 protected:
 	UniqueTexture b_iconimage;
+	UniqueTexture b_iconbuild;
+	UniqueTexture b_iconskills;
 private:
-
+	RGBA m_colors;
+	bool m_bDrawStroke;
 	typedef struct
 	{
 		char szSpriteName[MAX_ICONSPRITENAME_LENGTH];
@@ -1229,6 +1346,18 @@ private:
 	SharedTexture ourforces;
 };
 
+class CHudTwinAxes : public CHudBase
+{
+public:
+	int Init();
+	int VidInit();
+	int Draw(float fltime);
+	bool CheckForPlayer(cl_entity_s* pEnt);
+
+protected:
+	SharedTexture m_pCurTexture;
+};
+
 //
 //-----------------------------------------------------
 //
@@ -1252,6 +1381,19 @@ private:
 
 };
 
+class CHudHitDamage : public IBaseHudSub
+{
+public:
+	int VidInit(void);
+	int Draw(float flTime);
+	void Settext();
+
+private:
+	SharedTexture m_iTex;
+	SharedTexture m_pCurTexture;
+	float m_flDisplayTime;
+};
+
 class CHudSiFiammo : public CHudBase
 {
 public:
@@ -1266,6 +1408,51 @@ private:
 	SharedTexture m_iTex;
 	cvar_t* hud_sifiammo_style;
 	int current_style;
+};
+
+class CHudHeadIcon : public CHudBase
+{
+public:
+	int Init(void);
+	int VidInit(void);
+	int Draw(float flTime);
+	void Reset(void);
+	void Shutdown();
+	void R_AttachTentToPlayer(int client, int modelIndex, vec3_t offset, float life, int additive, int flags, float scale, int rendermode = 0, float framerate = 1.0);
+	void R_AttachTentToEntity(int entity, int modelIndex, vec3_t offset, float life, int additive, int flags, float scale, int rendermode = 0, float framerate = 1.0);
+	CHudMsgFunc(HeadIcon);
+	CHudMsgFunc(MPToCL);
+private:
+	SharedTexture m_pTexture_Zombie_s;
+	SharedTexture m_iTex[5];
+	int frame;
+	int i;
+
+	duration_t tNextsecond1;
+	time_point_t timesecond1;
+	duration_t tDeltasecond1;
+
+	time_point_t timetx1;
+};
+
+class CHudSpecialCrossHair : public CHudBase
+{
+public:
+	int Init(void);
+	int VidInit(void);
+	int Draw(float flTime);
+	void Reset(void);
+	void Shutdown();
+	void DrawHuntbowCrossHair(float x, float y, float wide, float height, int iType);
+	CHudMsgFunc(SpecialCrossHair);
+
+private:
+	float wide, height;
+	int iType;
+	int iStoredType;
+	int iWeapon;
+	int DisplayTime;
+	SharedTexture m_pCurTexture[16];
 };
 
 class CHud
@@ -1328,7 +1515,7 @@ public:
 		return m_bIsCZero;
 	}
 
-
+	bool IsZombieMod() const;
 	float   m_flTime;      // the current client time
 	float   m_fOldTime;    // the time at which the HUD was last redrawn
 	double  m_flTimeDelta; // the difference between flTime and fOldTime
@@ -1362,6 +1549,16 @@ public:
 	cvar_t* m_alarmstyle;
 
 	cvar_t *cl_headname;
+	cvar_t* zsh_mentality;
+	cvar_t* menu_musicpack;
+	cvar_t* menu_getconsole;
+	cvar_t* menu_tentime;
+
+	cvar_t* ui_wpn_getgun;
+	cvar_t* ui_wpn_getpistol;
+	cvar_t* ui_wpn_getknife;
+	cvar_t* ui_wpn_getgrenade;
+
 #ifdef __ANDROID__
 	cvar_t *cl_android_force_defaults;
 #endif
@@ -1402,22 +1599,36 @@ public:
 	CHudRadar       m_Radar;
 	CHudSpectatorGui m_SpectatorGui;
 	CHudDeathInfo m_DeathInfo;
-	CHudNewHud m_NewHud;
+	CHudInfoShelterIcon infogetitem;
+	CHudInfoWoodIcon infogetres;
+	CHudInfoMetalIcon infogetres2;
+	CHudInfoZombieIcon infogetzm;
 	CHudNewAlarm  m_NewAlarm;
-	//CHudDrawFontText m_DrawFontText;
 	CHudFollowIcon	m_FollowIcon;
 	CHudScenarioStatus m_scenarioStatus;
 	CHudSiFiammo m_HudSiFiammo;
 	CHudHeadName	m_HeadName;
+	CHudTwinAxes	m_TwinAxes;
 	CHudRetina		m_Retina;
 	CHudScoreBoardLegacy m_legacy_score;
 	CHudZBS	m_ZBS;
 	CHudZB2 m_ZB2;
 	CHudClassic m_CLS;
+	CHudDeathMatch m_dm;
+	CHudTeamDeathMatch m_tdm;
+	CWeaponInt m_WPI;
 	CHudGunDeath m_gd;
+	CHudHidden m_hid;
 	CHudZB3 m_ZB3;
+	CHudZB5 m_ZB5;
 	CHudZSH m_ZSH;
+	CHudPR m_PR;
 	CHudMoeTouch m_MoeTouch;
+	CHudMVP m_MVP;
+	CHudHeadIcon m_HeadIcon;
+	CHudSpecialCrossHair	m_SpecialCrossHair;
+
+	WebmUtils util;
 	//CHudInterface m_HudInterface;
 	// user messages
 	CHudMsgFunc(Damage);
@@ -1429,6 +1640,10 @@ public:
 	CHudMsgFunc(SetFOV);
 	CHudMsgFunc(Concuss);
 	CHudMsgFunc(ShadowIdx);
+
+	std::set<int> m_setBanWeapon;
+	std::set<int> m_setBanKnife;
+	std::set<int> m_setBanGrenade;
 
 	// Screen information
 	SCREENINFO	m_scrinfo;
@@ -1447,6 +1662,10 @@ public:
 	int m_iWeaponGet;
 	int m_NEWHUD_hPlus;
 
+
+
+	int m_iZlevel;
+	float m_flZombieSelectTime;
 	// sprite indexes
 	int m_HUD_number_0;
 
@@ -1477,6 +1696,7 @@ private:
 
 extern CHud gHUD;
 extern cvar_t *sensitivity;
+extern vec3_t g_velocity;
 extern long g_iDamage[MAX_CLIENTS + 1];
 extern long g_iDamageTotal[MAX_CLIENTS + 1];
 extern double g_flDamageInAll;

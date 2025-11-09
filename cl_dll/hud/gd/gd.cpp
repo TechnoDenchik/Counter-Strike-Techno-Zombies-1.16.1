@@ -12,14 +12,15 @@
 
 #include "gd.h"
 #include "gd/WinHud.h"
-#include "lvupdate.h"
-#include "upweaponhud.h"
+#include "FinalAttack.h"
+#include "WeaponChange.h"
+#include "RespawnBar.h"
 #include "gd/GDScoreboard.h"
 #include "../dlls/gamemode/gd/gd_const.h"
 #include <vector>
 
 class CHudGunDeath::impl_t
-	: public THudSubDispatcher<CHudGDScoreboard, CHudGDUpdateWeapon>
+	: public THudSubDispatcher<CHudGDScoreboard, CHudGDFinalAttackWEBM, CHudGDWeapomChangeWEBM, CHudGDRespawnBar>
 {
 public:
 };
@@ -32,16 +33,25 @@ int CHudGunDeath::MsgFunc_GDMsg(const char* pszName, int iSize, void* pbuf)
 	BufferReader buf(pszName, pbuf, iSize);
 
 	auto type = static_cast<GunDeath>(buf.ReadByte());
+
+	int time = buf.ReadByte();
+	float timeFloat = (float)time;
+
 	switch (type)
 	{
-		case GD_UPDATE_LEVEL:
+		case GD_WEAPON_CHANGE:
 		{
-			pimpl->get<CHudGDUpdateWeapon>().weaponups();
+			pimpl->get<CHudGDWeapomChangeWEBM>().SetWebm();
 			break;
 		}
 		case GD_FINAL_ATTACK:
 		{
-			pimpl->get<CHudGDUpdateWeapon>().weaponupsmax();
+			pimpl->get<CHudGDFinalAttackWEBM>().SetWebm();
+			break;
+		}
+		case GD_RESPAWN_BAR:
+		{
+			pimpl->get<CHudGDRespawnBar>().StartRespawn(timeFloat);
 			break;
 		}
 	}

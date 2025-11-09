@@ -119,7 +119,7 @@ int CHudMenu :: Draw( float flTime )
 	i = 0;
 	while ( i < MAX_MENU_STRING && g_szMenuString[i] != '\0' )
 	{
-		DrawUtils::DrawHudString( x, y, 320, g_szMenuString + i, 255, 255, 255 );
+		DrawUtils::DrawHudString( x, y, 320, g_szMenuString + i, 255, 255, 255, 255);
 		y += 24;
 
 		while ( i < MAX_MENU_STRING && g_szMenuString[i] != '\0' && g_szMenuString[i] != '\n' )
@@ -199,6 +199,14 @@ int CHudMenu :: MsgFunc_ShowMenu( const char *pszName, int iSize, void *pbuf )
 				ShowVGUIMenu(MENU_RADIOC); return 1;
 			}
 			else ShowVGUIMenu( MENU_NUMERICAL_MENU ); // we just show touch screen numbers
+		}
+		if (!strncmp(menustring, "#Skillssurv", 3))
+		{
+			if (menustring[3])
+			{
+				ShowVGUIMenu(MENU_SURVSKILLS); return 1;
+			}
+			else ShowVGUIMenu(MENU_SURVSKILLS); // we just show touch screen numbers
 		}
 		else ShowVGUIMenu(MENU_NUMERICAL_MENU);
 	}
@@ -295,9 +303,6 @@ void CHudMenu::ShowVGUIMenu( int menuType )
 	case MENU_BUY:
 		switch (gHUD.m_iModRunning)
 		{
-		case MOD_ZBS:
-			szCmd = "exec touch/buy_zbs.cfg";
-			break;
 		default:
 			szCmd = "exec touch/buy.cfg";
 			break;
@@ -336,6 +341,9 @@ void CHudMenu::ShowVGUIMenu( int menuType )
 		break;
 	case MENU_RADIOA:
 		szCmd = "exec touch/radioa.cfg";
+		break;
+	case MENU_SURVSKILLS:
+		szCmd = "exec touch/survskills.cfg";
 		break;
 	case MENU_RADIOB:
 		szCmd = "exec touch/radiob.cfg";

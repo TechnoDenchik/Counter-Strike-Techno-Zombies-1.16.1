@@ -7,12 +7,13 @@
 #include "trains.h"
 #include "bmodels.h"
 
+#include "gd/gd_const.h"
 #include "mod_dm.h"
 
 class CMultiplayGameMgrHelper : public IVoiceGameMgrHelper
 {
 public:
-	virtual bool		CanPlayerHearPlayer(CBasePlayer *pListener, CBasePlayer *pTalker)
+	virtual bool CanPlayerHearPlayer(CBasePlayer *pListener, CBasePlayer *pTalker)
 	{
 		if (g_pGameRules->IsTeamplay())
 		{
@@ -35,6 +36,16 @@ void CMod_DeathMatch::InstallPlayerModStrategy(CBasePlayer *player)
 		MyPlayerModStrategy(CBasePlayer *player) : CPlayerModStrategy_Default(player) {}
 		void CheckBuyZone() override { m_pPlayer->m_signals.Signal(SIGNAL_BUY); };
 		bool CanPlayerBuy(bool display) override { return true; }
+
+		void OnKilled(entvars_t* pKiller, entvars_t* pInflictor) override
+		{
+			MESSAGE_BEGIN(MSG_ONE, gmsgDMRespawnBar, nullptr, m_pPlayer->pev);
+			WRITE_BYTE(GD_RESPAWN_BAR);
+			WRITE_BYTE(3);
+			MESSAGE_END();
+
+			return CPlayerModStrategy_Default::OnKilled(pKiller, pInflictor);
+		}
 	};
 
 	std::unique_ptr<MyPlayerModStrategy> up(new MyPlayerModStrategy(player));
@@ -55,9 +66,7 @@ void CMod_DeathMatch::Think(void)
 {
 	m_VoiceGameMgr.Update(gpGlobals->frametime);\
 
-	///// Check game rules /////
-
-	if (CheckGameOver())   // someone else quit the game already
+	if (CheckGameOver())
 		return;
 	
 	if (CheckTimeLimit())
@@ -118,7 +127,7 @@ void CMod_DeathMatch::Think(void)
 		if (player->m_iTeam == TEAM_UNASSIGNED  || player->m_iTeam == TEAM_SPECTATOR)
 			continue;
 
-		if(gpGlobals->time < player->m_fDeadTime + 5.0f)
+		if(gpGlobals->time < player->m_fDeadTime + 3.0f)
 			continue;
 
 		player->RoundRespawn();
@@ -127,9 +136,6 @@ void CMod_DeathMatch::Think(void)
 
 void CMod_DeathMatch::PlayerKilled(CBasePlayer *pVictim, entvars_t *pKiller, entvars_t *pInflictor)
 {
-	// IBaseMod::PlayerKilled(pVictim, pKiller, pInflictor);
-	// overrides it!
-
 	DeathNotice(pVictim, pKiller, pInflictor);
 
 	pVictim->m_afPhysicsFlags &= ~PFLAG_ONTRAIN;
@@ -159,15 +165,12 @@ void CMod_DeathMatch::PlayerKilled(CBasePlayer *pVictim, entvars_t *pKiller, ent
 
 	FireTargets("game_playerdie", pVictim, pVictim, USE_TOGGLE, 0);
 
-	// Did the player kill himself?
 	if (pVictim->pev == pKiller)
 	{
-		// Players lose a frag for killing themselves
 		pKiller->frags -= 1;
 	}
 	else if (peKiller && peKiller->IsPlayer())
 	{
-		// if a player dies in a deathmatch game and the killer is a client, award the killer some points
 		CBasePlayer *killer = peKiller;
 		bool killedByFFA = false;
 
@@ -184,12 +187,9 @@ void CMod_DeathMatch::PlayerKilled(CBasePlayer *pVictim, entvars_t *pKiller, ent
 	}
 	else
 	{
-		// killed by the world
 		pKiller->frags -= 1;
 	}
 
-	// update the scores
-	// killed scores
 	MESSAGE_BEGIN(MSG_BROADCAST, gmsgScoreInfo);
 	WRITE_BYTE(ENTINDEX(pVictim->edict()));
 	WRITE_SHORT((int)pVictim->pev->frags);
@@ -198,7 +198,6 @@ void CMod_DeathMatch::PlayerKilled(CBasePlayer *pVictim, entvars_t *pKiller, ent
 	WRITE_SHORT(pVictim->m_iTeam);
 	MESSAGE_END();
 
-	// killers score, if it's a player
 	CBaseEntity *ep = CBaseEntity::Instance(pKiller);
 
 	if (ep && ep->Classify() == CLASS_PLAYER)
@@ -213,16 +212,12 @@ void CMod_DeathMatch::PlayerKilled(CBasePlayer *pVictim, entvars_t *pKiller, ent
 		WRITE_SHORT(PK->m_iTeam);
 		MESSAGE_END();
 
-		// let the killer paint another decal as soon as he'd like.
 		PK->m_flNextDecalTime = gpGlobals->time;
 	}
-
-	// TODO: RespawnBar.
 }
 
 int CMod_DeathMatch::PlayerRelationship(CBasePlayer *pPlayer, CBaseEntity *pTarget)
 {
-	// ALL Players are enemies.
 	if (!pPlayer || !pTarget)
 	{
 		return GR_NOTTEAMMATE;
@@ -245,10 +240,8 @@ BOOL CMod_DeathMatch::FPlayerCanTakeDamage(CBasePlayer *pPlayer, CBaseEntity *pA
 {
 	if (pAttacker && PlayerRelationship(pPlayer, pAttacker) == GR_TEAMMATE)
 	{
-		// my teammate hit me.
 		if ((friendlyfire.value == 0) && (pAttacker != pPlayer))
 		{
-			// friendly fire is off, and this hit came from someone other than myself,  then don't get hurt
 			return FALSE;
 		}
 	}
@@ -258,13 +251,6 @@ BOOL CMod_DeathMatch::FPlayerCanTakeDamage(CBasePlayer *pPlayer, CBaseEntity *pA
 
 BOOL CMod_DeathMatch::FPlayerCanRespawn(CBasePlayer *pPlayer)
 {
-	/*// Wait to Respawn...
-	if (gpGlobals->time < pPlayer->m_fDeadTime + 3.0)
-	{
-		return FALSE;
-	}*/
-
-	// Player cannot respawn while in the Choose Appearance menu
 	if (pPlayer->m_iMenu == Menu_ChooseAppearance)
 	{
 		return FALSE;
@@ -277,11 +263,9 @@ void CMod_DeathMatch::UpdateGameMode(CBasePlayer *pPlayer)
 {
 	MESSAGE_BEGIN(MSG_ONE, gmsgGameMode, NULL, pPlayer->edict());
 	WRITE_BYTE(MOD_DM);
-	WRITE_BYTE(0); // Reserved. (weapon restriction? )
-	WRITE_BYTE(maxkills.value); // MaxRound (mp_roundlimit)
-	WRITE_BYTE(0); // Reserved. (MaxTime?)
-
-	
+	WRITE_BYTE(0);
+	WRITE_BYTE(maxkills.value);
+	WRITE_BYTE(0);
 	MESSAGE_END();
 }
 
@@ -290,16 +274,13 @@ void CMod_DeathMatch::PlayerSpawn(CBasePlayer *pPlayer)
 	IBaseMod::PlayerSpawn(pPlayer);
 	pPlayer->AddAccount(16000);
 
-	// Give Armor
 	pPlayer->m_iKevlar = ARMOR_TYPE_HELMET;
 	pPlayer->pev->armorvalue = 100;
-
 	pPlayer->SpawnProtection_Start(3.0f);
 }
 
 bool CMod_DeathMatch::CheckWinLimitDM()
 {
-	// has someone won the specified number of frags?
 	if (m_iMaxRoundsWon != 0 && (CalcLeaderFrags() >= m_iMaxRoundsWon))
 	{
 			ALERT(at_console, "Changing maps...someone has won the specified number of frags\n");
