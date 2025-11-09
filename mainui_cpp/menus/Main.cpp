@@ -331,11 +331,13 @@ void CMenuMain::_Init( void )
 	iconconsole.iFlags = QMF_NOTIFY;
 	iconconsole.SetRect(7, 400, 32, 32);
 	iconconsole.SetPicture(ART_CONSOLE);
+	iconconsole.eFocusAnimation = QM_PULSEIFFOCUS;
 	iconconsole.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 
 	console.SetNameAndStatus(L("GameUI_Console"), L(""));
 	console.onActivated = UI_CloseMenu;
 	console.iFlags |= QMF_NOTIFY;
+	console.eFocusAnimation = QM_PULSEIFFOCUS;
 	console.colorBase = uiColorCyan;
 	console.SetCharSize(QM_BOLDFONT);
 	SET_EVENT_MULTI( console.onActivated,
@@ -346,6 +348,7 @@ void CMenuMain::_Init( void )
 
 	discord.iFlags = QMF_NOTIFY;
 	discord.SetPicture(ART_DISCORD);
+	discord.eFocusAnimation = QM_PULSEIFFOCUS;
 	discord.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	discord.SetRect(32, 40, 32, 32);
 	SET_EVENT(discord.onActivated, EngFuncs::ShellExecute("https://discord.gg/U9sdYbZrRU", NULL, false));
@@ -353,11 +356,13 @@ void CMenuMain::_Init( void )
 	iconresune.iFlags = QMF_NOTIFY;
 	iconresune.SetRect(7, 440, 32, 32);
 	iconresune.SetPicture(ART_RESUNEGAME);
+	iconresune.eFocusAnimation = QM_PULSEIFFOCUS;
 	iconresune.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	iconresune.onActivated = UI_CloseMenu;
 
 	resumeGame.SetNameAndStatus(L("GameUI_GameMenu_ResumeGame"), L(""));
 	resumeGame.onActivated = UI_CloseMenu;
+	resumeGame.eFocusAnimation = QM_PULSEIFFOCUS;
 	resumeGame.colorBase = uiColorCyan;
 	resumeGame.SetCharSize(QM_BOLDFONT);
 	resumeGame.iFlags |= QMF_NOTIFY;
@@ -365,11 +370,13 @@ void CMenuMain::_Init( void )
 	icondiscon.iFlags = QMF_NOTIFY;
 	icondiscon.SetRect(7, 480, 32, 32);
 	icondiscon.SetPicture(ART_DISCONNECT);
+	icondiscon.eFocusAnimation = QM_PULSEIFFOCUS;
 	icondiscon.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	icondiscon.onActivated = VoidCb(&CMenuMain::DisconnectDialogCb);
 
 	disconnect.SetNameAndStatus(L("GameUI_GameMenu_Disconnect"), L(""));
 	disconnect.onActivated = VoidCb(&CMenuMain::DisconnectDialogCb);
+	disconnect.eFocusAnimation = QM_PULSEIFFOCUS;
 	disconnect.colorBase = uiColorCyan;
 	disconnect.SetCharSize(QM_BOLDFONT);
 	disconnect.iFlags |= QMF_NOTIFY;
@@ -377,11 +384,13 @@ void CMenuMain::_Init( void )
 	iconplay.iFlags = QMF_NOTIFY;
 	iconplay.SetRect(7, 520, 32, 32);
 	iconplay.SetPicture(ART_PLAY);
+	iconplay.eFocusAnimation = QM_PULSEIFFOCUS;
 	iconplay.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	iconplay.onActivated = UI_CreateGame_Menu;
 
 	createGame.SetNameAndStatus(LL("GameUI_StartGame"), L(""));
 	createGame.onActivated = UI_CreateGame_Menu;
+	createGame.eFocusAnimation = QM_PULSEIFFOCUS;
 	createGame.colorBase = uiColorCyan;
 	createGame.SetCharSize(QM_BOLDFONT);
 	createGame.iFlags |= QMF_NOTIFY;
@@ -389,11 +398,13 @@ void CMenuMain::_Init( void )
 	iconmulti.iFlags = QMF_NOTIFY;
 	iconmulti.SetRect(7, 560, 32, 32);
 	iconmulti.SetPicture(ART_MULTIPLAYER);
+	iconmulti.eFocusAnimation = QM_PULSEIFFOCUS;
 	iconmulti.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	iconmulti.onActivated = UI_InternetGames_Menu;
 
 	multiPlayer.SetNameAndStatus(L("GameUI_GameMenu_FindServers"), L(""));
 	multiPlayer.onActivated = UI_InternetGames_Menu;
+	multiPlayer.eFocusAnimation = QM_PULSEIFFOCUS;
 	multiPlayer.colorBase = uiColorCyan;
 	multiPlayer.SetCharSize(QM_BOLDFONT);
 	multiPlayer.iFlags |= QMF_NOTIFY;
@@ -401,11 +412,13 @@ void CMenuMain::_Init( void )
 	iconsettings.iFlags = QMF_NOTIFY;
 	iconsettings.SetRect(7, 640, 32, 32);
 	iconsettings.SetPicture(ART_SETTINGS);
+	iconsettings.eFocusAnimation = QM_PULSEIFFOCUS;
 	iconsettings.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	iconsettings.onActivated = UI_Options_Menu;
 
 	configuration.SetNameAndStatus(L("GameUI_Options"), L(""));
 	configuration.onActivated = UI_Options_Menu;
+	configuration.eFocusAnimation = QM_PULSEIFFOCUS;
 	configuration.colorBase = uiColorCyan;
 	configuration.SetCharSize(QM_BOLDFONT);
 	configuration.iFlags |= QMF_NOTIFY;
@@ -413,6 +426,7 @@ void CMenuMain::_Init( void )
 	iconpreview.iFlags = QMF_NOTIFY;
 	iconpreview.SetRect(7, 600, 32, 32);
 	iconpreview.SetPicture(ART_PREVIEW);
+	iconpreview.eFocusAnimation = QM_PULSEIFFOCUS;
 	iconpreview.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	iconpreview.onActivated = UI_Options_Menu;
 	SET_EVENT(iconpreview.onActivated, EngFuncs::ShellExecute("https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.1/tree/cstz1161", NULL, false));
@@ -420,6 +434,7 @@ void CMenuMain::_Init( void )
 	previews.SetNameAndStatus(L("GameUI_Previews"), L(""));
 	previews.onActivated = UI_Options_Menu;
 	previews.iFlags |= QMF_NOTIFY;
+	previews.eFocusAnimation = QM_PULSEIFFOCUS;
 	previews.colorBase = uiColorCyan;
 	previews.SetCharSize(QM_BOLDFONT);
 	SET_EVENT(previews.onActivated, EngFuncs::ShellExecute("https://github.com/TechnoDenchik/Counter-Strike-Techno-Zombies-1.16.1/tree/cstz1161", NULL, false));
@@ -427,12 +442,14 @@ void CMenuMain::_Init( void )
 	iconquit.iFlags = QMF_NOTIFY;
 	iconquit.SetRect(10, 685, 26, 26);
 	iconquit.SetPicture(ART_QUIT);
+	iconquit.eFocusAnimation = QM_PULSEIFFOCUS;
 	iconquit.SetRenderMode(QM_DRAWHOLES, QM_DRAWHOLES, QM_DRAWHOLES);
 	iconquit.onActivated = MenuCb(&CMenuMain::QuitDialog);
 
 	quit.SetNameAndStatus(L("GameUI_GameMenu_Quit"), L(""));
 	quit.onActivated = MenuCb(&CMenuMain::QuitDialog);
 	quit.iFlags |= QMF_NOTIFY;
+	quit.eFocusAnimation = QM_PULSEIFFOCUS;
 	quit.colorBase = uiColorCyan;
 	quit.SetCharSize(QM_BOLDFONT);
 

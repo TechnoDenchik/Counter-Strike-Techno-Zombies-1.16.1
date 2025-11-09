@@ -20,7 +20,7 @@
 	class CBeam;
 
 #ifndef CLIENT_DLL
-	class CGungnirProjectile : public CBaseEntity
+	class CGungnirProjectileEx : public CBaseEntity
 	{
 	public:
 		void Spawn() override
@@ -29,9 +29,9 @@
 
 			m_fSequenceLoops = 0;
 			//ph26 = 0;
-			SetThink(&CGungnirProjectile::OnThink);
-			SetTouch(&CGungnirProjectile::OnTouch);
-			SET_MODEL(this->edict(), "sprites/ef_gungnir_missile.spr");
+			SetThink(&CGungnirProjectileEx::OnThink);
+			SetTouch(&CGungnirProjectileEx::OnTouch);
+			SET_MODEL(this->edict(), "sprites/ef_gungnir_missileex.spr");
 			pev->rendermode = kRenderTransAdd; // 5;
 			pev->renderfx = kRenderFxNone;
 			pev->renderamt = 255.0;
@@ -58,8 +58,8 @@
 
 		void Precache() override
 		{
-			PRECACHE_MODEL("sprites/ef_gungnir_missile.spr");
-			PRECACHE_MODEL("sprites/ef_gungnir_bexplo.spr");
+			PRECACHE_MODEL("sprites/ef_gungnir_missileex.spr");
+			PRECACHE_MODEL("sprites/ef_gungnir_bexploex.spr");
 			PRECACHE_SOUND("weapons/gungnir_shoot_b_exp.wav");
 			PRECACHE_SOUND("weapons/gungnir_charge_loop.wav");
 			PRECACHE_SOUND("weapons/gungnir_idle.wav");
@@ -184,7 +184,7 @@
 			WRITE_COORD(pev->origin.x);
 			WRITE_COORD(pev->origin.y);
 			WRITE_COORD(pev->origin.z);
-			WRITE_SHORT(MODEL_INDEX("sprites/ef_gungnir_bexplo.spr"));
+			WRITE_SHORT(MODEL_INDEX("sprites/ef_gungnir_bexploex.spr"));
 			WRITE_BYTE(10);
 			WRITE_BYTE(30);
 			WRITE_BYTE(TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NOSOUND);
@@ -218,9 +218,9 @@
 			return UTIL_Remove(this);
 		}
 	};
-	LINK_ENTITY_TO_CLASS(gungnir_projectile, CGungnirProjectile)
+	LINK_ENTITY_TO_CLASS(gungnir_projectileex, CGungnirProjectileEx)
 
-		class CGungnirSpear : public CBaseAnimating
+		class CGungnirSpearEx : public CBaseAnimating
 	{
 	public:
 		void Spawn() override
@@ -232,8 +232,8 @@
 
 			m_fSequenceLoops = 0;
 			//ph26 = 0;
-			SetTouch(&CGungnirSpear::OnTouch);
-			SetThink(&CGungnirSpear::FlyThink);
+			SetTouch(&CGungnirSpearEx::OnTouch);
+			SetThink(&CGungnirSpearEx::FlyThink);
 
 			//ph32 = ?
 			pev->solid = SOLID_CUSTOM; // 5
@@ -259,9 +259,9 @@
 
 		void Precache() override
 		{
-			m_iModelExplo = PRECACHE_MODEL("sprites/ef_gungnir_chargeexplo.spr");
-			m_iModelLight1 = PRECACHE_MODEL("sprites/ef_gungnir_lightline1.spr");
-			m_iModelLight2 = PRECACHE_MODEL("sprites/ef_gungnir_lightline2.spr");
+			m_iModelExplo = PRECACHE_MODEL("sprites/ef_gungnir_chargeexploex.spr");
+			m_iModelLight1 = PRECACHE_MODEL("sprites/ef_gungnir_lightline1ex.spr");
+			m_iModelLight2 = PRECACHE_MODEL("sprites/ef_gungnir_lightline2ex.spr");
 			PRECACHE_SOUND("weapons/gungnir_charge_shoot_exp.wav");
 			PRECACHE_SOUND("weapons/gungnir_charge_shoot_exp2.wav");
 			PRECACHE_SOUND("weapons/gungnir_charge_loop.wav");
@@ -436,7 +436,7 @@
 			EMIT_SOUND_DYN(this->edict(), CHAN_WEAPON, "weapons/gungnir_charge_shoot_exp.wav", VOL_NORM, ATTN_NORM, 0, 94);
 
 
-			SetThink(&CGungnirSpear::AdditionalDamageThink);
+			SetThink(&CGungnirSpearEx::AdditionalDamageThink);
 			pev->nextthink = gpGlobals->time + 1.1f;
 		}
 
@@ -504,11 +504,11 @@
 			return UTIL_Remove(this);
 		}
 	};
-	LINK_ENTITY_TO_CLASS(gungnir_spear, CGungnirSpear)
+	LINK_ENTITY_TO_CLASS(gungnir_spearex, CGungnirSpearEx)
 
 #endif
 
-		class CGungnir : public LinkWeaponTemplate< CGungnir,
+		class CGungnirEx : public LinkWeaponTemplate< CGungnirEx,
 		TGeneralData,
 		BuildTGetItemInfoFromCSW<WEAPON_AK47>::template type,
 		TPrecacheEvent,
@@ -534,12 +534,12 @@
 		};
 
 		static constexpr auto DefaultReloadTime = 1.9;
-		static constexpr const char* V_Model = "models/v_gungnir.mdl";
-		static constexpr const char* P_Model = "models/p_gungnira.mdl";
-		static constexpr const char* W_Model = "models/w_gungnir.mdl";
+		static constexpr const char* V_Model = "models/v_gungnirex.mdl";
+		static constexpr const char* P_Model = "models/p_gungnirexa.mdl";
+		static constexpr const char* W_Model = "models/w_gungnirex.mdl";
 		static constexpr const char* EventFile = "events/gungnir.sc";
 		static constexpr InventorySlotType ItemSlot = PRIMARY_WEAPON_SLOT;
-		static constexpr const char* ClassName = "weapon_gungnir";
+		static constexpr const char* ClassName = "weapon_gungnirex";
 		static constexpr const char* AnimExtension = "m249";
 		struct ItemInfoData_t : Base::ItemInfoData_t
 		{
@@ -550,7 +550,7 @@
 		static constexpr float WeaponIdleTime = 10;
 
 		KnockbackData KnockBack = { 250.0f, 100.0f, 150.0f, 100.0f, 0.2f };
-		static constexpr const char* Beam_SPR = "sprites/ef_gungnir_xbeam.spr"; //
+		static constexpr const char* Beam_SPR = "sprites/ef_gungnir_xbeamex.spr"; //
 
 	public:
 		void Precache() override;
@@ -650,14 +650,14 @@
 		float phs12;
 		int m_iSprBeam;
 	};
-	LINK_ENTITY_TO_CLASS(weapon_gungnir, CGungnir)
+	LINK_ENTITY_TO_CLASS(weapon_gungnirex, CGungnirEx)
 
-		void CGungnir::Precache()
+		void CGungnirEx::Precache()
 	{
 		PRECACHE_MODEL(Beam_SPR);
-		m_iSprBeam = PRECACHE_MODEL("sprites/ef_gungnir_xbeam.spr");
-		PRECACHE_MODEL("models/p_gungnirB.mdl");
-		PRECACHE_MODEL("sprites/ef_gungnir_aexplo.spr");
+		m_iSprBeam = PRECACHE_MODEL("sprites/ef_gungnir_xbeamex.spr");
+		PRECACHE_MODEL("models/p_gungnirexb.mdl");
+		PRECACHE_MODEL("sprites/ef_gungnir_aexploex.spr");
 		PRECACHE_SOUND("weapons/gungnir_charge_loop.wav");
 		PRECACHE_SOUND("weapons/gungnir_idle.wav");
 		PRECACHE_SOUND("weapons/gungnir_shoot_b.wav");
@@ -669,7 +669,7 @@
 
 	}
 
-	BOOL CGungnir::Deploy()
+	BOOL CGungnirEx::Deploy()
 	{
 		phs2 = -1;
 		phs3 = -1;
@@ -682,7 +682,7 @@
 		return DefaultDeploy(V_Model, P_Model, ANIM_DRAW, AnimExtension, UseDecrement() != FALSE);
 	}
 
-	void CGungnir::Spawn()
+	void CGungnirEx::Spawn()
 	{
 		Base::Spawn();
 
@@ -694,7 +694,7 @@
 		phs12 = -1;
 	}
 
-	void CGungnir::Holster(int skiplocal)
+	void CGungnirEx::Holster(int skiplocal)
 	{
 		phs2 = -1;
 		phs3 = -1;
@@ -707,7 +707,7 @@
 		return Base::Holster();
 	}
 
-	void CGungnir::PrimaryAttack()
+	void CGungnirEx::PrimaryAttack()
 	{
 		++m_iShotsFired;
 		m_bDelayFire = 1;
@@ -763,7 +763,7 @@
 		PrimaryAttack_InstantDamage();
 	}
 
-	void CGungnir::GungnirLighting(void)
+	void CGungnirEx::GungnirLighting(void)
 	{
 		UTIL_MakeVectors(m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle);
 
@@ -834,7 +834,7 @@
 #endif
 	}
 
-	BOOL CGungnir::IsTargetAvailable(CBasePlayer* m_pPlayer, CBaseEntity* pEntity, Vector vecSrc)
+	BOOL CGungnirEx::IsTargetAvailable(CBasePlayer* m_pPlayer, CBaseEntity* pEntity, Vector vecSrc)
 	{
 
 		if (!pEntity->IsAlive())
@@ -862,7 +862,7 @@
 		return true;
 	}
 
-	void CGungnir::ShootProjectile()
+	void CGungnirEx::ShootProjectile()
 	{
 		if (m_iClip <= 0)
 		{
@@ -878,7 +878,7 @@
 #ifndef CLIENT_DLL
 		UTIL_MakeVectors(m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle);
 		Vector vecSrc = m_pPlayer->GetGunPosition() + gpGlobals->v_forward * 10;
-		CGungnirProjectile* pEnt = static_cast<CGungnirProjectile*>(CBaseEntity::Create("gungnir_projectile", vecSrc, m_pPlayer->pev->v_angle, ENT(m_pPlayer->pev)));
+		CGungnirProjectileEx* pEnt = static_cast<CGungnirProjectileEx*>(CBaseEntity::Create("gungnir_projectileex", vecSrc, m_pPlayer->pev->v_angle, ENT(m_pPlayer->pev)));
 		if (pEnt)
 		{
 			pEnt->Init(gpGlobals->v_forward * 1500, GetDamage_ProjectileA(), GetDamage_ProjectileB(), 110, m_pPlayer->m_iTeam);
@@ -894,13 +894,13 @@
 #endif
 	}
 
-	void CGungnir::ShootSpear()
+	void CGungnirEx::ShootSpear()
 	{
 #ifndef CLIENT_DLL
 		UTIL_MakeVectors(m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle);
 		Vector vecSrcA = m_pPlayer->GetGunPosition() + gpGlobals->v_forward * 10 + gpGlobals->v_right * 5;
 		Vector vecSrcB = m_pPlayer->GetGunPosition() + gpGlobals->v_forward * 10 + -gpGlobals->v_right * (-5);
-		CGungnirSpear* pEnt = static_cast<CGungnirSpear*>(CBaseEntity::Create("gungnir_spear", vecSrcA, m_pPlayer->pev->v_angle, ENT(m_pPlayer->pev)));
+		CGungnirSpearEx* pEnt = static_cast<CGungnirSpearEx*>(CBaseEntity::Create("gungnir_spearex", vecSrcA, m_pPlayer->pev->v_angle, ENT(m_pPlayer->pev)));
 		if (pEnt)
 		{
 			pEnt->Init(gpGlobals->v_forward * 2000, GetDamage_SpearA(), GetDamage_SpearB(), GetDamage_SpearC(), 110, m_pPlayer->m_iTeam);
@@ -919,7 +919,7 @@
 #endif
 	}
 
-	void CGungnir::SecondaryAttack()
+	void CGungnirEx::SecondaryAttack()
 	{
 		if (phs3 <= 0.0 && m_iClip > 0)
 		{
@@ -930,7 +930,7 @@
 		}
 	}
 
-	void CGungnir::ItemPostFrame()
+	void CGungnirEx::ItemPostFrame()
 	{
 		if (phs4 > 0.0f && gpGlobals->time > phs4)
 		{
@@ -1038,7 +1038,7 @@
 		return CBasePlayerWeapon::ItemPostFrame();
 	}
 
-	void CGungnir::CreateEffect()
+	void CGungnirEx::CreateEffect()
 	{
 #ifndef CLIENT_DLL
 		for (size_t i = 0; i < 3; ++i)
@@ -1055,7 +1055,7 @@
 #endif
 	}
 
-	void CGungnir::DestroyEffect()
+	void CGungnirEx::DestroyEffect()
 	{
 #ifndef CLIENT_DLL
 		for (CBeam* p : phs5_6_7)
@@ -1066,7 +1066,7 @@
 #endif
 	}
 
-	void CGungnir::PrimaryAttack_FindTargets()
+	void CGungnirEx::PrimaryAttack_FindTargets()
 	{
 		const float flRadius = 320;
 
@@ -1085,7 +1085,7 @@
 #endif
 	}
 
-	bool CGungnir::PrimaryAttack_CheckTargetAvailable(CBaseEntity* a2, Vector vecAngleDirection)
+	bool CGungnirEx::PrimaryAttack_CheckTargetAvailable(CBaseEntity* a2, Vector vecAngleDirection)
 	{
 		const float flRadius = 320;
 
@@ -1111,7 +1111,7 @@
 		return true;
 	}
 
-	void CGungnir::PrimaryAttack_InstantDamage()
+	void CGungnirEx::PrimaryAttack_InstantDamage()
 	{
 		if (phs9_10_11.empty())
 		{
@@ -1151,7 +1151,7 @@
 				WRITE_COORD(pEntity->pev->origin.x);
 				WRITE_COORD(pEntity->pev->origin.y);
 				WRITE_COORD(pEntity->pev->origin.z);
-				WRITE_SHORT(MODEL_INDEX("sprites/ef_gungnir_aexplo.spr"));
+				WRITE_SHORT(MODEL_INDEX("sprites/ef_gungnir_aexploex.spr"));
 				WRITE_BYTE(10);
 				WRITE_BYTE(30);
 				WRITE_BYTE(TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOPARTICLES | TE_EXPLFLAG_NOSOUND);
@@ -1162,7 +1162,7 @@
 		}
 	}
 
-	void CGungnir::ClearEffect()
+	void CGungnirEx::ClearEffect()
 	{
 #ifndef CLIENT_DLL
 		for (CBeam* pBeam : phs5_6_7)

@@ -97,7 +97,7 @@ public:
 	TeamName m_iTeam;
 	float GetDamage() const;
 	char m_SbarString0[SBAR_STRING_SIZE];
-	unsigned short m_usKnife;
+	unsigned short m_usFireTwinAxes;
 
 private:
 	int m_iuser1; // iAttackRecord

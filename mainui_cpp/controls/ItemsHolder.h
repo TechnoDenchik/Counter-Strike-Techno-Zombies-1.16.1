@@ -65,7 +65,7 @@ public:
 
 	void CalcItemsPositions();
 	void CalcItemsSizes();
-
+	void FindNextAvailableItem();
 
 	inline void AddItem( CMenuBaseItem *item ) { AddItem( *item ); }
 	inline int GetCursor() const { return m_iCursor; }

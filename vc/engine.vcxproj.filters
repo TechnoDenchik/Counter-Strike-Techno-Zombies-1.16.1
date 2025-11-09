@@ -75,9 +75,6 @@
     <ClInclude Include="..\engine\client\gl_local.h">
       <Filter>engine\client</Filter>
     </ClInclude>
-    <ClInclude Include="..\engine\client\gl_static.h">
-      <Filter>engine\client</Filter>
-    </ClInclude>
     <ClInclude Include="..\engine\client\vgui\vgui_draw.h">
       <Filter>engine\client\vgui</Filter>
     </ClInclude>

@@ -103,10 +103,8 @@ void CSTwinShadowAxes::Spawn(void)
 void CSTwinShadowAxes::Precache(void)
 {
 	PRECACHE_MODEL("models/v_dgaxe.mdl");
-	PRECACHE_MODEL("models/v_dgaxe_3.mdl");
 	PRECACHE_MODEL("models/p_dgaxe_a.mdl");
 	PRECACHE_MODEL("models/dgaxe_summon.mdl");
-
 
 	PRECACHE_MODEL("sprites/ef_dgaxe_change.spr");
 
@@ -132,7 +130,7 @@ void CSTwinShadowAxes::Precache(void)
 	PRECACHE_SOUND("weapons/dgaxe_wall_stone1.wav");
 	PRECACHE_SOUND("weapons/dgaxe_wall_stone2.wav");
 
-	m_usKnife = PRECACHE_EVENT(1, "events/twinaxes.sc");
+	m_usFireTwinAxes = PRECACHE_EVENT(1, "events/twinaxes.sc");
 }
 
 int CSTwinShadowAxes::GetItemInfo(ItemInfo* p)
@@ -178,10 +176,7 @@ BOOL CSTwinShadowAxes::Deploy(void)
 	WRITE_BYTE(DGAXE_AIM_OFF);
 	MESSAGE_END();
 #endif
-	if(setskin == true)
-		return DefaultDeploy("models/v_dgaxe_3.mdl", "models/p_dgaxe_a.mdl", ANIM_DRAW, "knife", UseDecrement() != FALSE);
-	else
-		return DefaultDeploy("models/v_dgaxe.mdl", "models/p_dgaxe_a.mdl", ANIM_DRAW, "knife", UseDecrement() != FALSE);
+	return DefaultDeploy("models/v_dgaxe.mdl", "models/p_dgaxe_a.mdl", ANIM_DRAW, "knife", UseDecrement() != FALSE);
 }
 
 void CSTwinShadowAxes::Holster(int skiplocal)
@@ -679,6 +674,28 @@ void CSTwinShadowAxes::ItemPostFrame()
 		if (m_pPlayer->m_rgAmmo[m_iKnifeAmmoType] == 50)
 		{
 			GetSkin();
+
+			int flags;
+#ifdef CLIENT_WEAPONS
+			flags = FEV_NOTHOST;
+#else
+			flags = 0;
+#endif
+
+			PLAYBACK_EVENT_FULL(
+				flags,                  // Флаги события
+				ENT(m_pPlayer->pev),    // Сущность-источник
+				m_usFireTwinAxes,       // ID события
+				0,                      // Задержка
+				(float*)&g_vecZero,     // Происхождение
+				(float*)&g_vecZero,     // Углы
+				0,                      // fparam1
+				0,                      // fparam2  
+				ANIM_SKILL1,            // iparam1
+				2,                      // iparam2
+				3,                      // iparam3
+				4                       // iparam4
+			);
 		}
 	}
 	tWorldTime2 = gpGlobals->time;
@@ -1092,12 +1109,35 @@ int CSTwinShadowAxes::kombo(int fFirst)
 
 int CSTwinShadowAxes::Skill1(int fFirst)
 {
-	DefaultDeploy("models/v_dgaxe.mdl", "models/p_dgaxe_a.mdl", ANIM_DRAW, "", UseDecrement() != FALSE);
+	int flags;
+#ifdef CLIENT_WEAPONS
+	flags = FEV_NOTHOST;
+#else
+	flags = 0;
+#endif
+
+	m_pPlayer->m_rgAmmo[m_iKnifeAmmoType] -= 50;
+
 	if (m_pPlayer->m_rgAmmo[m_iKnifeAmmoType] < 50)
 	{
+		PLAYBACK_EVENT_FULL(
+			flags,                  // Флаги события
+			ENT(m_pPlayer->pev),    // Сущность-источник
+			m_usFireTwinAxes,       // ID события
+			0,                      // Задержка
+			(float*)&g_vecZero,     // Происхождение
+			(float*)&g_vecZero,     // Углы
+			0,                      // fparam1
+			0,                      // fparam2  
+			ANIM_SKILL1,            // iparam1
+			0,                      // iparam2
+			3,                      // iparam3
+			4                       // iparam4
+		);
+
 		setskin = false;
 	}
-	
+
 	setskill1 = false;
 	BOOL fDidHit = FALSE;
 	UTIL_MakeVectors(m_pPlayer->pev->v_angle);
@@ -1281,6 +1321,33 @@ int CSTwinShadowAxes::Skill2(int fFirst)
 			m_iuser3 = (v8 + 8);
 		else
 			m_iuser3 = (0);
+	}
+
+	int flags;
+#ifdef CLIENT_WEAPONS
+	flags = FEV_NOTHOST;
+#else
+	flags = 0;
+#endif
+
+	m_pPlayer->m_rgAmmo[m_iKnifeAmmoType] -= 50;
+
+	if (m_pPlayer->m_rgAmmo[m_iKnifeAmmoType] < 50)
+	{
+		PLAYBACK_EVENT_FULL(
+			flags,                  // Флаги события
+			ENT(m_pPlayer->pev),    // Сущность-источник
+			m_usFireTwinAxes,       // ID события
+			0,                      // Задержка
+			(float*)&g_vecZero,     // Происхождение
+			(float*)&g_vecZero,     // Углы
+			0,                      // fparam1
+			0,                      // fparam2  
+			ANIM_SKILL1,            // iparam1
+			0,                      // iparam2
+			3,                      // iparam3
+			4                       // iparam4
+		);
 	}
 
 	m_waterlevel++;

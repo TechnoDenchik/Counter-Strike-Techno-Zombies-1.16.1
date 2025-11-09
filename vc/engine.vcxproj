@@ -17,7 +17,6 @@
     <ClInclude Include="..\engine\client\gl_dynamic.h" />
     <ClInclude Include="..\engine\client\gl_export.h" />
     <ClInclude Include="..\engine\client\gl_local.h" />
-    <ClInclude Include="..\engine\client\gl_static.h" />
     <ClInclude Include="..\engine\client\input.h" />
     <ClInclude Include="..\engine\client\joyinput.h" />
     <ClInclude Include="..\engine\client\sound.h" />

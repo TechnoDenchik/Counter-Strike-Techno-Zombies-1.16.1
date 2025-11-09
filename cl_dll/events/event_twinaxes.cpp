@@ -52,12 +52,26 @@ static const char *SOUNDS_NAME = "weapons/dgaxe_slash1.wav";
 
 void EV_FireTwinAxes( struct event_args_s *args )
 {
-	int    idx = args->entindex;
-	Vector origin( args->origin );
+    int idx;
+    vec3_t origin;
 
-	if( EV_IsLocal( idx ))
-		gEngfuncs.pEventAPI->EV_WeaponAnimation( args->iparam1, 2 );
+    // 1. Получаем индекс игрока
+    idx = args->entindex;
 
-	//Play Swing sound
-	PLAY_EVENT_SOUND( SOUNDS_NAME );
+    // 3. Получаем дополнительные параметры
+    int anim_type = args->iparam1;  // ANIM_SKILL1
+    int skin_index = args->iparam2;  // 2
+
+    float fparam1 = args->fparam1;     // 0
+    float fparam2 = args->fparam2;     // 0
+
+    // 4. Получаем позицию и углы
+    VectorCopy(args->origin, origin);
+
+    // 6. Устанавливаем анимацию viewmodel
+    cl_entity_t* viewmodel = gEngfuncs.GetViewModel();
+    if (viewmodel)
+    {
+        viewmodel->curstate.skin = skin_index;
+    }
 }

@@ -17,6 +17,7 @@ GNU General Public License for more details.
 #define WINAPIFONT_H
 
 #define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
 #define UNICODE // use unicode fonts
 #include <windows.h>
 #undef GetCharABCWidths
@@ -36,38 +37,39 @@ struct abc_t
 class CWinAPIFont : public CBaseFont
 {
 public:
-	CWinAPIFont( );
-	~CWinAPIFont( );
+	CWinAPIFont();
+	~CWinAPIFont();
 
-	bool Create( const char *name,
+	bool Create(const char* name,
 		int tall, int weight,
 		int blur, float brighten,
 		int outlineSize,
 		int scanlineOffset, float scanlineScale,
-		int flags ) override;
-	void GetCharRGBA( int ch, Point pt, Size sz, unsigned char *rgba, Size &drawSize ) override;
-	void GetCharABCWidths( int ch, int &a, int &b, int &c ) override;
-	bool HasChar( int ch ) const override;
+		int flags) override;
+	void GetCharRGBA(int ch, Point pt, Size sz, unsigned char* rgba, Size& drawSize) override;
+	void GetCharABCWidths(int ch, int& a, int& b, int& c) override;
+	bool HasChar(int ch) const override;
 
 	bool m_bFound;
 
 private:
+	void ReleaseResources();
+	bool ValidateBufferAccess(int x, int y, const Size& sz) const;
+	wchar_t ConvertCharToWide(int ch) const;
+
 	CUtlRBTree<abc_t, int> m_ABCCache;
 
 	HFONT m_hFont;
 	HDC m_hDC;
 	HBITMAP m_hDIB;
 
-
 	int m_rgiBitmapSize[2];
 
 	// pointer to buffer for use when generated bitmap versions of a texture
-
-	unsigned char	*m_pBuf;
-
+	unsigned char* m_pBuf;
 
 	friend class CFontManager;
-	friend int CALLBACK FontEnumProc( const LOGFONT *, const TEXTMETRIC *, DWORD, LPARAM lpParam );
+	friend int CALLBACK FontEnumProc(const LOGFONT*, const TEXTMETRIC*, DWORD, LPARAM lpParam);
 };
 
 #endif // WINAPIFONT_H

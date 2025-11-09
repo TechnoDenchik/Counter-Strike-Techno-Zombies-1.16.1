@@ -1599,6 +1599,9 @@
     <ClCompile Include="..\discord_game_sdk\cpp\voice_manager.cpp">
       <Filter>dlls\mp_discord</Filter>
     </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_gungnirex.cpp">
+      <Filter>dlls\wpn_shared\Primary\Epic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\dlls\activity.h">

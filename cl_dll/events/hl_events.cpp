@@ -244,4 +244,5 @@ void Game_HookEvents( void )
 	HOOK_EVENT(m95xmas, FireM95xmas);
 	HOOK_EVENT(m2, FireM2);
 	HOOK_EVENT(janus7xmas, FireJanus7xmas);
+	HOOK_EVENT(janus7xmas, FireJanus7xmas);
 }

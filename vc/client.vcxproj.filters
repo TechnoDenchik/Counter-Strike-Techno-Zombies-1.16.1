@@ -1716,6 +1716,9 @@
     <ClCompile Include="..\discord_game_sdk\cpp\voice_manager.cpp">
       <Filter>cl_dll\discord</Filter>
     </ClCompile>
+    <ClCompile Include="..\dlls\wpn_shared\wpn_gungnirex.cpp">
+      <Filter>dlls\wpn_shared\Primary\Epic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\cl_dll\hud\followicon.h">
